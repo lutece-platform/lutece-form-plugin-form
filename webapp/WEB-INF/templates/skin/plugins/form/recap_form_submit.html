@@ -1,0 +1,58 @@
+<div class="span-22 prepend-1 append-1 append-bottom last">
+<div id="form-content" class="portlet -lutece-border-radius">
+	<#if validate_recap?exists>
+		<fieldset class="-lutece-border-radius"> 
+			<legend class="form-legend"> #i18n{form.recapFormSubmit.labelLegendRecap} </legend>
+			<#list formSubmit.listResponse as response>
+				<#if response.toStringValueResponse?has_content>
+					<div class="form-element">
+						<span class="form-label">
+							<label>
+								<#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>
+									${response.entry.title}:
+									<#assign entrySave=response.entry>
+								</#if>
+								&nbsp;
+							</label>
+						</span>
+						<span class="form-field-column">${response.toStringValueResponse}</span>
+					</div>
+				</#if>
+			</#list>
+		</fieldset>
+		<div align="center" class="form-steps">
+			<form action="${url_action}" method="post" name="" id=""  >
+				<input name="validate_recap" value="validate_recap" type="hidden" />
+				<input type="submit" value="#i18n{form.recapFormSubmit.buttonValidate}" class="-lutece-input -lutece-border-radius-mini"  name="validate_recap" />
+				<input type="button" value="#i18n{form.recapFormSubmit.buttonCancel}" class="-lutece-input -lutece-border-radius-mini" onclick="javascript:history.go(-1)" />
+			</form>
+		</div>
+	<#else>
+		<div><label class="form-title" >${formSubmit.form.title}</label><br/></div>
+		<fieldset class="-lutece-border-radius">${recap.recapMessage}</fieldset>
+		<#if recap.graph>
+			<fieldset class="-lutece-border-radius"> 
+				<legend class="form-legend"> #i18n{form.recapFormSubmit.labelLegendStatistic}</legend> 
+				<#list formSubmit.listResponse as response>
+					<#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>
+						<#assign entrySave=response.entry>
+						<div class="form-element">		
+							<span class="form-label">
+								<label>${response.entry.title}:&nbsp;</label>
+							</span>
+							<span class="form-field-column">
+								<img src="jsp/site/plugins/form/DoGenerateGraph.jsp?id_entry=${response.entry.idEntry}&amp;plugin_name=form<#if recap.graphThreeDimension>&amp;graph_three_dimension=1<#else>&amp;graph_three_dimension=0</#if><#if recap.graphLabelValue>&amp;graph_label_value=1<#else>&amp;graph_label_value=0</#if>&amp;id_graph_type=${recap.graphType.idGraphType}"/>
+							</span>	
+						</div>	
+					</#if>
+				</#list>
+			</fieldset>	
+		</#if>	
+		<div align="center" class="form-steps">
+			<form action="${recap.backUrl}" method="post" name="" id=""  >
+				<input type="submit" value="#i18n{form.recapFormSubmit.buttonBack}" class="-lutece-input -lutece-border-radius-mini"  name="save" />
+			</form>	
+		</div> 
+	</#if>
+</div>	 
+</div>	 

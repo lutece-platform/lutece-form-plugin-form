@@ -1,0 +1,65 @@
+<#macro getTextAreaContent responseContent has_error entry field>
+	<#if has_error>
+		<textarea name="${entry.idEntry}" id="${entry.idEntry}"  cols="${field.width}" rows="${field.height}" class="-lutece-input -lutece-border-radius-mini error">${responseContent}</textarea>
+	<#else>
+		<textarea name="${entry.idEntry}" id="${entry.idEntry}"  cols="${field.width}" rows="${field.height}" class="-lutece-input -lutece-border-radius-mini">${responseContent}</textarea>
+	</#if>
+</#macro>
+
+<div class="form-element">
+	 <span class="form-label">
+		<label for="${entry.idEntry}">	
+			${entry.title}
+			<#if entry.mandatory>
+				*
+			</#if>
+			 : 
+		</label>
+	    </span>
+	    <span class="form-field-column">	 
+			<#list entry.fields as field>
+				<#if list_responses??>
+					<#list list_responses as response>
+						<#if response.entry.idEntry == entry.idEntry && response.toStringValueResponse??>
+							<#if response.entry.formError??>
+								<@getTextAreaContent responseContent=response.toStringValueResponse has_error=true entry=entry field=field/>
+							<#else>
+								<@getTextAreaContent responseContent=response.toStringValueResponse has_error=false entry=entry field=field/>
+							</#if>
+						</#if>
+					</#list>
+				<#else>
+					<#if field.value?exists>
+						<@getTextAreaContent responseContent=field.value has_error=false entry=entry field=field/>
+					<#else>
+						<@getTextAreaContent responseContent="" has_error=false entry=entry field=field/>
+					</#if>
+					
+				</#if>
+			</#list>
+		</span>
+		 <#if entry.helpMessage?exists&&entry.helpMessage!=''>
+			<span class="form-help">
+				<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/form/help.gif" />
+					<span id="info-details" class="hide"><pre> ${entry.helpMessage}</pre></span>
+				</a>
+			</span>
+		</#if>
+		<#if list_responses??>
+			<#list list_responses as response>
+				<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+					<br />
+					<span class="form-label"><label>&nbsp;</label></span>
+					<span class="form-field-column">
+						<#assign formError = response.entry.formError>
+						<#if formError.mandatoryError>
+							<label class="error">#i18n{form.message.mandatory.entry}</label>
+						<#else>
+							<label class="error">${formError.errorMessage}</label>
+						</#if>
+					</span>
+				</#if>
+			</#list>
+		</#if>
+		
+</div>

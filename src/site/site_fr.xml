@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Lut&egrave;ce - Form">
+	<body>
+		<links>
+			<item name="EN" href="../index.html" />
+		</links>
+
+		<menu name="Aper&ccedil;u">
+			<item name="Introduction" href="index.html" />
+			<item name="T&eacute;l&eacute;chargement" href="download.html" />
+			<item name="Configuration" href="configuration.html" />
+			<item name="Utilisation" href="/user/admin-plugin.html" collapse="true">
+                <item name="Gestion des formulaires" href="/user/admin-form.html"/>
+                <item name="Gestion des formats d'export" href="/user/admin-export-format.html"/>
+				<item name="Gestion des expressions r&eacute;guli&egrave;res" href="/user/admin-regular-expression.html"/>
+				<item name="Gestion des messages par d&eacute;faut" href="/user/admin-default-message.html"/>
+			</item>
+		</menu>
+		
+		<menu name="Téléchargements" inherit="bottom" >
+			     <item name="Versions stables" href="../../../stable_builds/plugins/plugin-form/"/>
+			     <item name="Nightly builds" href="../../../nightly_builds/plugins/plugin-form/" />
+		</menu>
+
+		<menu ref="reports" />
+		
+	</body>
+</project>

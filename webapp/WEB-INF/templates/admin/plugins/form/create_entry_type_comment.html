@@ -1,0 +1,24 @@
+<#include "/admin/plugins/form/commons.html" />
+<#include "/admin/util/editor/editor.html" />
+<div class="content-box">
+	<h2>#i18n{form.createEntry.titleComment} : '${entry.form.title}'</h2>
+	<form action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
+		<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
+		<#if entry.fieldDepend?exists>
+			<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
+		</#if>
+		<p>
+			<label for="comment"> #i18n{form.createEntry.labelComment} * : </label>
+			<div  class="editor">
+				<textarea name="comment" id="comment" rows="20" cols="90" class="richtext"></textarea>
+			</div>
+		</p>
+		<p>
+			<input class="button" type="submit" value="#i18n{form.createEntry.buttonSave}" class="button" name="save" />
+			<input class="button" type="submit" value="#i18n{form.createEntry.buttonCancel}" class="button" name="cancel" />
+		</p>
+	</form>
+</div>
+<@initEditor />
+
+ 

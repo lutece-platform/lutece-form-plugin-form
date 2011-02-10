@@ -1,0 +1,20 @@
+ <#include "/admin/util/editor/editor.html" />
+<div class="content-box">
+ <h2>#i18n{form.modifyEntry.titleComment} : '${entry.form.title}'</h2>
+ <form action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+    <input name="id_entry" value="${entry.idEntry}" type="hidden" />
+	 <p>
+     <label for="comment"> #i18n{form.createEntry.labelComment} * : </label>
+	 <div  class="editor">
+		<textarea name="comment" id="comment"rows="20" cols="90" class="richtext">${entry.comment}</textarea>
+     </div>
+     </p>
+  	<p>
+  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" / >
+  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonCancel}" name="cancel" />
+   </p>
+  </form>
+ </div>
+ <@initEditor />
+
+ 

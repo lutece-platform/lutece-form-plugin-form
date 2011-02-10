@@ -1,0 +1,21 @@
+<script type="text/javascript" src="js/plugins/form/form.js"></script>
+<div class="content-box">
+  <h2> #i18n{form.testForm.title}</h2>
+	 <div class="highlight-box">
+	   ${str_form}
+	 </div>
+	<p>	        
+	 <form action="jsp/admin/plugins/form/DoExportResponseTestForm.jsp" method="post" name="" id=""  >
+ 			 <input name="id_form" value="${form.idForm}" type="hidden" />
+ 			 <label for="">#i18n{form.testForm.labelExportResponse} : </label>	
+ 			 <@combo name="id_export_format"  items=export_format_list default_value=-1 />
+			<input value="#i18n{form.testForm.buttonExportResponse}" class="button"  type="submit">
+			<input type="submit" value="#i18n{form.testForm.buttonCancel}" class="button" name="cancel" />
+ 	 </form>
+ 	</p>
+		   
+ 	
+  		
+   		 
+</div>	 
+	 

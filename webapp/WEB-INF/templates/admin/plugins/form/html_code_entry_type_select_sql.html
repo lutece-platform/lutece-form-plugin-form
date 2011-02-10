@@ -1,0 +1,68 @@
+<div class="form-element">
+  <span class="form-label">
+	<label  for="${entry.idEntry}">
+		${entry.title}
+	<#if entry.mandatory>
+		*
+	</#if>
+		:
+	</label>
+	</span>
+	<span class="form-field-column">
+		<select name="${entry.idEntry}" id="${entry.idEntry}"
+			<#if list_responses??>
+				<#list list_responses as response>
+					<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+						class="error"
+						<#break>
+					</#if>
+				</#list>
+			</#if>
+		>
+			<option value="">#i18n{form.xpage.form.noValue}</option>
+			<#list entry.fields as field>
+				<option  value="${field.idField}"
+					<#if list_responses??>
+						<#list list_responses as response>
+							<#if response.entry.idEntry == entry.idEntry && response.field??>
+								<#if response.field.idField == field.idField>
+									selected ="selected"
+									<#break>
+								</#if>
+							</#if>
+						</#list>
+					<#else>
+						<#if field.defaultValue>
+							selected ="selected"
+						</#if>
+					</#if>
+					>
+						${field.title}
+				</option>
+			</#list>
+		</select>
+	</span>
+   <#if entry.helpMessage?exists&&entry.helpMessage!=''>
+		<span class="form-help">
+			<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/form/help.gif" />
+				<span><pre> ${entry.helpMessage}</pre></span>
+			</a>
+		</span>
+	</#if>
+	<#if list_responses??>
+		<#list list_responses as response>
+			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+				<br />
+				<span class="form-label"><label>&nbsp;</label></span>
+				<span class="form-field-column">
+					<#assign formError = response.entry.formError>
+					<#if formError.mandatoryError>
+						<label class="error">#i18n{form.message.mandatory.entry}</label>
+					<#else>
+						<label class="error">${formError.errorMessage}</label>
+					</#if>
+				</span>
+			</#if>
+		</#list>
+	</#if>
+</div>

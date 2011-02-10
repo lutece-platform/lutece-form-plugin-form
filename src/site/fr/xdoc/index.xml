@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Introduction</title>
+	</properties>
+	<body>
+		<section name="Descriptif du plugin">
+			<subsection name="Introduction">
+				<p>	
+					Le plugin Form vise à permettre de mettre en place sur les sites Lutèce V2 des formulaires de 	
+					saisie utilisables par les internautes ou intranautes, pour réaliser notamment des questionnaires
+					d'enquête. Il s’agit de permettre à chaque webmestre de prendre en charge la conception, l’ajout
+					de la rubrique sur son site et l’exploitation des résultats du formulaire.
+				</p> 
+			</subsection>
+		</section>
+	</body>
+</document>

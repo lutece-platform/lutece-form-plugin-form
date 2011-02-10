@@ -1,0 +1,60 @@
+<#include "/admin/util/editor/editor.html" />
+
+<div class="content-box">
+	<h2>#i18n{form.modifyMessage.title} : '${form.title}'</h2>
+    <form action="jsp/admin/plugins/form/DoModifyMessage.jsp" method="post">
+    	<input type="hidden" name="id_form" value="${form.idForm}" />
+    	
+    	<p>
+			<label for="libelle_validate_button">#i18n{form.modifyMessage.labelLibelleValidateButton} * :</label>
+			<input type="text" name="libelle_validate_button" size="80" value="${form.libelleValidateButton}" maxlength="255" />
+		</p>
+		<p>
+			<label for="libelle_reset_button">#i18n{form.modifyMessage.labelLibelleResetButton} :</label>
+			<input type="text" name="libelle_reset_button" size="80" value="${form.libelleResetButton}" maxlength="255" />
+		</p>
+    	
+    	<p>
+			<label for="unavailability_message">#i18n{form.modifyMessage.labelUnavailabilityMessage} * :</label>
+			<div class="editor">
+				<#if form.unavailabilityMessage?exists>
+					<textarea class="richtext" name="unavailability_message" id="unavailability_message" rows="20" cols="90">${form.unavailabilityMessage}</textarea>
+				<#else>
+					<textarea class="richtext" name="unavailability_message" id="unavailability_message" rows="20" cols="90"></textarea>
+				</#if>
+				<br />
+			</div>
+			<label>&nbsp;</label>
+			#i18n{form.modifyMessage.labelUnavailabilityMessageComment}
+		</p>
+    	
+    	<p>
+    		<label for="welcome_message">#i18n{form.modifyMessage.labelWelcomeMessage} :</label>
+	     	<div class="editor">
+				<#if form.welcomeMessage?exists>
+   					<textarea class="richtext" name="welcome_message" id="welcome_message" rows="20" cols="90">${form.welcomeMessage}</textarea>
+				<#else>
+					<textarea class="richtext" name="welcome_message" id="welcome_message" rows="20" cols="90"></textarea>
+				</#if>
+			</div>
+		</p>
+		
+		<p>
+			<label for="requirement">#i18n{form.modifyMessage.labelRequirement} * :</label>
+			<div class="editor">
+     			<#if form.requirement?exists>
+     				<textarea class="richtext" name="requirement" id="requirement" rows="20" cols="90">${form.requirement}</textarea>
+				<#else>
+					<textarea class="richtext" name="requirement" id="requirement" rows="20" cols="90"></textarea>
+				</#if>
+			</div>
+		</p>
+		
+		<p>
+			<input type="submit" class="button" name="save" value="#i18n{form.modifyMessage.buttonSave}" />
+    		<input type="submit" class="button" name="cancel" value="#i18n{form.modifyMessage.buttonCancel}" />
+    	</p>
+    </form>
+</div> 
+
+<@initEditor />

@@ -1,0 +1,131 @@
+ <#include "/admin/util/editor/editor.html" />
+<div class="content-box">
+ <h2>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</h2>
+ <form action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+  	<input name="id_entry" value="${entry.idEntry}" type="hidden" />
+	<p>
+    	<label for="title">#i18n{form.createEntry.labelTitle} * : </label>
+    	<input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255"/>
+    	<br/>
+		<label>&nbsp;</label>#i18n{form.createEntry.labelTitleComment}
+ 	</p>
+    <p>
+     <label for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
+     
+     	<textarea class="-lutece-input -lutece-border-radius-mini" name="help_message"  id="help_message" rows="20" cols="90">${entry.helpMessage}</textarea>
+	
+	 <br/>
+	 <label>&nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
+	</p>
+    <p>
+     <label for="comment"> #i18n{form.createEntry.labelComment} : </label>
+
+     <textarea class="-lutece-input -lutece-border-radius-mini" name="comment" cols="80" rows="2">${entry.comment}</textarea>
+     </p>
+     <p>
+	    <label for="width">#i18n{form.createEntry.labelPresentation} : </label>
+	        
+	      <select  id="field_in_line" name="field_in_line">
+				<option value=1 <#if entry.fieldInLine >selected="selected" </#if> >#i18n{form.createEntry.selectPresentationInLine}</option>
+				<option value=0 <#if !entry.fieldInLine >selected="selected" </#if>>#i18n{form.createEntry.selectPresentationNotInLine}</option>
+		</select>
+	</p>
+    
+    <p>
+     <label for="">#i18n{form.createEntry.labelType} : </label>
+             ${entry.entryType.title}
+	</p>
+	  <p>
+    	<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+   		 <#if entry.mandatory>
+   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" >
+   		 <#else>
+   			<input name="mandatory" value="1" type="checkbox" >
+   		 </#if>	
+   </p>
+    
+  	
+    <p>
+  		<input type="submit" value="#i18n{form.modifyEntry.buttonSave}" class="button"  name="save" / >
+  		<input type="submit" value="#i18n{form.modifyEntry.buttonApply}" class="button"  name="apply"/ >
+  		<input type="submit" value="#i18n{form.modifyEntry.buttonCancel}" class="button" name="cancel" />
+   </p>
+  </form>
+ </div>
+
+
+<div class="content-box">
+	<h2>#i18n{form.createEntry.manageField.title}</h2>
+	<@paginationAdmin paginator=paginator combo=1/>
+	<a name="list" id="list"></a>
+	<table width="100%">
+          <tr> 
+            <th > #i18n{form.createEntry.manageField.rowTitle}
+            </th>
+            <th > #i18n{form.createEntry.manageField.rowValue}
+            </th>
+            <th> #i18n{form.createEntry.manageField.rowDefaultValue}
+            </th>
+			<th> #i18n{form.createEntry.manageField.rowConditionalQuestion}
+            </th>
+            <th> #i18n{form.createEntry.manageField.rowActions}
+            </th>
+          </tr>
+         <#assign cpt=0>
+           <#list list as field>
+          	<#assign cpt=cpt+1>
+          	<tr>
+            	<td >
+            			<a href="jsp/admin/plugins/form/ModifyFieldWithConditionalQuestion.jsp?id_field=${field.idField}"  class="bullet-link">
+              				${field.title}
+              			</a>
+           		</td>
+	            <td>
+	           		${field.value}
+	           </td>
+	            <td >
+	       			 <#if field.defaultValue>
+	       				<img  src="images/admin/skin/plugins/form/actions/enable.png" />    
+	       			</#if> 	 		
+	            </td >
+	            <td >
+	       			<#if field.conditionalQuestions?exists>
+	       					 <#list field.conditionalQuestions as entry>
+	       							 <#if entry.entryType.comment>
+	              							${entry.comment}
+	              						<#else>
+											${entry.title}
+										</#if><br>
+	       					</#list>
+	       					
+	       			</#if>     	
+	            </td >
+	            
+	              <td >
+	              	 <#if cpt!=1>
+	              		<a href="jsp/admin/plugins/form/DoMoveUpField.jsp?id_field=${field.idField}#list">
+	                 	 	<img src="images/admin/skin/plugins/form/actions/up.png"  alt="#i18n{form.createEntry.manageField.titleMoveUp}" title="#i18n{form.createEntry.manageField.titleMoveUp}">
+	                	 </a>
+	                </#if> 
+	               <#if field_has_next>
+	                	<a href="jsp/admin/plugins/form/DoMoveDownField.jsp?id_field=${field.idField}#list">
+	                 	 <img src="images/admin/skin/plugins/form/actions/down.png" alt="#i18n{form.createEntry.manageField.titleMoveDown}" title="#i18n{form.createEntry.manageField.titleMoveDown}">
+	                	 </a>
+	               </#if>
+	               
+	                <a href="jsp/admin/plugins/form/ConfirmRemoveField.jsp?id_field=${field.idField}#list">
+	                  <img src="images/admin/skin/plugins/form/actions/delete.png" alt="#i18n{form.createEntry.manageField.titleDelete}" title="#i18n{form.createEntry.manageField.titleDelete}" />
+	                </a>
+	             </td>
+	          </tr>
+			</#list> 
+        </table>
+        <@paginationAdmin paginator=paginator/>
+        <form method="post"  action="jsp/admin/plugins/form/CreateField.jsp?option_no_display_title=true">
+          <p>
+            <input type="submit" value="#i18n{form.createEntry.manageField.buttonInsert}" class="button" />
+          </p>
+        </form>
+    </div>
+
+ <@initEditor />

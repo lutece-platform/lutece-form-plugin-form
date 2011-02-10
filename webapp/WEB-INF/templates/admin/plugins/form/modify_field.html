@@ -1,0 +1,30 @@
+<div class="content-box">
+ <h2>#i18n{form.modifyField.title} : '${field.parentEntry.title}'</h2>
+ <form action="jsp/admin/plugins/form/DoModifyField.jsp#list" method="post" name="" id=""  >
+  <input name="id_field" value="${field.idField}" type="hidden" />
+   <p>
+    	<label for="title">#i18n{form.createField.labelTitle} * : </label>
+    	<input type="text" name="title" id="title" size="80" value="${field.title}"  maxlength="255" />
+    </p>
+    <p>
+    	<label for="value">#i18n{form.createField.labelValue} * : </label>
+    	<input type="text" name="value" id="value" size="80" value="${field.value}"/>
+    </p>
+  	<p>
+    	<label for="default_value">#i18n{form.createField.labelDefaultValue}</label>
+    	<#if field.defaultValue>
+    		<input name="default_value" value="1" type="checkbox"  checked="checked">
+  		<#else>
+  			<input name="default_value" value="1" type="checkbox">
+  		</#if>
+  			
+  	</p>
+  	 <p>
+  		<input type="submit" value="#i18n{form.createForm.buttonSave}" class="button"  name="save" / >
+  		<input type="submit" value="#i18n{form.createForm.buttonCancel}" class="button" name="cancel" />
+   </p>
+  </form>
+ </div>
+
+
+ 

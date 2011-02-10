@@ -1,0 +1,23 @@
+<div class="content-box">
+  	<h2> #i18n{form.manageOutputProcessor.title}</h2>
+	<#list processor_list as processor>
+		<div class="highlight-box">
+			<form action="jsp/admin/plugins/form/DoManageOutputProcessor.jsp" method="post" >
+				<input name="id_form" value="${form.idForm}" type="hidden" />
+				<p>
+					<label for="use_output_processor"> #i18n{form.manageOutputProcessor.useOutputProcessor} * :</label>
+					<#if processor.is_selected>
+						<input type="checkbox" name="is_selected" checked="checked" />
+					<#else>
+						<input type="checkbox" name="is_selected" />
+					</#if>
+				</p>
+				<input type="hidden" name="processor_key" value= "${processor.processor_key}"/>
+				<div class="content-box">
+					${processor.processor_configuration}
+				</div>
+				<input type="submit" value="#i18n{form.createForm.buttonSave}" class="button" name="save" />		
+		    </form>
+		 </div>
+	</#list>
+</div>

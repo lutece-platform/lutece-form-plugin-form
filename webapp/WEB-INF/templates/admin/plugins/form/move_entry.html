@@ -1,0 +1,20 @@
+<div class="content-box">
+  <h2>#i18n{form.moveEntry.title}:'${entry.form.title}''</h2>
+  <form action="jsp/admin/plugins/form/DoMoveEntry.jsp#list" method="post">
+    <div class="highlight-box">
+		<p>
+				#i18n{form.moveEntry.labelSelectEntry} :
+				     
+     </p>
+	 <p>
+			<#list entry_list as entry>
+					<input class="radio" name="id_entry" value="${entry.idEntry}" type="radio">
+					${entry.title}
+				<br>
+			</#list>
+       </p>
+     </div>
+		<input value="#i18n{form.moveEntry.buttonSave}" class="button" type="submit" >
+     <input class="button" onclick="javascript:history.go(-1)" value="#i18n{form.moveEntry.buttonCancel}" type="button">
+    </form>
+ </div>

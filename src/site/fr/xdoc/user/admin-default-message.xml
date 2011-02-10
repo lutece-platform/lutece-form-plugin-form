@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>
+           Gestion des messages par défaut
+        </title>
+    </properties>
+    <body>
+		<section name="Gestion des messages par défaut">
+			<p>
+				L'interface de gestion des messages par défaut récapitule les messages par défaut pouvant être administré.
+			</p>
+				<p>
+					<center>
+						<img src="user/images/manage_default_message.png" />
+					</center>
+				</p>
+				
+				<p>
+					
+					L'ensemble de messages par défaut sont utilisés à la création du formulaire.
+			
+				</p>
+			
+           </section>
+   </body>
+</document>       
+             

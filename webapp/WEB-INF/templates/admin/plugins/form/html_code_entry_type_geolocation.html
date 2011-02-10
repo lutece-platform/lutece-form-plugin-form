@@ -1,0 +1,81 @@
+<#if entry.fields?has_content>
+	<#list entry.fields as field>
+		<#if field.title?has_content>
+			<#if field.title == "X">
+				<#assign xField = field />
+			<#elseif field.title == "Y">
+				<#assign yField = field />
+			<#elseif field.title == "address">
+				<#assign addressField = field />
+			</#if>
+		</#if>
+	</#list>
+</#if>
+<div class="form-element">
+	 <span class="form-label">
+		<label for="${entry.idEntry}">	
+			${entry.title}
+			<#if entry.mandatory>
+				*
+			</#if>
+			 : 
+		</label>
+    </span>
+    <span class="form-field-column">
+		<span class="form-field-column">
+			<#if list_responses??>
+				<#list list_responses as response>
+					<#if response.entry.idEntry == entry.idEntry && response.toStringValueResponse??>
+						<#if response.field.title == 'X'>
+							<input type="hidden" name="${entry.idEntry}_x" id="${entry.idEntry}_x" value="${response.toStringValueResponse}"/>
+						<#elseif response.field.title == 'Y'>
+							<input type="hidden" name="${entry.idEntry}_y" id="${entry.idEntry}_y" value="${response.toStringValueResponse}"/>
+						<#else>
+							<input type="text" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50" 
+								<#if response.entry.formError??>
+									class="error"
+								</#if>
+							value="${response.toStringValueResponse}"/>
+						</#if>
+					</#if>
+				</#list>
+			<#else>
+				<input type="text" value="" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50" />
+				<input type="hidden" name="${entry.idEntry}_x" id="${entry.idEntry}_x" value=""/>
+		    	<input type="hidden" name="${entry.idEntry}_y" id="${entry.idEntry}_y" value=""/>
+			</#if>
+		</span>
+	</span>
+	 <#if entry.helpMessage?exists&&entry.helpMessage!=''>
+		<span class="form-help">
+			<a class="info" href="javascript:void(0);"><img  src="images/admin/skin/plugins/form/help.gif" />
+				<span id="info-details" class="hide"><pre> ${entry.helpMessage}</pre></span>
+			</a>
+		</span>
+	</#if>
+	<#if list_responses??>
+		<#assign show_error = 0>
+		<#list list_responses as response>
+			<#if response.entry.idEntry == entry.idEntry && response.entry.formError?? && show_error == 0>
+				<#assign show_error = 1>
+				<br />
+				<span class="form-label"><label>&nbsp;</label></span>
+				<span class="form-field-column">
+					<#assign formError = response.entry.formError>
+					<#if formError.mandatoryError>
+						<label class="error">#i18n{form.message.mandatory.entry}</label>
+					<#else>
+						<label class="error">${formError.errorMessage}</label>
+					</#if>
+				</span>
+			</#if>
+		</#list>
+	</#if>
+</div>
+<div class="form-element">
+</div>
+<#if entry.mapProvider?has_content>
+<div class="form-element">
+	<#include entry.mapProvider.htmlCode />
+</div>
+</#if>

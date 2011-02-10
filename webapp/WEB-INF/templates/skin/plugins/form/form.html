@@ -1,0 +1,16 @@
+<#-- 
+Theses Java objects can be used in this template :
+ - form_html : the HTML code of the form
+ - form : the form object 
+ - form_inactive : the message when the form is not active
+-->
+<div id="content" class="span-22 prepend-1 append-1 append-bottom last">
+	<div class="portlet -lutece-border-radius">
+		<#if !form_inactive?has_content>
+			${form_html!}
+		<#else>
+			${form_inactive}
+		</#if>
+	</div>
+</div>
+

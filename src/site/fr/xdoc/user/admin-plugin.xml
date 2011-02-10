@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>
+            Menu principal du plugin form
+        </title>
+    </properties>
+    <body>
+        <section name="Plugin Form">
+             <p>
+            	 Le menu principal récapitule en fonction des rôles de l'utilisateur les fonctionnalités nécessaires à la gestion des formulaires.
+            </p>
+
+             <ul>
+                 <li>Gestion des formulaires</li>
+                 <li>Gestion des formats d'export</li>
+                 <li>Gestion des expressions régulières</li>
+                 <li>Gestion des messages par défaut</li>
+             </ul>
+           </section>
+   </body>
+</document>       
+             

@@ -1,0 +1,80 @@
+<div class="content-box">
+  <h2> #i18n{form.result.title} : '${form.title}'</h2>
+	 	<form action="jsp/admin/plugins/form/Result.jsp" method="post" name="" id=""  >
+		 <div class="highlight-box">
+			<input name="id_form" value="${form.idForm}" type="hidden" />
+	 			 	<p>
+						<label class="text-label" for="fist_response_date_filter">#i18n{form.result.labelValidationDate}</label>
+						<input type="text" name="fist_response_date_filter" id="fist_response_date_filter" size="10" value="<#if fist_response_date_filter?has_content>${fist_response_date_filter?date}</#if>" />
+	
+						#i18n{form.result.labelAnd}
+						
+						<input type="text" name="last_response_date_filter" id="last_response_date_filter" size="10" value="<#if last_response_date_filter?has_content>${last_response_date_filter?if_exists?date}</#if>" />
+							<input type="submit" class="button" value="#i18n{form.result.buttonSearch}" />
+						</p>
+				
+		 </div>
+		  <div class="highlight-box">
+	    		<p>#i18n{form.result.titleStatistic}</p>
+				<br/>
+	    <p><span style="margin-left:50px;"><label class="text-label" for="">#i18n{form.result.labelNumberResponse} </label></span> 
+	       <span style="font-weight:bold;color:#000;">${number_response}</span> 
+	    </p>
+	    <p><span style="margin-left:50px;"><label class="text-label" for="">#i18n{form.result.labelFistResponseDate}</label></span> 
+	    	<#if fist_response_date?exists>
+	    		<span style="font-weight:bold;color:#000;">${fist_response_date?date}</span> 
+	   		 <#else>
+	   		 	<span style="font-weight:bold;color:#000;">-</span> 
+	   		 </#if>
+	    </p>
+	    <p>
+	       <span style="margin-left:50px;">
+	       	<label class="text-label" for="">#i18n{form.result.labelLastResponseDate}</label>
+	       </span> 
+	       <#if last_response_date?exists>
+	          <span style="font-weight:bold;color:#000;">${last_response_date?date}</span>
+	        <#else>
+	        	  <span style="font-weight:bold;color:#000;">-</span>
+	        </#if>  
+	       </p>
+	    <p>
+	    	<label class="text-label">#i18n{form.result.labelGraph}</label>
+	    	<input type="radio" name="times_unit" value="0" <#if times_unit=="0">checked</#if>> #i18n{form.result.radioButtonDay}
+	    	<input type="radio" name="times_unit" value="1" <#if times_unit=="1">checked</#if>> #i18n{form.result.radioButtonWeek}
+	    	<input type="radio" name="times_unit" value="2" <#if times_unit=="2">checked</#if>> #i18n{form.result.radioButtonMonth}
+	    </p> 
+	           <#if fist_response_date_filter?exists&&last_response_date_filter?exists>
+	          		<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&times_unit=${times_unit}&fist_response_date_filter=${fist_response_date_filter?date?if_exists}&last_response_date_filter=${last_response_date_filter?date?if_exists}"/>
+      		   <#elseif  fist_response_date_filter?exists > 
+      		   		<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&times_unit=${times_unit}&fist_response_date_filter=${fist_response_date_filter?date?if_exists}"/>
+      		  <#elseif last_response_date_filter?exists>
+      				 <img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&times_unit=${times_unit}&last_response_date_filter=${last_response_date_filter?date?if_exists}"/>
+      			<#else>
+      				<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&times_unit=${times_unit}"/>
+      			</#if>
+	  </div>
+  </form>
+  <form action="jsp/admin/plugins/form/DoExportResult.jsp" method="post" name="" id=""  >
+	 <div class="highlight-box">
+   		<p>#i18n{form.result.titleDataSave}</p>
+    	 
+		   	 <input name="id_form" value="${form.idForm}" type="hidden" />
+			<#if fistResponseDateFilter?exists>
+				<input name="fist_response_date_filter" value="${fist_response_date_filter?date?if_exists}" type="hidden" />	
+			</#if>	
+			<#if lastResponseDateFilter?exists>
+				<input name="last_response_date_filter" value="${last_response_date_filter?date?if_exists}" type="hidden" />	
+			</#if>	
+    	 	<p>
+	   		   <label for="">#i18n{form.result.labelExportResult} : </label>	
+ 			 <@combo name="id_export_format"  items=export_format_list default_value=-1 />
+			<input value="#i18n{form.result.buttonExportResult}" class="button"  type="submit">
+			<input type="submit" value="#i18n{form.result.buttonCancel}" class="button" name="cancel" />
+          </p>
+        
+      </div>
+      </form>
+   </div>
+     
+<@getDatePickerRange idFieldFrom="fist_response_date_filter" idFieldTo="last_response_date_filter" language=locale />
+	 

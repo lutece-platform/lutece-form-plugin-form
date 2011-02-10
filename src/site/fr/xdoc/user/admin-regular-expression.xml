@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>
+          Gestion des expressions régulières
+        </title>
+    </properties>
+    <body>
+		<section name="Gestion des expressions régulières">
+			<p>
+				L'interface de gestion des expressions régulières récapitule les actions pouvant
+				étre effectuées sur une expression régulière.
+			</p>
+				<p>
+					<center>
+						<img src="user/images/manage_regular_expression.png" />
+					</center>
+				</p>
+				<ul>
+					<li>Création d'une expression régulière</li>
+					<li>Modification d'une expression régulière</li>
+					<li>Suppression d'une expression régulière</li>
+				</ul>
+				<subsection name="Création d'une expression régulière">
+				<p>
+					L'interface de saisie suivante récapitule les
+					informations nécessaires à la création d'une
+					expression régulière.
+				</p>
+				<p>
+					<center>
+						<img src="/user/images/create_regular_expression.png" />
+					</center>
+				</p>
+				
+				<p>
+					
+					L’exemple de saisie  fourni  doit être  conforme  à la valeur de l’expression régulière
+			
+				</p>
+			</subsection>
+          <subsection name="Modification d'une expression régulière">
+           <p>
+             Pour modifier une expression régulière il suffit de cliquer sur le libellé de l'expression régulière.
+           </p>
+           </subsection>
+            <subsection name="Suppression d'une expression régulière">
+            <p>
+            Pour supprimer une expression régulière il faut cliquer sur l’icône
+			représentant l’action de suppression associée à l'expression régulière à supprimer.
+           </p>
+           <p>
+         	  Une expression régulière ne peut pas être supprimée si elle est associée à une question d’un formulaire.
+           </p>
+            </subsection>
+           </section>
+   </body>
+</document>       

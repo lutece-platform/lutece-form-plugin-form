@@ -1,0 +1,110 @@
+ <#assign cpt=0>
+<div class="form-element">
+ <span class="form-label">
+	<label for="${entry.idEntry}">	
+			${entry.title}
+			<#if entry.mandatory>
+				*
+			</#if>
+			 : 
+	 </label>	
+   </span>
+	 <#if entry.fieldInLine>
+	   	 <span class="form-field-ligne">
+	 <#else>
+		   <span class="form-field-column">	
+	 </#if>	 
+	 <ul>
+		<#list entry.fields as field>
+			 <#assign cpt=cpt+1>
+			 <li>
+				 <label>
+			 	<input type="checkbox" name="${entry.idEntry}" id="${entry.idEntry}" value="${field.idField}"
+			 	<#if list_responses??>
+					<#list list_responses as response>
+						<#if response.entry.idEntry == entry.idEntry && response.field??>
+							<#if response.field.idField == field.idField>
+								checked="checked"
+							</#if>
+						</#if>
+					</#list>
+				<#else>
+					<#if field.defaultValue>
+						checked="checked"  
+					</#if>
+				</#if>
+				
+				<#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0>
+					onclick="
+					doCheckboxEffect(this.checked,${field.idField});
+					"
+				</#if>	
+				  /> <#if !field.noDisplayTitle>${field.title}</#if>
+				 </label>
+				<#if !entry.fieldInLine&&cpt=1&&entry.helpMessage?exists&&entry.helpMessage!=''>
+					<span class="form-help">
+						<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/form/help.gif" />
+							<span><pre> ${entry.helpMessage}</pre></span>
+						</a>
+					</span> 
+				</#if>	
+  			 
+		  </li>  
+		</#list>
+	 </ul>
+	</span>	
+	<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
+			<span class="form-help">
+				<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/form/help.gif" />
+					<span><pre> ${entry.helpMessage}</pre></span>
+				</a>
+			</span>
+	 </#if>	
+	<#if list_responses??>
+		<#list list_responses as response>
+			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+				<span class="form-label"><label>&nbsp;</label></span>
+				<span class="form-field-column">
+					<#assign formError = response.entry.formError>
+					<#if formError.mandatoryError>
+						<label class="error">#i18n{form.message.mandatory.entry}</label>
+					<#else>
+						<label class="error">${formError.errorMessage}</label>
+					</#if>
+				</span>
+			</#if>
+		</#list>
+	</#if>
+	<#if str_list_entry_children?exists>
+		${str_list_entry_children}
+	</#if>
+</div>
+
+<#if list_responses??>
+	<script type="text/javascript">
+		<#list list_responses as response>
+			<#if response.entry.idEntry == entry.idEntry && response.field??>
+				var baliseId = "div" + ${response.field.idField};
+				if(document.getElementById && document.getElementById(baliseId) != null)
+				{
+					document.getElementById(baliseId).style.visibility='visible';
+					document.getElementById(baliseId).style.display='block';
+				}
+			</#if>
+		</#list>
+	</script>
+<#else>
+	<#list entry.fields as field>
+		<#if field.defaultValue && field.conditionalQuestions?exists && field.conditionalQuestions?size != 0>
+			<script type="text/javascript">
+				var baliseId = "div" + ${field.idField};
+				
+				if(document.getElementById && document.getElementById(baliseId) != null)
+				{
+					document.getElementById(baliseId).style.visibility='visible';
+					document.getElementById(baliseId).style.display='block';
+				}
+			</script>
+		</#if>
+	</#list>
+</#if>

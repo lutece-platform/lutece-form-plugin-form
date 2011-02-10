@@ -1,0 +1,30 @@
+  <div class="content-box">
+    <h2> #i18n{form.modifyExportFormat.title}</h2>
+    <form method="post" action="jsp/admin/plugins/form/DoModifyExportFormat.jsp" enctype="multipart/form-data" >
+        <input name="id_export" value="${export.idExport}" type="hidden" />
+        <p>
+            <label for="title" >#i18n{form.createExportFormat.labelTitle} * : </label>
+            <input type="text" size="20" id="title" name="title" maxlength="20" value="${export.title}"/>
+        </p>  
+        <p>
+            <label for="description" >#i18n{form.createExportFormat.labelDescription} * : </label>
+            <input type="text" size="60" id="description" name="description" maxlength="255" value="${export.description}"/>
+        </p>	
+         <p>
+            <label for="extension" >#i18n{form.createExportFormat.labelExtension} * : </label>
+            <input type="text" size="10" id="extension" name="extension" maxlength="10" value="${export.extension}"/>
+        </p>		
+        <p>
+            <label for="stylesheet_source" >#i18n{form.createExportFormat.labelXsl} * : </label>
+            <input type="file" id="stylesheet_source" name="stylesheet_source" size="60" maxlength="100"/>
+        </p>
+      			
+        
+        <p>
+            
+            <input type="submit" value="#i18n{form.createExportFormat.buttonSave}" class="button" />
+            <input type="button" value="#i18n{form.createExportFormat.buttonCancel}" class="button" onclick="javascript:history.go(-1)" />
+        </p>
+
+    </form>
+        </div>

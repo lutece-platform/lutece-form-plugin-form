@@ -1,0 +1,41 @@
+<div class="hide" id="locale">${locale}</div>
+<div id="form-content">
+	<form id="form-validate" action="${url_action}" method="post" enctype="multipart/form-data">
+		<input name="page" value="form" type="hidden" />
+		<input name="id_form" value="${form.idForm}" type="hidden" />
+		<input name="page_id" value="${form.formPageId}" type="hidden" />
+		<input name="session" value="session" type="hidden" />
+		<div>
+			<label class="form-title" >${form.title} </label><br/>
+		</div>
+		<fieldset class="form-fieldset">${form.welcomeMessage}</fieldset>
+		${str_entry}   
+		<#if form.activeRequirement>
+			<div>
+				<label for="comment" class="form-comment">
+					<input type="checkbox" name="requirement" id="requirement" value="requirement}" 
+						<#if validate_requirement?? && validate_requirement>
+							checked="checked"
+						</#if>
+					/>
+					<a href="jsp/site/RunStandaloneApp.jsp?page=form&view_requirement=view_requirement&id_form=${form.idForm}" onclick="javascript:openFrontRequirement(this.href); return false;" target="_blank"> #i18n{form.htmlCodeForm.requirement}</a>
+				</label>
+				<#if validate_requirement?? && !validate_requirement>
+					<br />
+					<label class="error">
+						#i18n{form.message.requirementError}
+					</label>
+				</#if>
+			</div>
+		</#if>	
+		<#if jcaptcha?exists>
+			<fieldset class="form-fieldset">${jcaptcha}</fieldset>
+		</#if>
+		<div align="center" class="form-steps">
+			<input type="submit" value="${form.libelleValidateButton}" class="-lutece-input -lutece-border-radius-mini" name="save" />
+			<#if form.libelleResetButton?has_content>
+				<input type="reset" value="${form.libelleResetButton}" class="-lutece-input -lutece-border-radius-mini" name="reset" />
+			</#if>
+		</div>
+	</form>
+</div>

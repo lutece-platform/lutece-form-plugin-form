@@ -1,0 +1,123 @@
+ <#include "/admin/util/editor/editor.html" />
+ <script language="JavaScript" type="text/javascript">
+ 
+	 function doDisplayGraph(isChecked)
+	{
+		if (isChecked) 
+		{
+			displayId('graphOpen');
+		} 
+		else 
+		{
+			hideId('graphOpen');
+		
+		}
+	}
+	
+	 function doDisplayLegende(isChecked)
+	{
+		if (isChecked) 
+		{
+			displayId('legendeOpen');
+		} 
+		else 
+		{
+			hideId('legendeOpen');
+		
+		}
+	}
+ </script> 
+ 
+ <div class="content-box">
+        <h2> #i18n{form.modifyRecap.title} : '${recap.form.title}'</h2>
+       <form action="jsp/admin/plugins/form/DoModifyRecap.jsp" method="post" name="" id=""  >
+     <input name="id_recap" value="${recap.idRecap}" type="hidden" />
+     <p>
+              <label for="back_url">
+              	 #i18n{form.modifyRecap.labelBackUrl} * : 
+              </label>
+              <input type="text" name="back_url" id="back_url" size="80" value="${recap.backUrl}" />
+            </p>
+          <p>
+            <label for="recap_message"> #i18n{form.modifyRecap.labelRecapMessage} * :</label>
+           <div  class="editor">
+           	<textarea class="richtext" name="recap_message" id="recap_message" rows="20" cols="90">${recap.recapMessage}</textarea>
+	       </div>
+	       </p>
+          <p>
+            <label for="">
+             #i18n{form.modifyRecap.labelRecapData} :   
+            </label>
+           	<#if recap.recapData>
+           	 	<input name="recap_data" value="1" type="checkbox"  checked="checked">
+           	 <#else>
+           	 	<input name="recap_data" value="1" type="checkbox"  >
+            </#if>
+            <br/>
+            <label>
+              &nbsp;
+            </label>#i18n{form.modifyRecap.labelRecapDataComment}
+          </p>
+          <p>
+            <label for="graph">
+             #i18n{form.modifyRecap.labelGraph} : 
+            </label>
+            	<#if recap.graph>
+            		<input name="graph"  id="graph" value="1" type="checkbox" onclick="doDisplayGraph(this.checked)" checked="checked">
+            	<#else>
+            		<input name="graph"  id="graph"  value="1" type="checkbox" onclick="doDisplayGraph(this.checked)">
+            	</#if>	
+            <br/>
+            <label>
+              &nbsp;
+            </label>#i18n{form.modifyRecap.labelGraphComment}
+            
+         	<#if !recap.graph>
+    			<p id="graphOpen" style="display:none">
+    		<#else>
+    			<p id="graphOpen" >
+    		</#if>  
+            <label for="">
+              #i18n{form.modifyRecap.labelGraphType} : 
+            </label>
+            <#if recap.graphType?exists>
+              	<@combo name="id_graph_type"  items=graph_type_list default_value=recap.graphType.idGraphType />
+            <#else>
+            	<@combo name="id_graph_type"  items=graph_type_list default_value=-1 />
+            </#if>
+            <p id="graphstyle">
+            <label for="">
+              #i18n{form.modifyRecap.labelGraphStyle} : 
+            </label>
+                <input type="radio" name="graph_three_dimension" value="0" checked="checked"> #i18n{form.modifyRecap.selectGraphStyle2d}
+                <#if recap.graphThreeDimension >
+                	<input type="radio" name="graph_three_dimension" value="1" checked="checked"  > #i18n{form.modifyRecap.selectGraphStyle3d}
+            	<#else>
+            		<input type="radio" name="graph_three_dimension" value="1" > #i18n{form.modifyRecap.selectGraphStyle3d}
+            	</#if>
+            </p>
+              <p id="graphstyle">
+             <label for="">
+         	#i18n{form.modifyRecap.labelGraphLabel} : 
+             </label>
+                <#if recap.graphLabelValue>
+                	<input name="graph_label_value" value="1" type="checkbox"  checked="checked" >
+            	<#else>
+            		<input name="graph_label_value" value="1" type="checkbox" >
+            	</#if>
+                <br/>
+                <label>
+                  &nbsp;
+                </label>  #i18n{form.modifyRecap.labelGraphLabelComment}
+              </p>
+            </p>
+             
+          </p>
+           
+          <p>
+         	<input type="submit" value="#i18n{form.modifyRecap.buttonSave}" class="button"  name="save"/>
+    		<input type="submit" value="#i18n{form.modifyRecap.buttonCancel}" class="button" name="cancel" />
+        </p>
+     </form>
+    </div> 
+     <@initEditor />

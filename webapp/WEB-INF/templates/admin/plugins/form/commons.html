@@ -1,0 +1,89 @@
+<#function getChecked code reference_list>
+	<#if reference_list?has_content>
+		<#list reference_list as reference_item>
+			<#if reference_item.code = code>
+				<#if reference_item.checked>
+  					<#return "checked='checked'">
+  				<#else>
+  					<#return "">
+  				</#if>
+  			</#if>
+  		</#list>
+	</#if>
+	<#return "">
+</#function>
+
+<#function getName code reference_list>
+	<#if reference_list?has_content>
+		<#list reference_list as reference_item>
+			<#if reference_item.code = code>
+  				<#return reference_item.name>
+  			</#if>
+  		</#list>
+	</#if>
+	<#return "">
+</#function>
+
+<script type="text/javascript">
+	function doDisplayAdvancedSettings(isChecked, optionalDiv)
+	{
+		if (isChecked)
+		{
+			displayId('advanced_settings');			
+			hideId('settings');		
+			if( optionalDiv != null )
+			{
+				hideId(optionalDiv);
+			}	
+			hideId('publication_settings');			
+			displayId('button_back');
+			hideId('button_publication_settings');
+			hideId('button_advanced_settings');
+		}
+		else
+		{
+			hideId('advanced_settings');
+			hideId('publication_settings');
+			displayId('settings');		
+			if( optionalDiv != null )
+			{
+				displayId(optionalDiv);
+			}			
+			hideId('button_back');
+			displayId('button_advanced_settings');		
+			displayId('button_publication_settings');				
+		}
+	}
+</script>
+
+<script type="text/javascript">
+	function doDisplayPublicationSettings(isChecked, optionalDiv)
+	{
+		if (isChecked)
+		{
+			displayId('publication_settings');			
+			hideId('settings');		
+			if( optionalDiv != null )
+			{
+				hideId(optionalDiv);
+			}	
+			hideId('advanced_settings');			
+			displayId('button_back');
+			hideId('button_publication_settings');
+			hideId('button_advanced_settings');
+		}
+		else
+		{
+			hideId('advanced_settings');
+			hideId('publication_settings');
+			displayId('settings');		
+			if( optionalDiv != null )
+			{
+				displayId(optionalDiv);
+			}		
+			hideId('button_back');
+			displayId('button_advanced_settings');	
+			displayId('button_publication_settings');					
+		}
+	}
+</script>

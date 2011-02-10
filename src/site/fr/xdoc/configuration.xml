@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "//UNKNOWN/" "http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+	<properties>
+		<title>Configuration</title>
+	</properties>
+	<body>
+		<section name="Installation">
+			<p>
+				Il existe plusieurs possibilités d'installation en
+				fonction de la distribution employée :
+			</p>
+			<ul>
+				<li>
+					Distribution binaire : Le contenu du fichier zip de
+					la distribution binaire doit être décompressé dans
+					une webapp contenant déjà le coeur de lutèce.
+				</li>
+				<li>
+					Sources : Dans ce cas il est nécessaire d'ajouter la
+					dépendance sur le coeur afin de pouvoir compiler les
+					sources et de se retrouver avec une distribution
+					binaire.
+				</li>
+			</ul>
+			<p>
+			Pour générer la distribution binaire, il suffit de télécharger les sources du projet 
+			et d'exécuter la commande : <br/>
+			<code>mvn lutece:assembly</code>.
+			</p>
+			<br/><br/>
+			<p>
+			Le module est à installer dans une application contenant
+				au minimum :
+			</p>
+			<ul>
+				<li>le coeur de Lutèce</li>
+			</ul>
+			<p>
+				Pour les détails de l'installation, reportez vous à la
+				rubrique :
+				<a href="http://dev.lutece.paris.fr/lutece-core/fr/howto-create-plugins.html">Installation de plugin</a>
+			</p> 
+			<br/>
+			<br/>
+			<p>
+				<strong>Remarque :</strong>
+				<br />
+				Il est possible d'obtenir un fichier
+				<code>war</code>
+				déployable en utilisant un packaging de type
+				<code>lutece-site.</code>
+				Ce fichier doit être placé dans le répertoire
+				<code>webapps</code>
+				de votre installation de Tomcat. Il sera automatiquement
+				déployé lors du lancement du serveur.
+			</p>
+		</section>
+		<section name="Configuration">
+		
+			<subsection name="Mode Portail">
+				<p>
+					La configuration correspond à la configuration
+					classique d'un portail Lutèce.
+				</p>
+			</subsection>
+			<subsection name="Fichiers paramétrables">
+			
+				<p> db.properties :</p>
+				<p>
+				Pour utiliser un pool spécifique au plugin form, ajouter le code suivant dans ce fichier :
+				</p>
+				
+				<source>
+					form.poolservice=fr.paris.lutece.util.pool.service.LuteceConnectionService
+					form.driver=org.gjt.mm.mysql.Driver
+					form.url=jdbc:mysql://&lt;mysqlhost&gt;:&lt;mysqlport&gt;/&lt;basename&gt;?
+								autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=utf8
+					form.user=
+					form.password=
+					form.initconns=2
+					form.maxconns=5
+					form.logintimeout=2000
+					form.checkvalidconnectionsql=SELECT 1
+				</source>
+
+				<br />
+				<p> form.properties :</p>
+				<p>
+				Certains réglages sont disponibles au niveau du plugin :
+				</p>
+				<table>
+					<tr>
+						<th>Propriété</th>
+						<th>Description</th>
+					</tr>
+					<tr>
+						<td>form.itemsPerPage</td>
+						<td>Nombre de lignes affichées
+						 par le paginator dans les interfaces d'administration du plugin.</td>
+					</tr>
+					<tr>
+						<td>daemon.formPublication.interval</td>
+						<td>Intervalle de temps en milliseconde entre chaque passage du daemon de publication.
+						Ce dernier est chargé de désactiver les formulaires dont la date de validité est inférieure à la date de passage du daemon.</td>
+					</tr>
+					<tr>
+						<td>daemon.formPublication.onstartup</td>
+						<td>Pour démarrer le daemon au démarrage de la WebApp, renseignez la valeur 1 sinon 0.</td>
+					</tr>
+					<tr>
+						<td>graph.numberResponseAxisX</td>
+						<td>Nombre de résultats affichés sur l'axe des abscisses du graphique représentant le nombre de réponses par unité de temps. </td>
+					</tr>	
+				</table>
+			</subsection>
+		</section>
+	</body>
+</document>

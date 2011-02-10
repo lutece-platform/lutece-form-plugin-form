@@ -1,0 +1,15 @@
+<div class="content-box">
+	<h2>#i18n{form.manageValidator.title}</h2>
+	<#if validator_list?has_content>
+		<#list validator_list as validator>
+			<div class="highlight-box">
+				${validator}
+			</div>
+		</#list>
+	<#else>
+		<p>
+			#i18n{form.manageValidator.noValidator}
+		</p>
+		<br/>
+	</#if>
+</div>

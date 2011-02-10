@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Gestion des Formulaires</title>
+	</properties>
+	<body>
+		<section name="Gestion des Formulaires">
+			<p>
+				L'interface de gestion des formulaires récapitule en
+				fonction des rôles de l'utilisateur les actions pouvant
+				être effectuées sur un formulaire.
+			</p>
+				<p>
+					<center>
+						<img src="user/images/manage_form.png"/>
+					</center>
+				</p>
+			<ul>
+				<li>Création d'un formulaire</li>
+				<li>Modification d'un formulaire</li>
+				<li>Modification de l'état d'un formulaire</li>
+				<li>Suppression d'un formulaire</li>
+				<li>Duplication d'un formulaire</li>
+				<li>Tester un formulaire</li>
+				<li>Gestion du récapitulatif d'un formulaire</li>
+				<li>Visualisation des résultats d'un formulaire</li>
+			</ul>
+			<p>
+				La liste des formulaires est triée par date de création
+				du formulaire, du plus récent au plus ancien. Cette
+				dernière peut être filtrée sur le statut d'un formulaire ainsi que sur l'appartenance
+				d'un formulaire à un groupe de travail.
+
+			</p>
+			<subsection name="Création d'un formulaire">
+				<p>
+					L'interface de saisie suivante récapitule les
+					informations nécessaires à la création d'un
+					formulaire.
+				</p>
+				<p>
+					<center>
+						<img src="user/images/create_form.png" />
+					</center>
+				</p>
+				<p>
+					La sélection d'un groupe de travail permet
+					d'associer un formulaire à un groupe de travail
+					Lutèce. L'administration du formulaire sera alors
+					restreinte aux utilisateurs faisant parti du groupe
+					sélectionné.
+				</p>
+				<p>
+					La sélection d'une liste de diffusion permet
+					d'associer un formulaire à une liste de diffusion.
+					Les utilisateurs de la liste sélectionnée
+					recevront un mail à chaque validation du formulaire
+					par un répondant, ainsi qu'une notification de fin
+					de validité du formulaire à l’expiration de ce
+					dernier.
+				</p>
+				<p>
+					La sélection d'un captcha entraine que la saisie du
+					formulaire par un répondant ne sera validée qu'après
+					vérification du captcha (cette option est disponible
+					que dans le cas ou le plugin captcha est activé sur
+					le site).
+				</p>
+				<p>
+					L'option 'Limiter le nombre de réponses' permet
+					d'empêcher qu'un formulaire soit saisi plusieurs
+					fois par le même répondant.
+				</p>
+				<p>
+					L'option 'Tracer les utilisateurs' permet de stocker
+					pour chaque soumission l’adresse IP du répondant.
+				</p>
+				<p>
+					La date de validité permet après expiration de cette
+					dernière de faire passer automatiquement le
+					formulaire à l'état indisponible. Le formulaire sera
+					alors remplacé par son message d'indisponibilité.
+				</p>
+
+			</subsection>
+			<subsection name="Modification d'un formulaire">
+				<p>
+					L'interface de modification 
+					permet de modifier les informations renseignées lors de l’insertion du
+					formulaire et d'administrer les
+					entrées du formulaire (questions, textes libres et
+					regroupements).
+					
+				</p>
+				
+				<p>
+					<center>
+						<img src="user/images/modify_form.png" />
+					</center>
+				</p>
+				
+				<subsection name="Gestion des entrées du formulaire">
+					<p>
+						Les actions possibles sur les entrées d'un
+						formulaire (questions, commentaires, regroupement
+						de questions)sont:
+						<ul>
+							<li>
+								Déplacement d'une entrée à l'intérieur
+								d'un formulaire
+							</li>
+							<li>
+								Duplication d'une question ou d'un
+								commentaire
+							</li>
+							<li>Création d'une nouvelle entrée</li>
+							<li>Modification d'une entrée</li>
+							<li>Suppression d'une entrée</li>
+
+
+						</ul>
+					</p>
+
+					<p>
+						Le déplacement des entrées dans le formulaire se
+						fait en utilisant les flèches ‘bas’ et ‘haut’
+						placées à coté de chaque entrée.
+					</p>
+					<p>
+						Pour grouper des questions il suffit de créer un
+						'regroupement' en saisissant son libellé puis de
+						déplacer les questions concernées à l’intérieur
+						de ce dernier.
+					</p>
+					<p>
+						L'insertion des questions ou des commentaires
+						dans un regroupement se fait en cliquant sur
+						l’icône correspondante puis en sélectionnant le
+						regroupement de destination.
+					</p>
+					<p>
+						De même pour sortir une question ou un
+						commentaire d’un regroupement il suffit de
+						cliquer sur l’icône correspondante, la question
+						se place alors en dernière position dans la
+						liste des questions du formulaire.
+					</p>
+					<p>
+						Pour créer une nouvelle question ou commentaire
+						il suffit de sélectionner dans la liste des
+						champs possibles le type de champ à insérer et
+						de cliquer sur le bouton 'Ajouter'.
+					</p>
+					<subsection name="Création d'une question">
+						<p>
+							L'interface de saisie suivante récapitule
+							les informations nécessaires lors de la
+							création d'une question. L'interface
+							affichée dépend du type de question
+							sélectionné.
+						</p>
+						<p>
+							<center>
+								<img src="user/images/create_entry.png" />
+							</center>
+						</p>
+
+					</subsection>
+					<subsection
+						name="Modification d'une question de type fermé">
+						<p>
+							L'interface de saisie suivante récapitule
+							les informations nécessaires à la
+							modification d'une question fermée (radio
+							bouton, liste déroulante, case à cocher) et
+							permet l'administration des réponses
+							associées.
+
+						</p>
+						<p>
+							<center>
+								<img
+									src="user/images/modify_entry.png" />
+							</center>
+						</p>
+						<p>
+							Les actions possibles concernant les
+							réponses à une question sont:
+							<ul>
+								<li>
+									Déplacement d'une réponse à
+									l'intérieur d'une question
+								</li>
+								<li>Création d'une réponse</li>
+								<li>Modification d'une réponse</li>
+								<li>Suppression d'une réponse</li>
+							</ul>
+						</p>
+
+						<p>
+							Le Déplacement des réponses dans une
+							question se fait en utilisant les flèches
+							‘bas’ et ‘haut’ placées à coté de chaque
+							réponse.
+						</p>
+						<subsection
+							name="Gestion des réponses associées aux questions">
+							<p>
+								Lors de la création d'une réponse, le
+								fait de saisir une valeur vide pour une
+								réponse entraine que la sélection de
+								cette réponse par un répondant sera
+								considérée comme une non réponse.
+							</p>
+							<p>
+								L'interface de saisie suivante
+								récapitule les informations nécessaires
+								lors de la modification d'une réponse et
+								permet dans le cas ou la réponse est
+								associée à une question de type bouton
+								radio ou case à cocher d'administrer des
+								questions conditionnelles.
+							</p>
+							<p>
+								<center>
+									<img
+										src="user/images/modify_response.png" />
+								</center>
+							</p>
+							<p>
+								Les questions conditionnelles créées
+								s'afficheront lors de la sélection de la
+								réponse par le répondant.
+							</p>
+
+						</subsection>
+					</subsection>
+					<subsection
+						name="Mofification d'une question de type ouvert">
+						<p>
+							L'interface de saisie suivante récapitule
+							les informations nécessaires lors de la
+							modification d'une question ouverte (zone de
+							texte libre, zone de texte
+							long, commentaire, date, fichier) et permet
+							dans le cas d'une question de type texte
+							libre de lui associer des règles de
+							validations.
+						</p>
+						<p>
+							<center>
+								<img src="user/images/modify_open_entry.png" />
+							</center>
+						</p>
+						<p>
+							Dans le cas d’une question de type 'Zone de
+							texte court' il est possible de demander
+							qu’un ou plusieurs contrôles soit effectués
+							sur le format du texte saisi. Pour ce faire
+							il faut sélectionner dans la liste
+							déroulante une règle de vérification à
+							appliquer et cliquer sur le bouton ajouter. Les
+							règles de vérifications proposées sont
+							administrables.Il est possible de supprimer
+							un contrôle en cliquant sur l’icône
+							correspondant à l’action de suppression
+							associée à la vérification
+						</p>
+					</subsection>
+				</subsection>
+			</subsection>
+			<subsection name="Activation/Désactivation d'un formulaire">
+				<p>
+					Pour Activer un formulaire il faut cliquer sur l’icône
+					représentant l’action d’activation associée au
+					formulaire. Cette action est possible si le
+					formulaire est dans l’état ‘indisponible’ De même il est
+					possible de désactiver un formulaire. Cette action est
+					possible si le formulaire est dans l’état ‘disponible’.
+					Dans le cas ou le formulaire est inséré dans une
+					rubrique il sera remplacé par son message
+					d’indisponibilité
+	
+				</p>
+			</subsection>
+			<subsection name="Suppression d'un formulaire">
+				<p>
+					Pour Supprimer un formulaire il faut cliquer sur l’icône
+					représentant l’action de suppression associée au
+					formulaire à supprimer. Dans le cas ou le formulaire est
+					inséré dans une rubrique il ne peut être supprimé. La
+					suppression du formulaire entraine la suppression de
+					toutes les réponses associées.
+	
+				</p>
+		    </subsection>
+			<subsection name="Duplication d'un formulaire">
+				<p>
+					Pour dupliquer un formulaire il faut cliquer sur l’icône
+					représentant l’action de duplication associée au
+					formulaire que vous souhaitez dupliquer. Le formulaire
+					nouvellement créé a le statut indisponible, il apparait
+					en tête dans la liste des formulaires La liste des
+					réponses lui étant associée est vide.
+				</p>
+			</subsection>
+			<subsection name="Tester un formulaire">
+				<p>
+					L'interface de saisie affiche le formulaire tel
+					qu'il apparaitra coté front office, privé du style
+					d'affichage de la rubrique ou il sera inséré.
+				</p>
+				<p>
+					<center>
+						<img src="user/images/test_form.png" />
+					</center>
+				</p>
+				<p>
+					Les tests sur les formulaires permettent de vérifier
+					que l'ensemble des informations du formulaire sont
+					bien présentes et que les contrôles concernant la
+					saisie utilisateur sont bien effectuées.
+				</p>
+				<p>
+					Il est possible de consulter les résultats en
+					exportant les réponses saisies durant le test (Les
+					réponses insérées ne sont stockées que durant la
+					période du test). Pour consulter les résultats
+					cliquer sur le bouton idoine après avoir sélectionné
+					un format de sortie.
+				</p>
+			</subsection>
+			<subsection
+				name="Gestion du récapitulatif d'un formulaire">
+				<p>
+					L'interface de saisie suivante récapitule les
+					informations qui devront être affichées après
+					validation du formulaire par un répondant.
+				</p>
+				<p>
+					<center>
+						<img src="user/images/recap_form.png" />
+					</center>
+				</p>
+				<p>
+					Il est possible de configurer le récapitulatif en
+					modifiant les informations suivantes
+					<ul>
+						<li>Le message de remerciement</li>
+						<li>
+							Afficher le récapitulatif de la saisie
+							utilisateur
+						</li>
+						<li>
+							Affichage sous forme de
+							graphique des statistiques concernant les
+							résultats du formulaire 
+						</li>
+						<li>
+							Configuration des propriétés d’affichage du
+							graphique
+						</li>
+					</ul>
+
+
+
+
+				</p>
+			</subsection>
+			<subsection
+				name="Visualisation des résultats d'un formulaire">
+				<p>
+					La page suivante affiche les résultats du formulaire
+					et permet de les exporter dans un fichier
+					au format sélectionné.
+				</p>
+				<p>
+					<center>
+						<img src="user/images/result_form.png" />
+					</center>
+				</p>
+				<p>
+					Il est possible d'affiner les résultats en
+					choisissant un intervalle de date de validation pour
+					les réponses.
+
+				</p>
+				<p>
+					Ces résultats peuvent être exportés en choisissant
+					un format d'export parmi la liste des formats
+					d’export disponible. (Cette liste est administrable)
+				</p>
+			</subsection>
+
+
+		</section>
+	</body>
+</document>

@@ -1,0 +1,60 @@
+<table>
+   	<tr>
+   		<th>#i18n{form.dashboard.columnTitleLabel}</th>   		
+   		<th>#i18n{form.dashboard.row_state}</th>  
+   		<th>#i18n{form.dashboard.columnTitleActions}</th>  
+   		<th>#i18n{form.dashboard.nb_answers}</th>   	 		
+   	</tr>
+    <#list form_list as form>
+    	<tr>
+			<td>
+				<#if authorized_form_modification_list?seq_contains(form.idForm)>
+					<a href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form">
+						${form.title} 
+					</a>
+				<#else>
+					${form.title} 
+				</#if>
+			</td>
+			
+			<td>
+				<#if form.active>
+			       	<#if form.autoPublished>
+			      		<img src="images/admin/skin/plugins/form/actions/enable_auto_publication.png" alt="#i18n{form.manageForm.stateEnabledAutoPublication}" title="#i18n{form.manageForm.stateEnabledAutoPublication}" />
+					<#else>
+						<img src="images/admin/skin/plugins/form/actions/enable.png" alt="#i18n{form.manageForm.stateEnabled}" title="#i18n{form.manageForm.stateEnabled}" />
+					</#if>
+				<#else>
+			       	<#if form.autoPublished>
+			       		<#if form.autoPublicationActive>
+			      			<img src="images/admin/skin/plugins/form/actions/disable_auto_publication.png" alt="#i18n{form.manageForm.stateDisableddAutoPublication}" title="#i18n{form.manageForm.stateDisabledAutoPublication}" />
+			      		<#else>
+			      			<img src="images/admin/skin/plugins/form/actions/pause_auto_publication.png" alt="#i18n{form.manageForm.stateSuspendedAutoPublication}" title="#i18n{form.manageForm.stateSuspendedAutoPublication}" />
+			      		</#if>
+					<#else>
+						<img src="images/admin/skin/plugins/form/actions/disable.png" alt="#i18n{form.manageForm.stateDisabled}" title="#i18n{form.manageForm.stateDisabled}"/>
+					</#if>
+				</#if>		     
+			</td>
+			
+            <td>
+            	<#if form.actions?exists>
+					<#list form.actions as action>
+						<#if (action.permission=='CHANGE_STATE') || (action.permission=='CHANGE_STATE_AUTO_PUBLICATION') || (action.permission=='VIEW_RESULT') || (action.permission=='DELETE') >
+							<#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
+							<#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && 
+								!((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
+						 		<a href="${action.url}?id_form=${form.idForm}&plugin_name=form">
+							  		<img src="${action.iconUrl}" alt="${action.name}" title="${action.description}">
+						  		</a>
+					  		</#if>
+				  		</#if>
+					</#list>
+				</#if>					
+            </td>        
+            <td>
+            	${response_count_map[form.idForm?string]}
+            </td>   
+    	</tr>
+    </#list>
+</table>

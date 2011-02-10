@@ -1,0 +1,52 @@
+ <#include "/admin/util/editor/editor.html" />
+<div class="content-box">
+  <h2> #i18n{form.manageDefaultMessage.title}</h2>
+  <form action="jsp/admin/plugins/form/DoModifyDefaultMessage.jsp" method="post" >
+   
+  <p>
+     <label for="welcome_message"> #i18n{form.manageDefaultMessage.labelWelcomeMessage} * :</label>
+     <div  class="editor">
+     	<textarea name="welcome_message"   id="welcome_message"rows="20" cols="90" class="richtext">${default_message.welcomeMessage}</textarea>
+	 </div>
+	 <br/>
+  </p>
+  <p>
+     <label for="unavailability_message"> #i18n{form.manageDefaultMessage.labelUnavailabilityMessage} * :</label>
+       <div  class="editor">
+     	<textarea name="unavailability_message" id="unavailability_message" rows="20" cols="90" class="richtext">${default_message.unavailabilityMessage}</textarea>
+	 </div>
+	 <br/>
+  </p>
+  <p>
+     <label for="requirement"> #i18n{form.manageDefaultMessage.labelRequirementMessage} * :</label>
+     <div class="editor">
+     	<textarea name="requirement" id="requirement"  rows="20" cols="90" class="richtext">${default_message.requirement}</textarea>
+	</div>
+	 <br/>
+  </p>
+   <p>
+     <label for="recap_message"> #i18n{form.manageDefaultMessage.labelRecapMessage} * :</label>
+     <div class="editor">
+     	<textarea name="recap_message" id="recap_message" rows="20" cols="90" class="richtext">${default_message.recapMessage}</textarea>
+	 </div>
+	 <br/>
+  </p>
+   
+  <p>
+    <label for="libelle_validate_button">#i18n{form.manageDefaultMessage.labelLibelleValidateButton} * :</label>
+    <input type="text" name="libelle_validate_button" id="" size="80" value="${default_message.libelleValidateButton}" maxlength="255" />
+   </p>
+  <p>
+    <label for="libelle_reset_button">#i18n{form.manageDefaultMessage.labelLibelleResetButton} :</label>
+    <input type="text" name="libelle_reset_button" id="" size="80" value="${default_message.libelleResetButton}" maxlength="255" />
+  </p>
+  <p>
+    <label for="back_url">#i18n{form.manageDefaultMessage.labelBackUrl} * :</label>
+    <input type="text" name="back_url" id="" size="80" value="${default_message.backUrl}" />
+   	<p>
+    <input type="submit" value="#i18n{form.createForm.buttonSave}" class="button" />
+    <input type="button" value="#i18n{form.createForm.buttonCancel}" class="button" onclick="javascript:history.go(-1)" />
+   </p>
+  </form>
+ </div>
+ <@initEditor />

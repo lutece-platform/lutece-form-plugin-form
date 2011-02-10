@@ -1,0 +1,56 @@
+<div class="form-element">
+	<span class="form-label">	
+		<label for="${entry.idEntry}">	
+			${entry.title}<#if entry.mandatory> *</#if> : 
+		</label>	
+	</span>
+	<span class="form-field-column">	  
+		<#list entry.fields as field>
+			<input type="text" name="${entry.idEntry}" id="${entry.idEntry}" size="10" class="-lutece-input -lutece-border-radius-mini 
+				<#if list_responses??>
+					<#list list_responses as response>
+						<#if response.entry.idEntry == entry.idEntry>
+							<#if response.entry.formError??>
+								error
+							</#if>
+							" 
+							<#if response.toStringValueResponse??>
+								value="${response.toStringValueResponse}"
+							</#if>
+						</#if>
+					</#list>
+				<#else>
+					<#if field.valueTypeDate?exists>
+						" value="${field.valueTypeDate}" 
+				 	<#else>
+						" value="" 
+					</#if>
+				</#if>
+			/>
+		</#list>
+	</span>
+	<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+		<span class="form-help">
+			<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/form/help.gif" />
+				<span><pre> ${entry.helpMessage}</pre></span>
+			</a>
+		</span>
+	</#if>	
+	<#if list_responses??>
+		<#list list_responses as response>
+			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+				<br />
+				<span class="form-label"><label>&nbsp;</label></span>
+				<span class="form-field-column">
+					<#assign formError = response.entry.formError>
+					<#if formError.mandatoryError>
+						<label class="error">#i18n{form.message.mandatory.entry}</label>
+					<#else>
+						<label class="error">${formError.errorMessage}</label>
+					</#if>
+				</span>
+			</#if>
+		</#list>
+	</#if>
+</div>
+<@getDatePicker idField="${entry.idEntry}" language=locale />

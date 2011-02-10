@@ -1,0 +1,44 @@
+<div id="content-box-actions">
+	<form method="post" action="jsp/admin/plugins/form/CreateExportFormat.jsp" >
+		<input type="submit" class="button bt-toolbar" value="#i18n{form.manageExportFormat.buttonCreate}"   />
+	</form>
+</div>
+<div class="content-box">
+	<h2>#i18n{form.manageExportFormat.title}</h2>
+	<@paginationAdmin paginator=paginator combo=1/>
+	<table> 
+		<tr>
+			<th>
+				#i18n{form.manageExportFormat.rowTitle}
+			</th>
+			<th>
+				#i18n{form.manageExportFormat.rowDescription}
+			</th>
+			<th>
+				#i18n{form.manageExportFormat.rowExtension}
+			</th>
+			<th>
+				#i18n{form.manageExportFormat.rowActions}
+			</th>
+		</tr>
+		<#list export_list as export>	
+			<tr>
+				<td>
+					<a href="jsp/admin/plugins/form/ModifyExportFormat.jsp?id_export=${export.idExport}" class="bullet-link">${export.title}</a>
+				</td>
+				<td >
+					${export.description}
+				</td>
+				<td >
+					${export.extension}
+				</td>
+				<td >
+					<a href="jsp/admin/plugins/form/ConfirmRemoveExportFormat.jsp?id_export=${export.idExport}">
+						<img src="images/admin/skin/plugins/form/actions/delete.png" alt="#i18n{form.manageForm.altDelete}" title="#i18n{form.manageForm.altDelete}" />
+					</a>
+				</td>
+			</tr>
+		</#list>
+	</table>
+	<@paginationAdmin paginator=paginator/>
+</div> 

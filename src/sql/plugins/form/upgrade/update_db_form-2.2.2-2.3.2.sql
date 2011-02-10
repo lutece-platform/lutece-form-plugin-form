@@ -1,0 +1,1 @@
+ALTER TABLE form_form ADD supports_https smallint default 0;

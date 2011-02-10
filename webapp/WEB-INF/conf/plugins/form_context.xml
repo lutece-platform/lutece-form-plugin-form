@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+ 	 <bean id="form.formDAO"  class="fr.paris.lutece.plugins.form.business.FormDAO" />
+ 	 <bean id="form.defaultMessageDAO"  class="fr.paris.lutece.plugins.form.business.DefaultMessageDAO" />
+ 	 <bean id="form.exportFormatDAO"  class="fr.paris.lutece.plugins.form.business.ExportFormatDAO" /> 	 
+ 	 <bean id="form.entryTypeDAO"  class="fr.paris.lutece.plugins.form.business.EntryTypeDAO" />
+ 	 <bean id="form.graphTypeDAO"  class="fr.paris.lutece.plugins.form.business.GraphTypeDAO" />
+ 	 <bean id="form.entryDAO"  class="fr.paris.lutece.plugins.form.business.EntryDAO" />
+ 	 <bean id="form.fieldDAO"  class="fr.paris.lutece.plugins.form.business.FieldDAO" />
+ 	 <bean id="form.recapDAO"  class="fr.paris.lutece.plugins.form.business.RecapDAO" />
+ 	 <bean id="form.formActionDAO"  class="fr.paris.lutece.plugins.form.business.FormActionDAO" />
+ 	 <bean id="form.responseDAO"  class="fr.paris.lutece.plugins.form.business.ResponseDAO" />
+ 	 <bean id="form.formSubmitDAO"  class="fr.paris.lutece.plugins.form.business.FormSubmitDAO" />
+ 	 <bean id="form.formPortletDAO"  class="fr.paris.lutece.plugins.form.business.portlet.FormPortletDAO" />
+ 	 <bean id="form.formProcessorDAO"  class="fr.paris.lutece.plugins.form.business.outputprocessor.FormProcessorDAO" />
+     <bean id="form.notifySenderConfigurationDAO" 	class="fr.paris.lutece.plugins.form.modules.processornotifysender.business.NotifySenderConfigurationDAO" />
+ 	 <bean id="form.entryParameterDAO" class="fr.paris.lutece.plugins.form.business.parameter.EntryParameterDAO" />
+ 	 <bean id="form.formParameterDAO" class="fr.paris.lutece.plugins.form.business.parameter.FormParameterDAO" />
+ 	 <bean id="form.formRemovalService" class="fr.paris.lutece.portal.service.util.RemovalListenerService" />
+ 	 <bean id="form.entryRemovalService" class="fr.paris.lutece.portal.service.util.RemovalListenerService" />
+ 	  
+   	<bean id="form.outputProcessorSet"  class="fr.paris.lutece.plugins.form.business.outputprocessor.OutputProcessorSet" />
+    
+      <bean id="form.notifySender" class="fr.paris.lutece.plugins.form.modules.processornotifysender.business.ProcessorNotifySender">
+      	<property name="key" value="notifySender" />
+      </bean>
+    
+    
+ </beans>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>
+            Gestion des formats d'export
+        </title>
+    </properties>
+    <body>
+		<section name="Gestion des formats d'export">
+			<p>
+				L'interface de gestion des formats d'export récapitule les actions pouvant
+				être effectuées sur un format d'export.
+			</p>
+				<p>
+					<center>
+						<img src="user/images/manage_export_format.png" />
+					</center>
+				</p>
+				<ul>
+					<li>Création d'un format d'export</li>
+					<li>Modification d'un format d'export</li>
+					<li>Suppression d'un format d'export</li>
+				</ul>
+				<subsection name="Création d'un format d'export">
+				<p>
+					L'interface de saisie suivante récapitule les
+					informations nécessaires à la création d'un
+					format d'export.
+				</p>
+				<p>
+					<center>
+						<img src="user/images/create_export_format.png" />
+					</center>
+				</p>
+				<p>
+					
+					 La  feuille de style XSL fournie permet de faire la transformation des réponses générées 
+					 au format XML vers le format d’export souhaité(Le fichier généré après transformation comprendra l’extension renseignée).
+			
+				</p>
+			</subsection>
+          	<subsection name="Modification d'un format d'export">
+	           <p>
+	             Pour modifier un format d'export il suffit de cliquer sur le libellé du format souhaité.
+	           </p>
+	       </subsection> 
+	       <subsection name="Suppression d'un format d'export">
+	        <p>
+            Pour supprimer un format d'export il faut cliquer sur l’icône
+				représentant l’action de suppression associée au
+				format à supprimer.
+           </p>
+           </subsection>
+           </section>
+   </body>
+</document>       
+             

@@ -1,0 +1,18 @@
+<div class="content-box">
+	<h2>
+	    <img src="${icon}" width="24" height="24" align="middle"/>
+	    <a href="${url}" >
+	        #i18n{form.dashboard.formList}
+	    </a>
+	    <a class="top" href="jsp/admin/AdminMenu.jsp#top">
+            <img alt="#i18n{form.dashboard.top}" src="images/admin/skin/sign-up.png">
+        </a>
+        <#if permission_create>
+		    <a class="top" href="jsp/admin/plugins/form/CreateForm.jsp">
+		    	<img src="images/admin/skin/plugins/form/actions/add.png" title="#i18n{form.dashboard.addForm}" alt="#i18n{form.dashboard.addForm}" />
+		    </a>
+		</#if>
+    </h2>
+    <br />
+    <#include "form_dashboard.html" />
+</div>

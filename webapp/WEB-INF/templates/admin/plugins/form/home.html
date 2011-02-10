@@ -1,0 +1,41 @@
+
+	<div class="content-box" >
+		<h2>#i18n{form.home.title}</h2>
+		<table>
+        	<tr>
+	           	 <td>
+	                <a href="jsp/admin/plugins/form/ManageForm.jsp?plugin_name=form" class="bullet-link">#i18n{form.home.labelManageForm}</a>
+	            </td>
+	            <td>
+					#i18n{form.home.labelManageFormComment}
+	            </td>
+	        </tr>
+        
+        
+        <#if permission_manage_export_format>
+	        <tr>
+	             
+	            <td>
+	            	<a href="jsp/admin/plugins/form/ManageExportFormat.jsp?plugin_name=form" class="bullet-link">#i18n{form.home.labelExportFormat}</a>
+	            </td>       
+	              <td>    
+	             		#i18n{form.home.labelExportFormatComment}
+	              </td>
+	        </tr>	
+        </#if>
+        <#if permission_manage_default_message>   
+			<tr>
+				<td>
+	                <a href="jsp/admin/plugins/form/ManageDefaultMessage.jsp?plugin_name=form" class="bullet-link">#i18n{form.home.labelDefaultMessage}</a>
+	       		</td>
+	            <td>
+				 	#i18n{form.home.labelDefaultMessageComment}
+	            </td>
+	        </tr>
+	     </#if>
+	    </table>
+	 </div>
+
+ 
+
+ 

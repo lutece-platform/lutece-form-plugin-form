@@ -1,0 +1,56 @@
+<div class="content-box">
+        <h2>#i18n{form.manageRegularExpression.title}</h2>
+        
+        
+         <form method="post"  action="jsp/admin/plugins/form/ManageRegularExpression.jsp">
+        <@pagination paginator=paginator />
+	<!-- Number of feeds per page selector -->
+        #i18n{form.manageRegularExpression.labelItemsPerPage} :
+        <select name="items_per_page">
+            <#list [ "5" , "10" , "20" , "50" ] as nb>
+            	<#if nb_items_per_page = nb >
+             		<option selected="selected" value="${nb}">${nb}</option>
+            	<#else>
+             		<option value="${nb}">${nb}</option>
+            	</#if>
+            </#list>
+        </select>
+        <input type="submit" class="button" value="#i18n{form.manageRegularExpression.buttonItemsPerPage}" />
+    </form>
+         
+          <table> 
+            <tr>
+              <th width="20%" >
+               #i18n{form.manageRegularExpression.rowTitle}
+              </th>
+              <th width="40%" >
+                #i18n{form.manageRegularExpression.rowDescription}
+              </th>
+              <th width="40%" >
+               #i18n{form.manageRegularExpression.rowActions}
+              </th>
+            </tr>
+             <#list expression_list as expression>	
+	            <tr>
+	              <td width="20%" >
+	                <a href="jsp/admin/plugins/form/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}" class="bullet-link">${expression.title}</a>
+	              </td>
+	              <td width="40%">
+	               ${expression.value}
+	                </td>
+	                <td width="40%">
+	               	<a href="jsp/admin/plugins/form/ConfirmRemoveRegularExpression.jsp?id_expression=${expression.idExpression}">
+	         			 <img src="images/admin/skin/plugins/form/actions/delete.png" alt="#i18n{form.manageForm.altDelete}" title="#i18n{form.manageForm.altDelete}" />
+	       			 </a>
+	                </td>
+	            </tr>
+	         </#list>
+          </table> 
+         
+          <form method="post"  action="jsp/admin/plugins/form/CreateRegularExpression.jsp" >
+            <p>
+              <input type="submit" class="button" value="#i18n{form.manageRegularExpression.buttonCreate}"   />
+            </p>
+          </form>
+        
+      </div> 
