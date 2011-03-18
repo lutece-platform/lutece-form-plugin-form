@@ -88,7 +88,7 @@
 		</h2>			
 		<p>
 			<label for="workgroup">#i18n{form.createForm.labelWorkgroup} :</label>
-			<@combo name="workgroup" items=user_workgroup_list default_value="" />
+			<@combo name="workgroup" items=user_workgroup_list default_value="${workgroup_key_default_value}" />
 			<br />
 			<label>&nbsp;</label>
 			#i18n{form.createForm.labelWorkgroupComment}

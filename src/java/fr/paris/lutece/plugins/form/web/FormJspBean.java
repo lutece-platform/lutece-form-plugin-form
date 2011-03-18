@@ -264,6 +264,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION = "is_active_mylutece_authentification";
     private static final String MARK_PERMISSION_MANAGE_ADVANCED_PARAMETERS = "permission_manage_advanced_parameters";
     private static final String MARK_LIST_PARAM_DEFAULT_VALUES = "list_param_default_values";
+    private static final String MARK_DEFAULT_VALUE_WORKGROUP_KEY = "workgroup_key_default_value";
 
     //Jsp Definition
     private static final String JSP_DO_DISABLE_FORM = "jsp/admin/plugins/form/DoDisableForm.jsp";
@@ -830,6 +831,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         model.put( MARK_IS_ACTIVE_CAPTCHA, PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) );
         model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
         model.put( MARK_LIST_PARAM_DEFAULT_VALUES, listParamDefaultValues );
+        model.put( MARK_DEFAULT_VALUE_WORKGROUP_KEY, AdminWorkgroupService.ALL_GROUPS );
         setPageTitleProperty( PROPERTY_CREATE_FORM_TITLE );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_FORM, locale, model );
