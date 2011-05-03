@@ -694,7 +694,7 @@ public class FormApp implements XPageApplication
         }
 
         //Notify new form submit
-        FormUtils.sendNotificationMailFormSubmit( formSubmit.getForm(  ), locale );
+        FormUtils.sendNotificationMailFormSubmit( formSubmit, locale );
 
         //Process all outputProcess
         for ( IOutputProcessor outputProcessor : OutputProcessorService.getInstance(  )

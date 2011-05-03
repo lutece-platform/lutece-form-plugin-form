@@ -110,6 +110,7 @@ public final class FormUtils
     private static final String MARK_FIELD = "field";
     private static final String MARK_STR_LIST_CHILDREN = "str_list_entry_children";
     private static final String MARK_FORM = "form";
+    private static final String MARK_FORM_SUBMIT = "formSubmit";
     private static final String MARK_JCAPTCHA = "jcaptcha";
     private static final String MARK_STR_ENTRY = "str_entry";
     private static final String MARK_LIST_RESPONSES = "list_responses";
@@ -174,7 +175,7 @@ public final class FormUtils
             String strSenderEmail = MailService.getNoReplyEmail(  );
 
             Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList(  ) );
-            HashMap model = new HashMap(  );
+            Map<String, Object> model = new HashMap<String, Object>(  );
             model.put( MARK_FORM, form );
 
             HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_MAIL_END_DISPONIBILITY, locale, model );
@@ -200,16 +201,41 @@ public final class FormUtils
      */
     public static void sendNotificationMailFormSubmit( Form form, Locale locale )
     {
-        try
+    	Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList(  ) );
+    	Map<String, Object> model = new HashMap<String, Object>(  );
+        model.put( MARK_FORM, form );
+        sendNotificationMailFormSubmit( model, listRecipients, locale );
+    }
+    
+    /**
+     * SendMail to the mailing list associate to the form a mail of new form submit.
+     * It will also display the anwsers submitted by the user.
+     * @param formSubmit the submit form
+     * @param locale {@link Locale}
+     */
+    public static void sendNotificationMailFormSubmit( FormSubmit formSubmit, Locale locale )
+    {
+    	Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( formSubmit.getForm(  ).getIdMailingList(  ) );
+    	Map<String, Object> model = new HashMap<String, Object>(  );
+        model.put( MARK_FORM, formSubmit.getForm(  ) );
+        model.put( MARK_FORM_SUBMIT, formSubmit );
+        sendNotificationMailFormSubmit( model, listRecipients, locale );
+    }
+    
+    /**
+     * Send the mail
+     * @param model the model of the template
+     * @param listRecipients the list of recipients
+     * @param locale {@link Locale}
+     */
+    private static void sendNotificationMailFormSubmit( Map<String, Object> model, Collection<Recipient> listRecipients, Locale locale )
+    {
+    	try
         {
             String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SUBJECT, locale );
             String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SENDER_NAME,
                     locale );
             String strSenderEmail = MailService.getNoReplyEmail(  );
-
-            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList(  ) );
-            HashMap model = new HashMap(  );
-            model.put( MARK_FORM, form );
 
             HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_MAIL_FORM_SUBMIT, locale, model );
 
