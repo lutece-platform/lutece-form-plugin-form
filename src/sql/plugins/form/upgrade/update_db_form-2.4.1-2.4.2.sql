@@ -4,7 +4,7 @@
 DROP TABLE IF EXISTS form_form_parameter;
 CREATE TABLE form_form_parameter (
 	parameter_key varchar(100) NOT NULL,
-	parameter_value varchar(100) NOT NULL,
+	parameter_value varchar(100),
 	PRIMARY KEY (parameter_key)
 );
 
