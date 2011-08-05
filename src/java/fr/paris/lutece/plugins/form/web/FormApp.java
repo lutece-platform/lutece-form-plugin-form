@@ -111,7 +111,7 @@ public class FormApp implements XPageApplication
     private static final String PROPERTY_XPAGE_PATHLABEL = "form.xpage.pathlabel";
 
     // request parameters
-    private static final String PARAMETER_ID_FORM = "id_form";
+    public static final String PARAMETER_ID_FORM = "id_form";
     private static final String PARAMETER_FORM_SUBMIT = "form_submit";
     private static final String PARAMETER_REQUIREMENT = "requirement";
     private static final String PARAMETER_VIEW_REQUIREMENT = "view_requirement";
