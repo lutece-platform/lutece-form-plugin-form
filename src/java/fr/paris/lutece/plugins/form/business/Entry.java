@@ -595,4 +595,14 @@ public class Entry implements IEntry
     {
     	_formError = formError;
     }
+    
+    /**
+     * Sets the string value of the response
+     * @param response the response
+     * @param locale the locale - will use a default one if not specified
+     */
+    public void setResponseToStringValue( Response response, Locale locale )
+    {
+    	response.setToStringValueResponse( new String( response.getValueResponse(  ) ) );
+    }
 }

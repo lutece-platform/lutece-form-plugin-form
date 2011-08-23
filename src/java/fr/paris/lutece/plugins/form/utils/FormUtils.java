@@ -48,6 +48,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -74,6 +75,7 @@ import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.StatisticFormSubmit;
+import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
@@ -115,6 +117,7 @@ public final class FormUtils
     private static final String MARK_STR_ENTRY = "str_entry";
     private static final String MARK_LIST_RESPONSES = "list_responses";
     private static final String MARK_VALIDATE_REQUIREMENT = "validate_requirement";
+    private static final String MARK_DRAFT_SUPPORTED = "draft_supported";
     private static final String PARAMETER_ID_ENTRY_TYPE = "id_type";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String CONSTANT_WHERE = " WHERE ";
@@ -625,6 +628,7 @@ public final class FormUtils
         //Theme management
         /*Theme theme = ThemeHome.findByPrimaryKey("red");
         model.put( MARK_THEME_URL, theme.getPathCss(  ) );*/
+        model.put( MARK_DRAFT_SUPPORTED, FormDraftBackupService.isDraftSupported(  ) );
         template = AppTemplateService.getTemplate( TEMPLATE_HTML_CODE_FORM, locale, model );
 
         return template.getHtml(  );
@@ -651,7 +655,8 @@ public final class FormUtils
      * @param locale the locale
      * @param request HttpServletRequest
      */
-    public static void getHtmlEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale, HttpServletRequest request )
+    @SuppressWarnings("unchecked")
+	public static void getHtmlEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale, HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<String, Object>(  );
         StringBuffer strConditionalQuestionStringBuffer = null;
@@ -748,7 +753,8 @@ public final class FormUtils
      * @param locale the locale
      * @return null if there is no error in the response else return a FormError Object
      */
-    public static FormError getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
+    @SuppressWarnings("unchecked")
+	public static FormError getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
         FormSubmit formSubmit, boolean bResponseNull, Locale locale )
     {
         FormError formError = null;
@@ -1108,7 +1114,8 @@ public final class FormUtils
      * @param user the current user
      * @return  a  reference list of form
      */
-    public static ReferenceList getFormList( Plugin plugin, AdminUser user )
+    @SuppressWarnings("unchecked")
+	public static ReferenceList getFormList( Plugin plugin, AdminUser user )
     {
         List<Form> listForms = FormHome.getFormList( new FormFilter(  ), plugin );
         listForms = (List) AdminWorkgroupService.getAuthorizedCollection( listForms, user );
@@ -1375,5 +1382,35 @@ public final class FormUtils
     			break;
     		}
     	}
+    }
+    
+    /**
+     * Restores submitted responses
+     * @param session the session
+     * @param mapResponses response list, key is entry id
+     */
+    public static void restoreResponses( HttpSession session, Map<Integer, List<Response>> mapResponses )
+	{
+		session.setAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES, mapResponses );
+	}
+    
+    /**
+     * Removes submitted responses
+     * @param session the session
+     */
+    public static void removeResponses( HttpSession session )
+    {
+    	session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+    }
+    
+    /**
+     * Gets the responses bound to the session
+     * @param session the session
+     * @return the responses if any, <code>null</code> otherwise.
+     */
+    @SuppressWarnings("unchecked")
+	public static Map<Integer, List<Response>> getResponses( HttpSession session )
+    {
+    	return (Map<Integer, List<Response>>) session.getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
     }
 }

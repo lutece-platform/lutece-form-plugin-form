@@ -386,4 +386,13 @@ public class EntryTypeImage extends Entry
         return new LocalizedPaginator( this.getFields(  ).get( 0 ).getRegularExpressionList(  ), nItemPerPage,
             strBaseUrl, strPageIndexParameterName, strPageIndex, locale );
     }
+    
+    /**
+     * toStringValue should stay <code>null</code>.
+     */
+    @Override
+    public void setResponseToStringValue( Response response, Locale locale )
+    {
+    	// nothing - null is default
+    }
 }

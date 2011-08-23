@@ -32,6 +32,9 @@
 		</#if>
 		<div align="center" class="form-steps">
 			<input type="submit" value="${form.libelleValidateButton}" class="-lutece-input -lutece-border-radius-mini" name="save" />
+			<#if draft_supported>
+			<input type="submit" value="#i18n{form.button.saveDraft}" class="-lutece-input -lutece-border-radius-mini" name="save_draft" />
+			</#if>
 			<#if form.libelleResetButton?has_content>
 				<input type="reset" value="${form.libelleResetButton}" class="-lutece-input -lutece-border-radius-mini" name="reset" />
 			</#if>

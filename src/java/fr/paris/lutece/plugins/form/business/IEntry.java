@@ -369,4 +369,11 @@ public interface IEntry
      * @param formError the form error
      */
     void setFormError( FormError formError );
+    
+    /**
+     * Sets the string value of the response
+     * @param response the response
+     * @param locale the locale - will use a default one if not specified
+     */
+    void setResponseToStringValue( Response response, Locale locale );
 }

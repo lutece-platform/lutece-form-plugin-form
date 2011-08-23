@@ -62,6 +62,7 @@ import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
+import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
@@ -119,6 +120,7 @@ public class FormApp implements XPageApplication
     private static final String PARAMETER_VOTED = "voted";
     private static final String PARAMETER_SAVE = "save";
     private static final String PARAMETER_SESSION = "session";
+    private static final String PARAMETER_SAVE_DRAFT = "save_draft";
     
     // session
     private static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
@@ -200,6 +202,9 @@ public class FormApp implements XPageApplication
             page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale(  ) ) );
             page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale(  ) ) );
             page.setContent( getResult( request, session, nMode, plugin ) );
+            
+            // remove existing draft
+            FormDraftBackupService.validateDraft( request, form );
         }
 
         else if ( request.getParameter( PARAMETER_VIEW_REQUIREMENT ) != null )
@@ -209,15 +214,50 @@ public class FormApp implements XPageApplication
             page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale(  ) ) );
             page.setContent( getRequirement( request, nMode, plugin ) );
         }
+        else if ( ( request.getParameter( PARAMETER_SAVE_DRAFT ) != null ) &&
+        	( request.getParameter( PARAMETER_ID_FORM ) != null ) )
+        {
+        	// the formsubmit may no be reused
+        	FormSubmit formSubmit = new FormSubmit();
+        	formSubmit.setForm( form );
+        	// parse request & save draft
+        	doInsertResponseInFormSubmit( request, formSubmit, plugin );
+        	FormDraftBackupService.saveDraft( request, form );
+        	page = getForm(request, session, nMode, plugin);
+        }
         else if ( ( request.getParameter( PARAMETER_SAVE ) != null ) &&
                 ( request.getParameter( PARAMETER_ID_FORM ) != null ) )
         {
         	page = getRecap( request, session, nMode, plugin );
+        	// save draft
+        	// we can get FormSubmit here
+        	FormSubmit formSubmit = (FormSubmit) session.getAttribute( PARAMETER_FORM_SUBMIT );
+        	if ( formSubmit == null )
+        	{
+        		FormDraftBackupService.saveDraft( request, form );
+        	}
+        	else
+        	{
+        		FormDraftBackupService.saveDraft( request, formSubmit );
+        	}
         }
         else if ( request.getParameter( PARAMETER_ID_FORM ) != null )
         {
-            //Display Form
-            page = getForm( request, session, nMode, plugin );
+            // Reset all responses in session if the user has not submitted any form
+        	// there is a few chances that PARAMETER_SESSION may not be blank but will be overwritten by draft if any
+            if ( StringUtils.isBlank( request.getParameter( PARAMETER_SESSION ) ) )
+            {
+            	session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+                session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
+            }
+
+        	// try to restore draft
+        	// preProcessRequest return true if the form should not be displayed (for deletion...)
+        	if ( !FormDraftBackupService.preProcessRequest( request, form ) )
+        	{
+	            //Display Form
+	            page = getForm( request, session, nMode, plugin );
+        	}
         }
         else
         {
@@ -363,13 +403,6 @@ public class FormApp implements XPageApplication
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         String strFormId = request.getParameter( PARAMETER_ID_FORM );
         
-        // Reset all responses in session if the user has not submitted any form
-        if ( StringUtils.isBlank( request.getParameter( PARAMETER_SESSION ) ) )
-        {
-        	session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
-            session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
-        }
-
         if ( !strFormId.matches( REGEX_ID ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_ERROR );

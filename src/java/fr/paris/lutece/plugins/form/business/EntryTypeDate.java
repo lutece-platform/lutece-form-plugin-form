@@ -261,4 +261,19 @@ public class EntryTypeDate extends Entry
 
         return DateUtil.getDateString( date, locale );
     }
+    
+    /**
+     * Sets the date.
+     */
+    @Override
+    public void setResponseToStringValue( Response response, Locale locale )
+    {
+    	if ( response.getValueResponse(  ) != null && response.getValueResponse(  ).length != 0 )
+    	{
+	    	Long newLong = Long.parseLong( new String( response.getValueResponse(  ) ) );
+	        Timestamp date = new Timestamp( newLong );
+	
+	        response.setToStringValueResponse( DateUtil.getDateString( date, locale ) );
+    	}
+    }
 }
