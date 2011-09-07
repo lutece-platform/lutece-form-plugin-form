@@ -57,12 +57,11 @@
   <form action="jsp/admin/plugins/form/DoExportResult.jsp" method="post" name="" id=""  >
 	 <div class="highlight-box">
    		<p>#i18n{form.result.titleDataSave}</p>
-    	 
 		   	 <input name="id_form" value="${form.idForm}" type="hidden" />
-			<#if fistResponseDateFilter?exists>
+			<#if fist_response_date_filter?exists>
 				<input name="fist_response_date_filter" value="${fist_response_date_filter?date?if_exists}" type="hidden" />	
 			</#if>	
-			<#if lastResponseDateFilter?exists>
+			<#if last_response_date_filter?exists>
 				<input name="last_response_date_filter" value="${last_response_date_filter?date?if_exists}" type="hidden" />	
 			</#if>	
     	 	<p>
