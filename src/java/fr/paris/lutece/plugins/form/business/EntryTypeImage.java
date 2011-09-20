@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
@@ -50,6 +51,7 @@ import fr.paris.lutece.util.html.Paginator;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -60,6 +62,7 @@ import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -210,11 +213,47 @@ public class EntryTypeImage extends Entry
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {    
+    	HttpSession session = request.getSession( false );
+    	// handle file deletion...
+    	if ( request.getParameter( FormUtils.PARAMETER_DELETE_PREFIX + Integer.toString( this.getIdEntry(  ) ) ) != null )
+    	{
+    		// checkbox checked
+    		if ( session != null )
+    		{
+    			request.getSession(  ).removeAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ) );
+    		}
+    	}
+    	
+    	// find the fileSource the session one first...
+    	FileItem fileSource = null;
+    	if ( session != null )
+    	{
+    		// check the file in session - it might no be deleted
+    		fileSource = (FileItem) session.getAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ) );
+    	}
+    	
     	if ( request instanceof MultipartHttpServletRequest )
     	{
+			// standard upload
     		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            FileItem fileSource = multipartRequest.getFile( FormUtils.EMPTY_STRING + this.getIdEntry(  ) );
-            String strFilename = FileUploadService.getFileNameOnly( fileSource );
+    		FileItem fileItemRequested = multipartRequest.getFile( FormUtils.EMPTY_STRING + this.getIdEntry(  ) );
+    		
+			FileItem asynchronousFileItem = FormAsynchronousUploadHandler.getFileItem( Integer.toString( getIdEntry(  ) ), request.getSession(  ).getId(  ) );
+			// try asynchronous uploaded files
+			if ( asynchronousFileItem != null )
+			{
+				fileSource = asynchronousFileItem;
+			}
+    		
+    		if ( StringUtils.isNotBlank( fileItemRequested.getName(  ) ) )
+    		{
+    			// a file may have been uploaded
+    			fileSource = fileItemRequested;
+    		}
+    		
+    		session.setAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ), fileSource );
+
+    		String strFilename = FileUploadService.getFileNameOnly( fileSource );
             List<RegularExpression> listRegularExpression = this.getFields(  ).get( 0 ).getRegularExpressionList(  );
             
             byte[] byValueEntry = fileSource.get(  );
@@ -394,5 +433,10 @@ public class EntryTypeImage extends Entry
     public void setResponseToStringValue( Response response, Locale locale )
     {
     	// nothing - null is default
+    }
+    
+    public boolean isFile(  )
+    {
+    	return true;
     }
 }

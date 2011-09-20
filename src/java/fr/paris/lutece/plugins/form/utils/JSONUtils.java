@@ -33,12 +33,23 @@
  */
 package fr.paris.lutece.plugins.form.utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.IOUtils;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
@@ -53,6 +64,7 @@ import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
 /**
  * Provides json utility methods for forms
@@ -75,7 +87,7 @@ public final class JSONUtils
 	public static final String JSON_KEY_MANDATORY_ERROR = "mandatory_error";
 	public static final String JSON_KEY_TITLE_QUESTION = "title_question";
 	public static final String JSON_KEY_FORM_ERROR = "form_error";
-
+	public static final String JSON_KEY_FIELD_NAME = "field_name";
 	/**
 	 * Empty constructor
 	 */
@@ -110,9 +122,10 @@ public final class JSONUtils
 	 * Builds the response
 	 * @param json the json
 	 * @param locale the locale
+	 * @param session the session
 	 * @return response the response
 	 */
-	private static Response buildResponse( JSONObject json, Locale locale )
+	private static Response buildResponse( JSONObject json, Locale locale, HttpSession session )
 	{
 		Response response = new Response(  );
 		response.setIdResponse( json.getInt( JSON_KEY_ID_RESPONSE ) );
@@ -149,7 +162,14 @@ public final class JSONUtils
 			bIsFile = true;
 		}
 		
-		if ( !bIsFile && response.getValueResponse(  ) != null )
+		if ( bIsFile )
+		{
+			if ( session != null )
+			{
+				session.setAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + entry.getIdEntry(  ), buildFileItemResponse( response.getFileName(  ), response.getValueResponse(  ) ) );
+			}
+		}
+		else if ( response.getValueResponse(  ) != null )
 		{
 			// if the entry is not a file, we can set the string value
 			
@@ -161,13 +181,25 @@ public final class JSONUtils
 	}
 	
 	/**
+	 * Builds a FileItem response
+	 * @param strFileName
+	 * @param bValue
+	 * @return
+	 */
+	private static FileItem buildFileItemResponse( String strFileName, byte[] bValue )
+	{
+		return new FormFileItem( bValue, strFileName );
+	}
+	
+	/**
 	 * Builds the responses list - null if {@link #JSON_KEY_RESPONSE} is missing.
 	 * @param strJSON the json
 	 * @param locale the locale
+	 * @param session the session
 	 * @return the responses list - null if {@link #JSON_KEY_RESPONSE} is missing
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<Integer, List<Response>> buildListResponses( String strJSON, Locale locale )
+	public static Map<Integer, List<Response>> buildListResponses( String strJSON, Locale locale, HttpSession session )
 	{
 		Map<Integer, List<Response>> mapResponses;
 		JSONObject jsonObject = JSONObject.fromObject( strJSON );
@@ -185,7 +217,7 @@ public final class JSONUtils
 					// array
 					for ( JSONObject jsonResponse : ( ( Collection<JSONObject> ) ((JSONArray)  jsonResponses) ) )
 					{
-						Response response = buildResponse( jsonResponse, locale );
+						Response response = buildResponse( jsonResponse, locale, session );
 						List<Response> listResponses = mapResponses.get( response.getEntry(  ).getIdEntry(  ) );
 						if ( listResponses == null )
 						{
@@ -200,7 +232,7 @@ public final class JSONUtils
 					// only one response ?
 					JSONObject jsonResponse = (JSONObject) jsonResponses;
 					
-					Response response = buildResponse( jsonResponse, locale );
+					Response response = buildResponse( jsonResponse, locale, session );
 					
 					List<Response> listResponses = new ArrayList<Response>();
 					listResponses.add( response );
@@ -292,5 +324,105 @@ public final class JSONUtils
 		formError.setTitleQuestion( jsonObject.getString( JSON_KEY_TITLE_QUESTION ) );
 		
 		return formError;
+	}
+	
+	/**
+	 * 
+	 * FormFileItem : builds fileItem from json response.
+	 *
+	 */
+	private static class FormFileItem implements FileItem, Serializable
+	{
+		private static final long serialVersionUID = 1L;
+		
+		private byte[] _bValue;
+		private String _strFileName;
+
+		/**
+		 * FormFileItem
+		 * @param bValue the byte value
+		 * @param strFileName the file name
+		 * @param lSize
+		 */
+		public FormFileItem( byte[] bValue, String strFileName )
+		{
+			_bValue = bValue;
+			_strFileName = strFileName;
+		}
+		public void delete(  )
+		{
+			_bValue = null;
+		}
+
+		public byte[] get()
+		{
+			return _bValue;
+		}
+
+		public String getContentType()
+		{
+			return FileSystemUtil.getMIMEType( _strFileName );
+		}
+
+		public String getFieldName()
+		{
+			return null;
+		}
+
+		public InputStream getInputStream() throws IOException
+		{
+			return IOUtils.toInputStream( new String( _bValue ) );
+		}
+
+		public String getName()
+		{
+			return _strFileName;
+		}
+
+		public OutputStream getOutputStream() throws IOException
+		{
+			return null;
+		}
+
+		public long getSize()
+		{
+			return _bValue.length;
+		}
+
+		public String getString()
+		{
+			return new String( _bValue );
+		}
+
+		public String getString( String encoding )
+				throws UnsupportedEncodingException
+		{
+			return new String( _bValue, encoding );
+		}
+
+		public boolean isFormField()
+		{
+			return false;
+		}
+
+		public boolean isInMemory()
+		{
+			return true;
+		}
+
+		public void setFieldName( String name )
+		{
+			// nothing
+		}
+
+		public void setFormField( boolean state )
+		{
+			// nothing
+		}
+
+		public void write( File file ) throws Exception
+		{
+			// nothing
+		}
 	}
 }

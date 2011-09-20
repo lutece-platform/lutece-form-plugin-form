@@ -376,4 +376,10 @@ public interface IEntry
      * @param locale the locale - will use a default one if not specified
      */
     void setResponseToStringValue( Response response, Locale locale );
+    
+    /**
+     * Returns <code>true</code> if the entry is a file, <code>false</code> otherwise.
+     * @return <code>true</code> if the entry is a file, <code>false</code> otherwise
+     */
+    boolean isFile(  );
 }

@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.form.web;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -63,6 +64,7 @@ import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
+import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
@@ -151,7 +153,8 @@ public class FormApp implements XPageApplication
      * @return The page content.
      * @throws SiteMessageException the SiteMessageException
      */
-    public XPage getPage( HttpServletRequest request, int nMode, Plugin plugin )
+    @SuppressWarnings("unchecked")
+	public XPage getPage( HttpServletRequest request, int nMode, Plugin plugin )
         throws SiteMessageException, UserNotSignedException
     {
         XPage page = new XPage(  );
@@ -249,6 +252,14 @@ public class FormApp implements XPageApplication
             {
             	session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
                 session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
+                // remove file in sessions
+                for ( String strAttributeName : Collections.<String>list( session.getAttributeNames() ) )
+                {
+                	if ( strAttributeName.startsWith( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE ) )
+                	{
+                		session.removeAttribute( strAttributeName );
+                	}
+                }
             }
 
         	// try to restore draft
@@ -284,6 +295,8 @@ public class FormApp implements XPageApplication
         if ( ( session == null ) || ( session.getAttribute( PARAMETER_FORM_SUBMIT ) == null ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_SESSION_LOST, SiteMessage.TYPE_STOP );
+            // sonar "Correctness - Possible null pointer dereference" - exception already thrown by SiteMessageService.setMessage
+            throw new SiteMessageException(  );
         }
 
         // For the entry unique
@@ -728,6 +741,9 @@ public class FormApp implements XPageApplication
 
         //Notify new form submit
         FormUtils.sendNotificationMailFormSubmit( formSubmit, locale );
+        
+        // We can safely remove session files : they are validated
+        FormAsynchronousUploadHandler.removeSessionFiles( session.getId(  ) );
 
         //Process all outputProcess
         for ( IOutputProcessor outputProcessor : OutputProcessorService.getInstance(  )
@@ -777,5 +793,25 @@ public class FormApp implements XPageApplication
                 }
             }
         }
+    }
+    
+    /**
+     * Removes the uploaded fileItem
+     * @param request the request
+     */
+    public void doRemoveAsynchronousUploadedFile( HttpServletRequest request )
+    {
+    	String strSessionId = request.getSession(  ).getId(  );
+    	String strIdEntry = request.getParameter( FormUtils.PARAMETER_ID_ENTRY );
+    	
+    	// file may be uploaded asynchronously...
+    	FormAsynchronousUploadHandler.removeFileItem( strIdEntry, strSessionId );
+    	
+    	// ... or already in session
+    	HttpSession session = request.getSession( false );
+    	if ( session != null )
+    	{
+    		session.removeAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + strIdEntry );
+    	}
     }
 }

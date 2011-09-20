@@ -26,12 +26,34 @@
         <css-stylesheet>jscalendar/calendar-lutece.css</css-stylesheet>
         <css-stylesheet>form/form.css</css-stylesheet>
     </css-stylesheets>
+    
+    
+    <css-stylesheets>
+        <css-stylesheets-scope>xpage</css-stylesheets-scope>
+        <css-stylesheet>form/uploadify/uploadify.css</css-stylesheet>
+    </css-stylesheets>
+    
+    
 
     <!-- Specific plugin JAVASCRIPT -->
     <javascript-files>
         <javascript-files-scope>portal</javascript-files-scope>
         <javascript-file>form/form.js</javascript-file>
     </javascript-files>
+    <javascript-files>
+        <javascript-files-scope>xpage</javascript-files-scope>
+        <javascript-file>form/uploadify/jquery.uploadify.v2.1.4.min.js</javascript-file>
+    </javascript-files>
+    
+    <javascript-files>
+        <javascript-files-scope>xpage</javascript-files-scope>
+        <javascript-file>form/uploadify/swfobject.js</javascript-file>
+    </javascript-files>
+    <javascript-files>
+        <javascript-files-scope>xpage</javascript-files-scope>
+        <javascript-file>form/formupload.js</javascript-file>
+    </javascript-files>
+    
 
     <!--Administration interface parameters -->
     <admin-features>
@@ -124,4 +146,10 @@
             <dashboard-feature-right>FORM_MANAGEMENT</dashboard-feature-right>
         </dashboard-component>
     </dashboard-components>
+    
+    <listeners>
+		<listener>
+			<listener-class>fr.paris.lutece.plugins.form.web.FormSessionListener</listener-class>
+		</listener>
+	</listeners>
 </plug-in>

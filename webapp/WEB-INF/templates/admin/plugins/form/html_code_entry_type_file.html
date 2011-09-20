@@ -45,3 +45,27 @@
 		</#list>
 	</#if>
 </div>	
+
+<#-- file removing -->
+<div class="form-element">
+<#if list_responses?has_content>
+<span class="form-label" id="_file_deletion_${entry.idEntry}">
+ <label for="delete_${entry.idEntry}">	
+				#i18n{form.file.uploadedFile} :
+		</label>
+		</span>
+		 <span class="form-field-column" id="_filename_${entry.idEntry}">
+		<#list list_responses as response> 
+			${response.fileName}
+			&nbsp; - #i18n{form.file.removeUploadedFile} <input type="checkbox" name="delete_${entry.idEntry}" value="1" id="delete_${entry.idEntry}" />
+		</#list> 
+			</span>
+<#else>
+<span class="form-label" id="_file_deletion_${entry.idEntry}"><label for="">	
+				#i18n{form.file.uploadedFile} :
+		</label>
+	</span>
+		<span class="form-field-column" id="_filename_${entry.idEntry}">-</span>
+</span>
+</#if>
+</div>

@@ -106,6 +106,10 @@ public final class FormUtils
     public static final String CONSTANT_GROUP_BY_MONTH = "2";
     public static final String EMPTY_STRING = "";
     public static final String CONSTANT_EQUAL = "=";
+    public static final String PARAMETER_ID_ENTRY = "id_entry";
+    public static final String PARAMETER_DELETE_PREFIX = "delete_";
+    public static final String SESSION_ATTRIBUTE_PREFIX_FILE = "FORM_FILE_";
+
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_URL_ACTION = "url_action";
     private static final String MARK_ENTRY = "entry";
@@ -942,8 +946,7 @@ public final class FormUtils
                     }
 
                     if ( ( responseStore == null ) ||
-                            ( ( responseStore != null ) &&
-                            ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) ) )
+                            ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) )
                     {
                         XmlUtil.beginElement( buffer, TAG_QUESTION );
                         XmlUtil.addElementHtml( buffer, TAG_QUESTION_TITLE, response.getEntry(  ).getTitle(  ) );

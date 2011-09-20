@@ -54,8 +54,8 @@ public class Form implements AdminWorkgroupResource, RBACResource
     public static final String RESOURCE_TYPE = "FORM_FORM_TYPE";
     public static final int STATE_ENABLE = 1;
     public static final int STATE_DISABLE = 0;
-    private static FormWorkgroupRemovalListener _listenerWorkgroup;
-    private static FormRegularExpressionRemovalListener _listenerRegularExpression;
+    private static FormWorkgroupRemovalListener _listenerWorkgroup = new FormWorkgroupRemovalListener(  );
+    private static FormRegularExpressionRemovalListener _listenerRegularExpression = new FormRegularExpressionRemovalListener(  );
     private int _nIdForm;
     private String _strTitle;
     private String _strDescription;
@@ -93,17 +93,8 @@ public class Form implements AdminWorkgroupResource, RBACResource
     public static void init(  )
     {
         // Create removal listeners and register them
-        if ( _listenerWorkgroup == null )
-        {
-            _listenerWorkgroup = new FormWorkgroupRemovalListener(  );
-            WorkgroupRemovalListenerService.getService(  ).registerListener( _listenerWorkgroup );
-        }
-
-        if ( _listenerRegularExpression == null )
-        {
-            _listenerRegularExpression = new FormRegularExpressionRemovalListener(  );
-            RegularExpressionRemovalListenerService.getService(  ).registerListener( _listenerRegularExpression );
-        }
+        WorkgroupRemovalListenerService.getService(  ).registerListener( _listenerWorkgroup );
+        RegularExpressionRemovalListenerService.getService(  ).registerListener( _listenerRegularExpression );
     }
 
     /**

@@ -208,7 +208,7 @@ public class EntryTypeDate extends Entry
 
             if ( this.isMandatory(  ) )
             {
-                if ( ( strValueEntry == null ) || strValueEntry.equals( FormUtils.EMPTY_STRING ) )
+                if ( FormUtils.EMPTY_STRING.equals( strValueEntry ) )
                 {
                     FormError formError = new FormError(  );
                     formError.setMandatoryError( true );

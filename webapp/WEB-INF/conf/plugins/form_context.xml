@@ -27,5 +27,5 @@
       	<property name="key" value="notifySender" />
       </bean>
     
-    
+    <bean id="form.asynchronousUploadHandler" class="fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler" />
  </beans>

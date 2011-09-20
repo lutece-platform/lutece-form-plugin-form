@@ -605,4 +605,13 @@ public class Entry implements IEntry
     {
     	response.setToStringValueResponse( new String( response.getValueResponse(  ) ) );
     }
+    
+    /**
+     * Returns <code>true</code> if the entry is a file, <code>false</code> otherwise.
+     * @return <code>true</code> if the entry is a file, <code>false</code> otherwise
+     */
+    public boolean isFile(  )
+    {
+    	return false;
+    }
 }
