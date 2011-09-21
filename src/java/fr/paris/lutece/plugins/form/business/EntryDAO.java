@@ -82,6 +82,11 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_FILTER_ID_FIELD_DEPEND = " AND ent.id_field_depend = ? ";
     private static final String SQL_FILTER_ID_FIELD_DEPEND_IS_NULL = " AND ent.id_field_depend IS NULL ";
     private static final String SQL_ORDER_BY_POSITION = " ORDER BY ent.pos ";
+    private static final String SQL_GROUP_BY_POSITION = " GROUP BY ent.pos ";
+    private static final String SQL_GROUP_BY_FORM_ENTRY_ENTRY_TYPE = "GROUP BY ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
+	    "ent.id_entry,ent.id_form,ent.id_parent,ent.title,ent.help_message," +
+	    "ent.comment,ent.mandatory,ent.fields_in_line," +
+	    "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider ";
 
     /**
      * Generates a new primary key
@@ -390,17 +395,18 @@ public final class EntryDAO implements IEntryDAO
         Field fieldDepend = null;
         Form form = null;
 
-        String strSQL = SQL_QUERY_SELECT_ENTRY_BY_FILTER;
-        strSQL += ( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM : EMPTY_STRING );
-        strSQL += ( ( filter.containsIdEntryParent(  ) ) ? SQL_FILTER_ID_PARENT : EMPTY_STRING );
-        strSQL += ( ( filter.containsEntryParentNull(  ) ) ? SQL_FILTER_ID_PARENT_IS_NULL : EMPTY_STRING );
-        strSQL += ( ( filter.containsIdIsGroup(  ) ) ? SQL_FILTER_IS_GROUP : EMPTY_STRING );
-        strSQL += ( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : EMPTY_STRING );
-        strSQL += ( ( filter.containsFieldDependNull(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND_IS_NULL : EMPTY_STRING );
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECT_ENTRY_BY_FILTER );
+        sbSQL.append( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdEntryParent(  ) ) ? SQL_FILTER_ID_PARENT : EMPTY_STRING );
+        sbSQL.append( ( filter.containsEntryParentNull(  ) ) ? SQL_FILTER_ID_PARENT_IS_NULL : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdIsGroup(  ) ) ? SQL_FILTER_IS_GROUP : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : EMPTY_STRING );
+        sbSQL.append( ( filter.containsFieldDependNull(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND_IS_NULL : EMPTY_STRING );
 
-        strSQL += SQL_ORDER_BY_POSITION;
+        sbSQL.append( SQL_GROUP_BY_FORM_ENTRY_ENTRY_TYPE );
+        sbSQL.append( SQL_ORDER_BY_POSITION );
 
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
+        DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
         int nIndex = 1;
 
         if ( filter.containsIdForm(  ) )
@@ -524,17 +530,18 @@ public final class EntryDAO implements IEntryDAO
     public int selectNumberEntryByFilter( EntryFilter filter, Plugin plugin )
     {
         int nNumberEntry = 0;
-        String strSQL = SQL_QUERY_SELECT_NUMBER_ENTRY_BY_FILTER;
-        strSQL += ( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM : EMPTY_STRING );
-        strSQL += ( ( filter.containsIdEntryParent(  ) ) ? SQL_FILTER_ID_PARENT : EMPTY_STRING );
-        strSQL += ( ( filter.containsEntryParentNull(  ) ) ? SQL_FILTER_ID_PARENT_IS_NULL : EMPTY_STRING );
-        strSQL += ( ( filter.containsIdIsGroup(  ) ) ? SQL_FILTER_IS_GROUP : EMPTY_STRING );
-        strSQL += ( ( filter.containsIdIsComment(  ) ) ? SQL_FILTER_IS_COMMENT : EMPTY_STRING );
-        strSQL += ( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : EMPTY_STRING );
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECT_NUMBER_ENTRY_BY_FILTER );
+        sbSQL.append( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdEntryParent(  ) ) ? SQL_FILTER_ID_PARENT : EMPTY_STRING );
+        sbSQL.append( ( filter.containsEntryParentNull(  ) ) ? SQL_FILTER_ID_PARENT_IS_NULL : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdIsGroup(  ) ) ? SQL_FILTER_IS_GROUP : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdIsComment(  ) ) ? SQL_FILTER_IS_COMMENT : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : EMPTY_STRING );
+        
+        sbSQL.append( SQL_GROUP_BY_POSITION );
+        sbSQL.append( SQL_ORDER_BY_POSITION );
 
-        strSQL += SQL_ORDER_BY_POSITION;
-
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
+        DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
         int nIndex = 1;
 
         if ( filter.containsIdForm(  ) )
