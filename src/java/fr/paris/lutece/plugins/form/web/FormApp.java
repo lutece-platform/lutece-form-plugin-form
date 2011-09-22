@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.form.web;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -253,7 +254,7 @@ public class FormApp implements XPageApplication
             	session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
                 session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
                 // remove file in sessions
-                for ( String strAttributeName : Collections.<String>list( session.getAttributeNames() ) )
+                for ( String strAttributeName : Collections.list( (Enumeration<String>) session.getAttributeNames() ) )
                 {
                 	if ( strAttributeName.startsWith( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE ) )
                 	{
