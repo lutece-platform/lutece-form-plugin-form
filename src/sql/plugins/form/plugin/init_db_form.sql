@@ -33,6 +33,8 @@ INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,
 (12,'Image',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeImage');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES
 (13,'Utilisateur MyLutece',false,false,true,'fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser');
+INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES
+(14,'Session',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeSession');
 
 --
 -- Dumping data for table form_action
