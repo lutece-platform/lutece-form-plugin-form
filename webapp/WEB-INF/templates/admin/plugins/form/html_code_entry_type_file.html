@@ -56,8 +56,15 @@
 		</span>
 		 <span class="form-field-column" id="_filename_${entry.idEntry}">
 		<#list list_responses as response> 
-			${response.fileName}
-			&nbsp; - #i18n{form.file.removeUploadedFile} <input type="checkbox" name="delete_${entry.idEntry}" value="1" id="delete_${entry.idEntry}" />
+			<#if response.fileName?? && response.fileName != ''>
+				<input name="_filename_value_${entry.idEntry}" type="hidden" value="${response.fileName}" />
+				${response.fileName}&nbsp;&nbsp;-
+				<span id="delete_${entry.idEntry}">
+					#i18n{form.file.removeUploadedFile} <input type="checkbox" name="delete_${entry.idEntry}" value="1" />
+				</span>
+			<#else>
+				<span class="form-field-column" id="_filename_${entry.idEntry}">-</span>
+			</#if>
 		</#list> 
 			</span>
 <#else>

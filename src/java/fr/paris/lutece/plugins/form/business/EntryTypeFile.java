@@ -196,6 +196,10 @@ public class EntryTypeFile extends Entry
     	if ( request.getParameter( FormUtils.PARAMETER_DELETE_PREFIX + Integer.toString( this.getIdEntry(  ) ) ) != null )
     	{
     		// checkbox checked
+    		String strSessionId = request.getSession(  ).getId(  );
+
+        	// file may be uploaded asynchronously...
+        	FormAsynchronousUploadHandler.removeFileItem( Integer.toString( this.getIdEntry(  ) ), strSessionId );
     		if ( session != null )
     		{
     			request.getSession(  ).removeAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ) );
@@ -231,13 +235,13 @@ public class EntryTypeFile extends Entry
 
     		session.setAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ), fileSource );
     		
-            String strFilename = FileUploadService.getFileNameOnly( fileSource );
+            String strFilename = fileSource != null ? FileUploadService.getFileNameOnly( fileSource ) : StringUtils.EMPTY;
             List<RegularExpression> listRegularExpression = this.getFields(  ).get( 0 ).getRegularExpressionList(  );
 
             Response response = new Response(  );
             response.setEntry( this );
             
-            byte[] byValueEntry = fileSource.get(  );
+            byte[] byValueEntry = fileSource != null ? fileSource.get(  ) : null;
 
             response.setValueResponse( byValueEntry );
             response.setFileName( strFilename );
@@ -247,7 +251,7 @@ public class EntryTypeFile extends Entry
 
             if ( this.isMandatory(  ) )
             {
-                if ( ( strFilename == null ) || ( strFilename.equals( EMPTY_STRING ) ) )
+                if ( StringUtils.isBlank( strFilename ) )
                 {
                     FormError formError = new FormError(  );
                     formError.setMandatoryError( true );
@@ -259,7 +263,7 @@ public class EntryTypeFile extends Entry
             
             String strMimeType = FileSystemUtil.getMIMEType( strFilename );
 
-            if ( ( strFilename != null ) && ( !strFilename.equals( EMPTY_STRING ) ) && ( listRegularExpression != null ) &&
+            if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null ) &&
                     ( listRegularExpression.size(  ) != 0 ) && RegularExpressionService.getInstance(  ).isAvailable(  ) )
             {
                 for ( RegularExpression regularExpression : listRegularExpression )

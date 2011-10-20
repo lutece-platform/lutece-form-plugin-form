@@ -43,7 +43,27 @@ function addAsynchronousUploadField(fieldId) {
 	    });
 	    
 	    /* removing checkbox, replaced by a link */
-	    $( "#delete_" + fieldId ).hide(  );
+	    if ( $( '#delete_' + fieldId ) )
+	    {
+	    	$( '#delete_' + fieldId ).hide(  );
+	    	var fileName = $( '#_filename_' + fieldId + ' input[type="hidden"]' ).val(  );
+	    	if ( fileName )
+	    	{
+	    		var anchorId = '_img_remove_file_' + fieldId;
+	    		$( '#_filename_' + fieldId).append( getImageRemoveFile( anchorId, fieldId ) );
+	    		$( '#' + anchorId).click( 
+    				function( event ) {
+						var jsonData = { 'id_entry' : fieldId };
+						$.getJSON( baseUrl + '/jsp/site/plugins/form/DoRemoveFile.jsp', jsonData,
+								function( json ) {
+							$( '#_filename_' + fieldId).hide(  );
+						} );
+						event.preventDefault();
+						$("#_filename_" + fieldId).html( "-" );
+    				}
+	    		);
+	    	}
+	    }
 	}
 }
 
@@ -81,7 +101,7 @@ function handleError( event,ID,fileObj,data,fieldId ) {
 		{
 			strMaxSize = Math.round( maxSize * 100 ) / 100 + "ko";
 		}
-		alert("Le fichier est trop gros. La taille est limitée à " + strMaxSize );
+		alert("Le fichier est trop gros. La taille est limitï¿½e ï¿½ " + strMaxSize );
 	}
 	else
 	{
@@ -111,8 +131,6 @@ function formStartUpload( event, ID, fieldId )
 function formOnUploadComplete(event,ID,fileObj,data)
 {
 	uploading--;
-	
-	alert( "Uploaded file..." );
 	
 	var jsonData;
 	try
@@ -168,9 +186,8 @@ $('input[type=submit]').each(function() {
 
 function displayFile( fileName, fieldId )
 {
-	alert("fileName=" + fileName);
 	var anchorId = '_img_remove_file_' + fieldId;
-	var strContent =  fileName + " &nbsp; - " + getImageRemoveFile( anchorId, fieldId );
+	var strContent =  fileName + "&nbsp; - " + getImageRemoveFile( anchorId, fieldId );
 	$("#_filename_" + fieldId).html( strContent );
 	$("#" + anchorId).click( 
 			function( event ) {
