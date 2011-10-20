@@ -38,10 +38,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
+import fr.paris.lutece.plugins.form.business.EntryFilter;
+import fr.paris.lutece.plugins.form.business.EntryHome;
+import fr.paris.lutece.plugins.form.business.EntryTypeSession;
 import fr.paris.lutece.plugins.form.business.ExportFormat;
 import fr.paris.lutece.plugins.form.business.ExportFormatHome;
+import fr.paris.lutece.plugins.form.business.Field;
+import fr.paris.lutece.plugins.form.business.FieldHome;
 import fr.paris.lutece.plugins.form.business.Form;
+import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.parameter.EntryParameterHome;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterHome;
 import fr.paris.lutece.portal.business.rbac.RBAC;
@@ -158,5 +169,46 @@ public class FormService
     	model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
 
     	return model;
+    }
+    
+    /**
+     * Check if the user is authorized to view the form.
+     * <br />
+     * This method checks every mandatory EntryTypeSession, and check if there is a value for the
+     * attribute of the session.
+     * @param form the form
+     * @param request the HTTP request
+     * @return true if he is authorized, false otherwise
+     */
+    public boolean isSessionValid( Form form, HttpServletRequest request )
+    {
+    	Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
+    	EntryFilter eFilter = new EntryFilter(  );
+    	eFilter.setIdForm( form.getIdForm(  ) );
+    	List<IEntry> listEntries = EntryHome.getEntryList( eFilter, plugin );
+    	
+    	HttpSession session = request.getSession( false );
+    	
+		for ( IEntry entry : listEntries )
+		{
+			if ( entry instanceof EntryTypeSession && entry.isMandatory(  ) )
+			{
+				List<Field> listFields = FieldHome.getFieldListByIdEntry( entry.getIdEntry(  ), plugin );
+				if ( session == null )
+				{
+					return false;
+				}
+				else if ( session != null && listFields != null && !listFields.isEmpty(  ) && listFields.get( 0 ) != null && 
+						StringUtils.isNotBlank( listFields.get( 0 ).getValue(  ) ) )
+		    	{
+	    			String strAttributeName = listFields.get( 0 ).getValue(  );
+	    			if ( StringUtils.isBlank( (String) session.getAttribute( strAttributeName ) ) )
+	    			{
+	    				return false;
+	    			}
+		    	}
+			}
+		}
+    	return true;
     }
 }

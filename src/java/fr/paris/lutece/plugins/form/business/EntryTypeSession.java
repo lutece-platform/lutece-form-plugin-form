@@ -96,6 +96,7 @@ public class EntryTypeSession extends Entry
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strAttibuteName = request.getParameter( PARAMETER_VALUE );
+        String strMandatory = request.getParameter( PARAMETER_MANDATORY );
 
         String strFieldError = EMPTY_STRING;
 
@@ -119,7 +120,7 @@ public class EntryTypeSession extends Entry
         this.setTitle( strTitle );
         this.setHelpMessage( StringUtils.EMPTY );
         this.setComment( StringUtils.EMPTY );
-        this.setMandatory( false );
+        this.setMandatory( StringUtils.isNotEmpty( strMandatory ) );
         this.setConfirmField( false );
         this.setConfirmFieldTitle( null );
         this.setUnique( false );

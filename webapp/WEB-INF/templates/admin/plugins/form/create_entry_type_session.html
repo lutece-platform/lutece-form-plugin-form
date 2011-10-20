@@ -1,3 +1,4 @@
+<#include "/admin/plugins/form/commons.html" />
 <div class="content-box">
 	<h2>#i18n{form.createEntry.titleQuestion} : '${entry.form.title}'</h2>
 	<form action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post">
@@ -14,6 +15,13 @@
 			${entry.entryType.title}
 		</p>
 		<p>
+			<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+			<input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />
+			<br />
+			<label>&nbsp;</label>
+			#i18n{form.createEntry.labelMandatoryCommentForEntryTypeSession}
+		</p>
+		<p>
 			<label for="value">#i18n{form.createEntry.labelAttributeName} * : </label>
 			<input type="text" name="value" id="value" size="80" maxlength="255" value ="" />
 			<br />
@@ -21,7 +29,7 @@
 		</p>
 		<p>
 			<input type="submit" value="#i18n{form.createEntry.buttonSave}" class="button" name="save" />
-			<input type="submit" value="#i18n{form.createEntry.buttonApplyAndManageVerification}" class="button" name="apply"/ >
+			<input type="submit" value="#i18n{form.createEntry.buttonApplyAndManageVerification}" class="button" name="apply" />
 			<input type="submit" value="#i18n{form.createEntry.buttonCancel}" class="button" name="cancel" />
 		</p>
 	</form>

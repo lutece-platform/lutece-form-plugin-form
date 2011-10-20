@@ -29,9 +29,9 @@
 	<p>
     	<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
    		 <#if entry.mandatory>
-   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" >
+   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" />
    		 <#else>
-   			<input name="mandatory" value="1" type="checkbox" >
+   			<input name="mandatory" value="1" type="checkbox" />
    		 </#if>	
     </p>
     <p>
@@ -58,8 +58,8 @@
 	    	
   	<#-- </p> -->
     <p>
-  		<input type="submit" value="#i18n{form.modifyEntry.buttonSave}" class="button"  name="save" / >
-  		<input type="submit" value="#i18n{form.modifyEntry.buttonApply}" class="button"  name="apply"/ >
+  		<input type="submit" value="#i18n{form.modifyEntry.buttonSave}" class="button"  name="save" />
+  		<input type="submit" value="#i18n{form.modifyEntry.buttonApply}" class="button"  name="apply" />
   		<input type="submit" value="#i18n{form.modifyEntry.buttonCancel}" class="button" name="cancel" />
     </p>
   </form>
@@ -69,20 +69,18 @@
 	<div class="content-box">
 	          <h2>#i18n{form.createEntry.manageRegularExpression.title}</h2>
 				<div class="highlight-box">
-		            <p>
 		            <form  method="post"  action="jsp/admin/plugins/form/DoInsertVerification.jsp#list"> 
 		              <input name="id_field" value="${id_field}" type="hidden" />
 						<label for="id_expression">
 		                	 #i18n{form.createEntry.manageRegularExpression.labelInsert} :
 		              	</label>
 		               	<@combo name="id_expression"  items=regular_expression_list default_value=-1 />
-						<input value="#i18n{form.createEntry.manageRegularExpression.buttonInsert}" class="button"  type="submit">
+						<input value="#i18n{form.createEntry.manageRegularExpression.buttonInsert}" class="button"  type="submit" />
 						 <br/>
 						 <br/>
 	 				
 	 					<label>&nbsp;</label> #i18n{form.createEntry.manageRegularExpression.labelInsertComment}
 		            </form>
-		        </p>
 		        <p>&nbsp;</p>
 	        </div>
 		<@paginationAdmin paginator=paginator combo=1/>

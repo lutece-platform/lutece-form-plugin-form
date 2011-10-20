@@ -33,9 +33,9 @@
   <p>
     	<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
    		 <#if entry.mandatory>
-   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" >
+   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" />
    		 <#else>
-   			<input name="mandatory" value="1" type="checkbox" >
+   			<input name="mandatory" value="1" type="checkbox" />
    		 </#if>	
    </p>
      <p>
@@ -57,11 +57,11 @@
 	    			<input class="-lutece-input -lutece-border-radius-mini" type="text" name="max_size_enter" id="max_size_enter" size="5" value="${field.maxSizeEnter}" />
 	    		<#else>
 	    			<input class="-lutece-input -lutece-border-radius-mini" type="text" name="max_size_enter" id="max_size_enter" size="5" value="" />
-	    		</#if>	
+	    		</#if>
 	    	</#list>	
   	 </p>
      <p>
-  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" / >
+  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" />
   		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonCancel}" name="cancel" />
    </p>
   </form>

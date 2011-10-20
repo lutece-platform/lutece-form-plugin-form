@@ -29,16 +29,16 @@
 	  <p>
     	<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
    		 <#if entry.mandatory>
-   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" >
+   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" />
    		 <#else>
-   			<input name="mandatory" value="1" type="checkbox" >
+   			<input name="mandatory" value="1" type="checkbox" /	>
    		 </#if>	
    </p>
     
   	
       <p>
-  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" / >
-  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonApply}" name="apply"/ >
+  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" />
+  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonApply}" name="apply" />
   		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonCancel}" name="cancel" />
    </p>
   </form>
@@ -81,12 +81,12 @@
 	           	<td >
 	               <#if cpt!=1>
 	              		<a href="jsp/admin/plugins/form/DoMoveUpField.jsp?id_field=${field.idField}#list">
-	                 	 <img src="images/admin/skin/plugins/form/actions/up.png"  alt="#i18n{form.createEntry.manageField.titleMoveUp}" title="#i18n{form.createEntry.manageField.titleMoveUp}">
+	                 	 <img src="images/admin/skin/plugins/form/actions/up.png"  alt="#i18n{form.createEntry.manageField.titleMoveUp}" title="#i18n{form.createEntry.manageField.titleMoveUp}" />
 	               	  </a>
 	                </#if> 
 	               <#if field_has_next>
 	               	 <a href="jsp/admin/plugins/form/DoMoveDownField.jsp?id_field=${field.idField}#list">
-	                 	 <img src="images/admin/skin/plugins/form/actions/down.png" alt="#i18n{form.createEntry.manageField.titleMoveDown}" title="#i18n{form.createEntry.manageField.titleMoveDown}">
+	                 	 <img src="images/admin/skin/plugins/form/actions/down.png" alt="#i18n{form.createEntry.manageField.titleMoveDown}" title="#i18n{form.createEntry.manageField.titleMoveDown}" />
 	                 </a>
 	               </#if>
 	                <a href="jsp/admin/plugins/form/ConfirmRemoveField.jsp?id_field=${field.idField}#list">

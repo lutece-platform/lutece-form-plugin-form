@@ -11,6 +11,17 @@
 			${entry.entryType.title}
 		</p>
 		<p>
+			<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+			<#if entry.mandatory>
+				<input name="mandatory" value="1" type="checkbox" checked="checked" />
+			<#else>
+				<input name="mandatory" value="1" type="checkbox" />
+			</#if>
+			<br />
+			<label>&nbsp;</label>
+			#i18n{form.createEntry.labelMandatoryCommentForEntryTypeSession}
+		</p>
+		<p>
 			<label for="value">#i18n{form.createEntry.labelAttributeName} * : </label>
 			<#list entry.fields as field>
 				<input type="text" name="value" id="value" size="80" maxlength="255" value="${field.value}"/>
@@ -19,8 +30,8 @@
 			<label>&nbsp;</label>#i18n{form.createEntry.labelAttributeNameComment}
 		</p>
 		<p>
-			<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" / >
-			<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonApply}" name="apply"/ >
+			<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" />
+			<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonApply}" name="apply" />
 			<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonCancel}" name="cancel" />
 		</p>
 	</form>
