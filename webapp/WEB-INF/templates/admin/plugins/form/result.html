@@ -44,13 +44,13 @@
 	    	<input type="radio" name="times_unit" value="2" <#if times_unit=="2">checked</#if>> #i18n{form.result.radioButtonMonth}
 	    </p> 
 	           <#if fist_response_date_filter?exists&&last_response_date_filter?exists>
-	          		<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&times_unit=${times_unit}&fist_response_date_filter=${fist_response_date_filter?date?if_exists}&last_response_date_filter=${last_response_date_filter?date?if_exists}"/>
+	          		<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}&amp;fist_response_date_filter=${fist_response_date_filter?date?if_exists}&amp;last_response_date_filter=${last_response_date_filter?date?if_exists}"/>
       		   <#elseif  fist_response_date_filter?exists > 
-      		   		<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&times_unit=${times_unit}&fist_response_date_filter=${fist_response_date_filter?date?if_exists}"/>
+      		   		<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}&amp;fist_response_date_filter=${fist_response_date_filter?date?if_exists}"/>
       		  <#elseif last_response_date_filter?exists>
-      				 <img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&times_unit=${times_unit}&last_response_date_filter=${last_response_date_filter?date?if_exists}"/>
+      				 <img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}&amp;last_response_date_filter=${last_response_date_filter?date?if_exists}"/>
       			<#else>
-      				<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&times_unit=${times_unit}"/>
+      				<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}"/>
       			</#if>
 	  </div>
   </form>
