@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.form.utils.StringUtil;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -190,7 +191,7 @@ public class EntryTypeSelectSQL extends Entry
         
         if ( field != null )
         {
-            response.setValueResponse( field.getValue(  ).getBytes(  ) );
+            response.setValueResponse( StringUtil.convertToByte( field.getValue(  ) ) );
             response.setField( field );
         }
 
@@ -221,7 +222,7 @@ public class EntryTypeSelectSQL extends Entry
     @Override
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return new String( response.getValueResponse(  ) );
+        return StringUtil.convertToString( response.getValueResponse(  ) );
     }
 
     /**
@@ -234,13 +235,8 @@ public class EntryTypeSelectSQL extends Entry
     @Override
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-        return new String( response.getField(  ).getTitle(  ) );
+        return response.getField(  ).getTitle(  );
     }
-
-    /**
-     * {@inheritDoc}
-     * @return
-     */
 
     /*    @Override
         public List<Field> getFields()

@@ -39,6 +39,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.form.utils.StringUtil;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.security.LuteceUser;
@@ -180,7 +181,7 @@ public class EntryTypeMyLuteceUser extends Entry
     	}
     	Response response = new Response(  );
         response.setEntry( this );
-        response.setValueResponse( user.getName(  ).getBytes(  ) );
+        response.setValueResponse( StringUtil.convertToByte( user.getName(  ) ) );
         
         listResponse.add( response );
         
@@ -196,7 +197,7 @@ public class EntryTypeMyLuteceUser extends Entry
          */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return new String( response.getValueResponse(  ) );
+        return StringUtil.convertToString( response.getValueResponse(  ) );
     }
 
     /**

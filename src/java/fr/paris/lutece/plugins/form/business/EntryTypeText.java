@@ -33,6 +33,13 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
@@ -46,13 +53,6 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -291,7 +291,7 @@ public class EntryTypeText extends Entry
 
         if ( strValueEntry != null )
         {
-        	response.setValueResponse( strValueEntry.getBytes(  ) );
+			response.setValueResponse( fr.paris.lutece.plugins.form.utils.StringUtil.convertToByte( strValueEntry ) );
         	byte[] byResponseValue = response.getValueResponse(  );
 
             if ( byResponseValue != null )
@@ -391,15 +391,15 @@ public class EntryTypeText extends Entry
     }
 
     /**
-         * Get the response value  associate to the entry  to export in the file export
-         * @param response the response associate to the entry
-         * @param locale the locale
-         * @param request the request
-         * @return  the response value  associate to the entry  to export in the file export
-         */
+     * Get the response value  associate to the entry  to export in the file export
+     * @param response the response associate to the entry
+     * @param locale the locale
+     * @param request the request
+     * @return  the response value  associate to the entry  to export in the file export
+     */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return new String( response.getValueResponse(  ) );
+    	return fr.paris.lutece.plugins.form.utils.StringUtil.convertToString( response.getValueResponse(  ) );
     }
 
     /**
@@ -411,9 +411,12 @@ public class EntryTypeText extends Entry
      */
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-        return new String( response.getValueResponse(  ) );
+    	return fr.paris.lutece.plugins.form.utils.StringUtil.convertToString( response.getValueResponse(  ) );
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public LocalizedPaginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
         String strPageIndex, Locale locale )

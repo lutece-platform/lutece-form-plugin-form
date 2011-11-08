@@ -214,7 +214,7 @@ public class EntryTypeTextArea extends Entry
         if ( strValueEntry != null )
         {
         	int nMaxSize = getFields(  ).get( 0 ).getMaxSizeEnter(  );
-        	response.setValueResponse( strValueEntry.getBytes(  ) );
+        	response.setValueResponse( fr.paris.lutece.plugins.form.utils.StringUtil.convertToByte( strValueEntry ) );
         	byte[] byResponseValue = response.getValueResponse(  );
 
             if ( byResponseValue != null )
@@ -276,7 +276,7 @@ public class EntryTypeTextArea extends Entry
          */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return new String( response.getValueResponse(  ) );
+    	return fr.paris.lutece.plugins.form.utils.StringUtil.convertToString( response.getValueResponse(  ) );
     }
 
     /**
@@ -288,6 +288,6 @@ public class EntryTypeTextArea extends Entry
      */
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-        return new String( response.getValueResponse(  ) );
+    	return fr.paris.lutece.plugins.form.utils.StringUtil.convertToString( response.getValueResponse(  ) );
     }
 }

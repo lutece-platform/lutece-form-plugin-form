@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.form.utils.StringUtil;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -218,7 +219,7 @@ public class EntryTypeCheckBox extends Entry
             {
                 response = new Response(  );
                 response.setEntry( this );
-                response.setValueResponse( fieldInResponse.getValue(  ).getBytes(  ) );
+                response.setValueResponse( StringUtil.convertToByte( fieldInResponse.getValue(  ) ) );
                 response.setField( fieldInResponse );
                 listResponse.add( response );
             }
@@ -250,15 +251,15 @@ public class EntryTypeCheckBox extends Entry
     }
 
     /**
-         * Get the response value  associate to the entry  to export in the file export
-         * @param response the response associate to the entry
-         * @param locale the locale
-         * @param request the request
-         * @return  the response value  associate to the entry  to export in the file export
-         */
+     * Get the response value  associate to the entry  to export in the file export
+     * @param response the response associate to the entry
+     * @param locale the locale
+     * @param request the request
+     * @return  the response value  associate to the entry  to export in the file export
+     */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return new String( response.getValueResponse(  ) );
+    	return fr.paris.lutece.plugins.form.utils.StringUtil.convertToString( response.getValueResponse(  ) );
     }
 
     /**
@@ -273,6 +274,9 @@ public class EntryTypeCheckBox extends Entry
         return new String( response.getField(  ).getTitle(  ) );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public LocalizedPaginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
         String strPageIndex, Locale locale )

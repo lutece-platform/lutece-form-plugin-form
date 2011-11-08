@@ -366,6 +366,9 @@ public class EntryTypeFile extends Entry
         }
     }    
  
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public LocalizedPaginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
         String strPageIndex, Locale locale )

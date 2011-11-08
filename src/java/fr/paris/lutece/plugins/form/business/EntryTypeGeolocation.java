@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.form.utils.StringUtil;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -198,25 +199,25 @@ public class EntryTypeGeolocation extends Entry
         // add responses
         Response responseX = new Response(  );
         responseX.setEntry( this );
-        responseX.setValueResponse( strXValue.getBytes(  ) );
+        responseX.setValueResponse( StringUtil.convertToByte( strXValue ) );
         responseX.setField( xField );
-        responseX.setToStringValueResponse( new String( responseX.getValueResponse(  ) ) );
+        responseX.setToStringValueResponse( strXValue );
         
         listResponse.add( responseX );
 
         Response responseY = new Response(  );
         responseY.setEntry( this );
-        responseY.setValueResponse( strYValue.getBytes(  ) );
+        responseY.setValueResponse( StringUtil.convertToByte( strYValue ) );
         responseY.setField( yField );
-        responseY.setToStringValueResponse( new String( responseY.getValueResponse(  ) ) );
+        responseY.setToStringValueResponse( strYValue );
         
         listResponse.add( responseY );
         
         Response responseAddress = new Response(  );
         responseAddress.setEntry( this );
-        responseAddress.setValueResponse( strAddressValue.getBytes(  ) );
+        responseAddress.setValueResponse( StringUtil.convertToByte( strAddressValue ) );
         responseAddress.setField( addressField );
-        responseAddress.setToStringValueResponse( new String( responseAddress.getValueResponse(  ) ) );
+        responseAddress.setToStringValueResponse( strAddressValue );
         
         listResponse.add( responseAddress );
         
@@ -256,8 +257,8 @@ public class EntryTypeGeolocation extends Entry
     	String strTitle = response.getField(  ).getTitle(  );
     	if ( CONSTANT_ADDRESS.equals( strTitle ) )
     	{
-    		strTitle = I18nService.getLocalizedString( MESSAGE_ADDRESS, locale );
-    		return new String( response.getValueResponse(  ) );
+    		//strTitle = I18nService.getLocalizedString( MESSAGE_ADDRESS, locale );
+    		return StringUtil.convertToString( response.getValueResponse(  ) );
     	}
         return CONSTANT_EMPTY_STRING;
     }
@@ -301,6 +302,6 @@ public class EntryTypeGeolocation extends Entry
     	{
     		fieldName = ObjectUtils.toString( response.getField(  ).getTitle(  ) );
     	}
-    	return fieldName + FormUtils.CONSTANT_EQUAL + new String( response.getValueResponse(  ) );
+    	return fieldName + FormUtils.CONSTANT_EQUAL + StringUtil.convertToString( response.getValueResponse(  ) );
     }
 }

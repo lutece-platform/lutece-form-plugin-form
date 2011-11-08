@@ -42,6 +42,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import fr.paris.lutece.plugins.form.utils.StringUtil;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -161,7 +162,7 @@ public class EntryTypeSession extends Entry
         {
         	Response response = new Response(  );
         	response.setEntry( this );
-        	response.setValueResponse( strValueEntry.getBytes(  ) );
+        	response.setValueResponse( StringUtil.convertToByte( strValueEntry ) );
 
         	byte[] byResponseValue = response.getValueResponse(  );
 
@@ -184,7 +185,7 @@ public class EntryTypeSession extends Entry
      */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return new String( response.getValueResponse(  ) );
+        return StringUtil.convertToString( response.getValueResponse(  ) );
     }
 
     /**

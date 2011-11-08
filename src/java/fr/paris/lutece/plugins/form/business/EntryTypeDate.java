@@ -176,7 +176,8 @@ public class EntryTypeDate extends Entry
         	Date tDateValue = DateUtil.formatDate( strValueEntry, locale );
         	if ( tDateValue != null )
         	{
-        		response.setValueResponse( ( FormUtils.EMPTY_STRING + tDateValue.getTime(  ) ).getBytes(  ) );
+        		response.setValueResponse( fr.paris.lutece.plugins.form.utils.StringUtil.convertToByte( 
+        				Long.toString( tDateValue.getTime(  ) ) ) );
         	}
         	else
         	{
@@ -256,7 +257,8 @@ public class EntryTypeDate extends Entry
      */
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-        Long newLong = Long.parseLong( new String( response.getValueResponse(  ) ) );
+    	String strResponseValue = fr.paris.lutece.plugins.form.utils.StringUtil.convertToString( response.getValueResponse(  ) );
+        Long newLong = Long.parseLong( strResponseValue );
         Timestamp date = new Timestamp( newLong );
 
         return DateUtil.getDateString( date, locale );
@@ -270,7 +272,8 @@ public class EntryTypeDate extends Entry
     {
     	if ( response.getValueResponse(  ) != null && response.getValueResponse(  ).length != 0 )
     	{
-	    	Long newLong = Long.parseLong( new String( response.getValueResponse(  ) ) );
+    		String strResponseValue = fr.paris.lutece.plugins.form.utils.StringUtil.convertToString( response.getValueResponse(  ) );
+	    	Long newLong = Long.parseLong( strResponseValue );
 	        Timestamp date = new Timestamp( newLong );
 	
 	        response.setToStringValueResponse( DateUtil.getDateString( date, locale ) );
