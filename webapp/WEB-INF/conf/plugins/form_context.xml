@@ -20,12 +20,14 @@
  	 <bean id="form.formParameterDAO" class="fr.paris.lutece.plugins.form.business.parameter.FormParameterDAO" />
  	 <bean id="form.formRemovalService" class="fr.paris.lutece.portal.service.util.RemovalListenerService" />
  	 <bean id="form.entryRemovalService" class="fr.paris.lutece.portal.service.util.RemovalListenerService" />
- 	  
-   	<bean id="form.outputProcessorSet"  class="fr.paris.lutece.plugins.form.business.outputprocessor.OutputProcessorSet" />
+ 	   
+	 <bean id="form.outputProcessorSet"  class="fr.paris.lutece.plugins.form.business.outputprocessor.OutputProcessorSet" />
     
-      <bean id="form.notifySender" class="fr.paris.lutece.plugins.form.modules.processornotifysender.business.ProcessorNotifySender">
+     <bean id="form.notifySenderService" class="fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderService" />
+     <bean id="form.notifySender" class="fr.paris.lutece.plugins.form.modules.processornotifysender.business.ProcessorNotifySender">
       	<property name="key" value="notifySender" />
-      </bean>
+      	<property name="notifySenderService" ref="form.notifySenderService" />
+     </bean>
     
     <bean id="form.asynchronousUploadHandler" class="fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler" />
  </beans>

@@ -63,6 +63,7 @@ public interface INotifySenderConfigurationDAO
     /**
      * Delete a record from the table
      * @param nIdForm The identifier of the form associate to the notifySenderConfiguration
+     * @param plugin the plugin
      */
     void delete( int nIdForm, Plugin plugin );
 

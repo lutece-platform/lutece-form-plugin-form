@@ -93,6 +93,7 @@ CREATE TABLE form_notify_sender_configuration (
 	id_form int default 0 NOT NULL,
 	id_entry_email_sender int default 0 NOT NULL,
 	message long varchar,
+	send_attachments smallint default 0 NOT NULL,
 	PRIMARY KEY (id_form,id_entry_email_sender)
 );
 

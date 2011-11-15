@@ -11,6 +11,19 @@
 		<label>&nbsp;</label>
 		#i18n{module.form.processornotifysender.configuration_notify_sender.email_sender_comment}
 	</p>
+	<#if permission_send_attachments>
+		<p>
+			<label for="send_attachments">#i18n{module.form.processornotifysender.configuration_notify_sender.send_attachments} :</label>
+			<input type="checkbox" value="1" name="send_attachments" 
+				<#if configuration?exists && configuration.sendAttachments>
+					checked="checked"
+				</#if>
+			/>
+			<br />
+			<label>&nbsp;</label>
+			#i18n{module.form.processornotifysender.configuration_notify_sender.send_attachments_comment}
+		</p>
+	</#if>
 	<p>
 		<label for="mail_message">#i18n{module.form.processornotifysender.configuration_notify_sender.mail_message} : </label>
 		<div>

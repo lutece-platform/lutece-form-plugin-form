@@ -59,7 +59,6 @@ public final class NotifySenderConfigurationHome
      * Create an instance of the notifySenderConfiguration class
      * @param notifySenderConfiguration The instance of the NotifySenderConfiguration which contains the informations to store
      * @param plugin the Plugin
-     * @return The  instance of notifySenderConfiguration which has been created with its primary key.
      */
     public static void create( NotifySenderConfiguration notifySenderConfiguration, Plugin plugin )
     {
@@ -70,7 +69,6 @@ public final class NotifySenderConfigurationHome
      * Update of the notifySenderConfiguration which is specified in parameter
      * @param notifySenderConfiguration The instance of the NotifySenderConfiguration which contains the data to store
      * @param plugin the Plugin
-     * @return The instance of the  notifySenderConfiguration which has been updated
      */
     public static void update( NotifySenderConfiguration notifySenderConfiguration, Plugin plugin )
     {

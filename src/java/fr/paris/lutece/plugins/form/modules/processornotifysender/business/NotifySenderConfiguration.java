@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2002-2011, Mairie de Paris
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
  *
@@ -43,6 +43,7 @@ public class NotifySenderConfiguration
     private int _nIdForm;
     private int _nIdEntryEmailSender;
     private String _strMessage;
+    private boolean _bSendAttachment;
 
     /**
      * Returns the IdForm
@@ -96,5 +97,23 @@ public class NotifySenderConfiguration
     public void setMessage( String strMessage )
     {
         _strMessage = strMessage;
+    }
+
+    /**
+     * Set true if it must send the attachments
+     * @param bSendAttachments true if it must send the attachments
+     */
+    public void setSendAttachments( boolean bSendAttachments )
+    {
+        _bSendAttachment = bSendAttachments;
+    }
+
+    /**
+     * True if it must send the attachments
+     * @return true if it must send the attachments
+     */
+    public boolean isSendAttachments(  )
+    {
+        return _bSendAttachment;
     }
 }

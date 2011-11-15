@@ -33,26 +33,31 @@
  */
 package fr.paris.lutece.plugins.form.modules.processornotifysender.business;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.outputprocessor.OutputProcessor;
+import fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderResourceIdService;
+import fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.portal.business.rbac.RBAC;
+import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.mail.MailService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -71,7 +76,7 @@ public class ProcessorNotifySender extends OutputProcessor
     private static final String PARAMETER_ID_FORM = "id_form";
     private static final String PARAMETER_ID_ENTRY_EMAIL_SENDER = "id_entry_email_sender";
     private static final String PARAMETER_MAIL_MESSAGE = "mail_message";
-    private static final String PARAMETER_SEND_RECAP = "send_recap";
+    private static final String PARAMETER_SEND_ATTACHMENTS = "send_attachments";
     private static final String MARK_FORM = "form";
     private static final String MARK_REF_LIST_ENTRY = "entry_list";
     private static final String MARK_CONFIGURATION = "configuration";
@@ -81,14 +86,24 @@ public class ProcessorNotifySender extends OutputProcessor
     private static final String MARK_FORM_SUBMIT = "formSubmit";
     private static final String MARK_MESSAGE = "mail_message";
     private static final String MARK_TITLE = "mail_title";
+    private static final String MARK_PERMISSION_SEND_ATTACHMENTS = "permission_send_attachments";
     private static final String MESSAGE_CONFIGURATION_ERROR_ENTRY_NOT_SELECTED = "module.form.processornotifysender.message.error.configuration.entry_not_selected";
     private static final String MESSAGE_ERROR_NO_CONFIGURATION_ASSOCIATED = "module.form.processornotifysender.message.error.no_configuration_associated";
     private static final String MESSAGE_RECAP_INFORMATION = "module.form.processornotifysender.configuration_notify_sender.send_recap";
     private static final String PROPERTY_TAG_RECAP = "processornotifysender.recap_tag";
+    private NotifySenderService _notifySenderService;
 
-    /*
-     * (non-Javadoc)
-     * @see fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor#getOutputConfigForm(fr.paris.lutece.plugins.form.business.Form, java.util.Locale, fr.paris.lutece.portal.service.plugin.Plugin)
+    /**
+     * Set the notify sender service
+     * @param notifySenderService the notify sender service
+     */
+    public void setNotifySenderService( NotifySenderService notifySenderService )
+    {
+        _notifySenderService = notifySenderService;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public String getOutputConfigForm( HttpServletRequest request, Form form, Locale locale, Plugin plugin )
     {
@@ -104,15 +119,17 @@ public class ProcessorNotifySender extends OutputProcessor
         model.put( MARK_LOCALE, locale );
         model.put( MARK_REF_LIST_ENTRY, FormUtils.getRefListAllQuestions( form.getIdForm(  ), plugin ) );
         model.put( MARK_MESSAGE_RECAP, strMessageRecap );
+        model.put( MARK_PERMISSION_SEND_ATTACHMENTS, RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, 
+        		RBAC.WILDCARD_RESOURCES_ID, NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, 
+        		AdminUserService.getAdminUser( request ) ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CONFIGURATION_NOTIFY_SENDER, locale, model );
 
         return template.getHtml(  );
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor#doOutputConfigForm(javax.servlet.http.HttpServletRequest, java.util.Locale, fr.paris.lutece.portal.service.plugin.Plugin)
+    /**
+     * {@inheritDoc}
      */
     public String doOutputConfigForm( HttpServletRequest request, Locale locale, Plugin plugin )
     {
@@ -129,10 +146,10 @@ public class ProcessorNotifySender extends OutputProcessor
             AppLogService.error( ne );
         }
 
-        NotifySenderConfiguration configuration = new NotifySenderConfiguration(  );
-        configuration.setIdForm( nIdForm );
+        NotifySenderConfiguration config = new NotifySenderConfiguration(  );
+        config.setIdForm( nIdForm );
 
-        String strError = getConfigurationData( request, configuration, locale );
+        String strError = getConfigurationData( request, config );
 
         if ( strError != null )
         {
@@ -141,27 +158,26 @@ public class ProcessorNotifySender extends OutputProcessor
 
         if ( NotifySenderConfigurationHome.findByPrimaryKey( nIdForm, plugin ) != null )
         {
-            NotifySenderConfigurationHome.update( configuration, plugin );
+            NotifySenderConfigurationHome.update( config, plugin );
         }
         else
         {
-            NotifySenderConfigurationHome.create( configuration, plugin );
+            NotifySenderConfigurationHome.create( config, plugin );
         }
 
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor#process(fr.paris.lutece.plugins.form.business.FormSubmit, javax.servlet.http.HttpServletRequest, fr.paris.lutece.portal.service.plugin.Plugin)
+    /**
+     * {@inheritDoc}
      */
     public String process( FormSubmit formSubmit, HttpServletRequest request, Plugin plugin )
     {
-        NotifySenderConfiguration configuration = NotifySenderConfigurationHome.findByPrimaryKey( formSubmit.getForm(  )
+        NotifySenderConfiguration config = NotifySenderConfigurationHome.findByPrimaryKey( formSubmit.getForm(  )
                                                                                                             .getIdForm(  ),
                 plugin );
 
-        if ( configuration == null )
+        if ( config == null )
         {
             return MESSAGE_ERROR_NO_CONFIGURATION_ASSOCIATED;
         }
@@ -177,14 +193,14 @@ public class ProcessorNotifySender extends OutputProcessor
         //----------------------------------
         for ( Response response : formSubmit.getListResponse(  ) )
         {
-            if ( response.getEntry(  ).getIdEntry(  ) == configuration.getIdEntryEmailSender(  ) )
+            if ( response.getEntry(  ).getIdEntry(  ) == config.getIdEntryEmailSender(  ) )
             {
                 strEmailSender = response.getEntry(  )
                                          .getResponseValueForExport( request, response, request.getLocale(  ) );
             }
         }
 
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         Recap recap = RecapHome.findByPrimaryKey( formSubmit.getForm(  ).getRecap(  ).getIdRecap(  ), plugin );
 
         if ( ( recap != null ) && recap.isRecapData(  ) )
@@ -215,7 +231,7 @@ public class ProcessorNotifySender extends OutputProcessor
 
         //-------------------------------------------------------------
         String strTagRecap = AppPropertiesService.getProperty( PROPERTY_TAG_RECAP );
-        String strMessage = configuration.getMessage(  ).replace( strTagRecap, templateRecap.getHtml(  ) );
+        String strMessage = config.getMessage(  ).replace( strTagRecap, templateRecap.getHtml(  ) );
 
         model.put( MARK_MESSAGE, strMessage );
         model.put( MARK_TITLE, strSubject );
@@ -223,15 +239,8 @@ public class ProcessorNotifySender extends OutputProcessor
         HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_NOTIFY_SENDER, request.getLocale(  ),
                 model );
 
-        try
-        {
-            // Send Mail
-            MailService.sendMailHtml( strEmailSender, strSenderName, strSenderEmail, strSubject, t.getHtml(  ) );
-        }
-        catch ( Exception e )
-        {
-            AppLogService.error( " Error during Process > Notify sender : " + e.getMessage(  ) );
-        }
+        _notifySenderService.sendNotification( formSubmit, strEmailSender, strSenderName, strSenderEmail, strSubject,
+            t.getHtml(  ), config.isSendAttachments(  ) );
 
         return null;
     }
@@ -239,18 +248,25 @@ public class ProcessorNotifySender extends OutputProcessor
     /**
      * Get the configuration data
      * @param request the request
-     * @param configuration the configuration object
-     * @param locale the locale
+     * @param config the configuration object
      * @return Message error if error appear else null
      */
-    private String getConfigurationData( HttpServletRequest request, NotifySenderConfiguration configuration,
-        Locale locale )
+    private String getConfigurationData( HttpServletRequest request, NotifySenderConfiguration config )
     {
         String strIdEntryEmailSender = request.getParameter( PARAMETER_ID_ENTRY_EMAIL_SENDER );
 
         int nIdEntryEmailSender = -1;
         String strMailMessage = request.getParameter( PARAMETER_MAIL_MESSAGE );
-        String strSendRecap = request.getParameter( PARAMETER_SEND_RECAP );
+        String strSendAttachments = request.getParameter( PARAMETER_SEND_ATTACHMENTS );
+        boolean bSendAttachments = false;
+
+        // Check if it must send the attachments
+        if ( RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, 
+        		RBAC.WILDCARD_RESOURCES_ID, NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, 
+        		AdminUserService.getAdminUser( request ) ) && strSendAttachments != null )
+        {
+        	bSendAttachments = true;
+        }
 
         try
         {
@@ -266,9 +282,10 @@ public class ProcessorNotifySender extends OutputProcessor
             return MESSAGE_CONFIGURATION_ERROR_ENTRY_NOT_SELECTED;
         }
 
-        configuration.setIdEntryEmailSender( nIdEntryEmailSender );
+        config.setIdEntryEmailSender( nIdEntryEmailSender );
+        config.setSendAttachments( bSendAttachments );
 
-        configuration.setMessage( strMailMessage );
+        config.setMessage( strMailMessage );
 
         return null; // No error
     }

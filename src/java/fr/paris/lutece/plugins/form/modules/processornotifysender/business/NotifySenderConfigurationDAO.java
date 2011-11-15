@@ -46,15 +46,15 @@ import java.util.List;
 public final class NotifySenderConfigurationDAO implements INotifySenderConfigurationDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECT = "SELECT id_form,id_entry_email_sender, message FROM form_notify_sender_configuration WHERE id_form = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO form_notify_sender_configuration ( id_form, id_entry_email_sender, message ) VALUES ( ?, ?, ?) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_form,id_entry_email_sender, message, send_attachments FROM form_notify_sender_configuration WHERE id_form = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO form_notify_sender_configuration ( id_form, id_entry_email_sender, message, send_attachments ) VALUES ( ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_notify_sender_configuration WHERE id_form = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE form_notify_sender_configuration SET  id_form = ?,id_entry_email_sender = ?,  message = ? WHERE id_form = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT   id_form,id_entry_email_sender,message FROM form_notify_sender_configuration";
+    private static final String SQL_QUERY_UPDATE = "UPDATE form_notify_sender_configuration SET  id_form = ?,id_entry_email_sender = ?,  message = ?, send_attachments = ? WHERE id_form = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_form, id_entry_email_sender, message, send_attachments FROM form_notify_sender_configuration";
 
-    /* (non-Javadoc)
-         * @see fr.paris.lutece.plugins.form.business.modules.processornotifysender.business.INotifySenderConfigurationDAO#insert(fr.paris.lutece.plugins.form.business.modules.processornotifysender.business.NotifySenderConfiguration)
-         */
+    /**
+     * {@inheritDoc}
+     */
     public void insert( NotifySenderConfiguration notifySenderConfiguration, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -62,14 +62,15 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
         daoUtil.setInt( 1, notifySenderConfiguration.getIdForm(  ) );
         daoUtil.setInt( 2, notifySenderConfiguration.getIdEntryEmailSender(  ) );
         daoUtil.setString( 3, notifySenderConfiguration.getMessage(  ) );
+        daoUtil.setBoolean( 4, notifySenderConfiguration.isSendAttachments(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
 
-    /* (non-Javadoc)
-         * @see fr.paris.lutece.plugins.form.business.modules.processornotifysender.business.INotifySenderConfigurationDAO#load(int)
-         */
+    /**
+     * {@inheritDoc}
+     */
     public NotifySenderConfiguration load( int nIdForm, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
@@ -85,6 +86,7 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
             notifySenderConfiguration.setIdForm( daoUtil.getInt( 1 ) );
             notifySenderConfiguration.setIdEntryEmailSender( daoUtil.getInt( 2 ) );
             notifySenderConfiguration.setMessage( daoUtil.getString( 3 ) );
+            notifySenderConfiguration.setSendAttachments( daoUtil.getBoolean( 4 ) );
         }
 
         daoUtil.free(  );
@@ -92,9 +94,9 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
         return notifySenderConfiguration;
     }
 
-    /* (non-Javadoc)
-         * @see fr.paris.lutece.plugins.form.business.modules.processornotifysender.business.INotifySenderConfigurationDAO#delete(int)
-         */
+    /**
+     * {@inheritDoc}
+     */
     public void delete( int nIdForm, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -103,9 +105,9 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
         daoUtil.free(  );
     }
 
-    /* (non-Javadoc)
-         * @see fr.paris.lutece.plugins.form.business.modules.processornotifysender.business.INotifySenderConfigurationDAO#store(fr.paris.lutece.plugins.form.business.modules.processornotifysender.business.NotifySenderConfiguration)
-         */
+    /**
+     * {@inheritDoc}
+     */
     public void store( NotifySenderConfiguration notifySenderConfiguration, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -113,15 +115,17 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
         daoUtil.setInt( 1, notifySenderConfiguration.getIdForm(  ) );
         daoUtil.setInt( 2, notifySenderConfiguration.getIdEntryEmailSender(  ) );
         daoUtil.setString( 3, notifySenderConfiguration.getMessage(  ) );
-        daoUtil.setInt( 4, notifySenderConfiguration.getIdForm(  ) );
+        daoUtil.setBoolean( 4, notifySenderConfiguration.isSendAttachments(  ) );
+
+        daoUtil.setInt( 5, notifySenderConfiguration.getIdForm(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
 
-    /* (non-Javadoc)
-         * @see fr.paris.lutece.plugins.form.business.modules.processornotifysender.business.INotifySenderConfigurationDAO#selectNotifySenderConfigurationsList()
-         */
+    /**
+     * {@inheritDoc}
+     */
     public List<NotifySenderConfiguration> selectNotifySenderConfigurationsList( Plugin plugin )
     {
         List<NotifySenderConfiguration> notifySenderConfigurationList = new ArrayList<NotifySenderConfiguration>(  );
@@ -136,6 +140,7 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
             notifySenderConfiguration.setIdForm( daoUtil.getInt( 1 ) );
             notifySenderConfiguration.setIdEntryEmailSender( daoUtil.getInt( 2 ) );
             notifySenderConfiguration.setMessage( daoUtil.getString( 3 ) );
+            notifySenderConfiguration.setSendAttachments( daoUtil.getBoolean( 4 ) );
 
             notifySenderConfigurationList.add( notifySenderConfiguration );
         }
