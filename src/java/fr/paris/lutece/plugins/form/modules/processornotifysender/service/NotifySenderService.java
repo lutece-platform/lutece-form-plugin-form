@@ -62,10 +62,10 @@ import fr.paris.lutece.util.mail.FileAttachment;
  */
 public final class NotifySenderService
 {
-    private static final String PROPERTY_ZIP_EXTENSION = "form.zip.extension";
-    private static final String PROPERTY_FILE_FOLDER_PATH = "form.file.folder.path";
-    private static final String PROPERTY_ZIP_FOLDER_PATH = "form.zip.folder.path";
-    private static final String PROPERTY_ATTACHMENT_NAME = "form.attachment.name";
+    private static final String PROPERTY_ZIP_EXTENSION = "processornotifysender.zip.extension";
+    private static final String PROPERTY_FILE_FOLDER_PATH = "processornotifysender.file.folder.path";
+    private static final String PROPERTY_ZIP_FOLDER_PATH = "processornotifysender.zip.folder.path";
+    private static final String PROPERTY_ATTACHMENT_NAME = "processornotifysender.attachment.name";
 
     /**
      * Private constructor
