@@ -53,6 +53,8 @@ import fr.paris.lutece.plugins.form.business.Field;
 import fr.paris.lutece.plugins.form.business.FieldHome;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.business.Recap;
+import fr.paris.lutece.plugins.form.business.RecapHome;
 import fr.paris.lutece.plugins.form.business.parameter.EntryParameterHome;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterHome;
 import fr.paris.lutece.portal.business.rbac.RBAC;
@@ -210,5 +212,18 @@ public class FormService
 			}
 		}
     	return true;
+    }
+
+    /**
+     * Check if the given form has a recap or not
+     * @param form the form
+     * @return true if the form has a recap, false otherwise
+     */
+    public boolean hasRecap( Form form )
+    {
+    	Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
+        Recap recap = RecapHome.findByPrimaryKey( form.getRecap(  ).getIdRecap(  ), plugin );
+
+        return ( recap != null ) && recap.isRecapData(  );
     }
 }

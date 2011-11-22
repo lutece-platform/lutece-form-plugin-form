@@ -246,6 +246,13 @@ public class FormApp implements XPageApplication
         	{
         		FormDraftBackupService.saveDraft( request, formSubmit );
         	}
+
+        	// Validate draft if the form does not have a recap
+        	if ( !FormService.getInstance(  ).hasRecap( form ) )
+        	{
+        		// remove existing draft
+        		FormDraftBackupService.validateDraft( request, form );
+        	}
         }
         else if ( request.getParameter( PARAMETER_ID_FORM ) != null )
         {
