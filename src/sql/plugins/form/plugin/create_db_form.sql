@@ -14,6 +14,8 @@ DROP TABLE IF EXISTS form_default_message;
 DROP TABLE IF EXISTS form_action;
 DROP TABLE IF EXISTS form_form_parameter;
 DROP TABLE IF EXISTS form_entry_parameter;
+DROP TABLE IF EXISTS form_rss_cf;
+DROP TABLE IF EXISTS form_category;
 
 --
 -- Table structure for table form_action
@@ -151,6 +153,7 @@ CREATE TABLE form_form (
 	supports_https smallint default 0,
 	code_theme varchar(25)default NULL,
 	active_mylutece_authentification smallint default NULL,
+	`id_category` int(11) default NULL,
 	PRIMARY KEY (id_form)
 );
 
@@ -158,6 +161,8 @@ CREATE INDEX index_form_form_recap ON form_form (id_recap);
 
 ALTER TABLE form_form ADD CONSTRAINT fk_form_form_recap FOREIGN KEY (id_recap)
 	REFERENCES form_recap (id_recap);
+ALTER TABLE form_form ADD CONSTRAINT fk_form_form_category FOREIGN KEY (id_category)
+	REFERENCES form_category (id_category);
 
 --
 -- Table structure for table form_entry
@@ -284,4 +289,25 @@ CREATE TABLE form_entry_parameter (
 	parameter_key varchar(100) NOT NULL,
 	parameter_value varchar(100),
 	PRIMARY KEY (parameter_key)
+);
+
+--
+-- Table structure for table form_rss_cf
+--
+CREATE TABLE form_rss_cf (
+	id_rss int default 0 NOT NULL,
+	id_form int default 0 NOT NULL,
+	is_submit_rss smallint default 0 NOT NULL,	
+	id_form_submit int default 0 NOT NULL,
+	PRIMARY KEY (id_rss)
+);
+
+--
+-- Table structure for table form_category
+--
+CREATE TABLE form_category (
+	id_category int NOT NULL,
+	title varchar(100) NOT NULL,
+	color varchar(10),
+	PRIMARY KEY (id_category)
 );
