@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.form.utils;
 
 import java.awt.Color;
+import fr.paris.lutece.plugins.form.business.Category;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -110,6 +111,7 @@ public final class FormUtils
     public static final String PARAMETER_DELETE_PREFIX = "delete_";
     public static final String SESSION_ATTRIBUTE_PREFIX_FILE = "FORM_FILE_";
     public static final String BEAN_ENTRY_TYPE_SERVICE = "form.entryTypeService";
+    public static final int CONSTANT_ID_NULL = -1;
 
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_URL_ACTION = "url_action";
@@ -120,6 +122,7 @@ public final class FormUtils
     private static final String MARK_FORM_SUBMIT = "formSubmit";
     private static final String MARK_JCAPTCHA = "jcaptcha";
     private static final String MARK_STR_ENTRY = "str_entry";
+    private static final String MARK_CATEGORY_LIST = "category_list";
     private static final String MARK_LIST_RESPONSES = "list_responses";
     private static final String MARK_VALIDATE_REQUIREMENT = "validate_requirement";
     private static final String MARK_DRAFT_SUPPORTED = "draft_supported";
@@ -157,6 +160,8 @@ public final class FormUtils
     private static final String PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SENDER_NAME = "form.notificationMailEndDisponibility.senderName";
     private static final String PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SUBJECT = "form.notificationMailFormSubmit.subject";
     private static final String PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SENDER_NAME = "form.notificationMailFormSubmit.senderName";
+    private static final String PROPERTY_CHOOSE_CATEGORY = "form.form.choose.category";
+    private static final String REGEX_ID = "^[\\d]+$";
 
   
     /**
@@ -604,6 +609,19 @@ public final class FormUtils
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
+        
+        ArrayList<Category> listCats = new ArrayList<Category>(  );
+        Category category = new Category(  );
+
+        category.setIdCategory( -2 );
+        category.setTitle( I18nService.getLocalizedString( PROPERTY_CHOOSE_CATEGORY, locale ) );
+
+        if ( form.getCategory(  ) != null )
+        {
+            listCats.add( category );
+        }
+
+        ReferenceList refCategoryList = getRefListCategory( listCats );
 
         for ( IEntry entry : listEntryFirstLevel )
         {
@@ -616,6 +634,7 @@ public final class FormUtils
             model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode(  ) );
         }
 
+        model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_FORM, form );
         model.put( MARK_URL_ACTION, strUrlAction );
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
@@ -637,6 +656,25 @@ public final class FormUtils
         template = AppTemplateService.getTemplate( TEMPLATE_HTML_CODE_FORM, locale, model );
 
         return template.getHtml(  );
+    }
+
+    /**
+     * Init reference list with the different categories
+     *
+     *
+     * @param listCategories the list of categories
+     * @return reference list of  category
+     */
+    public static ReferenceList getRefListCategory( List<Category> listCategories )
+    {
+        ReferenceList refListCategories = new ReferenceList(  );
+
+        for ( Category category : listCategories )
+        {
+            refListCategories.addItem( category.getIdCategory(  ), category.getTitle(  ) );
+        }
+
+        return refListCategories;
     }
 
     /**
@@ -1416,5 +1454,31 @@ public final class FormUtils
 	public static Map<Integer, List<Response>> getResponses( HttpSession session )
     {
     	return (Map<Integer, List<Response>>) session.getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+    }
+    
+    /**
+     * convert a string to int
+     *
+     * @param strParameter
+     *            the string parameter to convert
+     * @return the conversion
+     */
+    public static int convertStringToInt( String strParameter )
+    {
+        int nIdParameter = -1;
+
+        try
+        {
+            if ( ( strParameter != null ) && strParameter.matches( REGEX_ID ) )
+            {
+                nIdParameter = Integer.parseInt( strParameter );
+            }
+        }
+        catch ( NumberFormatException ne )
+        {
+            AppLogService.error( ne );
+        }
+
+        return nIdParameter;
     }
 }
