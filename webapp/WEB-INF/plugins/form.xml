@@ -89,6 +89,11 @@
 				fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderResourceIdService
 			</rbac-resource-type-class>
 		</rbac-resource-type>
+        <rbac-resource-type>
+            <rbac-resource-type-class>
+            	fr.paris.lutece.plugins.form.service.CategoryResourceIdService
+            </rbac-resource-type-class>
+        </rbac-resource-type>
     </rbac-resource-types>
     <!-- Portlet parameters -->
     <portlets>
