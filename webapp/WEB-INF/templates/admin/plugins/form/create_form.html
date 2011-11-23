@@ -75,6 +75,13 @@
 			#i18n{form.createForm.labelDescriptionComment}
 		</p>
 		<p>
+			<label for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
+			<@combo name="id_category" items=category_list default_value="-2" />
+			<br />
+			<label>&nbsp;</label>
+			#i18n{form.createForm.labelCategoryComment}
+		</p>
+		<p>
 			<input type="submit" class="button" name="save" value="#i18n{form.createForm.buttonSave}" />
 			<input type="submit" class="button" name="cancel" value="#i18n{form.createForm.buttonCancel}" />
 		</p>

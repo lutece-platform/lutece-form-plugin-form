@@ -33,9 +33,11 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
+import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
 import fr.paris.lutece.plugins.form.business.ExportFormat;
 import fr.paris.lutece.plugins.form.business.ExportFormatHome;
+import fr.paris.lutece.plugins.form.service.CategoryResourceIdService;
 import fr.paris.lutece.plugins.form.service.DefaultMessageResourceIdService;
 import fr.paris.lutece.plugins.form.service.ExportFormatResourceIdService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
@@ -69,6 +71,7 @@ public class ManageFormJspBean extends PluginAdminPageJspBean
 
     //Markers
     private static final String MARK_PERMISSION_MANAGE_EXPORT_FORMAT = "permission_manage_export_format";
+    private static final String MARK_PERMISSION_MANAGE_CATEGORY = "permission_manage_category";
 
     //    private static final String MARK_PERMISSION_MANAGE_REGULAR_EXPRESSION = "permission_manage_regular_expression";
     private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
@@ -104,6 +107,16 @@ public class ManageFormJspBean extends PluginAdminPageJspBean
         else
         {
             model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, false );
+        }
+
+        if ( RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    CategoryResourceIdService.PERMISSION_MANAGE, adminUser ) )
+        {
+            model.put( MARK_PERMISSION_MANAGE_CATEGORY, true );
+        }
+        else
+        {
+            model.put( MARK_PERMISSION_MANAGE_CATEGORY, false );
         }
 
         if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,

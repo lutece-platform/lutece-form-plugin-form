@@ -55,6 +55,8 @@ import org.jfree.chart.entity.StandardEntityCollection;
 
 import com.keypoint.PngEncoder;
 
+import fr.paris.lutece.plugins.form.business.Category;
+import fr.paris.lutece.plugins.form.business.CategoryHome;
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
 import fr.paris.lutece.plugins.form.business.DefaultMessageHome;
 import fr.paris.lutece.plugins.form.business.Entry;
@@ -236,6 +238,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_FORM_LIST = "form_list";
     private static final String MARK_FORM = "form";
+    private static final String MARK_CATEGORY_LIST = "category_list";
     private static final String MARK_PERMISSION_CREATE_FORM = "permission_create_form";
     private static final String MARK_ENTRY_TYPE_GROUP = "entry_type_group";
     private static final String MARK_ENTRY_LIST = "entry_list";
@@ -304,6 +307,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ID_MAILINIG_LIST = "id_mailing_list";
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_ID_ENTRY = "id_entry";
+    private static final String PARAMETER_ID_CATEGORY = "id_category";
     private static final String PARAMETER_ID_FIELD = "id_field";
     private static final String PARAMETER_ID_EXPRESSION = "id_expression";
     private static final String PARAMETER_ID_RECAP = "id_recap";
@@ -577,6 +581,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         String strActiveCaptcha = request.getParameter( PARAMETER_ACTIVE_CAPTCHA );
         String strActiveStoreAdresse = request.getParameter( PARAMETER_ACTIVE_STORE_ADRESSE );
         String strActiveRequirement = request.getParameter( PARAMETER_ACTIVE_REQUIREMENT );
+        String strCategory = request.getParameter ( PARAMETER_ID_CATEGORY );
         String strActiveMyLuteceAuthentification = request.getParameter( PARAMETER_ACTIVE_MYLUTECE_AUTHENTIFICATION );
 
         String strLimitNumberResponse = request.getParameter( PARAMETER_LIMIT_NUMBER_RESPONSE );
@@ -699,6 +704,20 @@ public class FormJspBean extends PluginAdminPageJspBean
         {
         	form.setActiveMyLuteceAuthentification( false );
         }
+        
+        try
+        {
+        	int nCategoryId = Integer.parseInt( strCategory );
+        	
+        	Category category = CategoryHome.findByPrimaryKey( nCategoryId, getPlugin( ) );
+        	form.setCategory( category );
+        }
+        catch ( NumberFormatException ne )
+        {
+            AppLogService.error( ne );
+
+            return getHomeUrl( request );
+        }
 
         try
         {
@@ -820,10 +839,19 @@ public class FormJspBean extends PluginAdminPageJspBean
         // Default Values
         ReferenceList listParamDefaultValues = FormParameterHome.findAll( getPlugin(  ) );
 
+        //Add categories
+        List<Category> listCategoriesView = CategoryHome.getList( getPlugin( ) );
+        Category emptyCategory = new Category( );
+        emptyCategory.setIdCategory( -2 );
+        emptyCategory.setTitle( "" );
+        listCategoriesView.add( emptyCategory );
+        ReferenceList refCategoryList = FormUtils.getRefListCategory( listCategoriesView );
+        
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_USER_WORKGROUP_REF_LIST, refListWorkGroups );
         model.put( MARK_MAILING_REF_LIST, refMailingList );
         model.put( MARK_THEME_REF_LIST, themesRefList );
+        model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_DEFAULT_MESSAGE, defaultMessage );
         model.put( MARK_DEFAULT_THEME, defaultTheme );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
@@ -989,6 +1017,13 @@ public class FormJspBean extends PluginAdminPageJspBean
         refMailingList.addItem( -1, strNothing );
         refMailingList.addAll( AdminMailingListService.getMailingLists( adminUser ) );
 
+        List<Category> listCategoriesView = CategoryHome.getList( plugin );
+        Category emptyCategory = new Category( );
+        emptyCategory.setIdCategory( -2 );
+        emptyCategory.setTitle( "" );
+        listCategoriesView.add( emptyCategory );
+        ReferenceList refCategoryList = FormUtils.getRefListCategory( listCategoriesView );
+        
         EntryType entryTypeGroup = new EntryType(  );
         refEntryType = initRefListEntryType( plugin, locale, entryTypeGroup );
 
@@ -1014,6 +1049,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         model.put( MARK_ENTRY_TYPE_REF_LIST, refEntryType );
         model.put( MARK_ENTRY_TYPE_GROUP, entryTypeGroup );
         model.put( MARK_FORM, form );
+        model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_ENTRY_LIST, paginator.getPageItems(  ) );
         model.put( MARK_THEME_REF_LIST, themesRefList );
         model.put( MARK_NUMBER_QUESTION, nNumberQuestion );

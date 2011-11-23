@@ -33,19 +33,18 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import java.sql.Date;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -60,28 +59,28 @@ public final class FormDAO implements IFormDAO
         "id_mailing_list,active_captcha,active_store_adresse," +
         "libelle_validate_button,libelle_reset_button,date_begin_disponibility,date_end_disponibility," +
         " active,auto_publication,date_creation,limit_number_response,id_recap,active_requirement,information_1," +
-        " information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification " +
+        " information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification, id_category" +
         " FROM form_form WHERE id_form = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO form_form ( id_form,title,description, welcome_message," +
         "unavailability_message,requirement_message,workgroup," +
         "id_mailing_list,active_captcha,active_store_adresse," +
         "libelle_validate_button,libelle_reset_button,date_begin_disponibility," +
         " date_end_disponibility,active,auto_publication,date_creation,limit_number_response," +
-        " id_recap,active_requirement,information_1,information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification ) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        " id_recap,active_requirement,information_1,information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification, id_category ) " +
+        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_form WHERE id_form = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE form_form SET id_form=?,title=?,description=?, welcome_message=?," +
         "unavailability_message=?, requirement_message=?,workgroup=?," +
         "id_mailing_list=?,active_captcha=?,active_store_adresse=?," +
         "libelle_validate_button=?,libelle_reset_button=?,date_begin_disponibility=?,date_end_disponibility=?,active=?,auto_publication=?,limit_number_response=? ,active_requirement=?," +
         "information_1=? ,information_2=? ,information_3=? ,information_4=? ,information_5=?, supports_https = ?, code_theme = ?, " +
-        "active_mylutece_authentification=? WHERE id_form=?";
+        "active_mylutece_authentification=? ,id_category=? WHERE id_form=?";
     private static final String SQL_QUERY_SELECT_FORM_BY_FILTER = "SELECT id_form,title,description, welcome_message," +
         "unavailability_message, requirement_message,workgroup," +
         "id_mailing_list,active_captcha,active_store_adresse," +
         "libelle_validate_button,libelle_reset_button,date_begin_disponibility,date_end_disponibility,active," +
         " auto_publication,date_creation,limit_number_response,id_recap,active_requirement,information_1," +
-        " information_2,information_3,information_4,information_5,supports_https, code_theme, active_mylutece_authentification " + " FROM form_form ";
+        " information_2,information_3,information_4,information_5,supports_https, code_theme, active_mylutece_authentification, id_category " + " FROM form_form ";
     private static final String SQL_QUERY_SELECT_ALL_THEMES = "SELECT id_form, code_theme FROM form_form";
     private static final String SQL_FILTER_OR = " OR ";
     private static final String SQL_FILTER_OPEN_PARENTHESIS = " ( ";
@@ -89,9 +88,12 @@ public final class FormDAO implements IFormDAO
     private static final String SQL_FILTER_WORKGROUP = " workgroup = ? ";
     private static final String SQL_FILTER_STATE = " active = ? ";
     private static final String SQL_FILTER_STATE_DAEMON = " auto_publication = ? ";
+    private static final String SQL_FILTER_ID_CATEGORY = " id_category = ? ";
     private static final String SQL_FILTER_STATE_BEGIN_DISPONIBILTY_AFTER_CURRENT_DATE = " date_begin_disponibility > ? ";
     private static final String SQL_FILTER_STATE_END_DISPONIBILTY_BEFORE_CURRENT_DATE = " date_end_disponibility < ? ";
-    private static final String SQL_ORDER_BY_DATE_CREATION = " ORDER BY date_creation DESC ";
+    private static final String SQL_ORDER_BY_DATE_CREATION = " ORDER BY date_creation DESC ";    
+    private static final String SQL_QUERY_SELECT_CATEGORY_BY_ID_FORM = "SELECT cat.id_category,cat.title FROM form_form form,form_category cat " +
+    " WHERE form.id_category=cat.id_category AND form.id_form=?";
 
     /**
      * Generates a new primary key
@@ -162,6 +164,14 @@ public final class FormDAO implements IFormDAO
         daoUtil.setBoolean( nIndex++, form.isSupportHTTPS(  ) );
         daoUtil.setString( nIndex++, form.getCodeTheme(  ) );
         daoUtil.setBoolean( nIndex++, form.isActiveMyLuteceAuthentification(  ) );
+        if ( form.getCategory(  ) != null )
+        {
+        	daoUtil.setInt( nIndex++, form.getCategory(  ).getIdCategory( ) );
+        }
+        else
+        {
+        	daoUtil.setIntNull( nIndex++ );
+        }
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -219,6 +229,11 @@ public final class FormDAO implements IFormDAO
             form.setSupportHTTPS( daoUtil.getBoolean( nIndex++ ) );
             form.setCodeTheme( daoUtil.getString( nIndex++ ) );
             form.setActiveMyLuteceAuthentification( daoUtil.getBoolean( nIndex++ ) );
+            int i = nIndex++;
+            if ( daoUtil.getObject( i ) != null )
+            {
+                form.setCategory( CategoryHome.findByPrimaryKey( daoUtil.getInt( i ), plugin ) );
+            }
         }
 
         daoUtil.free(  );
@@ -279,6 +294,14 @@ public final class FormDAO implements IFormDAO
         daoUtil.setBoolean( nIndex++, form.isSupportHTTPS(  ) );
         daoUtil.setString( nIndex++, form.getCodeTheme(  ) );
         daoUtil.setBoolean( nIndex++, form.isActiveMyLuteceAuthentification(  ) );
+        if ( form.getCategory(  ) != null )
+        {
+            daoUtil.setInt( nIndex++, form.getCategory(  ).getIdCategory(  ) );
+        }
+        else
+        {
+            daoUtil.setIntNull( nIndex++ );
+        }
 
         daoUtil.setInt( nIndex++, form.getIdForm(  ) );
 
@@ -333,6 +356,11 @@ public final class FormDAO implements IFormDAO
             }
         }
 
+        if ( filter.containsIdCategory(  ) )
+        {
+            listStrFilter.add( SQL_FILTER_ID_CATEGORY );
+        }
+
         String strSQL = FormUtils.buildRequestWithFilter( SQL_QUERY_SELECT_FORM_BY_FILTER, listStrFilter, null,
                 SQL_ORDER_BY_DATE_CREATION );
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
@@ -365,6 +393,12 @@ public final class FormDAO implements IFormDAO
         if ( filter.containsDateEndDisponibilityBeforeCurrentDate(  ) )
         {
             daoUtil.setDate( nIndex, new Date( new java.util.Date(  ).getTime(  ) ) );
+            nIndex++;
+        }
+
+        if ( filter.containsIdCategory(  ) )
+        {
+            daoUtil.setInt( nIndex, filter.getIdCategory(  ) );
             nIndex++;
         }
 
@@ -404,6 +438,11 @@ public final class FormDAO implements IFormDAO
             form.setSupportHTTPS( daoUtil.getBoolean( nIndex++ ) );
             form.setCodeTheme( daoUtil.getString( nIndex++ ) );
             form.setActiveMyLuteceAuthentification( daoUtil.getBoolean( nIndex++ ) );
+            int i = nIndex++;
+            if ( daoUtil.getObject( i ) != null )
+            {
+                form.setCategory( CategoryHome.findByPrimaryKey( daoUtil.getInt( i ), plugin ) );
+            }
 
             formList.add( form );
         }

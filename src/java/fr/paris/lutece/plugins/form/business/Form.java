@@ -38,6 +38,7 @@ import fr.paris.lutece.portal.service.regularexpression.RegularExpressionRemoval
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
 import fr.paris.lutece.portal.service.workgroup.WorkgroupRemovalListenerService;
 
+import fr.paris.lutece.plugins.form.business.Category;
 import java.sql.Timestamp;
 
 import java.util.Date;
@@ -86,6 +87,7 @@ public class Form implements AdminWorkgroupResource, RBACResource
     private String _strInfoComplementary5;
     private String _strCodeTheme;
     private boolean _bActiveMyLuteceAuthentification;
+    private Category _category;
 
     /**
      * Initialize the Form
@@ -662,5 +664,23 @@ public class Form implements AdminWorkgroupResource, RBACResource
    public void setActiveMyLuteceAuthentification( boolean bActiveMyLuteceAuthentification )
    {
 	   _bActiveMyLuteceAuthentification = bActiveMyLuteceAuthentification;
+   }
+
+   /**
+   *
+   * @return the category associate to the form
+   */
+   public Category getCategory(  )
+   {
+       return _category;
+   }
+
+   /**
+    * set the category associate to the form
+    * @param category the category associate to the form
+    */
+   public void setCategory( Category category )
+   {
+       _category = category;
    }
 }

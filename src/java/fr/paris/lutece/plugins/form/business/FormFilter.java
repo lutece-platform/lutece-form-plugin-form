@@ -48,6 +48,7 @@ public class FormFilter
     private String _strWorkgroup = ALL_STRING;
     private boolean _bDateBeginDisponibilityAfterCurrentDate;
     private boolean _bDateEndDisponibilityBeforeCurrentDate;
+    private int _nIdCategory = ALL_INT;
 
     /**
      *
@@ -179,5 +180,32 @@ public class FormFilter
     public boolean containsIdAutoPublication(  )
     {
         return ( _nIdAutoPublicationState != ALL_INT );
+    }
+
+    /**
+     *
+     * @return  the id of the category insert in the filter
+     */
+    public int getIdCategory(  )
+    {
+        return _nIdCategory;
+    }
+
+    /**
+     * set  the id of the category in the filter
+     * @param idCategory the id of the category to insert in the filter
+     */
+    public void setIdCategory( int idCategory )
+    {
+        _nIdCategory = idCategory;
+    }
+
+    /**
+     *
+     * @return true if the filter contain an id of category
+     */
+    public boolean containsIdCategory(  )
+    {
+        return ( _nIdCategory != ALL_INT );
     }
 }
