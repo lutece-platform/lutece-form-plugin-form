@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<rss version="2.0">
+    <channel>
+        <title>${site_name}</title>
+        <link>${site_url}</link>
+        <language>${file_language}</language>
+        <pubDate>${site_date}</pubDate>
+        <image>
+            <url>
+                ${site_url}/images/local/skin/valid-rss.png
+            </url>
+            <title>${site_name}</title>
+            <link>${site_url}</link>
+        </image>
+        <description>#i18n{form.resource_rss.description} : ${site_description}</description>
+        
+        <#list itemList as item>
+        <item>
+            <title>
+            	${item.item_title}<br />
+				#i18n{form.resource_rss.dateBeginForm} : ${item.item_date_begin_form}<br />
+				#i18n{form.resource_rss.dateEndForm} : ${item.item_date_end_form}
+            </title>
+            <link>${site_url}</link>
+            <description>${item.item_description}</description>
+        	<pubDate>${item.item_date}</pubDate>
+        </item>
+        </#list>
+        
+    </channel>
+</rss>
