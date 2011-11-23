@@ -50,6 +50,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
@@ -303,7 +304,8 @@ public final class JSONUtils
 	{
 		JSONObject jsonError = new JSONObject(  );
 		
-		jsonError.element( JSON_KEY_ERROR_MESSAGE, formError.getErrorMessage(  ) );
+		jsonError.element( JSON_KEY_ERROR_MESSAGE, StringUtils.isNotBlank( 
+				formError.getErrorMessage(  ) ) ? formError.getErrorMessage(  ) : StringUtils.EMPTY );
 		jsonError.element( JSON_KEY_MANDATORY_ERROR, formError.isMandatoryError(  ) );
 		jsonError.element( JSON_KEY_TITLE_QUESTION, formError.getTitleQuestion(  ) );
 
