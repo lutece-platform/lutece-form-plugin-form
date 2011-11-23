@@ -244,14 +244,18 @@ public class FormApp implements XPageApplication
         	}
         	else
         	{
-        		FormDraftBackupService.saveDraft( request, formSubmit );
-        	}
-
-        	// Validate draft if the form does not have a recap
-        	if ( !FormService.getInstance(  ).hasRecap( form ) )
-        	{
-        		// remove existing draft
-        		FormDraftBackupService.validateDraft( request, form );
+        		// Validate draft if the form does not have a recap and the session 
+        		// contains a list of responses without errors
+            	if ( !FormService.getInstance(  ).hasRecap( form ) && 
+            			!FormService.getInstance(  ).hasFormErrors( session ) )
+            	{
+            		// remove existing draft
+            		FormDraftBackupService.validateDraft( request, form );
+            	}
+            	else
+            	{
+            		FormDraftBackupService.saveDraft( request, formSubmit );
+            	}
         	}
         }
         else if ( request.getParameter( PARAMETER_ID_FORM ) != null )
@@ -423,7 +427,7 @@ public class FormApp implements XPageApplication
         throws SiteMessageException, UserNotSignedException
     {
         XPage page = new XPage(  );
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         String strFormId = request.getParameter( PARAMETER_ID_FORM );
         
         if ( !strFormId.matches( REGEX_ID ) )

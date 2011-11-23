@@ -81,6 +81,7 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_FILTER_IS_COMMENT = " AND typ.is_comment = ? ";
     private static final String SQL_FILTER_ID_FIELD_DEPEND = " AND ent.id_field_depend = ? ";
     private static final String SQL_FILTER_ID_FIELD_DEPEND_IS_NULL = " AND ent.id_field_depend IS NULL ";
+    private static final String SQL_FILTER_ID_TYPE = " AND ent.id_type = ? ";
     private static final String SQL_ORDER_BY_POSITION = " ORDER BY ent.pos ";
     private static final String SQL_GROUP_BY_POSITION = " GROUP BY ent.pos ";
     private static final String SQL_GROUP_BY_FORM_ENTRY_ENTRY_TYPE = "GROUP BY ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
@@ -402,6 +403,7 @@ public final class EntryDAO implements IEntryDAO
         sbSQL.append( ( filter.containsIdIsGroup(  ) ) ? SQL_FILTER_IS_GROUP : EMPTY_STRING );
         sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : EMPTY_STRING );
         sbSQL.append( ( filter.containsFieldDependNull(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND_IS_NULL : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdEntryType(  ) ) ? SQL_FILTER_ID_TYPE : EMPTY_STRING );
 
         sbSQL.append( SQL_GROUP_BY_FORM_ENTRY_ENTRY_TYPE );
         sbSQL.append( SQL_ORDER_BY_POSITION );
@@ -438,6 +440,12 @@ public final class EntryDAO implements IEntryDAO
         if ( filter.containsIdField(  ) )
         {
             daoUtil.setInt( nIndex, filter.getIdFieldDepend(  ) );
+            nIndex++;
+        }
+
+        if ( filter.containsIdEntryType(  ) )
+        {
+            daoUtil.setInt( nIndex, filter.getIdEntryType(  ) );
             nIndex++;
         }
 
@@ -537,6 +545,7 @@ public final class EntryDAO implements IEntryDAO
         sbSQL.append( ( filter.containsIdIsGroup(  ) ) ? SQL_FILTER_IS_GROUP : EMPTY_STRING );
         sbSQL.append( ( filter.containsIdIsComment(  ) ) ? SQL_FILTER_IS_COMMENT : EMPTY_STRING );
         sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdEntryType(  ) ) ? SQL_FILTER_ID_TYPE : EMPTY_STRING );
         
         sbSQL.append( SQL_GROUP_BY_POSITION );
         sbSQL.append( SQL_ORDER_BY_POSITION );
@@ -587,6 +596,12 @@ public final class EntryDAO implements IEntryDAO
         if ( filter.containsIdField(  ) )
         {
             daoUtil.setInt( nIndex, filter.getIdFieldDepend(  ) );
+            nIndex++;
+        }
+
+        if ( filter.containsIdEntryType(  ) )
+        {
+            daoUtil.setInt( nIndex, filter.getIdEntryType(  ) );
             nIndex++;
         }
 

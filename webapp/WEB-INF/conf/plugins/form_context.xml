@@ -28,6 +28,7 @@
       	<property name="key" value="notifySender" />
       	<property name="notifySenderService" ref="form.notifySenderService" />
      </bean>
-    
-    <bean id="form.asynchronousUploadHandler" class="fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler" />
+     <bean id="form.entryTypeService" class="fr.paris.lutece.plugins.form.service.EntryTypeService" />
+	 
+	 <bean id="form.asynchronousUploadHandler" class="fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler" />
  </beans>

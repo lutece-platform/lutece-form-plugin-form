@@ -109,6 +109,7 @@ public final class FormUtils
     public static final String PARAMETER_ID_ENTRY = "id_entry";
     public static final String PARAMETER_DELETE_PREFIX = "delete_";
     public static final String SESSION_ATTRIBUTE_PREFIX_FILE = "FORM_FILE_";
+    public static final String BEAN_ENTRY_TYPE_SERVICE = "form.entryTypeService";
 
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_URL_ACTION = "url_action";
@@ -128,8 +129,8 @@ public final class FormUtils
     private static final String CONSTANT_AND = " AND ";
     
 	// session
-    private static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
-    private static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
+    public static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
+    public static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
 
     //	 Xml Tags
     private static final String TAG_FORM = "form";

@@ -52,6 +52,7 @@ public class EntryFilter
     private int _nFieldDependNull = ALL_INT;
     private int _nIdIsGroup = ALL_INT;
     private int _nIdIsComment = ALL_INT;
+    private int _nIdEntryType = ALL_INT;
 
     /**
      *
@@ -241,4 +242,31 @@ public class EntryFilter
     {
         return ( _nIdIsComment != ALL_INT );
     }
+    
+    /**
+     * Get the id entry type
+     * @return  the id of entry type insert in the filter
+     */
+   public int getIdEntryType(  )
+   {
+       return _nIdEntryType;
+   }
+
+   /**
+    * set the id of entry type
+    * @param nIdEntryType the id of entry type to insert in the filter
+    */
+   public void setIdEntryType( int nIdEntryType )
+   {
+	   _nIdEntryType = nIdEntryType;
+   }
+
+   /**
+    * Check if the filter contains the id entry type
+    * @return true if the filter contains an id entry type
+    */
+   public boolean containsIdEntryType(  )
+   {
+       return ( _nIdEntryType != ALL_INT );
+   }
 }

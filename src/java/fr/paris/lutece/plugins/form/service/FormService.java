@@ -37,6 +37,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -46,6 +47,7 @@ import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
+import fr.paris.lutece.plugins.form.business.EntryType;
 import fr.paris.lutece.plugins.form.business.EntryTypeSession;
 import fr.paris.lutece.plugins.form.business.ExportFormat;
 import fr.paris.lutece.plugins.form.business.ExportFormatHome;
@@ -55,8 +57,10 @@ import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
+import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.parameter.EntryParameterHome;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterHome;
+import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.business.style.ThemeHome;
@@ -64,6 +68,7 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
 
@@ -72,7 +77,7 @@ import fr.paris.lutece.util.ReferenceList;
  * FormService
  *
  */
-public class FormService
+public final class FormService
 {
 	private static final String MARK_PERMISSION_MANAGE_EXPORT_FORMAT = "permission_manage_export_format";
 	private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
@@ -87,6 +92,15 @@ public class FormService
     private static final String MYLUTECE_PLUGIN = "mylutece";
 
 	private static FormService _singleton;
+	private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getPluginBean( 
+			FormPlugin.PLUGIN_NAME, FormUtils.BEAN_ENTRY_TYPE_SERVICE );
+
+	/**
+	 * Private constructor
+	 */
+	private FormService(  )
+	{
+	}
 
 	/**
 	 * Initialize the Form service
@@ -133,7 +147,7 @@ public class FormService
     	}
 
     	List<ExportFormat> listExportFormat = ExportFormatHome.getList( plugin );
-    	listExportFormat = (List) RBACService.getAuthorizedCollection( listExportFormat,
+    	listExportFormat = (List<ExportFormat>) RBACService.getAuthorizedCollection( listExportFormat,
     			ExportFormatResourceIdService.PERMISSION_MANAGE, user );
 
     	if ( ( listExportFormat.size(  ) != 0 ) ||
@@ -185,8 +199,15 @@ public class FormService
     public boolean isSessionValid( Form form, HttpServletRequest request )
     {
     	Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
+
+    	EntryType entryTypeSession = _entryTypeService.getEntryType( EntryTypeSession.class.getName(  ) );
+
     	EntryFilter eFilter = new EntryFilter(  );
     	eFilter.setIdForm( form.getIdForm(  ) );
+    	if ( entryTypeSession != null )
+    	{
+    		eFilter.setIdEntryType( entryTypeSession.getIdType(  ) );
+    	}
     	List<IEntry> listEntries = EntryHome.getEntryList( eFilter, plugin );
     	
     	HttpSession session = request.getSession( false );
@@ -225,5 +246,41 @@ public class FormService
         Recap recap = RecapHome.findByPrimaryKey( form.getRecap(  ).getIdRecap(  ), plugin );
 
         return ( recap != null ) && recap.isRecapData(  );
+    }
+
+    /**
+     * Check if the session has a list of responses without form errors and 
+     * the validate requirement is indeed checked
+     * @param session the HTTP session
+     * @return true if the session has errors, false otherwise
+     */
+    public boolean hasFormErrors( HttpSession session )
+    {
+    	Map<Integer, List<Response>> listSubmittedResponses = ( Map<Integer, List<Response>> ) session.
+				getAttribute( FormUtils.SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+		if ( listSubmittedResponses != null )
+		{
+			for ( Entry<Integer, List<Response>> param : listSubmittedResponses.entrySet(  ) )
+			{
+				for ( Response response : param.getValue(  ) )
+				{
+					if ( response.getEntry(  ) != null && response.getEntry(  ).getFormError(  ) != null )
+					{
+						return true;
+					}
+				}
+			}
+		}
+
+		if ( session.getAttribute( FormUtils.SESSION_VALIDATE_REQUIREMENT ) != null )
+    	{
+    		boolean bValidateRequirement = ( Boolean ) session.getAttribute( FormUtils.SESSION_VALIDATE_REQUIREMENT );
+    		if ( !bValidateRequirement )
+    		{
+    			return true;
+    		}
+    	}
+
+		return false;
     }
 }
