@@ -271,7 +271,7 @@ public class EntryTypeCheckBox extends Entry
      */
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-        return new String( response.getField(  ).getTitle(  ) );
+        return response.getField(  ).getTitle(  );
     }
 
     /**

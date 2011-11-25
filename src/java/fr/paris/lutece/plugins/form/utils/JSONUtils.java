@@ -273,7 +273,7 @@ public final class JSONUtils
 		
 		if ( response.getValueResponse(  ) != null )
 		{
-			jsonResponse.element( JSON_KEY_VALUE_RESPONSE, new String( response.getValueResponse(  ) ) );
+			jsonResponse.element( JSON_KEY_VALUE_RESPONSE, StringUtil.convertToString( response.getValueResponse(  ) ) );
 		}
 		
 		// file specific data
