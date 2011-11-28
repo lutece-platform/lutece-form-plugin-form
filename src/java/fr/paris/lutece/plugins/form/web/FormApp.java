@@ -235,22 +235,22 @@ public class FormApp implements XPageApplication
                 ( request.getParameter( PARAMETER_ID_FORM ) != null ) )
         {
         	page = getRecap( request, session, nMode, plugin );
-        	// save draft
-        	// we can get FormSubmit here
-        	FormSubmit formSubmit = (FormSubmit) session.getAttribute( PARAMETER_FORM_SUBMIT );
-        	if ( formSubmit == null )
+        	// Validate draft if the form does not have a recap and the session 
+    		// contains a list of responses without errors
+        	if ( !FormService.getInstance(  ).hasRecap( form ) && 
+        			!FormService.getInstance(  ).hasFormErrors( session ) )
         	{
-        		FormDraftBackupService.saveDraft( request, form );
+        		// remove existing draft
+        		FormDraftBackupService.validateDraft( request, form );
         	}
         	else
         	{
-        		// Validate draft if the form does not have a recap and the session 
-        		// contains a list of responses without errors
-            	if ( !FormService.getInstance(  ).hasRecap( form ) && 
-            			!FormService.getInstance(  ).hasFormErrors( session ) )
+        		// save draft
+            	// we can get FormSubmit here
+            	FormSubmit formSubmit = (FormSubmit) session.getAttribute( PARAMETER_FORM_SUBMIT );
+            	if ( formSubmit == null )
             	{
-            		// remove existing draft
-            		FormDraftBackupService.validateDraft( request, form );
+            		FormDraftBackupService.saveDraft( request, form );
             	}
             	else
             	{
