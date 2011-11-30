@@ -44,6 +44,7 @@ import fr.paris.lutece.portal.business.rss.IFeedResource;
 import fr.paris.lutece.portal.business.rss.IFeedResourceImage;
 import fr.paris.lutece.portal.business.rss.IFeedResourceItem;
 import fr.paris.lutece.portal.business.rss.ResourceRss;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
@@ -79,14 +80,12 @@ public class FormResourceRss extends ResourceRss
 
     //Parameters
     private static final String PARAMETER_ID_FORM = "id_form";
-    private static final String PARAMETER_URL_FEED_IMAGE = "/images/local/skin/valid-rss.png";
-
-    //Properties
-    private static final String FIELD_ID_FORM = "form.resource_rss.label_form";
 
     //Messages
     private static final String PROPERTY_SITE_LANGUAGE = "rss.language";
     private static final String PROPERTY_WEBAPP_PROD_URL = "lutece.prod.url";
+    private static final String PROPERTY_DESCRIPTION_WIRE = "form.resource_rss.description_wire";
+    private static final String PROPERTY_TITLE_WIRE = "form.resource_rss.title_wire";
     private static final String MARK_ITEM_LIST = "itemList";
 
     /**
@@ -146,7 +145,7 @@ public class FormResourceRss extends ResourceRss
      */
     public String doValidateConfigForm( HttpServletRequest request, Locale locale )
     {
-    	this.setDescription( "Description RESOURCE" );
+    	this.setDescription( I18nService.getLocalizedString( PROPERTY_DESCRIPTION_WIRE, locale ) );
     	
         return null;
     }
@@ -184,6 +183,9 @@ public class FormResourceRss extends ResourceRss
 
         String strRssFileLanguage = AppPropertiesService.getProperty( PROPERTY_SITE_LANGUAGE );
         Locale locale = new Locale( strRssFileLanguage );
+        
+    	String strWebAppUrl = AppPropertiesService.getProperty( PROPERTY_WEBAPP_PROD_URL );
+    	String strSiteUrl = strWebAppUrl;
 
         FormFilter formFilter = new FormFilter( );
         formFilter.setIdState( 1 );
@@ -225,18 +227,10 @@ public class FormResourceRss extends ResourceRss
     	Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 		
 		IFeedResource resource = new FeedResource(  );
-		resource.setTitle( "Titre resource" );
+		resource.setTitle( I18nService.getLocalizedString( PROPERTY_TITLE_WIRE, new Locale( strRssFileLanguage ) )  );
 		resource.setLink( strSiteUrl + JSP_PAGE_FORM );
 		resource.setLanguage( strRssFileLanguage );
-		
-		IFeedResourceImage image = new FeedResourceImage(  );
-    	image.setUrl( strSiteUrl + PARAMETER_URL_FEED_IMAGE );
-    	image.setTitle( "Titre resource" );
-		image.setLink( strSiteUrl );
-    	
-    	resource.setImage( image );
-
-		resource.setDescription( "Description resource" );
+		resource.setDescription( I18nService.getLocalizedString( PROPERTY_DESCRIPTION_WIRE, new Locale( strRssFileLanguage ) ) );
 
 		FormFilter formFilter = new FormFilter(  );
 		formFilter.setIdState( 1 );
