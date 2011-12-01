@@ -146,8 +146,13 @@ public final class FormUtils
     private static final String TAG_QUESTIONS = "questions";
     private static final String TAG_QUESTION = "question";
     private static final String TAG_QUESTION_TITLE = "question-title";
+    private static final String TAG_QUESTION_ID = "question-id";
     private static final String TAG_RESPONSES = "responses";
     private static final String TAG_RESPONSE = "response";
+    private static final String TAG_FORM_ENTRIES = "form-entries";
+    private static final String TAG_FORM_ENTRY = "form-entry";
+    private static final String TAG_FORM_ENTRY_ID = "form-entry-id";
+    private static final String TAG_FORM_ENTRY_TITLE = "form-entry-title";
 
     //TEMPLATE
     private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "admin/plugins/form/html_code_div_conditional_entry.html";
@@ -939,6 +944,19 @@ public final class FormUtils
         StringBuffer buffer = new StringBuffer(  );
         XmlUtil.beginElement( buffer, TAG_FORM );
         XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle(  ) );
+        
+        // Build entries list XML
+        XmlUtil.beginElement( buffer, TAG_FORM_ENTRIES );
+        for ( IEntry entry : getAllQuestionList( form.getIdForm(  ), plugin ) )
+        {
+        	XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
+        	XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry(  ) );
+        	XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle(  ) );
+        	XmlUtil.endElement( buffer, TAG_FORM_ENTRY );
+        }
+        XmlUtil.endElement( buffer, TAG_FORM_ENTRIES );
+        
+        // Build Form submits list XML
         XmlUtil.beginElement( buffer, TAG_FORM_SUBMITS );
 
         //ResponseFilter filter=new ResponseFilter();
@@ -964,7 +982,7 @@ public final class FormUtils
             Response responseStore = null;
             XmlUtil.beginElement( buffer, TAG_QUESTIONS );
 
-            if ( ( formSubmit.getListResponse(  ) != null ) && ( formSubmit.getListResponse(  ).size(  ) != 0 ) )
+            if ( ( formSubmit.getListResponse(  ) != null ) && !formSubmit.getListResponse(  ).isEmpty(  ) )
             {
                 for ( Response response : formSubmit.getListResponse(  ) )
                 {
@@ -989,6 +1007,7 @@ public final class FormUtils
                     {
                         XmlUtil.beginElement( buffer, TAG_QUESTION );
                         XmlUtil.addElementHtml( buffer, TAG_QUESTION_TITLE, response.getEntry(  ).getTitle(  ) );
+                        XmlUtil.addElement( buffer, TAG_QUESTION_ID, response.getEntry(  ).getIdEntry(  ) );
                         XmlUtil.beginElement( buffer, TAG_RESPONSES );
                     }
 

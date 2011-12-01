@@ -40,6 +40,8 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  * This class provides Data Access methods for Response objects
@@ -68,7 +70,10 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_FILTER_ID_FORM_SUBMITION = " AND resp.id_form_submit = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_FILTER_ID_FIELD = " AND resp.id_field = ? ";
-    private static final String SQL_ORDER_BY_ID_RESPONSE = " ORDER BY id_response ";
+    private static final String SQL_FILTER_ID_RESPONSE = " resp.id_response ";
+    private static final String SQL_ORDER_BY = " ORDER BY ";
+    private static final String SQL_ASC = " ASC ";
+    private static final String SQL_DESC = " DESC ";
 
     /**
      * Generates a new primary key
@@ -267,13 +272,15 @@ public final class ResponseDAO implements IResponseDAO
         Field field = null;
         FormSubmit formResponse = null;
 
-        String strSQL = SQL_QUERY_SELECT_RESPONSE_BY_FILTER;
-        strSQL += ( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM_SUBMITION : EMPTY_STRING );
-        strSQL += ( ( filter.containsIdEntry(  ) ) ? SQL_FILTER_ID_ENTRY : EMPTY_STRING );
-        strSQL += ( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD : EMPTY_STRING );
-        strSQL += SQL_ORDER_BY_ID_RESPONSE;
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECT_RESPONSE_BY_FILTER );
+        sbSQL.append( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM_SUBMITION : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdEntry(  ) ) ? SQL_FILTER_ID_ENTRY : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD : StringUtils.EMPTY );
+        sbSQL.append( SQL_ORDER_BY );
+        sbSQL.append( ( filter.containsOrderBy(  ) ) ? filter.getOrderBy(  ) : SQL_FILTER_ID_RESPONSE );
+        sbSQL.append( ( filter.isOrderByAsc(  ) ) ? SQL_ASC : SQL_DESC );
 
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
+        DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
         int nIndex = 1;
 
         if ( filter.containsIdForm(  ) )

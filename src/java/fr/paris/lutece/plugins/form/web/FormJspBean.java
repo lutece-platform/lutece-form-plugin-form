@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.form.web;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -349,6 +350,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String EQUAL_STRING = "=";
     private static final String MYLUTECE_PLUGIN = "mylutece";
     private static final String CONST_ZERO = "0";
+    private static final String SQL_FILTER_ENTRY_POS = " ent.pos ";
 
     //session fields
     private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
@@ -3609,6 +3611,8 @@ public class FormJspBean extends PluginAdminPageJspBean
             {
                 filter = new ResponseFilter(  );
                 filter.setIdForm( formSubmit.getIdFormSubmit(  ) );
+                filter.setOrderBy( SQL_FILTER_ENTRY_POS );
+                filter.setOrderByAsc( true );
                 formSubmit.setListResponse( ResponseHome.getResponseList( filter, plugin ) );
             }
 
@@ -3621,18 +3625,17 @@ public class FormJspBean extends PluginAdminPageJspBean
                 String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,
                         exportFormat.getXsl(  ), strXslUniqueId, null, null );
 
-                byte[] byteFileOutPut = strFileOutPut.getBytes(  );
-
                 try
                 {
                     String strFormatExtension = exportFormat.getExtension(  ).trim(  );
                     String strFileName = form.getTitle(  ) + "." + strFormatExtension;
                     FormUtils.addHeaderResponse( request, response, strFileName, strFormatExtension );
-                    response.setContentLength( (int) byteFileOutPut.length );
 
-                    OutputStream os = response.getOutputStream(  );
-                    os.write( byteFileOutPut );
-                    os.close(  );
+                    response.setContentLength( strFileOutPut.length(  ) );
+                    PrintWriter out = response.getWriter(  );
+                    out.write( strFileOutPut );
+                    out.flush(  );
+                    out.close(  );
                 }
                 catch ( IOException e )
                 {

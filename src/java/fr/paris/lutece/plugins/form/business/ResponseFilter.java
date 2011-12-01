@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.form.business;
 
 import java.sql.Timestamp;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  *
@@ -52,6 +54,8 @@ public class ResponseFilter
     private boolean _bGroupbyDay;
     private boolean _bGroupbyWeek;
     private boolean _bGroupbyMonth;
+    private String _strOrderBy;
+    private boolean _bIsOrderByAsc = true;
 
     /**
      *
@@ -241,4 +245,49 @@ public class ResponseFilter
     {
         _bGroupbyWeek = groupbyWeek;
     }
+
+    /**
+     * Set order by
+     * @param strOrderBy
+     */
+	public void setOrderBy( String strOrderBy )
+	{
+		_strOrderBy = strOrderBy;
+	}
+
+	/**
+	 * Get order by
+	 * @return the order by
+	 */
+	public String getOrderBy(  )
+	{
+		return _strOrderBy;
+	}
+
+	/**
+	 * Check if the filter contains order by
+	 * @return true if it contains, false otherwise
+	 */
+	public boolean containsOrderBy(  )
+	{
+		return StringUtils.isNotBlank( _strOrderBy );
+	}
+
+	/**
+	 * Set order by asc
+	 * @param bIsOrderByAsc true if the order by is asc
+	 */
+	public void setOrderByAsc( boolean bIsOrderByAsc )
+	{
+		_bIsOrderByAsc = bIsOrderByAsc;
+	}
+
+	/**
+	 * Check if the order by is asc
+	 * @return true if the order by is asc;
+	 */
+	public boolean isOrderByAsc(  )
+	{
+		return _bIsOrderByAsc;
+	}
 }
