@@ -404,6 +404,7 @@ public final class EntryDAO implements IEntryDAO
         sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : EMPTY_STRING );
         sbSQL.append( ( filter.containsFieldDependNull(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND_IS_NULL : EMPTY_STRING );
         sbSQL.append( ( filter.containsIdEntryType(  ) ) ? SQL_FILTER_ID_TYPE : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdIsComment(  ) ) ? SQL_FILTER_IS_COMMENT : EMPTY_STRING );
 
         sbSQL.append( SQL_GROUP_BY_FORM_ENTRY_ENTRY_TYPE );
         sbSQL.append( SQL_ORDER_BY_POSITION );
@@ -446,6 +447,20 @@ public final class EntryDAO implements IEntryDAO
         if ( filter.containsIdEntryType(  ) )
         {
             daoUtil.setInt( nIndex, filter.getIdEntryType(  ) );
+            nIndex++;
+        }
+        
+        if ( filter.containsIdIsComment(  ) )
+        {
+            if ( filter.getIdIsComment(  ) == 0 )
+            {
+                daoUtil.setBoolean( nIndex, false );
+            }
+            else
+            {
+                daoUtil.setBoolean( nIndex, true );
+            }
+
             nIndex++;
         }
 

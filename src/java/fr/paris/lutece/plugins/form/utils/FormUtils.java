@@ -1232,6 +1232,7 @@ public final class FormUtils
                 filter = new EntryFilter(  );
                 filter.setIdForm( nIdForm );
                 filter.setIdEntryParent( entryFirstLevel.getIdEntry(  ) );
+                filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
                 for ( IEntry entryChild : EntryHome.getEntryList( filter, plugin ) )
                 {
