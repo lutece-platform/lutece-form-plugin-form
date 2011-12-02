@@ -121,26 +121,23 @@ public final class FormHome
      */
     public static void remove( int nIdForm, Plugin plugin )
     {
-        Form form = findByPrimaryKey( nIdForm, plugin );
-        List<IEntry> listEntry;
-        List<FormSubmit> listFormSubmit;
-
-        EntryFilter entryFilter = new EntryFilter(  );
-        entryFilter.setIdForm( form.getIdForm(  ) );
-        listEntry = EntryHome.getEntryList( entryFilter, plugin );
-
-        for ( IEntry entry : listEntry )
-        {
-            EntryHome.remove( entry.getIdEntry(  ), plugin );
-        }
-
         ResponseFilter responseFilter = new ResponseFilter(  );
         responseFilter.setIdForm( nIdForm );
-        listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
+        List<FormSubmit>listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
 
         for ( FormSubmit formSubmit : listFormSubmit )
         {
             FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
+        }
+
+        Form form = findByPrimaryKey( nIdForm, plugin );
+        EntryFilter entryFilter = new EntryFilter(  );
+        entryFilter.setIdForm( form.getIdForm(  ) );
+        List<IEntry> listEntry = EntryHome.getEntryList( entryFilter, plugin );
+
+        for ( IEntry entry : listEntry )
+        {
+            EntryHome.remove( entry.getIdEntry(  ), plugin );
         }
 
         _dao.delete( nIdForm, plugin );

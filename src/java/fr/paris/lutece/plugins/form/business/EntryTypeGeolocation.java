@@ -33,21 +33,20 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.plugins.form.utils.StringUtil;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.util.ReferenceList;
-
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.message.AdminMessage;
+import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.util.ReferenceList;
 
 
 public class EntryTypeGeolocation extends Entry
@@ -64,13 +63,11 @@ public class EntryTypeGeolocation extends Entry
     public static final String CONSTANT_Y = "Y";
     public static final String CONSTANT_PROVIDER = "provider";
     public static final String CONSTANT_ADDRESS = "address";
-    private static final String CONSTANT_EQUAL = " = ";
-    private static final String CONSTANT_EMPTY_STRING = "";
     private static final String TEMPLATE_CREATE = "admin/plugins/form/create_entry_type_geolocation.html";
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/modify_entry_type_geolocation.html";
     private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/html_code_entry_type_geolocation.html";
     private static final String MESSAGE_SPECIFY_BOTH_X_AND_Y = "form.message.specifyBothXAndY";
-    private static final String MESSAGE_ADDRESS = "form.modifyField.address";
+    //private static final String MESSAGE_ADDRESS = "form.modifyField.address";
 
     /**
      * {@inheritDoc}
@@ -199,7 +196,7 @@ public class EntryTypeGeolocation extends Entry
         // add responses
         Response responseX = new Response(  );
         responseX.setEntry( this );
-        responseX.setValueResponse( StringUtil.convertToByte( strXValue ) );
+        responseX.setResponseValue( strXValue );
         responseX.setField( xField );
         responseX.setToStringValueResponse( strXValue );
         
@@ -207,7 +204,7 @@ public class EntryTypeGeolocation extends Entry
 
         Response responseY = new Response(  );
         responseY.setEntry( this );
-        responseY.setValueResponse( StringUtil.convertToByte( strYValue ) );
+        responseY.setResponseValue( strYValue );
         responseY.setField( yField );
         responseY.setToStringValueResponse( strYValue );
         
@@ -215,7 +212,7 @@ public class EntryTypeGeolocation extends Entry
         
         Response responseAddress = new Response(  );
         responseAddress.setEntry( this );
-        responseAddress.setValueResponse( StringUtil.convertToByte( strAddressValue ) );
+        responseAddress.setResponseValue( strAddressValue );
         responseAddress.setField( addressField );
         responseAddress.setToStringValueResponse( strAddressValue );
         
@@ -258,9 +255,9 @@ public class EntryTypeGeolocation extends Entry
     	if ( CONSTANT_ADDRESS.equals( strTitle ) )
     	{
     		//strTitle = I18nService.getLocalizedString( MESSAGE_ADDRESS, locale );
-    		return StringUtil.convertToString( response.getValueResponse(  ) );
+    		return response.getResponseValue(  );
     	}
-        return CONSTANT_EMPTY_STRING;
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -296,12 +293,13 @@ public class EntryTypeGeolocation extends Entry
      */
     @Override
     public String getResponseValueForExport(HttpServletRequest request,
-    		Response response, Locale locale) {
-    	String fieldName = FormUtils.EMPTY_STRING;
+    		Response response, Locale locale)
+    {
+    	String fieldName = StringUtils.EMPTY;
     	if ( response.getField(  ) != null )
     	{
     		fieldName = ObjectUtils.toString( response.getField(  ).getTitle(  ) );
     	}
-    	return fieldName + FormUtils.CONSTANT_EQUAL + StringUtil.convertToString( response.getValueResponse(  ) );
+    	return fieldName + FormUtils.CONSTANT_EQUAL + response.getResponseValue(  );
     }
 }

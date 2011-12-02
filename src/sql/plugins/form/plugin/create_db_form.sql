@@ -16,6 +16,8 @@ DROP TABLE IF EXISTS form_form_parameter;
 DROP TABLE IF EXISTS form_entry_parameter;
 DROP TABLE IF EXISTS form_rss_cf;
 DROP TABLE IF EXISTS form_category;
+DROP TABLE IF EXISTS form_file;
+DROP TABLE IF EXISTS form_physical_file;
 
 --
 -- Table structure for table form_action
@@ -243,11 +245,10 @@ ALTER TABLE form_submit ADD CONSTRAINT fk_form_submit_form FOREIGN KEY (id_form)
 CREATE TABLE form_response (
 	id_response int default 0 NOT NULL,
 	id_form_submit int default NULL,
-	response_value long varbinary,
+	response_value long VARCHAR DEFAULT NULL,
 	id_entry int default NULL,
 	id_field int default NULL,
-	file_name varchar(255),
-	file_extension varchar(10),
+	id_file int default NULL,
 	PRIMARY KEY (id_response)
 );
 
@@ -310,4 +311,25 @@ CREATE TABLE form_category (
 	title varchar(100) NOT NULL,
 	color varchar(10),
 	PRIMARY KEY (id_category)
+);
+
+--
+-- Table structure for table form_file
+--
+CREATE TABLE form_file (
+  id_file INT DEFAULT 0 NOT NULL,
+  title LONG VARCHAR DEFAULT NULL,
+  id_physical_file INT DEFAULT NULL,
+  file_size  INT DEFAULT NULL,
+  mime_type VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (id_file)
+);
+
+--
+-- Table structure for table form_physical_file
+--
+CREATE TABLE form_physical_file (
+  id_physical_file INT DEFAULT 0 NOT NULL,
+  file_value LONG VARBINARY,  
+  PRIMARY KEY (id_physical_file)
 );

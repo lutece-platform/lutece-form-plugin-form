@@ -49,6 +49,7 @@ import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
+import fr.paris.lutece.plugins.form.business.EntryTypeSession;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormError;
 import fr.paris.lutece.plugins.form.business.FormFilter;
@@ -60,11 +61,12 @@ import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.ResponseFilter;
-import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
+import fr.paris.lutece.plugins.form.service.EntryTypeService;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
+import fr.paris.lutece.plugins.form.service.ResponseService;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
@@ -78,6 +80,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppHTTPSService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -104,6 +107,7 @@ public class FormApp implements XPageApplication
     private static final String MARK_FORM = "form";
     private static final String MARK_MESSAGE_FORM_INACTIVE = "form_inactive";
     private static final String MARK_URL_ACTION = "url_action";
+    private static final String MARK_ENTRY_TYPE_SESSION = "entry_type_session";
 
     // templates
     private static final String TEMPLATE_XPAGE_RECAP_FORM_SUBMIT = "skin/plugins/form/recap_form_submit.html";
@@ -146,6 +150,11 @@ public class FormApp implements XPageApplication
 
     // Misc
     private static final String REGEX_ID = "^[\\d]+$";
+    
+    private ResponseService _responseService = (ResponseService) SpringContextService.getPluginBean( 
+    		FormPlugin.PLUGIN_NAME, FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+    private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getPluginBean( 
+			FormPlugin.PLUGIN_NAME, FormUtils.BEAN_ENTRY_TYPE_SERVICE );
 
     /**
      * Returns the Form XPage result content depending on the request parameters and the current mode.
@@ -330,8 +339,7 @@ public class FormApp implements XPageApplication
                         ResponseFilter filter = new ResponseFilter(  );
                         filter.setIdEntry( response.getEntry(  ).getIdEntry(  ) );
 
-                        Collection<Response> listSubmittedResponses = ResponseHome.getResponseList( filter,
-                                PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
+                        Collection<Response> listSubmittedResponses = _responseService.getResponseList( filter, false );
 
                         for ( Response submittedResponse : listSubmittedResponses )
                         {
@@ -366,6 +374,7 @@ public class FormApp implements XPageApplication
 
         model.put( MARK_RECAP, recap );
         model.put( MARK_FORM_SUBMIT, formSubmit );
+        model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.class.getName(  ) ) );
 
         //String strPageId = request.getParameter( PARAMETER_PAGE_ID );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_RECAP_FORM_SUBMIT, locale, model );
@@ -581,16 +590,14 @@ public class FormApp implements XPageApplication
             //convert the value of the object response to string 
             for ( Response response : formSubmit.getListResponse(  ) )
             {
-                byte[] byResponseValue = response.getValueResponse(  );
-
-                if ( byResponseValue != null )
+                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || response.getFile(  ) != null )
                 {
                     response.setToStringValueResponse( response.getEntry(  )
                                                                .getResponseValueForRecap( request, response, locale ) );
                 }
                 else
                 {
-                    response.setToStringValueResponse( EMPTY_STRING );
+                    response.setToStringValueResponse( StringUtils.EMPTY );
                 }
             }
 
@@ -757,7 +764,7 @@ public class FormApp implements XPageApplication
         for ( Response response : formSubmit.getListResponse(  ) )
         {
             response.setFormSubmit( formSubmit );
-            ResponseHome.create( response, plugin );
+            _responseService.create( response );
         }
 
         //Notify new form submit

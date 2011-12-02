@@ -33,6 +33,12 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.form.business.file.File;
+import fr.paris.lutece.plugins.form.utils.StringUtil;
+
 
 /**
  *
@@ -49,6 +55,8 @@ public class Response
     private IEntry _entry;
     private Field _field;
     private FormSubmit _formSubmit;
+    private File _file;
+    private String _strResponseValue;
 
     /**
      *
@@ -107,15 +115,30 @@ public class Response
     /**
      *
      * @return the value of the response
+     * @deprecated The response is now in String and not in byte
      */
     public byte[] getValueResponse(  )
     {
-        return _byValueResponse;
+    	if ( _byValueResponse != null )
+    	{
+    		return _byValueResponse;
+    	}
+    	
+    	// If the response has a file, then return the content of the file
+    	if ( _file != null && _file.getPhysicalFile(  ) != null && 
+    			_file.getPhysicalFile(  ).getValue(  ) != null )
+    	{
+    		return _file.getPhysicalFile(  ).getValue(  );
+    	}
+    	
+    	// Otherwise, return the content of the response value
+    	return StringUtil.convertToByte( _strResponseValue );
     }
 
     /**
      * set the value of the response
      * @param valueResponse the value of the response
+     * @deprecated The response is now in String and not in byte
      */
     public void setValueResponse( byte[] valueResponse )
     {
@@ -137,7 +160,7 @@ public class Response
      */
     public void setField( Field field )
     {
-        this._field = field;
+        _field = field;
     }
 
     /**
@@ -146,7 +169,11 @@ public class Response
      */
     public String getToStringValueResponse(  )
     {
-        return _strToStringValueResponse;
+    	if ( _strToStringValueResponse != null )
+    	{
+    		return _strToStringValueResponse;
+    	}
+    	return _strResponseValue;
     }
 
     /**
@@ -161,15 +188,25 @@ public class Response
     /**
      *
      * @return the file extension if the response value is a file
+     * @deprecated the file is now stored in class File
      */
     public String getFileExtension(  )
     {
-        return _strFileExtension;
+    	if ( StringUtils.isNotBlank( _strFileExtension ) )
+    	{
+    		return _strFileExtension;
+    	}
+    	if ( _file != null && StringUtils.isNotBlank( _file.getTitle(  ) ))
+    	{
+    		FilenameUtils.getExtension( _file.getTitle(  ) );
+    	}
+    	return null;
     }
 
     /**
      * set the file extension if the response value is a file
      * @param fileExtension the file extension if the response value is a file
+     * @deprecated the file is now stored in class File
      */
     public void setFileExtension( String fileExtension )
     {
@@ -179,18 +216,64 @@ public class Response
     /**
      * the file name if the response value is a file
      * @return the file name if the response value is a file
+     * @deprecated the file name is now stored in class File
      */
     public String getFileName(  )
     {
-        return _strFileName;
+    	if ( StringUtils.isNotBlank( _strFileName ) )
+    	{
+    		return _strFileName;
+    	}
+    	if ( _file != null )
+    	{
+    		return _file.getTitle(  );
+    	}
+    	return null;
     }
 
     /**
      * the file name if the response value is a file
      * @param fileName the file name if the response value is a file
+     * @deprecated the file name is now stored in class File
      */
     public void setFileName( String fileName )
     {
         _strFileName = fileName;
     }
+
+    /**
+     * Set file
+     * @param file the file
+     */
+	public void setFile( File file )
+	{
+		_file = file;
+	}
+
+	/**
+	 * Get file
+	 * @return the file
+	 */
+	public File getFile(  )
+	{
+		return _file;
+	}
+
+	/**
+	 * Set the response value
+	 * @param strResponseValue the response value
+	 */
+	public void setResponseValue( String strResponseValue )
+	{
+		_strResponseValue = strResponseValue;
+	}
+
+	/**
+	 * Get the response value
+	 * @return the response value
+	 */
+	public String getResponseValue(  )
+	{
+		return _strResponseValue;
+	}
 }

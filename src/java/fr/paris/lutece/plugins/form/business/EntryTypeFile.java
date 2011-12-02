@@ -35,6 +35,17 @@ package fr.paris.lutece.plugins.form.business;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
@@ -44,24 +55,12 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
-
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.Paginator;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -242,11 +241,21 @@ public class EntryTypeFile extends Entry
             response.setEntry( this );
             
             byte[] byValueEntry = fileSource != null ? fileSource.get(  ) : null;
+            
+            if ( byValueEntry != null && fileSource.getSize(  ) < Integer.MAX_VALUE )
+            {
+            	PhysicalFile physicalFile = new PhysicalFile(  );
+            	physicalFile.setValue( byValueEntry );
+            	
+            	fr.paris.lutece.plugins.form.business.file.File file = new fr.paris.lutece.plugins.form.business.file.File(  );
+            	file.setPhysicalFile( physicalFile );
+            	file.setTitle( strFilename );
+            	file.setSize( (int) fileSource.getSize(  ) );
+            	file.setMimeType( FileSystemUtil.getMIMEType( strFilename ) );
+            	
+            	response.setFile( file );
+            }
 
-            response.setValueResponse( byValueEntry );
-            response.setFileName( strFilename );
-            response.setFileExtension( FilenameUtils.getExtension( strFilename ) );         
-           
             listResponse.add( response );
 
             if ( this.isMandatory(  ) )
@@ -356,9 +365,9 @@ public class EntryTypeFile extends Entry
      */
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-        if ( response.getFileName(  ) != null )
+        if ( response.getFile(  ) != null && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ))
         {
-            return response.getFileName(  );
+            return response.getFile(  ).getTitle(  );
         }
         else
         {

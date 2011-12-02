@@ -48,14 +48,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.Field;
@@ -63,8 +64,10 @@ import fr.paris.lutece.plugins.form.business.FieldHome;
 import fr.paris.lutece.plugins.form.business.FormError;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Response;
+import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
 /**
@@ -89,6 +92,8 @@ public final class JSONUtils
 	public static final String JSON_KEY_TITLE_QUESTION = "title_question";
 	public static final String JSON_KEY_FORM_ERROR = "form_error";
 	public static final String JSON_KEY_FIELD_NAME = "field_name";
+	public static final String JSON_KEY_MIME_TYPE = "mime_type";
+
 	/**
 	 * Empty constructor
 	 */
@@ -132,15 +137,15 @@ public final class JSONUtils
 		response.setIdResponse( json.getInt( JSON_KEY_ID_RESPONSE ) );
 		IEntry entry = EntryHome.findByPrimaryKey( json.getInt( JSON_KEY_ID_ENTRY ), PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
 		response.setEntry( entry );
+		
 		if ( json.containsKey( JSON_KEY_FORM_ERROR ) )
 		{
 			response.getEntry(  ).setFormError( buildFormError( json.getString( JSON_KEY_FORM_ERROR ) ) );
 		}
 		
-		
-		if ( json.containsKey( JSON_KEY_VALUE_RESPONSE ) )
+		if ( json.containsKey( JSON_KEY_VALUE_RESPONSE ) && !json.containsKey( JSON_KEY_FILE_NAME ) )
 		{
-			response.setValueResponse( json.getString( JSON_KEY_VALUE_RESPONSE ).getBytes(  ) );
+			response.setResponseValue( json.getString( JSON_KEY_VALUE_RESPONSE ) );
 		}
 		
 		if (  json.containsKey( JSON_KEY_ID_FIELD ) )
@@ -153,13 +158,22 @@ public final class JSONUtils
 		boolean bIsFile = false;
 		if ( json.containsKey( JSON_KEY_FILE_NAME ) )
 		{
-			response.setFileName( json.getString( JSON_KEY_FILE_NAME ) );
-			bIsFile = true;
-		}
-		
-		if ( json.containsKey( JSON_KEY_FILE_EXTENSION ) )
-		{
-			response.setFileExtension( json.getString( JSON_KEY_FILE_EXTENSION ) );
+			fr.paris.lutece.plugins.form.business.file.File file = null;
+			try
+			{
+				PhysicalFile physicalFile = new PhysicalFile(  );
+				physicalFile.setValue( StringUtil.convertToByte( json.getString( JSON_KEY_VALUE_RESPONSE ) ) );
+				
+				file = new fr.paris.lutece.plugins.form.business.file.File(  );
+				file.setPhysicalFile( physicalFile );
+				file.setTitle( json.getString( JSON_KEY_FILE_NAME ) );
+				file.setMimeType( json.getString( JSON_KEY_MIME_TYPE ) );
+			}
+			catch( JSONException e )
+			{
+				AppLogService.error( e.getMessage(  ), e );
+			}
+			response.setFile( file );
 			bIsFile = true;
 		}
 		
@@ -167,10 +181,11 @@ public final class JSONUtils
 		{
 			if ( session != null )
 			{
-				session.setAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + entry.getIdEntry(  ), buildFileItemResponse( response.getFileName(  ), response.getValueResponse(  ) ) );
+				session.setAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + entry.getIdEntry(  ), buildFileItemResponse( 
+						response.getFile(  ).getTitle(  ), response.getFile(  ).getPhysicalFile(  ).getValue(  ) ) );
 			}
 		}
-		else if ( response.getValueResponse(  ) != null )
+		else if ( response.getResponseValue(  ) != null )
 		{
 			// if the entry is not a file, we can set the string value
 			
@@ -271,19 +286,18 @@ public final class JSONUtils
 			jsonResponse.element( JSON_KEY_ID_FIELD, response.getField(  ).getIdField(  ) );
 		}
 		
-		if ( response.getValueResponse(  ) != null )
+		if ( response.getResponseValue(  ) != null && response.getFile(  ) == null )
 		{
-			jsonResponse.element( JSON_KEY_VALUE_RESPONSE, StringUtil.convertToString( response.getValueResponse(  ) ) );
+			jsonResponse.element( JSON_KEY_VALUE_RESPONSE, response.getResponseValue(  ) );
 		}
 		
 		// file specific data
-		if ( response.getFileName(  ) != null )
+		if ( response.getFile(  ) != null && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) )
 		{
-			jsonResponse.element( JSON_KEY_FILE_NAME, response.getFileName(  ) );
-		}
-		if ( response.getFileExtension(  ) != null )
-		{
-			jsonResponse.element( JSON_KEY_FILE_EXTENSION, response.getFileExtension(  ) );
+			jsonResponse.element( JSON_KEY_FILE_NAME, response.getFile(  ).getTitle(  ) );
+			jsonResponse.element( JSON_KEY_FILE_EXTENSION, FilenameUtils.getExtension( response.getFile(  ).getTitle(  ) ) );
+			jsonResponse.element( JSON_KEY_MIME_TYPE, response.getFile(  ).getMimeType(  ) );
+			jsonResponse.element( JSON_KEY_VALUE_RESPONSE, response.getFile(  ).getPhysicalFile(  ).getValue(  ) );
 		}
 		
 		// form error

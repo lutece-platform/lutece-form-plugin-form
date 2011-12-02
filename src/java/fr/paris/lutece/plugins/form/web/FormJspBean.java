@@ -49,6 +49,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
@@ -84,7 +85,6 @@ import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.ResponseFilter;
-import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.StatisticFormSubmit;
 import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
 import fr.paris.lutece.plugins.form.business.parameter.EntryParameterHome;
@@ -96,6 +96,7 @@ import fr.paris.lutece.plugins.form.service.FormRemovalListenerService;
 import fr.paris.lutece.plugins.form.service.FormResourceIdService;
 import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
+import fr.paris.lutece.plugins.form.service.ResponseService;
 import fr.paris.lutece.plugins.form.service.validator.IValidator;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
@@ -114,6 +115,7 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppHTTPSService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -367,6 +369,8 @@ public class FormJspBean extends PluginAdminPageJspBean
     private int _nIdForm = -1;
     private int _nIdEntry = -1;
     private List<FormSubmit> _listFormSubmitTest;
+    private ResponseService _responseService = (ResponseService) SpringContextService.getPluginBean( 
+    		FormPlugin.PLUGIN_NAME, FormUtils.BEAN_FORM_RESPONSE_SERVICE );
 
     /*-------------------------------MANAGEMENT  FORM-----------------------------*/
 
@@ -496,7 +500,6 @@ public class FormJspBean extends PluginAdminPageJspBean
         return getAdminPage( template.getHtml(  ) );
     }
     
-
     /**
      * Modify form parameter default values
      * @param request HttpServletRequest
@@ -3613,7 +3616,7 @@ public class FormJspBean extends PluginAdminPageJspBean
                 filter.setIdForm( formSubmit.getIdFormSubmit(  ) );
                 filter.setOrderBy( SQL_FILTER_ENTRY_POS );
                 filter.setOrderByAsc( true );
-                formSubmit.setListResponse( ResponseHome.getResponseList( filter, plugin ) );
+                formSubmit.setListResponse( _responseService.getResponseList( filter, false ) );
             }
 
             if ( ( listFormSubmit != null ) && ( listFormSubmit.size(  ) != 0 ) )
@@ -3625,21 +3628,26 @@ public class FormJspBean extends PluginAdminPageJspBean
                 String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,
                         exportFormat.getXsl(  ), strXslUniqueId, null, null );
 
+                String strFormatExtension = exportFormat.getExtension(  ).trim(  );
+                String strFileName = form.getTitle(  ) + "." + strFormatExtension;
+                FormUtils.addHeaderResponse( request, response, strFileName, strFormatExtension );
+                PrintWriter out = null;
                 try
                 {
-                    String strFormatExtension = exportFormat.getExtension(  ).trim(  );
-                    String strFileName = form.getTitle(  ) + "." + strFormatExtension;
-                    FormUtils.addHeaderResponse( request, response, strFileName, strFormatExtension );
-
-                    response.setContentLength( strFileOutPut.length(  ) );
-                    PrintWriter out = response.getWriter(  );
+                    out = response.getWriter(  );
                     out.write( strFileOutPut );
-                    out.flush(  );
-                    out.close(  );
                 }
                 catch ( IOException e )
                 {
                     AppLogService.error( e );
+                }
+                finally
+                {
+                	if ( out != null )
+                	{
+                		out.flush(  );
+                		out.close(  );
+                	}
                 }
             }
             else
@@ -3809,7 +3817,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         }
 
         Plugin plugin = getPlugin(  );
-        responseFile = ResponseHome.findByPrimaryKey( nIdResponse, plugin );
+        responseFile = _responseService.findByPrimaryKey( nIdResponse, true );
 
         if ( responseFile != null )
         {
@@ -3837,13 +3845,14 @@ public class FormJspBean extends PluginAdminPageJspBean
                     AdminMessage.TYPE_STOP );
             }
 
-            if ( responseFile.getFileName(  ) != null )
+            if ( responseFile.getFile(  ) != null && responseFile.getFile(  ).getPhysicalFile(  ) != null && 
+            		responseFile.getFile(  ).getPhysicalFile(  ).getValue(  ) != null )
             {
                 try
                 {
-                    byte[] byteFileOutPut = responseFile.getValueResponse(  );
-                    FormUtils.addHeaderResponse( request, response, responseFile.getFileName(  ),
-                        responseFile.getFileExtension(  ) );
+                    byte[] byteFileOutPut = responseFile.getFile(  ).getPhysicalFile(  ).getValue(  );
+                    FormUtils.addHeaderResponse( request, response, responseFile.getFile(  ).getTitle(  ),
+                    		FilenameUtils.getExtension( responseFile.getFile(  ).getTitle(  ) ) );
                     response.setContentLength( (int) byteFileOutPut.length );
 
                     OutputStream os = response.getOutputStream(  );

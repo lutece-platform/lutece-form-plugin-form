@@ -105,11 +105,11 @@ public final class ResponseHome
     }
 
     /**
-         * Load the data of all the response who verify the filter and returns them in a  list
-         * @param filter the filter
-         * @param plugin the plugin
-         * @return  the list of response
-         */
+     * Load the data of all the response who verify the filter and returns them in a  list
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return  the list of response
+     */
     public static List<Response> getResponseList( ResponseFilter filter, Plugin plugin )
     {
         return _dao.selectListByFilter( filter, plugin );

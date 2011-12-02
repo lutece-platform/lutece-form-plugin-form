@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.form.modules.processornotifysender.utils;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
@@ -93,23 +95,23 @@ public final class FileUtils
      */
     public static void addFileResponseToFolder( Response response, String strFolder ) throws IOException
     {
-        // Create the folder first
-        createFolder( strFolder );
-
-        File file = new File( strFolder + response.getFileName(  ) );
-        
-        // Delete the file if it exists
-        if ( file.exists(  ) )
+        if ( response.getFile(  ) != null && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) && 
+        		response.getFile(  ).getPhysicalFile(  ) != null && response.getFile(  ).getPhysicalFile(  ).getValue(  ) != null )
         {
-        	if ( !file.delete(  ) )
+        	// Create the folder first
+        	createFolder( strFolder );
+        	File file = new File( strFolder + response.getFile(  ).getTitle(  ) );
+        	
+        	// Delete the file if it exists
+        	if ( file.exists(  ) )
         	{
-        		AppLogService.error( MESSAGE_DELETE_ERROR + strFolder + response.getFileName(  ) );
+        		if ( !file.delete(  ) )
+        		{
+        			AppLogService.error( MESSAGE_DELETE_ERROR + strFolder + response.getFile(  ).getTitle(  ) );
+        		}
         	}
-        }
-        
-        if ( response.getValueResponse(  ) != null )
-        {
-        	org.apache.commons.io.FileUtils.writeByteArrayToFile( file, response.getValueResponse(  ) );
+        	
+    		org.apache.commons.io.FileUtils.writeByteArrayToFile( file, response.getFile(  ).getPhysicalFile(  ).getValue(  ) );
         }
     }
 

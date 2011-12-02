@@ -22,6 +22,8 @@
  	 <bean id="form.formRemovalService" class="fr.paris.lutece.portal.service.util.RemovalListenerService" />
  	 <bean id="form.entryRemovalService" class="fr.paris.lutece.portal.service.util.RemovalListenerService" />
 	 <bean id="resourceRssFormConfigDAO"  class="fr.paris.lutece.plugins.form.business.rss.FormResourceRssConfigDAO" />
+	 <bean id="form.fileDAO" class="fr.paris.lutece.plugins.form.business.file.FileDAO" />
+	 <bean id="form.physicalFileDAO" class="fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFileDAO" />
 	
 	<!-- RSS -->
     <bean id="ResourceRssTypeForm" class="fr.paris.lutece.portal.business.rss.ResourceRssType" >
@@ -29,15 +31,25 @@
 		<property name="titleI18nKey" value="form.resource_rss_type.label" />
 		<property name="className" value="fr.paris.lutece.plugins.form.business.rss.FormResourceRss"/>
 	</bean>
- 	   
+	
+	<!-- Services -->
+	<bean id="form.physicalFileService" class="fr.paris.lutece.plugins.form.service.physicalfile.PhysicalFileService" />
+	<bean id="form.fileService" class="fr.paris.lutece.plugins.form.service.file.FileService">
+		<property name="physicalFileService" ref="form.physicalFileService" />
+	</bean>
+	<bean id="form.responseService" class="fr.paris.lutece.plugins.form.service.ResponseService">
+		<property name="fileService" ref="form.fileService" />
+	</bean>
+	<bean id="form.entryTypeService" class="fr.paris.lutece.plugins.form.service.EntryTypeService" />
+
 	 <bean id="form.outputProcessorSet"  class="fr.paris.lutece.plugins.form.business.outputprocessor.OutputProcessorSet" />
     
      <bean id="form.notifySenderService" class="fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderService" />
      <bean id="form.notifySender" class="fr.paris.lutece.plugins.form.modules.processornotifysender.business.ProcessorNotifySender">
       	<property name="key" value="notifySender" />
       	<property name="notifySenderService" ref="form.notifySenderService" />
+      	<property name="entryTypeService" ref="form.entryTypeService" />
      </bean>
-     <bean id="form.entryTypeService" class="fr.paris.lutece.plugins.form.service.EntryTypeService" />
 	 
 	 <bean id="form.asynchronousUploadHandler" class="fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler" />
  </beans>

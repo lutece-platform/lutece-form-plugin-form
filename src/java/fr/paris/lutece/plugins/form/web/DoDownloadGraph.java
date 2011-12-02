@@ -33,28 +33,30 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
+import java.awt.image.BufferedImage;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
+
 import com.keypoint.PngEncoder;
 
 import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.GraphType;
 import fr.paris.lutece.plugins.form.business.GraphTypeHome;
 import fr.paris.lutece.plugins.form.business.IEntry;
-import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.StatisticEntrySubmit;
+import fr.paris.lutece.plugins.form.service.FormPlugin;
+import fr.paris.lutece.plugins.form.service.ResponseService;
+import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
-
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.entity.StandardEntityCollection;
-
-import java.awt.image.BufferedImage;
-
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -70,6 +72,8 @@ public class DoDownloadGraph
     private static final String PARAMETER_GRAPH_LABEL_VALUE = "graph_label_value";
     private static final String PARAMETER_PLUGIN_NAME = "plugin_name";
     private static final String EMPTY_STRING = "";
+    private ResponseService _responseService = (ResponseService) SpringContextService.getPluginBean( 
+    		FormPlugin.PLUGIN_NAME, FormUtils.BEAN_FORM_RESPONSE_SERVICE );
 
     /**
      * Write in the http response the statistic graph of a question
@@ -123,7 +127,7 @@ public class DoDownloadGraph
 
             entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
 
-            List<StatisticEntrySubmit> listStatistic = ResponseHome.getStatisticByIdEntry( nIdEntry, plugin );
+            List<StatisticEntrySubmit> listStatistic = _responseService.getStatisticByIdEntry( nIdEntry );
             graphType = GraphTypeHome.findByPrimaryKey( nIdGraphType, plugin );
 
             if ( graphType != null )

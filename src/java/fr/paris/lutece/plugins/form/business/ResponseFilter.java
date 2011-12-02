@@ -139,9 +139,9 @@ public class ResponseFilter
     }
 
     /**
-         *
-         * @return date of the first submit
-         */
+     *
+     * @return date of the first submit
+     */
     public Timestamp getDateFirst(  )
     {
         return _tDateFirst;

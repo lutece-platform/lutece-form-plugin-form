@@ -162,18 +162,9 @@ public class EntryTypeSession extends Entry
         {
         	Response response = new Response(  );
         	response.setEntry( this );
-        	response.setValueResponse( StringUtil.convertToByte( strValueEntry ) );
-
-        	byte[] byResponseValue = response.getValueResponse(  );
-
-            if ( byResponseValue != null )
-            {
-                response.setToStringValueResponse( getResponseValueForRecap( request, response, locale ) );
-            }
-            else
-            {
-                response.setToStringValueResponse( StringUtils.EMPTY );
-            }
+        	response.setResponseValue( strValueEntry );
+            response.setToStringValueResponse( StringUtils.EMPTY );
+            
             listResponse.add( response );
         }
 
@@ -185,7 +176,7 @@ public class EntryTypeSession extends Entry
      */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return StringUtil.convertToString( response.getValueResponse(  ) );
+        return response.getResponseValue(  );
     }
 
     /**

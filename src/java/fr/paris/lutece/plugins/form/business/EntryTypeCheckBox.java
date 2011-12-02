@@ -33,20 +33,19 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.plugins.form.utils.StringUtil;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -219,7 +218,7 @@ public class EntryTypeCheckBox extends Entry
             {
                 response = new Response(  );
                 response.setEntry( this );
-                response.setValueResponse( StringUtil.convertToByte( fieldInResponse.getValue(  ) ) );
+                response.setResponseValue( fieldInResponse.getValue(  ) );
                 response.setField( fieldInResponse );
                 listResponse.add( response );
             }
@@ -259,7 +258,7 @@ public class EntryTypeCheckBox extends Entry
      */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-    	return fr.paris.lutece.plugins.form.utils.StringUtil.convertToString( response.getValueResponse(  ) );
+    	return response.getResponseValue(  );
     }
 
     /**

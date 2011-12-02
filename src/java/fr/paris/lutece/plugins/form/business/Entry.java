@@ -603,7 +603,7 @@ public class Entry implements IEntry
      */
     public void setResponseToStringValue( Response response, Locale locale )
     {
-    	response.setToStringValueResponse( new String( response.getValueResponse(  ) ) );
+    	response.setToStringValueResponse( response.getResponseValue(  ) );
     }
     
     /**

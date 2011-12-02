@@ -127,12 +127,12 @@ public final class NotifySenderService
         // Add the response files to a temporary folder
         for ( Response response : formSubmit.getListResponse(  ) )
         {
-            if ( StringUtils.isNotBlank( response.getFileName(  ) ) && ( response.getValueResponse(  ) != null ) &&
-                    StringUtils.isNotBlank( response.getFileExtension(  ) ) )
+            if ( response.getFile(  ) != null && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) && 
+            		response.getFile(  ).getPhysicalFile(  ) != null && response.getFile(  ).getPhysicalFile(  ).getValue(  ) != null )
             {
                 if ( AppLogService.isDebugEnabled(  ) )
                 {
-                    AppLogService.debug( "NotifySenderService : Adding '" + response.getFileName(  ) + "' to folder '" +
+                    AppLogService.debug( "NotifySenderService : Adding '" + response.getFile(  ).getTitle(  ) + "' to folder '" +
                         getFileFolderPath(  ) + "'" );
                 }
 
@@ -142,7 +142,7 @@ public final class NotifySenderService
 				}
 				catch ( IOException e )
 				{
-					AppLogService.error( "NotifySenderService : Cannot add file '" + response.getFileName(  ) + "' to folder '" + 
+					AppLogService.error( "NotifySenderService : Cannot add file '" + response.getFile(  ).getTitle(  ) + "' to folder '" + 
 							getFileFolderPath(  ) + "'" );
 				}
             }

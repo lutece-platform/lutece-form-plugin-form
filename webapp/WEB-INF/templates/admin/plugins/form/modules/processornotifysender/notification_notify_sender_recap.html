@@ -1,27 +1,29 @@
-<br />
+﻿<br />
 <fieldset> 
 	<legend> #i18n{form.recapFormSubmit.labelLegendRecap} </legend>
 	<div>
 		<table>
 		<#list formSubmit.listResponse as response>
-			<#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>
-				<#if response_index != 1>
-					</ul>
-					</td>
-					</tr>
-				</#if>
-					<tr><td valign="top" align="right">
-						${response.entry.title} : &nbsp;
-						<#assign entrySave=response.entry>
-					</td>
-					<td valign="top">
-					<ul style="list-style-type: none; padding:0; margin:0;">
+			<#if entry_type_session.idType != response.entry.entryType.idType>
+				<#if !entrySave?exists || entrySave.idEntry != response.entry.idEntry>
+					<#if response_index != 1>
+						</ul>
+						</td>
+						</tr>
+					</#if>
+						<tr><td valign="top" align="right">
+							${response.entry.title} : &nbsp;
+							<#assign entrySave=response.entry>
+						</td>
+						<td valign="top">
+						<ul style="list-style-type: none; padding:0; margin:0;">
+						<#if response.toStringValueResponse?has_content>
+							<li>${response.toStringValueResponse}</li>
+						</#if>
+				<#else>
 					<#if response.toStringValueResponse?has_content>
 						<li>${response.toStringValueResponse}</li>
 					</#if>
-			<#else>
-				<#if response.toStringValueResponse?has_content>
-					<li>${response.toStringValueResponse}</li>
 				</#if>
 			</#if>
 		</#list>

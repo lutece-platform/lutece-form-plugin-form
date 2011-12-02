@@ -31,12 +31,12 @@
 		<div><label class="form-title" >${formSubmit.form.title}</label><br/></div>
 		<fieldset class="-lutece-border-radius">${recap.recapMessage}</fieldset>
 		<#if recap.graph>
-			<fieldset class="-lutece-border-radius"> 
+			<fieldset class="-lutece-border-radius">
 				<legend class="form-legend"> #i18n{form.recapFormSubmit.labelLegendStatistic}</legend> 
 				<#list formSubmit.listResponse as response>
-					<#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>
+					<#if entry_type_session.idType != response.entry.entryType.idType && ( !entrySave?exists || entrySave.idEntry != response.entry.idEntry )>
 						<#assign entrySave=response.entry>
-						<div class="form-element">		
+						<div class="form-element">
 							<span class="form-label">
 								<label>${response.entry.title}:&nbsp;</label>
 							</span>

@@ -51,6 +51,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
@@ -111,6 +112,7 @@ public final class FormUtils
     public static final String PARAMETER_DELETE_PREFIX = "delete_";
     public static final String SESSION_ATTRIBUTE_PREFIX_FILE = "FORM_FILE_";
     public static final String BEAN_ENTRY_TYPE_SERVICE = "form.entryTypeService";
+    public static final String BEAN_FORM_RESPONSE_SERVICE = "form.responseService";
     public static final int CONSTANT_ID_NULL = -1;
 
     private static final String MARK_LOCALE = "locale";
@@ -1011,14 +1013,14 @@ public final class FormUtils
                         XmlUtil.beginElement( buffer, TAG_RESPONSES );
                     }
 
-                    if ( response.getValueResponse(  ) != null )
+                    if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || response.getFile(  ) != null )
                     {
                         XmlUtil.addElementHtml( buffer, TAG_RESPONSE,
                             response.getEntry(  ).getResponseValueForExport( request, response, locale ) );
                     }
                     else
                     {
-                        XmlUtil.addElement( buffer, TAG_RESPONSE, EMPTY_STRING );
+                        XmlUtil.addElement( buffer, TAG_RESPONSE, StringUtils.EMPTY );
                     }
 
                     responseStore = response;
@@ -1191,6 +1193,12 @@ public final class FormUtils
         return refListForms;
     }
 
+    /**
+     * Get the ReferenceList associated to all questions
+     * @param nIdForm the id form
+     * @param plugin the {@link Plugin}
+     * @return a {@link ReferenceList}
+     */
     public static ReferenceList getRefListAllQuestions( int nIdForm, Plugin plugin )
     {
         ReferenceList refListQuestions = new ReferenceList(  );

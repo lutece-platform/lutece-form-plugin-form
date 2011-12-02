@@ -78,7 +78,7 @@ public class ResponseHomeTest extends LuteceTestCase
         response.setField( field );
         response.setEntry( entry );
         response.setFormSubmit( formResponse );
-        response.setValueResponse( VALUE_RESPONSE_1.getBytes(  ) );
+        response.setResponseValue( VALUE_RESPONSE_1 );
 
         ResponseHome.create( response, _plugin );
 
@@ -111,7 +111,7 @@ public class ResponseHomeTest extends LuteceTestCase
         response.setField( field );
         response.setEntry( entry );
         response.setFormSubmit( formResponse );
-        response.setValueResponse( VALUE_RESPONSE_2.getBytes(  ) );
+        response.setResponseValue( VALUE_RESPONSE_2 );
 
         ResponseHome.update( response, _plugin );
 

@@ -39,6 +39,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.form.business.EntryTypeSession;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.Recap;
@@ -47,6 +50,7 @@ import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.outputprocessor.OutputProcessor;
 import fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderResourceIdService;
 import fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderService;
+import fr.paris.lutece.plugins.form.service.EntryTypeService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
@@ -87,11 +91,13 @@ public class ProcessorNotifySender extends OutputProcessor
     private static final String MARK_MESSAGE = "mail_message";
     private static final String MARK_TITLE = "mail_title";
     private static final String MARK_PERMISSION_SEND_ATTACHMENTS = "permission_send_attachments";
+    private static final String MARK_ENTRY_TYPE_SESSION = "entry_type_session";
     private static final String MESSAGE_CONFIGURATION_ERROR_ENTRY_NOT_SELECTED = "module.form.processornotifysender.message.error.configuration.entry_not_selected";
     private static final String MESSAGE_ERROR_NO_CONFIGURATION_ASSOCIATED = "module.form.processornotifysender.message.error.no_configuration_associated";
     private static final String MESSAGE_RECAP_INFORMATION = "module.form.processornotifysender.configuration_notify_sender.send_recap";
     private static final String PROPERTY_TAG_RECAP = "processornotifysender.recap_tag";
     private NotifySenderService _notifySenderService;
+    private EntryTypeService _entryTypeService;
 
     /**
      * Set the notify sender service
@@ -100,6 +106,15 @@ public class ProcessorNotifySender extends OutputProcessor
     public void setNotifySenderService( NotifySenderService notifySenderService )
     {
         _notifySenderService = notifySenderService;
+    }
+
+    /**
+     * Set the entry type service
+     * @param entryTypeService the entry type service
+     */
+    public void setEntryTypeService( EntryTypeService entryTypeService )
+    {
+    	_entryTypeService = entryTypeService;
     }
 
     /**
@@ -208,9 +223,7 @@ public class ProcessorNotifySender extends OutputProcessor
             //convert the value of the object response to string 
             for ( Response response : formSubmit.getListResponse(  ) )
             {
-                byte[] byResponseValue = response.getValueResponse(  );
-
-                if ( byResponseValue != null )
+                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || response.getFile(  ) != null )
                 {
                     response.setToStringValueResponse( response.getEntry(  )
                                                                .getResponseValueForRecap( request, response,
@@ -225,6 +238,7 @@ public class ProcessorNotifySender extends OutputProcessor
 
         model.put( MARK_RECAP_HTML, recap );
         model.put( MARK_FORM_SUBMIT, formSubmit );
+        model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.class.getName(  ) ) );
 
         HtmlTemplate templateRecap = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_NOTIFY_SENDER_RECAP,
                 request.getLocale(  ), model );
