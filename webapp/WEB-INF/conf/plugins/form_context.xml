@@ -41,6 +41,8 @@
 		<property name="fileService" ref="form.fileService" />
 	</bean>
 	<bean id="form.entryTypeService" class="fr.paris.lutece.plugins.form.service.EntryTypeService" />
+	<bean id="form.formParameterService" class="fr.paris.lutece.plugins.form.service.parameter.FormParameterService" />
+    <bean id="form.entryParameterService" class="fr.paris.lutece.plugins.form.service.parameter.EntryParameterService" />
 
 	 <bean id="form.outputProcessorSet"  class="fr.paris.lutece.plugins.form.business.outputprocessor.OutputProcessorSet" />
     

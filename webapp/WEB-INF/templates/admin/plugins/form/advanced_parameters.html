@@ -96,6 +96,26 @@
 		<input type="submit" class="button" value="#i18n{form.manage_advanced_parameters.buttonModify}" />
 	</form>
 </div>
+
+<#if list_export_encoding_param?? && list_export_encoding_param?has_content>
+	<div class="highlight-box">
+		<p>#i18n{form.manage_advanced_parameters.label_export_encoding_parameters}</p>
+		<form method="post" action="jsp/admin/plugins/form/DoModifyExportEncodingParameters.jsp">
+			<p>
+				<label for="export_csv_encoding">#i18n{form.manage_advanced_parameters.label_export_csv_encoding} * : </label>
+				<input type="text" name="export_csv_encoding" id="export_csv_encoding" size="20" maxlength="100" value="${getName('export_csv_encoding',list_export_encoding_param)}" />
+			</p>
+			<p>
+				<label for="export_xml_encoding">#i18n{form.manage_advanced_parameters.label_export_xml_encoding} * : </label>
+				<input type="text" name="export_xml_encoding" id="export_xml_encoding" size="20" maxlength="100" value="${getName('export_xml_encoding',list_export_encoding_param)}" />
+			</p>
+			<p>
+				<input type="submit" class="button" value="#i18n{form.manage_advanced_parameters.buttonModify}" />
+			</p>
+		</form>
+	</div>
+</#if>
+
 <#if (permission_manage_export_format?exists && permission_manage_export_format) || (permission_manage_default_message?exists && permission_manage_default_message)>
 	<div class="highlight-box" >
 		<p>#i18n{form.home.title}</p>

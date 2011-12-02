@@ -58,8 +58,8 @@ import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
 import fr.paris.lutece.plugins.form.business.Response;
-import fr.paris.lutece.plugins.form.business.parameter.EntryParameterHome;
-import fr.paris.lutece.plugins.form.business.parameter.FormParameterHome;
+import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
+import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.style.Theme;
@@ -83,6 +83,7 @@ public final class FormService
 	private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
 	private static final String MARK_LIST_FORM_PARAM_DEFAULT_VALUES = "list_form_param_default_values";
 	private static final String MARK_LIST_ENTRY_PARAM_DEFAULT_VALUES = "list_entry_param_default_values";
+	private static final String MARK_LIST_EXPORT_ENCODING_PARAM = "list_export_encoding_param";
 	private static final String MARK_IS_ACTIVE_CAPTCHA = "is_active_captcha";
 	private static final String MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION = "is_active_mylutece_authentification";
 	private static final String MARK_THEME_REF_LIST = "theme_list";
@@ -139,11 +140,13 @@ public final class FormService
     	if ( RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, 
     			FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, user ) )
     	{
-    		ReferenceList listDirectoryParamDefaultValues = FormParameterHome.findAll( plugin );
-    		ReferenceList listEntryParamDefaultValues = EntryParameterHome.findAll( plugin );
+    		ReferenceList listDirectoryParamDefaultValues = FormParameterService.getService(  ).findDefaultValueParameters(  );
+    		ReferenceList listEntryParamDefaultValues = EntryParameterService.getService(  ).findAll(  );
+    		ReferenceList listExportEncodingParam = FormParameterService.getService(  ).findExportEncodingParameters(  );
 
     		model.put( MARK_LIST_FORM_PARAM_DEFAULT_VALUES, listDirectoryParamDefaultValues );
     		model.put( MARK_LIST_ENTRY_PARAM_DEFAULT_VALUES, listEntryParamDefaultValues );
+    		model.put( MARK_LIST_EXPORT_ENCODING_PARAM, listExportEncodingParam );
     	}
 
     	List<ExportFormat> listExportFormat = ExportFormatHome.getList( plugin );

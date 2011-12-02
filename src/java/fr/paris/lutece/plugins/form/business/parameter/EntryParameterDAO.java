@@ -43,7 +43,7 @@ import fr.paris.lutece.util.sql.DAOUtil;
  * EntryParameterDAO
  *
  */
-public class EntryParameterDAO implements IParameterDAO 
+public class EntryParameterDAO implements IEntryParameterDAO 
 {
 	private static final String TRUE = "1";
 	

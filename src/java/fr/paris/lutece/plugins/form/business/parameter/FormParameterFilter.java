@@ -33,62 +33,73 @@
  */
 package fr.paris.lutece.plugins.form.business.parameter;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.util.ReferenceItem;
-import fr.paris.lutece.util.ReferenceList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
- * FormParameterHome
+ * FormParameterFilter
  *
  */
-public final class FormParameterHome 
+public class FormParameterFilter
 {
-	// Static variable pointed at the DAO instance
-    private static IFormParameterDAO _dao = ( IFormParameterDAO ) SpringContextService.getPluginBean( "form",
-    		"form.formParameterDAO" );
-
-    /**
-     * Load all the parameter default values
-     * @param plugin Plugin
-     * @return a list of ReferenceItem
-     */
-    public static ReferenceList findAll( Plugin plugin )
-    {
-    	return _dao.selectAll( plugin );
-    }
-    
+	private boolean _bExcludeParameterKeys;
+	private List<String> _listParameterKeys;
+	
 	/**
-     * Load the parameter value
-     * @param strParameterKey the parameter key
-     * @param plugin
-     * @return The parameter value
-     */
-    public static ReferenceItem findByKey( String strParameterKey, Plugin plugin )
-    {
-    	return _dao.load( strParameterKey, plugin );
-    }
-    
-    /**
-     * Update the parameter value
-     * @param strParameterKey The parameter key
-     * @param strParameterValue The parameter value 
-     * @param plugin
-     */
-    public static void update( ReferenceItem param, Plugin plugin )
-    {
-    	_dao.store( param, plugin );
-    }
-    
-    /**
-     * Load parameters by filter
-     * @param filter the filter 
-     * @param plugin the plugin
-     * @return a {@link RefereceList}
-     */
-    public static ReferenceList findByFilter( FormParameterFilter filter, Plugin plugin )
-    {
-    	return _dao.selectByFilter( filter, plugin );
-    }
+	 * Constructor
+	 */
+	public FormParameterFilter(  )
+	{
+		_bExcludeParameterKeys = false;
+	}
+	
+	/**
+	 * Check if the filter contains a list of parameters keys
+	 * @return true if it contains a list of parameter keys
+	 */
+	public boolean containsListParameterKeys(  )
+	{
+		return _listParameterKeys != null;
+	}
+	
+	/**
+	 * Add a parameter key to the list to filter
+	 * @param strParameterKey the parameter key
+	 */
+	public void addParameterKey( String strParameterKey )
+	{
+		if ( _listParameterKeys == null )
+		{
+			_listParameterKeys = new ArrayList<String>(  );
+		}
+		_listParameterKeys.add( strParameterKey );
+	}
+	
+	/**
+	 * Get the list of parameter keys
+	 * @return the list of parameter keys
+	 */
+	public List<String> getListParameterKeys(  )
+	{
+		return _listParameterKeys;
+	}
+	
+	/**
+	 * Check if the filter must exclude the list of parameter keys
+	 * @return true if the filter must exclude the list of parameter keys, false otherwise
+	 */
+	public boolean excludeParameterKeys(  )
+	{
+		return _bExcludeParameterKeys;
+	}
+	
+	/**
+	 * Set true if the filter must exclude the list of parameter keys, false otherwise
+	 * @param bExcludeParameterKeys true if the filter must exclude the list of parameter keys, false otherwise
+	 */
+	public void setExcludeParameterKeys( boolean bExcludeParameterKeys )
+	{
+		_bExcludeParameterKeys = bExcludeParameterKeys;
+	}
 }

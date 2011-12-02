@@ -46,7 +46,7 @@ import fr.paris.lutece.util.ReferenceList;
 public final class EntryParameterHome 
 {
 	// Static variable pointed at the DAO instance
-    private static IParameterDAO _dao = ( IParameterDAO ) SpringContextService.getPluginBean( "form",
+    private static IEntryParameterDAO _dao = ( IEntryParameterDAO ) SpringContextService.getPluginBean( "form",
     		"form.entryParameterDAO" );
 
     /**

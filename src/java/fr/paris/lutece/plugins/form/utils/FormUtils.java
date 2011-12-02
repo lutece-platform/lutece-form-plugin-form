@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.form.utils;
 
 import java.awt.Color;
-import fr.paris.lutece.plugins.form.business.Category;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -63,6 +62,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.Week;
 import org.jfree.data.xy.XYDataset;
 
+import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.EntryType;
@@ -78,6 +78,7 @@ import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.StatisticFormSubmit;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
+import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
@@ -1054,10 +1055,12 @@ public final class FormUtils
 
         if ( strFileExtension.equals( "csv" ) )
         {
+        	response.setCharacterEncoding( FormParameterService.getService(  ).getExportCSVEncoding(  ) );
             response.setContentType( "application/csv" );
         }
         else
         {
+        	response.setCharacterEncoding( FormParameterService.getService(  ).getExportXMLEncoding(  ) );
             String strMimeType = FileSystemUtil.getMIMEType( strFileName );
 
             if ( strMimeType != null )

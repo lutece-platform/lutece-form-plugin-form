@@ -39,10 +39,10 @@ import fr.paris.lutece.util.ReferenceList;
 
 /**
  * 
- * IDirectoryParameterDAO
+ * IFormParameterDAO
  *
  */
-public interface IParameterDAO 
+public interface IFormParameterDAO 
 {
 	/**
      * Load all the parameter default values
@@ -65,4 +65,12 @@ public interface IParameterDAO
      * @param plugin Plugin
      */
     void store( ReferenceItem param, Plugin plugin );
+    
+    /**
+     * Load by filter
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return a {@link ReferenceList}
+     */
+    ReferenceList selectByFilter( FormParameterFilter filter, Plugin plugin );
 }

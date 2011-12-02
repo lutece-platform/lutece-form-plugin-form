@@ -37,6 +37,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -87,8 +88,6 @@ import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.StatisticFormSubmit;
 import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
-import fr.paris.lutece.plugins.form.business.parameter.EntryParameterHome;
-import fr.paris.lutece.plugins.form.business.parameter.FormParameterHome;
 import fr.paris.lutece.plugins.form.business.portlet.FormPortletHome;
 import fr.paris.lutece.plugins.form.service.EntryRemovalListenerService;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
@@ -97,6 +96,8 @@ import fr.paris.lutece.plugins.form.service.FormResourceIdService;
 import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
 import fr.paris.lutece.plugins.form.service.ResponseService;
+import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
+import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.service.validator.IValidator;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
@@ -123,6 +124,7 @@ import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
+import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
@@ -187,6 +189,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String MESSAGE_SELECT_GROUP = "form.message.selectGroup";
     private static final String MESSAGE_ERROR_DURING_DOWNLOAD_FILE = "form.message.errorDuringDownloadFile";
     private static final String MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE = "form.message.youAreNotAllowedToDownloadFile";
+    private static final String MESSAGE_ERROR_EXPORT_ENCODING_NOT_SUPPORTED = "form.message.error.export.encoding.not_supported";
     private static final String FIELD_TITLE = "form.createForm.labelTitle";
     private static final String FIELD_DESCRIPTION = "form.createForm.labelDescription";
     private static final String FIELD_LIBELE_VALIDATE_BUTTON = "form.createForm.labelLibelleValidateButton";
@@ -515,7 +518,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     		throw new AccessDeniedException(  );
     	}
     	
-    	ReferenceList listParams = FormParameterHome.findAll( getPlugin(  ) );
+    	ReferenceList listParams = FormParameterService.getService(  ).findDefaultValueParameters(  );
     	for ( ReferenceItem param : listParams )
     	{
     		String strParamValue = request.getParameter( param.getCode(  ) );
@@ -524,7 +527,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         		strParamValue = CONST_ZERO;
         	}
         	param.setName( strParamValue );
-        	FormParameterHome.update( param, getPlugin(  ) );
+        	FormParameterService.getService(  ).update( param );
     	}
     	
     	return getJspManageAdvancedParameters( request );
@@ -545,7 +548,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     		throw new AccessDeniedException(  );
     	}
     	
-    	ReferenceList listParams = EntryParameterHome.findAll( getPlugin(  ) );
+    	ReferenceList listParams = EntryParameterService.getService(  ).findAll(  );
     	for ( ReferenceItem param : listParams )
     	{
     		String strParamValue = request.getParameter( param.getCode(  ) );
@@ -554,7 +557,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         		strParamValue = CONST_ZERO;
         	}
         	param.setName( strParamValue );
-        	EntryParameterHome.update( param, getPlugin(  ) );
+        	EntryParameterService.getService(  ).update( param );
     	}
     	
     	return getJspManageAdvancedParameters( request );
@@ -842,7 +845,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         }
         
         // Default Values
-        ReferenceList listParamDefaultValues = FormParameterHome.findAll( getPlugin(  ) );
+        ReferenceList listParamDefaultValues = FormParameterService.getService(  ).findDefaultValueParameters(  );
 
         //Add categories
         List<Category> listCategoriesView = CategoryHome.getList( getPlugin( ) );
@@ -1570,7 +1573,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         entry.setForm( form );
         
         // Default Values
-        ReferenceList listParamDefaultValues = EntryParameterHome.findAll( getPlugin(  ) );
+        ReferenceList listParamDefaultValues = EntryParameterService.getService(  ).findAll(  );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_ENTRY, entry );
@@ -4210,5 +4213,50 @@ public class FormJspBean extends PluginAdminPageJspBean
     {
         return AppPathService.getBaseUrl( request ) + JSP_MANAGE_VALIDATOR_FORM + QUESTION_MARK_STRING +
         PARAMETER_ID_FORM + EQUAL_STRING + nIdForm;
+    }
+
+    /**
+     * Modify directory parameter default values
+     * @param request HttpServletRequest
+     * @return JSP return
+     * @throws AccessDeniedException
+     */
+    public String doModifyExportEncodingParameters( HttpServletRequest request )
+        throws AccessDeniedException
+    {
+    	if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, 
+        		RBAC.WILDCARD_RESOURCES_ID,	FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
+    	{
+    		throw new AccessDeniedException(  );
+    	}
+
+        ReferenceList listParams = FormParameterService.getService(  ).findExportEncodingParameters(  );
+
+        for ( ReferenceItem param : listParams )
+        {
+            String strParamValue = request.getParameter( param.getCode(  ) );
+            if ( StringUtils.isNotBlank( strParamValue ) )
+            {
+            	// Test if the encoding is supported
+            	try
+				{
+					strParamValue.getBytes( strParamValue );
+				}
+				catch ( UnsupportedEncodingException e )
+				{
+					Object[] tabRequiredFields = { strParamValue };
+					return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_EXPORT_ENCODING_NOT_SUPPORTED, 
+							tabRequiredFields, AdminMessage.TYPE_STOP );
+				} 
+            }
+            else
+            {
+            	return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
+            }
+            param.setName( strParamValue );
+            FormParameterService.getService(  ).update( param );
+        }
+
+        return getJspManageAdvancedParameters( request );
     }
 }

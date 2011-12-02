@@ -31,64 +31,63 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business.parameter;
+package fr.paris.lutece.plugins.form.service.parameter;
 
+import fr.paris.lutece.plugins.form.business.parameter.EntryParameterHome;
+import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
 /**
  * 
- * FormParameterHome
+ * DirectoryParameterService
  *
  */
-public final class FormParameterHome 
+public final class EntryParameterService
 {
-	// Static variable pointed at the DAO instance
-    private static IFormParameterDAO _dao = ( IFormParameterDAO ) SpringContextService.getPluginBean( "form",
-    		"form.formParameterDAO" );
+	private static final String BEAN_ENTRY_PARAMETER_SERVICE = "form.entryParameterService";
+	
+	private Plugin _plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 
-    /**
-     * Load all the parameter default values
-     * @param plugin Plugin
-     * @return a list of ReferenceItem
-     */
-    public static ReferenceList findAll( Plugin plugin )
-    {
-    	return _dao.selectAll( plugin );
-    }
-    
+	/**
+	 * Get the instance of the service
+	 * @return the instance of the service
+	 */
+	public static EntryParameterService getService(  )
+	{
+		return (EntryParameterService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME, 
+				BEAN_ENTRY_PARAMETER_SERVICE );
+	}
+	
+	/**
+	 * Find all directory parameters
+	 * @return a {@link ReferenceList}
+	 */
+	public ReferenceList findAll(  )
+	{
+		return EntryParameterHome.findAll( _plugin );
+	}
+	
 	/**
      * Load the parameter value
      * @param strParameterKey the parameter key
-     * @param plugin
      * @return The parameter value
      */
-    public static ReferenceItem findByKey( String strParameterKey, Plugin plugin )
+    public ReferenceItem findByKey( String strParameterKey )
     {
-    	return _dao.load( strParameterKey, plugin );
+        return EntryParameterHome.findByKey( strParameterKey, _plugin );
     }
-    
+
     /**
      * Update the parameter value
      * @param strParameterKey The parameter key
-     * @param strParameterValue The parameter value 
-     * @param plugin
+     * @param strParameterValue The parameter value
      */
-    public static void update( ReferenceItem param, Plugin plugin )
+    public void update( ReferenceItem param )
     {
-    	_dao.store( param, plugin );
-    }
-    
-    /**
-     * Load parameters by filter
-     * @param filter the filter 
-     * @param plugin the plugin
-     * @return a {@link RefereceList}
-     */
-    public static ReferenceList findByFilter( FormParameterFilter filter, Plugin plugin )
-    {
-    	return _dao.selectByFilter( filter, plugin );
+    	EntryParameterHome.update( param, _plugin );
     }
 }
