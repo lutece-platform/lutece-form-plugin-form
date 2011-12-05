@@ -70,6 +70,7 @@ import fr.paris.lutece.util.html.Paginator;
  */
 public class EntryTypeFile extends Entry
 {
+	private static final String PREFIX_ENTRY_ID = "form_";
     private final String _template_create = "admin/plugins/form/create_entry_type_file.html";
     private final String _template_modify = "admin/plugins/form/modify_entry_type_file.html";
     private final String _template_html_code = "admin/plugins/form/html_code_entry_type_file.html";
@@ -192,13 +193,13 @@ public class EntryTypeFile extends Entry
     {
     	HttpSession session = request.getSession( false );
     	// handle file deletion...
-    	if ( request.getParameter( FormUtils.PARAMETER_DELETE_PREFIX + Integer.toString( this.getIdEntry(  ) ) ) != null )
+    	if ( request.getParameter( FormUtils.PARAMETER_DELETE_PREFIX + PREFIX_ENTRY_ID + Integer.toString( this.getIdEntry(  ) ) ) != null )
     	{
     		// checkbox checked
     		String strSessionId = request.getSession(  ).getId(  );
 
         	// file may be uploaded asynchronously...
-        	FormAsynchronousUploadHandler.removeFileItem( Integer.toString( this.getIdEntry(  ) ), strSessionId );
+        	FormAsynchronousUploadHandler.removeFileItem( PREFIX_ENTRY_ID + Integer.toString( this.getIdEntry(  ) ), strSessionId );
     		if ( session != null )
     		{
     			request.getSession(  ).removeAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ) );
@@ -217,9 +218,9 @@ public class EntryTypeFile extends Entry
     	{
     		// standard upload
     		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-    		FileItem fileItemRequested = multipartRequest.getFile( FormUtils.EMPTY_STRING + this.getIdEntry(  ) );
+    		FileItem fileItemRequested = multipartRequest.getFile( PREFIX_ENTRY_ID + this.getIdEntry(  ) );
     		
-			FileItem asynchronousFileItem = FormAsynchronousUploadHandler.getFileItem( Integer.toString( getIdEntry(  ) ), request.getSession(  ).getId(  ) );
+			FileItem asynchronousFileItem = FormAsynchronousUploadHandler.getFileItem( PREFIX_ENTRY_ID + Integer.toString( getIdEntry(  ) ), request.getSession(  ).getId(  ) );
 			// try asynchronous uploaded files
 			if ( asynchronousFileItem != null )
 			{
