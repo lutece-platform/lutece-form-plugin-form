@@ -42,6 +42,11 @@ function addAsynchronousUploadField(fieldId) {
 			}
 	    });
 	    
+	    /* move form help so the question mark is besides the input instead of below */
+	    var formHelp = $( '#' + fieldId ).parent(  ).parent(  ).find( '.form-help' );
+		var formQueue = $( '#' + fieldId + 'Queue' );
+		formQueue.appendTo( formHelp );
+	    
 	    /* removing checkbox, replaced by a link */
 	    if ( $( '#delete_' + fieldId ) )
 	    {
