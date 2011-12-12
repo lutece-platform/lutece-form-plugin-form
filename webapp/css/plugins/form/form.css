@@ -130,6 +130,8 @@ a.info:hover span {
 
 #form-content pre {
 	padding: 10px;
+	background-color: white;
+	border: 1px solid black;
 }
 
 #form-requirement {
