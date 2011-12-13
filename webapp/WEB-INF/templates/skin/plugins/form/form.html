@@ -6,6 +6,9 @@ Theses Java objects can be used in this template :
 -->
 <div id="content" class="span-22 prepend-1 append-1 append-bottom last">
 	<div class="portlet -lutece-border-radius">
+		<#if is_draft_saved>
+			<h2 class="error">#i18n{form.xpage.form.draftSaved}</h2>
+		</#if>
 		<#if !form_inactive?has_content>
 			${form_html!}
 		<#else>

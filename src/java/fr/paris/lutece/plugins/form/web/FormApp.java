@@ -108,6 +108,7 @@ public class FormApp implements XPageApplication
     private static final String MARK_MESSAGE_FORM_INACTIVE = "form_inactive";
     private static final String MARK_URL_ACTION = "url_action";
     private static final String MARK_ENTRY_TYPE_SESSION = "entry_type_session";
+    private static final String MARK_IS_DRAFT_SAVED = "is_draft_saved";
 
     // templates
     private static final String TEMPLATE_XPAGE_RECAP_FORM_SUBMIT = "skin/plugins/form/recap_form_submit.html";
@@ -482,6 +483,11 @@ public class FormApp implements XPageApplication
                 FormUtils.getHtmlForm( form, strUrlAction + form.getIdForm(  ), plugin, request.getLocale(  ), request ) );
             model.put( MARK_FORM, form );
         }
+
+        // The draft is saved either by clicking on "save" or by clicking on "validate"
+        boolean bIsDraftSaved = ( request.getParameter( PARAMETER_ID_FORM ) != null ) && 
+        ( ( request.getParameter( PARAMETER_SAVE ) != null ) || ( request.getParameter( PARAMETER_SAVE_DRAFT ) != null ) );
+        model.put( MARK_IS_DRAFT_SAVED, bIsDraftSaved );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM, request.getLocale(  ), model );
         page.setContent( template.getHtml(  ) );
