@@ -85,6 +85,7 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppHTTPSService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.portal.web.xpages.XPageApplication;
@@ -120,6 +121,7 @@ public class FormApp implements XPageApplication
     // properties for page titles and path label
     private static final String PROPERTY_XPAGE_PAGETITLE = "form.xpage.pagetitle";
     private static final String PROPERTY_XPAGE_PATHLABEL = "form.xpage.pathlabel";
+    private static final String PROPERTY_SESSION_INVALIDATE_URL_RETURN = "form.session.invalidate.urlReturn";
 
     // request parameters
     public static final String PARAMETER_ID_FORM = "id_form";
@@ -455,7 +457,8 @@ public class FormApp implements XPageApplication
         // Check if the session contains all the attributes set by the mandatory EntryTypeSession
         if ( !FormService.getInstance(  ).isSessionValid( form, request ) )
         {
-        	SiteMessageService.setMessage( request, Messages.USER_ACCESS_DENIED, SiteMessage.TYPE_STOP );
+        	String strUrlReturn = AppPropertiesService.getProperty( PROPERTY_SESSION_INVALIDATE_URL_RETURN );
+        	SiteMessageService.setMessage( request, Messages.USER_ACCESS_DENIED, SiteMessage.TYPE_STOP, strUrlReturn );
         }
 
         // Check if the form needs MyLutece authentication
