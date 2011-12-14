@@ -46,7 +46,7 @@
 	</#if>
 </div>
 
-	<#-- file removing -->
+<#-- file removing -->
 <div class="form-element">
 <#if list_responses?has_content>
 <span class="form-label" id="_file_deletion_${entry.idEntry}">
@@ -57,9 +57,9 @@
 		 <span class="form-field-column" id="_filename_form_${entry.idEntry}">
 		<#list list_responses as response>
 			<#if response.fileName?? && response.fileName != ''>
-				<input name="_filename_value_${entry.idEntry}" type="hidden" value="${response.fileName}" />
+				<input name="_filename_value_form_${entry.idEntry}" type="hidden" value="${response.fileName}" />
 				${response.fileName}&nbsp;&nbsp;-
-				<span id="delete_${entry.idEntry}">
+				<span id="delete_form_${entry.idEntry}">
 					#i18n{form.file.removeUploadedFile} <input type="checkbox" name="delete_form_${entry.idEntry}" value="1" />
 				</span>
 			<#else>
@@ -70,8 +70,8 @@
 <#else>
 <span class="form-label" id="_file_deletion_form_${entry.idEntry}"><label for="">	
 				#i18n{form.file.uploadedFile} :
-		</label> </span>
+		</label> 
+	</span>
 		<span class="form-field-column" id="_filename_form_${entry.idEntry}">-</span>
-
 </#if>
 </div>	
