@@ -37,6 +37,7 @@ import fr.paris.lutece.plugins.form.business.file.File;
 import fr.paris.lutece.plugins.form.business.file.FileHome;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.physicalfile.PhysicalFileService;
+import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 
@@ -47,7 +48,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
  */
 public class FileService
 {
-	private Plugin _plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 	private PhysicalFileService _physicalFileService;
 
 	/**
@@ -71,7 +71,7 @@ public class FileService
             file.getPhysicalFile(  ).setIdPhysicalFile( _physicalFileService.create( file.getPhysicalFile(  ) ) );
         }
 
-        return FileHome.create( file, _plugin );
+        return FileHome.create( file, FormUtils.getPlugin() );
     }
 
     /**
@@ -85,7 +85,7 @@ public class FileService
         	_physicalFileService.update( file.getPhysicalFile(  ) );
         }
 
-        FileHome.update( file, _plugin );
+        FileHome.update( file, FormUtils.getPlugin() );
     }
 
     /**
@@ -101,7 +101,7 @@ public class FileService
             _physicalFileService.remove( file.getPhysicalFile(  ).getIdPhysicalFile(  ) );
         }
 
-        FileHome.remove( nIdFile, _plugin );
+        FileHome.remove( nIdFile, FormUtils.getPlugin() );
     }
 
     /**
@@ -111,7 +111,7 @@ public class FileService
      */
     public File findByPrimaryKey( int nKey, boolean bGetFileData )
     {
-    	File file = FileHome.findByPrimaryKey( nKey, _plugin );
+    	File file = FileHome.findByPrimaryKey( nKey, FormUtils.getPlugin() );
     	if ( bGetFileData && file != null && file.getPhysicalFile(  ) != null )
     	{
     		file.setPhysicalFile( _physicalFileService.findByPrimaryKey( file.getPhysicalFile(  ).getIdPhysicalFile(  ) ) );

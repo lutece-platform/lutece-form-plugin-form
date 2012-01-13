@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.form.service.physicalfile;
 import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
+import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 
@@ -46,8 +47,7 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
  */
 public class PhysicalFileService
 {
-	private Plugin _plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
-	
+
 	/**
      * Creation of an instance of record physical file
      * @param physicalFile The instance of the physical file which contains the informations to store
@@ -55,7 +55,7 @@ public class PhysicalFileService
      */
     public int create( PhysicalFile physicalFile )
     {
-        return PhysicalFileHome.create( physicalFile, _plugin );
+        return PhysicalFileHome.create( physicalFile, FormUtils.getPlugin() );
     }
 
     /**
@@ -64,7 +64,7 @@ public class PhysicalFileService
      */
     public void update( PhysicalFile physicalFile )
     {
-        PhysicalFileHome.update( physicalFile, _plugin );
+        PhysicalFileHome.update( physicalFile, FormUtils.getPlugin() );
     }
 
     /**
@@ -73,7 +73,7 @@ public class PhysicalFileService
      */
     public void remove( int nIdPhysicalFile )
     {
-        PhysicalFileHome.remove( nIdPhysicalFile, _plugin );
+        PhysicalFileHome.remove( nIdPhysicalFile, FormUtils.getPlugin() );
     }
 
     /**
@@ -83,6 +83,6 @@ public class PhysicalFileService
      */
     public PhysicalFile findByPrimaryKey( int nKey )
     {
-        return PhysicalFileHome.findByPrimaryKey( nKey, _plugin );
+        return PhysicalFileHome.findByPrimaryKey( nKey, FormUtils.getPlugin() );
     }
 }

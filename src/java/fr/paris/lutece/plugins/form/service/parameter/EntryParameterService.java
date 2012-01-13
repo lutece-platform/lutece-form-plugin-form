@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.form.service.parameter;
 
 import fr.paris.lutece.plugins.form.business.parameter.EntryParameterHome;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
+import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -50,8 +51,6 @@ public final class EntryParameterService
 {
 	private static final String BEAN_ENTRY_PARAMETER_SERVICE = "form.entryParameterService";
 	
-	private Plugin _plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
-
 	/**
 	 * Get the instance of the service
 	 * @return the instance of the service
@@ -68,7 +67,7 @@ public final class EntryParameterService
 	 */
 	public ReferenceList findAll(  )
 	{
-		return EntryParameterHome.findAll( _plugin );
+		return EntryParameterHome.findAll( FormUtils.getPlugin() );
 	}
 	
 	/**
@@ -78,7 +77,7 @@ public final class EntryParameterService
      */
     public ReferenceItem findByKey( String strParameterKey )
     {
-        return EntryParameterHome.findByKey( strParameterKey, _plugin );
+        return EntryParameterHome.findByKey( strParameterKey, FormUtils.getPlugin() );
     }
 
     /**
@@ -88,6 +87,6 @@ public final class EntryParameterService
      */
     public void update( ReferenceItem param )
     {
-    	EntryParameterHome.update( param, _plugin );
+    	EntryParameterHome.update( param, FormUtils.getPlugin() );
     }
 }

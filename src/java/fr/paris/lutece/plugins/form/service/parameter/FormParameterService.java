@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.form.service.parameter;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterFilter;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterHome;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
+import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -59,8 +60,6 @@ public final class FormParameterService
 	// PROPERTIES
 	private static final String PROPERTY_DEFAULT_EXPORT_ENCODING = "form.export.encoding.default";
 	
-	private Plugin _plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
-
 	/**
 	 * Get the instance of the service
 	 * @return the instance of the service
@@ -77,7 +76,7 @@ public final class FormParameterService
 	 */
 	public ReferenceList findAll(  )
 	{
-		return FormParameterHome.findAll( _plugin );
+		return FormParameterHome.findAll( FormUtils.getPlugin() );
 	}
 	
 	/**
@@ -90,7 +89,7 @@ public final class FormParameterService
 		filter.setExcludeParameterKeys( true );
 		filter.addParameterKey( PARAMETER_EXPORT_CSV_ENCODING );
 		filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
-		return FormParameterHome.findByFilter( filter, _plugin );
+		return FormParameterHome.findByFilter( filter, FormUtils.getPlugin() );
 	}
 	
 	/**
@@ -103,7 +102,7 @@ public final class FormParameterService
 		filter.setExcludeParameterKeys( false );
 		filter.addParameterKey( PARAMETER_EXPORT_CSV_ENCODING );
 		filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
-		return FormParameterHome.findByFilter( filter, _plugin );
+		return FormParameterHome.findByFilter( filter, FormUtils.getPlugin() );
 	}
 	
 	/**
@@ -113,7 +112,7 @@ public final class FormParameterService
      */
     public ReferenceItem findByKey( String strParameterKey )
     {
-        return FormParameterHome.findByKey( strParameterKey, _plugin );
+        return FormParameterHome.findByKey( strParameterKey, FormUtils.getPlugin() );
     }
 
     /**
@@ -123,7 +122,7 @@ public final class FormParameterService
      */
     public void update( ReferenceItem param )
     {
-    	FormParameterHome.update( param, _plugin );
+    	FormParameterHome.update( param, FormUtils.getPlugin() );
     }
     
     /**

@@ -40,6 +40,7 @@ import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.StatisticEntrySubmit;
 import fr.paris.lutece.plugins.form.service.file.FileService;
+import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 
@@ -50,7 +51,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
  */
 public final class ResponseService
 {
-	private Plugin _plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 	private FileService _fileService;
 
 	/**
@@ -72,7 +72,7 @@ public final class ResponseService
     	{
     		response.getFile(  ).setIdFile( _fileService.create( response.getFile(  ) ) );
     	}
-    	ResponseHome.create( response, _plugin );
+    	ResponseHome.create( response, FormUtils.getPlugin() );
     }
 
     /**
@@ -85,7 +85,7 @@ public final class ResponseService
     	{
     		_fileService.update( response.getFile(  ) );
     	}
-    	ResponseHome.update( response, _plugin );
+    	ResponseHome.update( response, FormUtils.getPlugin() );
     }
 
     /**
@@ -104,7 +104,7 @@ public final class ResponseService
     	}
     	
     	// Then remove responses
-        ResponseHome.remove( nIdFormSubmit, _plugin );
+        ResponseHome.remove( nIdFormSubmit, FormUtils.getPlugin() );
     }
 
     // GET
@@ -117,7 +117,7 @@ public final class ResponseService
      */
     public Response findByPrimaryKey( int nKey, boolean bGetFileData )
     {
-    	Response response = ResponseHome.findByPrimaryKey( nKey, _plugin );
+    	Response response = ResponseHome.findByPrimaryKey( nKey, FormUtils.getPlugin() );
     	if ( bGetFileData && response != null && response.getFile(  ) != null )
     	{
     		response.setFile( _fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), true ) );
@@ -133,7 +133,7 @@ public final class ResponseService
      */
     public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
     {
-    	List<Response> listResponses = ResponseHome.getResponseList( filter, _plugin );
+    	List<Response> listResponses = ResponseHome.getResponseList( filter, FormUtils.getPlugin() );
     	if ( bGetFileData && listResponses != null && !listResponses.isEmpty(  ) )
     	{
     		for ( Response response : listResponses )
@@ -154,6 +154,6 @@ public final class ResponseService
      */
     public List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry )
     {
-        return ResponseHome.getStatisticByIdEntry( nIdEntry, _plugin );
+        return ResponseHome.getStatisticByIdEntry( nIdEntry, FormUtils.getPlugin() );
     }
 }

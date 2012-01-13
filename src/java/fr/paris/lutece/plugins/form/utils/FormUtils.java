@@ -77,6 +77,7 @@ import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.StatisticFormSubmit;
+import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
@@ -1511,5 +1512,14 @@ public final class FormUtils
         }
 
         return nIdParameter;
+    }
+    
+    /**
+     * Gets the form plugin
+     * @return the plugin
+     */
+    public static Plugin getPlugin(  )
+    {
+    	return PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
     }
 }
