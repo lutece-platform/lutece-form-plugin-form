@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.form.utils;
 
-import java.io.UnsupportedEncodingException;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 import org.apache.commons.lang.StringUtils;
 
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -48,9 +48,9 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
  */
 public final class StringUtil
 {
-	private static final String PROPERTY_ENCODING_ENABLE = "form.response.encoding.enable";
-	private static final String PROPERTY_ENCODING = "form.response.encoding";
-	
+    private static final String PROPERTY_ENCODING_ENABLE = "form.response.encoding.enable";
+    private static final String PROPERTY_ENCODING = "form.response.encoding";
+
     /**
      * Private constructor
      */
@@ -81,6 +81,7 @@ public final class StringUtil
                 AppLogService.error( e );
             }
         }
+
         return new String( toConvert );
     }
 
@@ -95,21 +96,23 @@ public final class StringUtil
      */
     public static byte[] convertToByte( String strToConvert )
     {
-    	String strEncoding = getConversionEncoding(  );
-    	if ( isConversionEnable(  ) && StringUtils.isNotBlank( strEncoding ) )
+        String strEncoding = getConversionEncoding(  );
+
+        if ( isConversionEnable(  ) && StringUtils.isNotBlank( strEncoding ) )
         {
-    		try
-			{
-				return strToConvert.getBytes( strEncoding );
-			}
-			catch ( UnsupportedEncodingException e )
-			{
-				AppLogService.error( e );
-			}
-    	}
-    	return strToConvert.getBytes(  ); 
+            try
+            {
+                return strToConvert.getBytes( strEncoding );
+            }
+            catch ( UnsupportedEncodingException e )
+            {
+                AppLogService.error( e );
+            }
+        }
+
+        return strToConvert.getBytes(  );
     }
-    
+
     /**
      * Check if the conversion is enable.
      * <br />
@@ -118,7 +121,7 @@ public final class StringUtil
      */
     public static boolean isConversionEnable(  )
     {
-    	return Boolean.valueOf( AppPropertiesService.getProperty( PROPERTY_ENCODING_ENABLE ) );
+        return Boolean.valueOf( AppPropertiesService.getProperty( PROPERTY_ENCODING_ENABLE ) );
     }
 
     /**
@@ -127,6 +130,6 @@ public final class StringUtil
      */
     public static String getConversionEncoding(  )
     {
-    	return AppPropertiesService.getProperty( PROPERTY_ENCODING );
+        return AppPropertiesService.getProperty( PROPERTY_ENCODING );
     }
 }

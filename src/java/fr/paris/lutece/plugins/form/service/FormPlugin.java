@@ -62,8 +62,9 @@ public class FormPlugin extends PluginDefaultImplementation implements Serializa
         // Initialize the Poll service
         FormService.getInstance(  ).init(  );
 
-        if (this.isInstalled()) {
-        	_xPageTheme = FormHome.getXPageThemes( this );
+        if ( this.isInstalled(  ) )
+        {
+            _xPageTheme = FormHome.getXPageThemes( this );
         }
     }
 
@@ -100,7 +101,7 @@ public class FormPlugin extends PluginDefaultImplementation implements Serializa
      */
     public void updatePoolName( String strPoolName )
     {
-        super.updatePoolName(strPoolName);
+        super.updatePoolName( strPoolName );
         _xPageTheme = FormHome.getXPageThemes( this );
     }
 }

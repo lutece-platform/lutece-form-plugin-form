@@ -41,29 +41,30 @@ import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 
+
 /**
- * 
+ *
  * FileService
- * 
+ *
  */
 public class FileService
 {
-	private PhysicalFileService _physicalFileService;
+    private PhysicalFileService _physicalFileService;
 
-	/**
-	 * Set the physical file service
-	 * @param physicalFileService the physical file service
-	 */
-	public void setPhysicalFileService( PhysicalFileService physicalFileService )
-	{
-		_physicalFileService = physicalFileService;
-	}
-	
-	/**
-     * Creation of an instance of record file
-     * @param file The instance of the file which contains the informations to store
-     * @return the id of the file after creation
+    /**
+     * Set the physical file service
+     * @param physicalFileService the physical file service
      */
+    public void setPhysicalFileService( PhysicalFileService physicalFileService )
+    {
+        _physicalFileService = physicalFileService;
+    }
+
+    /**
+    * Creation of an instance of record file
+    * @param file The instance of the file which contains the informations to store
+    * @return the id of the file after creation
+    */
     public int create( File file )
     {
         if ( file.getPhysicalFile(  ) != null )
@@ -71,7 +72,7 @@ public class FileService
             file.getPhysicalFile(  ).setIdPhysicalFile( _physicalFileService.create( file.getPhysicalFile(  ) ) );
         }
 
-        return FileHome.create( file, FormUtils.getPlugin() );
+        return FileHome.create( file, FormUtils.getPlugin(  ) );
     }
 
     /**
@@ -82,10 +83,10 @@ public class FileService
     {
         if ( file.getPhysicalFile(  ) != null )
         {
-        	_physicalFileService.update( file.getPhysicalFile(  ) );
+            _physicalFileService.update( file.getPhysicalFile(  ) );
         }
 
-        FileHome.update( file, FormUtils.getPlugin() );
+        FileHome.update( file, FormUtils.getPlugin(  ) );
     }
 
     /**
@@ -101,7 +102,7 @@ public class FileService
             _physicalFileService.remove( file.getPhysicalFile(  ).getIdPhysicalFile(  ) );
         }
 
-        FileHome.remove( nIdFile, FormUtils.getPlugin() );
+        FileHome.remove( nIdFile, FormUtils.getPlugin(  ) );
     }
 
     /**
@@ -111,11 +112,13 @@ public class FileService
      */
     public File findByPrimaryKey( int nKey, boolean bGetFileData )
     {
-    	File file = FileHome.findByPrimaryKey( nKey, FormUtils.getPlugin() );
-    	if ( bGetFileData && file != null && file.getPhysicalFile(  ) != null )
-    	{
-    		file.setPhysicalFile( _physicalFileService.findByPrimaryKey( file.getPhysicalFile(  ).getIdPhysicalFile(  ) ) );
-    	}
+        File file = FileHome.findByPrimaryKey( nKey, FormUtils.getPlugin(  ) );
+
+        if ( bGetFileData && ( file != null ) && ( file.getPhysicalFile(  ) != null ) )
+        {
+            file.setPhysicalFile( _physicalFileService.findByPrimaryKey( file.getPhysicalFile(  ).getIdPhysicalFile(  ) ) );
+        }
+
         return file;
     }
 }

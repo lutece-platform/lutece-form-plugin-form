@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import java.sql.Timestamp;
-
 import org.apache.commons.lang.StringUtils;
+
+import java.sql.Timestamp;
 
 
 /**
@@ -250,44 +250,44 @@ public class ResponseFilter
      * Set order by
      * @param strOrderBy
      */
-	public void setOrderBy( String strOrderBy )
-	{
-		_strOrderBy = strOrderBy;
-	}
+    public void setOrderBy( String strOrderBy )
+    {
+        _strOrderBy = strOrderBy;
+    }
 
-	/**
-	 * Get order by
-	 * @return the order by
-	 */
-	public String getOrderBy(  )
-	{
-		return _strOrderBy;
-	}
+    /**
+     * Get order by
+     * @return the order by
+     */
+    public String getOrderBy(  )
+    {
+        return _strOrderBy;
+    }
 
-	/**
-	 * Check if the filter contains order by
-	 * @return true if it contains, false otherwise
-	 */
-	public boolean containsOrderBy(  )
-	{
-		return StringUtils.isNotBlank( _strOrderBy );
-	}
+    /**
+     * Check if the filter contains order by
+     * @return true if it contains, false otherwise
+     */
+    public boolean containsOrderBy(  )
+    {
+        return StringUtils.isNotBlank( _strOrderBy );
+    }
 
-	/**
-	 * Set order by asc
-	 * @param bIsOrderByAsc true if the order by is asc
-	 */
-	public void setOrderByAsc( boolean bIsOrderByAsc )
-	{
-		_bIsOrderByAsc = bIsOrderByAsc;
-	}
+    /**
+     * Set order by asc
+     * @param bIsOrderByAsc true if the order by is asc
+     */
+    public void setOrderByAsc( boolean bIsOrderByAsc )
+    {
+        _bIsOrderByAsc = bIsOrderByAsc;
+    }
 
-	/**
-	 * Check if the order by is asc
-	 * @return true if the order by is asc;
-	 */
-	public boolean isOrderByAsc(  )
-	{
-		return _bIsOrderByAsc;
-	}
+    /**
+     * Check if the order by is asc
+     * @return true if the order by is asc;
+     */
+    public boolean isOrderByAsc(  )
+    {
+        return _bIsOrderByAsc;
+    }
 }

@@ -137,22 +137,22 @@ public class EntryType
     {
         _bComment = isComment;
     }
-    
+
     /**
-     * 
+     *
      * @return true if the type is mylutece user
      */
     public Boolean getMyLuteceUser(  )
     {
-    	return _bMyLuteceUser;
+        return _bMyLuteceUser;
     }
-    
+
     /**
-     * 
+     *
      * @param isMyLuteceUser set true if the type is mylutece user
      */
     public void setMyLuteceUser( Boolean isMyLuteceUser )
     {
-    	_bMyLuteceUser = isMyLuteceUser;
+        _bMyLuteceUser = isMyLuteceUser;
     }
 }

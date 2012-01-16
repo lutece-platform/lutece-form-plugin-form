@@ -33,17 +33,17 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.FileItem;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
+
+import org.apache.commons.fileupload.FileItem;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -448,7 +448,7 @@ public class Entry implements IEntry
     {
         return null;
     }
-    
+
     /**
      * The paginator who is use in the template modify of the entry
      * @param nItemPerPage Number of items to display per page
@@ -586,18 +586,18 @@ public class Entry implements IEntry
      */
     public FormError getFormError(  )
     {
-    	return _formError;
+        return _formError;
     }
-    
+
     /**
      * Set the form error associated to the entry
      * @param formError the form error
      */
     public void setFormError( FormError formError )
     {
-    	_formError = formError;
+        _formError = formError;
     }
-    
+
     /**
      * Sets the string value of the response
      * @param response the response
@@ -605,23 +605,24 @@ public class Entry implements IEntry
      */
     public void setResponseToStringValue( Response response, Locale locale )
     {
-    	response.setToStringValueResponse( response.getResponseValue(  ) );
+        response.setToStringValueResponse( response.getResponseValue(  ) );
     }
-    
+
     /**
      * Returns <code>true</code> if the entry is a file, <code>false</code> otherwise.
      * @return <code>true</code> if the entry is a file, <code>false</code> otherwise
      */
     public boolean isFile(  )
     {
-    	return false;
+        return false;
     }
 
     /**
      * {@inheritDoc}
      */
-	public FormError canUploadFiles( List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
-	{
-		return null;
-	}
+    public FormError canUploadFiles( List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload,
+        Locale locale )
+    {
+        return null;
+    }
 }

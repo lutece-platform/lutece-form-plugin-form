@@ -123,7 +123,8 @@ public final class FormHome
     {
         ResponseFilter responseFilter = new ResponseFilter(  );
         responseFilter.setIdForm( nIdForm );
-        List<FormSubmit>listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
+
+        List<FormSubmit> listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
 
         for ( FormSubmit formSubmit : listFormSubmit )
         {
@@ -133,6 +134,7 @@ public final class FormHome
         Form form = findByPrimaryKey( nIdForm, plugin );
         EntryFilter entryFilter = new EntryFilter(  );
         entryFilter.setIdForm( form.getIdForm(  ) );
+
         List<IEntry> listEntry = EntryHome.getEntryList( entryFilter, plugin );
 
         for ( IEntry entry : listEntry )

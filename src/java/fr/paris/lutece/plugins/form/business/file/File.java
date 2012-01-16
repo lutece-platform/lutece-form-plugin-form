@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.form.business.file;
 
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -112,15 +112,17 @@ public class File
      */
     public String getMimeType(  )
     {
-    	if ( StringUtils.isBlank( _strMimeType ) )
-    	{
-    		if ( StringUtils.isBlank( _strTitle ) )
-    		{
-    			return StringUtils.EMPTY;
-    		}
-    		return FileSystemUtil.getMIMEType( _strTitle );
-    	}
-    	return _strMimeType;
+        if ( StringUtils.isBlank( _strMimeType ) )
+        {
+            if ( StringUtils.isBlank( _strTitle ) )
+            {
+                return StringUtils.EMPTY;
+            }
+
+            return FileSystemUtil.getMIMEType( _strTitle );
+        }
+
+        return _strMimeType;
     }
 
     /**
@@ -129,7 +131,7 @@ public class File
      */
     public void setMimeType( String strMimeType )
     {
-    	_strMimeType = strMimeType;
+        _strMimeType = strMimeType;
     }
 
     /**

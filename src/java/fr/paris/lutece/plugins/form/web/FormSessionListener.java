@@ -33,11 +33,12 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
+import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
+import fr.paris.lutece.portal.service.util.AppLogService;
+
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
-import fr.paris.lutece.portal.service.util.AppLogService;
 
 /**
  * Will remove fileItems uploaded by flash
@@ -64,8 +65,7 @@ public class FormSessionListener implements HttpSessionListener
         {
             AppLogService.debug( "FormSessionListener removing " + strSessionId );
         }
-        
+
         FormAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( strSessionId );
     }
-
 }

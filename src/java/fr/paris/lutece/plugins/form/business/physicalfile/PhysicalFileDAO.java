@@ -66,7 +66,7 @@ public final class PhysicalFileDAO implements IPhysicalFileDAO
         {
             nKey = daoUtil.getInt( 1 ) + 1;
         }
-        
+
         daoUtil.free(  );
 
         return nKey;
@@ -77,15 +77,15 @@ public final class PhysicalFileDAO implements IPhysicalFileDAO
      */
     public synchronized int insert( PhysicalFile physicalFile, Plugin plugin )
     {
-		int nIndex = 1;
-		physicalFile.setIdPhysicalFile( newPrimaryKey( plugin ) );
-		
-		DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-		daoUtil.setInt( nIndex++, physicalFile.getIdPhysicalFile(  ) );
-		daoUtil.setBytes( nIndex++, physicalFile.getValue(  ) );
-		daoUtil.executeUpdate(  );
-		
-		daoUtil.free(  );
+        int nIndex = 1;
+        physicalFile.setIdPhysicalFile( newPrimaryKey( plugin ) );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
+        daoUtil.setInt( nIndex++, physicalFile.getIdPhysicalFile(  ) );
+        daoUtil.setBytes( nIndex++, physicalFile.getValue(  ) );
+        daoUtil.executeUpdate(  );
+
+        daoUtil.free(  );
 
         return physicalFile.getIdPhysicalFile(  );
     }
@@ -103,7 +103,7 @@ public final class PhysicalFileDAO implements IPhysicalFileDAO
 
         if ( daoUtil.next(  ) )
         {
-        	int nIndex = 1;
+            int nIndex = 1;
             physicalFile = new PhysicalFile(  );
             physicalFile.setIdPhysicalFile( daoUtil.getInt( nIndex++ ) );
             physicalFile.setValue( daoUtil.getBytes( nIndex++ ) );
@@ -130,12 +130,12 @@ public final class PhysicalFileDAO implements IPhysicalFileDAO
      */
     public void store( PhysicalFile physicalFile, Plugin plugin )
     {
-    	int nIndex = 1;
+        int nIndex = 1;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         daoUtil.setBytes( nIndex++, physicalFile.getValue(  ) );
-        
+
         daoUtil.setInt( nIndex++, physicalFile.getIdPhysicalFile(  ) );
-        
+
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }

@@ -33,35 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.utils;
 
-import java.awt.Color;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.Month;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.time.Week;
-import org.jfree.data.xy.XYDataset;
-
 import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
@@ -96,6 +67,40 @@ import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.xml.XmlUtil;
 
+import org.apache.commons.lang.StringUtils;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+
+import org.jfree.data.time.Day;
+import org.jfree.data.time.Month;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.time.Week;
+import org.jfree.data.xy.XYDataset;
+
+import java.awt.Color;
+
+import java.sql.Timestamp;
+
+import java.text.DateFormat;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 
 /**
  *
@@ -116,7 +121,6 @@ public final class FormUtils
     public static final String BEAN_FORM_RESPONSE_SERVICE = "form.responseService";
     public static final int CONSTANT_ID_NULL = -1;
     public static final String CONSTANT_UNDERSCORE = "_";
-
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_URL_ACTION = "url_action";
     private static final String MARK_ENTRY = "entry";
@@ -134,8 +138,8 @@ public final class FormUtils
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String CONSTANT_WHERE = " WHERE ";
     private static final String CONSTANT_AND = " AND ";
-    
-	// session
+
+    // session
     public static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
     public static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
 
@@ -172,7 +176,6 @@ public final class FormUtils
     private static final String PROPERTY_CHOOSE_CATEGORY = "form.form.choose.category";
     private static final String REGEX_ID = "^[\\d]+$";
 
-  
     /**
      * FormUtils
      *
@@ -223,12 +226,12 @@ public final class FormUtils
      */
     public static void sendNotificationMailFormSubmit( Form form, Locale locale )
     {
-    	Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList(  ) );
-    	Map<String, Object> model = new HashMap<String, Object>(  );
+        Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList(  ) );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_FORM, form );
         sendNotificationMailFormSubmit( model, listRecipients, locale );
     }
-    
+
     /**
      * SendMail to the mailing list associate to the form a mail of new form submit.
      * It will also display the anwsers submitted by the user.
@@ -237,22 +240,24 @@ public final class FormUtils
      */
     public static void sendNotificationMailFormSubmit( FormSubmit formSubmit, Locale locale )
     {
-    	Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( formSubmit.getForm(  ).getIdMailingList(  ) );
-    	Map<String, Object> model = new HashMap<String, Object>(  );
+        Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( formSubmit.getForm(  )
+                                                                                                .getIdMailingList(  ) );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_FORM, formSubmit.getForm(  ) );
         model.put( MARK_FORM_SUBMIT, formSubmit );
         sendNotificationMailFormSubmit( model, listRecipients, locale );
     }
-    
+
     /**
      * Send the mail
      * @param model the model of the template
      * @param listRecipients the list of recipients
      * @param locale {@link Locale}
      */
-    private static void sendNotificationMailFormSubmit( Map<String, Object> model, Collection<Recipient> listRecipients, Locale locale )
+    private static void sendNotificationMailFormSubmit( Map<String, Object> model,
+        Collection<Recipient> listRecipients, Locale locale )
     {
-    	try
+        try
         {
             String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SUBJECT, locale );
             String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SENDER_NAME,
@@ -606,7 +611,8 @@ public final class FormUtils
      * @param request HttpServletRequest
      * @return the html code of the form
      */
-    public static String getHtmlForm( Form form, String strUrlAction, Plugin plugin, Locale locale, HttpServletRequest request )
+    public static String getHtmlForm( Form form, String strUrlAction, Plugin plugin, Locale locale,
+        HttpServletRequest request )
     {
         List<IEntry> listEntryFirstLevel;
         Map<String, Object> model = new HashMap<String, Object>(  );
@@ -618,7 +624,7 @@ public final class FormUtils
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
-        
+
         ArrayList<Category> listCats = new ArrayList<Category>(  );
         Category category = new Category(  );
 
@@ -648,14 +654,15 @@ public final class FormUtils
         model.put( MARK_URL_ACTION, strUrlAction );
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
         model.put( MARK_LOCALE, locale );
-        if ( request != null && request.getSession(  ) != null )
+
+        if ( ( request != null ) && ( request.getSession(  ) != null ) )
         {
-        	if ( request.getSession(  ).getAttribute( SESSION_VALIDATE_REQUIREMENT ) != null )
-        	{
-        		boolean bValidateRequirement = ( Boolean ) request.getSession(  ).getAttribute( SESSION_VALIDATE_REQUIREMENT );
-        		model.put( MARK_VALIDATE_REQUIREMENT, bValidateRequirement );
-        	}
-        	
+            if ( request.getSession(  ).getAttribute( SESSION_VALIDATE_REQUIREMENT ) != null )
+            {
+                boolean bValidateRequirement = (Boolean) request.getSession(  )
+                                                                .getAttribute( SESSION_VALIDATE_REQUIREMENT );
+                model.put( MARK_VALIDATE_REQUIREMENT, bValidateRequirement );
+            }
         }
 
         //Theme management
@@ -698,7 +705,7 @@ public final class FormUtils
     {
         return getHtmlForm( form, strUrlAction, plugin, locale, null );
     }
-    
+
     /**
      * insert in the string buffer the content of the html code of the entry
      * @param nIdEntry the key of the entry which html code must be insert in the stringBuffer
@@ -707,8 +714,9 @@ public final class FormUtils
      * @param locale the locale
      * @param request HttpServletRequest
      */
-    @SuppressWarnings("unchecked")
-	public static void getHtmlEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale, HttpServletRequest request )
+    @SuppressWarnings( "unchecked" )
+    public static void getHtmlEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale,
+        HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<String, Object>(  );
         StringBuffer strConditionalQuestionStringBuffer = null;
@@ -765,19 +773,23 @@ public final class FormUtils
 
         model.put( MARK_ENTRY, entry );
         model.put( MARK_LOCALE, locale );
-        if ( request != null && request.getSession(  ) != null )
+
+        if ( ( request != null ) && ( request.getSession(  ) != null ) )
         {
-        	Map<Integer, List<Response>> listSubmittedResponses = ( Map<Integer, List<Response>> ) request.getSession(  ).
-        			getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
-        	if ( listSubmittedResponses != null )
-        	{
-        		List<Response> listResponses = listSubmittedResponses.get( entry.getIdEntry(  ) );
-            	if ( listResponses != null )
-            	{
-            		model.put( MARK_LIST_RESPONSES, listResponses );
-            	}
-        	}
+            Map<Integer, List<Response>> listSubmittedResponses = (Map<Integer, List<Response>>) request.getSession(  )
+                                                                                                        .getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+
+            if ( listSubmittedResponses != null )
+            {
+                List<Response> listResponses = listSubmittedResponses.get( entry.getIdEntry(  ) );
+
+                if ( listResponses != null )
+                {
+                    model.put( MARK_LIST_RESPONSES, listResponses );
+                }
+            }
         }
+
         template = AppTemplateService.getTemplate( entry.getHtmlCode(  ), locale, model );
         stringBuffer.append( template.getHtml(  ) );
     }
@@ -791,7 +803,7 @@ public final class FormUtils
      */
     public static void getHtmlEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale )
     {
-    	getHtmlEntry( nIdEntry, plugin, stringBuffer, locale, null );
+        getHtmlEntry( nIdEntry, plugin, stringBuffer, locale, null );
     }
 
     /**
@@ -805,8 +817,8 @@ public final class FormUtils
      * @param locale the locale
      * @return null if there is no error in the response else return a FormError Object
      */
-    @SuppressWarnings("unchecked")
-	public static FormError getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
+    @SuppressWarnings( "unchecked" )
+    public static FormError getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
         FormSubmit formSubmit, boolean bResponseNull, Locale locale )
     {
         FormError formError = null;
@@ -829,12 +841,14 @@ public final class FormUtils
         {
             for ( IEntry entryChild : entry.getChildren(  ) )
             {
-            	FormError formErrorForThisEntry = getResponseEntry( request, entryChild.getIdEntry(  ), plugin, formSubmit, false, locale ); 
-                if ( formErrorForThisEntry != null && formError == null )
+                FormError formErrorForThisEntry = getResponseEntry( request, entryChild.getIdEntry(  ), plugin,
+                        formSubmit, false, locale );
+
+                if ( ( formErrorForThisEntry != null ) && ( formError == null ) )
                 {
-                	formError = new FormError(  );
-                	formError.setMandatoryError( false );
-                	formError.setTitleQuestion( entry.getTitle(  ) );
+                    formError = new FormError(  );
+                    formError.setMandatoryError( false );
+                    formError.setTitleQuestion( entry.getTitle(  ) );
                 }
             }
         }
@@ -853,18 +867,20 @@ public final class FormUtils
 
             if ( formError != null )
             {
-            	entry.setFormError( formError );
+                entry.setFormError( formError );
             }
+
             if ( request.getSession(  ) != null )
-    		{
-        		Map<Integer, List<Response>> listSubmittedResponses = ( Map<Integer, List<Response>> ) request.getSession(  ).
-        				getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
-        		if ( listSubmittedResponses != null )
-        		{
-        			listSubmittedResponses.put( entry.getIdEntry(  ), listResponse );
-            		request.getSession(  ).setAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES, listSubmittedResponses );
-        		}
-    		}
+            {
+                Map<Integer, List<Response>> listSubmittedResponses = (Map<Integer, List<Response>>) request.getSession(  )
+                                                                                                            .getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+
+                if ( listSubmittedResponses != null )
+                {
+                    listSubmittedResponses.put( entry.getIdEntry(  ), listResponse );
+                    request.getSession(  ).setAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES, listSubmittedResponses );
+                }
+            }
 
             formSubmit.getListResponse(  ).addAll( listResponse );
 
@@ -890,6 +906,7 @@ public final class FormUtils
                 }
             }
         }
+
         return formError;
     }
 
@@ -943,23 +960,25 @@ public final class FormUtils
     public static String getXmlResponses( HttpServletRequest request, Form form, List<FormSubmit> listFormSubmit,
         Locale locale, Plugin plugin )
     {
-    	// this map stores field in order to not request db multiple time for same field
-    	Map<String, Field> mapFields = new HashMap<String, Field>(  );
+        // this map stores field in order to not request db multiple time for same field
+        Map<String, Field> mapFields = new HashMap<String, Field>(  );
         StringBuffer buffer = new StringBuffer(  );
         XmlUtil.beginElement( buffer, TAG_FORM );
         XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle(  ) );
-        
+
         // Build entries list XML
         XmlUtil.beginElement( buffer, TAG_FORM_ENTRIES );
+
         for ( IEntry entry : getAllQuestionList( form.getIdForm(  ), plugin ) )
         {
-        	XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
-        	XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry(  ) );
-        	XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle(  ) );
-        	XmlUtil.endElement( buffer, TAG_FORM_ENTRY );
+            XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
+            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry(  ) );
+            XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle(  ) );
+            XmlUtil.endElement( buffer, TAG_FORM_ENTRY );
         }
+
         XmlUtil.endElement( buffer, TAG_FORM_ENTRIES );
-        
+
         // Build Form submits list XML
         XmlUtil.beginElement( buffer, TAG_FORM_SUBMITS );
 
@@ -990,15 +1009,18 @@ public final class FormUtils
             {
                 for ( Response response : formSubmit.getListResponse(  ) )
                 {
-                	if ( response.getField(  ) != null )
-                	{
-                		Field field = mapFields.get( response.getField(  ).getIdField(  ) );
-                		if ( field == null )
-                		{
-                			field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ), plugin );
-                		}
-                		response.setField( field );
-                	}
+                    if ( response.getField(  ) != null )
+                    {
+                        Field field = mapFields.get( response.getField(  ).getIdField(  ) );
+
+                        if ( field == null )
+                        {
+                            field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ), plugin );
+                        }
+
+                        response.setField( field );
+                    }
+
                     if ( ( responseStore != null ) &&
                             ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) )
                     {
@@ -1015,7 +1037,7 @@ public final class FormUtils
                         XmlUtil.beginElement( buffer, TAG_RESPONSES );
                     }
 
-                    if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || response.getFile(  ) != null )
+                    if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || ( response.getFile(  ) != null ) )
                     {
                         XmlUtil.addElementHtml( buffer, TAG_RESPONSE,
                             response.getEntry(  ).getResponseValueForExport( request, response, locale ) );
@@ -1056,12 +1078,13 @@ public final class FormUtils
 
         if ( strFileExtension.equals( "csv" ) )
         {
-        	response.setCharacterEncoding( FormParameterService.getService(  ).getExportCSVEncoding(  ) );
+            response.setCharacterEncoding( FormParameterService.getService(  ).getExportCSVEncoding(  ) );
             response.setContentType( "application/csv" );
         }
         else
         {
-        	response.setCharacterEncoding( FormParameterService.getService(  ).getExportXMLEncoding(  ) );
+            response.setCharacterEncoding( FormParameterService.getService(  ).getExportXMLEncoding(  ) );
+
             String strMimeType = FileSystemUtil.getMIMEType( strFileName );
 
             if ( strMimeType != null )
@@ -1181,8 +1204,8 @@ public final class FormUtils
      * @param user the current user
      * @return  a  reference list of form
      */
-    @SuppressWarnings("unchecked")
-	public static ReferenceList getFormList( Plugin plugin, AdminUser user )
+    @SuppressWarnings( "unchecked" )
+    public static ReferenceList getFormList( Plugin plugin, AdminUser user )
     {
         List<Form> listForms = FormHome.getFormList( new FormFilter(  ), plugin );
         listForms = (List) AdminWorkgroupService.getAuthorizedCollection( listForms, user );
@@ -1375,8 +1398,8 @@ public final class FormUtils
         }
 
         return strBuffer.toString(  );
-    }    
-   
+    }
+
     /**
      * Get entry type mylutece user
      * @param plugin Plugin
@@ -1384,14 +1407,16 @@ public final class FormUtils
      */
     public static EntryType getEntryTypeMyLuteceUser( Plugin plugin )
     {
-    	for ( EntryType entryType : EntryTypeHome.getList( plugin ) )
-		{
-			if ( entryType.getClassName(  ).equals( fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser.class.getName(  ) ) )
-			{
-				return entryType;
-			}
-		}
-    	return null;
+        for ( EntryType entryType : EntryTypeHome.getList( plugin ) )
+        {
+            if ( entryType.getClassName(  )
+                              .equals( fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser.class.getName(  ) ) )
+            {
+                return entryType;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -1401,11 +1426,13 @@ public final class FormUtils
      * @param locale Locale
      * @param request HttpServletRequest
      */
-    public static void activateMyLuteceAuthentification( Form form, Plugin plugin, Locale locale, HttpServletRequest request )
+    public static void activateMyLuteceAuthentification( Form form, Plugin plugin, Locale locale,
+        HttpServletRequest request )
     {
-		EntryType entryType = FormUtils.getEntryTypeMyLuteceUser( plugin );
-		IEntry entry = null;
-		try
+        EntryType entryType = FormUtils.getEntryTypeMyLuteceUser( plugin );
+        IEntry entry = null;
+
+        try
         {
             entry = (IEntry) Class.forName( entryType.getClassName(  ) ).newInstance(  );
             entry.setEntryType( entryType );
@@ -1425,9 +1452,11 @@ public final class FormUtils
             // can't access to rhe class
             AppLogService.error( e );
         }
-		entry.getRequestData( request, locale );
+
+        entry.getRequestData( request, locale );
         entry.setForm( form );
         entry.setIdEntry( EntryHome.create( entry, plugin ) );
+
         if ( entry.getFields(  ) != null )
         {
             for ( Field field : entry.getFields(  ) )
@@ -1437,7 +1466,7 @@ public final class FormUtils
             }
         }
     }
-    
+
     /**
      * Deactivate mylutece authentification for the form
      * @param form Form
@@ -1445,49 +1474,52 @@ public final class FormUtils
      */
     public static void deactivateMyLuteceAuthentification( Form form, Plugin plugin )
     {
-    	EntryFilter entryFilter = new EntryFilter(  );
-    	entryFilter.setIdForm( form.getIdForm(  ) );
-    	List<IEntry> listEntries = EntryHome.getEntryList( entryFilter, plugin );
-    	for ( IEntry entry : listEntries )
-    	{
-    		if ( entry instanceof fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser )
-    		{
-    			EntryHome.remove( entry.getIdEntry(  ), plugin );
-    			break;
-    		}
-    	}
+        EntryFilter entryFilter = new EntryFilter(  );
+        entryFilter.setIdForm( form.getIdForm(  ) );
+
+        List<IEntry> listEntries = EntryHome.getEntryList( entryFilter, plugin );
+
+        for ( IEntry entry : listEntries )
+        {
+            if ( entry instanceof fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser )
+            {
+                EntryHome.remove( entry.getIdEntry(  ), plugin );
+
+                break;
+            }
+        }
     }
-    
+
     /**
      * Restores submitted responses
      * @param session the session
      * @param mapResponses response list, key is entry id
      */
     public static void restoreResponses( HttpSession session, Map<Integer, List<Response>> mapResponses )
-	{
-		session.setAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES, mapResponses );
-	}
-    
+    {
+        session.setAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES, mapResponses );
+    }
+
     /**
      * Removes submitted responses
      * @param session the session
      */
     public static void removeResponses( HttpSession session )
     {
-    	session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+        session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
     }
-    
+
     /**
      * Gets the responses bound to the session
      * @param session the session
      * @return the responses if any, <code>null</code> otherwise.
      */
-    @SuppressWarnings("unchecked")
-	public static Map<Integer, List<Response>> getResponses( HttpSession session )
+    @SuppressWarnings( "unchecked" )
+    public static Map<Integer, List<Response>> getResponses( HttpSession session )
     {
-    	return (Map<Integer, List<Response>>) session.getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+        return (Map<Integer, List<Response>>) session.getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
     }
-    
+
     /**
      * convert a string to int
      *
@@ -1513,16 +1545,16 @@ public final class FormUtils
 
         return nIdParameter;
     }
-    
+
     /**
      * Gets the form plugin
      * @return the plugin
      */
     public static Plugin getPlugin(  )
     {
-    	return PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
+        return PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
     }
-    
+
     /**
      * Returns a copy of the string , with leading and trailing whitespace
      * omitted.
@@ -1548,24 +1580,24 @@ public final class FormUtils
      */
     public static Field findFieldByTitleInTheList( String strTitle, List<Field> listFields )
     {
-    	if ( listFields == null || listFields.isEmpty(  ) )
-    	{
-    		return null;
-    	}
-    	
-    	for ( Field field : listFields )
+        if ( ( listFields == null ) || listFields.isEmpty(  ) )
         {
-        	if ( StringUtils.isNotBlank( strTitle ) )
-        	{
-        		if ( trim( strTitle ).equals( trim( field.getTitle(  ) ) ) )
-        		{
-        			return field;
-        		}
-        	}
-        	else if ( StringUtils.isBlank( field.getTitle(  ) ) )
-        	{
-        		return field;
-        	}
+            return null;
+        }
+
+        for ( Field field : listFields )
+        {
+            if ( StringUtils.isNotBlank( strTitle ) )
+            {
+                if ( trim( strTitle ).equals( trim( field.getTitle(  ) ) ) )
+                {
+                    return field;
+                }
+            }
+            else if ( StringUtils.isBlank( field.getTitle(  ) ) )
+            {
+                return field;
+            }
         }
 
         return null;

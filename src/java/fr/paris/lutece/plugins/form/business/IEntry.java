@@ -33,17 +33,17 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.FileItem;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
+
+import org.apache.commons.fileupload.FileItem;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -185,7 +185,7 @@ public interface IEntry
      * @return the paginator who is use in the template modify of the entry
      */
     Paginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName, String strPageIndex );
-    
+
     /**
      * The paginator who is use in the template modify of the entry
      * @param nItemPerPage Number of items to display per page
@@ -195,7 +195,8 @@ public interface IEntry
      * @param locale Locale
      * @return the paginator who is use in the template modify of the entry
      */
-    LocalizedPaginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName, String strPageIndex, Locale locale );
+    LocalizedPaginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
+        String strPageIndex, Locale locale );
 
     /**
      * Get the list of regular expression  who is use in the template modify of the entry
@@ -365,26 +366,26 @@ public interface IEntry
      * @return the form error
      */
     FormError getFormError(  );
-    
+
     /**
      * Set the form error associated to the entry
      * @param formError the form error
      */
     void setFormError( FormError formError );
-    
+
     /**
      * Sets the string value of the response
      * @param response the response
      * @param locale the locale - will use a default one if not specified
      */
     void setResponseToStringValue( Response response, Locale locale );
-    
+
     /**
      * Returns <code>true</code> if the entry is a file, <code>false</code> otherwise.
      * @return <code>true</code> if the entry is a file, <code>false</code> otherwise
      */
     boolean isFile(  );
-    
+
     /**
      * Check if the file can be uploaded or not.
      * This method will check the size of each file and the number max of files
@@ -394,6 +395,5 @@ public interface IEntry
      * @param locale the locale
      * @return form error if there is an error
      */
-    FormError canUploadFiles( List<FileItem> listUploadedFileItems, 
-    		List<FileItem> listFileItemsToUpload, Locale locale );
+    FormError canUploadFiles( List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale );
 }

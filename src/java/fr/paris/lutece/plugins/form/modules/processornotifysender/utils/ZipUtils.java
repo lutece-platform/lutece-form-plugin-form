@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.form.modules.processornotifysender.utils;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.string.StringUtil;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -57,7 +57,8 @@ import java.util.zip.ZipOutputStream;
  */
 public final class ZipUtils
 {
-	private static final String MESSAGE_DELETE_ERROR = "Error deleting file or folder : ";
+    private static final String MESSAGE_DELETE_ERROR = "Error deleting file or folder : ";
+
     /**
      * Private constructor
      */
@@ -77,36 +78,37 @@ public final class ZipUtils
 
         // Delete zip if it exists
         File fileToDelete = new File( strZipDestination + strZipName );
+
         if ( fileToDelete.exists(  ) )
         {
-        	if ( !fileToDelete.delete(  ) )
-        	{
-        		AppLogService.error( MESSAGE_DELETE_ERROR + strZipDestination + strZipName );
-        	}
+            if ( !fileToDelete.delete(  ) )
+            {
+                AppLogService.error( MESSAGE_DELETE_ERROR + strZipDestination + strZipName );
+            }
         }
 
         File folderToZip = new File( strFolderToZip );
         ZipOutputStream zos = null;
 
         try
-		{
-        	BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( strZipDestination + strZipName ) );
-			zos = new ZipOutputStream( bos );
-			
-			zipFolder( folderToZip, zos, StringUtils.EMPTY );
-		}
-		catch ( FileNotFoundException e )
-		{
-			AppLogService.error( e );
-		}
-		catch ( IOException e )
-		{
-			AppLogService.error( e );
-		}
-		finally
-		{
-			IOUtils.closeQuietly( zos );
-		}
+        {
+            BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( strZipDestination + strZipName ) );
+            zos = new ZipOutputStream( bos );
+
+            zipFolder( folderToZip, zos, StringUtils.EMPTY );
+        }
+        catch ( FileNotFoundException e )
+        {
+            AppLogService.error( e );
+        }
+        catch ( IOException e )
+        {
+            AppLogService.error( e );
+        }
+        finally
+        {
+            IOUtils.closeQuietly( zos );
+        }
     }
 
     /**
@@ -163,8 +165,9 @@ public final class ZipUtils
 
                     try
                     {
-                    	bis = new FileInputStream( entries[j].getAbsolutePath(  ) );
-                    	// Create new entry for the zip
+                        bis = new FileInputStream( entries[j].getAbsolutePath(  ) );
+
+                        // Create new entry for the zip
                         ZipEntry ze = new ZipEntry( path + StringUtil.replaceAccent( entries[j].getName(  ) ) );
                         byte[] tab = IOUtils.toByteArray( bis );
 
@@ -174,12 +177,12 @@ public final class ZipUtils
                         zos.closeEntry(  );
                     }
                     catch ( FileNotFoundException e )
-            		{
-            			AppLogService.error( e );
-            		}
+                    {
+                        AppLogService.error( e );
+                    }
                     finally
                     {
-                    	IOUtils.closeQuietly( bis );
+                        IOUtils.closeQuietly( bis );
                     }
                 }
             }

@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionRemovalListenerService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
 import fr.paris.lutece.portal.service.workgroup.WorkgroupRemovalListenerService;
 
-import fr.paris.lutece.plugins.form.business.Category;
 import java.sql.Timestamp;
 
 import java.util.Date;
@@ -647,40 +647,40 @@ public class Form implements AdminWorkgroupResource, RBACResource
     {
         return _bSupportHTTPS;
     }
-    
+
     /**
-    * 
+    *
     * @return true if the form require mylutece authentification
     */
-   public boolean isActiveMyLuteceAuthentification(  )
-   {
-       return _bActiveMyLuteceAuthentification;
-   }
+    public boolean isActiveMyLuteceAuthentification(  )
+    {
+        return _bActiveMyLuteceAuthentification;
+    }
 
-   /**
-    * set true if the form require mylutece authentification
-    * @param active true if the form require mylutece authentification
+    /**
+     * set true if the form require mylutece authentification
+     * @param active true if the form require mylutece authentification
+     */
+    public void setActiveMyLuteceAuthentification( boolean bActiveMyLuteceAuthentification )
+    {
+        _bActiveMyLuteceAuthentification = bActiveMyLuteceAuthentification;
+    }
+
+    /**
+    *
+    * @return the category associate to the form
     */
-   public void setActiveMyLuteceAuthentification( boolean bActiveMyLuteceAuthentification )
-   {
-	   _bActiveMyLuteceAuthentification = bActiveMyLuteceAuthentification;
-   }
+    public Category getCategory(  )
+    {
+        return _category;
+    }
 
-   /**
-   *
-   * @return the category associate to the form
-   */
-   public Category getCategory(  )
-   {
-       return _category;
-   }
-
-   /**
-    * set the category associate to the form
-    * @param category the category associate to the form
-    */
-   public void setCategory( Category category )
-   {
-       _category = category;
-   }
+    /**
+     * set the category associate to the form
+     * @param category the category associate to the form
+     */
+    public void setCategory( Category category )
+    {
+        _category = category;
+    }
 }

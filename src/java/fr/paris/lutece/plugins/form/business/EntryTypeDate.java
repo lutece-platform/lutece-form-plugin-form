@@ -40,6 +40,8 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.string.StringUtil;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.sql.Timestamp;
 
 import java.util.ArrayList;
@@ -48,8 +50,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -175,15 +175,16 @@ public class EntryTypeDate extends Entry
 
         if ( strValueEntry != null )
         {
-        	Date tDateValue = DateUtil.formatDate( strValueEntry, locale );
-        	if ( tDateValue != null )
-        	{
-        		response.setResponseValue( Long.toString( tDateValue.getTime(  ) ) );
-        	}
-        	else
-        	{
-        		response.setResponseValue( strValueEntry );
-        	}
+            Date tDateValue = DateUtil.formatDate( strValueEntry, locale );
+
+            if ( tDateValue != null )
+            {
+                response.setResponseValue( Long.toString( tDateValue.getTime(  ) ) );
+            }
+            else
+            {
+                response.setResponseValue( strValueEntry );
+            }
 
             if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
             {
@@ -193,9 +194,9 @@ public class EntryTypeDate extends Entry
             {
                 response.setToStringValueResponse( EMPTY_STRING );
             }
-        	
-        	listResponse.add( response );
-        	
+
+            listResponse.add( response );
+
             // Checks if the entry value contains XSS characters
             if ( StringUtil.containsXssCharacters( strValueEntry ) )
             {
@@ -218,6 +219,7 @@ public class EntryTypeDate extends Entry
                     return formError;
                 }
             }
+
             if ( tDateValue == null )
             {
                 String strError = I18nService.getLocalizedString( _message_illogical_date, locale );
@@ -262,19 +264,19 @@ public class EntryTypeDate extends Entry
 
         return DateUtil.getDateString( date, locale );
     }
-    
+
     /**
      * Sets the date.
      */
     @Override
     public void setResponseToStringValue( Response response, Locale locale )
     {
-    	if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
-    	{
-	    	Long newLong = Long.parseLong( response.getResponseValue(  ) );
-	        Timestamp date = new Timestamp( newLong );
-	
-	        response.setToStringValueResponse( DateUtil.getDateString( date, locale ) );
-    	}
+        if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
+        {
+            Long newLong = Long.parseLong( response.getResponseValue(  ) );
+            Timestamp date = new Timestamp( newLong );
+
+            response.setToStringValueResponse( DateUtil.getDateString( date, locale ) );
+        }
     }
 }

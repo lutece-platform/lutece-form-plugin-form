@@ -47,15 +47,11 @@ import java.util.List;
  */
 public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_rss " +
-        "FROM form_rss_cf  WHERE id_rss=?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO form_rss_cf( " +
-        "id_rss)" + "VALUES (?)";
-    private static final String SQL_QUERY_UPDATE = "UPDATE form_rss_cf " +
-        "SET id_rss=?" + " WHERE id_rss=?";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_rss " + "FROM form_rss_cf  WHERE id_rss=?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO form_rss_cf( " + "id_rss)" + "VALUES (?)";
+    private static final String SQL_QUERY_UPDATE = "UPDATE form_rss_cf " + "SET id_rss=?" + " WHERE id_rss=?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_rss_cf WHERE id_rss=? ";
-    private static final String SQL_QUERY_FIND_ALL = "SELECT id_rss " +
-        "FROM form_rss_cf";
+    private static final String SQL_QUERY_FIND_ALL = "SELECT id_rss " + "FROM form_rss_cf";
 
     /**
      * Insert a new record in the table.

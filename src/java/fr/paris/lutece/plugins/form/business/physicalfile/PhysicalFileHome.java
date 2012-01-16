@@ -43,9 +43,9 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
  */
 public final class PhysicalFileHome
 {
-	private static final String BEAN_FORM_PHYSICAL_FILE_DAO = "form.physicalFileDAO";
+    private static final String BEAN_FORM_PHYSICAL_FILE_DAO = "form.physicalFileDAO";
     private static IPhysicalFileDAO _dao = (IPhysicalFileDAO) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-    		BEAN_FORM_PHYSICAL_FILE_DAO );
+            BEAN_FORM_PHYSICAL_FILE_DAO );
 
     /**
      * Private constructor - this class need not be instantiated

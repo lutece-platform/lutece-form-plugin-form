@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.form.business.outputprocessor;
 
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+
 import java.util.Collection;
 import java.util.List;
-
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 
 /**
@@ -45,34 +45,35 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public class OutputProcessorSet implements IOutputProcessorSet
 {
     /**
-     * 
+     *
      * {@inheritDoc}
      */
     public IOutputProcessor getOutputProcessor( String strKey )
     {
-    	if ( strKey == null )
-    	{
-    		return null;
-    	}
-    	
-    	List<IOutputProcessor> listProcessors = SpringContextService.getBeansOfType( IOutputProcessor.class );
-    	for ( IOutputProcessor processor : listProcessors )
-    	{
-    		if ( strKey.equals( processor.getKey(  ) ) )
-    		{
-    			return processor;
-    		}
-    	}
-    	
-    	return null;
+        if ( strKey == null )
+        {
+            return null;
+        }
+
+        List<IOutputProcessor> listProcessors = SpringContextService.getBeansOfType( IOutputProcessor.class );
+
+        for ( IOutputProcessor processor : listProcessors )
+        {
+            if ( strKey.equals( processor.getKey(  ) ) )
+            {
+                return processor;
+            }
+        }
+
+        return null;
     }
 
     /**
-     * 
+     *
      * {@inheritDoc}
      */
     public Collection<IOutputProcessor> getAllOutputProcessor(  )
     {
-    	return SpringContextService.getBeansOfType( IOutputProcessor.class );
+        return SpringContextService.getBeansOfType( IOutputProcessor.class );
     }
 }

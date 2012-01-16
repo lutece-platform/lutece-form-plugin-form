@@ -33,30 +33,31 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.util.ReferenceList;
 
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 public class EntryTypeGeolocation extends Entry
 {
-	public static final String PARAMETER_MAP_PROVIDER = "map_provider";
+    public static final String PARAMETER_MAP_PROVIDER = "map_provider";
     public static final String PARAMETER_SUFFIX_X = "_x";
     public static final String PARAMETER_SUFFIX_Y = "_y";
     public static final String PARAMETER_SUFFIX_ADDRESS = "_address";
     private static final int CONSTANT_POSITION_X = 0;
     private static final int CONSTANT_POSITION_Y = 1;
+
     //private static final int CONSTANT_POSITION_PROVIDER = 2;
     private static final int CONSTANT_POSITION_ADDRESS = 3;
     public static final String CONSTANT_X = "X";
@@ -67,6 +68,7 @@ public class EntryTypeGeolocation extends Entry
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/modify_entry_type_geolocation.html";
     private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/html_code_entry_type_geolocation.html";
     private static final String MESSAGE_SPECIFY_BOTH_X_AND_Y = "form.message.specifyBothXAndY";
+
     //private static final String MESSAGE_ADDRESS = "form.modifyField.address";
 
     /**
@@ -148,8 +150,9 @@ public class EntryTypeGeolocation extends Entry
         {
             mapProviderField.setValue( FormUtils.EMPTY_STRING );
         }
+
         mapProviderField.setParentEntry( this );
-        
+
         Field addressField = new Field(  );
         addressField.setTitle( CONSTANT_ADDRESS );
         addressField.setValue( CONSTANT_ADDRESS );
@@ -199,7 +202,7 @@ public class EntryTypeGeolocation extends Entry
         responseX.setResponseValue( strXValue );
         responseX.setField( xField );
         responseX.setToStringValueResponse( strXValue );
-        
+
         listResponse.add( responseX );
 
         Response responseY = new Response(  );
@@ -207,17 +210,17 @@ public class EntryTypeGeolocation extends Entry
         responseY.setResponseValue( strYValue );
         responseY.setField( yField );
         responseY.setToStringValueResponse( strYValue );
-        
+
         listResponse.add( responseY );
-        
+
         Response responseAddress = new Response(  );
         responseAddress.setEntry( this );
         responseAddress.setResponseValue( strAddressValue );
         responseAddress.setField( addressField );
         responseAddress.setToStringValueResponse( strAddressValue );
-        
+
         listResponse.add( responseAddress );
-        
+
         if ( this.isMandatory(  ) )
         {
             if ( StringUtils.isBlank( strAddressValue ) )
@@ -229,34 +232,36 @@ public class EntryTypeGeolocation extends Entry
                 return formError;
             }
         }
-        
+
         if ( ( StringUtils.isBlank( strXValue ) && StringUtils.isNotBlank( strYValue ) ) ||
                 ( StringUtils.isNotBlank( strXValue ) && StringUtils.isBlank( strYValue ) ) )
         {
-        	if ( StringUtils.isBlank( strAddressValue ) )
-        	{
-	            FormError formError = new FormError(  );
-	
-	            formError.setMandatoryError( this.isMandatory(  ) );
-	            formError.setTitleQuestion( this.getTitle(  ) );
-	            formError.setErrorMessage( MESSAGE_SPECIFY_BOTH_X_AND_Y );
-	
-	            return formError;
-        	}
+            if ( StringUtils.isBlank( strAddressValue ) )
+            {
+                FormError formError = new FormError(  );
+
+                formError.setMandatoryError( this.isMandatory(  ) );
+                formError.setTitleQuestion( this.getTitle(  ) );
+                formError.setErrorMessage( MESSAGE_SPECIFY_BOTH_X_AND_Y );
+
+                return formError;
+            }
         }
-        
+
         return super.getResponseData( request, listResponse, locale );
     }
 
     @Override
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-    	String strTitle = response.getField(  ).getTitle(  );
-    	if ( CONSTANT_ADDRESS.equals( strTitle ) )
-    	{
-    		//strTitle = I18nService.getLocalizedString( MESSAGE_ADDRESS, locale );
-    		return response.getResponseValue(  );
-    	}
+        String strTitle = response.getField(  ).getTitle(  );
+
+        if ( CONSTANT_ADDRESS.equals( strTitle ) )
+        {
+            //strTitle = I18nService.getLocalizedString( MESSAGE_ADDRESS, locale );
+            return response.getResponseValue(  );
+        }
+
         return StringUtils.EMPTY;
     }
 
@@ -288,18 +293,19 @@ public class EntryTypeGeolocation extends Entry
     }
 
     /**
-     * 
+     *
      * {@inheritDoc}
      */
     @Override
-    public String getResponseValueForExport(HttpServletRequest request,
-    		Response response, Locale locale)
+    public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-    	String fieldName = StringUtils.EMPTY;
-    	if ( response.getField(  ) != null )
-    	{
-    		fieldName = ObjectUtils.toString( response.getField(  ).getTitle(  ) );
-    	}
-    	return fieldName + FormUtils.CONSTANT_EQUAL + response.getResponseValue(  );
+        String fieldName = StringUtils.EMPTY;
+
+        if ( response.getField(  ) != null )
+        {
+            fieldName = ObjectUtils.toString( response.getField(  ).getTitle(  ) );
+        }
+
+        return fieldName + FormUtils.CONSTANT_EQUAL + response.getResponseValue(  );
     }
 }

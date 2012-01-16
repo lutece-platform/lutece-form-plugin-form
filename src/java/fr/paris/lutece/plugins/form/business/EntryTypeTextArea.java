@@ -39,13 +39,13 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.util.string.StringUtil;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -132,7 +132,7 @@ public class EntryTypeTextArea extends Entry
         {
             strFieldError = FIELD_WIDTH;
         }
-        
+
         try
         {
             if ( ( strMaxSizeEnter != null ) && !strMaxSizeEnter.trim(  ).equals( EMPTY_STRING ) )
@@ -215,8 +215,8 @@ public class EntryTypeTextArea extends Entry
 
         if ( strValueEntry != null )
         {
-        	int nMaxSize = getFields(  ).get( 0 ).getMaxSizeEnter(  );
-        	response.setResponseValue( strValueEntry );
+            int nMaxSize = getFields(  ).get( 0 ).getMaxSizeEnter(  );
+            response.setResponseValue( strValueEntry );
 
             if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
             {
@@ -226,8 +226,9 @@ public class EntryTypeTextArea extends Entry
             {
                 response.setToStringValueResponse( StringUtils.EMPTY );
             }
-        	listResponse.add( response );
-        	
+
+            listResponse.add( response );
+
             // Checks if the entry value contains XSS characters
             if ( StringUtil.containsXssCharacters( strValueEntry ) )
             {
@@ -238,20 +239,21 @@ public class EntryTypeTextArea extends Entry
 
                 return formError;
             }
-            
+
             // check max size for the field. 0 means no limit
-            if ( nMaxSize != - 1 && strValueEntry.length(  ) > nMaxSize )
+            if ( ( nMaxSize != -1 ) && ( strValueEntry.length(  ) > nMaxSize ) )
             {
-            	FormError formError = new FormError(  );
+                FormError formError = new FormError(  );
                 formError.setMandatoryError( false );
                 formError.setTitleQuestion( this.getTitle(  ) );
-                Object[] messageArgs = new Object[] {
-                		nMaxSize,
-                };
-                formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MAXLENGTH, messageArgs, request.getLocale(  ) ) );
+
+                Object[] messageArgs = new Object[] { nMaxSize, };
+                formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MAXLENGTH, messageArgs,
+                        request.getLocale(  ) ) );
 
                 return formError;
             }
+
             if ( this.isMandatory(  ) )
             {
                 if ( strValueEntry.equals( FormUtils.EMPTY_STRING ) )
@@ -277,7 +279,7 @@ public class EntryTypeTextArea extends Entry
      */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-    	return response.getResponseValue(  );
+        return response.getResponseValue(  );
     }
 
     /**
@@ -289,6 +291,6 @@ public class EntryTypeTextArea extends Entry
      */
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-    	return response.getResponseValue(  );
+        return response.getResponseValue(  );
     }
 }

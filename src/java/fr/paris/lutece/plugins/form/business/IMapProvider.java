@@ -42,7 +42,7 @@ import fr.paris.lutece.util.ReferenceItem;
  * <br/>
  * <ul>
  * <li><code>getKey(  )</code> must return the unique key.</li>
- * <li><code>getDisplayedName(  )</code> will be displayed in reference lists.</li> 
+ * <li><code>getDisplayedName(  )</code> will be displayed in reference lists.</li>
  * </ul>
  */
 public interface IMapProvider
@@ -71,5 +71,4 @@ public interface IMapProvider
      * @return the item created.
      */
     ReferenceItem toRefItem(  );
-    
 }

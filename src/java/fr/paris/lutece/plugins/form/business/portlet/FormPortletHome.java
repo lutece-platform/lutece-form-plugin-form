@@ -52,7 +52,8 @@ public class FormPortletHome extends PortletHome
     /////////////////////////////////////////////////////////////////////////////////
     // Constants
     // Static variable pointed at the DAO instance
-    private static IFormPortletDAO _dao = (IFormPortletDAO) SpringContextService.getPluginBean( "form", "form.formPortletDAO" );
+    private static IFormPortletDAO _dao = (IFormPortletDAO) SpringContextService.getPluginBean( "form",
+            "form.formPortletDAO" );
 
     /* This class implements the Singleton design pattern. */
     private static FormPortletHome _singleton;

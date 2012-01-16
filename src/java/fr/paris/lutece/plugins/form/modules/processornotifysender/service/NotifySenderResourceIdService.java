@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.form.modules.processornotifysender.service;
 
-import java.util.Locale;
-
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
+
+import java.util.Locale;
 
 
 /**

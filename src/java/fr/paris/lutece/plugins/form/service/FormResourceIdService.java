@@ -81,11 +81,9 @@ public class FormResourceIdService extends ResourceIdService
 
     /** Permission for managing OutputProcessor */
     public static final String PERMISSION_MANAGE_OUTPUT_PROCESSOR = "MANAGE_OUTPUT_PROCESSOR";
-    
+
     /** Permission for managing advanced parameters */
     public static final String PERMISSION_MANAGE_ADVANCED_PARAMETERS = "MANAGE_ADVANCED_PARAMETERS";
-    
-    
 
     /** Permission for managing Validator */
     public static final String PERMISSION_MANAGE_VALIDATOR = "MANAGE_VALIDATOR";
@@ -101,7 +99,7 @@ public class FormResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_MANAGE_OUTPUT_PROCESSOR = "form.permission.label.manageOutputProcessor";
     private static final String PROPERTY_LABEL_MANAGE_VALIDATOR = "form.permission.label.manageValidator";
     private static final String PROPERTY_LABEL_MANAGE_ADVANCED_PARAMETERS = "form.permission.label.manage_advanced_parameters";
-    
+
     /** Creates a new instance of DocumentTypeResourceIdService */
     public FormResourceIdService(  )
     {
@@ -168,7 +166,7 @@ public class FormResourceIdService extends ResourceIdService
         p.setPermissionKey( PERMISSION_DELETE );
         p.setPermissionTitleKey( PROPERTY_LABEL_DELETE );
         rt.registerPermission( p );
-        
+
         p = new Permission(  );
         p.setPermissionKey( PERMISSION_MANAGE_ADVANCED_PARAMETERS );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE_ADVANCED_PARAMETERS );

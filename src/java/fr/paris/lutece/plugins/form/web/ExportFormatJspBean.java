@@ -33,18 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
-import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.apache.commons.fileupload.FileItem;
-import org.xml.sax.InputSource;
-
 import fr.paris.lutece.plugins.form.business.ExportFormat;
 import fr.paris.lutece.plugins.form.business.ExportFormatHome;
 import fr.paris.lutece.plugins.form.service.ExportFormatResourceIdService;
@@ -66,6 +54,21 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.commons.fileupload.FileItem;
+
+import org.xml.sax.InputSource;
+
+import java.io.ByteArrayInputStream;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 
 /**
@@ -140,8 +143,8 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         _nItemsPerPageForm = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                 _nItemsPerPageForm, _nDefaultItemsPerPage );
 
-        LocalizedPaginator paginator = new LocalizedPaginator( listExportFormat, _nItemsPerPageForm, getJspManageExportFormat( request ),
-                PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport, getLocale(  ) );
+        LocalizedPaginator paginator = new LocalizedPaginator( listExportFormat, _nItemsPerPageForm,
+                getJspManageExportFormat( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport, getLocale(  ) );
 
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageForm );

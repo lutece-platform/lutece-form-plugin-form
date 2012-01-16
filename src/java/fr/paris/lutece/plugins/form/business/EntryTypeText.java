@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.ResponseService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
@@ -56,6 +47,15 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -294,7 +294,7 @@ public class EntryTypeText extends Entry
 
         if ( strValueEntry != null )
         {
-			response.setResponseValue( strValueEntry );
+            response.setResponseValue( strValueEntry );
 
             if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
             {
@@ -304,8 +304,9 @@ public class EntryTypeText extends Entry
             {
                 response.setToStringValueResponse( StringUtils.EMPTY );
             }
+
             listResponse.add( response );
-        	
+
             // Checks if the entry value contains XSS characters
             if ( StringUtil.containsXssCharacters( strValueEntry ) )
             {
@@ -364,8 +365,8 @@ public class EntryTypeText extends Entry
                 ResponseFilter filter = new ResponseFilter(  );
                 filter.setIdEntry( this.getIdEntry(  ) );
 
-                ResponseService responseService = (ResponseService) SpringContextService.getPluginBean( 
-                		FormPlugin.PLUGIN_NAME, FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+                ResponseService responseService = (ResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
+                        FormUtils.BEAN_FORM_RESPONSE_SERVICE );
                 Collection<Response> listSubmittedResponses = responseService.getResponseList( filter, false );
 
                 for ( Response submittedResponse : listSubmittedResponses )
@@ -402,7 +403,7 @@ public class EntryTypeText extends Entry
      */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-    	return response.getResponseValue(  );
+        return response.getResponseValue(  );
     }
 
     /**
@@ -414,9 +415,9 @@ public class EntryTypeText extends Entry
      */
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-    	return response.getResponseValue(  );
+        return response.getResponseValue(  );
     }
-    
+
     /**
      * {@inheritDoc}
      */

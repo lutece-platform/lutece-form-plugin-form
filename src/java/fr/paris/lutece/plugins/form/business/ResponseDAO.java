@@ -33,15 +33,15 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.form.business.file.File;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -108,7 +108,7 @@ public final class ResponseDAO implements IResponseDAO
      */
     public synchronized void insert( Response response, Plugin plugin )
     {
-    	int nIndex = 1;
+        int nIndex = 1;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         response.setIdResponse( newPrimaryKey( plugin ) );
         daoUtil.setInt( nIndex++, response.getIdResponse(  ) );
@@ -124,14 +124,14 @@ public final class ResponseDAO implements IResponseDAO
         {
             daoUtil.setIntNull( nIndex++ );
         }
-        
+
         if ( response.getFile(  ) != null )
         {
-        	daoUtil.setInt( nIndex++, response.getFile(  ).getIdFile(  ) );
+            daoUtil.setInt( nIndex++, response.getFile(  ).getIdFile(  ) );
         }
         else
         {
-        	daoUtil.setIntNull( nIndex++ );
+            daoUtil.setIntNull( nIndex++ );
         }
 
         daoUtil.executeUpdate(  );
@@ -150,28 +150,30 @@ public final class ResponseDAO implements IResponseDAO
     {
         boolean bException = false;
         Response response = null;
-        
+
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nIdResponse );
         daoUtil.executeQuery(  );
 
         if ( daoUtil.next(  ) )
         {
-        	int nIndex = 1;
-        	
+            int nIndex = 1;
+
             response = new Response(  );
             response.setIdResponse( daoUtil.getInt( nIndex++ ) );
-            
+
             FormSubmit formResponse = new FormSubmit(  );
             formResponse.setIdFormSubmit( daoUtil.getInt( nIndex++ ) );
             response.setFormSubmit( formResponse );
-            
+
             response.setResponseValue( daoUtil.getString( nIndex++ ) );
+
             EntryType entryType = new EntryType(  );
             entryType.setClassName( daoUtil.getString( nIndex++ ) );
             entryType.setIdType( daoUtil.getInt( nIndex++ ) );
-            
+
             IEntry entry = null;
+
             try
             {
                 entry = (IEntry) Class.forName( entryType.getClassName(  ) ).newInstance(  );
@@ -197,7 +199,8 @@ public final class ResponseDAO implements IResponseDAO
 
             if ( bException )
             {
-            	daoUtil.free(  );
+                daoUtil.free(  );
+
                 return null;
             }
 
@@ -209,19 +212,21 @@ public final class ResponseDAO implements IResponseDAO
             // Get field if it exists
             if ( daoUtil.getObject( nIndex ) != null )
             {
-            	Field field = new Field(  );
+                Field field = new Field(  );
                 field.setIdField( daoUtil.getInt( nIndex ) );
                 response.setField( field );
             }
+
             nIndex++;
 
             // Get file if it exists
             if ( daoUtil.getObject( nIndex ) != null )
             {
-            	File file = new File(  );
-            	file.setIdFile( daoUtil.getInt( nIndex ) );
-            	response.setFile( file );
+                File file = new File(  );
+                file.setIdFile( daoUtil.getInt( nIndex ) );
+                response.setFile( file );
             }
+
             nIndex++;
         }
 
@@ -252,7 +257,7 @@ public final class ResponseDAO implements IResponseDAO
      */
     public void store( Response response, Plugin plugin )
     {
-    	int nIndex = 1;
+        int nIndex = 1;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
         daoUtil.setInt( nIndex++, response.getFormSubmit(  ).getIdFormSubmit(  ) );
@@ -270,13 +275,13 @@ public final class ResponseDAO implements IResponseDAO
 
         if ( response.getFile(  ) != null )
         {
-        	daoUtil.setInt( nIndex++, response.getFile(  ).getIdFile(  ) );
+            daoUtil.setInt( nIndex++, response.getFile(  ).getIdFile(  ) );
         }
         else
         {
-        	daoUtil.setIntNull( nIndex++ );
+            daoUtil.setIntNull( nIndex++ );
         }
-        
+
         daoUtil.setInt( nIndex++, response.getIdResponse(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -292,7 +297,7 @@ public final class ResponseDAO implements IResponseDAO
     {
         boolean bException = false;
         List<Response> responseList = new ArrayList<Response>(  );
-        
+
         StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECT_RESPONSE_BY_FILTER );
         sbSQL.append( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM_SUBMITION : StringUtils.EMPTY );
         sbSQL.append( ( filter.containsIdEntry(  ) ) ? SQL_FILTER_ID_ENTRY : StringUtils.EMPTY );
@@ -326,19 +331,22 @@ public final class ResponseDAO implements IResponseDAO
 
         while ( daoUtil.next(  ) )
         {
-        	nIndex = 1;
-        	
-        	Response response = new Response(  );
+            nIndex = 1;
+
+            Response response = new Response(  );
             response.setIdResponse( daoUtil.getInt( nIndex++ ) );
+
             FormSubmit formResponse = new FormSubmit(  );
             formResponse.setIdFormSubmit( daoUtil.getInt( nIndex++ ) );
             response.setFormSubmit( formResponse );
             response.setResponseValue( daoUtil.getString( nIndex++ ) );
+
             EntryType entryType = new EntryType(  );
             entryType.setClassName( daoUtil.getString( nIndex++ ) );
             entryType.setIdType( daoUtil.getInt( nIndex++ ) );
 
             IEntry entry = null;
+
             try
             {
                 entry = (IEntry) Class.forName( entryType.getClassName(  ) ).newInstance(  );
@@ -375,19 +383,21 @@ public final class ResponseDAO implements IResponseDAO
             // Get field if it exists
             if ( daoUtil.getObject( nIndex ) != null )
             {
-            	Field field = new Field(  );
+                Field field = new Field(  );
                 field.setIdField( daoUtil.getInt( nIndex ) );
                 response.setField( field );
             }
+
             nIndex++;
-            
+
             // Get file if it exists
             if ( daoUtil.getObject( nIndex ) != null )
             {
-            	File file = new File(  );
-            	file.setIdFile( daoUtil.getInt( nIndex ) );
-            	response.setFile( file );
+                File file = new File(  );
+                file.setIdFile( daoUtil.getInt( nIndex ) );
+                response.setFile( file );
             }
+
             nIndex++;
 
             responseList.add( response );

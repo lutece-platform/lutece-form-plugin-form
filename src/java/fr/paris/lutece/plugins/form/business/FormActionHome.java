@@ -47,7 +47,8 @@ import java.util.Locale;
 public final class FormActionHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormActionDAO _dao = (IFormActionDAO) SpringContextService.getPluginBean( "form", "form.formActionDAO" );
+    private static IFormActionDAO _dao = (IFormActionDAO) SpringContextService.getPluginBean( "form",
+            "form.formActionDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

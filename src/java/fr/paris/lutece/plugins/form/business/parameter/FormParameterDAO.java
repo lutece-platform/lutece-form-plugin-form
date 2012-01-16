@@ -38,19 +38,19 @@ import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+
 /**
- * 
+ *
  * FormParameterDAO
  *
  */
-public class FormParameterDAO implements IFormParameterDAO 
+public class FormParameterDAO implements IFormParameterDAO
 {
-	private static final String TRUE = "1";
-	
-	private static final String SQL_QUERY_SELECT = " SELECT parameter_value FROM form_form_parameter WHERE parameter_key = ? ";
-	private static final String SQL_QUERY_UPDATE = " UPDATE form_form_parameter SET parameter_value = ? WHERE parameter_key = ? ";
-	private static final String SQL_QUERY_SELECT_ALL = " SELECT parameter_key, parameter_value FROM form_form_parameter ";
-	private static final String SQL_ORDER_BY = " ORDER BY ";
+    private static final String TRUE = "1";
+    private static final String SQL_QUERY_SELECT = " SELECT parameter_value FROM form_form_parameter WHERE parameter_key = ? ";
+    private static final String SQL_QUERY_UPDATE = " UPDATE form_form_parameter SET parameter_value = ? WHERE parameter_key = ? ";
+    private static final String SQL_QUERY_SELECT_ALL = " SELECT parameter_key, parameter_value FROM form_form_parameter ";
+    private static final String SQL_ORDER_BY = " ORDER BY ";
     private static final String SQL_ASC = " ASC ";
     private static final String SQL_PARAMETER_KEY = " parameter_key ";
     private static final String SQL_WHERE = " WHERE ";
@@ -60,36 +60,38 @@ public class FormParameterDAO implements IFormParameterDAO
     private static final String CLOSED_BRACKET = " ) ";
     private static final String SIMPLE_QUOTE = "'";
     private static final String COMMA = ",";
-	
-	/**
-	 * Load all the default values
-	 * @param plugin Plugin
-	 * @return a list of ReferenceItem
-	 */
-	public ReferenceList selectAll( Plugin plugin )
-	{
-		ReferenceList listParams = new ReferenceList(  );
-		String strSQL = SQL_QUERY_SELECT_ALL + SQL_ORDER_BY + SQL_PARAMETER_KEY + SQL_ASC;
-    	DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
+
+    /**
+     * Load all the default values
+     * @param plugin Plugin
+     * @return a list of ReferenceItem
+     */
+    public ReferenceList selectAll( Plugin plugin )
+    {
+        ReferenceList listParams = new ReferenceList(  );
+        String strSQL = SQL_QUERY_SELECT_ALL + SQL_ORDER_BY + SQL_PARAMETER_KEY + SQL_ASC;
+        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         daoUtil.executeQuery(  );
-        
+
         while ( daoUtil.next(  ) )
         {
-        	ReferenceItem param = new ReferenceItem(  );
-        	param.setCode( daoUtil.getString( 1 ) );
-        	param.setName( daoUtil.getString( 2 ) );
-        	if(  param.getName(  ) != null )
-        	{
-        		param.setChecked( param.getName(  ).equals( TRUE ) ? true : false );
-        	}        	
-        	listParams.add( param );
+            ReferenceItem param = new ReferenceItem(  );
+            param.setCode( daoUtil.getString( 1 ) );
+            param.setName( daoUtil.getString( 2 ) );
+
+            if ( param.getName(  ) != null )
+            {
+                param.setChecked( param.getName(  ).equals( TRUE ) ? true : false );
+            }
+
+            listParams.add( param );
         }
-        
+
         daoUtil.free(  );
-        
+
         return listParams;
-	}
-	
+    }
+
     /**
      * Load the parameter value
      * @param strParameterKey the parameter key
@@ -98,72 +100,78 @@ public class FormParameterDAO implements IFormParameterDAO
      */
     public ReferenceItem load( String strParameterKey, Plugin plugin )
     {
-    	ReferenceItem param = null;
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
+        ReferenceItem param = null;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setString( 1, strParameterKey );
         daoUtil.executeQuery(  );
-        
+
         if ( daoUtil.next(  ) )
         {
-        	param = new ReferenceItem(  );
-        	param.setCode( strParameterKey );
-        	param.setName( daoUtil.getString( 1 ) );
+            param = new ReferenceItem(  );
+            param.setCode( strParameterKey );
+            param.setName( daoUtil.getString( 1 ) );
         }
-        
+
         daoUtil.free(  );
-        
+
         return param;
     }
-    
+
     /**
      * Update the parameter value
-     * @param strParameterValue The parameter value 
+     * @param strParameterValue The parameter value
      * @param strParameterKey The parameter key
      * @param plugin
      */
     public void store( ReferenceItem param, Plugin plugin )
     {
-    	 DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-         daoUtil.setString( 1, param.getName(  ) );
-         daoUtil.setString( 2, param.getCode(  ) );
+        daoUtil.setString( 1, param.getName(  ) );
+        daoUtil.setString( 2, param.getCode(  ) );
 
-         daoUtil.executeUpdate(  );
-         daoUtil.free(  );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
-    
+
     /**
      * {@inheritDoc}
      */
-	public ReferenceList selectByFilter( FormParameterFilter filter, Plugin plugin )
-	{
-		// Build SQL query
-		StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECT_ALL );
-		if ( filter.containsListParameterKeys(  ) )
-		{
-			sbSQL.append( SQL_WHERE + SQL_PARAMETER_KEY );
-			if ( filter.excludeParameterKeys(  ) )
-			{
-				sbSQL.append( SQL_NOT );
-			}
-			sbSQL.append( SQL_IN );
-			sbSQL.append( OPEN_BRACKET );
-			for ( int i = 0; i < filter.getListParameterKeys(  ).size(  ); i++ )
-			{
-				String strParameterKey = filter.getListParameterKeys(  ).get( i );
-				sbSQL.append( SIMPLE_QUOTE );
-				sbSQL.append( strParameterKey );
-				sbSQL.append( SIMPLE_QUOTE );
-				if ( i < filter.getListParameterKeys(  ).size(  ) - 1 )
-				{
-					sbSQL.append( COMMA );
-				}
-			}
-			sbSQL.append( CLOSED_BRACKET );
-		}
-		
-		// Execute SQL query
-		ReferenceList listParams = new ReferenceList(  );
+    public ReferenceList selectByFilter( FormParameterFilter filter, Plugin plugin )
+    {
+        // Build SQL query
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECT_ALL );
+
+        if ( filter.containsListParameterKeys(  ) )
+        {
+            sbSQL.append( SQL_WHERE + SQL_PARAMETER_KEY );
+
+            if ( filter.excludeParameterKeys(  ) )
+            {
+                sbSQL.append( SQL_NOT );
+            }
+
+            sbSQL.append( SQL_IN );
+            sbSQL.append( OPEN_BRACKET );
+
+            for ( int i = 0; i < filter.getListParameterKeys(  ).size(  ); i++ )
+            {
+                String strParameterKey = filter.getListParameterKeys(  ).get( i );
+                sbSQL.append( SIMPLE_QUOTE );
+                sbSQL.append( strParameterKey );
+                sbSQL.append( SIMPLE_QUOTE );
+
+                if ( i < ( filter.getListParameterKeys(  ).size(  ) - 1 ) )
+                {
+                    sbSQL.append( COMMA );
+                }
+            }
+
+            sbSQL.append( CLOSED_BRACKET );
+        }
+
+        // Execute SQL query
+        ReferenceList listParams = new ReferenceList(  );
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
         daoUtil.executeQuery(  );
 
@@ -179,5 +187,5 @@ public class FormParameterDAO implements IFormParameterDAO
         daoUtil.free(  );
 
         return listParams;
-	}
+    }
 }

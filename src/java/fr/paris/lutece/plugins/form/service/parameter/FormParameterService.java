@@ -44,75 +44,78 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
+
 /**
- * 
+ *
  * FormParameterService
  *
  */
 public final class FormParameterService
 {
-	private static final String BEAN_FORM_PARAMETER_SERVICE = "form.formParameterService";
-	
-	// PARAMETERS
-	private static final String PARAMETER_EXPORT_CSV_ENCODING = "export_csv_encoding";
-	private static final String PARAMETER_EXPORT_XML_ENCODING = "export_xml_encoding";
-	
-	// PROPERTIES
-	private static final String PROPERTY_DEFAULT_EXPORT_ENCODING = "form.export.encoding.default";
-	
-	/**
-	 * Get the instance of the service
-	 * @return the instance of the service
-	 */
-	public static FormParameterService getService(  )
-	{
-		return (FormParameterService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME, 
-				BEAN_FORM_PARAMETER_SERVICE );
-	}
-	
-	/**
-	 * Find all directory parameters
-	 * @return a {@link ReferenceList}
-	 */
-	public ReferenceList findAll(  )
-	{
-		return FormParameterHome.findAll( FormUtils.getPlugin() );
-	}
-	
-	/**
-	 * Find the default value parameters of the directory
-	 * @return a {@link ReferenceList}
-	 */
-	public ReferenceList findDefaultValueParameters(  )
-	{
-		FormParameterFilter filter = new FormParameterFilter(  );
-		filter.setExcludeParameterKeys( true );
-		filter.addParameterKey( PARAMETER_EXPORT_CSV_ENCODING );
-		filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
-		return FormParameterHome.findByFilter( filter, FormUtils.getPlugin() );
-	}
-	
-	/**
-	 * Find the export parameters 
-	 * @return a {@link ReferenceList}
-	 */
-	public ReferenceList findExportEncodingParameters(  )
-	{
-		FormParameterFilter filter = new FormParameterFilter(  );
-		filter.setExcludeParameterKeys( false );
-		filter.addParameterKey( PARAMETER_EXPORT_CSV_ENCODING );
-		filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
-		return FormParameterHome.findByFilter( filter, FormUtils.getPlugin() );
-	}
-	
-	/**
-     * Load the parameter value
-     * @param strParameterKey the parameter key
-     * @return The parameter value
+    private static final String BEAN_FORM_PARAMETER_SERVICE = "form.formParameterService";
+
+    // PARAMETERS
+    private static final String PARAMETER_EXPORT_CSV_ENCODING = "export_csv_encoding";
+    private static final String PARAMETER_EXPORT_XML_ENCODING = "export_xml_encoding";
+
+    // PROPERTIES
+    private static final String PROPERTY_DEFAULT_EXPORT_ENCODING = "form.export.encoding.default";
+
+    /**
+     * Get the instance of the service
+     * @return the instance of the service
      */
+    public static FormParameterService getService(  )
+    {
+        return (FormParameterService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
+            BEAN_FORM_PARAMETER_SERVICE );
+    }
+
+    /**
+     * Find all directory parameters
+     * @return a {@link ReferenceList}
+     */
+    public ReferenceList findAll(  )
+    {
+        return FormParameterHome.findAll( FormUtils.getPlugin(  ) );
+    }
+
+    /**
+     * Find the default value parameters of the directory
+     * @return a {@link ReferenceList}
+     */
+    public ReferenceList findDefaultValueParameters(  )
+    {
+        FormParameterFilter filter = new FormParameterFilter(  );
+        filter.setExcludeParameterKeys( true );
+        filter.addParameterKey( PARAMETER_EXPORT_CSV_ENCODING );
+        filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
+
+        return FormParameterHome.findByFilter( filter, FormUtils.getPlugin(  ) );
+    }
+
+    /**
+     * Find the export parameters
+     * @return a {@link ReferenceList}
+     */
+    public ReferenceList findExportEncodingParameters(  )
+    {
+        FormParameterFilter filter = new FormParameterFilter(  );
+        filter.setExcludeParameterKeys( false );
+        filter.addParameterKey( PARAMETER_EXPORT_CSV_ENCODING );
+        filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
+
+        return FormParameterHome.findByFilter( filter, FormUtils.getPlugin(  ) );
+    }
+
+    /**
+    * Load the parameter value
+    * @param strParameterKey the parameter key
+    * @return The parameter value
+    */
     public ReferenceItem findByKey( String strParameterKey )
     {
-        return FormParameterHome.findByKey( strParameterKey, FormUtils.getPlugin() );
+        return FormParameterHome.findByKey( strParameterKey, FormUtils.getPlugin(  ) );
     }
 
     /**
@@ -122,34 +125,38 @@ public final class FormParameterService
      */
     public void update( ReferenceItem param )
     {
-    	FormParameterHome.update( param, FormUtils.getPlugin() );
+        FormParameterHome.update( param, FormUtils.getPlugin(  ) );
     }
-    
+
     /**
      * Get the encoding for export CSV
      * @return the encoding for export CSV
      */
     public String getExportCSVEncoding(  )
     {
-    	ReferenceItem param = findByKey( PARAMETER_EXPORT_CSV_ENCODING );
-    	if ( param == null )
-    	{
-    		return AppPropertiesService.getProperty( PROPERTY_DEFAULT_EXPORT_ENCODING );
-    	}
-    	return param.getName(  );
+        ReferenceItem param = findByKey( PARAMETER_EXPORT_CSV_ENCODING );
+
+        if ( param == null )
+        {
+            return AppPropertiesService.getProperty( PROPERTY_DEFAULT_EXPORT_ENCODING );
+        }
+
+        return param.getName(  );
     }
-    
+
     /**
      * Get the encoding for export XML
      * @return the encoding for export XML
      */
     public String getExportXMLEncoding(  )
     {
-    	ReferenceItem param = findByKey( PARAMETER_EXPORT_XML_ENCODING );
-    	if ( param == null )
-    	{
-    		return AppPropertiesService.getProperty( PROPERTY_DEFAULT_EXPORT_ENCODING );
-    	}
-    	return param.getName(  );
+        ReferenceItem param = findByKey( PARAMETER_EXPORT_XML_ENCODING );
+
+        if ( param == null )
+        {
+            return AppPropertiesService.getProperty( PROPERTY_DEFAULT_EXPORT_ENCODING );
+        }
+
+        return param.getName(  );
     }
 }

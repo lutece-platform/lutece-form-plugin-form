@@ -38,47 +38,49 @@ import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+
 /**
- * 
+ *
  * EntryParameterDAO
  *
  */
-public class EntryParameterDAO implements IEntryParameterDAO 
+public class EntryParameterDAO implements IEntryParameterDAO
 {
-	private static final String TRUE = "1";
-	
-	private static final String SQL_QUERY_SELECT = " SELECT parameter_value FROM form_entry_parameter WHERE parameter_key = ? ";
-	private static final String SQL_QUERY_UPDATE = " UPDATE form_entry_parameter SET parameter_value = ? WHERE parameter_key = ? ";
-	private static final String SQL_QUERY_SELECT_ALL = " SELECT parameter_key, parameter_value FROM form_entry_parameter ORDER BY parameter_key ASC ";
-	
-	/**
-	 * Load all the default values
-	 * @param plugin Plugin
-	 * @return a list of ReferenceItem
-	 */
-	public ReferenceList selectAll( Plugin plugin )
-	{
-		ReferenceList listParams = new ReferenceList(  );
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin );
+    private static final String TRUE = "1";
+    private static final String SQL_QUERY_SELECT = " SELECT parameter_value FROM form_entry_parameter WHERE parameter_key = ? ";
+    private static final String SQL_QUERY_UPDATE = " UPDATE form_entry_parameter SET parameter_value = ? WHERE parameter_key = ? ";
+    private static final String SQL_QUERY_SELECT_ALL = " SELECT parameter_key, parameter_value FROM form_entry_parameter ORDER BY parameter_key ASC ";
+
+    /**
+     * Load all the default values
+     * @param plugin Plugin
+     * @return a list of ReferenceItem
+     */
+    public ReferenceList selectAll( Plugin plugin )
+    {
+        ReferenceList listParams = new ReferenceList(  );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin );
         daoUtil.executeQuery(  );
-        
+
         while ( daoUtil.next(  ) )
         {
-        	ReferenceItem param = new ReferenceItem(  );
-        	param.setCode( daoUtil.getString( 1 ) );
-        	param.setName( daoUtil.getString( 2 ) );
-        	if(  param.getName(  ) != null )
-        	{
-        		param.setChecked( param.getName(  ).equals( TRUE ) ? true : false );
-        	}        	
-        	listParams.add( param );
+            ReferenceItem param = new ReferenceItem(  );
+            param.setCode( daoUtil.getString( 1 ) );
+            param.setName( daoUtil.getString( 2 ) );
+
+            if ( param.getName(  ) != null )
+            {
+                param.setChecked( param.getName(  ).equals( TRUE ) ? true : false );
+            }
+
+            listParams.add( param );
         }
-        
+
         daoUtil.free(  );
-        
+
         return listParams;
-	}
-	
+    }
+
     /**
      * Load the parameter value
      * @param strParameterKey the parameter key
@@ -87,37 +89,37 @@ public class EntryParameterDAO implements IEntryParameterDAO
      */
     public ReferenceItem load( String strParameterKey, Plugin plugin )
     {
-    	ReferenceItem param = null;
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
+        ReferenceItem param = null;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setString( 1, strParameterKey );
         daoUtil.executeQuery(  );
-        
+
         if ( daoUtil.next(  ) )
         {
-        	param = new ReferenceItem(  );
-        	param.setCode( strParameterKey );
-        	param.setName( daoUtil.getString( 1 ) );
+            param = new ReferenceItem(  );
+            param.setCode( strParameterKey );
+            param.setName( daoUtil.getString( 1 ) );
         }
-        
+
         daoUtil.free(  );
-        
+
         return param;
     }
-    
+
     /**
      * Update the parameter value
-     * @param strParameterValue The parameter value 
+     * @param strParameterValue The parameter value
      * @param strParameterKey The parameter key
      * @param plugin
      */
     public void store( ReferenceItem param, Plugin plugin )
     {
-    	 DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-         daoUtil.setString( 1, param.getName(  ) );
-         daoUtil.setString( 2, param.getCode(  ) );
+        daoUtil.setString( 1, param.getName(  ) );
+        daoUtil.setString( 2, param.getCode(  ) );
 
-         daoUtil.executeUpdate(  );
-         daoUtil.free(  );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 }

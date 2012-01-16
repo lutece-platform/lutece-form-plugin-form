@@ -85,9 +85,9 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_ORDER_BY_POSITION = " ORDER BY ent.pos ";
     private static final String SQL_GROUP_BY_POSITION = " GROUP BY ent.pos ";
     private static final String SQL_GROUP_BY_FORM_ENTRY_ENTRY_TYPE = "GROUP BY ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
-	    "ent.id_entry,ent.id_form,ent.id_parent,ent.title,ent.help_message," +
-	    "ent.comment,ent.mandatory,ent.fields_in_line," +
-	    "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider ";
+        "ent.id_entry,ent.id_form,ent.id_parent,ent.title,ent.help_message," +
+        "ent.comment,ent.mandatory,ent.fields_in_line," +
+        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider ";
 
     /**
      * Generates a new primary key
@@ -449,7 +449,7 @@ public final class EntryDAO implements IEntryDAO
             daoUtil.setInt( nIndex, filter.getIdEntryType(  ) );
             nIndex++;
         }
-        
+
         if ( filter.containsIdIsComment(  ) )
         {
             if ( filter.getIdIsComment(  ) == 0 )
@@ -561,7 +561,7 @@ public final class EntryDAO implements IEntryDAO
         sbSQL.append( ( filter.containsIdIsComment(  ) ) ? SQL_FILTER_IS_COMMENT : EMPTY_STRING );
         sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : EMPTY_STRING );
         sbSQL.append( ( filter.containsIdEntryType(  ) ) ? SQL_FILTER_ID_TYPE : EMPTY_STRING );
-        
+
         sbSQL.append( SQL_GROUP_BY_POSITION );
         sbSQL.append( SQL_ORDER_BY_POSITION );
 

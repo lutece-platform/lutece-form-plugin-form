@@ -33,12 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -46,6 +40,12 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -187,7 +187,7 @@ public class EntryTypeSelectSQL extends Entry
         {
             field = FormUtils.findFieldByIdInTheList( nIdField, getSqlQueryFields(  ) );
         }
-        
+
         if ( field != null )
         {
             response.setResponseValue( field.getValue(  ) );

@@ -47,8 +47,7 @@ import java.util.List;
 public final class CategoryHome
 {
     // Static variable pointed at the DAO instance
-    private static ICategoryDAO _dao = (ICategoryDAO) SpringContextService.getPluginBean( "form",
-            "form.categoryDAO" );
+    private static ICategoryDAO _dao = (ICategoryDAO) SpringContextService.getPluginBean( "form", "form.categoryDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

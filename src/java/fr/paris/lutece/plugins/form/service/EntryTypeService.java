@@ -33,69 +33,72 @@
  */
 package fr.paris.lutece.plugins.form.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import fr.paris.lutece.plugins.form.business.EntryType;
 import fr.paris.lutece.plugins.form.business.EntryTypeHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 /**
- * 
+ *
  * EntryTypeService
  *
  */
 public final class EntryTypeService
 {
-	private Map<String, EntryType> _mapEntryTypes;
+    private Map<String, EntryType> _mapEntryTypes;
 
-	/**
-	 * Private constructor
-	 */
-	private EntryTypeService(  )
-	{
-	}
+    /**
+     * Private constructor
+     */
+    private EntryTypeService(  )
+    {
+    }
 
-	/**
-	 * Get the map of entry types
-	 * @return the map of entry types
-	 */
-	public Map<String, EntryType> getMapEntryTypes(  )
-	{
-		if ( _mapEntryTypes == null )
-		{
-			initMapEntryTypes(  );
-		}
+    /**
+     * Get the map of entry types
+     * @return the map of entry types
+     */
+    public Map<String, EntryType> getMapEntryTypes(  )
+    {
+        if ( _mapEntryTypes == null )
+        {
+            initMapEntryTypes(  );
+        }
 
-		return _mapEntryTypes;
-	}
+        return _mapEntryTypes;
+    }
 
-	/**
-	 * Get the entry type given the class name
-	 * @param strClassName the class name
-	 * @return an {@link EntryType}
-	 */
-	public EntryType getEntryType( String strClassName )
-	{
-		if ( _mapEntryTypes == null )
-		{
-			initMapEntryTypes(  );
-		}
-		
-		 return _mapEntryTypes.get( strClassName );
-	}
+    /**
+     * Get the entry type given the class name
+     * @param strClassName the class name
+     * @return an {@link EntryType}
+     */
+    public EntryType getEntryType( String strClassName )
+    {
+        if ( _mapEntryTypes == null )
+        {
+            initMapEntryTypes(  );
+        }
 
-	/**
-	 * Init the map of entry types
-	 */
-	private void initMapEntryTypes(  )
-	{
-		_mapEntryTypes = new HashMap<String, EntryType>(  );
-		Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
-		for ( EntryType entryType : EntryTypeHome.getList( plugin ) )
-		{
-			_mapEntryTypes.put( entryType.getClassName(  ), entryType );
-		}
-	}
+        return _mapEntryTypes.get( strClassName );
+    }
+
+    /**
+     * Init the map of entry types
+     */
+    private void initMapEntryTypes(  )
+    {
+        _mapEntryTypes = new HashMap<String, EntryType>(  );
+
+        Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
+
+        for ( EntryType entryType : EntryTypeHome.getList( plugin ) )
+        {
+            _mapEntryTypes.put( entryType.getClassName(  ), entryType );
+        }
+    }
 }

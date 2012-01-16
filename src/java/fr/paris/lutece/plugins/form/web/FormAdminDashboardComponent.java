@@ -33,10 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.service.FormResourceIdService;
 import fr.paris.lutece.plugins.form.service.FormService;
@@ -47,36 +43,40 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+
 /**
- * 
+ *
  * FormAdminDashboardComponent
  *
  */
 public class FormAdminDashboardComponent extends AdminDashboardComponent
 {
-	// CONSTANTS
-	private static final String EMPTY_STRING = "";
-	
-	// TEMPLATES
-	private static final String TEMPLATE_ADMIN_DASHBOARD = "admin/plugins/form/form_admindashboard.html";
-	
-	/**
-	 * 
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDashboardData( AdminUser user, HttpServletRequest request )
-	{
-		if ( RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, 
-    			FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, user ) )
-    	{
-			Map<String, Object> model = FormService.getInstance(  ).getManageAdvancedParameters( user );
-			HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_ADMIN_DASHBOARD, user.getLocale(  ), model );
-			
-			return template.getHtml(  );
-    	}
-		
-		return EMPTY_STRING;
-	}
+    // CONSTANTS
+    private static final String EMPTY_STRING = "";
 
+    // TEMPLATES
+    private static final String TEMPLATE_ADMIN_DASHBOARD = "admin/plugins/form/form_admindashboard.html";
+
+    /**
+     *
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDashboardData( AdminUser user, HttpServletRequest request )
+    {
+        if ( RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, user ) )
+        {
+            Map<String, Object> model = FormService.getInstance(  ).getManageAdvancedParameters( user );
+            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_ADMIN_DASHBOARD, user.getLocale(  ), model );
+
+            return template.getHtml(  );
+        }
+
+        return EMPTY_STRING;
+    }
 }

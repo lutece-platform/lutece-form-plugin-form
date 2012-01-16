@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.form.business.file.File;
 import fr.paris.lutece.plugins.form.utils.StringUtil;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -54,18 +54,21 @@ public class Response
     private FormSubmit _formSubmit;
     private File _file;
     private String _strResponseValue;
+
     /**
      * @deprecated The response value is stored in String
      * @since 2.4.8
      * @see #_strResponseValue
      */
     private byte[] _byValueResponse;
+
     /**
      * @deprecated The file is stored in class File
      * @since 2.4.8
      * @see {@link File}
      */
     private String _strFileName;
+
     /**
      * @deprecated The file is stored in class File
      * @since 2.4.8
@@ -151,11 +154,12 @@ public class Response
      */
     public String getToStringValueResponse(  )
     {
-    	if ( _strToStringValueResponse != null )
-    	{
-    		return _strToStringValueResponse;
-    	}
-    	return _strResponseValue;
+        if ( _strToStringValueResponse != null )
+        {
+            return _strToStringValueResponse;
+        }
+
+        return _strResponseValue;
     }
 
     /**
@@ -171,40 +175,39 @@ public class Response
      * Set file
      * @param file the file
      */
-	public void setFile( File file )
-	{
-		_file = file;
-	}
+    public void setFile( File file )
+    {
+        _file = file;
+    }
 
-	/**
-	 * Get file
-	 * @return the file
-	 */
-	public File getFile(  )
-	{
-		return _file;
-	}
+    /**
+     * Get file
+     * @return the file
+     */
+    public File getFile(  )
+    {
+        return _file;
+    }
 
-	/**
-	 * Set the response value
-	 * @param strResponseValue the response value
-	 */
-	public void setResponseValue( String strResponseValue )
-	{
-		_strResponseValue = strResponseValue;
-	}
+    /**
+     * Set the response value
+     * @param strResponseValue the response value
+     */
+    public void setResponseValue( String strResponseValue )
+    {
+        _strResponseValue = strResponseValue;
+    }
 
-	/**
-	 * Get the response value
-	 * @return the response value
-	 */
-	public String getResponseValue(  )
-	{
-		return _strResponseValue;
-	}
+    /**
+     * Get the response value
+     * @return the response value
+     */
+    public String getResponseValue(  )
+    {
+        return _strResponseValue;
+    }
 
-	// DEPRECATED METHODS
-	
+    // DEPRECATED METHODS
 
     /**
      *
@@ -215,20 +218,20 @@ public class Response
      */
     public byte[] getValueResponse(  )
     {
-    	if ( _byValueResponse != null )
-    	{
-    		return _byValueResponse;
-    	}
-    	
-    	// If the response has a file, then return the content of the file
-    	if ( _file != null && _file.getPhysicalFile(  ) != null && 
-    			_file.getPhysicalFile(  ).getValue(  ) != null )
-    	{
-    		return _file.getPhysicalFile(  ).getValue(  );
-    	}
-    	
-    	// Otherwise, return the content of the response value
-    	return StringUtil.convertToByte( _strResponseValue );
+        if ( _byValueResponse != null )
+        {
+            return _byValueResponse;
+        }
+
+        // If the response has a file, then return the content of the file
+        if ( ( _file != null ) && ( _file.getPhysicalFile(  ) != null ) &&
+                ( _file.getPhysicalFile(  ).getValue(  ) != null ) )
+        {
+            return _file.getPhysicalFile(  ).getValue(  );
+        }
+
+        // Otherwise, return the content of the response value
+        return StringUtil.convertToByte( _strResponseValue );
     }
 
     /**
@@ -242,14 +245,14 @@ public class Response
     {
         _byValueResponse = valueResponse;
     }
-    
-	/**
-     * the file name if the response value is a file
-     * @param fileName the file name if the response value is a file
-     * @deprecated the file name is now stored in class File
-     * @since 2.4.8
-     * @see {@link File}
-     */
+
+    /**
+    * the file name if the response value is a file
+    * @param fileName the file name if the response value is a file
+    * @deprecated the file name is now stored in class File
+    * @since 2.4.8
+    * @see {@link File}
+    */
     public void setFileName( String fileName )
     {
         _strFileName = fileName;
@@ -264,15 +267,17 @@ public class Response
      */
     public String getFileExtension(  )
     {
-    	if ( StringUtils.isNotBlank( _strFileExtension ) )
-    	{
-    		return _strFileExtension;
-    	}
-    	if ( _file != null && StringUtils.isNotBlank( _file.getTitle(  ) ))
-    	{
-    		FilenameUtils.getExtension( _file.getTitle(  ) );
-    	}
-    	return null;
+        if ( StringUtils.isNotBlank( _strFileExtension ) )
+        {
+            return _strFileExtension;
+        }
+
+        if ( ( _file != null ) && StringUtils.isNotBlank( _file.getTitle(  ) ) )
+        {
+            FilenameUtils.getExtension( _file.getTitle(  ) );
+        }
+
+        return null;
     }
 
     /**
@@ -296,14 +301,16 @@ public class Response
      */
     public String getFileName(  )
     {
-    	if ( StringUtils.isNotBlank( _strFileName ) )
-    	{
-    		return _strFileName;
-    	}
-    	if ( _file != null )
-    	{
-    		return _file.getTitle(  );
-    	}
-    	return null;
+        if ( StringUtils.isNotBlank( _strFileName ) )
+        {
+            return _strFileName;
+        }
+
+        if ( _file != null )
+        {
+            return _file.getTitle(  );
+        }
+
+        return null;
     }
 }

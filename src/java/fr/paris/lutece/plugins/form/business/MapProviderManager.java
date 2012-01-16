@@ -33,59 +33,60 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.List;
 
+
 /**
- * 
+ *
  * Manages all map providers for Form.
  *
  */
 public final class MapProviderManager
 {
-	/**
-	 * MapProviderManager empty constructor
-	 */
+    /**
+     * MapProviderManager empty constructor
+     */
     private MapProviderManager(  )
     {
     }
 
     /**
-	 * Gets the mapProvider for the provided key.
-	 * @param strKey the key
-	 * @return <code>null</code> if <code>strKey</code> is blank, the map provider if found, <code>null</code> otherwise.
-	 * @see StringUtils#isBlank(String)
-	 */
-	public static IMapProvider getMapProvider( String strKey )
-	{
-		if ( StringUtils.isBlank( strKey ) )
-		{
-			return null;
-		}
-			
-		for ( IMapProvider mapProvider : getMapProvidersList(  ) )
-		{
-			if ( strKey.equals( mapProvider.getKey(  ) ) )
-			{
-				return mapProvider;
-			}
-		}
-		
-		AppLogService.info( MapProviderManager.class.getName(  ) + " : No map provider found for key " + strKey );
-		
-		return null;
-	}
+         * Gets the mapProvider for the provided key.
+         * @param strKey the key
+         * @return <code>null</code> if <code>strKey</code> is blank, the map provider if found, <code>null</code> otherwise.
+         * @see StringUtils#isBlank(String)
+         */
+    public static IMapProvider getMapProvider( String strKey )
+    {
+        if ( StringUtils.isBlank( strKey ) )
+        {
+            return null;
+        }
+
+        for ( IMapProvider mapProvider : getMapProvidersList(  ) )
+        {
+            if ( strKey.equals( mapProvider.getKey(  ) ) )
+            {
+                return mapProvider;
+            }
+        }
+
+        AppLogService.info( MapProviderManager.class.getName(  ) + " : No map provider found for key " + strKey );
+
+        return null;
+    }
 
     /**
-	 * Builds all available providers list
-	 * @return all available providers
-	 */
-	public static List<IMapProvider> getMapProvidersList(  )
-	{
-		return SpringContextService.getBeansOfType( IMapProvider.class );
-	}
+         * Builds all available providers list
+         * @return all available providers
+         */
+    public static List<IMapProvider> getMapProvidersList(  )
+    {
+        return SpringContextService.getBeansOfType( IMapProvider.class );
+    }
 }

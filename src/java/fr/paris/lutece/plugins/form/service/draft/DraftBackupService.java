@@ -33,33 +33,36 @@
  */
 package fr.paris.lutece.plugins.form.service.draft;
 
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 
+import javax.servlet.http.HttpServletRequest;
+
+
 /**
- * 
+ *
  * DraftBackupService for {@link Form}
  *
  */
-public interface DraftBackupService 
+public interface DraftBackupService
 {
     /**
      * Save the draft. Useful when the user save his form but does not submit it.
      * @param request The HTTP request
      * @param form The Form
      */
-    void saveDraft( HttpServletRequest request, Form form ) throws SiteMessageException;
+    void saveDraft( HttpServletRequest request, Form form )
+        throws SiteMessageException;
 
     /**
      * Validate a draft. Usefull when the user submitted his form.
      * @param request The HTTP request
      * @param form The form
      */
-    void validateDraft( HttpServletRequest request, Form form ) throws SiteMessageException;
-    
+    void validateDraft( HttpServletRequest request, Form form )
+        throws SiteMessageException;
+
     /**
      * Pre Process Request
      * @param request The HTTP request
@@ -68,13 +71,15 @@ public interface DraftBackupService
      * should be continued
      * @throws SiteMessageException if an error occurs
      */
-    boolean preProcessRequest( HttpServletRequest request, Form form ) throws SiteMessageException;
-    
+    boolean preProcessRequest( HttpServletRequest request, Form form )
+        throws SiteMessageException;
+
     /**
      * Saves the draft for the formSubmit
      * @param request the request
      * @param formSubmit the formsubmit
      * @throws SiteMessageException if an error occurs
      */
-    void saveDraft( HttpServletRequest request, FormSubmit formSubmit ) throws SiteMessageException;
+    void saveDraft( HttpServletRequest request, FormSubmit formSubmit )
+        throws SiteMessageException;
 }

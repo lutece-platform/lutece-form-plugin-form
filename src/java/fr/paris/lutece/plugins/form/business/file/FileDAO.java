@@ -78,28 +78,29 @@ public final class FileDAO implements IFileDAO
      */
     public synchronized int insert( File file, Plugin plugin )
     {
-		file.setIdFile( newPrimaryKey( plugin ) );
-		DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-		
-		int nIndex = 1;
-		daoUtil.setInt( nIndex++, file.getIdFile(  ) );
-		daoUtil.setString( nIndex++, file.getTitle(  ) );
-		
-		if ( file.getPhysicalFile(  ) != null )
-		{
-			daoUtil.setInt( nIndex++, file.getPhysicalFile(  ).getIdPhysicalFile(  ) );
-		}
-		else
-		{
-			daoUtil.setIntNull( nIndex++ );
-		}
-		
-		daoUtil.setInt( nIndex++, file.getSize(  ) );
-		daoUtil.setString( nIndex++, file.getMimeType(  ) );
-		
-		daoUtil.executeUpdate(  );
-		daoUtil.free(  );
-    		
+        file.setIdFile( newPrimaryKey( plugin ) );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
+
+        int nIndex = 1;
+        daoUtil.setInt( nIndex++, file.getIdFile(  ) );
+        daoUtil.setString( nIndex++, file.getTitle(  ) );
+
+        if ( file.getPhysicalFile(  ) != null )
+        {
+            daoUtil.setInt( nIndex++, file.getPhysicalFile(  ).getIdPhysicalFile(  ) );
+        }
+        else
+        {
+            daoUtil.setIntNull( nIndex++ );
+        }
+
+        daoUtil.setInt( nIndex++, file.getSize(  ) );
+        daoUtil.setString( nIndex++, file.getMimeType(  ) );
+
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+
         return file.getIdFile(  );
     }
 
@@ -117,8 +118,8 @@ public final class FileDAO implements IFileDAO
 
         if ( daoUtil.next(  ) )
         {
-        	int nIndex = 1;
-        	
+            int nIndex = 1;
+
             file = new File(  );
             file.setIdFile( daoUtil.getInt( nIndex++ ) );
             file.setTitle( daoUtil.getString( nIndex++ ) );
@@ -129,6 +130,7 @@ public final class FileDAO implements IFileDAO
                 physicalFile.setIdPhysicalFile( daoUtil.getInt( nIndex ) );
                 file.setPhysicalFile( physicalFile );
             }
+
             nIndex++;
 
             file.setSize( daoUtil.getInt( nIndex++ ) );
@@ -171,9 +173,9 @@ public final class FileDAO implements IFileDAO
 
         daoUtil.setInt( nIndex++, file.getSize(  ) );
         daoUtil.setString( nIndex++, file.getMimeType(  ) );
-        
+
         daoUtil.setInt( nIndex++, file.getIdFile(  ) );
-        
+
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }

@@ -33,27 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import net.sf.json.JSON;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.EntryTypeSession;
@@ -99,6 +78,27 @@ import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.portal.web.xpages.XPageApplication;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
+
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 /**
  * This class manages Form page.
@@ -142,7 +142,7 @@ public class FormApp implements XPageApplication
     private static final String PARAMETER_SESSION = "session";
     private static final String PARAMETER_SAVE_DRAFT = "save_draft";
     private static final String PARAMETER_FIELD_INDEX = "field_index";
-    
+
     // session
     private static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
     private static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
@@ -162,11 +162,10 @@ public class FormApp implements XPageApplication
 
     // Misc
     private static final String REGEX_ID = "^[\\d]+$";
-    
-    private ResponseService _responseService = (ResponseService) SpringContextService.getPluginBean( 
-    		FormPlugin.PLUGIN_NAME, FormUtils.BEAN_FORM_RESPONSE_SERVICE );
-    private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getPluginBean( 
-			FormPlugin.PLUGIN_NAME, FormUtils.BEAN_ENTRY_TYPE_SERVICE );
+    private ResponseService _responseService = (ResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
+            FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+    private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
+            FormUtils.BEAN_ENTRY_TYPE_SERVICE );
 
     /**
      * Returns the Form XPage result content depending on the request parameters and the current mode.
@@ -177,8 +176,8 @@ public class FormApp implements XPageApplication
      * @return The page content.
      * @throws SiteMessageException the SiteMessageException
      */
-    @SuppressWarnings("unchecked")
-	public XPage getPage( HttpServletRequest request, int nMode, Plugin plugin )
+    @SuppressWarnings( "unchecked" )
+    public XPage getPage( HttpServletRequest request, int nMode, Plugin plugin )
         throws SiteMessageException, UserNotSignedException
     {
         XPage page = new XPage(  );
@@ -204,22 +203,23 @@ public class FormApp implements XPageApplication
 
             form = FormHome.findByPrimaryKey( nIdForm, plugin );
         }
-        
+
         // Special case for upload fields : if no action is specified, a submit
         // button associated with an upload might have been pressed :
         String strUploadAction = FormAsynchronousUploadHandler.getHandler(  ).getUploadAction( request );
 
         if ( strUploadAction != null )
         {
-        	// the formsubmit may no be reused
-        	FormSubmit formSubmit = new FormSubmit();
-        	formSubmit.setForm( form );
-        	// Upload the file
-        	FormAsynchronousUploadHandler.getHandler(  ).doUploadAction( request, strUploadAction );
-        	// parse request & save draft
-        	doInsertResponseInFormSubmit( request, formSubmit, plugin );
-        	FormDraftBackupService.saveDraft( request, form );
-        	return getForm(request, session, nMode, plugin);
+            // the formsubmit may no be reused
+            FormSubmit formSubmit = new FormSubmit(  );
+            formSubmit.setForm( form );
+            // Upload the file
+            FormAsynchronousUploadHandler.getHandler(  ).doUploadAction( request, strUploadAction );
+            // parse request & save draft
+            doInsertResponseInFormSubmit( request, formSubmit, plugin );
+            FormDraftBackupService.saveDraft( request, form );
+
+            return getForm( request, session, nMode, plugin );
         }
 
         if ( ( form == null ) && ( session != null ) && ( session.getAttribute( PARAMETER_FORM_SUBMIT ) != null ) )
@@ -246,7 +246,7 @@ public class FormApp implements XPageApplication
             page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale(  ) ) );
             page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale(  ) ) );
             page.setContent( getResult( request, session, nMode, plugin ) );
-            
+
             // remove existing draft
             FormDraftBackupService.validateDraft( request, form );
         }
@@ -259,61 +259,63 @@ public class FormApp implements XPageApplication
             page.setContent( getRequirement( request, nMode, plugin ) );
         }
         else if ( ( request.getParameter( PARAMETER_SAVE_DRAFT ) != null ) &&
-        	( request.getParameter( PARAMETER_ID_FORM ) != null ) )
+                ( request.getParameter( PARAMETER_ID_FORM ) != null ) )
         {
-        	// the formsubmit may no be reused
-        	FormSubmit formSubmit = new FormSubmit();
-        	formSubmit.setForm( form );
-        	// parse request & save draft
-        	doInsertResponseInFormSubmit( request, formSubmit, plugin );
-        	FormDraftBackupService.saveDraft( request, form );
-        	page = getForm(request, session, nMode, plugin);
+            // the formsubmit may no be reused
+            FormSubmit formSubmit = new FormSubmit(  );
+            formSubmit.setForm( form );
+            // parse request & save draft
+            doInsertResponseInFormSubmit( request, formSubmit, plugin );
+            FormDraftBackupService.saveDraft( request, form );
+            page = getForm( request, session, nMode, plugin );
         }
         else if ( ( request.getParameter( PARAMETER_SAVE ) != null ) &&
                 ( request.getParameter( PARAMETER_ID_FORM ) != null ) )
         {
-        	page = getRecap( request, session, nMode, plugin );
-        	// Validate draft if the form does not have a recap and the session 
-    		// contains a list of responses without errors
-        	if ( !FormService.getInstance(  ).hasRecap( form ) && 
-        			!FormService.getInstance(  ).hasFormErrors( session ) )
-        	{
-        		// remove existing draft
-        		FormDraftBackupService.validateDraft( request, form );
-        	}
-        	else
-        	{
-        		// save draft
-            	// we can get FormSubmit here
-            	FormSubmit formSubmit = (FormSubmit) session.getAttribute( PARAMETER_FORM_SUBMIT );
-            	if ( formSubmit == null )
-            	{
-            		FormDraftBackupService.saveDraft( request, form );
-            	}
-            	else
-            	{
-            		FormDraftBackupService.saveDraft( request, formSubmit );
-            	}
-        	}
+            page = getRecap( request, session, nMode, plugin );
+
+            // Validate draft if the form does not have a recap and the session 
+            // contains a list of responses without errors
+            if ( !FormService.getInstance(  ).hasRecap( form ) &&
+                    !FormService.getInstance(  ).hasFormErrors( session ) )
+            {
+                // remove existing draft
+                FormDraftBackupService.validateDraft( request, form );
+            }
+            else
+            {
+                // save draft
+                // we can get FormSubmit here
+                FormSubmit formSubmit = (FormSubmit) session.getAttribute( PARAMETER_FORM_SUBMIT );
+
+                if ( formSubmit == null )
+                {
+                    FormDraftBackupService.saveDraft( request, form );
+                }
+                else
+                {
+                    FormDraftBackupService.saveDraft( request, formSubmit );
+                }
+            }
         }
         else if ( request.getParameter( PARAMETER_ID_FORM ) != null )
         {
             // Reset all responses in session if the user has not submitted any form
-        	// there is a few chances that PARAMETER_SESSION may not be blank but will be overwritten by draft if any
+            // there is a few chances that PARAMETER_SESSION may not be blank but will be overwritten by draft if any
             if ( StringUtils.isBlank( request.getParameter( PARAMETER_SESSION ) ) )
             {
-            	session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+                session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
                 session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
                 FormAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( session.getId(  ) );
             }
 
-        	// try to restore draft
-        	// preProcessRequest return true if the form should not be displayed (for deletion...)
-        	if ( !FormDraftBackupService.preProcessRequest( request, form ) )
-        	{
-	            //Display Form
-	            page = getForm( request, session, nMode, plugin );
-        	}
+            // try to restore draft
+            // preProcessRequest return true if the form should not be displayed (for deletion...)
+            if ( !FormDraftBackupService.preProcessRequest( request, form ) )
+            {
+                //Display Form
+                page = getForm( request, session, nMode, plugin );
+            }
         }
         else
         {
@@ -340,6 +342,7 @@ public class FormApp implements XPageApplication
         if ( ( session == null ) || ( session.getAttribute( PARAMETER_FORM_SUBMIT ) == null ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_SESSION_LOST, SiteMessage.TYPE_STOP );
+
             // sonar "Correctness - Possible null pointer dereference" - exception already thrown by SiteMessageService.setMessage
             throw new SiteMessageException(  );
         }
@@ -421,23 +424,25 @@ public class FormApp implements XPageApplication
 
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         Collection<Form> listAllForms = FormHome.getFormList( filter, plugin );
-        if ( SecurityService.isAuthenticationEnable(  ) && 
-        		SecurityService.getInstance(  ).getRegisteredUser( request ) == null )
+
+        if ( SecurityService.isAuthenticationEnable(  ) &&
+                ( SecurityService.getInstance(  ).getRegisteredUser( request ) == null ) )
         {
-        	Collection<Form> listForms = new ArrayList<Form>(  );
+            Collection<Form> listForms = new ArrayList<Form>(  );
+
             for ( Form form : listAllForms )
             {
-            	if ( !form.isActiveMyLuteceAuthentification(  ) )
-            	{
-            		listForms.add( form );
-            	}
+                if ( !form.isActiveMyLuteceAuthentification(  ) )
+                {
+                    listForms.add( form );
+                }
             }
 
             model.put( MARK_LIST_FORMS, listForms );
         }
         else
         {
-        	model.put( MARK_LIST_FORMS, listAllForms );
+            model.put( MARK_LIST_FORMS, listAllForms );
         }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_LIST_FORMS, request.getLocale(  ), model );
@@ -460,7 +465,7 @@ public class FormApp implements XPageApplication
         XPage page = new XPage(  );
         Map<String, Object> model = new HashMap<String, Object>(  );
         String strFormId = request.getParameter( PARAMETER_ID_FORM );
-        
+
         if ( !strFormId.matches( REGEX_ID ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_ERROR );
@@ -476,13 +481,13 @@ public class FormApp implements XPageApplication
         // Check if the session contains all the attributes set by the mandatory EntryTypeSession
         if ( !FormService.getInstance(  ).isSessionValid( form, request ) )
         {
-        	String strUrlReturn = AppPropertiesService.getProperty( PROPERTY_SESSION_INVALIDATE_URL_RETURN );
-        	SiteMessageService.setMessage( request, Messages.USER_ACCESS_DENIED, SiteMessage.TYPE_STOP, strUrlReturn );
+            String strUrlReturn = AppPropertiesService.getProperty( PROPERTY_SESSION_INVALIDATE_URL_RETURN );
+            SiteMessageService.setMessage( request, Messages.USER_ACCESS_DENIED, SiteMessage.TYPE_STOP, strUrlReturn );
         }
 
         // Check if the form needs MyLutece authentication
         checkMyLuteceAuthentification( form, request );
-        
+
         page.setTitle( form.getTitle(  ) );
         page.setPathLabel( form.getTitle(  ) );
 
@@ -508,11 +513,14 @@ public class FormApp implements XPageApplication
 
         // The draft is saved either by clicking on "save" or by clicking on "validate"
         boolean bIsDraftSaved = false;
+
         if ( FormDraftBackupService.isDraftSupported(  ) )
         {
-        	bIsDraftSaved = ( request.getParameter( PARAMETER_ID_FORM ) != null ) && 
-        	( ( request.getParameter( PARAMETER_SAVE ) != null ) || ( request.getParameter( PARAMETER_SAVE_DRAFT ) != null ) );
+            bIsDraftSaved = ( request.getParameter( PARAMETER_ID_FORM ) != null ) &&
+                ( ( request.getParameter( PARAMETER_SAVE ) != null ) ||
+                ( request.getParameter( PARAMETER_SAVE_DRAFT ) != null ) );
         }
+
         model.put( MARK_IS_DRAFT_SAVED, bIsDraftSaved );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM, request.getLocale(  ), model );
@@ -559,7 +567,7 @@ public class FormApp implements XPageApplication
         }
 
         Form form = FormHome.findByPrimaryKey( nIdForm, plugin );
-        
+
         checkMyLuteceAuthentification( form, request );
 
         //test already vote
@@ -585,24 +593,26 @@ public class FormApp implements XPageApplication
         {
             formSubmit.setIp( request.getRemoteAddr(  ) );
         }
-        
+
         formSubmit.setForm( form );
+
         boolean bValidateRequirement = true;
+
         if ( form.isActiveRequirement(  ) && ( strRequirement == null ) )
         {
-    		session.setAttribute( SESSION_VALIDATE_REQUIREMENT, false );
-    		bValidateRequirement = false;
+            session.setAttribute( SESSION_VALIDATE_REQUIREMENT, false );
+            bValidateRequirement = false;
         }
-    	else
-    	{
-    		session.setAttribute( SESSION_VALIDATE_REQUIREMENT, true );
-    	}
-        
+        else
+        {
+            session.setAttribute( SESSION_VALIDATE_REQUIREMENT, true );
+        }
+
         if ( doInsertResponseInFormSubmit( request, formSubmit, plugin ) || !bValidateRequirement )
         {
-        	return getForm( request, session, nMode, plugin );
+            return getForm( request, session, nMode, plugin );
         }
-        
+
         //get form Recap
         Recap recap = RecapHome.findByPrimaryKey( form.getRecap(  ).getIdRecap(  ), plugin );
 
@@ -622,7 +632,7 @@ public class FormApp implements XPageApplication
             //convert the value of the object response to string 
             for ( Response response : formSubmit.getListResponse(  ) )
             {
-                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || response.getFile(  ) != null )
+                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || ( response.getFile(  ) != null ) )
                 {
                     response.setToStringValueResponse( response.getEntry(  )
                                                                .getResponseValueForRecap( request, response, locale ) );
@@ -666,7 +676,7 @@ public class FormApp implements XPageApplication
         page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale(  ) ) );
         page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale(  ) ) );
         page.setContent( template.getHtml(  ) );
-        
+
         return page;
     }
 
@@ -741,18 +751,20 @@ public class FormApp implements XPageApplication
 
         if ( request.getSession(  ) != null )
         {
-        	Map<Integer, List<Response>> listSubmittedResponses = new HashMap<Integer, List<Response>>(  );
-        	request.getSession(  ).setAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES, listSubmittedResponses );
+            Map<Integer, List<Response>> listSubmittedResponses = new HashMap<Integer, List<Response>>(  );
+            request.getSession(  ).setAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES, listSubmittedResponses );
         }
-        
+
         for ( IEntry entry : listEntryFirstLevel )
         {
             formError = FormUtils.getResponseEntry( request, entry.getIdEntry(  ), plugin, formSubmit, false, locale );
+
             if ( formError != null )
             {
-            	bHasError = true;
+                bHasError = true;
             }
         }
+
         return bHasError;
     }
 
@@ -801,7 +813,7 @@ public class FormApp implements XPageApplication
 
         //Notify new form submit
         FormUtils.sendNotificationMailFormSubmit( formSubmit, locale );
-        
+
         // We can safely remove session files : they are validated
         FormAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( session.getId(  ) );
 
@@ -813,17 +825,17 @@ public class FormApp implements XPageApplication
             outputProcessor.process( formSubmit, request, plugin );
         }
     }
-    
+
     /**
      * check if authentification
-     * @param form Form 
+     * @param form Form
      * @param request HttpServletRequest
      * @throws UserNotSignedException exception if the form requires an authentification and the user is not logged
      */
     private void checkMyLuteceAuthentification( Form form, HttpServletRequest request )
-    	throws UserNotSignedException
+        throws UserNotSignedException
     {
-    	// Try to register the user in case of external authentication
+        // Try to register the user in case of external authentication
         if ( SecurityService.isAuthenticationEnable(  ) )
         {
             if ( SecurityService.getInstance(  ).isExternalAuthentication(  ) )
@@ -854,31 +866,32 @@ public class FormApp implements XPageApplication
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * Removes the uploaded fileItem
      * @param request the request
      * @category CALLED_BY_JS (formupload.js)
      */
     public String doRemoveAsynchronousUploadedFile( HttpServletRequest request )
     {
-    	String strSessionId = request.getSession(  ).getId(  );
-    	String strIdEntry = request.getParameter( FormUtils.PARAMETER_ID_ENTRY );
-    	String strFieldIndex = request.getParameter( PARAMETER_FIELD_INDEX );
-    	
-    	if ( StringUtils.isBlank( strIdEntry ) || StringUtils.isBlank( strFieldIndex ) )
+        String strSessionId = request.getSession(  ).getId(  );
+        String strIdEntry = request.getParameter( FormUtils.PARAMETER_ID_ENTRY );
+        String strFieldIndex = request.getParameter( PARAMETER_FIELD_INDEX );
+
+        if ( StringUtils.isBlank( strIdEntry ) || StringUtils.isBlank( strFieldIndex ) )
         {
             return JSONUtils.buildJsonErrorRemovingFile( request ).toString(  );
         }
-    	
-    	// parse json
+
+        // parse json
         JSON jsonFieldIndexes = JSONSerializer.toJSON( strFieldIndex );
 
         if ( !jsonFieldIndexes.isArray(  ) )
         {
             return JSONUtils.buildJsonErrorRemovingFile( request ).toString(  );
         }
+
         JSONArray jsonArrayFieldIndexers = (JSONArray) jsonFieldIndexes;
         int[] tabFieldIndex = new int[jsonArrayFieldIndexers.size(  )];
 
@@ -893,22 +906,25 @@ public class FormApp implements XPageApplication
                 return JSONUtils.buildJsonErrorRemovingFile( request ).toString(  );
             }
         }
-        
+
         // inverse order (removing using index - remove greater first to keep order)
         Arrays.sort( tabFieldIndex );
         ArrayUtils.reverse( tabFieldIndex );
-        
+
         for ( int nFieldIndex : tabFieldIndex )
         {
-        	FormAsynchronousUploadHandler.getHandler(  ).removeFileItem( strIdEntry, strSessionId, nFieldIndex );
+            FormAsynchronousUploadHandler.getHandler(  ).removeFileItem( strIdEntry, strSessionId, nFieldIndex );
         }
-        
-    	JSONObject json = new JSONObject(  );
+
+        JSONObject json = new JSONObject(  );
         // operation successful
         json.element( JSONUtils.JSON_KEY_SUCCESS, JSONUtils.JSON_KEY_SUCCESS );
-        json.accumulateAll( JSONUtils.getUploadedFileJSON( FormAsynchronousUploadHandler.getHandler(  ).getFileItems( strIdEntry, strSessionId ) ) );
-        json.element( JSONUtils.JSON_KEY_FIELD_NAME, FormAsynchronousUploadHandler.getHandler(  ).buildFieldName( strIdEntry ) );
-        
+        json.accumulateAll( JSONUtils.getUploadedFileJSON( FormAsynchronousUploadHandler.getHandler(  )
+                                                                                        .getFileItems( strIdEntry,
+                    strSessionId ) ) );
+        json.element( JSONUtils.JSON_KEY_FIELD_NAME,
+            FormAsynchronousUploadHandler.getHandler(  ).buildFieldName( strIdEntry ) );
+
         return json.toString(  );
     }
 }

@@ -38,16 +38,17 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
+
 /**
- * 
+ *
  * FormParameterHome
  *
  */
-public final class FormParameterHome 
+public final class FormParameterHome
 {
-	// Static variable pointed at the DAO instance
-    private static IFormParameterDAO _dao = ( IFormParameterDAO ) SpringContextService.getPluginBean( "form",
-    		"form.formParameterDAO" );
+    // Static variable pointed at the DAO instance
+    private static IFormParameterDAO _dao = (IFormParameterDAO) SpringContextService.getPluginBean( "form",
+            "form.formParameterDAO" );
 
     /**
      * Load all the parameter default values
@@ -56,39 +57,39 @@ public final class FormParameterHome
      */
     public static ReferenceList findAll( Plugin plugin )
     {
-    	return _dao.selectAll( plugin );
+        return _dao.selectAll( plugin );
     }
-    
-	/**
-     * Load the parameter value
-     * @param strParameterKey the parameter key
-     * @param plugin
-     * @return The parameter value
-     */
+
+    /**
+    * Load the parameter value
+    * @param strParameterKey the parameter key
+    * @param plugin
+    * @return The parameter value
+    */
     public static ReferenceItem findByKey( String strParameterKey, Plugin plugin )
     {
-    	return _dao.load( strParameterKey, plugin );
+        return _dao.load( strParameterKey, plugin );
     }
-    
+
     /**
      * Update the parameter value
      * @param strParameterKey The parameter key
-     * @param strParameterValue The parameter value 
+     * @param strParameterValue The parameter value
      * @param plugin
      */
     public static void update( ReferenceItem param, Plugin plugin )
     {
-    	_dao.store( param, plugin );
+        _dao.store( param, plugin );
     }
-    
+
     /**
      * Load parameters by filter
-     * @param filter the filter 
+     * @param filter the filter
      * @param plugin the plugin
      * @return a {@link RefereceList}
      */
     public static ReferenceList findByFilter( FormParameterFilter filter, Plugin plugin )
     {
-    	return _dao.selectByFilter( filter, plugin );
+        return _dao.selectByFilter( filter, plugin );
     }
 }

@@ -33,12 +33,13 @@
  */
 package fr.paris.lutece.plugins.form.service.draft;
 
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.util.AppLogService;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * Static wrapper for {@link DraftBackupService}. <br>
@@ -46,70 +47,73 @@ import fr.paris.lutece.portal.service.util.AppLogService;
  * Make sure there is only one implementation at runtime, multiple implementation will lead to non predictable behavior. <br>
  * Does nothing if no implementation is set.
  */
-public final class FormDraftBackupService 
+public final class FormDraftBackupService
 {
-	private static DraftBackupService _draftBackupService;
-	
-	/**
-	 * Empty constructor
-	 */
-	private FormDraftBackupService(  )
-	{
-		// nothing
-	}
-	
-	/**
-	 * Sets the {@link DraftBackupService}
-	 * @param draftBackupService the backup service
-	 */
-	public synchronized static void setDraftBackupService( DraftBackupService draftBackupService )
-	{
-		_draftBackupService = draftBackupService;
-		AppLogService.debug( "Using " + draftBackupService.getClass(  ) + " as draftBackupService" );
-	}
-	
+    private static DraftBackupService _draftBackupService;
+
+    /**
+     * Empty constructor
+     */
+    private FormDraftBackupService(  )
+    {
+        // nothing
+    }
+
+    /**
+     * Sets the {@link DraftBackupService}
+     * @param draftBackupService the backup service
+     */
+    public synchronized static void setDraftBackupService( DraftBackupService draftBackupService )
+    {
+        _draftBackupService = draftBackupService;
+        AppLogService.debug( "Using " + draftBackupService.getClass(  ) + " as draftBackupService" );
+    }
+
     /**
      * Save the draft. Useful when the user save his form but does not submit it.
      * @param request The HTTP request
      * @param form The Form
      * @throws SiteMessageException if an error occurs
      */
-    public static void saveDraft( HttpServletRequest request, Form form ) throws SiteMessageException
+    public static void saveDraft( HttpServletRequest request, Form form )
+        throws SiteMessageException
     {
-    	if ( _draftBackupService != null )
-    	{
-    		_draftBackupService.saveDraft( request, form );
-    	}
+        if ( _draftBackupService != null )
+        {
+            _draftBackupService.saveDraft( request, form );
+        }
     }
-    
+
     /**
      * Saves the formSubmit as draft. Useful after the user submitted his form.
      * @param request the request
      * @param formSubmit formSubmit
      * @throws SiteMessageException if an error occurs
      */
-    public static void saveDraft( HttpServletRequest request, FormSubmit formSubmit ) throws SiteMessageException
+    public static void saveDraft( HttpServletRequest request, FormSubmit formSubmit )
+        throws SiteMessageException
     {
-    	if ( _draftBackupService != null )
-    	{
-    		_draftBackupService.saveDraft( request, formSubmit );
-    	}
+        if ( _draftBackupService != null )
+        {
+            _draftBackupService.saveDraft( request, formSubmit );
+        }
     }
 
     /**
-     * Validate a draft. 
+     * Validate a draft.
      * @param request The HTTP request
      * @param form The form
      * @throws SiteMessageException if an error occurs
      */
-    public static void validateDraft( HttpServletRequest request, Form form ) throws SiteMessageException
+    public static void validateDraft( HttpServletRequest request, Form form )
+        throws SiteMessageException
     {
-    	if ( _draftBackupService != null )
-    	{
-    		_draftBackupService.validateDraft( request, form );
-    	}
+        if ( _draftBackupService != null )
+        {
+            _draftBackupService.validateDraft( request, form );
+        }
     }
-    
+
     /**
      * Pre Process Request.
      * Always returns <code>false</code> if no implementation.
@@ -119,23 +123,23 @@ public final class FormDraftBackupService
      * should be continued
      * @throws SiteMessageException if an error occurs
      */
-    public static boolean preProcessRequest( HttpServletRequest request, Form form ) throws SiteMessageException
+    public static boolean preProcessRequest( HttpServletRequest request, Form form )
+        throws SiteMessageException
     {
-    	if ( _draftBackupService != null )
-    	{
-    		return _draftBackupService.preProcessRequest( request, form );
-    	}
-    	
-    	return false;
+        if ( _draftBackupService != null )
+        {
+            return _draftBackupService.preProcessRequest( request, form );
+        }
+
+        return false;
     }
-    
+
     /**
      * Returns <code>true</code> if draft is supported, <code>false</code> otherwise.
      * @return <code>true</code> if draft is supported, <code>false</code> otherwise.
      */
     public static boolean isDraftSupported(  )
     {
-    	return _draftBackupService != null;
+        return _draftBackupService != null;
     }
-
 }

@@ -33,29 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.entity.StandardEntityCollection;
-
 import com.keypoint.PngEncoder;
 
 import fr.paris.lutece.plugins.form.business.Category;
@@ -136,6 +113,33 @@ import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
+
+import java.awt.image.BufferedImage;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
+import java.sql.Timestamp;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * This class provides the user interface to manage form features ( manage,
@@ -160,7 +164,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String TEMPLATE_MODIFY_MESSAGE = "admin/plugins/form/modify_message.html";
     private static final String TEMPLATE_MANAGE_VALIDATOR = "admin/plugins/form/manage_validator.html";
     private static final String TEMPLATE_MANAGE_ADVANCED_PARAMETERS = "admin/plugins/form/manage_advanced_parameters.html";
-    
+
     //message
     private static final String MESSAGE_CONFIRM_REMOVE_FORM = "form.message.confirmRemoveForm";
     private static final String MESSAGE_CONFIRM_REMOVE_FORM_WITH_FORM_SUBMIT = "form.message.confirmRemoveFormWithFormSubmit";
@@ -290,7 +294,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String JSP_MANAGE_OUTPUT_PROCESS_FORM = "jsp/admin/plugins/form/ManageOutputProcessor.jsp";
     private static final String JSP_MANAGE_VALIDATOR_FORM = "jsp/admin/plugins/form/ManageValidator.jsp";
     private static final String JSP_MANAGE_ADVANCED_PARAMETERS = "jsp/admin/plugins/form/ManageAdvancedParameters.jsp";
-    
+
     //parameters form
     private static final String PARAMETER_ID_FORM = "id_form";
     private static final String PARAMETER_REQUIREMENT = "requirement";
@@ -372,8 +376,8 @@ public class FormJspBean extends PluginAdminPageJspBean
     private int _nIdForm = -1;
     private int _nIdEntry = -1;
     private List<FormSubmit> _listFormSubmitTest;
-    private ResponseService _responseService = (ResponseService) SpringContextService.getPluginBean( 
-    		FormPlugin.PLUGIN_NAME, FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+    private ResponseService _responseService = (ResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
+            FormUtils.BEAN_FORM_RESPONSE_SERVICE );
 
     /*-------------------------------MANAGEMENT  FORM-----------------------------*/
 
@@ -429,8 +433,8 @@ public class FormJspBean extends PluginAdminPageJspBean
         refListActive = initRefListActive( plugin, locale );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
-        LocalizedPaginator paginator = new LocalizedPaginator( listForm, _nItemsPerPageForm, getJspManageForm( request ),
-                PARAMETER_PAGE_INDEX, _strCurrentPageIndexForm, getLocale(  ) );
+        LocalizedPaginator paginator = new LocalizedPaginator( listForm, _nItemsPerPageForm,
+                getJspManageForm( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexForm, getLocale(  ) );
 
         listActionsForFormEnable = FormActionHome.selectActionsByFormState( Form.STATE_ENABLE, plugin, locale );
         listActionsForFormDisable = FormActionHome.selectActionsByFormState( Form.STATE_DISABLE, plugin, locale );
@@ -449,9 +453,9 @@ public class FormJspBean extends PluginAdminPageJspBean
             listActions = (List<FormAction>) RBACService.getAuthorizedActionsCollection( listActions, form, getUser(  ) );
             form.setActions( listActions );
         }
-        
-        boolean bPermissionAdvancedParameter = RBACService.isAuthorized( Form.RESOURCE_TYPE, 
-        		RBAC.WILDCARD_RESOURCES_ID,	FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) );
+
+        boolean bPermissionAdvancedParameter = RBACService.isAuthorized( Form.RESOURCE_TYPE,
+                RBAC.WILDCARD_RESOURCES_ID, FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) );
 
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageForm );
@@ -481,7 +485,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         //refMailingList=AdminMailingListService.getMailingLists(adminUser);
         return getAdminPage( templateList.getHtml(  ) );
     }
-    
+
     /**
      * Returns advanced parameters form
      *
@@ -490,19 +494,20 @@ public class FormJspBean extends PluginAdminPageJspBean
      */
     public String getManageAdvancedParameters( HttpServletRequest request )
     {
-    	if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, 
-    			FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
-    	{
-    		return getManageForm( request );
-    	}
-    	
-    	Map<String, Object> model = FormService.getInstance(  ).getManageAdvancedParameters( getUser(  ) );
-    	
-    	HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_ADVANCED_PARAMETERS, getLocale(  ), model );
+        if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
+        {
+            return getManageForm( request );
+        }
+
+        Map<String, Object> model = FormService.getInstance(  ).getManageAdvancedParameters( getUser(  ) );
+
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_ADVANCED_PARAMETERS, getLocale(  ),
+                model );
 
         return getAdminPage( template.getHtml(  ) );
     }
-    
+
     /**
      * Modify form parameter default values
      * @param request HttpServletRequest
@@ -510,29 +515,32 @@ public class FormJspBean extends PluginAdminPageJspBean
      * @throws AccessDeniedException
      */
     public String doModifyFormParameterDefaultValues( HttpServletRequest request )
-    	throws AccessDeniedException
+        throws AccessDeniedException
     {
-    	if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, 
-        		RBAC.WILDCARD_RESOURCES_ID,	FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
-    	{
-    		throw new AccessDeniedException(  );
-    	}
-    	
-    	ReferenceList listParams = FormParameterService.getService(  ).findDefaultValueParameters(  );
-    	for ( ReferenceItem param : listParams )
-    	{
-    		String strParamValue = request.getParameter( param.getCode(  ) );
-        	if ( strParamValue == null )
-        	{
-        		strParamValue = CONST_ZERO;
-        	}
-        	param.setName( strParamValue );
-        	FormParameterService.getService(  ).update( param );
-    	}
-    	
-    	return getJspManageAdvancedParameters( request );
+        if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
+        {
+            throw new AccessDeniedException(  );
+        }
+
+        ReferenceList listParams = FormParameterService.getService(  ).findDefaultValueParameters(  );
+
+        for ( ReferenceItem param : listParams )
+        {
+            String strParamValue = request.getParameter( param.getCode(  ) );
+
+            if ( strParamValue == null )
+            {
+                strParamValue = CONST_ZERO;
+            }
+
+            param.setName( strParamValue );
+            FormParameterService.getService(  ).update( param );
+        }
+
+        return getJspManageAdvancedParameters( request );
     }
-    
+
     /**
      * Modify entry parameter default values
      * @param request HttpServletRequest
@@ -540,29 +548,32 @@ public class FormJspBean extends PluginAdminPageJspBean
      * @throws AccessDeniedException
      */
     public String doModifyEntryParameterDefaultValues( HttpServletRequest request )
-    	throws AccessDeniedException
+        throws AccessDeniedException
     {
-    	if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, 
-        		RBAC.WILDCARD_RESOURCES_ID,	FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
-    	{
-    		throw new AccessDeniedException(  );
-    	}
-    	
-    	ReferenceList listParams = EntryParameterService.getService(  ).findAll(  );
-    	for ( ReferenceItem param : listParams )
-    	{
-    		String strParamValue = request.getParameter( param.getCode(  ) );
-        	if ( strParamValue == null )
-        	{
-        		strParamValue = CONST_ZERO;
-        	}
-        	param.setName( strParamValue );
-        	EntryParameterService.getService(  ).update( param );
-    	}
-    	
-    	return getJspManageAdvancedParameters( request );
+        if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
+        {
+            throw new AccessDeniedException(  );
+        }
+
+        ReferenceList listParams = EntryParameterService.getService(  ).findAll(  );
+
+        for ( ReferenceItem param : listParams )
+        {
+            String strParamValue = request.getParameter( param.getCode(  ) );
+
+            if ( strParamValue == null )
+            {
+                strParamValue = CONST_ZERO;
+            }
+
+            param.setName( strParamValue );
+            EntryParameterService.getService(  ).update( param );
+        }
+
+        return getJspManageAdvancedParameters( request );
     }
-    
+
     /**
      * return url of the jsp manage advanced parameters form
      * @param request The HTTP request
@@ -589,7 +600,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         String strActiveCaptcha = request.getParameter( PARAMETER_ACTIVE_CAPTCHA );
         String strActiveStoreAdresse = request.getParameter( PARAMETER_ACTIVE_STORE_ADRESSE );
         String strActiveRequirement = request.getParameter( PARAMETER_ACTIVE_REQUIREMENT );
-        String strCategory = request.getParameter ( PARAMETER_ID_CATEGORY );
+        String strCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         String strActiveMyLuteceAuthentification = request.getParameter( PARAMETER_ACTIVE_MYLUTECE_AUTHENTIFICATION );
 
         String strLimitNumberResponse = request.getParameter( PARAMETER_LIMIT_NUMBER_RESPONSE );
@@ -703,22 +714,22 @@ public class FormJspBean extends PluginAdminPageJspBean
         {
             form.setActiveRequirement( false );
         }
-        
+
         if ( strActiveMyLuteceAuthentification != null )
         {
-        	form.setActiveMyLuteceAuthentification( true );
+            form.setActiveMyLuteceAuthentification( true );
         }
         else
         {
-        	form.setActiveMyLuteceAuthentification( false );
+            form.setActiveMyLuteceAuthentification( false );
         }
-        
+
         try
         {
-        	int nCategoryId = Integer.parseInt( strCategory );
-        	
-        	Category category = CategoryHome.findByPrimaryKey( nCategoryId, getPlugin( ) );
-        	form.setCategory( category );
+            int nCategoryId = Integer.parseInt( strCategory );
+
+            Category category = CategoryHome.findByPrimaryKey( nCategoryId, getPlugin(  ) );
+            form.setCategory( category );
         }
         catch ( NumberFormatException ne )
         {
@@ -843,18 +854,19 @@ public class FormJspBean extends PluginAdminPageJspBean
         {
             themesRefList.addItem( theme.getCodeTheme(  ), theme.getThemeDescription(  ) );
         }
-        
+
         // Default Values
         ReferenceList listParamDefaultValues = FormParameterService.getService(  ).findDefaultValueParameters(  );
 
         //Add categories
-        List<Category> listCategoriesView = CategoryHome.getList( getPlugin( ) );
-        Category emptyCategory = new Category( );
+        List<Category> listCategoriesView = CategoryHome.getList( getPlugin(  ) );
+        Category emptyCategory = new Category(  );
         emptyCategory.setIdCategory( -2 );
         emptyCategory.setTitle( "" );
         listCategoriesView.add( emptyCategory );
+
         ReferenceList refCategoryList = FormUtils.getRefListCategory( listCategoriesView );
-        
+
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_USER_WORKGROUP_REF_LIST, refListWorkGroups );
         model.put( MARK_MAILING_REF_LIST, refMailingList );
@@ -909,9 +921,10 @@ public class FormJspBean extends PluginAdminPageJspBean
             form.setLibelleResetButton( defaultMessage.getLibelleResetButton(  ) );
 
             FormHome.create( form, plugin );
+
             if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) && form.isActiveMyLuteceAuthentification(  ) )
             {
-            	FormUtils.activateMyLuteceAuthentification( form, plugin, getLocale(  ), request );
+                FormUtils.activateMyLuteceAuthentification( form, plugin, getLocale(  ), request );
             }
 
             Theme theme = ThemeHome.findByPrimaryKey( form.getCodeTheme(  ) );
@@ -1026,12 +1039,13 @@ public class FormJspBean extends PluginAdminPageJspBean
         refMailingList.addAll( AdminMailingListService.getMailingLists( adminUser ) );
 
         List<Category> listCategoriesView = CategoryHome.getList( plugin );
-        Category emptyCategory = new Category( );
+        Category emptyCategory = new Category(  );
         emptyCategory.setIdCategory( -2 );
         emptyCategory.setTitle( "" );
         listCategoriesView.add( emptyCategory );
+
         ReferenceList refCategoryList = FormUtils.getRefListCategory( listCategoriesView );
-        
+
         EntryType entryTypeGroup = new EntryType(  );
         refEntryType = initRefListEntryType( plugin, locale, entryTypeGroup );
 
@@ -1101,6 +1115,7 @@ public class FormJspBean extends PluginAdminPageJspBean
             if ( nIdForm != -1 )
             {
                 updatedForm = FormHome.findByPrimaryKey( nIdForm, plugin );
+
                 Form form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
                 String strOldTheme = updatedForm.getCodeTheme(  );
@@ -1121,16 +1136,17 @@ public class FormJspBean extends PluginAdminPageJspBean
 
                 updatedForm.setIdForm( nIdForm );
                 FormHome.update( updatedForm, getPlugin(  ) );
+
                 if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) &&
-                		updatedForm.isActiveMyLuteceAuthentification(  ) && !form.isActiveMyLuteceAuthentification(  ) )
-        		{
-        			FormUtils.activateMyLuteceAuthentification( updatedForm, plugin, getLocale(  ), request );
-        		}
-        		else if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) &&
-                		!updatedForm.isActiveMyLuteceAuthentification(  ) && form.isActiveMyLuteceAuthentification(  ) )
-        		{
-        			FormUtils.deactivateMyLuteceAuthentification( updatedForm, plugin );
-        		}
+                        updatedForm.isActiveMyLuteceAuthentification(  ) && !form.isActiveMyLuteceAuthentification(  ) )
+                {
+                    FormUtils.activateMyLuteceAuthentification( updatedForm, plugin, getLocale(  ), request );
+                }
+                else if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) &&
+                        !updatedForm.isActiveMyLuteceAuthentification(  ) && form.isActiveMyLuteceAuthentification(  ) )
+                {
+                    FormUtils.deactivateMyLuteceAuthentification( updatedForm, plugin );
+                }
 
                 String strNewTheme = updatedForm.getCodeTheme(  );
 
@@ -1571,7 +1587,7 @@ public class FormJspBean extends PluginAdminPageJspBean
 
         form = FormHome.findByPrimaryKey( _nIdForm, plugin );
         entry.setForm( form );
-        
+
         // Default Values
         ReferenceList listParamDefaultValues = EntryParameterService.getService(  ).findAll(  );
 
@@ -1813,18 +1829,19 @@ public class FormJspBean extends PluginAdminPageJspBean
             {
                 for ( Field field : entry.getFields(  ) )
                 {
-                	// Check if the field already exists in the database
-                	Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField(  ), plugin );
-                	if ( fieldStored != null )
-                	{
-                		// If it exists, update
-                		FieldHome.update( field, plugin );
-                	}
-                	else
-                	{
-                		// If it does not exist, create
-                		FieldHome.create( field, plugin );
-                	}
+                    // Check if the field already exists in the database
+                    Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField(  ), plugin );
+
+                    if ( fieldStored != null )
+                    {
+                        // If it exists, update
+                        FieldHome.update( field, plugin );
+                    }
+                    else
+                    {
+                        // If it does not exist, create
+                        FieldHome.create( field, plugin );
+                    }
                 }
             }
         }
@@ -2854,7 +2871,8 @@ public class FormJspBean extends PluginAdminPageJspBean
             _nItemsPerPageConditionalEntry = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                     _nItemsPerPageConditionalEntry, _nDefaultItemsPerPage );
 
-            LocalizedPaginator paginator = new LocalizedPaginator( field.getConditionalQuestions(  ), _nItemsPerPageConditionalEntry,
+            LocalizedPaginator paginator = new LocalizedPaginator( field.getConditionalQuestions(  ),
+                    _nItemsPerPageConditionalEntry,
                     AppPathService.getBaseUrl( request ) + JSP_MODIFY_FIELD + "?id_field=" + nIdField,
                     PARAMETER_PAGE_INDEX, _strCurrentPageIndexConditionalEntry, getLocale(  ) );
 
@@ -3645,7 +3663,9 @@ public class FormJspBean extends PluginAdminPageJspBean
                 String strFormatExtension = exportFormat.getExtension(  ).trim(  );
                 String strFileName = form.getTitle(  ) + "." + strFormatExtension;
                 FormUtils.addHeaderResponse( request, response, strFileName, strFormatExtension );
+
                 PrintWriter out = null;
+
                 try
                 {
                     out = response.getWriter(  );
@@ -3657,11 +3677,11 @@ public class FormJspBean extends PluginAdminPageJspBean
                 }
                 finally
                 {
-                	if ( out != null )
-                	{
-                		out.flush(  );
-                		out.close(  );
-                	}
+                    if ( out != null )
+                    {
+                        out.flush(  );
+                        out.close(  );
+                    }
                 }
             }
             else
@@ -3859,14 +3879,14 @@ public class FormJspBean extends PluginAdminPageJspBean
                     AdminMessage.TYPE_STOP );
             }
 
-            if ( responseFile.getFile(  ) != null && responseFile.getFile(  ).getPhysicalFile(  ) != null && 
-            		responseFile.getFile(  ).getPhysicalFile(  ).getValue(  ) != null )
+            if ( ( responseFile.getFile(  ) != null ) && ( responseFile.getFile(  ).getPhysicalFile(  ) != null ) &&
+                    ( responseFile.getFile(  ).getPhysicalFile(  ).getValue(  ) != null ) )
             {
                 try
                 {
                     byte[] byteFileOutPut = responseFile.getFile(  ).getPhysicalFile(  ).getValue(  );
                     FormUtils.addHeaderResponse( request, response, responseFile.getFile(  ).getTitle(  ),
-                    		FilenameUtils.getExtension( responseFile.getFile(  ).getTitle(  ) ) );
+                        FilenameUtils.getExtension( responseFile.getFile(  ).getTitle(  ) ) );
                     response.setContentLength( (int) byteFileOutPut.length );
 
                     OutputStream os = response.getOutputStream(  );
@@ -4235,35 +4255,38 @@ public class FormJspBean extends PluginAdminPageJspBean
     public String doModifyExportEncodingParameters( HttpServletRequest request )
         throws AccessDeniedException
     {
-    	if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, 
-        		RBAC.WILDCARD_RESOURCES_ID,	FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
-    	{
-    		throw new AccessDeniedException(  );
-    	}
+        if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
+        {
+            throw new AccessDeniedException(  );
+        }
 
         ReferenceList listParams = FormParameterService.getService(  ).findExportEncodingParameters(  );
 
         for ( ReferenceItem param : listParams )
         {
             String strParamValue = request.getParameter( param.getCode(  ) );
+
             if ( StringUtils.isNotBlank( strParamValue ) )
             {
-            	// Test if the encoding is supported
-            	try
-				{
-					strParamValue.getBytes( strParamValue );
-				}
-				catch ( UnsupportedEncodingException e )
-				{
-					Object[] tabRequiredFields = { strParamValue };
-					return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_EXPORT_ENCODING_NOT_SUPPORTED, 
-							tabRequiredFields, AdminMessage.TYPE_STOP );
-				} 
+                // Test if the encoding is supported
+                try
+                {
+                    strParamValue.getBytes( strParamValue );
+                }
+                catch ( UnsupportedEncodingException e )
+                {
+                    Object[] tabRequiredFields = { strParamValue };
+
+                    return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_EXPORT_ENCODING_NOT_SUPPORTED,
+                        tabRequiredFields, AdminMessage.TYPE_STOP );
+                }
             }
             else
             {
-            	return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
+                return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
             }
+
             param.setName( strParamValue );
             FormParameterService.getService(  ).update( param );
         }

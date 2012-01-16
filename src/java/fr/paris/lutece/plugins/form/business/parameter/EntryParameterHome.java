@@ -38,16 +38,17 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
+
 /**
- * 
+ *
  * EntryParameterHome
  *
  */
-public final class EntryParameterHome 
+public final class EntryParameterHome
 {
-	// Static variable pointed at the DAO instance
-    private static IEntryParameterDAO _dao = ( IEntryParameterDAO ) SpringContextService.getPluginBean( "form",
-    		"form.entryParameterDAO" );
+    // Static variable pointed at the DAO instance
+    private static IEntryParameterDAO _dao = (IEntryParameterDAO) SpringContextService.getPluginBean( "form",
+            "form.entryParameterDAO" );
 
     /**
      * Load all the parameter default values
@@ -56,28 +57,28 @@ public final class EntryParameterHome
      */
     public static ReferenceList findAll( Plugin plugin )
     {
-    	return _dao.selectAll( plugin );
+        return _dao.selectAll( plugin );
     }
-    
-	/**
-     * Load the parameter value
-     * @param strParameterKey the parameter key
-     * @param plugin
-     * @return The parameter value
-     */
+
+    /**
+    * Load the parameter value
+    * @param strParameterKey the parameter key
+    * @param plugin
+    * @return The parameter value
+    */
     public static ReferenceItem findByKey( String strParameterKey, Plugin plugin )
     {
-    	return _dao.load( strParameterKey, plugin );
+        return _dao.load( strParameterKey, plugin );
     }
-    
+
     /**
      * Update the parameter value
      * @param strParameterKey The parameter key
-     * @param strParameterValue The parameter value 
+     * @param strParameterValue The parameter value
      * @param plugin
      */
     public static void update( ReferenceItem param, Plugin plugin )
     {
-    	_dao.store( param, plugin );
+        _dao.store( param, plugin );
     }
 }

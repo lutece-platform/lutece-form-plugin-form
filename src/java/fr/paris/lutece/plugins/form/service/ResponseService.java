@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.service;
 
-import java.util.List;
-
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.ResponseHome;
@@ -44,35 +42,39 @@ import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 
+import java.util.List;
+
+
 /**
- * 
+ *
  * ResponseService
- * 
+ *
  */
 public final class ResponseService
 {
-	private FileService _fileService;
+    private FileService _fileService;
 
-	/**
-	 * Set the file service
-	 * @param fileService the file service
-	 */
-	public void setFileService( FileService fileService )
-	{
-		_fileService = fileService;
-	}
-	
-	/**
-     * Creation of an instance of response
-     * @param response The instance of the response which contains the informations to store
+    /**
+     * Set the file service
+     * @param fileService the file service
      */
+    public void setFileService( FileService fileService )
+    {
+        _fileService = fileService;
+    }
+
+    /**
+    * Creation of an instance of response
+    * @param response The instance of the response which contains the informations to store
+    */
     public void create( Response response )
     {
-    	if ( response.getFile(  ) != null )
-    	{
-    		response.getFile(  ).setIdFile( _fileService.create( response.getFile(  ) ) );
-    	}
-    	ResponseHome.create( response, FormUtils.getPlugin() );
+        if ( response.getFile(  ) != null )
+        {
+            response.getFile(  ).setIdFile( _fileService.create( response.getFile(  ) ) );
+        }
+
+        ResponseHome.create( response, FormUtils.getPlugin(  ) );
     }
 
     /**
@@ -81,11 +83,12 @@ public final class ResponseService
      */
     public void update( Response response )
     {
-    	if ( response.getFile(  ) != null )
-    	{
-    		_fileService.update( response.getFile(  ) );
-    	}
-    	ResponseHome.update( response, FormUtils.getPlugin() );
+        if ( response.getFile(  ) != null )
+        {
+            _fileService.update( response.getFile(  ) );
+        }
+
+        ResponseHome.update( response, FormUtils.getPlugin(  ) );
     }
 
     /**
@@ -94,21 +97,24 @@ public final class ResponseService
      */
     public void remove( int nIdFormSubmit )
     {
-    	// First remove files
-    	ResponseFilter filter = new ResponseFilter(  );
-    	filter.setIdForm( nIdFormSubmit );
-    	for ( Response response : getResponseList( filter, false ) )
-    	{
-    		if ( response.getFile(  ) != null )
-    		_fileService.remove( response.getFile(  ).getIdFile(  ) );
-    	}
-    	
-    	// Then remove responses
+        // First remove files
+        ResponseFilter filter = new ResponseFilter(  );
+        filter.setIdForm( nIdFormSubmit );
+
+        for ( Response response : getResponseList( filter, false ) )
+        {
+            if ( response.getFile(  ) != null )
+            {
+                _fileService.remove( response.getFile(  ).getIdFile(  ) );
+            }
+        }
+
+        // Then remove responses
         ResponseHome.remove( nIdFormSubmit, FormUtils.getPlugin(  ) );
     }
 
     // GET
-    
+
     /**
      * Returns an instance of a Response whose identifier is specified in parameter
      * @param nKey The entry primary key
@@ -117,12 +123,14 @@ public final class ResponseService
      */
     public Response findByPrimaryKey( int nKey, boolean bGetFileData )
     {
-    	Response response = ResponseHome.findByPrimaryKey( nKey, FormUtils.getPlugin(  ) );
-    	if ( bGetFileData && response != null && response.getFile(  ) != null )
-    	{
-    		response.setFile( _fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), true ) );
-    	}
-        return response; 
+        Response response = ResponseHome.findByPrimaryKey( nKey, FormUtils.getPlugin(  ) );
+
+        if ( bGetFileData && ( response != null ) && ( response.getFile(  ) != null ) )
+        {
+            response.setFile( _fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), true ) );
+        }
+
+        return response;
     }
 
     /**
@@ -133,18 +141,20 @@ public final class ResponseService
      */
     public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
     {
-    	List<Response> listResponses = ResponseHome.getResponseList( filter, FormUtils.getPlugin(  ) );
-    	if ( bGetFileData && listResponses != null && !listResponses.isEmpty(  ) )
-    	{
-    		for ( Response response : listResponses )
-    		{
-    			if ( response.getFile(  ) != null )
-    			{
-    				response.setFile( _fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), bGetFileData ) );
-    			}
-    		}
-    	}
-    	return listResponses;
+        List<Response> listResponses = ResponseHome.getResponseList( filter, FormUtils.getPlugin(  ) );
+
+        if ( bGetFileData && ( listResponses != null ) && !listResponses.isEmpty(  ) )
+        {
+            for ( Response response : listResponses )
+            {
+                if ( response.getFile(  ) != null )
+                {
+                    response.setFile( _fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), bGetFileData ) );
+                }
+            }
+        }
+
+        return listResponses;
     }
 
     /**

@@ -33,16 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.modules.processornotifysender.service;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.modules.processornotifysender.utils.FileUtils;
@@ -53,6 +43,17 @@ import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.mail.FileAttachment;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -127,24 +128,25 @@ public final class NotifySenderService
         // Add the response files to a temporary folder
         for ( Response response : formSubmit.getListResponse(  ) )
         {
-            if ( response.getFile(  ) != null && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) && 
-            		response.getFile(  ).getPhysicalFile(  ) != null && response.getFile(  ).getPhysicalFile(  ).getValue(  ) != null )
+            if ( ( response.getFile(  ) != null ) && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) &&
+                    ( response.getFile(  ).getPhysicalFile(  ) != null ) &&
+                    ( response.getFile(  ).getPhysicalFile(  ).getValue(  ) != null ) )
             {
                 if ( AppLogService.isDebugEnabled(  ) )
                 {
-                    AppLogService.debug( "NotifySenderService : Adding '" + response.getFile(  ).getTitle(  ) + "' to folder '" +
-                        getFileFolderPath(  ) + "'" );
+                    AppLogService.debug( "NotifySenderService : Adding '" + response.getFile(  ).getTitle(  ) +
+                        "' to folder '" + getFileFolderPath(  ) + "'" );
                 }
 
                 try
-				{
-					FileUtils.addFileResponseToFolder( response, getFileFolderPath(  ) );
-				}
-				catch ( IOException e )
-				{
-					AppLogService.error( "NotifySenderService : Cannot add file '" + response.getFile(  ).getTitle(  ) + "' to folder '" + 
-							getFileFolderPath(  ) + "'" );
-				}
+                {
+                    FileUtils.addFileResponseToFolder( response, getFileFolderPath(  ) );
+                }
+                catch ( IOException e )
+                {
+                    AppLogService.error( "NotifySenderService : Cannot add file '" + response.getFile(  ).getTitle(  ) +
+                        "' to folder '" + getFileFolderPath(  ) + "'" );
+                }
             }
         }
 
@@ -168,6 +170,7 @@ public final class NotifySenderService
             }
 
             fis = new FileInputStream( getZipFolderPath(  ) + getZipName( nIdFormSubmit ) );
+
             byte[] data = IOUtils.toByteArray( fis );
 
             String strAttachmentName = AppPropertiesService.getProperty( PROPERTY_ATTACHMENT_NAME );
@@ -201,9 +204,9 @@ public final class NotifySenderService
         }
         finally
         {
-        	IOUtils.closeQuietly( fis );
+            IOUtils.closeQuietly( fis );
         }
-        
+
         // Clean folders
         FileUtils.cleanFolder( getFileFolderPath(  ) );
         FileUtils.cleanFolder( getZipFolderPath(  ) );

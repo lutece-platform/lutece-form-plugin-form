@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.form.modules.processornotifysender.utils;
 
-import java.io.File;
-import java.io.IOException;
+import fr.paris.lutece.plugins.form.business.Response;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 import org.apache.commons.lang.StringUtils;
 
-import fr.paris.lutece.plugins.form.business.Response;
-import fr.paris.lutece.portal.service.util.AppLogService;
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -93,25 +93,29 @@ public final class FileUtils
      * @param strFolder the temporary folder for extraction
      * @throws IOException exception if the copy from byte[] to File has an error
      */
-    public static void addFileResponseToFolder( Response response, String strFolder ) throws IOException
+    public static void addFileResponseToFolder( Response response, String strFolder )
+        throws IOException
     {
-        if ( response.getFile(  ) != null && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) && 
-        		response.getFile(  ).getPhysicalFile(  ) != null && response.getFile(  ).getPhysicalFile(  ).getValue(  ) != null )
+        if ( ( response.getFile(  ) != null ) && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) &&
+                ( response.getFile(  ).getPhysicalFile(  ) != null ) &&
+                ( response.getFile(  ).getPhysicalFile(  ).getValue(  ) != null ) )
         {
-        	// Create the folder first
-        	createFolder( strFolder );
-        	File file = new File( strFolder + response.getFile(  ).getTitle(  ) );
-        	
-        	// Delete the file if it exists
-        	if ( file.exists(  ) )
-        	{
-        		if ( !file.delete(  ) )
-        		{
-        			AppLogService.error( MESSAGE_DELETE_ERROR + strFolder + response.getFile(  ).getTitle(  ) );
-        		}
-        	}
-        	
-    		org.apache.commons.io.FileUtils.writeByteArrayToFile( file, response.getFile(  ).getPhysicalFile(  ).getValue(  ) );
+            // Create the folder first
+            createFolder( strFolder );
+
+            File file = new File( strFolder + response.getFile(  ).getTitle(  ) );
+
+            // Delete the file if it exists
+            if ( file.exists(  ) )
+            {
+                if ( !file.delete(  ) )
+                {
+                    AppLogService.error( MESSAGE_DELETE_ERROR + strFolder + response.getFile(  ).getTitle(  ) );
+                }
+            }
+
+            org.apache.commons.io.FileUtils.writeByteArrayToFile( file,
+                response.getFile(  ).getPhysicalFile(  ).getValue(  ) );
         }
     }
 

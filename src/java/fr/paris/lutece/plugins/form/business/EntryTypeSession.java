@@ -33,19 +33,19 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import fr.paris.lutece.plugins.form.utils.StringUtil;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.message.AdminMessage;
+import fr.paris.lutece.portal.service.message.AdminMessageService;
+
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-
-import fr.paris.lutece.plugins.form.utils.StringUtil;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
 
 
 /**
@@ -54,14 +54,14 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
  * This entry is used to fetch the value of a session's attribute.
  * One example is when coupling form with crm, the module-crm-form
  * will put in session the ID demand and the user GUID. This entry will
- * be able to fetch the ID demand and user GUID when validating the form. 
- * Then, it is easier to export the value to directory with the 
+ * be able to fetch the ID demand and user GUID when validating the form.
+ * Then, it is easier to export the value to directory with the
  * module-form-exportdirectory.
  *
  */
 public class EntryTypeSession extends Entry
 {
-	private static final String FIELD_ATTRIBUTE_NAME = "form.createEntry.labelAttributeName";
+    private static final String FIELD_ATTRIBUTE_NAME = "form.createEntry.labelAttributeName";
     private final String _template_create = "admin/plugins/form/create_entry_type_session.html";
     private final String _template_modify = "admin/plugins/form/modify_entry_type_session.html";
     private final String _template_html_code = "admin/plugins/form/html_code_entry_type_session.html";
@@ -107,7 +107,7 @@ public class EntryTypeSession extends Entry
         }
         else if ( StringUtils.isBlank( strAttibuteName ) )
         {
-        	strFieldError = FIELD_ATTRIBUTE_NAME;
+            strFieldError = FIELD_ATTRIBUTE_NAME;
         }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
@@ -146,25 +146,26 @@ public class EntryTypeSession extends Entry
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-    	String strValueEntry = StringUtils.EMPTY;
-    	HttpSession session = request.getSession( false );
-    	if ( session != null )
-    	{
-    		if ( this.getFields(  ) != null && !this.getFields(  ).isEmpty(  ) &&
-    				this.getFields(  ).get( 0 ) != null )
-    		{
-    			String strAttributeName = this.getFields(  ).get( 0 ).getValue(  );
-    			strValueEntry = (String) session.getAttribute( strAttributeName );
-    		}
-    	}
+        String strValueEntry = StringUtils.EMPTY;
+        HttpSession session = request.getSession( false );
+
+        if ( session != null )
+        {
+            if ( ( this.getFields(  ) != null ) && !this.getFields(  ).isEmpty(  ) &&
+                    ( this.getFields(  ).get( 0 ) != null ) )
+            {
+                String strAttributeName = this.getFields(  ).get( 0 ).getValue(  );
+                strValueEntry = (String) session.getAttribute( strAttributeName );
+            }
+        }
 
         if ( StringUtils.isNotBlank( strValueEntry ) )
         {
-        	Response response = new Response(  );
-        	response.setEntry( this );
-        	response.setResponseValue( strValueEntry );
+            Response response = new Response(  );
+            response.setEntry( this );
+            response.setResponseValue( strValueEntry );
             response.setToStringValueResponse( StringUtils.EMPTY );
-            
+
             listResponse.add( response );
         }
 

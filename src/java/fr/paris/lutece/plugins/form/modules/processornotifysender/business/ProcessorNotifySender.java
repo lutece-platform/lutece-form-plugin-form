@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.modules.processornotifysender.business;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.form.business.EntryTypeSession;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
@@ -62,6 +54,14 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -114,7 +114,7 @@ public class ProcessorNotifySender extends OutputProcessor
      */
     public void setEntryTypeService( EntryTypeService entryTypeService )
     {
-    	_entryTypeService = entryTypeService;
+        _entryTypeService = entryTypeService;
     }
 
     /**
@@ -134,9 +134,9 @@ public class ProcessorNotifySender extends OutputProcessor
         model.put( MARK_LOCALE, locale );
         model.put( MARK_REF_LIST_ENTRY, FormUtils.getRefListAllQuestions( form.getIdForm(  ), plugin ) );
         model.put( MARK_MESSAGE_RECAP, strMessageRecap );
-        model.put( MARK_PERMISSION_SEND_ATTACHMENTS, RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, 
-        		RBAC.WILDCARD_RESOURCES_ID, NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, 
-        		AdminUserService.getAdminUser( request ) ) );
+        model.put( MARK_PERMISSION_SEND_ATTACHMENTS,
+            RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, AdminUserService.getAdminUser( request ) ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CONFIGURATION_NOTIFY_SENDER, locale, model );
 
@@ -189,7 +189,7 @@ public class ProcessorNotifySender extends OutputProcessor
     public String process( FormSubmit formSubmit, HttpServletRequest request, Plugin plugin )
     {
         NotifySenderConfiguration config = NotifySenderConfigurationHome.findByPrimaryKey( formSubmit.getForm(  )
-                                                                                                            .getIdForm(  ),
+                                                                                                     .getIdForm(  ),
                 plugin );
 
         if ( config == null )
@@ -223,7 +223,7 @@ public class ProcessorNotifySender extends OutputProcessor
             //convert the value of the object response to string 
             for ( Response response : formSubmit.getListResponse(  ) )
             {
-                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || response.getFile(  ) != null )
+                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || ( response.getFile(  ) != null ) )
                 {
                     response.setToStringValueResponse( response.getEntry(  )
                                                                .getResponseValueForRecap( request, response,
@@ -275,11 +275,11 @@ public class ProcessorNotifySender extends OutputProcessor
         boolean bSendAttachments = false;
 
         // Check if it must send the attachments
-        if ( RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, 
-        		RBAC.WILDCARD_RESOURCES_ID, NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, 
-        		AdminUserService.getAdminUser( request ) ) && strSendAttachments != null )
+        if ( RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, AdminUserService.getAdminUser( request ) ) &&
+                ( strSendAttachments != null ) )
         {
-        	bSendAttachments = true;
+            bSendAttachments = true;
         }
 
         try

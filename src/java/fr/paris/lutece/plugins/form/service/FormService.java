@@ -33,17 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
@@ -71,6 +60,17 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 /**
  *
@@ -79,54 +79,52 @@ import fr.paris.lutece.util.ReferenceList;
  */
 public final class FormService
 {
-	private static final String MARK_PERMISSION_MANAGE_EXPORT_FORMAT = "permission_manage_export_format";
-	private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
-	private static final String MARK_LIST_FORM_PARAM_DEFAULT_VALUES = "list_form_param_default_values";
-	private static final String MARK_LIST_ENTRY_PARAM_DEFAULT_VALUES = "list_entry_param_default_values";
-	private static final String MARK_LIST_EXPORT_ENCODING_PARAM = "list_export_encoding_param";
-	private static final String MARK_IS_ACTIVE_CAPTCHA = "is_active_captcha";
-	private static final String MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION = "is_active_mylutece_authentification";
-	private static final String MARK_THEME_REF_LIST = "theme_list";
-	private static final String MARK_DEFAULT_THEME = "default_theme";
-	 
+    private static final String MARK_PERMISSION_MANAGE_EXPORT_FORMAT = "permission_manage_export_format";
+    private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
+    private static final String MARK_LIST_FORM_PARAM_DEFAULT_VALUES = "list_form_param_default_values";
+    private static final String MARK_LIST_ENTRY_PARAM_DEFAULT_VALUES = "list_entry_param_default_values";
+    private static final String MARK_LIST_EXPORT_ENCODING_PARAM = "list_export_encoding_param";
+    private static final String MARK_IS_ACTIVE_CAPTCHA = "is_active_captcha";
+    private static final String MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION = "is_active_mylutece_authentification";
+    private static final String MARK_THEME_REF_LIST = "theme_list";
+    private static final String MARK_DEFAULT_THEME = "default_theme";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String MYLUTECE_PLUGIN = "mylutece";
+    private static FormService _singleton;
+    private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
+            FormUtils.BEAN_ENTRY_TYPE_SERVICE );
 
-	private static FormService _singleton;
-	private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getPluginBean( 
-			FormPlugin.PLUGIN_NAME, FormUtils.BEAN_ENTRY_TYPE_SERVICE );
-
-	/**
-	 * Private constructor
-	 */
-	private FormService(  )
-	{
-	}
-
-	/**
-	 * Initialize the Form service
-	 *
-	 */
-	public void init(  )
-	{
-		Form.init(  );
-	}
-
-	/**
-     * Returns the instance of the singleton
-     *
-     * @return The instance of the singleton
+    /**
+     * Private constructor
      */
+    private FormService(  )
+    {
+    }
+
+    /**
+     * Initialize the Form service
+     *
+     */
+    public void init(  )
+    {
+        Form.init(  );
+    }
+
+    /**
+    * Returns the instance of the singleton
+    *
+    * @return The instance of the singleton
+    */
     public static FormService getInstance(  )
     {
-    	if ( _singleton == null )
-    	{
-    		_singleton = new FormService(  );
-    	}
+        if ( _singleton == null )
+        {
+            _singleton = new FormService(  );
+        }
 
-    	return _singleton;
+        return _singleton;
     }
-    
+
     /**
      * Build the advanced parameters management
      * @param user the current user
@@ -134,47 +132,48 @@ public final class FormService
      */
     public Map<String, Object> getManageAdvancedParameters( AdminUser user )
     {
-    	Map<String, Object> model = new HashMap<String, Object>(  );
-    	Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
+        Map<String, Object> model = new HashMap<String, Object>(  );
+        Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 
-    	if ( RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, 
-    			FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, user ) )
-    	{
-    		ReferenceList listDirectoryParamDefaultValues = FormParameterService.getService(  ).findDefaultValueParameters(  );
-    		ReferenceList listEntryParamDefaultValues = EntryParameterService.getService(  ).findAll(  );
-    		ReferenceList listExportEncodingParam = FormParameterService.getService(  ).findExportEncodingParameters(  );
+        if ( RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, user ) )
+        {
+            ReferenceList listDirectoryParamDefaultValues = FormParameterService.getService(  )
+                                                                                .findDefaultValueParameters(  );
+            ReferenceList listEntryParamDefaultValues = EntryParameterService.getService(  ).findAll(  );
+            ReferenceList listExportEncodingParam = FormParameterService.getService(  ).findExportEncodingParameters(  );
 
-    		model.put( MARK_LIST_FORM_PARAM_DEFAULT_VALUES, listDirectoryParamDefaultValues );
-    		model.put( MARK_LIST_ENTRY_PARAM_DEFAULT_VALUES, listEntryParamDefaultValues );
-    		model.put( MARK_LIST_EXPORT_ENCODING_PARAM, listExportEncodingParam );
-    	}
+            model.put( MARK_LIST_FORM_PARAM_DEFAULT_VALUES, listDirectoryParamDefaultValues );
+            model.put( MARK_LIST_ENTRY_PARAM_DEFAULT_VALUES, listEntryParamDefaultValues );
+            model.put( MARK_LIST_EXPORT_ENCODING_PARAM, listExportEncodingParam );
+        }
 
-    	List<ExportFormat> listExportFormat = ExportFormatHome.getList( plugin );
-    	listExportFormat = (List<ExportFormat>) RBACService.getAuthorizedCollection( listExportFormat,
-    			ExportFormatResourceIdService.PERMISSION_MANAGE, user );
+        List<ExportFormat> listExportFormat = ExportFormatHome.getList( plugin );
+        listExportFormat = (List<ExportFormat>) RBACService.getAuthorizedCollection( listExportFormat,
+                ExportFormatResourceIdService.PERMISSION_MANAGE, user );
 
-    	if ( ( listExportFormat.size(  ) != 0 ) ||
-    			RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-    					ExportFormatResourceIdService.PERMISSION_MANAGE, user ) )
-    	{
-    		model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, true );
-    	}
-    	else
-    	{
-    		model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, false );
-    	}
+        if ( ( listExportFormat.size(  ) != 0 ) ||
+                RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    ExportFormatResourceIdService.PERMISSION_MANAGE, user ) )
+        {
+            model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, true );
+        }
+        else
+        {
+            model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, false );
+        }
 
-    	if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-    			DefaultMessageResourceIdService.PERMISSION_MANAGE,user ) )
-    	{
-    		model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, true );
-    	}
-    	else
-    	{
-    		model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, false );
-    	}
-    	
-    	 //Style management
+        if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    DefaultMessageResourceIdService.PERMISSION_MANAGE, user ) )
+        {
+            model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, true );
+        }
+        else
+        {
+            model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, false );
+        }
+
+        //Style management
         Collection<Theme> themes = ThemeHome.getThemesList(  );
         ReferenceList themesRefList = new ReferenceList(  );
 
@@ -182,14 +181,15 @@ public final class FormService
         {
             themesRefList.addItem( theme.getCodeTheme(  ), theme.getThemeDescription(  ) );
         }
+
         model.put( MARK_DEFAULT_THEME, ThemeHome.getGlobalTheme(  ) );
         model.put( MARK_THEME_REF_LIST, themesRefList );
-    	model.put( MARK_IS_ACTIVE_CAPTCHA, PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) );
-    	model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
+        model.put( MARK_IS_ACTIVE_CAPTCHA, PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) );
+        model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
 
-    	return model;
+        return model;
     }
-    
+
     /**
      * Check if the user is authorized to view the form.
      * <br />
@@ -201,41 +201,46 @@ public final class FormService
      */
     public boolean isSessionValid( Form form, HttpServletRequest request )
     {
-    	Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
+        Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 
-    	EntryType entryTypeSession = _entryTypeService.getEntryType( EntryTypeSession.class.getName(  ) );
+        EntryType entryTypeSession = _entryTypeService.getEntryType( EntryTypeSession.class.getName(  ) );
 
-    	EntryFilter eFilter = new EntryFilter(  );
-    	eFilter.setIdForm( form.getIdForm(  ) );
-    	if ( entryTypeSession != null )
-    	{
-    		eFilter.setIdEntryType( entryTypeSession.getIdType(  ) );
-    	}
-    	List<IEntry> listEntries = EntryHome.getEntryList( eFilter, plugin );
-    	
-    	HttpSession session = request.getSession( false );
-    	
-		for ( IEntry entry : listEntries )
-		{
-			if ( entry instanceof EntryTypeSession && entry.isMandatory(  ) )
-			{
-				List<Field> listFields = FieldHome.getFieldListByIdEntry( entry.getIdEntry(  ), plugin );
-				if ( session == null )
-				{
-					return false;
-				}
-				else if ( session != null && listFields != null && !listFields.isEmpty(  ) && listFields.get( 0 ) != null && 
-						StringUtils.isNotBlank( listFields.get( 0 ).getValue(  ) ) )
-		    	{
-	    			String strAttributeName = listFields.get( 0 ).getValue(  );
-	    			if ( StringUtils.isBlank( (String) session.getAttribute( strAttributeName ) ) )
-	    			{
-	    				return false;
-	    			}
-		    	}
-			}
-		}
-    	return true;
+        EntryFilter eFilter = new EntryFilter(  );
+        eFilter.setIdForm( form.getIdForm(  ) );
+
+        if ( entryTypeSession != null )
+        {
+            eFilter.setIdEntryType( entryTypeSession.getIdType(  ) );
+        }
+
+        List<IEntry> listEntries = EntryHome.getEntryList( eFilter, plugin );
+
+        HttpSession session = request.getSession( false );
+
+        for ( IEntry entry : listEntries )
+        {
+            if ( entry instanceof EntryTypeSession && entry.isMandatory(  ) )
+            {
+                List<Field> listFields = FieldHome.getFieldListByIdEntry( entry.getIdEntry(  ), plugin );
+
+                if ( session == null )
+                {
+                    return false;
+                }
+                else if ( ( session != null ) && ( listFields != null ) && !listFields.isEmpty(  ) &&
+                        ( listFields.get( 0 ) != null ) && StringUtils.isNotBlank( listFields.get( 0 ).getValue(  ) ) )
+                {
+                    String strAttributeName = listFields.get( 0 ).getValue(  );
+
+                    if ( StringUtils.isBlank( (String) session.getAttribute( strAttributeName ) ) )
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -245,45 +250,46 @@ public final class FormService
      */
     public boolean hasRecap( Form form )
     {
-    	Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
+        Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
         Recap recap = RecapHome.findByPrimaryKey( form.getRecap(  ).getIdRecap(  ), plugin );
 
         return ( recap != null ) && recap.isRecapData(  );
     }
 
     /**
-     * Check if the session has a list of responses without form errors and 
+     * Check if the session has a list of responses without form errors and
      * the validate requirement is indeed checked
      * @param session the HTTP session
      * @return true if the session has errors, false otherwise
      */
     public boolean hasFormErrors( HttpSession session )
     {
-    	Map<Integer, List<Response>> listSubmittedResponses = ( Map<Integer, List<Response>> ) session.
-				getAttribute( FormUtils.SESSION_FORM_LIST_SUBMITTED_RESPONSES );
-		if ( listSubmittedResponses != null )
-		{
-			for ( Entry<Integer, List<Response>> param : listSubmittedResponses.entrySet(  ) )
-			{
-				for ( Response response : param.getValue(  ) )
-				{
-					if ( response.getEntry(  ) != null && response.getEntry(  ).getFormError(  ) != null )
-					{
-						return true;
-					}
-				}
-			}
-		}
+        Map<Integer, List<Response>> listSubmittedResponses = (Map<Integer, List<Response>>) session.getAttribute( FormUtils.SESSION_FORM_LIST_SUBMITTED_RESPONSES );
 
-		if ( session.getAttribute( FormUtils.SESSION_VALIDATE_REQUIREMENT ) != null )
-    	{
-    		boolean bValidateRequirement = ( Boolean ) session.getAttribute( FormUtils.SESSION_VALIDATE_REQUIREMENT );
-    		if ( !bValidateRequirement )
-    		{
-    			return true;
-    		}
-    	}
+        if ( listSubmittedResponses != null )
+        {
+            for ( Entry<Integer, List<Response>> param : listSubmittedResponses.entrySet(  ) )
+            {
+                for ( Response response : param.getValue(  ) )
+                {
+                    if ( ( response.getEntry(  ) != null ) && ( response.getEntry(  ).getFormError(  ) != null ) )
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
 
-		return false;
+        if ( session.getAttribute( FormUtils.SESSION_VALIDATE_REQUIREMENT ) != null )
+        {
+            boolean bValidateRequirement = (Boolean) session.getAttribute( FormUtils.SESSION_VALIDATE_REQUIREMENT );
+
+            if ( !bValidateRequirement )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
