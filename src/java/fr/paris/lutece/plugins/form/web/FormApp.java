@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.form.web;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -45,6 +46,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
+
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.form.business.EntryFilter;
@@ -71,6 +78,7 @@ import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.form.utils.JSONUtils;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
@@ -133,6 +141,7 @@ public class FormApp implements XPageApplication
     private static final String PARAMETER_SAVE = "save";
     private static final String PARAMETER_SESSION = "session";
     private static final String PARAMETER_SAVE_DRAFT = "save_draft";
+    private static final String PARAMETER_FIELD_INDEX = "field_index";
     
     // session
     private static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
@@ -194,6 +203,23 @@ public class FormApp implements XPageApplication
             }
 
             form = FormHome.findByPrimaryKey( nIdForm, plugin );
+        }
+        
+        // Special case for upload fields : if no action is specified, a submit
+        // button associated with an upload might have been pressed :
+        String strUploadAction = FormAsynchronousUploadHandler.getHandler(  ).getUploadAction( request );
+
+        if ( strUploadAction != null )
+        {
+        	// the formsubmit may no be reused
+        	FormSubmit formSubmit = new FormSubmit();
+        	formSubmit.setForm( form );
+        	// Upload the file
+        	FormAsynchronousUploadHandler.getHandler(  ).doUploadAction( request, strUploadAction );
+        	// parse request & save draft
+        	doInsertResponseInFormSubmit( request, formSubmit, plugin );
+        	FormDraftBackupService.saveDraft( request, form );
+        	return getForm(request, session, nMode, plugin);
         }
 
         if ( ( form == null ) && ( session != null ) && ( session.getAttribute( PARAMETER_FORM_SUBMIT ) != null ) )
@@ -278,14 +304,7 @@ public class FormApp implements XPageApplication
             {
             	session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
                 session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
-                // remove file in sessions
-                for ( String strAttributeName : Collections.list( (Enumeration<String>) session.getAttributeNames() ) )
-                {
-                	if ( strAttributeName.startsWith( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE ) )
-                	{
-                		session.removeAttribute( strAttributeName );
-                	}
-                }
+                FormAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( session.getId(  ) );
             }
 
         	// try to restore draft
@@ -488,8 +507,12 @@ public class FormApp implements XPageApplication
         }
 
         // The draft is saved either by clicking on "save" or by clicking on "validate"
-        boolean bIsDraftSaved = ( request.getParameter( PARAMETER_ID_FORM ) != null ) && 
-        ( ( request.getParameter( PARAMETER_SAVE ) != null ) || ( request.getParameter( PARAMETER_SAVE_DRAFT ) != null ) );
+        boolean bIsDraftSaved = false;
+        if ( FormDraftBackupService.isDraftSupported(  ) )
+        {
+        	bIsDraftSaved = ( request.getParameter( PARAMETER_ID_FORM ) != null ) && 
+        	( ( request.getParameter( PARAMETER_SAVE ) != null ) || ( request.getParameter( PARAMETER_SAVE_DRAFT ) != null ) );
+        }
         model.put( MARK_IS_DRAFT_SAVED, bIsDraftSaved );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM, request.getLocale(  ), model );
@@ -751,8 +774,8 @@ public class FormApp implements XPageApplication
             SiteMessageService.setMessage( request, MESSAGE_ERROR_FORM_INACTIVE, SiteMessage.TYPE_STOP );
         }
 
-        //si le nombre de soumission est limit� � un on v�rifie 
-        //que l'utilisateur n'a pas d�j� r�pondu au  formulaire avant de persister la soumission  
+        // If the number of submitted response is set to one, then we check if the user 
+        // has not already answer to the form before submitting the response  
         if ( formSubmit.getForm(  ).isLimitNumberResponse(  ) )
         {
             if ( session.getAttribute( PARAMETER_ID_FORM + formSubmit.getForm(  ).getIdForm(  ) ) != null )
@@ -780,7 +803,7 @@ public class FormApp implements XPageApplication
         FormUtils.sendNotificationMailFormSubmit( formSubmit, locale );
         
         // We can safely remove session files : they are validated
-        FormAsynchronousUploadHandler.removeSessionFiles( session.getId(  ) );
+        FormAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( session.getId(  ) );
 
         //Process all outputProcess
         for ( IOutputProcessor outputProcessor : OutputProcessorService.getInstance(  )
@@ -833,22 +856,59 @@ public class FormApp implements XPageApplication
     }
     
     /**
+     * 
      * Removes the uploaded fileItem
      * @param request the request
+     * @category CALLED_BY_JS (formupload.js)
      */
-    public void doRemoveAsynchronousUploadedFile( HttpServletRequest request )
+    public String doRemoveAsynchronousUploadedFile( HttpServletRequest request )
     {
     	String strSessionId = request.getSession(  ).getId(  );
     	String strIdEntry = request.getParameter( FormUtils.PARAMETER_ID_ENTRY );
+    	String strFieldIndex = request.getParameter( PARAMETER_FIELD_INDEX );
     	
-    	// file may be uploaded asynchronously...
-    	FormAsynchronousUploadHandler.removeFileItem( strIdEntry, strSessionId );
+    	if ( StringUtils.isBlank( strIdEntry ) || StringUtils.isBlank( strFieldIndex ) )
+        {
+            return JSONUtils.buildJsonErrorRemovingFile( request ).toString(  );
+        }
     	
-    	// ... or already in session
-    	HttpSession session = request.getSession( false );
-    	if ( session != null )
-    	{
-    		session.removeAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + strIdEntry );
-    	}
+    	// parse json
+        JSON jsonFieldIndexes = JSONSerializer.toJSON( strFieldIndex );
+
+        if ( !jsonFieldIndexes.isArray(  ) )
+        {
+            return JSONUtils.buildJsonErrorRemovingFile( request ).toString(  );
+        }
+        JSONArray jsonArrayFieldIndexers = (JSONArray) jsonFieldIndexes;
+        int[] tabFieldIndex = new int[jsonArrayFieldIndexers.size(  )];
+
+        for ( int nIndex = 0; nIndex < jsonArrayFieldIndexers.size(  ); nIndex++ )
+        {
+            try
+            {
+                tabFieldIndex[nIndex] = Integer.parseInt( jsonArrayFieldIndexers.getString( nIndex ) );
+            }
+            catch ( NumberFormatException nfe )
+            {
+                return JSONUtils.buildJsonErrorRemovingFile( request ).toString(  );
+            }
+        }
+        
+        // inverse order (removing using index - remove greater first to keep order)
+        Arrays.sort( tabFieldIndex );
+        ArrayUtils.reverse( tabFieldIndex );
+        
+        for ( int nFieldIndex : tabFieldIndex )
+        {
+        	FormAsynchronousUploadHandler.getHandler(  ).removeFileItem( strIdEntry, strSessionId, nFieldIndex );
+        }
+        
+    	JSONObject json = new JSONObject(  );
+        // operation successful
+        json.element( JSONUtils.JSON_KEY_SUCCESS, JSONUtils.JSON_KEY_SUCCESS );
+        json.accumulateAll( JSONUtils.getUploadedFileJSON( FormAsynchronousUploadHandler.getHandler(  ).getFileItems( strIdEntry, strSessionId ) ) );
+        json.element( JSONUtils.JSON_KEY_FIELD_NAME, FormAsynchronousUploadHandler.getHandler(  ).buildFieldName( strIdEntry ) );
+        
+        return json.toString(  );
     }
 }

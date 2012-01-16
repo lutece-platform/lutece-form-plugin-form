@@ -1,4 +1,5 @@
- <#include "/admin/util/editor/editor.html" />
+<#include "/admin/util/editor/editor.html" />
+<#include "/admin/plugins/form/commons.html" />
 <div class="content-box">
  <h2>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</h2>
  <form action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
@@ -35,28 +36,23 @@
    		 </#if>	
     </p>
     <p>
-   		 <label for="width">#i18n{form.createEntry.labelWidth} * : </label>
-   		  <#list entry.fields as field>
+	    <label for="width">#i18n{form.createEntry.labelWidth} * : </label>
+	    <#list entry.fields as field>
+    		<#if !field.title??>
 	    		<input type="text" name="width" id="width" size="5" value="${field.width}" />
-	    		<#assign id_field=field.idField> 
-	    	</#list>
-   </p>
-    <#-- <p>
-	    <label for="width">#i18n{form.createEntry.labelThumbnailWidth} * : </label>
-	    	
-   		<input type="text" name="width" id="width" size="5" value="${ entry.fields[1].width}" />
-   		
-   		<#--  <#assign id_field=field.idField>  -->
-	    	
-    <#-- </p>
-    <p>
-	    <label for="height">#i18n{form.createEntry.labelThumbnailHeight} * : </label>
-	    	
-   		<input type="text" name="height" id="height" size="5" value="${ entry.fields[1].height}" /> -->
-   		
-   		<#--  <#assign id_field=field.idField>  -->
-	    	
-  	<#-- </p> -->
+	    		<#assign id_field=field.idField>
+	    		<#break>
+	    	</#if> 
+    	</#list>
+	</p>
+	<p>
+		<label for="file_max_size">#i18n{form.createEntry.labelFileMaxSize} * : </label>
+		<input type="text" name="file_max_size" id="file_max_size" size="10" value="${getFileMaxSize(entry)}" />
+	</p>
+	<p>
+		<label for="max_files">#i18n{form.createEntry.labelMaxFiles} * :</label>
+		<input name="max_files" type="text" size="2" value="${getMaxFiles(entry)}" maxlength="2" />
+	</p>
     <p>
   		<input type="submit" value="#i18n{form.modifyEntry.buttonSave}" class="button"  name="save" />
   		<input type="submit" value="#i18n{form.modifyEntry.buttonApply}" class="button"  name="apply" />

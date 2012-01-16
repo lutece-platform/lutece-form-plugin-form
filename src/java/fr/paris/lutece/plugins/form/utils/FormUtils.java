@@ -112,10 +112,10 @@ public final class FormUtils
     public static final String CONSTANT_EQUAL = "=";
     public static final String PARAMETER_ID_ENTRY = "id_entry";
     public static final String PARAMETER_DELETE_PREFIX = "delete_";
-    public static final String SESSION_ATTRIBUTE_PREFIX_FILE = "FORM_FILE_";
     public static final String BEAN_ENTRY_TYPE_SERVICE = "form.entryTypeService";
     public static final String BEAN_FORM_RESPONSE_SERVICE = "form.responseService";
     public static final int CONSTANT_ID_NULL = -1;
+    public static final String CONSTANT_UNDERSCORE = "_";
 
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_URL_ACTION = "url_action";
@@ -1521,5 +1521,53 @@ public final class FormUtils
     public static Plugin getPlugin(  )
     {
     	return PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
+    }
+    
+    /**
+     * Returns a copy of the string , with leading and trailing whitespace
+     * omitted.
+     * @param strParameter the string parameter to convert
+     * @return null if the strParameter is null other return with leading and
+     *         trailing whitespace omitted.
+     */
+    public static String trim( String strParameter )
+    {
+        if ( strParameter != null )
+        {
+            return strParameter.trim(  );
+        }
+
+        return strParameter;
+    }
+
+    /**
+     * Return the field which title is specified in parameter
+     * @param strTitle the title
+     * @param listFields the list of fields
+     * @return the field which title is specified in parameter
+     */
+    public static Field findFieldByTitleInTheList( String strTitle, List<Field> listFields )
+    {
+    	if ( listFields == null || listFields.isEmpty(  ) )
+    	{
+    		return null;
+    	}
+    	
+    	for ( Field field : listFields )
+        {
+        	if ( StringUtils.isNotBlank( strTitle ) )
+        	{
+        		if ( trim( strTitle ).equals( trim( field.getTitle(  ) ) ) )
+        		{
+        			return field;
+        		}
+        	}
+        	else if ( StringUtils.isBlank( field.getTitle(  ) ) )
+        	{
+        		return field;
+        	}
+        }
+
+        return null;
     }
 }

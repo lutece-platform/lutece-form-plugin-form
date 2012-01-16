@@ -35,12 +35,10 @@ package fr.paris.lutece.plugins.form.business;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
@@ -61,6 +59,7 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.Paginator;
+import fr.paris.lutece.util.url.UrlItem;
 
 
 /**
@@ -68,9 +67,9 @@ import fr.paris.lutece.util.html.Paginator;
  * class EntryTypeFile
  *
  */
-public class EntryTypeFile extends Entry
+public class EntryTypeFile extends AbstractEntryTypeUpload
 {
-	private static final String PREFIX_ENTRY_ID = "form_";
+	private static final String PARAMETER_ID_RESPONSE = "id_response";
     private final String _template_create = "admin/plugins/form/create_entry_type_file.html";
     private final String _template_modify = "admin/plugins/form/modify_entry_type_file.html";
     private final String _template_html_code = "admin/plugins/form/html_code_entry_type_file.html";
@@ -99,67 +98,20 @@ public class EntryTypeFile extends Entry
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
-        String strWidth = request.getParameter( PARAMETER_WIDTH );
-
-        String strFieldError = EMPTY_STRING;
-        int nWidth = -1;
-
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        
+        String strError = this.checkEntryData( request, locale );
+        if ( StringUtils.isNotBlank( strError ) )
         {
-            strFieldError = FIELD_TITLE;
-        }
-        else if ( ( strWidth == null ) || strWidth.trim(  ).equals( EMPTY_STRING ) )
-        {
-            strFieldError = FIELD_WIDTH;
-        }
-
-        if ( !strFieldError.equals( EMPTY_STRING ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
-        }
-
-        try
-        {
-            nWidth = Integer.parseInt( strWidth );
-        }
-        catch ( NumberFormatException ne )
-        {
-            strFieldError = FIELD_WIDTH;
-        }
-
-        if ( !strFieldError.equals( EMPTY_STRING ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+        	return strError;
         }
 
         this.setTitle( strTitle );
         this.setHelpMessage( strHelpMessage );
         this.setComment( strComment );
 
-        if ( this.getFields(  ) == null )
-        {
-            ArrayList<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
-            listFields.add( field );
-            this.setFields( listFields );
-        }
-
-        this.getFields(  ).get( 0 ).setWidth( nWidth );
-
-        if ( strMandatory != null )
-        {
-            this.setMandatory( true );
-        }
-        else
-        {
-            this.setMandatory( false );
-        }
+        this.setFields( request );
+        
+        this.setMandatory( strMandatory != null );
 
         return null;
     }
@@ -191,106 +143,82 @@ public class EntryTypeFile extends Entry
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-    	HttpSession session = request.getSession( false );
-    	// handle file deletion...
-    	if ( request.getParameter( FormUtils.PARAMETER_DELETE_PREFIX + PREFIX_ENTRY_ID + Integer.toString( this.getIdEntry(  ) ) ) != null )
-    	{
-    		// checkbox checked
-    		String strSessionId = request.getSession(  ).getId(  );
-
-        	// file may be uploaded asynchronously...
-        	FormAsynchronousUploadHandler.removeFileItem( PREFIX_ENTRY_ID + Integer.toString( this.getIdEntry(  ) ), strSessionId );
-    		if ( session != null )
-    		{
-    			request.getSession(  ).removeAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ) );
-    		}
-    	}
-    	
-    	// find the fileSource the session one first...
-    	FileItem fileSource = null;
-    	if ( session != null )
-    	{
-    		// check the file in session - it might no be deleted
-    		fileSource = (FileItem) session.getAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ) );
-    	}
+    	List<FileItem> listFilesSource = null;
     	
     	if ( request instanceof MultipartHttpServletRequest )
     	{
-    		// standard upload
-    		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-    		FileItem fileItemRequested = multipartRequest.getFile( PREFIX_ENTRY_ID + this.getIdEntry(  ) );
-    		
-			FileItem asynchronousFileItem = FormAsynchronousUploadHandler.getFileItem( PREFIX_ENTRY_ID + Integer.toString( getIdEntry(  ) ), request.getSession(  ).getId(  ) );
-			// try asynchronous uploaded files
-			if ( asynchronousFileItem != null )
+			List<FileItem> asynchronousFileItems = getFileSources( request );
+			if ( asynchronousFileItems != null )
 			{
-				fileSource = asynchronousFileItem;
+				listFilesSource = asynchronousFileItems;
 			}
-    		
-    		if ( StringUtils.isNotBlank( fileItemRequested.getName(  ) ) )
+			
+    		FormError formError = null;
+            if ( listFilesSource != null && !listFilesSource.isEmpty(  ) )
+            {
+            	formError = this.checkResponseData( listFilesSource, locale, request );
+            	if ( formError != null )
+            	{
+            		// Add the response to the list in order to have the error message in the page
+            		Response response = new Response(  );
+                    response.setEntry( this );
+                    listResponse.add( response );
+            	}
+            	for ( FileItem fileItem : listFilesSource )
+            	{
+            		String strFilename = fileItem != null ? FileUploadService.getFileNameOnly( fileItem ) : StringUtils.EMPTY;
+            		
+            		// Add the file to the response list
+            		Response response = new Response(  );
+            		response.setEntry( this );
+            		
+            		if ( fileItem != null && fileItem.get(  ) != null && fileItem.getSize(  ) < Integer.MAX_VALUE )
+            		{
+            			PhysicalFile physicalFile = new PhysicalFile(  );
+            			physicalFile.setValue( fileItem.get(  ) );
+            			
+            			fr.paris.lutece.plugins.form.business.file.File file = new fr.paris.lutece.plugins.form.business.file.File(  );
+            			file.setPhysicalFile( physicalFile );
+            			file.setTitle( strFilename );
+            			file.setSize( (int) fileItem.getSize(  ) );
+            			file.setMimeType( FileSystemUtil.getMIMEType( strFilename ) );
+            			
+            			response.setFile( file );
+            		}
+            		
+            		listResponse.add( response );
+            		
+            		String strMimeType = StringUtils.isBlank( strFilename ) ? FileSystemUtil.getMIMEType( strFilename ) : StringUtils.EMPTY;
+            		List<RegularExpression> listRegularExpression = this.getFields(  ).get( 0 ).getRegularExpressionList(  );
+            		
+            		if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null ) &&
+            				( listRegularExpression.size(  ) != 0 ) && RegularExpressionService.getInstance(  ).isAvailable(  ) )
+            		{
+            			for ( RegularExpression regularExpression : listRegularExpression )
+            			{
+            				if ( !RegularExpressionService.getInstance(  ).isMatches( strMimeType, regularExpression ) )
+            				{
+            					formError = new FormError(  );
+            					formError.setMandatoryError( false );
+            					formError.setTitleQuestion( this.getTitle(  ) );
+            					formError.setErrorMessage( regularExpression.getErrorMessage(  ) );
+            				}
+            			}
+            		}
+            	}
+            }
+            else if ( this.isMandatory(  ) )
     		{
-    			// a file may have been uploaded
-    			fileSource = fileItemRequested;
+				formError = new FormError(  );
+				formError.setMandatoryError( true );
+				formError.setTitleQuestion( this.getTitle(  ) );
+				
+				Response response = new Response(  );
+                response.setEntry( this );
+                listResponse.add( response );
     		}
-
-    		session.setAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ), fileSource );
-    		
-            String strFilename = fileSource != null ? FileUploadService.getFileNameOnly( fileSource ) : StringUtils.EMPTY;
-            List<RegularExpression> listRegularExpression = this.getFields(  ).get( 0 ).getRegularExpressionList(  );
-
-            Response response = new Response(  );
-            response.setEntry( this );
             
-            byte[] byValueEntry = fileSource != null ? fileSource.get(  ) : null;
-            
-            if ( byValueEntry != null && fileSource.getSize(  ) < Integer.MAX_VALUE )
-            {
-            	PhysicalFile physicalFile = new PhysicalFile(  );
-            	physicalFile.setValue( byValueEntry );
-            	
-            	fr.paris.lutece.plugins.form.business.file.File file = new fr.paris.lutece.plugins.form.business.file.File(  );
-            	file.setPhysicalFile( physicalFile );
-            	file.setTitle( strFilename );
-            	file.setSize( (int) fileSource.getSize(  ) );
-            	file.setMimeType( FileSystemUtil.getMIMEType( strFilename ) );
-            	
-            	response.setFile( file );
-            }
-
-            listResponse.add( response );
-
-            if ( this.isMandatory(  ) )
-            {
-                if ( StringUtils.isBlank( strFilename ) )
-                {
-                    FormError formError = new FormError(  );
-                    formError.setMandatoryError( true );
-                    formError.setTitleQuestion( this.getTitle(  ) );
-
-                    return formError;
-                }
-            }
-            
-            String strMimeType = FileSystemUtil.getMIMEType( strFilename );
-
-            if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null ) &&
-                    ( listRegularExpression.size(  ) != 0 ) && RegularExpressionService.getInstance(  ).isAvailable(  ) )
-            {
-                for ( RegularExpression regularExpression : listRegularExpression )
-                {
-                    if ( !RegularExpressionService.getInstance(  ).isMatches( strMimeType, regularExpression ) )
-                    {
-                        FormError formError = new FormError(  );
-                        formError.setMandatoryError( false );
-                        formError.setTitleQuestion( this.getTitle(  ) );
-                        formError.setErrorMessage( regularExpression.getErrorMessage(  ) );
-
-                        return formError;
-                    }
-                }
-            }
-
-            return null;
+            return formError;
     	}
     	
     	FormError formError = new FormError(  );
@@ -354,7 +282,9 @@ public class EntryTypeFile extends Entry
      */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return AppPathService.getBaseUrl( request ) + JSP_DOWNLOAD_FILE + "?id_response=" + response.getIdResponse(  );
+    	UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_DOWNLOAD_FILE );
+    	url.addParameter( PARAMETER_ID_RESPONSE, response.getIdResponse(  ) );
+        return url.getUrl(  );
     }
 
     /**
@@ -396,8 +326,28 @@ public class EntryTypeFile extends Entry
     	// nothing - null is default
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public boolean isFile(  )
     {
     	return true;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+	protected void setFields( HttpServletRequest request, List<Field> listFields )
+	{
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	protected FormError checkResponseData( FileItem fileItem, Locale locale )
+	{
+		return null;
+	}
 }

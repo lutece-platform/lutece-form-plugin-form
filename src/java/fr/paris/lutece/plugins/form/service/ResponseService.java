@@ -104,7 +104,7 @@ public final class ResponseService
     	}
     	
     	// Then remove responses
-        ResponseHome.remove( nIdFormSubmit, FormUtils.getPlugin() );
+        ResponseHome.remove( nIdFormSubmit, FormUtils.getPlugin(  ) );
     }
 
     // GET
@@ -117,7 +117,7 @@ public final class ResponseService
      */
     public Response findByPrimaryKey( int nKey, boolean bGetFileData )
     {
-    	Response response = ResponseHome.findByPrimaryKey( nKey, FormUtils.getPlugin() );
+    	Response response = ResponseHome.findByPrimaryKey( nKey, FormUtils.getPlugin(  ) );
     	if ( bGetFileData && response != null && response.getFile(  ) != null )
     	{
     		response.setFile( _fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), true ) );
@@ -133,14 +133,14 @@ public final class ResponseService
      */
     public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
     {
-    	List<Response> listResponses = ResponseHome.getResponseList( filter, FormUtils.getPlugin() );
+    	List<Response> listResponses = ResponseHome.getResponseList( filter, FormUtils.getPlugin(  ) );
     	if ( bGetFileData && listResponses != null && !listResponses.isEmpty(  ) )
     	{
     		for ( Response response : listResponses )
     		{
     			if ( response.getFile(  ) != null )
     			{
-    				response.setFile( _fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), true ) );
+    				response.setFile( _fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), bGetFileData ) );
     			}
     		}
     	}
@@ -154,6 +154,6 @@ public final class ResponseService
      */
     public List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry )
     {
-        return ResponseHome.getStatisticByIdEntry( nIdEntry, FormUtils.getPlugin() );
+        return ResponseHome.getStatisticByIdEntry( nIdEntry, FormUtils.getPlugin(  ) );
     }
 }

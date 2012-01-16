@@ -65,7 +65,7 @@ public class FormSessionListener implements HttpSessionListener
             AppLogService.debug( "FormSessionListener removing " + strSessionId );
         }
         
-        FormAsynchronousUploadHandler.removeSessionFiles( strSessionId );
+        FormAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( strSessionId );
     }
 
 }

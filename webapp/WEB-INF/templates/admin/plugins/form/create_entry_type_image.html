@@ -39,7 +39,15 @@
    <p>
    		 <label for="width">#i18n{form.createEntry.labelWidth} * : </label>
    		 <input class="-lutece-input -lutece-border-radius-mini" type="text" name="width" id="width" size="5" value="${getName('width',list_param_default_values)}" />
-   </p>   
+   </p>
+	<p>
+		<label for="file_max_size">#i18n{form.createEntry.labelFileMaxSize} * : </label>
+		<input type="text" name="file_max_size" id="file_max_size" size="10" value="${getName('file_max_size',list_param_default_values)}" />
+	</p>
+	<p>
+		<label for="max_files">#i18n{form.createEntry.labelMaxFiles} * :</label>
+		<input name="max_files" type="text" size="2" value="${getName('max_files',list_param_default_values)}" maxlength="2" />
+	</p>
 	<p>
   		<input class="button" type="submit" value="#i18n{form.createEntry.buttonSave}" name="save" />
   		<input class="button" type="submit" value="#i18n{form.createEntry.buttonApplyAndManageVerification}" name="apply" />

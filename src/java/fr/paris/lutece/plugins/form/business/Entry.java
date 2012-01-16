@@ -38,6 +38,8 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.fileupload.FileItem;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
@@ -614,4 +616,12 @@ public class Entry implements IEntry
     {
     	return false;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+	public FormError canUploadFiles( List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
+	{
+		return null;
+	}
 }

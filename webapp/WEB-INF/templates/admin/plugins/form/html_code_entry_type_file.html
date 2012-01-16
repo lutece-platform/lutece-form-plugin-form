@@ -1,3 +1,4 @@
+<#include "/admin/plugins/form/commons.html" />
 <div class="form-element">
 	 <span class="form-label">
 		 <label for="${entry.idEntry}">	
@@ -8,70 +9,94 @@
 				 : 
 		</label>
 	</span>
-	 <span class="form-field-column">	 
+	<span class="form-field-column">	 
 		<#list entry.fields as field>
-			<input type="file" name="form_${entry.idEntry}" id="form_${entry.idEntry}" size="${field.width}"
-				<#if list_responses??>
-					<#list list_responses as response>
-						<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
-							class="error"
-						</#if>
-					</#list>
-				</#if>
-			/>
-		</#list>
-		</span>	
-		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-			<span class="form-help">
-				<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/form/help.gif" />
-					<span><pre> ${entry.helpMessage}</pre></span>
-				</a>
-			</span>
-		</#if>
-	<#if list_responses??>
-		<#list list_responses as response>
-			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
-				<br />
-				<span class="form-label"><label>&nbsp;</label></span>
-				<span class="form-field-column">
-					<#assign formError = response.entry.formError>
-					<#if formError.mandatoryError>
-						<label class="error">#i18n{form.message.mandatory.entry}</label>
-					<#else>
-						<label class="error">${formError.errorMessage}</label>
+			<#if !field.title??>
+				<input type="file" name="form_${entry.idEntry}" id="form_${entry.idEntry}" size="${field.width}"
+					<#if list_responses??>
+						<#list list_responses as response>
+							<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+								class="error"
+							</#if>
+						</#list>
 					</#if>
-				</span>
+				/>
 			</#if>
 		</#list>
+		<input type="hidden" name="_form_upload_maxLength_form_${entry.idEntry}" id="_form_upload_maxLength_form_${entry.idEntry}" value="${getFileMaxSize( entry )}" />
+	</span>	
+	<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+		<span class="form-help">
+			<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/form/help.gif" />
+				<span><pre> ${entry.helpMessage}</pre></span>
+			</a>
+		</span>
+	</#if>
+	<#if list_responses?? && list_responses?has_content>
+		<#assign response_error = list_responses[0]>
+		<#if response_error.entry.idEntry == entry.idEntry && response_error.entry.formError??>
+			<br />
+			<span class="form-label"><label>&nbsp;</label></span>
+			<span class="form-field-column">
+				<#assign formError = response_error.entry.formError>
+				<#if formError.mandatoryError>
+					<label class="error">#i18n{form.message.mandatory.entry}</label>
+				<#else>
+					<label class="error">${formError.errorMessage}</label>
+				</#if>
+			</span>
+		</#if>
 	</#if>
 </div>	
 
-<#-- file removing -->
 <div class="form-element">
-<#if list_responses?has_content>
-<span class="form-label" id="_file_deletion_${entry.idEntry}">
- <label for="delete_${entry.idEntry}">	
-				#i18n{form.file.uploadedFile} :
-		</label>
-		</span>
-		 <span class="form-field-column" id="_filename_form_${entry.idEntry}">
-		<#list list_responses as response> 
-			<#if response.fileName?? && response.fileName != ''>
-				<input name="_filename_value_form_${entry.idEntry}" type="hidden" value="${response.fileName}" />
-				${response.fileName}&nbsp;&nbsp;-
-				<span id="delete_form_${entry.idEntry}">
-					#i18n{form.file.removeUploadedFile} <input type="checkbox" name="delete_form_${entry.idEntry}" value="1" />
-				</span>
-			<#else>
-				<span class="form-field-column" id="_filename_form_${entry.idEntry}">-</span>
-			</#if>
-		</#list> 
-			</span>
-<#else>
-<span class="form-label" id="_file_deletion_form_${entry.idEntry}"><label for="">	
-				#i18n{form.file.uploadedFile} :
-		</label>
+	<span class="form-label">
+		<label for="${entry.idEntry}">&nbsp;</label>
 	</span>
-		<span class="form-field-column" id="_filename_form_${entry.idEntry}">-</span>
+	<span class="form-field-column">
+		<input type="submit" id="_form_upload_submit_form_${entry.idEntry}" name="_form_upload_submit_form_${entry.idEntry}" value="#i18n{form.action.send.name}" />
+	</span>
+</div>
+
+<#-- file removing -->
+<#assign has_files = false>
+<#if list_responses?? && list_responses?has_content>
+	<#assign response_error = list_responses[0]>
+	<#if response_error.entry.idEntry == entry.idEntry>
+		<#assign has_files = true>
+	</#if>
 </#if>
+
+<div class="form-element <#if !has_files>hide</#if>" id="_file_deletion_label_form_${entry.idEntry}">
+	<span class="form-label">
+		<label for="delete_${entry.idEntry}">#i18n{form.file.uploadedFile} :</label>
+	</span>
+	<span class="form-field-column" id="_filename_form_${entry.idEntry}">
+		&nbsp;
+	</span>
+</div>
+<#assign file_index = 0>
+<div <#if !has_files>class="hide"</#if> id="_file_deletion_form_${entry.idEntry}">
+<#if has_files>
+	<#list list_responses as response>
+		<#if response.fileName?? && response.fileName != ''>
+			<div class="form-element">
+				<span class="form-label" id="_file_deletion_${entry.idEntry}">&nbsp;</span>
+				<span class="form-field-column" id="_filename_form_${entry.idEntry}">
+					<input type="checkbox" name="_form_upload_checkbox_form_${entry.idEntry}${file_index}" value="1" />
+					${response.fileName}
+				</span>
+			</div>
+		</#if>
+		<#assign file_index = file_index + 1>
+	</#list>
+</#if>
+</div>
+<div class="form-element <#if !has_files>hide</#if>" id="_file_deletion_button_form_${entry.idEntry}">
+	<span class="form-label">
+		<label for="${entry.idEntry}">&nbsp;</label>
+	</span>
+	<span class="form-field-column">
+		<input type="submit" name="_form_upload_delete_form_${entry.idEntry}" value="#i18n{form.action.delete.name}" />
+	</span>
 </div>

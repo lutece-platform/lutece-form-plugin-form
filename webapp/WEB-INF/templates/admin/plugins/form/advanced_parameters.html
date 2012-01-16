@@ -93,6 +93,14 @@
 			<label for="max_size_enter">#i18n{form.createEntry.labelMaxSizeEnter}  : </label>
 			<input type="text" name="max_size_enter" id="max_size_enter" size="5" value="${getName('max_size_enter',list_entry_param_default_values)}" />
 	   	</p>
+	   	<p>
+			<label for="file_max_size">#i18n{form.createEntry.labelFileMaxSize} :</label>
+			<input type="text" name="file_max_size" size="10" maxlength="255" value="${getName('file_max_size',list_entry_param_default_values)}" />
+		</p>
+		<p>
+			<label for="max_files">#i18n{form.createEntry.labelMaxFiles} :</label>
+			<input type="text" name="max_files" size="2" maxlength="255" value="${getName('max_files',list_entry_param_default_values)}" />
+		</p>
 		<input type="submit" class="button" value="#i18n{form.manage_advanced_parameters.buttonModify}" />
 	</form>
 </div>

@@ -36,25 +36,20 @@ package fr.paris.lutece.plugins.form.business;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
-import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -64,6 +59,7 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.Paginator;
+import fr.paris.lutece.util.url.UrlItem;
 
 
 /**
@@ -71,16 +67,16 @@ import fr.paris.lutece.util.html.Paginator;
  * class EntryTypeImage
  *
  */
-public class EntryTypeImage extends Entry
+public class EntryTypeImage extends AbstractEntryTypeUpload
 {
-	private static final String PREFIX_ENTRY_ID = "form_";
+	private static final String PARAMETER_ID_RESPONSE = "id_response";
     private final String _template_create = "admin/plugins/form/create_entry_type_image.html";
     private final String _template_modify = "admin/plugins/form/modify_entry_type_image.html";
     private final String _template_html_code = "admin/plugins/form/html_code_entry_type_image.html";
     
     //private static final int INTEGER_QUALITY_MAXIMUM = 1;
     
-    private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "form.message.notAnImage";   
+    private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "form.message.notAnImage";
 
     /**
      * Get the HtmlCode  of   the entry
@@ -105,85 +101,20 @@ public class EntryTypeImage extends Entry
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
-        String strWidth = request.getParameter( PARAMETER_WIDTH );
-        //String strHeight = request.getParameter( PARAMETER_HEIGHT );
 
-        String strFieldError = EMPTY_STRING;
-        int nWidth = -1;
-        //int nHeight = -1;
-
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        String strError = this.checkEntryData( request, locale );
+        if ( StringUtils.isNotBlank( strError ) )
         {
-            strFieldError = FIELD_TITLE;
-        }
-        else if ( ( strWidth == null ) || strWidth.trim(  ).equals( EMPTY_STRING ) 
-        		 )
-        {
-            strFieldError = FIELD_WIDTH;
-        }
-       /* else if ( ( strHeight == null ) || strHeight.trim(  ).equals( EMPTY_STRING ) )
-        {
-        	 strFieldError = FIELD_HEIGHT;
-        }*/
-
-        if ( !strFieldError.equals( EMPTY_STRING ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
-        }
-
-        try
-        {
-            nWidth = Integer.parseInt( strWidth );
-        }
-        catch ( NumberFormatException ne )
-        {
-            strFieldError = FIELD_WIDTH;
-        }
-        
-       /* try
-        {
-            nHeight = Integer.parseInt( strHeight );
-        }
-        catch ( NumberFormatException ne )
-        {
-            strFieldError = FIELD_HEIGHT;
-        }*/
-
-
-        if ( !strFieldError.equals( EMPTY_STRING ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+        	return strError;
         }
 
         this.setTitle( strTitle );
         this.setHelpMessage( strHelpMessage );
         this.setComment( strComment );
 
-        if ( this.getFields(  ) == null )
-        {
-            ArrayList<Field> listFields = new ArrayList<Field>(  );
-            listFields.add( new Field(  ) );        
-            //listFields.add( new Field(  ) );
-            this.setFields( listFields );
-        }
+        this.setFields( request );
 
-        this.getFields(  ).get( 0 ).setWidth( nWidth );
-       // this.getFields(  ).get( 1 ).setHeight( nHeight );
-
-        if ( strMandatory != null )
-        {
-            this.setMandatory( true );
-        }
-        else
-        {
-            this.setMandatory( false );
-        }
+        this.setMandatory( strMandatory != null );
 
         return null;
     }
@@ -215,143 +146,104 @@ public class EntryTypeImage extends Entry
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {    
-    	HttpSession session = request.getSession( false );
-    	// handle file deletion...
-    	if ( request.getParameter( FormUtils.PARAMETER_DELETE_PREFIX + PREFIX_ENTRY_ID + Integer.toString( this.getIdEntry(  ) ) ) != null )
-    	{
-    		// checkbox checked
-    		String strSessionId = request.getSession(  ).getId(  );
-
-        	// file may be uploaded asynchronously...
-        	FormAsynchronousUploadHandler.removeFileItem( PREFIX_ENTRY_ID + Integer.toString( this.getIdEntry(  ) ), strSessionId );
-    		if ( session != null )
-    		{
-    			request.getSession(  ).removeAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ) );
-    		}
-    	}
-    	
-    	// find the fileSource the session one first...
-    	FileItem fileSource = null;
-    	if ( session != null )
-    	{
-    		// check the file in session - it might no be deleted
-    		fileSource = (FileItem) session.getAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ) );
-    	}
+    	List<FileItem> listFilesSource = null;
     	
     	if ( request instanceof MultipartHttpServletRequest )
     	{
-			// standard upload
-    		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-    		FileItem fileItemRequested = multipartRequest.getFile( PREFIX_ENTRY_ID + this.getIdEntry(  ) );
-    		
-			FileItem asynchronousFileItem = FormAsynchronousUploadHandler.getFileItem( PREFIX_ENTRY_ID + Integer.toString( getIdEntry(  ) ), request.getSession(  ).getId(  ) );
-			// try asynchronous uploaded files
+			List<FileItem> asynchronousFileItem = getFileSources( request );
 			if ( asynchronousFileItem != null )
 			{
-				fileSource = asynchronousFileItem;
+				listFilesSource = asynchronousFileItem;
 			}
     		
-    		if ( StringUtils.isNotBlank( fileItemRequested.getName(  ) ) )
-    		{
-    			// a file may have been uploaded
-    			fileSource = fileItemRequested;
-    		}
-    		
-    		session.setAttribute( FormUtils.SESSION_ATTRIBUTE_PREFIX_FILE + this.getIdEntry(  ), fileSource );
-
-    		String strFilename = fileSource != null ? FileUploadService.getFileNameOnly( fileSource ) : StringUtils.EMPTY;
-            List<RegularExpression> listRegularExpression = this.getFields(  ).get( 0 ).getRegularExpressionList(  );
-            
-            byte[] byValueEntry = fileSource != null ? fileSource.get(  ) : null;
-            //Add the image to the response list
-            Response response = new Response(  );
-            response.setEntry( this );
-            
-            if ( byValueEntry != null && fileSource.getSize(  ) < Integer.MAX_VALUE )
+    		FormError formError = null;
+    		if ( listFilesSource != null && !listFilesSource.isEmpty(  ) )
             {
-            	PhysicalFile physicalFile = new PhysicalFile(  );
-            	physicalFile.setValue( byValueEntry );
-            	
-            	fr.paris.lutece.plugins.form.business.file.File file = new fr.paris.lutece.plugins.form.business.file.File(  );
-            	file.setPhysicalFile( physicalFile );
-            	file.setTitle( strFilename );
-            	file.setSize( (int) fileSource.getSize(  ) );
-            	file.setMimeType( FileSystemUtil.getMIMEType( strFilename ) );
-            	
-            	response.setFile( file );
-            }
-            
-            listResponse.add( response );
-            
-            if ( this.isMandatory(  ) )
-            {
-                if ( StringUtils.isBlank( strFilename ) )
-                {
-                    FormError formError = new FormError(  );
-                    formError.setMandatoryError( true );
-                    formError.setTitleQuestion( this.getTitle(  ) );
-
-                    return formError;
-                }
-            }
-
-            String strMimeType = fileSource != null ? fileSource.getContentType(  ) : StringUtils.EMPTY;
-
-            if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null ) &&
-                    ( listRegularExpression.size(  ) != 0 ) && RegularExpressionService.getInstance(  ).isAvailable(  ) )
-            {
-                for ( RegularExpression regularExpression : listRegularExpression )
-                {
-                    if ( !RegularExpressionService.getInstance(  ).isMatches( strMimeType, regularExpression ) )
-                    {
-                        FormError formError = new FormError(  );
-                        formError.setMandatoryError( false );
-                        formError.setTitleQuestion( this.getTitle(  ) );
-                        formError.setErrorMessage( regularExpression.getErrorMessage(  ) );
-
-                        return formError;
-                    }
-                }
-            }
-            
-            BufferedImage image = null;
-            try
-            {
-            	if( byValueEntry != null )
+    			formError = this.checkResponseData( listFilesSource, locale, request );
+            	if ( formError != null )
             	{
-            		image = ImageIO.read( new ByteArrayInputStream( byValueEntry ) );
+            		// Add the response to the list in order to have the error message in the page
+            		Response response = new Response(  );
+                    response.setEntry( this );
+                    listResponse.add( response );
             	}
-    		} 
-            catch ( IOException e )
-    		{			
-    			AppLogService.error( e );
-    		}
-
-    		if ( ( image == null ) &&  ( strFilename != null ) && ( !strFilename.equals( EMPTY_STRING ) ) )
+            	for ( FileItem fileItem : listFilesSource )
+            	{
+            		String strFilename = fileItem != null ? FileUploadService.getFileNameOnly( fileItem ) : StringUtils.EMPTY;
+            		
+            		//Add the image to the response list
+            		Response response = new Response(  );
+            		response.setEntry( this );
+            		
+            		if ( fileItem != null && fileItem.getSize(  ) < Integer.MAX_VALUE )
+            		{
+            			PhysicalFile physicalFile = new PhysicalFile(  );
+            			physicalFile.setValue( fileItem.get(  ) );
+            			
+            			fr.paris.lutece.plugins.form.business.file.File file = new fr.paris.lutece.plugins.form.business.file.File(  );
+            			file.setPhysicalFile( physicalFile );
+            			file.setTitle( strFilename );
+            			file.setSize( (int) fileItem.getSize(  ) );
+            			file.setMimeType( FileSystemUtil.getMIMEType( strFilename ) );
+            			
+            			response.setFile( file );
+            		}
+            		
+            		listResponse.add( response );
+            		
+            		String strMimeType = fileItem != null ? fileItem.getContentType(  ) : StringUtils.EMPTY;
+            		List<RegularExpression> listRegularExpression = this.getFields(  ).get( 0 ).getRegularExpressionList(  );
+            		
+            		if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null ) &&
+            				( listRegularExpression.size(  ) != 0 ) && RegularExpressionService.getInstance(  ).isAvailable(  ) )
+            		{
+            			for ( RegularExpression regularExpression : listRegularExpression )
+            			{
+            				if ( !RegularExpressionService.getInstance(  ).isMatches( strMimeType, regularExpression ) )
+            				{
+            					formError = new FormError(  );
+            					formError.setMandatoryError( false );
+            					formError.setTitleQuestion( this.getTitle(  ) );
+            					formError.setErrorMessage( regularExpression.getErrorMessage(  ) );
+            					
+            					return formError;
+            				}
+            			}
+            		}
+            		
+            		BufferedImage image = null;
+            		try
+            		{
+            			if( fileItem != null && fileItem.get(  ) != null )
+            			{
+            				image = ImageIO.read( new ByteArrayInputStream( fileItem.get(  ) ) );
+            			}
+            		} 
+            		catch ( IOException e )
+            		{			
+            			AppLogService.error( e );
+            		}
+            		
+            		if ( ( image == null ) &&  ( strFilename != null ) && ( !strFilename.equals( EMPTY_STRING ) ) )
+            		{
+            			formError = new FormError(  );
+            			formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE, request.getLocale(  ) ) );
+            			formError.setTitleQuestion( this.getTitle(  ) );
+            		}
+            	}
+            	return formError;
+            }
+    		if ( this.isMandatory(  ) && ( listFilesSource == null || listFilesSource.isEmpty(  ) ) )
     		{
-    			 FormError formError = new FormError(  );
-    			 formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE, request.getLocale(  ) ) );
-    			 formError.setTitleQuestion( this.getTitle(  ) );
-    			 return formError;
+				formError = new FormError(  );
+				formError.setMandatoryError( true );
+				formError.setTitleQuestion( this.getTitle(  ) );
+				
+				Response response = new Response(  );
+                response.setEntry( this );
+                listResponse.add( response );
     		}
-            //Add the thumbnail to the response list
-            
-            /*if ( ( strFilename != null ) && ( !strFilename.equals( EMPTY_STRING ) ) )
-            {
-            	 byValueEntry = ImageUtil.resizeImage( byValueEntry
-                 		, String.valueOf( this.getFields( ).get( 1 ).getWidth( ) )
-                 		, String.valueOf( this.getFields( ).get( 1 ).getHeight( ) )
-                 		, INTEGER_QUALITY_MAXIMUM );
-            }       
-            
-            response = new Response(  );
-            response.setEntry( this );
-            response.setValueResponse( byValueEntry );
-            response.setFileName( strFilename );
-            response.setFileExtension( FilenameUtils.getExtension( strFilename ) );*/
-            //listResponse.add( response );
-
-            return null;
+    		return formError;
     	}
     	FormError formError = new FormError(  );
         formError.setMandatoryError( true );
@@ -414,7 +306,9 @@ public class EntryTypeImage extends Entry
      */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return AppPathService.getBaseUrl( request ) + JSP_DOWNLOAD_FILE + "?id_response=" + response.getIdResponse(  );
+    	UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_DOWNLOAD_FILE );
+    	url.addParameter( PARAMETER_ID_RESPONSE, response.getIdResponse(  ) );
+        return url.getUrl(  );
     }
 
     /**
@@ -456,8 +350,28 @@ public class EntryTypeImage extends Entry
     	// nothing - null is default
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public boolean isFile(  )
     {
     	return true;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	protected FormError checkResponseData( FileItem fileItem, Locale locale )
+	{
+		return null;
+	}
+
+	/**
+     * {@inheritDoc}
+     */
+	@Override
+	protected void setFields( HttpServletRequest request, List<Field> listFields )
+	{
+	}
 }

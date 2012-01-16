@@ -2,4 +2,4 @@
 
 <jsp:useBean id="formApp" scope="request" class="fr.paris.lutece.plugins.form.web.FormApp" />
 
-<% formApp.doRemoveAsynchronousUploadedFile( request ); %>
+<%= formApp.doRemoveAsynchronousUploadedFile( request ) %>

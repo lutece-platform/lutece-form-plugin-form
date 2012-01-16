@@ -1813,7 +1813,18 @@ public class FormJspBean extends PluginAdminPageJspBean
             {
                 for ( Field field : entry.getFields(  ) )
                 {
-                    FieldHome.update( field, plugin );
+                	// Check if the field already exists in the database
+                	Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField(  ), plugin );
+                	if ( fieldStored != null )
+                	{
+                		// If it exists, update
+                		FieldHome.update( field, plugin );
+                	}
+                	else
+                	{
+                		// If it does not exist, create
+                		FieldHome.create( field, plugin );
+                	}
                 }
             }
         }
