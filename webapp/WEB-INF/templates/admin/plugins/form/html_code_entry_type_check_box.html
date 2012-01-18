@@ -18,8 +18,8 @@
 		<#list entry.fields as field>
 			 <#assign cpt=cpt+1>
 			 <li>
-				 <label>
-			 	<input type="checkbox" name="${entry.idEntry}" id="${entry.idEntry}" value="${field.idField}"
+				 <label for="${entry.idEntry}_${field.idField}">
+			 	<input type="checkbox" name="${entry.idEntry}" id="${entry.idEntry}_${field.idField}" value="${field.idField}"
 			 	<#if list_responses??>
 					<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry && response.field??>
