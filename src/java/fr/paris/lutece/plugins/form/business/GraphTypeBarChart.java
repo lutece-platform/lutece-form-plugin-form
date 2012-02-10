@@ -84,7 +84,7 @@ public class GraphTypeBarChart extends GraphType
         * @return the JFreeChart graph associate to the graph type
         */
 
-    //Création de l'histogramme
+    //CrÃ©ation de l'histogramme
     public static JFreeChart createBarChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle,
         boolean nGraphThreeDimension, boolean nGraphLabelValue )
     {
