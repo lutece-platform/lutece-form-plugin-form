@@ -89,8 +89,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -118,6 +116,7 @@ public class FormApp implements XPageApplication
     private static final String MARK_URL_ACTION = "url_action";
     private static final String MARK_ENTRY_TYPE_SESSION = "entry_type_session";
     private static final String MARK_IS_DRAFT_SAVED = "is_draft_saved";
+    private static final String MARK_FORM_HAS_ERRORS = "form_has_errors";
 
     // templates
     private static final String TEMPLATE_XPAGE_RECAP_FORM_SUBMIT = "skin/plugins/form/recap_form_submit.html";
@@ -522,6 +521,10 @@ public class FormApp implements XPageApplication
         }
 
         model.put( MARK_IS_DRAFT_SAVED, bIsDraftSaved );
+
+        // Check if there are responses in the session. If so, then there are errors
+        boolean bHasErrors = FormUtils.getResponses( session ) != null;
+        model.put( MARK_FORM_HAS_ERRORS, bHasErrors );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM, request.getLocale(  ), model );
         page.setContent( template.getHtml(  ) );
