@@ -35,11 +35,8 @@ package fr.paris.lutece.plugins.form.service.file;
 
 import fr.paris.lutece.plugins.form.business.file.File;
 import fr.paris.lutece.plugins.form.business.file.FileHome;
-import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.physicalfile.PhysicalFileService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 
 
 /**
@@ -67,7 +64,7 @@ public class FileService
     */
     public int create( File file )
     {
-        if ( file.getPhysicalFile(  ) != null )
+        if ( ( file != null ) && ( file.getPhysicalFile(  ) != null ) )
         {
             file.getPhysicalFile(  ).setIdPhysicalFile( _physicalFileService.create( file.getPhysicalFile(  ) ) );
         }
@@ -81,7 +78,7 @@ public class FileService
      */
     public void update( File file )
     {
-        if ( file.getPhysicalFile(  ) != null )
+        if ( ( file != null ) && ( file.getPhysicalFile(  ) != null ) )
         {
             _physicalFileService.update( file.getPhysicalFile(  ) );
         }
@@ -97,7 +94,7 @@ public class FileService
     {
         File file = findByPrimaryKey( nIdFile, false );
 
-        if ( file.getPhysicalFile(  ) != null )
+        if ( ( file != null ) && ( file.getPhysicalFile(  ) != null ) )
         {
             _physicalFileService.remove( file.getPhysicalFile(  ).getIdPhysicalFile(  ) );
         }
