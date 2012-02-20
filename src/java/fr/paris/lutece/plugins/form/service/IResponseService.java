@@ -74,6 +74,7 @@ public interface IResponseService {
 	 * Remove all  response  associate to the form submit whose identifier is specified in parameter
 	 * @param nIdFormSubmit The formSubmitKey
 	 */
+	@Transactional("form.transactionManager")
 	void remove(int nIdFormSubmit);
 
 	/**
