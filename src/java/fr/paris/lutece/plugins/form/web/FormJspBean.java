@@ -71,8 +71,8 @@ import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.FormRemovalListenerService;
 import fr.paris.lutece.plugins.form.service.FormResourceIdService;
 import fr.paris.lutece.plugins.form.service.FormService;
+import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
-import fr.paris.lutece.plugins.form.service.ResponseService;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.service.validator.IValidator;
@@ -376,7 +376,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private int _nIdForm = -1;
     private int _nIdEntry = -1;
     private List<FormSubmit> _listFormSubmitTest;
-    private ResponseService _responseService = (ResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
+    private IResponseService _responseService = (IResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
             FormUtils.BEAN_FORM_RESPONSE_SERVICE );
 
     /*-------------------------------MANAGEMENT  FORM-----------------------------*/

@@ -34,7 +34,7 @@
 package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.service.FormPlugin;
-import fr.paris.lutece.plugins.form.service.ResponseService;
+import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -91,7 +91,7 @@ public final class FormSubmitHome
      */
     public static void remove( int nIdFormSubmit, Plugin plugin )
     {
-        ResponseService responseService = (ResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
+        IResponseService responseService = (IResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
                 FormUtils.BEAN_FORM_RESPONSE_SERVICE );
         responseService.remove( nIdFormSubmit );
         _dao.delete( nIdFormSubmit, plugin );

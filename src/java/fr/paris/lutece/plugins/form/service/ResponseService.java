@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.service;
 
+import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.ResponseHome;
@@ -44,30 +45,46 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 
 /**
  *
  * ResponseService
  *
  */
-public final class ResponseService
+public class ResponseService implements IResponseService
 {
     private FileService _fileService;
 
-    /**
-     * Set the file service
-     * @param fileService the file service
-     */
-    public void setFileService( FileService fileService )
+    /* (non-Javadoc)
+	 * @see fr.paris.lutece.plugins.form.service.IResponseService#setFileService(fr.paris.lutece.plugins.form.service.file.FileService)
+	 */
+    @Override
+	public void setFileService( FileService fileService )
     {
         _fileService = fileService;
     }
+    
+    /* (non-Javadoc)
+	 * @see fr.paris.lutece.plugins.form.service.IResponseService#create(fr.paris.lutece.plugins.form.business.FormSubmit)
+	 */
+    @Override
+	@Transactional("form.transactionManager")
+    public void create( FormSubmit formSubmit )
+    {
+    	for ( Response response : formSubmit.getListResponse(  ) )
+    	{
+    		response.setFormSubmit( formSubmit );
+    		create( response );
+    	}
+    }
 
-    /**
-    * Creation of an instance of response
-    * @param response The instance of the response which contains the informations to store
-    */
-    public void create( Response response )
+    /* (non-Javadoc)
+	 * @see fr.paris.lutece.plugins.form.service.IResponseService#create(fr.paris.lutece.plugins.form.business.Response)
+	 */
+    @Override
+	public void create( Response response )
     {
         if ( response.getFile(  ) != null )
         {
@@ -77,11 +94,11 @@ public final class ResponseService
         ResponseHome.create( response, FormUtils.getPlugin(  ) );
     }
 
-    /**
-     * Update of the response which is specified in parameter
-     * @param response The instance of the Response which contains the informations to update
-     */
-    public void update( Response response )
+    /* (non-Javadoc)
+	 * @see fr.paris.lutece.plugins.form.service.IResponseService#update(fr.paris.lutece.plugins.form.business.Response)
+	 */
+    @Override
+	public void update( Response response )
     {
         if ( response.getFile(  ) != null )
         {
@@ -91,11 +108,11 @@ public final class ResponseService
         ResponseHome.update( response, FormUtils.getPlugin(  ) );
     }
 
-    /**
-     * Remove all  response  associate to the form submit whose identifier is specified in parameter
-     * @param nIdFormSubmit The formSubmitKey
-     */
-    public void remove( int nIdFormSubmit )
+    /* (non-Javadoc)
+	 * @see fr.paris.lutece.plugins.form.service.IResponseService#remove(int)
+	 */
+    @Override
+	public void remove( int nIdFormSubmit )
     {
         // First remove files
         ResponseFilter filter = new ResponseFilter(  );
@@ -115,13 +132,11 @@ public final class ResponseService
 
     // GET
 
-    /**
-     * Returns an instance of a Response whose identifier is specified in parameter
-     * @param nKey The entry primary key
-     * @param bGetFileData get file data
-     * @return an instance of Response
-     */
-    public Response findByPrimaryKey( int nKey, boolean bGetFileData )
+    /* (non-Javadoc)
+	 * @see fr.paris.lutece.plugins.form.service.IResponseService#findByPrimaryKey(int, boolean)
+	 */
+    @Override
+	public Response findByPrimaryKey( int nKey, boolean bGetFileData )
     {
         Response response = ResponseHome.findByPrimaryKey( nKey, FormUtils.getPlugin(  ) );
 
@@ -133,13 +148,11 @@ public final class ResponseService
         return response;
     }
 
-    /**
-     * Load the data of all the response who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param bGetFileData get file data
-     * @return  the list of response
-     */
-    public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
+    /* (non-Javadoc)
+	 * @see fr.paris.lutece.plugins.form.service.IResponseService#getResponseList(fr.paris.lutece.plugins.form.business.ResponseFilter, boolean)
+	 */
+    @Override
+	public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
     {
         List<Response> listResponses = ResponseHome.getResponseList( filter, FormUtils.getPlugin(  ) );
 
@@ -157,12 +170,11 @@ public final class ResponseService
         return listResponses;
     }
 
-    /**
-     *  Return a list of statistic on the entry
-     *  @param nIdEntry the id of the entry
-     *  @return return a list of statistic on the entry
-     */
-    public List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry )
+    /* (non-Javadoc)
+	 * @see fr.paris.lutece.plugins.form.service.IResponseService#getStatisticByIdEntry(int)
+	 */
+    @Override
+	public List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry )
     {
         return ResponseHome.getStatisticByIdEntry( nIdEntry, FormUtils.getPlugin(  ) );
     }

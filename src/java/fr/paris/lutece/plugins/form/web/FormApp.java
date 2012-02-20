@@ -51,8 +51,8 @@ import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
 import fr.paris.lutece.plugins.form.service.EntryTypeService;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.FormService;
+import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
-import fr.paris.lutece.plugins.form.service.ResponseService;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
@@ -161,7 +161,7 @@ public class FormApp implements XPageApplication
 
     // Misc
     private static final String REGEX_ID = "^[\\d]+$";
-    private ResponseService _responseService = (ResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
+    private IResponseService _responseService = (IResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
             FormUtils.BEAN_FORM_RESPONSE_SERVICE );
     private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
             FormUtils.BEAN_ENTRY_TYPE_SERVICE );
@@ -808,10 +808,16 @@ public class FormApp implements XPageApplication
 
         formSubmit.setIdFormSubmit( FormSubmitHome.create( formSubmit, plugin ) );
 
-        for ( Response response : formSubmit.getListResponse(  ) )
+        try
         {
-            response.setFormSubmit( formSubmit );
-            _responseService.create( response );
+        	_responseService.create( formSubmit );
+        }
+        catch ( RuntimeException ex )
+        {
+        	// something very wrong happened... a database check might be neededs
+        	AppLogService.error( ex.getMessage() + " for FormSubmit " + formSubmit.getIdFormSubmit(  ), ex );
+        	// rethrow the exception
+        	throw ex;
         }
 
         //Notify new form submit

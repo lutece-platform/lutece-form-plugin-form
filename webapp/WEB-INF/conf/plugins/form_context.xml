@@ -54,4 +54,9 @@
      </bean>
 	 
 	 <bean id="form.asynchronousUploadHandler" class="fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler" />
+	 
+	 
+	 <bean id="form.transactionManager"  class="fr.paris.lutece.portal.service.database.DAOUtilTransactionManager">
+	 	<property name="pluginName" value="form" />
+	 </bean>
  </beans>

@@ -41,7 +41,7 @@ import fr.paris.lutece.plugins.form.business.GraphTypeHome;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.StatisticEntrySubmit;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
-import fr.paris.lutece.plugins.form.service.ResponseService;
+import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -73,7 +73,7 @@ public class DoDownloadGraph
     private static final String PARAMETER_GRAPH_LABEL_VALUE = "graph_label_value";
     private static final String PARAMETER_PLUGIN_NAME = "plugin_name";
     private static final String EMPTY_STRING = "";
-    private ResponseService _responseService = (ResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
+    private IResponseService _responseService = (IResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
             FormUtils.BEAN_FORM_RESPONSE_SERVICE );
 
     /**
