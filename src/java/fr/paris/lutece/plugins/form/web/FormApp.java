@@ -150,6 +150,7 @@ public class FormApp implements XPageApplication
     private static final String MESSAGE_ERROR = "form.message.Error";
     private static final String MESSAGE_CAPTCHA_ERROR = "form.message.captchaError";
     private static final String MESSAGE_ALREADY_SUBMIT_ERROR = "form.message.alreadySubmitError";
+    private static final String MESSAGE_SUBMIT_SAVE_ERROR = "form.message.submitSaveError";
     private static final String MESSAGE_ERROR_FORM_INACTIVE = "form.message.errorFormInactive";
     private static final String MESSAGE_SESSION_LOST = "form.message.session.lost";
     private static final String MESSAGE_UNIQUE_FIELD = "form.message.errorUniqueField";
@@ -812,12 +813,15 @@ public class FormApp implements XPageApplication
         {
         	_responseService.create( formSubmit );
         }
-        catch ( RuntimeException ex )
+        catch ( Exception ex )
         {
-        	// something very wrong happened... a database check might be neededs
+        	// something very wrong happened... a database check might be needed
         	AppLogService.error( ex.getMessage() + " for FormSubmit " + formSubmit.getIdFormSubmit(  ), ex );
-        	// rethrow the exception
-        	throw ex;
+        	// revert
+        	// we clear the DB form the given formsubmit (FormSubmitHome also removes the reponses)
+        	FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
+        	// throw a message to the user
+        	 SiteMessageService.setMessage( request, MESSAGE_SUBMIT_SAVE_ERROR, SiteMessage.TYPE_ERROR );
         }
 
         //Notify new form submit
