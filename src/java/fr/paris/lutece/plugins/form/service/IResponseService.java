@@ -33,73 +33,71 @@
  */
 package fr.paris.lutece.plugins.form.service;
 
-import java.util.List;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.StatisticEntrySubmit;
 import fr.paris.lutece.plugins.form.service.file.FileService;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+
 /**
  * Response service
  *
  */
-public interface IResponseService {
+public interface IResponseService
+{
+    /**
+     * Set the file service
+     * @param fileService the file service
+     */
+    void setFileService( FileService fileService );
 
-	/**
-	 * Set the file service
-	 * @param fileService the file service
-	 */
-	void setFileService(FileService fileService);
+    @Transactional( "form.transactionManager" )
+    void create( FormSubmit formSubmit );
 
-	@Transactional("form.transactionManager")
-	void create(FormSubmit formSubmit);
+    /**
+     * Creation of an instance of response
+     * @param response The instance of the response which contains the informations to store
+     */
+    void create( Response response );
 
-	/**
-	 * Creation of an instance of response
-	 * @param response The instance of the response which contains the informations to store
-	 */
-	void create(Response response);
+    /**
+     * Update of the response which is specified in parameter
+     * @param response The instance of the Response which contains the informations to update
+     */
+    void update( Response response );
 
-	/**
-	 * Update of the response which is specified in parameter
-	 * @param response The instance of the Response which contains the informations to update
-	 */
-	void update(Response response);
+    /**
+     * Remove all  response  associate to the form submit whose identifier is specified in parameter
+     * @param nIdFormSubmit The formSubmitKey
+     */
+    @Transactional( "form.transactionManager" )
+    void remove( int nIdFormSubmit );
 
-	/**
-	 * Remove all  response  associate to the form submit whose identifier is specified in parameter
-	 * @param nIdFormSubmit The formSubmitKey
-	 */
-	@Transactional("form.transactionManager")
-	void remove(int nIdFormSubmit);
+    /**
+     * Returns an instance of a Response whose identifier is specified in parameter
+     * @param nKey The entry primary key
+     * @param bGetFileData get file data
+     * @return an instance of Response
+     */
+    Response findByPrimaryKey( int nKey, boolean bGetFileData );
 
-	/**
-	 * Returns an instance of a Response whose identifier is specified in parameter
-	 * @param nKey The entry primary key
-	 * @param bGetFileData get file data
-	 * @return an instance of Response
-	 */
-	Response findByPrimaryKey(int nKey, boolean bGetFileData);
+    /**
+     * Load the data of all the response who verify the filter and returns them in a  list
+     * @param filter the filter
+     * @param bGetFileData get file data
+     * @return  the list of response
+     */
+    List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData );
 
-	/**
-	 * Load the data of all the response who verify the filter and returns them in a  list
-	 * @param filter the filter
-	 * @param bGetFileData get file data
-	 * @return  the list of response
-	 */
-	List<Response> getResponseList(ResponseFilter filter,
-			boolean bGetFileData);
-
-	/**
-	 *  Return a list of statistic on the entry
-	 *  @param nIdEntry the id of the entry
-	 *  @return return a list of statistic on the entry
-	 */
-	List<StatisticEntrySubmit> getStatisticByIdEntry(
-			int nIdEntry);
-
+    /**
+     *  Return a list of statistic on the entry
+     *  @param nIdEntry the id of the entry
+     *  @return return a list of statistic on the entry
+     */
+    List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry );
 }

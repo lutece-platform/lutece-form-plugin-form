@@ -55,8 +55,18 @@
 	 
 	 <bean id="form.asynchronousUploadHandler" class="fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler" />
 	 
-	 
 	 <bean id="form.transactionManager"  class="fr.paris.lutece.portal.service.database.DAOUtilTransactionManager">
 	 	<property name="pluginName" value="form" />
+	 </bean>
+	 
+	 <!-- Export types -->
+	 <bean id="form.exportTypeFactory" class="fr.paris.lutece.plugins.form.business.exporttype.ExportTypeFactory" />
+	 <bean id="form.fullExportType" class="fr.paris.lutece.plugins.form.business.exporttype.FullExportType">
+	 	<property name="key" value="full" />
+	 	<property name="titleI18nKey" value="form.export.type.full" />
+	 </bean>
+	 <bean id="form.lastDateExportType" class="fr.paris.lutece.plugins.form.business.exporttype.LastDateExportType">
+	 	<property name="key" value="lastDate" />
+	 	<property name="titleI18nKey" value="form.export.type.lastDate" />
 	 </bean>
  </beans>

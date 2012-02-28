@@ -34,13 +34,13 @@
 package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFile;
+import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
@@ -321,7 +321,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
      */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_DOWNLOAD_FILE );
+        UrlItem url = new UrlItem( FormUtils.getAdminBaseUrl( request ) + JSP_DOWNLOAD_FILE );
         url.addParameter( PARAMETER_ID_RESPONSE, response.getIdResponse(  ) );
 
         return url.getUrl(  );

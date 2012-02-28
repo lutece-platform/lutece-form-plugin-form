@@ -61,6 +61,8 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
@@ -119,6 +121,7 @@ public final class FormUtils
     public static final String PARAMETER_DELETE_PREFIX = "delete_";
     public static final String BEAN_ENTRY_TYPE_SERVICE = "form.entryTypeService";
     public static final String BEAN_FORM_RESPONSE_SERVICE = "form.responseService";
+    public static final String BEAN_EXPORT_DAEMON_TYPE_FACTORY = "form.exportTypeFactory";
     public static final int CONSTANT_ID_NULL = -1;
     public static final String CONSTANT_UNDERSCORE = "_";
     private static final String MARK_LOCALE = "locale";
@@ -138,6 +141,7 @@ public final class FormUtils
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String CONSTANT_WHERE = " WHERE ";
     private static final String CONSTANT_AND = " AND ";
+    private static final String SLASH = "/";
 
     // session
     public static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
@@ -174,6 +178,9 @@ public final class FormUtils
     private static final String PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SUBJECT = "form.notificationMailFormSubmit.subject";
     private static final String PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SENDER_NAME = "form.notificationMailFormSubmit.senderName";
     private static final String PROPERTY_CHOOSE_CATEGORY = "form.form.choose.category";
+    private static final String PROPERTY_LUTECE_ADMIN_PROD_URL = "lutece.admin.prod.url";
+    private static final String PROPERTY_LUTECE_BASE_URL = "lutece.base.url";
+    private static final String PROPERTY_LUTECE_PROD_URL = "lutece.prod.url";
     private static final String REGEX_ID = "^[\\d]+$";
 
     /**
@@ -989,7 +996,10 @@ public final class FormUtils
         {
             XmlUtil.beginElement( buffer, TAG_FORM_SUBMIT );
             XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_ID, formSubmit.getIdFormSubmit(  ) );
-            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_DATE, getDateString( formSubmit.getDateResponse(  ), locale ) );
+
+            String strDate = ( locale != null ) ? getDateString( formSubmit.getDateResponse(  ), locale )
+                                                : StringUtils.EMPTY;
+            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_DATE, strDate );
 
             if ( formSubmit.getIp(  ) != null )
             {
@@ -1601,5 +1611,44 @@ public final class FormUtils
         }
 
         return null;
+    }
+
+    /**
+     * Get the base url
+     * @param request the HTTP request
+     * @return the base url
+     */
+    public static String getAdminBaseUrl( HttpServletRequest request )
+    {
+        String strBaseUrl = StringUtils.EMPTY;
+
+        if ( request != null )
+        {
+            strBaseUrl = AppPathService.getBaseUrl( request );
+        }
+        else
+        {
+            strBaseUrl = AppPropertiesService.getProperty( PROPERTY_LUTECE_ADMIN_PROD_URL );
+
+            if ( StringUtils.isBlank( strBaseUrl ) )
+            {
+                strBaseUrl = AppPropertiesService.getProperty( PROPERTY_LUTECE_BASE_URL );
+
+                if ( StringUtils.isBlank( strBaseUrl ) )
+                {
+                    strBaseUrl = AppPropertiesService.getProperty( PROPERTY_LUTECE_PROD_URL );
+                }
+            }
+        }
+
+        if ( StringUtils.isNotBlank( strBaseUrl ) )
+        {
+            if ( !strBaseUrl.endsWith( SLASH ) )
+            {
+                return strBaseUrl + SLASH;
+            }
+        }
+
+        return strBaseUrl;
     }
 }

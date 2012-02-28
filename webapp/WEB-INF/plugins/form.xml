@@ -138,6 +138,18 @@
                 fr.paris.lutece.plugins.form.service.publication.DaemonPublication
 			</daemon-class>
         </daemon>
+        <daemon>
+            <daemon-id>formExportResponses</daemon-id>
+            <daemon-name>
+                form.daemon.formExportResponses.name
+			</daemon-name>
+            <daemon-description>
+                form.daemon.formExportResponses.description
+			</daemon-description>
+            <daemon-class>
+                fr.paris.lutece.plugins.form.service.daemon.ExportResponsesDaemon
+			</daemon-class>
+        </daemon>
     </daemons>
 
     <!-- Admin Dashboard components -->

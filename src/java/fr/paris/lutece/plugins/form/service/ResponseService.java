@@ -40,12 +40,10 @@ import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.StatisticEntrySubmit;
 import fr.paris.lutece.plugins.form.service.file.FileService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
-
-import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 /**
@@ -57,34 +55,34 @@ public class ResponseService implements IResponseService
 {
     private FileService _fileService;
 
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.form.service.IResponseService#setFileService(fr.paris.lutece.plugins.form.service.file.FileService)
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-	public void setFileService( FileService fileService )
+    public void setFileService( FileService fileService )
     {
         _fileService = fileService;
     }
-    
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.form.service.IResponseService#create(fr.paris.lutece.plugins.form.business.FormSubmit)
-	 */
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-	@Transactional("form.transactionManager")
+    @Transactional( "form.transactionManager" )
     public void create( FormSubmit formSubmit )
     {
-    	for ( Response response : formSubmit.getListResponse(  ) )
-    	{
-    		response.setFormSubmit( formSubmit );
-    		create( response );
-    	}
+        for ( Response response : formSubmit.getListResponse(  ) )
+        {
+            response.setFormSubmit( formSubmit );
+            create( response );
+        }
     }
 
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.form.service.IResponseService#create(fr.paris.lutece.plugins.form.business.Response)
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-	public void create( Response response )
+    public void create( Response response )
     {
         if ( response.getFile(  ) != null )
         {
@@ -94,11 +92,11 @@ public class ResponseService implements IResponseService
         ResponseHome.create( response, FormUtils.getPlugin(  ) );
     }
 
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.form.service.IResponseService#update(fr.paris.lutece.plugins.form.business.Response)
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-	public void update( Response response )
+    public void update( Response response )
     {
         if ( response.getFile(  ) != null )
         {
@@ -108,11 +106,11 @@ public class ResponseService implements IResponseService
         ResponseHome.update( response, FormUtils.getPlugin(  ) );
     }
 
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.form.service.IResponseService#remove(int)
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-	public void remove( int nIdFormSubmit )
+    public void remove( int nIdFormSubmit )
     {
         // First remove files
         ResponseFilter filter = new ResponseFilter(  );
@@ -132,11 +130,11 @@ public class ResponseService implements IResponseService
 
     // GET
 
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.form.service.IResponseService#findByPrimaryKey(int, boolean)
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-	public Response findByPrimaryKey( int nKey, boolean bGetFileData )
+    public Response findByPrimaryKey( int nKey, boolean bGetFileData )
     {
         Response response = ResponseHome.findByPrimaryKey( nKey, FormUtils.getPlugin(  ) );
 
@@ -148,11 +146,11 @@ public class ResponseService implements IResponseService
         return response;
     }
 
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.form.service.IResponseService#getResponseList(fr.paris.lutece.plugins.form.business.ResponseFilter, boolean)
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-	public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
+    public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
     {
         List<Response> listResponses = ResponseHome.getResponseList( filter, FormUtils.getPlugin(  ) );
 
@@ -170,11 +168,11 @@ public class ResponseService implements IResponseService
         return listResponses;
     }
 
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.form.service.IResponseService#getStatisticByIdEntry(int)
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-	public List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry )
+    public List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry )
     {
         return ResponseHome.getStatisticByIdEntry( nIdEntry, FormUtils.getPlugin(  ) );
     }

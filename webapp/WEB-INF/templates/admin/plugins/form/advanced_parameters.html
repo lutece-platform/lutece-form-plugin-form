@@ -105,17 +105,25 @@
 	</form>
 </div>
 
-<#if list_export_encoding_param?? && list_export_encoding_param?has_content>
+<#if list_export_param?? && list_export_param?has_content>
 	<div class="highlight-box">
 		<p>#i18n{form.manage_advanced_parameters.label_export_encoding_parameters}</p>
-		<form method="post" action="jsp/admin/plugins/form/DoModifyExportEncodingParameters.jsp">
+		<form method="post" action="jsp/admin/plugins/form/DoModifyExportParameters.jsp">
 			<p>
 				<label for="export_csv_encoding">#i18n{form.manage_advanced_parameters.label_export_csv_encoding} * : </label>
-				<input type="text" name="export_csv_encoding" id="export_csv_encoding" size="20" maxlength="100" value="${getName('export_csv_encoding',list_export_encoding_param)}" />
+				<input type="text" name="export_csv_encoding" id="export_csv_encoding" size="20" maxlength="100" value="${getName('export_csv_encoding',list_export_param)}" />
 			</p>
 			<p>
 				<label for="export_xml_encoding">#i18n{form.manage_advanced_parameters.label_export_xml_encoding} * : </label>
-				<input type="text" name="export_xml_encoding" id="export_xml_encoding" size="20" maxlength="100" value="${getName('export_xml_encoding',list_export_encoding_param)}" />
+				<input type="text" name="export_xml_encoding" id="export_xml_encoding" size="20" maxlength="100" value="${getName('export_xml_encoding',list_export_param)}" />
+			</p>
+			<p>
+				<label for="id_export_format_daemon">#i18n{form.manage_advanced_parameters.label_export_format_daemon} : </label>
+				<@combo name="id_export_format_daemon" items=export_format_list default_value=getName('id_export_format_daemon',list_export_param) />
+			</p>
+			<p>
+				<label for="export_daemon_type">#i18n{form.manage_advanced_parameters.label_export_daemon_type} : </label>
+				<@combo name="export_daemon_type" items=export_daemon_type_list default_value=getName('export_daemon_type',list_export_param) />
 			</p>
 			<p>
 				<input type="submit" class="button" value="#i18n{form.manage_advanced_parameters.buttonModify}" />

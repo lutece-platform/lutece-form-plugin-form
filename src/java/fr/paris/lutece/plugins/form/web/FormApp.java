@@ -811,17 +811,17 @@ public class FormApp implements XPageApplication
 
         try
         {
-        	_responseService.create( formSubmit );
+            _responseService.create( formSubmit );
         }
         catch ( Exception ex )
         {
-        	// something very wrong happened... a database check might be needed
-        	AppLogService.error( ex.getMessage() + " for FormSubmit " + formSubmit.getIdFormSubmit(  ), ex );
-        	// revert
-        	// we clear the DB form the given formsubmit (FormSubmitHome also removes the reponses)
-        	FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
-        	// throw a message to the user
-        	 SiteMessageService.setMessage( request, MESSAGE_SUBMIT_SAVE_ERROR, SiteMessage.TYPE_ERROR );
+            // something very wrong happened... a database check might be needed
+            AppLogService.error( ex.getMessage(  ) + " for FormSubmit " + formSubmit.getIdFormSubmit(  ), ex );
+            // revert
+            // we clear the DB form the given formsubmit (FormSubmitHome also removes the reponses)
+            FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
+            // throw a message to the user
+            SiteMessageService.setMessage( request, MESSAGE_SUBMIT_SAVE_ERROR, SiteMessage.TYPE_ERROR );
         }
 
         //Notify new form submit

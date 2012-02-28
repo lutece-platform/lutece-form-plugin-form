@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
 import fr.paris.lutece.plugins.form.business.Response;
+import fr.paris.lutece.plugins.form.business.exporttype.IExportTypeFactory;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
@@ -83,16 +84,18 @@ public final class FormService
     private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
     private static final String MARK_LIST_FORM_PARAM_DEFAULT_VALUES = "list_form_param_default_values";
     private static final String MARK_LIST_ENTRY_PARAM_DEFAULT_VALUES = "list_entry_param_default_values";
-    private static final String MARK_LIST_EXPORT_ENCODING_PARAM = "list_export_encoding_param";
+    private static final String MARK_LIST_EXPORT_PARAM = "list_export_param";
     private static final String MARK_IS_ACTIVE_CAPTCHA = "is_active_captcha";
     private static final String MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION = "is_active_mylutece_authentification";
     private static final String MARK_THEME_REF_LIST = "theme_list";
     private static final String MARK_DEFAULT_THEME = "default_theme";
+    private static final String MARK_EXPORT_FORMAT_REF_LIST = "export_format_list";
+    private static final String MARK_EXPORT_DAEMON_TYPE_LIST = "export_daemon_type_list";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String MYLUTECE_PLUGIN = "mylutece";
     private static FormService _singleton;
-    private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-            FormUtils.BEAN_ENTRY_TYPE_SERVICE );
+    private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getBean( FormUtils.BEAN_ENTRY_TYPE_SERVICE );
+    private IExportTypeFactory _exportDaemonTypeFactory = (IExportTypeFactory) SpringContextService.getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
 
     /**
      * Private constructor
@@ -141,11 +144,11 @@ public final class FormService
             ReferenceList listDirectoryParamDefaultValues = FormParameterService.getService(  )
                                                                                 .findDefaultValueParameters(  );
             ReferenceList listEntryParamDefaultValues = EntryParameterService.getService(  ).findAll(  );
-            ReferenceList listExportEncodingParam = FormParameterService.getService(  ).findExportEncodingParameters(  );
+            ReferenceList listExportParam = FormParameterService.getService(  ).findExportParameters(  );
 
             model.put( MARK_LIST_FORM_PARAM_DEFAULT_VALUES, listDirectoryParamDefaultValues );
             model.put( MARK_LIST_ENTRY_PARAM_DEFAULT_VALUES, listEntryParamDefaultValues );
-            model.put( MARK_LIST_EXPORT_ENCODING_PARAM, listExportEncodingParam );
+            model.put( MARK_LIST_EXPORT_PARAM, listExportParam );
         }
 
         List<ExportFormat> listExportFormat = ExportFormatHome.getList( plugin );
@@ -186,6 +189,8 @@ public final class FormService
         model.put( MARK_THEME_REF_LIST, themesRefList );
         model.put( MARK_IS_ACTIVE_CAPTCHA, PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) );
         model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
+        model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( plugin ) );
+        model.put( MARK_EXPORT_DAEMON_TYPE_LIST, _exportDaemonTypeFactory.getExportTypesAsRefList( user.getLocale(  ) ) );
 
         return model;
     }

@@ -4247,12 +4247,12 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * Modify directory parameter default values
+     * Modify form export parameter default values
      * @param request HttpServletRequest
      * @return JSP return
      * @throws AccessDeniedException
      */
-    public String doModifyExportEncodingParameters( HttpServletRequest request )
+    public String doModifyExportParameters( HttpServletRequest request )
         throws AccessDeniedException
     {
         if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
@@ -4261,7 +4261,7 @@ public class FormJspBean extends PluginAdminPageJspBean
             throw new AccessDeniedException(  );
         }
 
-        ReferenceList listParams = FormParameterService.getService(  ).findExportEncodingParameters(  );
+        ReferenceList listParams = FormParameterService.getService(  ).findExportParameters(  );
 
         for ( ReferenceItem param : listParams )
         {
@@ -4269,17 +4269,20 @@ public class FormJspBean extends PluginAdminPageJspBean
 
             if ( StringUtils.isNotBlank( strParamValue ) )
             {
-                // Test if the encoding is supported
-                try
+                if ( FormParameterService.getService(  ).isExportEncodingParameter( param.getCode(  ) ) )
                 {
-                    strParamValue.getBytes( strParamValue );
-                }
-                catch ( UnsupportedEncodingException e )
-                {
-                    Object[] tabRequiredFields = { strParamValue };
+                    // Test if the encoding is supported
+                    try
+                    {
+                        strParamValue.getBytes( strParamValue );
+                    }
+                    catch ( UnsupportedEncodingException e )
+                    {
+                        Object[] tabRequiredFields = { strParamValue };
 
-                    return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_EXPORT_ENCODING_NOT_SUPPORTED,
-                        tabRequiredFields, AdminMessage.TYPE_STOP );
+                        return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_EXPORT_ENCODING_NOT_SUPPORTED,
+                            tabRequiredFields, AdminMessage.TYPE_STOP );
+                    }
                 }
             }
             else

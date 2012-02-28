@@ -33,16 +33,18 @@
  */
 package fr.paris.lutece.plugins.form.service.parameter;
 
+import fr.paris.lutece.plugins.form.business.exporttype.IExportType;
+import fr.paris.lutece.plugins.form.business.exporttype.IExportTypeFactory;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterFilter;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterHome;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -57,6 +59,8 @@ public final class FormParameterService
     // PARAMETERS
     private static final String PARAMETER_EXPORT_CSV_ENCODING = "export_csv_encoding";
     private static final String PARAMETER_EXPORT_XML_ENCODING = "export_xml_encoding";
+    private static final String PARAMETER_ID_EXPORT_FORMAT_DAEMON = "id_export_format_daemon";
+    private static final String PARAMETER_EXPORT_DAEMON_TYPE = "export_daemon_type";
 
     // PROPERTIES
     private static final String PROPERTY_DEFAULT_EXPORT_ENCODING = "form.export.encoding.default";
@@ -90,6 +94,7 @@ public final class FormParameterService
         filter.setExcludeParameterKeys( true );
         filter.addParameterKey( PARAMETER_EXPORT_CSV_ENCODING );
         filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
+        filter.addParameterKey( PARAMETER_ID_EXPORT_FORMAT_DAEMON );
 
         return FormParameterHome.findByFilter( filter, FormUtils.getPlugin(  ) );
     }
@@ -98,12 +103,14 @@ public final class FormParameterService
      * Find the export parameters
      * @return a {@link ReferenceList}
      */
-    public ReferenceList findExportEncodingParameters(  )
+    public ReferenceList findExportParameters(  )
     {
         FormParameterFilter filter = new FormParameterFilter(  );
         filter.setExcludeParameterKeys( false );
         filter.addParameterKey( PARAMETER_EXPORT_CSV_ENCODING );
         filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
+        filter.addParameterKey( PARAMETER_ID_EXPORT_FORMAT_DAEMON );
+        filter.addParameterKey( PARAMETER_EXPORT_DAEMON_TYPE );
 
         return FormParameterHome.findByFilter( filter, FormUtils.getPlugin(  ) );
     }
@@ -158,5 +165,59 @@ public final class FormParameterService
         }
 
         return param.getName(  );
+    }
+
+    /**
+     * Get the id export responses for daemon
+     * @return the id export responses for daemon
+     */
+    public int getIdExportResponsesDaemon(  )
+    {
+        ReferenceItem param = findByKey( PARAMETER_ID_EXPORT_FORMAT_DAEMON );
+
+        if ( ( param == null ) || StringUtils.isBlank( param.getName(  ) ) ||
+                !StringUtils.isNumeric( param.getName(  ) ) )
+        {
+            return 1;
+        }
+
+        return FormUtils.convertStringToInt( param.getName(  ) );
+    }
+
+    /**
+     * Check if the given key is from an encoding parameter
+     * @param strKey the key
+     * @return true if it is an encoding parameter, false otherwise
+     */
+    public boolean isExportEncodingParameter( String strKey )
+    {
+        if ( StringUtils.isNotBlank( strKey ) )
+        {
+            if ( PARAMETER_EXPORT_CSV_ENCODING.equals( strKey ) || PARAMETER_EXPORT_XML_ENCODING.equals( strKey ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get tge export daemon type configured in the advanced parameters of
+     * the plugin-form.
+     * @return a {@link IExportType}
+     */
+    public IExportType getExportDaemonType(  )
+    {
+        ReferenceItem param = findByKey( PARAMETER_EXPORT_DAEMON_TYPE );
+
+        IExportTypeFactory exportDaemonTypeFactory = (IExportTypeFactory) SpringContextService.getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
+
+        if ( ( param == null ) || StringUtils.isBlank( param.getName(  ) ) )
+        {
+            return exportDaemonTypeFactory.getExportType( StringUtils.EMPTY );
+        }
+
+        return exportDaemonTypeFactory.getExportType( param.getName(  ) );
     }
 }
