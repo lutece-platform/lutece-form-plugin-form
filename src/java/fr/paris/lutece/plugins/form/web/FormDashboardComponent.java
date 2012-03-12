@@ -47,12 +47,15 @@ import fr.paris.lutece.portal.business.right.Right;
 import fr.paris.lutece.portal.business.right.RightHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.dashboard.DashboardComponent;
+import fr.paris.lutece.portal.service.database.AppConnectionService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,6 +91,13 @@ public class FormDashboardComponent extends DashboardComponent
     public String getDashboardData( AdminUser user, HttpServletRequest request )
     {
         Plugin plugin = getPlugin(  );
+
+        if ( !plugin.isInstalled(  ) || StringUtils.isBlank( plugin.getDbPoolName(  ) ) ||
+                AppConnectionService.NO_POOL_DEFINED.equals( plugin.getDbPoolName(  ) ) )
+        {
+            return StringUtils.EMPTY;
+        }
+
         Right right = RightHome.findByPrimaryKey( getRight(  ) );
         Locale locale = user.getLocale(  );
         List<FormAction> listActionsForFormEnable;

@@ -35,7 +35,10 @@ package fr.paris.lutece.plugins.form.service;
 
 import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.portal.business.style.Theme;
+import fr.paris.lutece.portal.service.database.AppConnectionService;
 import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 
@@ -62,7 +65,8 @@ public class FormPlugin extends PluginDefaultImplementation implements Serializa
         // Initialize the Poll service
         FormService.getInstance(  ).init(  );
 
-        if ( this.isInstalled(  ) )
+        if ( this.isInstalled(  ) && StringUtils.isNotBlank( this.getDbPoolName(  ) ) &&
+                !AppConnectionService.NO_POOL_DEFINED.equals( this.getDbPoolName(  ) ) )
         {
             _xPageTheme = FormHome.getXPageThemes( this );
         }
