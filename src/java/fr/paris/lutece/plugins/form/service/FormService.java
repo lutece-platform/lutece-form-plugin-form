@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.service;
 
+import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
@@ -82,6 +83,7 @@ public final class FormService
 {
     private static final String MARK_PERMISSION_MANAGE_EXPORT_FORMAT = "permission_manage_export_format";
     private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
+    private static final String MARK_PERMISSION_MANAGE_CATEGORY = "permission_manage_category";
     private static final String MARK_LIST_FORM_PARAM_DEFAULT_VALUES = "list_form_param_default_values";
     private static final String MARK_LIST_ENTRY_PARAM_DEFAULT_VALUES = "list_entry_param_default_values";
     private static final String MARK_LIST_EXPORT_PARAM = "list_export_param";
@@ -174,6 +176,16 @@ public final class FormService
         else
         {
             model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, false );
+        }
+
+        if ( RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    CategoryResourceIdService.PERMISSION_MANAGE, user ) )
+        {
+            model.put( MARK_PERMISSION_MANAGE_CATEGORY, true );
+        }
+        else
+        {
+            model.put( MARK_PERMISSION_MANAGE_CATEGORY, false );
         }
 
         //Style management

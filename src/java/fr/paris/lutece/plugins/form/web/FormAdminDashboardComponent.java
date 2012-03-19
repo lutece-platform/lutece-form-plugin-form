@@ -43,6 +43,8 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,9 +57,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class FormAdminDashboardComponent extends AdminDashboardComponent
 {
-    // CONSTANTS
-    private static final String EMPTY_STRING = "";
-
     // TEMPLATES
     private static final String TEMPLATE_ADMIN_DASHBOARD = "admin/plugins/form/form_admindashboard.html";
 
@@ -77,6 +76,6 @@ public class FormAdminDashboardComponent extends AdminDashboardComponent
             return template.getHtml(  );
         }
 
-        return EMPTY_STRING;
+        return StringUtils.EMPTY;
     }
 }
