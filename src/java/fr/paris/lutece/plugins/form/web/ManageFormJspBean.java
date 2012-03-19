@@ -58,6 +58,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * class ManageFormJspBean
+ * @deprecated This JSP bean is not used anymore
  */
 public class ManageFormJspBean extends PluginAdminPageJspBean
 {

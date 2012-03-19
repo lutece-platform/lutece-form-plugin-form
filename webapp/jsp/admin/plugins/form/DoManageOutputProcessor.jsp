@@ -2,9 +2,8 @@
 
 <jsp:useBean id="formForm" scope="session" class="fr.paris.lutece.plugins.form.web.FormJspBean" />
 
-
 <% 
-	formForm.init( request, fr.paris.lutece.plugins.form.web.ManageFormJspBean.RIGHT_MANAGE_FORM );
+	formForm.init( request, formForm.RIGHT_MANAGE_FORM );
     response.sendRedirect( formForm.doManageOutputProcessor(request));
 
 %>
