@@ -148,7 +148,7 @@ INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('active
 INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('support_https', '0');
 INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('active_requirement', '1');
 INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('id_theme_list', NULL);
-INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('export_csv_encoding', 'UTF-8');
+INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('export_csv_encoding', 'ISO-8859-1');
 INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('export_xml_encoding', 'UTF-8');
 INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('id_export_format_daemon', '3');
 INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('export_daemon_type', 'full');
