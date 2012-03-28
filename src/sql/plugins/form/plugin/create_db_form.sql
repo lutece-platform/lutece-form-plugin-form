@@ -124,6 +124,16 @@ ALTER TABLE form_recap ADD CONSTRAINT fk_form_recap_graph_type FOREIGN KEY (id_g
 	REFERENCES form_graph_type (id_graph_type);
 
 --
+-- Table structure for table form_category
+--
+CREATE TABLE form_category (
+	id_category int NOT NULL,
+	title varchar(100) NOT NULL,
+	color varchar(10),
+	PRIMARY KEY (id_category)
+);
+
+--
 -- Table structure for table form_form
 --
 CREATE TABLE form_form (
@@ -155,7 +165,7 @@ CREATE TABLE form_form (
 	supports_https smallint default 0,
 	code_theme varchar(25)default NULL,
 	active_mylutece_authentification smallint default NULL,
-	`id_category` int(11) default NULL,
+	id_category int default NULL,
 	PRIMARY KEY (id_form)
 );
 
@@ -301,16 +311,6 @@ CREATE TABLE form_rss_cf (
 	is_submit_rss smallint default 0 NOT NULL,	
 	id_form_submit int default 0 NOT NULL,
 	PRIMARY KEY (id_rss)
-);
-
---
--- Table structure for table form_category
---
-CREATE TABLE form_category (
-	id_category int NOT NULL,
-	title varchar(100) NOT NULL,
-	color varchar(10),
-	PRIMARY KEY (id_category)
 );
 
 --
