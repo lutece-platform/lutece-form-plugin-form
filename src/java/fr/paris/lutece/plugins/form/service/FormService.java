@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.form.business.DefaultMessage;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.EntryType;
+import fr.paris.lutece.plugins.form.business.EntryTypeNumbering;
 import fr.paris.lutece.plugins.form.business.EntryTypeSession;
 import fr.paris.lutece.plugins.form.business.ExportFormat;
 import fr.paris.lutece.plugins.form.business.ExportFormatHome;
@@ -48,6 +49,7 @@ import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
 import fr.paris.lutece.plugins.form.business.Response;
+import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.exporttype.IExportTypeFactory;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
@@ -308,5 +310,25 @@ public final class FormService
         }
 
         return false;
+    }
+
+    /**
+     * Get the max number
+     * @param nIdEntryTypeNumbering the id entry type numbering
+     * @param nIdDirectory the id directory
+     * @return the max number
+     */
+    public int getMaxNumber( IEntry entry )
+    {
+        int nMaxNumber = 1;
+
+        if ( entry instanceof EntryTypeNumbering && ( entry != null ) && ( entry.getEntryType(  ) != null ) &&
+                ( entry.getForm(  ) != null ) )
+        {
+            nMaxNumber = ResponseHome.findMaxNumber( entry.getIdEntry(  ), entry.getForm(  ).getIdForm(  ),
+                    FormUtils.getPlugin(  ) );
+        }
+
+        return nMaxNumber;
     }
 }

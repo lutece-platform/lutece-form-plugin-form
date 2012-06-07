@@ -1,4 +1,4 @@
-﻿<div class="span-22 prepend-1 append-1 append-bottom last">
+<div class="span-22 prepend-1 append-1 append-bottom last">
 <div id="form-content" class="portlet -lutece-border-radius">
 	<#if validate_recap?exists>
 		<fieldset class="-lutece-border-radius"> 
@@ -34,7 +34,7 @@
 			<fieldset class="-lutece-border-radius">
 				<legend class="form-legend"> #i18n{form.recapFormSubmit.labelLegendStatistic}</legend> 
 				<#list formSubmit.listResponse as response>
-					<#if entry_type_session.idType != response.entry.entryType.idType && ( !entrySave?exists || entrySave.idEntry != response.entry.idEntry )>
+					<#if entry_type_session.idType != response.entry.entryType.idType && entry_type_numbering.idType != response.entry.entryType.idType && ( !entrySave?exists || entrySave.idEntry != response.entry.idEntry )>
 						<#assign entrySave=response.entry>
 						<div class="form-element">
 							<span class="form-label">

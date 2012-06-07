@@ -93,4 +93,13 @@ public interface IResponseDAO
     *  @return return a list of statistic on the entry
     */
     List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry, Plugin plugin );
+
+    /**
+     * Get the max number from a given id form
+     * @param nIdEntry the id of the entry
+     * @param nIdForm the id form
+     * @param plugin {@link Plugin}
+     * @return the max number
+     */
+    int getMaxNumber( int nIdEntry, int nIdForm, Plugin plugin );
 }

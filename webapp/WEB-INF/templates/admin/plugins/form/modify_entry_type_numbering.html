@@ -1,0 +1,30 @@
+<div class="content-box">
+	<h2>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</h2>
+	<form action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+		<input name="id_entry" value="${entry.idEntry}" type="hidden" />
+		<p>
+			<label for="title">#i18n{form.createEntry.labelTitle} * : </label>
+			<input type="text" name="title" id="title" size="80" value="${entry.title}" maxlength="255" />
+			<br/>
+			<label>&nbsp;</label>#i18n{form.createEntry.labelTitleComment}
+		</p>
+		<#if entry.fields?? && entry.fields?has_content>
+			<#assign prefix = "">
+			<#if entry.fields[0].title??>
+				<#assign prefix = entry.fields[0].title>
+			</#if>
+			<p>
+				<label for="prefix">#i18n{form.createEntry.labelPrefix} :</label>
+				<input type="text" name="prefix" value="${prefix}" maxlength="255" size="80" />
+				<br />
+				<label>&nbsp;</label>
+				#i18n{form.createEntry.labelPrefixComment}
+			</p>
+		</#if>
+		<p>
+			<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" />
+	  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonApply}" name="apply" />
+	  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonCancel}" name="cancel" />
+		</p>
+	</form>
+</div>

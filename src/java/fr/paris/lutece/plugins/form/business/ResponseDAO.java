@@ -67,6 +67,12 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_QUERY_SELECT_COUNT_RESPONSE_BY_ID_ENTRY = " SELECT field.title, COUNT( resp.id_response )" +
         " FROM form_entry e LEFT JOIN form_field field ON ( e.id_entry = field.id_entry ) LEFT JOIN form_response resp on ( resp.id_field = field.id_field ) " +
         " WHERE e.id_entry = ? GROUP BY field.id_field ORDER BY field.pos ";
+
+    // Special query in order to sort numerically and not alphabetically (thus avoiding list like 1, 10, 11, 2, ... instead of 1, 2, ..., 10, 11)
+    private static final String SQL_QUERY_SELECT_MAX_NUMBER = " SELECT fr.response_value FROM form_response fr " +
+        " INNER JOIN form_submit fs ON fs.id_form_submit = fr.id_form_submit " +
+        " INNER JOIN form_entry ent ON fr.id_entry = ent.id_entry " +
+        " WHERE ent.id_entry = ? AND fs.id_form = ? ORDER BY CAST(fr.response_value AS DECIMAL) DESC LIMIT 1 ";
     private static final String SQL_FILTER_ID_FORM_SUBMITION = " AND resp.id_form_submit = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_FILTER_ID_FIELD = " AND resp.id_field = ? ";
@@ -433,5 +439,29 @@ public final class ResponseDAO implements IResponseDAO
         daoUtil.free(  );
 
         return listStatisticEntrySubmit;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getMaxNumber( int nIdEntry, int nIdForm, Plugin plugin )
+    {
+        int nIndex = 1;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_NUMBER, plugin );
+        daoUtil.setInt( nIndex++, nIdEntry );
+        daoUtil.setInt( nIndex++, nIdForm );
+        daoUtil.executeQuery(  );
+
+        int nKey = 1;
+
+        if ( daoUtil.next(  ) )
+        {
+            nKey = daoUtil.getInt( 1 ) + 1;
+        }
+
+        daoUtil.free(  );
+
+        return nKey;
     }
 }

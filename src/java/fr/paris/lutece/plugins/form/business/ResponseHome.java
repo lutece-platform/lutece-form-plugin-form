@@ -45,7 +45,7 @@ import java.util.List;
 public final class ResponseHome
 {
     // Static variable pointed at the DAO instance
-    private static IResponseDAO _dao = (IResponseDAO) SpringContextService.getPluginBean( "form", "form.responseDAO" );
+    private static IResponseDAO _dao = SpringContextService.getBean( "form.responseDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -124,5 +124,17 @@ public final class ResponseHome
     public static List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry, Plugin plugin )
     {
         return _dao.getStatisticByIdEntry( nIdEntry, plugin );
+    }
+
+    /**
+     * Get the max number from a given id form
+     * @param nIdEntry the id of the entry
+     * @param nIdForm the id form
+     * @param plugin {@link Plugin}
+     * @return the max number
+     */
+    public static int findMaxNumber( int nIdEntry, int nIdForm, Plugin plugin )
+    {
+        return _dao.getMaxNumber( nIdEntry, nIdForm, plugin );
     }
 }

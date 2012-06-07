@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.form.web;
 
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
+import fr.paris.lutece.plugins.form.business.EntryTypeNumbering;
 import fr.paris.lutece.plugins.form.business.EntryTypeSession;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormError;
@@ -115,6 +116,7 @@ public class FormApp implements XPageApplication
     private static final String MARK_MESSAGE_FORM_INACTIVE = "form_inactive";
     private static final String MARK_URL_ACTION = "url_action";
     private static final String MARK_ENTRY_TYPE_SESSION = "entry_type_session";
+    private static final String MARK_ENTRY_TYPE_NUMBERING = "entry_type_numbering";
     private static final String MARK_IS_DRAFT_SAVED = "is_draft_saved";
     private static final String MARK_FORM_HAS_ERRORS = "form_has_errors";
 
@@ -400,6 +402,7 @@ public class FormApp implements XPageApplication
         model.put( MARK_RECAP, recap );
         model.put( MARK_FORM_SUBMIT, formSubmit );
         model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.class.getName(  ) ) );
+        model.put( MARK_ENTRY_TYPE_NUMBERING, _entryTypeService.getEntryType( EntryTypeNumbering.class.getName(  ) ) );
 
         //String strPageId = request.getParameter( PARAMETER_PAGE_ID );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_RECAP_FORM_SUBMIT, locale, model );

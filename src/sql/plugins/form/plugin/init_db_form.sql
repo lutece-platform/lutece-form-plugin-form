@@ -8,33 +8,35 @@ INSERT INTO form_default_message (welcome_message,unavailability_message,require
 -- Dumping data for table form_entry_type
 --
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES 
-(1,'Bouton radio',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeRadioButton');
+(1,'Bouton radio',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeRadioButton');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES 
-(2,'Case à cocher',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeCheckBox');
+(2,'Case à cocher',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeCheckBox');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES 
-(3,'Commentaire',false,true,false,'fr.paris.lutece.plugins.form.business.EntryTypeComment');
+(3,'Commentaire',0,1,0,'fr.paris.lutece.plugins.form.business.EntryTypeComment');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES 
-(4,'Date',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeDate');
+(4,'Date',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeDate');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES 
-(5,'Liste déroulante',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeSelect');
+(5,'Liste déroulante',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeSelect');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES 
-(6,'Zone de texte court',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeText');
+(6,'Zone de texte court',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeText');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES 
-(7,'Zone de texte long',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeTextArea');
+(7,'Zone de texte long',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeTextArea');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES 
-(8,'Fichier',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeFile');
+(8,'Fichier',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeFile');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES 
-(9,'Regroupement',true,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeGroup');
+(9,'Regroupement',1,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeGroup');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES
-(10,'Liste déroulante SQL',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeSelectSQL');
+(10,'Liste déroulante SQL',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeSelectSQL');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES
-(11,'Géolocalisation',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeGeolocation');
+(11,'Géolocalisation',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeGeolocation');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES
-(12,'Image',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeImage');
+(12,'Image',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeImage');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES
-(13,'Utilisateur MyLutece',false,false,true,'fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser');
+(13,'Utilisateur MyLutece',0,0,1,'fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES
-(14,'Session',false,false,false,'fr.paris.lutece.plugins.form.business.EntryTypeSession');
+(14,'Session',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeSession');
+INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name) VALUES
+(15,'Numérotation',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeNumbering');
 
 --
 -- Dumping data for table form_action
