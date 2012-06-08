@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFile;
-import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -44,7 +43,6 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.Paginator;
-import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
@@ -62,7 +60,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class EntryTypeFile extends AbstractEntryTypeUpload
 {
-    private static final String PARAMETER_ID_RESPONSE = "id_response";
     private final String _template_create = "admin/plugins/form/create_entry_type_file.html";
     private final String _template_modify = "admin/plugins/form/modify_entry_type_file.html";
     private final String _template_html_code = "admin/plugins/form/html_code_entry_type_file.html";
@@ -273,21 +270,6 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
         }
 
         return refListRegularExpression;
-    }
-
-    /**
-     * Get the response value  associate to the entry  to export in the file export
-     * @param response the response associate to the entry
-     * @param locale the locale
-     * @param request the request
-     * @return  the response value  associate to the entry  to export in the file export
-     */
-    public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
-    {
-        UrlItem url = new UrlItem( FormUtils.getAdminBaseUrl( request ) + JSP_DOWNLOAD_FILE );
-        url.addParameter( PARAMETER_ID_RESPONSE, response.getIdResponse(  ) );
-
-        return url.getUrl(  );
     }
 
     /**

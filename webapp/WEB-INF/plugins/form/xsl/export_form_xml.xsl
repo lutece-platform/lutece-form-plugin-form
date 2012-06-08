@@ -34,6 +34,9 @@
 </xsl:template>
 <xsl:template match="question">
 	<question>
+		<question-id>
+			<xsl:value-of select="question-id"/>
+		</question-id>
 		<question-title>
 			<xsl:value-of select="question-title"/>
 		</question-title>

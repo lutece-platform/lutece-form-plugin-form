@@ -85,6 +85,19 @@
 	<#return "5242880">
 </#function>
 
+<#--
+-- Check if the given entry must export the binary
+-- @param entry the entry
+-- @return true if it must export the binaries, false otherwise
+-->
+<#function exportBinary entry>
+	<#assign field = getFieldValue( entry, "export_binary" ) />
+	<#if field?? && field = "true">
+		<#return true />
+	</#if>
+	<#return false />
+</#function>
+
 <script type="text/javascript">
 	function doDisplayAdvancedSettings(isChecked, optionalDiv)
 	{

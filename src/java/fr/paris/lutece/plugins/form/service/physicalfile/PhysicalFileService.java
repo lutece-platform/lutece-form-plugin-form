@@ -35,10 +35,7 @@ package fr.paris.lutece.plugins.form.service.physicalfile;
 
 import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFileHome;
-import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 
 
 /**
@@ -48,6 +45,8 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
  */
 public class PhysicalFileService
 {
+    public static final String BEAN_SERVICE = "form.physicalFileService";
+
     /**
     * Creation of an instance of record physical file
     * @param physicalFile The instance of the physical file which contains the informations to store

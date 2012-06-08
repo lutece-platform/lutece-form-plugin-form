@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import fr.paris.lutece.plugins.form.business.file.File;
+import fr.paris.lutece.plugins.form.service.file.FileService;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
@@ -41,13 +43,16 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
+import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -63,8 +68,10 @@ import javax.servlet.http.HttpSession;
 public abstract class AbstractEntryTypeUpload extends Entry
 {
     // PARAMETERS
+    protected static final String PARAMETER_ID_RESPONSE = "id_response";
     protected static final String PARAMETER_MAX_FILES = "max_files";
     protected static final String PARAMETER_FILE_MAX_SIZE = "file_max_size";
+    protected static final String PARAMETER_EXPORT_BINARY = "export_binary";
 
     // PROPERTIES
     private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES = "form.message.error.uploading_file.max_files";
@@ -78,6 +85,7 @@ public abstract class AbstractEntryTypeUpload extends Entry
     // CONSTANTS
     protected static final String CONSTANT_MAX_FILES = "max_files";
     protected static final String CONSTANT_FILE_MAX_SIZE = "file_max_size";
+    protected static final String CONSTANT_EXPORT_BINARY = "export_binary";
     protected static final String ALL = "*";
     protected static final String COMMA = ",";
 
@@ -183,6 +191,50 @@ public abstract class AbstractEntryTypeUpload extends Entry
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
+    {
+        // Check whether the binaries must be exported or just displaying an URL to download the file
+        if ( getFields(  ) == null )
+        {
+            setFields( FieldHome.getFieldListByIdEntry( getIdEntry(  ), FormUtils.getPlugin(  ) ) );
+        }
+
+        Field field = FormUtils.findFieldByTitleInTheList( CONSTANT_EXPORT_BINARY, getFields(  ) );
+
+        if ( ( field != null ) && StringUtils.isNotBlank( field.getValue(  ) ) &&
+                Boolean.valueOf( field.getValue(  ) ) )
+        {
+            if ( response.getFile(  ) != null )
+            {
+                FileService fileService = SpringContextService.getBean( FileService.BEAN_SERVICE );
+                File file = fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), true );
+
+                if ( ( file != null ) && ( file.getPhysicalFile(  ) != null ) &&
+                        ( file.getPhysicalFile(  ).getValue(  ) != null ) )
+                {
+                    String strPhysicalFile = Arrays.toString( file.getPhysicalFile(  ).getValue(  ) );
+
+                    if ( StringUtils.isNotBlank( strPhysicalFile ) )
+                    {
+                        // Removing the square brackets ("[]") that "Arrays.toString" added
+                        return strPhysicalFile.substring( 1, strPhysicalFile.length(  ) - 1 );
+                    }
+                }
+            }
+
+            return StringUtils.EMPTY;
+        }
+
+        UrlItem url = new UrlItem( FormUtils.getAdminBaseUrl( request ) + JSP_DOWNLOAD_FILE );
+        url.addParameter( PARAMETER_ID_RESPONSE, response.getIdResponse(  ) );
+
+        return url.getUrl(  );
     }
 
     // CHECKS
@@ -353,15 +405,16 @@ public abstract class AbstractEntryTypeUpload extends Entry
     // SET
 
     /**
-         * Set the list of fields
-         * @param request the HTTP request
-         */
+     * Set the list of fields
+     * @param request the HTTP request
+     */
     protected void setFields( HttpServletRequest request )
     {
         List<Field> listFields = new ArrayList<Field>(  );
         listFields.add( buildDefaultField( request ) );
         listFields.add( buildFieldMaxFiles( request ) );
         listFields.add( buildFieldFileMaxSize( request ) );
+        listFields.add( buildExportBinaryField( request ) );
 
         setFields( request, listFields );
 
@@ -435,6 +488,28 @@ public abstract class AbstractEntryTypeUpload extends Entry
 
         field.setParentEntry( this );
         field.setWidth( nWidth );
+
+        return field;
+    }
+
+    /**
+     * Build the field for exporting the binary
+     * @param request the HTTP request
+     * @return the field
+     */
+    private Field buildExportBinaryField( HttpServletRequest request )
+    {
+        String strExportBinary = request.getParameter( PARAMETER_EXPORT_BINARY );
+        Field field = FormUtils.findFieldByTitleInTheList( CONSTANT_EXPORT_BINARY, getFields(  ) );
+
+        if ( field == null )
+        {
+            field = new Field(  );
+        }
+
+        field.setParentEntry( this );
+        field.setTitle( CONSTANT_EXPORT_BINARY );
+        field.setValue( Boolean.toString( StringUtils.isNotBlank( strExportBinary ) ) );
 
         return field;
     }

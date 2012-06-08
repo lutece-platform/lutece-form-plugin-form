@@ -53,6 +53,16 @@
 		<label for="max_files">#i18n{form.createEntry.labelMaxFiles} * :</label>
 		<input name="max_files" type="text" size="2" value="${getMaxFiles(entry)}" maxlength="2" />
 	</p>
+	<p>
+		<label for="export_binary">#i18n{form.createEntry.labelExportBinary} : </label>
+		<input name="export_binary" value="1" type="checkbox" <#if exportBinary( entry )>checked="checked"</#if> />
+		<br />
+		<label>&nbsp;</label>
+		#i18n{form.createEntry.labelExportBinaryComment}
+		<br />
+		<label>&nbsp;</label>
+		<span class="alert">#i18n{form.createEntry.labelExportBinaryWarning}</span>
+	</p>
     <p>
   		<input type="submit" value="#i18n{form.modifyEntry.buttonSave}" class="button"  name="save" />
   		<input type="submit" value="#i18n{form.modifyEntry.buttonApply}" class="button"  name="apply" />

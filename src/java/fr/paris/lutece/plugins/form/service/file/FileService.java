@@ -46,6 +46,7 @@ import fr.paris.lutece.plugins.form.utils.FormUtils;
  */
 public class FileService
 {
+    public static final String BEAN_SERVICE = "form.fileService";
     private PhysicalFileService _physicalFileService;
 
     /**

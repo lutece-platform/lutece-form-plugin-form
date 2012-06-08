@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFile;
-import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -46,7 +45,6 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.Paginator;
-import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
@@ -71,8 +69,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class EntryTypeImage extends AbstractEntryTypeUpload
 {
-    private static final String PARAMETER_ID_RESPONSE = "id_response";
-
     //private static final int INTEGER_QUALITY_MAXIMUM = 1;
     private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "form.message.notAnImage";
     private final String _template_create = "admin/plugins/form/create_entry_type_image.html";
@@ -310,21 +306,6 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
         }
 
         return refListRegularExpression;
-    }
-
-    /**
-     * Get the response value  associate to the entry  to export in the file export
-     * @param response the response associate to the entry
-     * @param locale the locale
-     * @param request the request
-     * @return  the response value  associate to the entry  to export in the file export
-     */
-    public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
-    {
-        UrlItem url = new UrlItem( FormUtils.getAdminBaseUrl( request ) + JSP_DOWNLOAD_FILE );
-        url.addParameter( PARAMETER_ID_RESPONSE, response.getIdResponse(  ) );
-
-        return url.getUrl(  );
     }
 
     /**
