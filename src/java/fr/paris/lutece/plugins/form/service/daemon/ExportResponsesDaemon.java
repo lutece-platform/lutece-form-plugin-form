@@ -72,7 +72,10 @@ public class ExportResponsesDaemon extends Daemon
 
         if ( exportFormat != null )
         {
-            List<Form> listForms = FormHome.getFormList( new FormFilter(  ), plugin );
+            FormFilter filter = new FormFilter(  );
+            filter.setIdState( 1 );
+
+            List<Form> listForms = FormHome.getFormList( filter, plugin );
 
             if ( ( listForms != null ) && !listForms.isEmpty(  ) )
             {
