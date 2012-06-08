@@ -69,4 +69,15 @@
 	 	<property name="key" value="lastDate" />
 	 	<property name="titleI18nKey" value="form.export.type.lastDate" />
 	 </bean>
+	 
+	 <!-- File export types -->
+	 <bean id="form.exportServiceFactory" class="fr.paris.lutece.plugins.form.service.export.ExportServiceFactory" />
+	 <bean id="form.formExportService" class="fr.paris.lutece.plugins.form.service.export.FormExportService">
+	 	<property name="key" value="form" />
+	 	<property name="titleI18nKey" value="form.file.export.type.form" />
+	 </bean>
+	 <bean id="form.formSubmitExportService" class="fr.paris.lutece.plugins.form.service.export.FormSubmitExportService">
+	 	<property name="key" value="formSubmit" />
+	 	<property name="titleI18nKey" value="form.file.export.type.formSubmit" />
+	 </bean>
  </beans>

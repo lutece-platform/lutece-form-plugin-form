@@ -51,6 +51,8 @@ import fr.paris.lutece.plugins.form.business.RecapHome;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.exporttype.IExportTypeFactory;
+import fr.paris.lutece.plugins.form.service.export.ExportServiceFactory;
+import fr.paris.lutece.plugins.form.service.export.IExportServiceFactory;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
@@ -95,11 +97,13 @@ public final class FormService
     private static final String MARK_DEFAULT_THEME = "default_theme";
     private static final String MARK_EXPORT_FORMAT_REF_LIST = "export_format_list";
     private static final String MARK_EXPORT_DAEMON_TYPE_LIST = "export_daemon_type_list";
+    private static final String MARK_FILE_EXPORT_DAEMON_TYPE_LIST = "file_export_daemon_type_list";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String MYLUTECE_PLUGIN = "mylutece";
     private static FormService _singleton;
-    private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getBean( FormUtils.BEAN_ENTRY_TYPE_SERVICE );
-    private IExportTypeFactory _exportDaemonTypeFactory = (IExportTypeFactory) SpringContextService.getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
+    private EntryTypeService _entryTypeService = SpringContextService.getBean( FormUtils.BEAN_ENTRY_TYPE_SERVICE );
+    private IExportTypeFactory _exportDaemonTypeFactory = SpringContextService.getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
+    private IExportServiceFactory _fileExportDaemonTypeFactory = SpringContextService.getBean( ExportServiceFactory.BEAN_FACTORY );
 
     /**
      * Private constructor
@@ -205,6 +209,8 @@ public final class FormService
         model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
         model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( plugin ) );
         model.put( MARK_EXPORT_DAEMON_TYPE_LIST, _exportDaemonTypeFactory.getExportTypesAsRefList( user.getLocale(  ) ) );
+        model.put( MARK_FILE_EXPORT_DAEMON_TYPE_LIST,
+            _fileExportDaemonTypeFactory.getExportServicesAsRefList( user.getLocale(  ) ) );
 
         return model;
     }

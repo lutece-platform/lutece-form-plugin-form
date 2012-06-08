@@ -37,7 +37,9 @@ import fr.paris.lutece.plugins.form.business.exporttype.IExportType;
 import fr.paris.lutece.plugins.form.business.exporttype.IExportTypeFactory;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterFilter;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterHome;
-import fr.paris.lutece.plugins.form.service.FormPlugin;
+import fr.paris.lutece.plugins.form.service.export.ExportServiceFactory;
+import fr.paris.lutece.plugins.form.service.export.IExportService;
+import fr.paris.lutece.plugins.form.service.export.IExportServiceFactory;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -61,6 +63,7 @@ public final class FormParameterService
     private static final String PARAMETER_EXPORT_XML_ENCODING = "export_xml_encoding";
     private static final String PARAMETER_ID_EXPORT_FORMAT_DAEMON = "id_export_format_daemon";
     private static final String PARAMETER_EXPORT_DAEMON_TYPE = "export_daemon_type";
+    private static final String PARAMETER_FILE_EXPORT_DAEMON_TYPE = "file_export_daemon_type";
 
     // PROPERTIES
     private static final String PROPERTY_DEFAULT_EXPORT_ENCODING = "form.export.encoding.default";
@@ -71,8 +74,7 @@ public final class FormParameterService
      */
     public static FormParameterService getService(  )
     {
-        return (FormParameterService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-            BEAN_FORM_PARAMETER_SERVICE );
+        return SpringContextService.getBean( BEAN_FORM_PARAMETER_SERVICE );
     }
 
     /**
@@ -111,6 +113,7 @@ public final class FormParameterService
         filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
         filter.addParameterKey( PARAMETER_ID_EXPORT_FORMAT_DAEMON );
         filter.addParameterKey( PARAMETER_EXPORT_DAEMON_TYPE );
+        filter.addParameterKey( PARAMETER_FILE_EXPORT_DAEMON_TYPE );
 
         return FormParameterHome.findByFilter( filter, FormUtils.getPlugin(  ) );
     }
@@ -211,7 +214,7 @@ public final class FormParameterService
     {
         ReferenceItem param = findByKey( PARAMETER_EXPORT_DAEMON_TYPE );
 
-        IExportTypeFactory exportDaemonTypeFactory = (IExportTypeFactory) SpringContextService.getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
+        IExportTypeFactory exportDaemonTypeFactory = SpringContextService.getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
 
         if ( ( param == null ) || StringUtils.isBlank( param.getName(  ) ) )
         {
@@ -219,5 +222,24 @@ public final class FormParameterService
         }
 
         return exportDaemonTypeFactory.getExportType( param.getName(  ) );
+    }
+
+    /**
+     * Get tge export daemon type configured in the advanced parameters of
+     * the plugin-form.
+     * @return a {@link IExportType}
+     */
+    public IExportService getFileExportDaemonType(  )
+    {
+        ReferenceItem param = findByKey( PARAMETER_FILE_EXPORT_DAEMON_TYPE );
+
+        IExportServiceFactory fileExportDaemonTypeFactory = SpringContextService.getBean( ExportServiceFactory.BEAN_FACTORY );
+
+        if ( ( param == null ) || StringUtils.isBlank( param.getName(  ) ) )
+        {
+            return fileExportDaemonTypeFactory.getExportService( StringUtils.EMPTY );
+        }
+
+        return fileExportDaemonTypeFactory.getExportService( param.getName(  ) );
     }
 }

@@ -38,33 +38,17 @@ import fr.paris.lutece.plugins.form.business.ExportFormatHome;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormFilter;
 import fr.paris.lutece.plugins.form.business.FormHome;
-import fr.paris.lutece.plugins.form.business.FormSubmit;
-import fr.paris.lutece.plugins.form.business.FormSubmitHome;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
-import fr.paris.lutece.plugins.form.business.exporttype.IExportType;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
-import fr.paris.lutece.plugins.form.service.IResponseService;
+import fr.paris.lutece.plugins.form.service.export.IExportService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
-import fr.paris.lutece.plugins.form.utils.FileUtils;
-import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.daemon.Daemon;
-import fr.paris.lutece.portal.service.html.XmlTransformerService;
-import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.util.UniqueIDGenerator;
-import fr.paris.lutece.util.xml.XmlUtil;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.io.IOException;
-
 import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -74,16 +58,10 @@ import java.util.Locale;
  */
 public class ExportResponsesDaemon extends Daemon
 {
-    private static final String SQL_FILTER_ENTRY_POS = " ent.pos ";
-    private static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId(  ) + "form-";
-    private static final String CONSTANT_CSV = "csv";
-
-    // PROPERTIES
-    private static final String PROPERTY_FILE_FOLDER_PATH = "form.export.file.folder.path";
-
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run(  )
     {
         StringBuilder sbLog = new StringBuilder(  );
@@ -137,79 +115,16 @@ public class ExportResponsesDaemon extends Daemon
     {
         sbLog.append( "\nExporting responses for form ID " + form.getIdForm(  ) );
 
-        IExportType exportType = FormParameterService.getService(  ).getExportDaemonType(  );
+        IExportService exportService = FormParameterService.getService(  ).getFileExportDaemonType(  );
 
-        // Since it is a daemon, no Locale available. We take the default Locale
-        Locale locale = I18nService.getDefaultLocale(  );
-        ResponseFilter filter = exportType.getResponseFilter( form, locale );
-
-        List<FormSubmit> listFormSubmit = FormSubmitHome.getFormSubmitList( filter, plugin );
-        IResponseService responseService = (IResponseService) SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
-
-        for ( FormSubmit formSubmit : listFormSubmit )
+        if ( exportService != null )
         {
-            filter = new ResponseFilter(  );
-            filter.setIdForm( formSubmit.getIdFormSubmit(  ) );
-            filter.setOrderBy( SQL_FILTER_ENTRY_POS );
-            filter.setOrderByAsc( true );
-            formSubmit.setListResponse( responseService.getResponseList( filter, false ) );
+            exportService.doExport( form, sbLog, exportFormat, plugin );
         }
-
-        String strFormatExtension = exportFormat.getExtension(  ).trim(  );
-        String strFileName = FileUtils.buildFileName( form.getTitle(  ), strFormatExtension );
-        String strFolderPath = AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( 
-                    PROPERTY_FILE_FOLDER_PATH ) );
-        boolean bHasFormSubmit = false;
-
-        if ( ( listFormSubmit != null ) && !listFormSubmit.isEmpty(  ) )
+        else
         {
-            XmlTransformerService xmlTransformerService = new XmlTransformerService(  );
-            String strXmlSource = XmlUtil.getXmlHeader(  ) +
-                FormUtils.getXmlResponses( null, form, listFormSubmit, null, plugin );
-            String strXslUniqueId = XSL_UNIQUE_PREFIX_ID + exportFormat.getIdExport(  );
-            String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,
-                    exportFormat.getXsl(  ), strXslUniqueId, null, null );
-
-            String strEncoding = StringUtils.EMPTY;
-
-            if ( CONSTANT_CSV.equals( strFormatExtension ) )
-            {
-                strEncoding = FormParameterService.getService(  ).getExportCSVEncoding(  );
-            }
-            else
-            {
-                strEncoding = FormParameterService.getService(  ).getExportXMLEncoding(  );
-            }
-
-            try
-            {
-                FileUtils.createFile( strFolderPath, strFileName, strFileOutPut, strEncoding );
-                sbLog.append( "\n\t" + listFormSubmit.size(  ) + " responses exported." );
-            }
-            catch ( IOException e )
-            {
-                AppLogService.error( e.getMessage(  ), e );
-                sbLog.append( "\n\tERROR when writing file " + strFileName );
-            }
-
-            bHasFormSubmit = true;
+            AppLogService.error( "ExportResponsesDaemon - No file export service found." );
+            sbLog.append( "\nNo file export service found." );
         }
-
-        if ( !bHasFormSubmit )
-        {
-            // Delete
-            try
-            {
-                FileUtils.deleteFile( strFolderPath, strFileName );
-                sbLog.append( "\n\tNo response exported. Deleting file " + strFileName + "..." );
-            }
-            catch ( IOException e )
-            {
-                AppLogService.error( e.getMessage(  ), e );
-                sbLog.append( "\n\tERROR when deleting file " + strFileName );
-            }
-        }
-
-        exportType.saveExport( listFormSubmit, locale );
     }
 }

@@ -124,6 +124,9 @@
 			<p>
 				<label for="export_daemon_type">#i18n{form.manage_advanced_parameters.label_export_daemon_type} : </label>
 				<@combo name="export_daemon_type" items=export_daemon_type_list default_value=getName('export_daemon_type',list_export_param) />
+				<br />
+				<label for="file_export_daemon_type">&nbsp;</label>
+				<@combo name="file_export_daemon_type" items=file_export_daemon_type_list default_value=getName('file_export_daemon_type',list_export_param) />
 			</p>
 			<p>
 				<input type="submit" class="button" value="#i18n{form.manage_advanced_parameters.buttonModify}" />

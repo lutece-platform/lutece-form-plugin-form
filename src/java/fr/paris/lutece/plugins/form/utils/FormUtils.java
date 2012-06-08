@@ -989,89 +989,140 @@ public final class FormUtils
         // Build Form submits list XML
         XmlUtil.beginElement( buffer, TAG_FORM_SUBMITS );
 
-        //ResponseFilter filter=new ResponseFilter();
-        //filter.setIdForm(form.getIdForm());
-        //List<FormSubmit> listFormSubmit=FormSubmitHome.getFormSubmitList(filter, plugin);
         for ( FormSubmit formSubmit : listFormSubmit )
         {
-            XmlUtil.beginElement( buffer, TAG_FORM_SUBMIT );
-            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_ID, formSubmit.getIdFormSubmit(  ) );
-
-            String strDate = ( locale != null ) ? getDateString( formSubmit.getDateResponse(  ), locale )
-                                                : StringUtils.EMPTY;
-            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_DATE, strDate );
-
-            if ( formSubmit.getIp(  ) != null )
-            {
-                XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_IP, formSubmit.getIp(  ) );
-            }
-            else
-            {
-                XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_IP, EMPTY_STRING );
-            }
-
-            //filter.setIdForm(formSubmit.getIdFormSubmit());
-            //List<Response> listResponses=ResponseHome.getResponseList(filter, plugin);
-            Response responseStore = null;
-            XmlUtil.beginElement( buffer, TAG_QUESTIONS );
-
-            if ( ( formSubmit.getListResponse(  ) != null ) && !formSubmit.getListResponse(  ).isEmpty(  ) )
-            {
-                for ( Response response : formSubmit.getListResponse(  ) )
-                {
-                    if ( response.getField(  ) != null )
-                    {
-                        Field field = mapFields.get( response.getField(  ).getIdField(  ) );
-
-                        if ( field == null )
-                        {
-                            field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ), plugin );
-                        }
-
-                        response.setField( field );
-                    }
-
-                    if ( ( responseStore != null ) &&
-                            ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) )
-                    {
-                        XmlUtil.endElement( buffer, TAG_RESPONSES );
-                        XmlUtil.endElement( buffer, TAG_QUESTION );
-                    }
-
-                    if ( ( responseStore == null ) ||
-                            ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) )
-                    {
-                        XmlUtil.beginElement( buffer, TAG_QUESTION );
-                        XmlUtil.addElementHtml( buffer, TAG_QUESTION_TITLE, response.getEntry(  ).getTitle(  ) );
-                        XmlUtil.addElement( buffer, TAG_QUESTION_ID, response.getEntry(  ).getIdEntry(  ) );
-                        XmlUtil.beginElement( buffer, TAG_RESPONSES );
-                    }
-
-                    if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || ( response.getFile(  ) != null ) )
-                    {
-                        XmlUtil.addElementHtml( buffer, TAG_RESPONSE,
-                            response.getEntry(  ).getResponseValueForExport( request, response, locale ) );
-                    }
-                    else
-                    {
-                        XmlUtil.addElement( buffer, TAG_RESPONSE, StringUtils.EMPTY );
-                    }
-
-                    responseStore = response;
-                }
-
-                XmlUtil.endElement( buffer, TAG_RESPONSES );
-                XmlUtil.endElement( buffer, TAG_QUESTION );
-            }
-
-            XmlUtil.endElement( buffer, TAG_QUESTIONS );
-            XmlUtil.endElement( buffer, TAG_FORM_SUBMIT );
+            getXmlResponse( request, buffer, formSubmit, mapFields, locale, plugin );
         }
 
         XmlUtil.endElement( buffer, TAG_FORM_SUBMITS );
         XmlUtil.endElement( buffer, TAG_FORM );
 
         return buffer.toString(  );
+    }
+
+    /**
+     * Get the XML responses for a single form submit
+     * @param request the HTTP request
+     * @param form the form
+     * @param formSubmit the form submit
+     * @param locale the locale
+     * @param plugin the plugin
+     * @return the XML
+     */
+    public static String getXmlResponses( HttpServletRequest request, Form form, FormSubmit formSubmit, Locale locale,
+        Plugin plugin )
+    {
+        // this map stores field in order to not request db multiple time for same field
+        Map<String, Field> mapFields = new HashMap<String, Field>(  );
+        StringBuffer buffer = new StringBuffer(  );
+        XmlUtil.beginElement( buffer, TAG_FORM );
+        XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle(  ) );
+
+        // Build entries list XML
+        XmlUtil.beginElement( buffer, TAG_FORM_ENTRIES );
+
+        for ( IEntry entry : getAllQuestionList( form.getIdForm(  ), plugin ) )
+        {
+            XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
+            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry(  ) );
+            XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle(  ) );
+            XmlUtil.endElement( buffer, TAG_FORM_ENTRY );
+        }
+
+        XmlUtil.endElement( buffer, TAG_FORM_ENTRIES );
+
+        // Build Form submits list XML
+        XmlUtil.beginElement( buffer, TAG_FORM_SUBMITS );
+
+        getXmlResponse( request, buffer, formSubmit, mapFields, locale, plugin );
+
+        XmlUtil.endElement( buffer, TAG_FORM_SUBMITS );
+        XmlUtil.endElement( buffer, TAG_FORM );
+
+        return buffer.toString(  );
+    }
+
+    /**
+     * Get the xml responses for the given form submit
+     * @param request the HTTP request
+     * @param buffer the buffer
+     * @param formSubmit the form submit
+     * @param mapFields the map fields in order to not request db multiple time for same field
+     * @param locale the locale
+     * @param plugin the plugin
+     */
+    private static void getXmlResponse( HttpServletRequest request, StringBuffer buffer, FormSubmit formSubmit,
+        Map<String, Field> mapFields, Locale locale, Plugin plugin )
+    {
+        XmlUtil.beginElement( buffer, TAG_FORM_SUBMIT );
+        XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_ID, formSubmit.getIdFormSubmit(  ) );
+
+        String strDate = ( locale != null ) ? getDateString( formSubmit.getDateResponse(  ), locale ) : StringUtils.EMPTY;
+        XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_DATE, strDate );
+
+        if ( formSubmit.getIp(  ) != null )
+        {
+            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_IP, formSubmit.getIp(  ) );
+        }
+        else
+        {
+            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_IP, EMPTY_STRING );
+        }
+
+        Response responseStore = null;
+        XmlUtil.beginElement( buffer, TAG_QUESTIONS );
+
+        if ( ( formSubmit.getListResponse(  ) != null ) && !formSubmit.getListResponse(  ).isEmpty(  ) )
+        {
+            for ( Response response : formSubmit.getListResponse(  ) )
+            {
+                if ( response.getField(  ) != null )
+                {
+                    Field field = mapFields.get( response.getField(  ).getIdField(  ) );
+
+                    if ( field == null )
+                    {
+                        field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ), plugin );
+                    }
+
+                    response.setField( field );
+                }
+
+                if ( ( responseStore != null ) &&
+                        ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) )
+                {
+                    XmlUtil.endElement( buffer, TAG_RESPONSES );
+                    XmlUtil.endElement( buffer, TAG_QUESTION );
+                }
+
+                if ( ( responseStore == null ) ||
+                        ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) )
+                {
+                    XmlUtil.beginElement( buffer, TAG_QUESTION );
+                    XmlUtil.addElementHtml( buffer, TAG_QUESTION_TITLE, response.getEntry(  ).getTitle(  ) );
+                    XmlUtil.addElement( buffer, TAG_QUESTION_ID, response.getEntry(  ).getIdEntry(  ) );
+                    XmlUtil.beginElement( buffer, TAG_RESPONSES );
+                }
+
+                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || ( response.getFile(  ) != null ) )
+                {
+                    XmlUtil.addElementHtml( buffer, TAG_RESPONSE,
+                        response.getEntry(  ).getResponseValueForExport( request, response, locale ) );
+                }
+                else
+                {
+                    XmlUtil.addElement( buffer, TAG_RESPONSE, StringUtils.EMPTY );
+                }
+
+                responseStore = response;
+            }
+
+            XmlUtil.endElement( buffer, TAG_RESPONSES );
+            XmlUtil.endElement( buffer, TAG_QUESTION );
+        }
+
+        XmlUtil.endElement( buffer, TAG_QUESTIONS );
+        XmlUtil.endElement( buffer, TAG_FORM_SUBMIT );
     }
 
     /**
