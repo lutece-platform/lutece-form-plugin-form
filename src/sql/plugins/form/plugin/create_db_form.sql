@@ -195,6 +195,7 @@ CREATE TABLE form_entry (
 	confirm_field_title long varchar,
 	field_unique smallint default NULL,
 	map_provider varchar(45) default NULL,
+	css_class varchar(255) default NULL,
 	PRIMARY KEY (id_entry)
 );
 

@@ -84,16 +84,18 @@ public class EntryTypeRadioButton extends Entry
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
+        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
+
         int nFieldInLine = -1;
 
-        String strFieldError = EMPTY_STRING;
+        String strFieldError = StringUtils.EMPTY;
 
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strTitle ) )
         {
             strFieldError = FIELD_TITLE;
         }
 
-        if ( !strFieldError.equals( EMPTY_STRING ) )
+        if ( StringUtils.isNotBlank( strFieldError ) )
         {
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
@@ -107,6 +109,7 @@ public class EntryTypeRadioButton extends Entry
         this.setTitle( strTitle );
         this.setHelpMessage( strHelpMessage );
         this.setComment( strComment );
+        this.setCSSClass( strCSSClass );
 
         if ( strMandatory != null )
         {

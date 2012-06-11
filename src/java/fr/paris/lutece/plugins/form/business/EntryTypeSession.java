@@ -98,7 +98,7 @@ public class EntryTypeSession extends Entry
         String strAttibuteName = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
 
-        String strFieldError = EMPTY_STRING;
+        String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
         {

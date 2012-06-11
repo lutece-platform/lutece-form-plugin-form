@@ -33,10 +33,11 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,26 +49,25 @@ import java.util.List;
 public final class EntryDAO implements IEntryDAO
 {
     // Constants
-    private static final String EMPTY_STRING = "";
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_entry ) FROM form_entry";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
         "ent.id_entry,ent.id_form,form.title,ent.id_parent,ent.title,ent.help_message," +
         "ent.comment,ent.mandatory,ent.fields_in_line," +
-        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider " +
+        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class " +
         "FROM form_entry ent,form_entry_type typ	,form_form form  WHERE ent.id_entry = ? and ent.id_type=typ.id_type and " +
         "ent.id_form=form.id_form";
     private static final String SQL_QUERY_INSERT = "INSERT INTO form_entry ( " +
         "id_entry,id_form,id_type,id_parent,title,help_message," + "comment,mandatory,fields_in_line," +
-        "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_entry WHERE id_entry = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE  form_entry SET " +
         "id_entry=?,id_form=?,id_type=?,id_parent=?,title=?,help_message=?," +
         "comment=?,mandatory=?,fields_in_line=?," +
-        "pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=? WHERE id_entry=?";
+        "pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=?,css_class=? WHERE id_entry=?";
     private static final String SQL_QUERY_SELECT_ENTRY_BY_FILTER = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
         "ent.id_entry,ent.id_form,ent.id_parent,ent.title,ent.help_message," +
         "ent.comment,ent.mandatory,ent.fields_in_line," +
-        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider " +
+        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider,ent.css_class " +
         "FROM form_entry ent,form_entry_type typ WHERE ent.id_type=typ.id_type ";
     private static final String SQL_QUERY_SELECT_NUMBER_ENTRY_BY_FILTER = "SELECT COUNT(ent.id_entry) " +
         "FROM form_entry ent,form_entry_type typ WHERE ent.id_type=typ.id_type ";
@@ -87,7 +87,7 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_GROUP_BY_FORM_ENTRY_ENTRY_TYPE = "GROUP BY ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
         "ent.id_entry,ent.id_form,ent.id_parent,ent.title,ent.help_message," +
         "ent.comment,ent.mandatory,ent.fields_in_line," +
-        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider ";
+        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider,ent.css_class ";
 
     /**
      * Generates a new primary key
@@ -207,9 +207,10 @@ public final class EntryDAO implements IEntryDAO
         daoUtil.setString( 13, entry.getConfirmFieldTitle(  ) );
         daoUtil.setBoolean( 14, entry.isUnique(  ) );
 
-        String strMapProviderKey = ( entry.getMapProvider(  ) == null ) ? FormUtils.EMPTY_STRING
+        String strMapProviderKey = ( entry.getMapProvider(  ) == null ) ? StringUtils.EMPTY
                                                                         : entry.getMapProvider(  ).getKey(  );
         daoUtil.setString( 15, strMapProviderKey );
+        daoUtil.setString( 16, ( entry.getCSSClass(  ) == null ) ? StringUtils.EMPTY : entry.getCSSClass(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -305,6 +306,7 @@ public final class EntryDAO implements IEntryDAO
             entry.setConfirmFieldTitle( daoUtil.getString( 19 ) );
             entry.setUnique( daoUtil.getBoolean( 20 ) );
             entry.setMapProvider( MapProviderManager.getMapProvider( daoUtil.getString( 21 ) ) );
+            entry.setCSSClass( daoUtil.getString( 22 ) );
 
             entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry(  ), plugin ) );
         }
@@ -371,11 +373,12 @@ public final class EntryDAO implements IEntryDAO
         daoUtil.setString( 13, entry.getConfirmFieldTitle(  ) );
         daoUtil.setBoolean( 14, entry.isUnique(  ) );
 
-        String strMapProviderKey = ( entry.getMapProvider(  ) == null ) ? FormUtils.EMPTY_STRING
+        String strMapProviderKey = ( entry.getMapProvider(  ) == null ) ? StringUtils.EMPTY
                                                                         : entry.getMapProvider(  ).getKey(  );
         daoUtil.setString( 15, strMapProviderKey );
+        daoUtil.setString( 16, ( entry.getCSSClass(  ) == null ) ? StringUtils.EMPTY : entry.getCSSClass(  ) );
 
-        daoUtil.setInt( 16, entry.getIdEntry(  ) );
+        daoUtil.setInt( 17, entry.getIdEntry(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -397,14 +400,14 @@ public final class EntryDAO implements IEntryDAO
         Form form = null;
 
         StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECT_ENTRY_BY_FILTER );
-        sbSQL.append( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM : EMPTY_STRING );
-        sbSQL.append( ( filter.containsIdEntryParent(  ) ) ? SQL_FILTER_ID_PARENT : EMPTY_STRING );
-        sbSQL.append( ( filter.containsEntryParentNull(  ) ) ? SQL_FILTER_ID_PARENT_IS_NULL : EMPTY_STRING );
-        sbSQL.append( ( filter.containsIdIsGroup(  ) ) ? SQL_FILTER_IS_GROUP : EMPTY_STRING );
-        sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : EMPTY_STRING );
-        sbSQL.append( ( filter.containsFieldDependNull(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND_IS_NULL : EMPTY_STRING );
-        sbSQL.append( ( filter.containsIdEntryType(  ) ) ? SQL_FILTER_ID_TYPE : EMPTY_STRING );
-        sbSQL.append( ( filter.containsIdIsComment(  ) ) ? SQL_FILTER_IS_COMMENT : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdEntryParent(  ) ) ? SQL_FILTER_ID_PARENT : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsEntryParentNull(  ) ) ? SQL_FILTER_ID_PARENT_IS_NULL : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdIsGroup(  ) ) ? SQL_FILTER_IS_GROUP : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsFieldDependNull(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND_IS_NULL : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdEntryType(  ) ) ? SQL_FILTER_ID_TYPE : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdIsComment(  ) ) ? SQL_FILTER_IS_COMMENT : StringUtils.EMPTY );
 
         sbSQL.append( SQL_GROUP_BY_FORM_ENTRY_ENTRY_TYPE );
         sbSQL.append( SQL_ORDER_BY_POSITION );
@@ -534,6 +537,7 @@ public final class EntryDAO implements IEntryDAO
             entry.setConfirmFieldTitle( daoUtil.getString( 18 ) );
             entry.setUnique( daoUtil.getBoolean( 19 ) );
             entry.setMapProvider( MapProviderManager.getMapProvider( daoUtil.getString( 20 ) ) );
+            entry.setCSSClass( daoUtil.getString( 21 ) );
 
             entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry(  ), plugin ) );
             entryList.add( entry );
@@ -554,13 +558,13 @@ public final class EntryDAO implements IEntryDAO
     {
         int nNumberEntry = 0;
         StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECT_NUMBER_ENTRY_BY_FILTER );
-        sbSQL.append( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM : EMPTY_STRING );
-        sbSQL.append( ( filter.containsIdEntryParent(  ) ) ? SQL_FILTER_ID_PARENT : EMPTY_STRING );
-        sbSQL.append( ( filter.containsEntryParentNull(  ) ) ? SQL_FILTER_ID_PARENT_IS_NULL : EMPTY_STRING );
-        sbSQL.append( ( filter.containsIdIsGroup(  ) ) ? SQL_FILTER_IS_GROUP : EMPTY_STRING );
-        sbSQL.append( ( filter.containsIdIsComment(  ) ) ? SQL_FILTER_IS_COMMENT : EMPTY_STRING );
-        sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : EMPTY_STRING );
-        sbSQL.append( ( filter.containsIdEntryType(  ) ) ? SQL_FILTER_ID_TYPE : EMPTY_STRING );
+        sbSQL.append( ( filter.containsIdForm(  ) ) ? SQL_FILTER_ID_FORM : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdEntryParent(  ) ) ? SQL_FILTER_ID_PARENT : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsEntryParentNull(  ) ) ? SQL_FILTER_ID_PARENT_IS_NULL : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdIsGroup(  ) ) ? SQL_FILTER_IS_GROUP : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdIsComment(  ) ) ? SQL_FILTER_IS_COMMENT : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdField(  ) ) ? SQL_FILTER_ID_FIELD_DEPEND : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIdEntryType(  ) ) ? SQL_FILTER_ID_TYPE : StringUtils.EMPTY );
 
         sbSQL.append( SQL_GROUP_BY_POSITION );
         sbSQL.append( SQL_ORDER_BY_POSITION );

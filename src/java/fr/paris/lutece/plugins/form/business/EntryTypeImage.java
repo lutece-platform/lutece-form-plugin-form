@@ -98,6 +98,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
+        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
 
         String strError = this.checkEntryData( request, locale );
 
@@ -109,6 +110,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
         this.setTitle( strTitle );
         this.setHelpMessage( strHelpMessage );
         this.setComment( strComment );
+        this.setCSSClass( strCSSClass );
 
         this.setFields( request );
 
@@ -233,7 +235,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
                         AppLogService.error( e );
                     }
 
-                    if ( ( image == null ) && ( strFilename != null ) && ( !strFilename.equals( EMPTY_STRING ) ) )
+                    if ( ( image == null ) && StringUtils.isNotBlank( strFilename ) )
                     {
                         formError = new FormError(  );
                         formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE,

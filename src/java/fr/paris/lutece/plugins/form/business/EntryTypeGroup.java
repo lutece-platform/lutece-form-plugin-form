@@ -37,6 +37,8 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,14 +74,15 @@ public class EntryTypeGroup extends Entry
     public String getRequestData( HttpServletRequest request, Locale locale )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strFieldError = EMPTY_STRING;
+        String strFieldError = StringUtils.EMPTY;
+        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
 
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strTitle ) )
         {
             strFieldError = FIELD_INSERT_GROUP;
         }
 
-        if ( !strFieldError.equals( EMPTY_STRING ) )
+        if ( StringUtils.isNotBlank( strFieldError ) )
         {
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
@@ -88,6 +91,7 @@ public class EntryTypeGroup extends Entry
         }
 
         this.setTitle( strTitle );
+        this.setCSSClass( strCSSClass );
 
         return null;
     }

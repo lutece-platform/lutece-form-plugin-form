@@ -7,6 +7,13 @@
     <label for="title">#i18n{form.createEntry.labelTitle} * : </label>
     <input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255" />
    </p>
+   <p>
+		<label for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+		<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" size="80" />
+		<br />
+		<label for="">&nbsp;</label>
+		#i18n{form.createEntry.labelCSSClassComment}
+	</p>
     <p>
   		<input type="submit" value="#i18n{form.createForm.buttonSave}" class="button"  name="save" / >
   		<input type="submit" value="#i18n{form.createForm.buttonCancel}" class="button" name="cancel" />

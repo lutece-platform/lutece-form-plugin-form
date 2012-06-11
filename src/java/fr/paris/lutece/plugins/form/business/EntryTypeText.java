@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
@@ -98,29 +97,29 @@ public class EntryTypeText extends Entry
         String strConfirmField = request.getParameter( PARAMETER_CONFIRM_FIELD );
         String strConfirmFieldTitle = request.getParameter( PARAMETER_CONFIRM_FIELD_TITLE );
         String strUnique = request.getParameter( PARAMETER_UNIQUE );
+        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
 
         int nWidth = -1;
         int nMaxSizeEnter = -1;
 
-        String strFieldError = EMPTY_STRING;
+        String strFieldError = StringUtils.EMPTY;
 
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strTitle ) )
         {
             strFieldError = FIELD_TITLE;
         }
 
-        else if ( ( strWidth == null ) || strWidth.trim(  ).equals( EMPTY_STRING ) )
+        else if ( StringUtils.isBlank( strWidth ) )
         {
             strFieldError = FIELD_WIDTH;
         }
 
-        if ( ( strConfirmField != null ) &&
-                ( ( strConfirmFieldTitle == null ) || strConfirmFieldTitle.trim(  ).equals( EMPTY_STRING ) ) )
+        if ( ( strConfirmField != null ) && StringUtils.isBlank( strConfirmFieldTitle ) )
         {
             strFieldError = FIELD_CONFIRM_FIELD_TITLE;
         }
 
-        if ( !strFieldError.equals( EMPTY_STRING ) )
+        if ( StringUtils.isNotBlank( strFieldError ) )
         {
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
@@ -139,7 +138,7 @@ public class EntryTypeText extends Entry
 
         try
         {
-            if ( ( strMaxSizeEnter != null ) && !strMaxSizeEnter.trim(  ).equals( EMPTY_STRING ) )
+            if ( StringUtils.isNotBlank( strMaxSizeEnter ) )
             {
                 nMaxSizeEnter = Integer.parseInt( strMaxSizeEnter );
             }
@@ -149,7 +148,7 @@ public class EntryTypeText extends Entry
             strFieldError = FIELD_MAX_SIZE_ENTER;
         }
 
-        if ( !strFieldError.equals( EMPTY_STRING ) )
+        if ( StringUtils.isNotBlank( strFieldError ) )
         {
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
@@ -160,6 +159,7 @@ public class EntryTypeText extends Entry
         this.setTitle( strTitle );
         this.setHelpMessage( strHelpMessage );
         this.setComment( strComment );
+        this.setCSSClass( strCSSClass );
 
         if ( this.getFields(  ) == null )
         {
@@ -364,8 +364,7 @@ public class EntryTypeText extends Entry
                 ResponseFilter filter = new ResponseFilter(  );
                 filter.setIdEntry( this.getIdEntry(  ) );
 
-                IResponseService responseService = (IResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-                        FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+                IResponseService responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
                 Collection<Response> listSubmittedResponses = responseService.getResponseList( filter, false );
 
                 for ( Response submittedResponse : listSubmittedResponses )
@@ -374,8 +373,7 @@ public class EntryTypeText extends Entry
                                                                    .getResponseValueForRecap( request,
                             submittedResponse, locale );
 
-                    if ( !strValueEntry.equals( EMPTY_STRING ) && ( strSubmittedResponse != null ) &&
-                            !strSubmittedResponse.equals( EMPTY_STRING ) &&
+                    if ( StringUtils.isNotBlank( strValueEntry ) && StringUtils.isNotBlank( strSubmittedResponse ) &&
                             strValueEntry.equalsIgnoreCase( strSubmittedResponse ) )
                     {
                         FormError formError = new FormError(  );

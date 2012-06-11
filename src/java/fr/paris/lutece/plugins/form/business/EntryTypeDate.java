@@ -87,15 +87,16 @@ public class EntryTypeDate extends Entry
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
+        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
 
-        String strFieldError = EMPTY_STRING;
+        String strFieldError = StringUtils.EMPTY;
 
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strTitle ) )
         {
             strFieldError = FIELD_TITLE;
         }
 
-        if ( !strFieldError.equals( EMPTY_STRING ) )
+        if ( StringUtils.isNotBlank( strFieldError ) )
         {
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
@@ -105,7 +106,7 @@ public class EntryTypeDate extends Entry
 
         Date dDateValue = null;
 
-        if ( ( strValue != null ) && !strValue.equals( EMPTY_STRING ) )
+        if ( StringUtils.isNotBlank( strValue ) )
         {
             dDateValue = DateUtil.formatDate( strValue, locale );
 
@@ -118,6 +119,7 @@ public class EntryTypeDate extends Entry
         this.setTitle( strTitle );
         this.setHelpMessage( strHelpMessage );
         this.setComment( strComment );
+        this.setCSSClass( strCSSClass );
 
         if ( this.getFields(  ) == null )
         {
@@ -191,7 +193,7 @@ public class EntryTypeDate extends Entry
             }
             else
             {
-                response.setToStringValueResponse( EMPTY_STRING );
+                response.setToStringValueResponse( StringUtils.EMPTY );
             }
 
             listResponse.add( response );

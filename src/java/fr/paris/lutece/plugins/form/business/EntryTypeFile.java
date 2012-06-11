@@ -87,6 +87,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
+        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
 
         String strError = this.checkEntryData( request, locale );
 
@@ -98,6 +99,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
         this.setTitle( strTitle );
         this.setHelpMessage( strHelpMessage );
         this.setComment( strComment );
+        this.setCSSClass( strCSSClass );
 
         this.setFields( request );
 
@@ -284,7 +286,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
         }
         else
         {
-            return EMPTY_STRING;
+            return StringUtils.EMPTY;
         }
     }
 

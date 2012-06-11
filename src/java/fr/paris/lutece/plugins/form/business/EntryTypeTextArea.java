@@ -85,28 +85,29 @@ public class EntryTypeTextArea extends Entry
         String strWidth = request.getParameter( PARAMETER_WIDTH );
         String strHeight = request.getParameter( PARAMETER_HEIGHT );
         String strMaxSizeEnter = request.getParameter( PARAMETER_MAX_SIZE_ENTER );
+        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
 
         int nWidth = -1;
         int nHeight = -1;
         int nMaxSizeEnter = -1;
 
-        String strFieldError = EMPTY_STRING;
+        String strFieldError = StringUtils.EMPTY;
 
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strTitle ) )
         {
             strFieldError = FIELD_TITLE;
         }
 
-        else if ( ( strWidth == null ) || strWidth.trim(  ).equals( EMPTY_STRING ) )
+        else if ( StringUtils.isBlank( strWidth ) )
         {
             strFieldError = FIELD_WIDTH;
         }
-        else if ( ( strHeight == null ) || strHeight.trim(  ).equals( EMPTY_STRING ) )
+        else if ( StringUtils.isBlank( strHeight ) )
         {
             strFieldError = FIELD_HEIGHT;
         }
 
-        if ( !strFieldError.equals( EMPTY_STRING ) )
+        if ( StringUtils.isNotBlank( strFieldError ) )
         {
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
@@ -134,7 +135,7 @@ public class EntryTypeTextArea extends Entry
 
         try
         {
-            if ( ( strMaxSizeEnter != null ) && !strMaxSizeEnter.trim(  ).equals( EMPTY_STRING ) )
+            if ( StringUtils.isNotBlank( strMaxSizeEnter ) )
             {
                 nMaxSizeEnter = Integer.parseInt( strMaxSizeEnter );
             }
@@ -144,7 +145,7 @@ public class EntryTypeTextArea extends Entry
             strFieldError = FIELD_MAX_SIZE_ENTER;
         }
 
-        if ( !strFieldError.equals( EMPTY_STRING ) )
+        if ( StringUtils.isNotBlank( strFieldError ) )
         {
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
@@ -155,6 +156,7 @@ public class EntryTypeTextArea extends Entry
         this.setTitle( strTitle );
         this.setHelpMessage( strHelpMessage );
         this.setComment( strComment );
+        this.setCSSClass( strCSSClass );
 
         if ( this.getFields(  ) == null )
         {

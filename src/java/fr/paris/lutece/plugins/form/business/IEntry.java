@@ -396,4 +396,14 @@ public interface IEntry
      * @return form error if there is an error
      */
     FormError canUploadFiles( List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale );
+
+    /**
+     * @param strCSSClass the _strCSSClass to set
+     */
+    void setCSSClass( String strCSSClass );
+
+    /**
+     * @return the _strCSSClass
+     */
+    String getCSSClass(  );
 }
