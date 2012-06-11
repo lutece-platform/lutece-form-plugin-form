@@ -144,7 +144,7 @@ public final class EntryDAO implements IEntryDAO
      * @param plugin the plugin
      * @return the number of conditional question
      */
-    private int nunberConditionalQuestion( int nIdEntry, Plugin plugin )
+    private int numberConditionalQuestion( int nIdEntry, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NUMBER_CONDITIONAL_QUESTION, plugin );
         daoUtil.setInt( 1, nIdEntry );
@@ -306,7 +306,7 @@ public final class EntryDAO implements IEntryDAO
             entry.setUnique( daoUtil.getBoolean( 20 ) );
             entry.setMapProvider( MapProviderManager.getMapProvider( daoUtil.getString( 21 ) ) );
 
-            entry.setNumberConditionalQuestion( nunberConditionalQuestion( entry.getIdEntry(  ), plugin ) );
+            entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry(  ), plugin ) );
         }
 
         daoUtil.free(  );
@@ -535,7 +535,7 @@ public final class EntryDAO implements IEntryDAO
             entry.setUnique( daoUtil.getBoolean( 19 ) );
             entry.setMapProvider( MapProviderManager.getMapProvider( daoUtil.getString( 20 ) ) );
 
-            entry.setNumberConditionalQuestion( nunberConditionalQuestion( entry.getIdEntry(  ), plugin ) );
+            entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry(  ), plugin ) );
             entryList.add( entry );
         }
 

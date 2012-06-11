@@ -41,6 +41,8 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -177,7 +179,7 @@ public class EntryTypeRadioButton extends Entry
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strIdField = request.getParameter( FormUtils.EMPTY_STRING + this.getIdEntry(  ) );
+        String strIdField = request.getParameter( PREFIX_FORM + this.getIdEntry(  ) );
         int nIdField = -1;
         Field field = null;
         Response response = new Response(  );
@@ -210,13 +212,9 @@ public class EntryTypeRadioButton extends Entry
 
         if ( this.isMandatory(  ) )
         {
-            if ( ( field == null ) || field.getValue(  ).equals( FormUtils.EMPTY_STRING ) )
+            if ( ( field == null ) || StringUtils.isBlank( field.getValue(  ) ) )
             {
-                FormError formError = new FormError(  );
-                formError.setMandatoryError( true );
-                formError.setTitleQuestion( this.getTitle(  ) );
-
-                return formError;
+                return new MandatoryFormError( this, locale );
             }
         }
 

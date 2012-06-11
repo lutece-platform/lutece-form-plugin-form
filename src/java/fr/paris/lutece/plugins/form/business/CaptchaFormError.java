@@ -35,110 +35,56 @@ package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.portal.service.content.XPageAppService;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.url.UrlItem;
+
+import java.util.Locale;
 
 
 /**
  *
- * class FormError
+ * CaptchaFormError
  *
  */
-public class FormError
+public class CaptchaFormError extends FormError
 {
+    private static final String MESSAGE_CAPTCHA_ERROR = "form.message.captchaError";
+    private static final String ANCHOR_CAPTCHA = "captchaImage";
     private static final String PARAMETER_ID_FORM = "id_form";
-    private static final String PREFIX_FORM = "form";
-    private String _strTitleQuestion;
-    private String _strErrorMessage;
-    private boolean _bMandatoryError;
-    private String _strUrl;
+    private int _nIdForm;
 
     /**
-     * return true if the error is a mandatory error
-     * @return true if the error is a mandatory error
+     * Constructor
+     * @param nIdForm the id form
+     * @param locale the locale
      */
+    public CaptchaFormError( int nIdForm, Locale locale )
+    {
+        _nIdForm = nIdForm;
+        this.setErrorMessage( I18nService.getLocalizedString( MESSAGE_CAPTCHA_ERROR, locale ) );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isMandatoryError(  )
     {
-        return _bMandatoryError;
+        return false;
     }
 
     /**
-     * set true if the error is a mandatory error
-     * @param mandatoryError true if the error is a mandatory error
+     * {@inheritDoc}
      */
-    public void setMandatoryError( boolean mandatoryError )
-    {
-        _bMandatoryError = mandatoryError;
-    }
-
-    /**
-     * Gets the error Message
-     * @return the error Message
-     */
-    public String getErrorMessage(  )
-    {
-        return _strErrorMessage;
-    }
-
-    /**
-     * set the error message
-     * @param errorMessage the erroer message
-     */
-    public void setErrorMessage( String errorMessage )
-    {
-        _strErrorMessage = errorMessage;
-    }
-
-    /**
-     *
-     * @return the title of the mandatory question
-     */
-    public String getTitleQuestion(  )
-    {
-        return _strTitleQuestion;
-    }
-
-    /**
-     * set the title of the mandatory question
-     * @param titleMandatoryQuestion the title of the mandatory question
-     */
-    public void setTitleQuestion( String titleMandatoryQuestion )
-    {
-        _strTitleQuestion = titleMandatoryQuestion;
-    }
-
-    /**
-     * @param strUrl the _strUrl to set
-     */
-    public void setUrl( String strUrl )
-    {
-        this._strUrl = strUrl;
-    }
-
-    /**
-     * Set the url
-     * @param nIdForm the id form
-     * @param nIdEntry the id entry
-     */
-    public void setUrl( IEntry entry )
+    @Override
+    public String getUrl(  )
     {
         UrlItem url = new UrlItem( AppPathService.getPortalUrl(  ) );
         url.addParameter( XPageAppService.PARAM_XPAGE_APP, FormPlugin.PLUGIN_NAME );
+        url.addParameter( PARAMETER_ID_FORM, _nIdForm );
+        url.setAnchor( ANCHOR_CAPTCHA );
 
-        if ( ( entry != null ) && ( entry.getForm(  ) != null ) )
-        {
-            url.addParameter( PARAMETER_ID_FORM, entry.getForm(  ).getIdForm(  ) );
-            url.setAnchor( PREFIX_FORM + entry.getIdEntry(  ) );
-        }
-
-        _strUrl = url.getUrl(  );
-    }
-
-    /**
-     * @return the _strUrl
-     */
-    public String getUrl(  )
-    {
-        return _strUrl;
+        return url.getUrl(  );
     }
 }

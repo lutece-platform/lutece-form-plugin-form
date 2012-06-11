@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
+import fr.paris.lutece.plugins.form.business.CaptchaFormError;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.EntryTypeNumbering;
@@ -46,11 +47,11 @@ import fr.paris.lutece.plugins.form.business.FormSubmitHome;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
+import fr.paris.lutece.plugins.form.business.RequirementFormError;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
 import fr.paris.lutece.plugins.form.service.EntryTypeService;
-import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
@@ -118,7 +119,7 @@ public class FormApp implements XPageApplication
     private static final String MARK_ENTRY_TYPE_SESSION = "entry_type_session";
     private static final String MARK_ENTRY_TYPE_NUMBERING = "entry_type_numbering";
     private static final String MARK_IS_DRAFT_SAVED = "is_draft_saved";
-    private static final String MARK_FORM_HAS_ERRORS = "form_has_errors";
+    private static final String MARK_FORM_ERRORS = "form_errors";
 
     // templates
     private static final String TEMPLATE_XPAGE_RECAP_FORM_SUBMIT = "skin/plugins/form/recap_form_submit.html";
@@ -145,12 +146,10 @@ public class FormApp implements XPageApplication
     private static final String PARAMETER_FIELD_INDEX = "field_index";
 
     // session
-    private static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
     private static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
 
     //message
     private static final String MESSAGE_ERROR = "form.message.Error";
-    private static final String MESSAGE_CAPTCHA_ERROR = "form.message.captchaError";
     private static final String MESSAGE_ALREADY_SUBMIT_ERROR = "form.message.alreadySubmitError";
     private static final String MESSAGE_SUBMIT_SAVE_ERROR = "form.message.submitSaveError";
     private static final String MESSAGE_ERROR_FORM_INACTIVE = "form.message.errorFormInactive";
@@ -164,10 +163,8 @@ public class FormApp implements XPageApplication
 
     // Misc
     private static final String REGEX_ID = "^[\\d]+$";
-    private IResponseService _responseService = (IResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-            FormUtils.BEAN_FORM_RESPONSE_SERVICE );
-    private EntryTypeService _entryTypeService = (EntryTypeService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-            FormUtils.BEAN_ENTRY_TYPE_SERVICE );
+    private IResponseService _responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+    private EntryTypeService _entryTypeService = SpringContextService.getBean( FormUtils.BEAN_ENTRY_TYPE_SERVICE );
 
     /**
      * Returns the Form XPage result content depending on the request parameters and the current mode.
@@ -306,7 +303,8 @@ public class FormApp implements XPageApplication
             // there is a few chances that PARAMETER_SESSION may not be blank but will be overwritten by draft if any
             if ( StringUtils.isBlank( request.getParameter( PARAMETER_SESSION ) ) )
             {
-                session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+                FormUtils.removeResponses( session );
+                FormUtils.removeFormErrors( session );
                 session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
                 FormAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( session.getId(  ) );
             }
@@ -527,8 +525,7 @@ public class FormApp implements XPageApplication
         model.put( MARK_IS_DRAFT_SAVED, bIsDraftSaved );
 
         // Check if there are responses in the session. If so, then there are errors
-        boolean bHasErrors = FormUtils.getResponses( session ) != null;
-        model.put( MARK_FORM_HAS_ERRORS, bHasErrors );
+        model.put( MARK_FORM_ERRORS, FormUtils.getFormErrors( session ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM, request.getLocale(  ), model );
         page.setContent( template.getHtml(  ) );
@@ -549,12 +546,12 @@ public class FormApp implements XPageApplication
     private XPage getRecap( HttpServletRequest request, HttpSession session, int nMode, Plugin plugin )
         throws SiteMessageException, UserNotSignedException
     {
+        List<FormError> listFormErrors = new ArrayList<FormError>(  );
         int nIdForm = -1;
         Map<String, Object> model = new HashMap<String, Object>(  );
         Locale locale = request.getLocale(  );
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
 
-        //String strPageId = request.getParameter( PARAMETER_PAGE_ID );
         if ( ( strIdForm != null ) && !strIdForm.equals( EMPTY_STRING ) )
         {
             try
@@ -563,12 +560,12 @@ public class FormApp implements XPageApplication
             }
             catch ( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage(  ), ne );
                 SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
             }
         }
 
-        if ( nIdForm == -1 )
+        if ( nIdForm == FormUtils.CONSTANT_ID_NULL )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
         }
@@ -587,7 +584,7 @@ public class FormApp implements XPageApplication
 
             if ( !captchaSecurityService.validate( request ) )
             {
-                SiteMessageService.setMessage( request, MESSAGE_CAPTCHA_ERROR, SiteMessage.TYPE_STOP );
+                listFormErrors.add( new CaptchaFormError( nIdForm, locale ) );
             }
         }
 
@@ -608,6 +605,7 @@ public class FormApp implements XPageApplication
         if ( form.isActiveRequirement(  ) && ( strRequirement == null ) )
         {
             session.setAttribute( SESSION_VALIDATE_REQUIREMENT, false );
+            listFormErrors.add( new RequirementFormError( nIdForm, locale ) );
             bValidateRequirement = false;
         }
         else
@@ -615,8 +613,12 @@ public class FormApp implements XPageApplication
             session.setAttribute( SESSION_VALIDATE_REQUIREMENT, true );
         }
 
-        if ( doInsertResponseInFormSubmit( request, formSubmit, plugin ) || !bValidateRequirement )
+        listFormErrors.addAll( doInsertResponseInFormSubmit( request, formSubmit, plugin ) );
+
+        if ( ( ( listFormErrors != null ) && !listFormErrors.isEmpty(  ) ) || !bValidateRequirement )
         {
+            FormUtils.restoreFormErrors( session, listFormErrors );
+
             return getForm( request, session, nMode, plugin );
         }
 
@@ -633,7 +635,8 @@ public class FormApp implements XPageApplication
             }
 
             session.setAttribute( PARAMETER_FORM_SUBMIT, formSubmit );
-            session.removeAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+            FormUtils.removeResponses( session );
+            FormUtils.removeFormErrors( session );
             session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
 
             //convert the value of the object response to string 
@@ -721,8 +724,7 @@ public class FormApp implements XPageApplication
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
         }
 
-        Form form;
-        form = FormHome.findByPrimaryKey( nIdForm, plugin );
+        Form form = FormHome.findByPrimaryKey( nIdForm, plugin );
         model.put( MARK_REQUIREMENT, form.getRequirement(  ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_REQUIREMENT_FORM, locale, model );
@@ -737,21 +739,19 @@ public class FormApp implements XPageApplication
      * @param plugin the Plugin
      * @return true if there is an error, false otherwise
      */
-    public boolean doInsertResponseInFormSubmit( HttpServletRequest request, FormSubmit formSubmit, Plugin plugin )
+    public List<FormError> doInsertResponseInFormSubmit( HttpServletRequest request, FormSubmit formSubmit,
+        Plugin plugin )
     {
-        List<IEntry> listEntryFirstLevel;
-        EntryFilter filter;
+        List<FormError> listFormErrors = new ArrayList<FormError>(  );
         Locale locale = request.getLocale(  );
 
-        FormError formError = null;
-        boolean bHasError = false;
-
-        filter = new EntryFilter(  );
+        EntryFilter filter = new EntryFilter(  );
         filter.setIdForm( formSubmit.getForm(  ).getIdForm(  ) );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         filter.setIdIsComment( EntryFilter.FILTER_FALSE );
-        listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
+
+        List<IEntry> listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
 
         List<Response> listResponse = new ArrayList<Response>(  );
         formSubmit.setListResponse( listResponse );
@@ -759,20 +759,16 @@ public class FormApp implements XPageApplication
         if ( request.getSession(  ) != null )
         {
             Map<Integer, List<Response>> listSubmittedResponses = new HashMap<Integer, List<Response>>(  );
-            request.getSession(  ).setAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES, listSubmittedResponses );
+            FormUtils.restoreResponses( request.getSession(  ), listSubmittedResponses );
         }
 
         for ( IEntry entry : listEntryFirstLevel )
         {
-            formError = FormUtils.getResponseEntry( request, entry.getIdEntry(  ), plugin, formSubmit, false, locale );
-
-            if ( formError != null )
-            {
-                bHasError = true;
-            }
+            listFormErrors.addAll( FormUtils.getResponseEntry( request, entry.getIdEntry(  ), plugin, formSubmit,
+                    false, locale ) );
         }
 
-        return bHasError;
+        return listFormErrors;
     }
 
     /**

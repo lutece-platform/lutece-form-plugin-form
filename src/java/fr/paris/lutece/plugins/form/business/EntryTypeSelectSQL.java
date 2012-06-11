@@ -41,6 +41,8 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -165,7 +167,7 @@ public class EntryTypeSelectSQL extends Entry
     @Override
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strIdField = request.getParameter( FormUtils.EMPTY_STRING + this.getIdEntry(  ) );
+        String strIdField = request.getParameter( PREFIX_FORM + this.getIdEntry(  ) );
         int nIdField = -1;
         Field field = null;
         Response response = new Response(  );
@@ -198,13 +200,9 @@ public class EntryTypeSelectSQL extends Entry
 
         if ( this.isMandatory(  ) )
         {
-            if ( ( field == null ) || field.getValue(  ).equals( FormUtils.EMPTY_STRING ) )
+            if ( ( field == null ) || StringUtils.isBlank( field.getValue(  ) ) )
             {
-                FormError formError = new FormError(  );
-                formError.setMandatoryError( true );
-                formError.setTitleQuestion( this.getTitle(  ) );
-
-                return formError;
+                return new MandatoryFormError( this, locale );
             }
         }
 
@@ -236,13 +234,6 @@ public class EntryTypeSelectSQL extends Entry
     {
         return response.getField(  ).getTitle(  );
     }
-
-    /*    @Override
-        public List<Field> getFields()
-        {
-            return null;
-        }
-    */
 
     /**
      * Return fields from a SQL query

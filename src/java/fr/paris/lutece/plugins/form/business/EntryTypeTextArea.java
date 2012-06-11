@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -209,7 +208,7 @@ public class EntryTypeTextArea extends Entry
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( FormUtils.EMPTY_STRING + this.getIdEntry(  ) );
+        String strValueEntry = request.getParameter( PREFIX_FORM + this.getIdEntry(  ) );
         Response response = new Response(  );
         response.setEntry( this );
 
@@ -236,6 +235,7 @@ public class EntryTypeTextArea extends Entry
                 formError.setMandatoryError( false );
                 formError.setTitleQuestion( this.getTitle(  ) );
                 formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale(  ) ) );
+                formError.setUrl( this );
 
                 return formError;
             }
@@ -250,20 +250,14 @@ public class EntryTypeTextArea extends Entry
                 Object[] messageArgs = new Object[] { nMaxSize, };
                 formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MAXLENGTH, messageArgs,
                         request.getLocale(  ) ) );
+                formError.setUrl( this );
 
                 return formError;
             }
 
-            if ( this.isMandatory(  ) )
+            if ( this.isMandatory(  ) && StringUtils.isBlank( strValueEntry ) )
             {
-                if ( strValueEntry.equals( FormUtils.EMPTY_STRING ) )
-                {
-                    FormError formError = new FormError(  );
-                    formError.setMandatoryError( true );
-                    formError.setTitleQuestion( this.getTitle(  ) );
-
-                    return formError;
-                }
+                return new MandatoryFormError( this, locale );
             }
         }
 

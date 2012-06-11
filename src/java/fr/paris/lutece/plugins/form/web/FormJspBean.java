@@ -376,8 +376,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private int _nIdForm = -1;
     private int _nIdEntry = -1;
     private List<FormSubmit> _listFormSubmitTest;
-    private IResponseService _responseService = (IResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-            FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+    private IResponseService _responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
 
     /*-------------------------------MANAGEMENT  FORM-----------------------------*/
 
@@ -426,20 +425,20 @@ public class FormJspBean extends PluginAdminPageJspBean
         filter.setIdState( _nIdActive );
         filter.setWorkGroup( _strWorkGroup );
 
-        List listForm = FormHome.getFormList( filter, getPlugin(  ) );
-        listForm = (List) AdminWorkgroupService.getAuthorizedCollection( listForm, adminUser );
+        List<Form> listForm = FormHome.getFormList( filter, getPlugin(  ) );
+        listForm = (List<Form>) AdminWorkgroupService.getAuthorizedCollection( listForm, adminUser );
 
         refListWorkGroups = AdminWorkgroupService.getUserWorkgroups( adminUser, locale );
         refListActive = initRefListActive( plugin, locale );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
-        LocalizedPaginator paginator = new LocalizedPaginator( listForm, _nItemsPerPageForm,
+        LocalizedPaginator<Form> paginator = new LocalizedPaginator<Form>( listForm, _nItemsPerPageForm,
                 getJspManageForm( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexForm, getLocale(  ) );
 
         listActionsForFormEnable = FormActionHome.selectActionsByFormState( Form.STATE_ENABLE, plugin, locale );
         listActionsForFormDisable = FormActionHome.selectActionsByFormState( Form.STATE_DISABLE, plugin, locale );
 
-        for ( Form form : (List<Form>) paginator.getPageItems(  ) )
+        for ( Form form : paginator.getPageItems(  ) )
         {
             if ( form.isActive(  ) )
             {
@@ -1019,7 +1018,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         _nItemsPerPageEntry = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                 _nItemsPerPageEntry, _nDefaultItemsPerPage );
 
-        LocalizedPaginator paginator = new LocalizedPaginator( listEntry, _nItemsPerPageEntry,
+        LocalizedPaginator<IEntry> paginator = new LocalizedPaginator<IEntry>( listEntry, _nItemsPerPageEntry,
                 AppPathService.getBaseUrl( request ) + JSP_MODIFY_FORM + "?id_form=" + nIdForm, PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexEntry, getLocale(  ) );
 
@@ -3285,7 +3284,6 @@ public class FormJspBean extends PluginAdminPageJspBean
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         String strRequirement = request.getParameter( PARAMETER_REQUIREMENT );
         String strErrorMessage = null;
-        FormError formError = null;
         int nIdForm = -1;
         Form form;
 
@@ -3349,26 +3347,33 @@ public class FormJspBean extends PluginAdminPageJspBean
 
         for ( IEntry entry : listEntryFirstLevel )
         {
-            formError = FormUtils.getResponseEntry( request, entry.getIdEntry(  ), plugin, formSubmit, false, locale );
+            List<FormError> listFormError = FormUtils.getResponseEntry( request, entry.getIdEntry(  ), plugin,
+                    formSubmit, false, locale );
 
-            if ( formError != null )
+            if ( ( listFormError != null ) && !listFormError.isEmpty(  ) )
             {
-                if ( formError.isMandatoryError(  ) )
+                // Only display the first error
+                FormError formError = listFormError.get( 0 );
+
+                if ( formError != null )
                 {
-                    Object[] tabRequiredFields = { formError.getTitleQuestion(  ) };
+                    if ( formError.isMandatoryError(  ) )
+                    {
+                        Object[] tabRequiredFields = { formError.getTitleQuestion(  ) };
 
-                    strErrorMessage = AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_QUESTION,
-                            tabRequiredFields, AdminMessage.TYPE_STOP );
+                        strErrorMessage = AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_QUESTION,
+                                tabRequiredFields, AdminMessage.TYPE_STOP );
+                    }
+                    else
+                    {
+                        Object[] tabRequiredFields = { formError.getTitleQuestion(  ), formError.getErrorMessage(  ) };
+
+                        strErrorMessage = AdminMessageService.getMessageUrl( request, MESSAGE_FORM_ERROR,
+                                tabRequiredFields, AdminMessage.TYPE_STOP );
+                    }
+
+                    return strErrorMessage;
                 }
-                else
-                {
-                    Object[] tabRequiredFields = { formError.getTitleQuestion(  ), formError.getErrorMessage(  ) };
-
-                    strErrorMessage = AdminMessageService.getMessageUrl( request, MESSAGE_FORM_ERROR,
-                            tabRequiredFields, AdminMessage.TYPE_STOP );
-                }
-
-                return strErrorMessage;
             }
         }
 

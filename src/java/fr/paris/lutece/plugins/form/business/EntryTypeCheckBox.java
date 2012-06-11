@@ -178,7 +178,7 @@ public class EntryTypeCheckBox extends Entry
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String[] strTabIdField = request.getParameterValues( FormUtils.EMPTY_STRING + this.getIdEntry(  ) );
+        String[] strTabIdField = request.getParameterValues( PREFIX_FORM + this.getIdEntry(  ) );
         List<Field> listFieldInResponse = new ArrayList<Field>(  );
         int nIdField = -1;
         Field field = null;
@@ -238,11 +238,7 @@ public class EntryTypeCheckBox extends Entry
 
             if ( bAllFieldEmpty )
             {
-                FormError formError = new FormError(  );
-                formError.setMandatoryError( true );
-                formError.setTitleQuestion( this.getTitle(  ) );
-
-                return formError;
+                return new MandatoryFormError( this, locale );
             }
         }
 

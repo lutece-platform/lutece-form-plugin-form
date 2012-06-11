@@ -161,11 +161,11 @@ public final class FormHome
     }
 
     /**
-         * Load the data of all the form who verify the filter and returns them in a  list
-         * @param filter the filter
-         * @param plugin the plugin
-         * @return  the list of form
-         */
+     * Load the data of all the form who verify the filter and returns them in a  list
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return  the list of form
+     */
     public static List<Form> getFormList( FormFilter filter, Plugin plugin )
     {
         return _dao.selectFormList( filter, plugin );

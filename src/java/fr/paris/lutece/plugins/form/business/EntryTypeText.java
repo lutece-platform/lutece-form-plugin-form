@@ -277,15 +277,15 @@ public class EntryTypeText extends Entry
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( FormUtils.EMPTY_STRING + this.getIdEntry(  ) ).trim(  );
+        String strValueEntry = request.getParameter( PREFIX_FORM + this.getIdEntry(  ) ).trim(  );
         boolean bConfirmField = this.isConfirmField(  );
         boolean bUnique = this.isUnique(  );
         String strValueEntryConfirmField = null;
 
         if ( bConfirmField )
         {
-            strValueEntryConfirmField = request.getParameter( FormUtils.EMPTY_STRING + this.getIdEntry(  ) +
-                    SUFFIX_CONFIRM_FIELD ).trim(  );
+            strValueEntryConfirmField = request.getParameter( PREFIX_FORM + this.getIdEntry(  ) + SUFFIX_CONFIRM_FIELD )
+                                               .trim(  );
         }
 
         List<RegularExpression> listRegularExpression = this.getFields(  ).get( 0 ).getRegularExpressionList(  );
@@ -314,19 +314,16 @@ public class EntryTypeText extends Entry
                 formError.setMandatoryError( false );
                 formError.setTitleQuestion( this.getTitle(  ) );
                 formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale(  ) ) );
+                formError.setUrl( this );
 
                 return formError;
             }
 
             if ( this.isMandatory(  ) )
             {
-                if ( strValueEntry.equals( FormUtils.EMPTY_STRING ) )
+                if ( StringUtils.isBlank( strValueEntry ) )
                 {
-                    FormError formError = new FormError(  );
-                    formError.setMandatoryError( true );
-                    formError.setTitleQuestion( this.getTitle(  ) );
-
-                    return formError;
+                    return new MandatoryFormError( this, locale );
                 }
             }
 
@@ -342,6 +339,7 @@ public class EntryTypeText extends Entry
                         formError.setMandatoryError( false );
                         formError.setTitleQuestion( this.getTitle(  ) );
                         formError.setErrorMessage( regularExpression.getErrorMessage(  ) );
+                        formError.setUrl( this );
 
                         return formError;
                     }
@@ -356,6 +354,7 @@ public class EntryTypeText extends Entry
                 formError.setTitleQuestion( this.getConfirmFieldTitle(  ) );
                 formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_CONFIRM_FIELD,
                         new String[] { this.getTitle(  ) }, request.getLocale(  ) ) );
+                formError.setUrl( this );
 
                 return formError;
             }
@@ -384,6 +383,7 @@ public class EntryTypeText extends Entry
                         formError.setTitleQuestion( this.getTitle(  ) );
                         formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_UNIQUE_FIELD,
                                 request.getLocale(  ) ) );
+                        formError.setUrl( this );
 
                         return formError;
                     }

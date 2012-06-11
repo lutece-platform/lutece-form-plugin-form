@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -169,7 +168,7 @@ public class EntryTypeDate extends Entry
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( FormUtils.EMPTY_STRING + this.getIdEntry(  ) ).trim(  );
+        String strValueEntry = request.getParameter( PREFIX_FORM + this.getIdEntry(  ) ).trim(  );
         Response response = new Response(  );
         response.setEntry( this );
 
@@ -204,19 +203,16 @@ public class EntryTypeDate extends Entry
                 formError.setMandatoryError( false );
                 formError.setTitleQuestion( this.getTitle(  ) );
                 formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale(  ) ) );
+                formError.setUrl( this );
 
                 return formError;
             }
 
             if ( this.isMandatory(  ) )
             {
-                if ( FormUtils.EMPTY_STRING.equals( strValueEntry ) )
+                if ( StringUtils.isBlank( strValueEntry ) )
                 {
-                    FormError formError = new FormError(  );
-                    formError.setMandatoryError( true );
-                    formError.setTitleQuestion( this.getTitle(  ) );
-
-                    return formError;
+                    return new MandatoryFormError( this, locale );
                 }
             }
 
@@ -227,6 +223,7 @@ public class EntryTypeDate extends Entry
                 formError.setTitleQuestion( this.getTitle(  ) );
                 formError.setMandatoryError( false );
                 formError.setErrorMessage( strError );
+                formError.setUrl( this );
 
                 return formError;
             }

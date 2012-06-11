@@ -225,11 +225,7 @@ public class EntryTypeGeolocation extends Entry
         {
             if ( StringUtils.isBlank( strAddressValue ) )
             {
-                FormError formError = new FormError(  );
-                formError.setMandatoryError( true );
-                formError.setTitleQuestion( this.getTitle(  ) );
-
-                return formError;
+                return new MandatoryFormError( this, locale );
             }
         }
 
@@ -243,6 +239,7 @@ public class EntryTypeGeolocation extends Entry
                 formError.setMandatoryError( this.isMandatory(  ) );
                 formError.setTitleQuestion( this.getTitle(  ) );
                 formError.setErrorMessage( MESSAGE_SPECIFY_BOTH_X_AND_Y );
+                formError.setUrl( this );
 
                 return formError;
             }

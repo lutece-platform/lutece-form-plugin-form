@@ -152,6 +152,8 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
 
                 if ( formError != null )
                 {
+                    formError.setUrl( this );
+
                     // Add the response to the list in order to have the error message in the page
                     Response response = new Response(  );
                     response.setEntry( this );
@@ -201,6 +203,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
                                 formError.setMandatoryError( false );
                                 formError.setTitleQuestion( this.getTitle(  ) );
                                 formError.setErrorMessage( regularExpression.getErrorMessage(  ) );
+                                formError.setUrl( this );
                             }
                         }
                     }
@@ -208,9 +211,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
             }
             else if ( this.isMandatory(  ) )
             {
-                formError = new FormError(  );
-                formError.setMandatoryError( true );
-                formError.setTitleQuestion( this.getTitle(  ) );
+                formError = new MandatoryFormError( this, locale );
 
                 Response response = new Response(  );
                 response.setEntry( this );
@@ -220,11 +221,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
             return formError;
         }
 
-        FormError formError = new FormError(  );
-        formError.setMandatoryError( true );
-        formError.setTitleQuestion( this.getTitle(  ) );
-
-        return formError;
+        return new MandatoryFormError( this, locale );
     }
 
     /**

@@ -66,6 +66,7 @@ public class Entry implements IEntry
     protected static final String PARAMETER_CONFIRM_FIELD = "confirm_field";
     protected static final String PARAMETER_CONFIRM_FIELD_TITLE = "confirm_field_title";
     protected static final String SUFFIX_CONFIRM_FIELD = "_confirm_field";
+    protected static final String PREFIX_FORM = "form";
     protected static final String PARAMETER_UNIQUE = "unique_field";
 
     //	message

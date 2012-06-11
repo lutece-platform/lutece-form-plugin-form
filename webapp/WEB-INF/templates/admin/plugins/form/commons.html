@@ -1,3 +1,9 @@
+<#--
+-- Check if the checkbox must be checked or not
+-- @param code the checkbox code
+-- @param referecen_list the default values list
+-- @return the String 'checked="checked" if the checkbox must be checked, an empty String otherwise
+-->
 <#function getChecked code reference_list>
 	<#if reference_list?has_content>
 		<#list reference_list as reference_item>
@@ -13,6 +19,12 @@
 	<#return "">
 </#function>
 
+<#--
+-- Get the value of the parameter
+-- @param code the code of the parameter
+-- @param referecen_list the default values list
+-- @return the value of the parameter
+-->
 <#function getName code reference_list>
 	<#if reference_list?has_content>
 		<#list reference_list as reference_item>

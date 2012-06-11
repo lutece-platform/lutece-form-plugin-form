@@ -146,6 +146,7 @@ public final class FormUtils
     // session
     public static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
     public static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
+    public static final String SESSION_FORM_ERRORS = "form_errors";
 
     //	 Xml Tags
     private static final String TAG_FORM = "form";
@@ -783,8 +784,7 @@ public final class FormUtils
 
         if ( ( request != null ) && ( request.getSession(  ) != null ) )
         {
-            Map<Integer, List<Response>> listSubmittedResponses = (Map<Integer, List<Response>>) request.getSession(  )
-                                                                                                        .getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+            Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession(  ) );
 
             if ( listSubmittedResponses != null )
             {
@@ -824,15 +824,12 @@ public final class FormUtils
      * @param locale the locale
      * @return null if there is no error in the response else return a FormError Object
      */
-    @SuppressWarnings( "unchecked" )
-    public static FormError getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
+    public static List<FormError> getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
         FormSubmit formSubmit, boolean bResponseNull, Locale locale )
     {
-        FormError formError = null;
-        Response response = null;
-        IEntry entry = null;
+        List<FormError> listFormErrors = new ArrayList<FormError>(  );
         List<Response> listResponse = new ArrayList<Response>(  );
-        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
+        IEntry entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
 
         List<Field> listField = new ArrayList<Field>(  );
 
@@ -848,26 +845,21 @@ public final class FormUtils
         {
             for ( IEntry entryChild : entry.getChildren(  ) )
             {
-                FormError formErrorForThisEntry = getResponseEntry( request, entryChild.getIdEntry(  ), plugin,
-                        formSubmit, false, locale );
-
-                if ( ( formErrorForThisEntry != null ) && ( formError == null ) )
-                {
-                    formError = new FormError(  );
-                    formError.setMandatoryError( false );
-                    formError.setTitleQuestion( entry.getTitle(  ) );
-                }
+                listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry(  ), plugin, formSubmit, false,
+                        locale ) );
             }
         }
         else if ( !entry.getEntryType(  ).getComment(  ) )
         {
+            FormError formError = null;
+
             if ( !bResponseNull )
             {
                 formError = entry.getResponseData( request, listResponse, locale );
             }
             else
             {
-                response = new Response(  );
+                Response response = new Response(  );
                 response.setEntry( entry );
                 listResponse.add( response );
             }
@@ -875,17 +867,17 @@ public final class FormUtils
             if ( formError != null )
             {
                 entry.setFormError( formError );
+                listFormErrors.add( formError );
             }
 
             if ( request.getSession(  ) != null )
             {
-                Map<Integer, List<Response>> listSubmittedResponses = (Map<Integer, List<Response>>) request.getSession(  )
-                                                                                                            .getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+                Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession(  ) );
 
                 if ( listSubmittedResponses != null )
                 {
                     listSubmittedResponses.put( entry.getIdEntry(  ), listResponse );
-                    request.getSession(  ).setAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES, listSubmittedResponses );
+                    restoreResponses( request.getSession(  ), listSubmittedResponses );
                 }
             }
 
@@ -899,22 +891,23 @@ public final class FormUtils
                     {
                         for ( IEntry conditionalEntry : field.getConditionalQuestions(  ) )
                         {
-                            formError = getResponseEntry( request, conditionalEntry.getIdEntry(  ), plugin, formSubmit,
-                                    false, locale );
+                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry(  ), plugin,
+                                    formSubmit, false, locale ) );
                         }
                     }
                     else
                     {
                         for ( IEntry conditionalEntry : field.getConditionalQuestions(  ) )
                         {
-                            getResponseEntry( request, conditionalEntry.getIdEntry(  ), plugin, formSubmit, true, locale );
+                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry(  ), plugin,
+                                    formSubmit, true, locale ) );
                         }
                     }
                 }
             }
         }
 
-        return formError;
+        return listFormErrors;
     }
 
     /**
@@ -1579,6 +1572,36 @@ public final class FormUtils
     public static Map<Integer, List<Response>> getResponses( HttpSession session )
     {
         return (Map<Integer, List<Response>>) session.getAttribute( SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+    }
+
+    /**
+     * Restores form errors
+     * @param session the session
+     * @param listFormErrors the form errosr
+     */
+    public static void restoreFormErrors( HttpSession session, List<FormError> listFormErrors )
+    {
+        session.setAttribute( SESSION_FORM_ERRORS, listFormErrors );
+    }
+
+    /**
+     * Removes submitted responses
+     * @param session the session
+     */
+    public static void removeFormErrors( HttpSession session )
+    {
+        session.removeAttribute( SESSION_FORM_ERRORS );
+    }
+
+    /**
+     * Gets the form errors bound to the session
+     * @param session the session
+     * @return the form errors
+     */
+    @SuppressWarnings( "unchecked" )
+    public static List<FormError> getFormErrors( HttpSession session )
+    {
+        return (List<FormError>) session.getAttribute( SESSION_FORM_ERRORS );
     }
 
     /**

@@ -153,7 +153,6 @@ public class EntryTypeMyLuteceUser extends Entry
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
-        ;
 
         if ( SecurityService.getInstance(  ).isExternalAuthentication(  ) )
         {
@@ -177,6 +176,7 @@ public class EntryTypeMyLuteceUser extends Entry
             formError.setTitleQuestion( this.getTitle(  ) );
             formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MYLUTECE_AUTHENTIFICATION_REQUIRED,
                     request.getLocale(  ) ) );
+            formError.setUrl( this );
 
             return formError;
         }

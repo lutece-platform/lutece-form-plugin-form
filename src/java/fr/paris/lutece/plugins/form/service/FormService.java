@@ -289,7 +289,7 @@ public final class FormService
      */
     public boolean hasFormErrors( HttpSession session )
     {
-        Map<Integer, List<Response>> listSubmittedResponses = (Map<Integer, List<Response>>) session.getAttribute( FormUtils.SESSION_FORM_LIST_SUBMITTED_RESPONSES );
+        Map<Integer, List<Response>> listSubmittedResponses = FormUtils.getResponses( session );
 
         if ( listSubmittedResponses != null )
         {

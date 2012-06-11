@@ -1,6 +1,6 @@
 <div class="form-element">
   <span class="form-label">
-	<label  for="${entry.idEntry}">
+	<label for="form${entry.idEntry}">
 		${entry.title}
 	<#if entry.mandatory>
 		*
@@ -9,7 +9,7 @@
 	</label>
 	</span>
 	<span class="form-field-column">
-		<select name="${entry.idEntry}" id="${entry.idEntry}"
+		<select name="form${entry.idEntry}" id="form${entry.idEntry}"
 			<#if list_responses??>
 				<#list list_responses as response>
 					<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>

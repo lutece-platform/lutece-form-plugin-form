@@ -339,11 +339,7 @@ public abstract class AbstractEntryTypeUpload extends Entry
 
             if ( isMandatory(  ) && StringUtils.isBlank( strFilename ) )
             {
-                formError = new FormError(  );
-                formError.setMandatoryError( true );
-                formError.setTitleQuestion( this.getTitle(  ) );
-
-                return formError;
+                return new MandatoryFormError( this, locale );
             }
 
             String strMimeType = FileSystemUtil.getMIMEType( strFilename );

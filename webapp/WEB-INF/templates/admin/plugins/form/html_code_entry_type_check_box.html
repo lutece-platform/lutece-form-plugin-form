@@ -1,25 +1,25 @@
  <#assign cpt=0>
 <div class="form-element">
- <span class="form-label">
-	<label for="${entry.idEntry}">	
+	<span class="form-label">
+		<label for="form${entry.idEntry}" id="form${entry.idEntry}">	
 			${entry.title}
 			<#if entry.mandatory>
 				*
 			</#if>
 			 : 
-	 </label>	
-   </span>
-	 <#if entry.fieldInLine>
-	   	 <span class="form-field-ligne">
-	 <#else>
-		   <span class="form-field-column">	
-	 </#if>	 
-	 <ul>
+		</label>
+	</span>
+	<#if entry.fieldInLine>
+		<span class="form-field-ligne">
+	<#else>
+		<span class="form-field-column">
+	</#if>
+	<ul>
 		<#list entry.fields as field>
 			 <#assign cpt=cpt+1>
 			 <li>
-				 <label for="${entry.idEntry}_${field.idField}">
-			 	<input type="checkbox" name="${entry.idEntry}" id="${entry.idEntry}_${field.idField}" value="${field.idField}"
+				<label for="form${entry.idEntry}_${field.idField}">
+			 	<input type="checkbox" name="form${entry.idEntry}" id="form${entry.idEntry}_${field.idField}" value="${field.idField}"
 			 	<#if list_responses??>
 					<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry && response.field??>
@@ -51,7 +51,7 @@
   			 
 		  </li>  
 		</#list>
-	 </ul>
+	</ul>
 	</span>	
 	<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
 			<span class="form-help">
@@ -59,7 +59,7 @@
 					<span><pre> ${entry.helpMessage}</pre></span>
 				</a>
 			</span>
-	 </#if>	
+	</#if>	
 	<#if list_responses??>
 		<#list list_responses as response>
 			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>

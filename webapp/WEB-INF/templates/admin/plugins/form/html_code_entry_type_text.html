@@ -1,6 +1,6 @@
 <div class="form-element">
 	 <span class="form-label">
-		 <label for="${entry.idEntry}">	
+		 <label for="form${entry.idEntry}">	
 				${entry.title}
 				<#if entry.mandatory>
 					*
@@ -11,7 +11,7 @@
 	</span>
 	 <span class="form-field-column">	 
 		<#list entry.fields as field>
-			<input type="text" name="${entry.idEntry}" id="${entry.idEntry}" size="${field.width}" 
+			<input type="text" name="form${entry.idEntry}" id="form${entry.idEntry}" size="${field.width}" 
 				<#if list_responses??>
 					<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry>
@@ -64,7 +64,7 @@
 <#if entry.confirmField>
 <div class="form-element">
 	 <span class="form-label">
-		 <label for="${entry.idEntry}_confirm_field">	
+		 <label for="form${entry.idEntry}_confirm_field">	
 				${entry.confirmFieldTitle}
 				<#if entry.mandatory>
 					*
@@ -74,7 +74,7 @@
 	</span>
 	<#list entry.fields as field>
 	<span class="form-field-column">
-		<input type="text" name="${entry.idEntry}_confirm_field" id="${entry.idEntry}_confirm_field" size="${field.width}" value="" 
+		<input type="text" name="form${entry.idEntry}_confirm_field" id="form${entry.idEntry}_confirm_field" size="${field.width}" value="" 
 			<#if field.maxSizeEnter!=-1>
 				maxlength="${field.maxSizeEnter}"
 			</#if>

@@ -9,8 +9,13 @@ Theses Java objects can be used in this template :
 		<#if is_draft_saved>
 			<h2 class="error">#i18n{form.xpage.form.draftSaved}</h2>
 		</#if>
-		<#if form_has_errors>
-			<h2 class="error">#i18n{form.xpage.form.hasErrors}</h2>
+		<#if form_errors?? && form_errors?has_content>
+			<h2 class="error">
+				<#list form_errors as form_error>
+					<a href="${form_error.url!}">${form_error.errorMessage!}</a>
+					<br />
+				</#list>
+			</h2>
 		</#if>
 		<#if !form_inactive?has_content>
 			${form_html!}

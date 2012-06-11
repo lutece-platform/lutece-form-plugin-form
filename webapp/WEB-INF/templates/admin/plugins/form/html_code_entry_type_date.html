@@ -1,12 +1,12 @@
 <div class="form-element">
 	<span class="form-label">	
-		<label for="${entry.idEntry}">	
+		<label for="form${entry.idEntry}">	
 			${entry.title}<#if entry.mandatory> *</#if> : 
 		</label>	
 	</span>
 	<span class="form-field-column">	  
 		<#list entry.fields as field>
-			<input type="text" name="${entry.idEntry}" id="${entry.idEntry}" size="10" class="-lutece-input -lutece-border-radius-mini 
+			<input type="text" name="form${entry.idEntry}" id="form${entry.idEntry}" size="10" class="-lutece-input -lutece-border-radius-mini 
 				<#if list_responses??>
 					<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry>
