@@ -67,7 +67,6 @@ import fr.paris.lutece.plugins.form.business.StatisticFormSubmit;
 import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
 import fr.paris.lutece.plugins.form.business.portlet.FormPortletHome;
 import fr.paris.lutece.plugins.form.service.EntryRemovalListenerService;
-import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.FormRemovalListenerService;
 import fr.paris.lutece.plugins.form.service.FormResourceIdService;
 import fr.paris.lutece.plugins.form.service.FormService;
@@ -142,14 +141,13 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * This class provides the user interface to manage form features ( manage,
- * create, modify, remove)
+ * This class provides the user interface to manage form features ( manage, create, modify, remove)
  */
 public class FormJspBean extends PluginAdminPageJspBean
 {
     public static final String RIGHT_MANAGE_FORM = "FORM_MANAGEMENT";
 
-    //templates
+    // templates
     private static final String TEMPLATE_MANAGE_FORM = "admin/plugins/form/manage_form.html";
     private static final String TEMPLATE_MANAGE_OUTPUT_PROCESSOR = "admin/plugins/form/manage_output_processor.html";
     private static final String TEMPLATE_CREATE_FORM = "admin/plugins/form/create_form.html";
@@ -165,7 +163,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String TEMPLATE_MANAGE_VALIDATOR = "admin/plugins/form/manage_validator.html";
     private static final String TEMPLATE_MANAGE_ADVANCED_PARAMETERS = "admin/plugins/form/manage_advanced_parameters.html";
 
-    //message
+    // message
     private static final String MESSAGE_CONFIRM_REMOVE_FORM = "form.message.confirmRemoveForm";
     private static final String MESSAGE_CONFIRM_REMOVE_FORM_WITH_FORM_SUBMIT = "form.message.confirmRemoveFormWithFormSubmit";
     private static final String MESSAGE_CONFIRM_REMOVE_FORM_WITH_VALIDATOR = "form.message.confirmRemoveFormWithValidator";
@@ -204,7 +202,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String FIELD_UNAVAILABILITY_MESSAGE = "form.createForm.labelUnavailabilityMessage";
     private static final String FIELD_REQUIREMENT = "form.createForm.labelRequirement";
 
-    //properties
+    // properties
     private static final String PROPERTY_ITEM_PER_PAGE = "form.itemsPerPage";
     private static final String PROPERTY_ALL = "form.manageForm.select.all";
     private static final String PROPERTY_YES = "form.manageForm.select.yes";
@@ -231,7 +229,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String PROPERTY_MANAGE_VALIDATOR_TITLE = "form.manageValidator.title";
     private static final String PROPERTY_MANAGE_OUTPUT_PROCESSOR_TITLE = "form.manageOutputProcessor.title";
 
-    //Markers
+    // Markers
     private static final String MARK_WEBAPP_URL = "webapp_url";
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_PAGINATOR = "paginator";
@@ -279,7 +277,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String MARK_LIST_PARAM_DEFAULT_VALUES = "list_param_default_values";
     private static final String MARK_DEFAULT_VALUE_WORKGROUP_KEY = "workgroup_key_default_value";
 
-    //Jsp Definition
+    // Jsp Definition
     private static final String JSP_DO_DISABLE_FORM = "jsp/admin/plugins/form/DoDisableForm.jsp";
     private static final String JSP_DO_DISABLE_AUTO_FORM = "jsp/admin/plugins/form/DoDisableAutoForm.jsp";
     private static final String JSP_DO_REMOVE_FORM = "jsp/admin/plugins/form/DoRemoveForm.jsp";
@@ -295,7 +293,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String JSP_MANAGE_VALIDATOR_FORM = "jsp/admin/plugins/form/ManageValidator.jsp";
     private static final String JSP_MANAGE_ADVANCED_PARAMETERS = "jsp/admin/plugins/form/ManageAdvancedParameters.jsp";
 
-    //parameters form
+    // parameters form
     private static final String PARAMETER_ID_FORM = "id_form";
     private static final String PARAMETER_REQUIREMENT = "requirement";
     private static final String PARAMETER_TITLE = "title";
@@ -361,8 +359,8 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String CONST_ZERO = "0";
     private static final String SQL_FILTER_ENTRY_POS = " ent.pos ";
 
-    //session fields
-    private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
+    // session fields
+    private final int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
     private String _strCurrentPageIndexForm;
     private int _nItemsPerPageForm;
     private String _strCurrentPageIndexEntry;
@@ -376,13 +374,13 @@ public class FormJspBean extends PluginAdminPageJspBean
     private int _nIdForm = -1;
     private int _nIdEntry = -1;
     private List<FormSubmit> _listFormSubmitTest;
-    private IResponseService _responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+    private final IResponseService _responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
 
     /*-------------------------------MANAGEMENT  FORM-----------------------------*/
 
     /**
      * Return management Form ( list of form )
-     *@param request The Http request
+     * @param request The Http request
      * @return Html form
      */
     public String getManageForm( HttpServletRequest request )
@@ -420,7 +418,7 @@ public class FormJspBean extends PluginAdminPageJspBean
             _strWorkGroup = strWorkGroup;
         }
 
-        //build Filter
+        // build Filter
         FormFilter filter = new FormFilter(  );
         filter.setIdState( _nIdActive );
         filter.setWorkGroup( _strWorkGroup );
@@ -480,8 +478,8 @@ public class FormJspBean extends PluginAdminPageJspBean
 
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_FORM, locale, model );
 
-        //ReferenceList refMailingList;
-        //refMailingList=AdminMailingListService.getMailingLists(adminUser);
+        // ReferenceList refMailingList;
+        // refMailingList=AdminMailingListService.getMailingLists(adminUser);
         return getAdminPage( templateList.getHtml(  ) );
     }
 
@@ -584,8 +582,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * Get the request data and if there is no error insert the data in the form specified in parameter.
-     * return null if there is no error or else return the error page url
+     * Get the request data and if there is no error insert the data in the form specified in parameter. return null if there is no error or else return the error page url
      * @param request the request
      * @param form form
      * @return null if there is no error or else return the error page url
@@ -756,7 +753,7 @@ public class FormJspBean extends PluginAdminPageJspBean
 
         if ( ( strPublicationMode != null ) && strPublicationMode.equals( PUBLICATION_MODE_AUTO ) )
         {
-            //Set date begin disponibility
+            // Set date begin disponibility
             java.util.Date tDateBeginDisponibility = null;
 
             if ( ( strDateBeginDisponibility != null ) && !strDateBeginDisponibility.equals( EMPTY_STRING ) )
@@ -772,7 +769,7 @@ public class FormJspBean extends PluginAdminPageJspBean
                 // no need to check the date begin of validity
             }
 
-            //Set date end disponibility
+            // Set date end disponibility
             form.setDateBeginDisponibility( tDateBeginDisponibility );
 
             java.util.Date tDateEndDisponibility = null;
@@ -820,7 +817,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     /**
      * Gets the form creation page
      * @param request The HTTP request
-     * @return The  form creation page
+     * @return The form creation page
      */
     public String getCreateForm( HttpServletRequest request )
     {
@@ -845,7 +842,7 @@ public class FormJspBean extends PluginAdminPageJspBean
             return getManageForm( request );
         }
 
-        //Style management
+        // Style management
         Collection<Theme> themes = ThemeHome.getThemesList(  );
         ReferenceList themesRefList = new ReferenceList(  );
 
@@ -857,7 +854,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         // Default Values
         ReferenceList listParamDefaultValues = FormParameterService.getService(  ).findDefaultValueParameters(  );
 
-        //Add categories
+        // Add categories
         List<Category> listCategoriesView = CategoryHome.getList( getPlugin(  ) );
         Category emptyCategory = new Category(  );
         emptyCategory.setIdCategory( -2 );
@@ -925,9 +922,6 @@ public class FormJspBean extends PluginAdminPageJspBean
             {
                 FormUtils.activateMyLuteceAuthentification( form, plugin, getLocale(  ), request );
             }
-
-            Theme theme = ThemeHome.findByPrimaryKey( form.getCodeTheme(  ) );
-            ( (FormPlugin) getPlugin(  ) ).addXPageTheme( form.getIdForm(  ), theme );
         }
 
         return getJspManageForm( request );
@@ -936,7 +930,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     /**
      * Gets the form modification page
      * @param request The HTTP request
-     * @return The  form modification page
+     * @return The form modification page
      */
     public String getModifyForm( HttpServletRequest request )
     {
@@ -1048,7 +1042,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         EntryType entryTypeGroup = new EntryType(  );
         refEntryType = initRefListEntryType( plugin, locale, entryTypeGroup );
 
-        //Style management
+        // Style management
         Collection<Theme> themes = ThemeHome.getThemesList(  );
         ReferenceList themesRefList = new ReferenceList(  );
 
@@ -1145,14 +1139,6 @@ public class FormJspBean extends PluginAdminPageJspBean
                         !updatedForm.isActiveMyLuteceAuthentification(  ) && form.isActiveMyLuteceAuthentification(  ) )
                 {
                     FormUtils.deactivateMyLuteceAuthentification( updatedForm, plugin );
-                }
-
-                String strNewTheme = updatedForm.getCodeTheme(  );
-
-                if ( !strNewTheme.equals( strOldTheme ) )
-                {
-                    Theme newTheme = ThemeHome.findByPrimaryKey( strNewTheme );
-                    ( (FormPlugin) getPlugin(  ) ).addXPageTheme( nIdForm, newTheme );
                 }
 
                 if ( request.getParameter( PARAMETER_APPLY ) != null )
@@ -1375,8 +1361,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * Get the request data and if there is no error insert the data in the recap specified in parameter.
-     * return null if there is no error or else return the error page url
+     * Get the request data and if there is no error insert the data in the recap specified in parameter. return null if there is no error or else return the error page url
      * @param request the request
      * @param recap the recap
      * @return null if there is no error or else return the error page url
@@ -1392,8 +1377,8 @@ public class FormJspBean extends PluginAdminPageJspBean
         String strIdGraphType = request.getParameter( PARAMETER_ID_GRAPH_TYPE );
         String strGraphThreeDimension = request.getParameter( PARAMETER_GRAPH_THREE_DIMENSION );
 
-        //String strGraphLegende = request.getParameter( PARAMETER_GRAPH_LEGENDE );
-        //String strGraphValueLegende = request.getParameter( PARAMETER_GRAPH_VALUE_LEGENDE );
+        // String strGraphLegende = request.getParameter( PARAMETER_GRAPH_LEGENDE );
+        // String strGraphValueLegende = request.getParameter( PARAMETER_GRAPH_VALUE_LEGENDE );
         String strGraphLabel = request.getParameter( PARAMETER_GRAPH_LABEL_VALUE );
         GraphType graphType = null;
         String strFieldError = EMPTY_STRING;
@@ -1468,16 +1453,9 @@ public class FormJspBean extends PluginAdminPageJspBean
                 recap.setGraphThreeDimension( true );
             }
 
-            /*if ( strGraphLegende != null )
-            {
-                    recap.setGraphLegende( true );
-                    recap.setGraphValueLegende( strGraphValueLegende );
-            }
-            else
-            {
-                    recap.setGraphLegende( false );
-                    recap.setGraphValueLegende( null );
-            }
+            /*
+             * if ( strGraphLegende != null ) { recap.setGraphLegende( true ); recap.setGraphValueLegende( strGraphValueLegende ); } else { recap.setGraphLegende( false ); recap.setGraphValueLegende(
+             * null ); }
              */
             if ( strGraphLabel != null )
             {
@@ -1502,7 +1480,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * Perform the recap form  modification
+     * Perform the recap form modification
      * @param request The HTTP request
      * @return The URL to go after performing the action
      */
@@ -1548,7 +1526,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     /**
      * Gets the entry creation page
      * @param request The HTTP request
-     * @return The  entry creation page
+     * @return The entry creation page
      */
     public String getCreateEntry( HttpServletRequest request )
     {
@@ -1690,7 +1668,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     /**
      * Gets the entry modification page
      * @param request The HTTP request
-     * @return The  entry modification page
+     * @return The entry modification page
      */
     public String getModifyEntry( HttpServletRequest request )
     {
@@ -2070,7 +2048,7 @@ public class FormJspBean extends PluginAdminPageJspBean
 
         _nIdEntry = nIdEntry;
         entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
-        //recup group
+        // recup group
         filter = new EntryFilter(  );
         filter.setIdForm( entry.getForm(  ).getIdForm(  ) );
         filter.setIdIsGroup( EntryFilter.FILTER_TRUE );
@@ -2668,7 +2646,7 @@ public class FormJspBean extends PluginAdminPageJspBean
      * @param plugin the plugin
      * @param locale the locale
      * @param entryTypeGroup the entry type who represent a group
-     * @return reference list of  entry type
+     * @return reference list of entry type
      */
     private ReferenceList initRefListEntryType( Plugin plugin, Locale locale, EntryType entryTypeGroup )
     {
@@ -2710,8 +2688,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * Get the request data and if there is no error insert the data in the field specified in parameter.
-     * return null if there is no error or else return the error page url
+     * Get the request data and if there is no error insert the data in the field specified in parameter. return null if there is no error or else return the error page url
      * @param request the request
      * @param field field
      * @return null if there is no error or else return the error page url
@@ -3140,7 +3117,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * Delete association between  field and  regular expression
+     * Delete association between field and regular expression
      * @param request the Http Request
      * @return The URL to go after performing the action
      */
@@ -3175,7 +3152,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * insert association between  field and  regular expression
+     * insert association between field and regular expression
      * @param request the Http Request
      * @return The URL to go after performing the action
      */
@@ -3210,7 +3187,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     *  Gets the form test page
+     * Gets the form test page
      * @param request the http request
      * @return the form test page
      */
@@ -3271,8 +3248,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * if there is no error perform in session the response of the form
-     * else return the error
+     * if there is no error perform in session the response of the form else return the error
      * @param request the http request
      * @return The URL to go after performing the action
      */
@@ -3332,7 +3308,7 @@ public class FormJspBean extends PluginAdminPageJspBean
 
         Locale locale = getLocale(  );
 
-        //create form response
+        // create form response
         FormSubmit formSubmit = new FormSubmit(  );
         formSubmit.setForm( form );
         formSubmit.setDateResponse( FormUtils.getCurrentTimestamp(  ) );
@@ -3383,9 +3359,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * write in the http response the  export file of all response submit who are
-     * save during the test.
-     * if there is no response return a error
+     * write in the http response the export file of all response submit who are save during the test. if there is no response return a error
      * @param request the http request
      * @param response The http response
      * @return The URL to go after performing the action
@@ -3446,7 +3420,7 @@ public class FormJspBean extends PluginAdminPageJspBean
                     String strFormatExtension = exportFormat.getExtension(  ).trim(  );
                     String strFileName = form.getTitle(  ) + "." + strFormatExtension;
                     FormUtils.addHeaderResponse( request, response, strFileName, strFormatExtension );
-                    response.setContentLength( (int) byteFileOutPut.length );
+                    response.setContentLength( byteFileOutPut.length );
 
                     OutputStream os = response.getOutputStream(  );
                     os.write( byteFileOutPut );
@@ -3467,7 +3441,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     *  Gets the form result page
+     * Gets the form result page
      * @param request the http request
      * @return the form test page
      */
@@ -3579,8 +3553,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * write in the http response the  export file of all response submit who verify the date filter
-     * if there is no response return a error
+     * write in the http response the export file of all response submit who verify the date filter if there is no response return a error
      * @param request the http request
      * @param response The http response
      * @return The URL to go after performing the action
@@ -3700,7 +3673,7 @@ public class FormJspBean extends PluginAdminPageJspBean
 
     /**
      * write in the http response the statistic graph of all response submit who verify the date filter
-     *@param request the http request
+     * @param request the http request
      * @param response The http response
      *
      */
@@ -3829,8 +3802,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * write in the http response the value of the response whose identifier is specified in the request
-     * if there is no response return a error
+     * write in the http response the value of the response whose identifier is specified in the request if there is no response return a error
      * @param request the http request
      * @param response The http response
      * @return The URL to go after performing the action
@@ -3860,7 +3832,7 @@ public class FormJspBean extends PluginAdminPageJspBean
 
         if ( responseFile != null )
         {
-            //is authoried to view result
+            // is authoried to view result
             FormSubmit formSubmit = FormSubmitHome.findByPrimaryKey( responseFile.getFormSubmit(  ).getIdFormSubmit(  ),
                     plugin );
 
@@ -3876,8 +3848,7 @@ public class FormJspBean extends PluginAdminPageJspBean
 
             if ( ( listForm.size(  ) == 0 ) ||
                     ( ( listForm.size(  ) != 0 ) &&
-                    !RBACService.isAuthorized( Form.RESOURCE_TYPE,
-                        EMPTY_STRING + ( (Form) listForm.get( 0 ) ).getIdForm(  ),
+                    !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + listForm.get( 0 ).getIdForm(  ),
                         FormResourceIdService.PERMISSION_VIEW_RESULT, getUser(  ) ) ) )
             {
                 return AdminMessageService.getMessageUrl( request, MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE,
@@ -3892,7 +3863,7 @@ public class FormJspBean extends PluginAdminPageJspBean
                     byte[] byteFileOutPut = responseFile.getFile(  ).getPhysicalFile(  ).getValue(  );
                     FormUtils.addHeaderResponse( request, response, responseFile.getFile(  ).getTitle(  ),
                         FilenameUtils.getExtension( responseFile.getFile(  ).getTitle(  ) ) );
-                    response.setContentLength( (int) byteFileOutPut.length );
+                    response.setContentLength( byteFileOutPut.length );
 
                     OutputStream os = response.getOutputStream(  );
                     os.write( byteFileOutPut );
@@ -3916,7 +3887,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     /**
      * Gets the form modification page
      * @param request The HTTP request
-     * @return The  form modification page
+     * @return The form modification page
      */
     public String getManageOutputProcessor( HttpServletRequest request )
     {

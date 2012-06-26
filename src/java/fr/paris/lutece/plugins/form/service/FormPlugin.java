@@ -33,16 +33,10 @@
  */
 package fr.paris.lutece.plugins.form.service;
 
-import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.portal.business.style.Theme;
-import fr.paris.lutece.portal.service.database.AppConnectionService;
 import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.io.Serializable;
-
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -52,30 +46,25 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class FormPlugin extends PluginDefaultImplementation implements Serializable
 {
+    /** The Constant PLUGIN_NAME. */
     public static final String PLUGIN_NAME = "form";
     private static final long serialVersionUID = 6341523117444246634L;
     private static final String PARAMETER_ID_FORM = "id_form";
-    private Map<Integer, Theme> _xPageTheme;
 
     /**
-     * Initialize the plugin form
+     * {@inheritDoc}
      */
+    @Override
     public void init(  )
     {
         // Initialize the Poll service
         FormService.getInstance(  ).init(  );
-
-        if ( this.isInstalled(  ) && StringUtils.isNotBlank( this.getDbPoolName(  ) ) &&
-                !AppConnectionService.NO_POOL_DEFINED.equals( this.getDbPoolName(  ) ) )
-        {
-            _xPageTheme = FormHome.getXPageThemes( this );
-        }
     }
 
     /**
-     * Returns the theme the plugin use for rendering a Xpage
-     * @return The theme
+     * {@inheritDoc}
      */
+    @Override
     public Theme getXPageTheme( HttpServletRequest request )
     {
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
@@ -84,28 +73,18 @@ public class FormPlugin extends PluginDefaultImplementation implements Serializa
         {
             int nIdForm = Integer.parseInt( strIdForm );
 
-            return _xPageTheme.get( nIdForm );
+            return FormService.getInstance(  ).getXPageTheme( nIdForm );
         }
 
         return null;
     }
 
     /**
-     * Define the theme the plugin use for rendering a Xpage
-     * @param xPageTheme The theme
+     * {@inheritDoc}
      */
-    public void addXPageTheme( int nIdForm, Theme xPageTheme )
-    {
-        _xPageTheme.put( nIdForm, xPageTheme );
-    }
-
-    /**
-     * Updates a database connection pool associated to the plugin and stores it
-     * @param strPoolName the name of the pool
-     */
+    @Override
     public void updatePoolName( String strPoolName )
     {
         super.updatePoolName( strPoolName );
-        _xPageTheme = FormHome.getXPageThemes( this );
     }
 }

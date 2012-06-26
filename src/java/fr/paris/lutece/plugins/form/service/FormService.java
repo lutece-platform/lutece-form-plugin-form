@@ -45,6 +45,7 @@ import fr.paris.lutece.plugins.form.business.ExportFormatHome;
 import fr.paris.lutece.plugins.form.business.Field;
 import fr.paris.lutece.plugins.form.business.FieldHome;
 import fr.paris.lutece.plugins.form.business.Form;
+import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
@@ -62,6 +63,7 @@ import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.portal.ThemesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
@@ -101,9 +103,9 @@ public final class FormService
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String MYLUTECE_PLUGIN = "mylutece";
     private static FormService _singleton;
-    private EntryTypeService _entryTypeService = SpringContextService.getBean( FormUtils.BEAN_ENTRY_TYPE_SERVICE );
-    private IExportTypeFactory _exportDaemonTypeFactory = SpringContextService.getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
-    private IExportServiceFactory _fileExportDaemonTypeFactory = SpringContextService.getBean( ExportServiceFactory.BEAN_FACTORY );
+    private final EntryTypeService _entryTypeService = SpringContextService.getBean( FormUtils.BEAN_ENTRY_TYPE_SERVICE );
+    private final IExportTypeFactory _exportDaemonTypeFactory = SpringContextService.getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
+    private final IExportServiceFactory _fileExportDaemonTypeFactory = SpringContextService.getBean( ExportServiceFactory.BEAN_FACTORY );
 
     /**
      * Private constructor
@@ -122,10 +124,10 @@ public final class FormService
     }
 
     /**
-    * Returns the instance of the singleton
-    *
-    * @return The instance of the singleton
-    */
+     * Returns the instance of the singleton
+     *
+     * @return The instance of the singleton
+     */
     public static FormService getInstance(  )
     {
         if ( _singleton == null )
@@ -194,7 +196,7 @@ public final class FormService
             model.put( MARK_PERMISSION_MANAGE_CATEGORY, false );
         }
 
-        //Style management
+        // Style management
         Collection<Theme> themes = ThemeHome.getThemesList(  );
         ReferenceList themesRefList = new ReferenceList(  );
 
@@ -216,10 +218,8 @@ public final class FormService
     }
 
     /**
-     * Check if the user is authorized to view the form.
-     * <br />
-     * This method checks every mandatory EntryTypeSession, and check if there is a value for the
-     * attribute of the session.
+     * Check if the user is authorized to view the form. <br />
+     * This method checks every mandatory EntryTypeSession, and check if there is a value for the attribute of the session.
      * @param form the form
      * @param request the HTTP request
      * @return true if he is authorized, false otherwise
@@ -282,8 +282,7 @@ public final class FormService
     }
 
     /**
-     * Check if the session has a list of responses without form errors and
-     * the validate requirement is indeed checked
+     * Check if the session has a list of responses without form errors and the validate requirement is indeed checked
      * @param session the HTTP session
      * @return true if the session has errors, false otherwise
      */
@@ -336,5 +335,23 @@ public final class FormService
         }
 
         return nMaxNumber;
+    }
+
+    /**
+     * Gets the x page theme.
+     *
+     * @param nIdForm the n id form
+     * @return the x page theme
+     */
+    public Theme getXPageTheme( int nIdForm )
+    {
+        Form form = FormHome.findByPrimaryKey( nIdForm, FormUtils.getPlugin(  ) );
+
+        if ( form != null )
+        {
+            return ThemesService.getGlobalTheme( form.getCodeTheme(  ) );
+        }
+
+        return ThemesService.getGlobalThemeObject(  );
     }
 }
