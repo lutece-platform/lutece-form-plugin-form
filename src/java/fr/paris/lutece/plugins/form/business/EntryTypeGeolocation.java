@@ -49,21 +49,40 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 
+/**
+ * The Class EntryTypeGeolocation.
+ */
 public class EntryTypeGeolocation extends Entry
 {
+    /** The Constant PARAMETER_MAP_PROVIDER. */
     public static final String PARAMETER_MAP_PROVIDER = "map_provider";
-    public static final String PARAMETER_SUFFIX_X = "_x";
-    public static final String PARAMETER_SUFFIX_Y = "_y";
-    public static final String PARAMETER_SUFFIX_ADDRESS = "_address";
-    private static final int CONSTANT_POSITION_X = 0;
-    private static final int CONSTANT_POSITION_Y = 1;
 
-    //private static final int CONSTANT_POSITION_PROVIDER = 2;
-    private static final int CONSTANT_POSITION_ADDRESS = 3;
+    /** The Constant PARAMETER_SUFFIX_X. */
+    public static final String PARAMETER_SUFFIX_X = "_x";
+
+    /** The Constant PARAMETER_SUFFIX_Y. */
+    public static final String PARAMETER_SUFFIX_Y = "_y";
+
+    /** The Constant PARAMETER_SUFFIX_ADDRESS. */
+    public static final String PARAMETER_SUFFIX_ADDRESS = "_address";
+
+    /** The Constant PARAMETER_SUFFIX_ID_ADDRESS. */
+    public static final String PARAMETER_SUFFIX_ID_ADDRESS = "_idAddress";
+
+    /** The Constant CONSTANT_X. */
     public static final String CONSTANT_X = "X";
+
+    /** The Constant CONSTANT_Y. */
     public static final String CONSTANT_Y = "Y";
+
+    /** The Constant CONSTANT_PROVIDER. */
     public static final String CONSTANT_PROVIDER = "provider";
+
+    /** The Constant CONSTANT_ADDRESS. */
     public static final String CONSTANT_ADDRESS = "address";
+
+    /** The Constant CONSTANT_ID_ADDRESS. */
+    public static final String CONSTANT_ID_ADDRESS = "idAddress";
     private static final String TEMPLATE_CREATE = "admin/plugins/form/create_entry_type_geolocation.html";
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/modify_entry_type_geolocation.html";
     private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/html_code_entry_type_geolocation.html";
@@ -127,58 +146,28 @@ public class EntryTypeGeolocation extends Entry
                 AdminMessage.TYPE_STOP );
         }
 
-        // we need 4 fields : 1 for X, 1 for Y, 1 for map provider, 1 for address
-        Field xField = new Field(  );
-        xField.setTitle( CONSTANT_X );
-        xField.setValue( CONSTANT_X );
-        xField.setParentEntry( this );
+        /** we need 5 fields : 1 for X, 1 for Y, 1 for map provider, 1 for address and 1 for id address **/
+        List<Field> listFields = new ArrayList<Field>(  );
+        listFields.add( buildField( CONSTANT_X ) );
+        listFields.add( buildField( CONSTANT_Y ) );
+        listFields.add( buildFieldMapProvider( strMapProvider ) );
+        listFields.add( buildField( CONSTANT_ADDRESS ) );
+        listFields.add( buildField( CONSTANT_ID_ADDRESS ) );
 
-        Field yField = new Field(  );
-        yField.setTitle( CONSTANT_Y );
-        yField.setValue( CONSTANT_Y );
-        yField.setParentEntry( this );
+        setFields( listFields );
 
-        Field mapProviderField = new Field(  );
-        mapProviderField.setTitle( CONSTANT_PROVIDER );
-
-        if ( StringUtils.isNotBlank( strMapProvider ) )
-        {
-            strMapProvider = strMapProvider.trim(  );
-            mapProviderField.setValue( strMapProvider );
-            setMapProvider( MapProviderManager.getMapProvider( strMapProvider ) );
-        }
-        else
-        {
-            mapProviderField.setValue( FormUtils.EMPTY_STRING );
-        }
-
-        mapProviderField.setParentEntry( this );
-
-        Field addressField = new Field(  );
-        addressField.setTitle( CONSTANT_ADDRESS );
-        addressField.setValue( CONSTANT_ADDRESS );
-        addressField.setParentEntry( this );
-
-        List<Field> listEntries = new ArrayList<Field>(  );
-        listEntries.add( xField );
-        listEntries.add( yField );
-        listEntries.add( mapProviderField );
-        listEntries.add( addressField );
-
-        this.setFields( listEntries );
-
-        this.setTitle( strTitle );
-        this.setHelpMessage( strHelpMessage );
-        this.setComment( strComment );
-        this.setCSSClass( strCSSClass );
+        setTitle( strTitle );
+        setHelpMessage( strHelpMessage );
+        setComment( strComment );
+        setCSSClass( strCSSClass );
 
         if ( strMandatory != null )
         {
-            this.setMandatory( true );
+            setMandatory( true );
         }
         else
         {
-            this.setMandatory( false );
+            setMandatory( false );
         }
 
         return null;
@@ -190,40 +179,62 @@ public class EntryTypeGeolocation extends Entry
     @Override
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strXValue = request.getParameter( this.getIdEntry(  ) + PARAMETER_SUFFIX_X );
-        String strYValue = request.getParameter( this.getIdEntry(  ) + PARAMETER_SUFFIX_Y );
-        String strAddressValue = request.getParameter( this.getIdEntry(  ) + PARAMETER_SUFFIX_ADDRESS );
+        String strXValue = request.getParameter( getIdEntry(  ) + PARAMETER_SUFFIX_X );
+        String strYValue = request.getParameter( getIdEntry(  ) + PARAMETER_SUFFIX_Y );
+        String strAddressValue = request.getParameter( getIdEntry(  ) + PARAMETER_SUFFIX_ADDRESS );
+        String strIdAddressValue = request.getParameter( getIdEntry(  ) + PARAMETER_SUFFIX_ID_ADDRESS );
 
-        Field xField = getFields(  ).get( CONSTANT_POSITION_X );
-        Field yField = getFields(  ).get( CONSTANT_POSITION_Y );
-        Field addressField = getFields(  ).get( CONSTANT_POSITION_ADDRESS );
+        Field fieldX = FormUtils.findFieldByTitleInTheList( CONSTANT_X, getFields(  ) );
+        Field fieldY = FormUtils.findFieldByTitleInTheList( CONSTANT_Y, getFields(  ) );
+        Field fieldAddress = FormUtils.findFieldByTitleInTheList( CONSTANT_ADDRESS, getFields(  ) );
+        Field fieldIdAddress = FormUtils.findFieldByTitleInTheList( CONSTANT_ID_ADDRESS, getFields(  ) );
 
-        // add responses
+        /**
+         * The field "idAddress" exists since version 2.5.3 of the plugin-form.
+         * Create the field "idAddress" in case the field does not exist in the database.
+         * This task is used for existing applications that are using the plugin-address
+         * and the module-form-address to get the addresses.
+         * @since v2.5.3
+         */
+        if ( fieldIdAddress == null )
+        {
+            fieldIdAddress = buildField( CONSTANT_ID_ADDRESS );
+            FieldHome.create( fieldIdAddress, FormUtils.getPlugin(  ) );
+        }
+
+        // 1 : Response X
         Response responseX = new Response(  );
         responseX.setEntry( this );
         responseX.setResponseValue( strXValue );
-        responseX.setField( xField );
+        responseX.setField( fieldX );
         responseX.setToStringValueResponse( strXValue );
-
         listResponse.add( responseX );
 
+        // 2 : Response Y
         Response responseY = new Response(  );
         responseY.setEntry( this );
         responseY.setResponseValue( strYValue );
-        responseY.setField( yField );
+        responseY.setField( fieldY );
         responseY.setToStringValueResponse( strYValue );
-
         listResponse.add( responseY );
 
+        // 3 : Response Address
         Response responseAddress = new Response(  );
         responseAddress.setEntry( this );
         responseAddress.setResponseValue( strAddressValue );
-        responseAddress.setField( addressField );
+        responseAddress.setField( fieldAddress );
         responseAddress.setToStringValueResponse( strAddressValue );
-
         listResponse.add( responseAddress );
 
-        if ( this.isMandatory(  ) )
+        // 4 : Response Id Address
+        Response responseIdAddress = new Response(  );
+        responseIdAddress.setEntry( this );
+        responseIdAddress.setResponseValue( strIdAddressValue );
+        responseIdAddress.setField( fieldIdAddress );
+        responseIdAddress.setToStringValueResponse( strIdAddressValue );
+        listResponse.add( responseIdAddress );
+
+        if ( isMandatory(  ) )
         {
             if ( StringUtils.isBlank( strAddressValue ) )
             {
@@ -238,8 +249,8 @@ public class EntryTypeGeolocation extends Entry
             {
                 FormError formError = new FormError(  );
 
-                formError.setMandatoryError( this.isMandatory(  ) );
-                formError.setTitleQuestion( this.getTitle(  ) );
+                formError.setMandatoryError( isMandatory(  ) );
+                formError.setTitleQuestion( getTitle(  ) );
                 formError.setErrorMessage( MESSAGE_SPECIFY_BOTH_X_AND_Y );
                 formError.setUrl( this );
 
@@ -250,6 +261,9 @@ public class EntryTypeGeolocation extends Entry
         return super.getResponseData( request, listResponse, locale );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
@@ -306,5 +320,50 @@ public class EntryTypeGeolocation extends Entry
         }
 
         return fieldName + FormUtils.CONSTANT_EQUAL + response.getResponseValue(  );
+    }
+
+    // PRIVATE METHODS
+
+    /**
+     * Builds the field.
+     *
+     * @param strFieldTitle the str field title
+     * @return the field
+     */
+    private Field buildField( String strFieldTitle )
+    {
+        Field field = new Field(  );
+        field.setTitle( strFieldTitle );
+        field.setValue( strFieldTitle );
+        field.setParentEntry( this );
+
+        return field;
+    }
+
+    /**
+     * Builds the field map provider.
+     *
+     * @param strMapProvider the str map provider
+     * @return the field
+     */
+    private Field buildFieldMapProvider( String strMapProvider )
+    {
+        Field fieldMapProvider = new Field(  );
+        fieldMapProvider.setTitle( CONSTANT_PROVIDER );
+
+        if ( StringUtils.isNotBlank( strMapProvider ) )
+        {
+            strMapProvider = strMapProvider.trim(  );
+            fieldMapProvider.setValue( strMapProvider );
+            setMapProvider( MapProviderManager.getMapProvider( strMapProvider ) );
+        }
+        else
+        {
+            fieldMapProvider.setValue( FormUtils.EMPTY_STRING );
+        }
+
+        fieldMapProvider.setParentEntry( this );
+
+        return fieldMapProvider;
     }
 }
