@@ -129,6 +129,8 @@ public class FormApp implements XPageApplication
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
 
     // properties for page titles and path label
+    private static final String PROPERTY_XPAGE_LIST_FORMS_PAGETITLE = "form.xpage.listForms.pagetitle";
+    private static final String PROPERTY_XPAGE_LIST_FORMS_PATHLABEL = "form.xpage.listForms.pathlabel";
     private static final String PROPERTY_XPAGE_PAGETITLE = "form.xpage.pagetitle";
     private static final String PROPERTY_XPAGE_PATHLABEL = "form.xpage.pathlabel";
     private static final String PROPERTY_SESSION_INVALIDATE_URL_RETURN = "form.session.invalidate.urlReturn";
@@ -175,6 +177,7 @@ public class FormApp implements XPageApplication
      * @return The page content.
      * @throws SiteMessageException the SiteMessageException
      */
+    @Override
     @SuppressWarnings( "unchecked" )
     public XPage getPage( HttpServletRequest request, int nMode, Plugin plugin )
         throws SiteMessageException, UserNotSignedException
@@ -273,7 +276,7 @@ public class FormApp implements XPageApplication
         {
             page = getRecap( request, session, nMode, plugin );
 
-            // Validate draft if the form does not have a recap and the session 
+            // Validate draft if the form does not have a recap and the session
             // contains a list of responses without errors
             if ( !FormService.getInstance(  ).hasRecap( form ) &&
                     !FormService.getInstance(  ).hasFormErrors( session ) )
@@ -320,8 +323,9 @@ public class FormApp implements XPageApplication
         else
         {
             //See forms list
-            page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale(  ) ) );
-            page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale(  ) ) );
+            page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_LIST_FORMS_PAGETITLE, request.getLocale(  ) ) );
+            page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_LIST_FORMS_PATHLABEL,
+                    request.getLocale(  ) ) );
             page.setContent( getFormList( request, session, nMode, plugin ) );
         }
 
@@ -639,7 +643,7 @@ public class FormApp implements XPageApplication
             FormUtils.removeFormErrors( session );
             session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
 
-            //convert the value of the object response to string 
+            //convert the value of the object response to string
             for ( Response response : formSubmit.getListResponse(  ) )
             {
                 if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || ( response.getFile(  ) != null ) )
@@ -789,8 +793,8 @@ public class FormApp implements XPageApplication
             SiteMessageService.setMessage( request, MESSAGE_ERROR_FORM_INACTIVE, SiteMessage.TYPE_STOP );
         }
 
-        // If the number of submitted response is set to one, then we check if the user 
-        // has not already answer to the form before submitting the response  
+        // If the number of submitted response is set to one, then we check if the user
+        // has not already answer to the form before submitting the response
         if ( formSubmit.getForm(  ).isLimitNumberResponse(  ) )
         {
             if ( session.getAttribute( PARAMETER_ID_FORM + formSubmit.getForm(  ).getIdForm(  ) ) != null )
@@ -866,7 +870,7 @@ public class FormApp implements XPageApplication
             }
             else
             {
-                //If portal authentication is enabled and user is null and the requested URL 
+                //If portal authentication is enabled and user is null and the requested URL
                 //is not the login URL, user cannot access to Portal
                 if ( ( form.isActiveMyLuteceAuthentification(  ) ) &&
                         ( SecurityService.getInstance(  ).getRegisteredUser( request ) == null ) &&
