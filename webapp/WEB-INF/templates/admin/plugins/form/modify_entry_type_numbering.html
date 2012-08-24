@@ -1,30 +1,45 @@
-<div class="content-box">
-	<h2>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</h2>
-	<form action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+<div class="row">
+	<legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
+	<form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+	<fieldset>
 		<input name="id_entry" value="${entry.idEntry}" type="hidden" />
-		<p>
-			<label for="title">#i18n{form.createEntry.labelTitle} * : </label>
-			<input type="text" name="title" id="title" size="80" value="${entry.title}" maxlength="255" />
+		
+			<div class="control-group">
+		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
+			<div class="controls">
+	<input type="text" name="title" id="title" size="80" value="${entry.title}" maxlength="255" />
+		</div>
+	</div>
 			<br/>
-			<label>&nbsp;</label>#i18n{form.createEntry.labelTitleComment}
-		</p>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label>#i18n{form.createEntry.labelTitleComment}
+		
 		<#if entry.fields?? && entry.fields?has_content>
 			<#assign prefix = "">
 			<#if entry.fields[0].title??>
 				<#assign prefix = entry.fields[0].title>
 			</#if>
-			<p>
-				<label for="prefix">#i18n{form.createEntry.labelPrefix} :</label>
-				<input type="text" name="prefix" value="${prefix}" maxlength="255" size="80" />
+			
+				<div class="control-group">
+		<label class="control-label" for="prefix">#i18n{form.createEntry.labelPrefix} :</label>
+				<div class="controls">
+	<input type="text" name="prefix" value="${prefix}" maxlength="255" size="80" />
+		</div>
+	</div>
 				<br />
-				<label>&nbsp;</label>
+				<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 				#i18n{form.createEntry.labelPrefixComment}
-			</p>
+			
 		</#if>
-		<p>
-			<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" />
-	  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonApply}" name="apply" />
-	  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonCancel}" name="cancel" />
-		</p>
-	</form>
+		
+			<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonSave}</button>
+	
+	  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonApply}</button>
+	
+	  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonCancel}</button>
+	
+		
+	</fieldset>
+</form>
 </div>

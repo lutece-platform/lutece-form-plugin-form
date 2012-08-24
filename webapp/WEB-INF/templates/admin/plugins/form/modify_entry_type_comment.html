@@ -1,26 +1,36 @@
  <#include "/admin/util/editor/editor.html" />
-<div class="content-box">
- <h2>#i18n{form.modifyEntry.titleComment} : '${entry.form.title}'</h2>
- <form action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+<div class="row">
+ <legend>#i18n{form.modifyEntry.titleComment} : '${entry.form.title}'</legend>
+ <form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+	<fieldset>
     <input name="id_entry" value="${entry.idEntry}" type="hidden" />
-	 <p>
-     <label for="comment"> #i18n{form.createEntry.labelComment} * : </label>
+	 
+     <div class="control-group">
+		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} * : </label>
 	 <div  class="editor">
 		<textarea name="comment" id="comment"rows="20" cols="90" class="richtext">${entry.comment}</textarea>
      </div>
-     </p>
-     <p>
-		<label for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-		<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" size="80" />
+     
+     
+		<div class="control-group">
+		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+		<div class="controls">
+	<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" size="80" />
+		</div>
+	</div>
 		<br />
-		<label for="">&nbsp;</label>
+		<div class="control-group">
+		<label class="control-label" for="">&nbsp;</label>
 		#i18n{form.createEntry.labelCSSClassComment}
-	</p>
-  	<p>
-  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" />
-  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonCancel}" name="cancel" />
-   </p>
-  </form>
+	
+  	
+  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonSave}</button>
+	
+  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonCancel}</button>
+	
+   
+  </fieldset>
+</form>
  </div>
  <@initEditor />
 

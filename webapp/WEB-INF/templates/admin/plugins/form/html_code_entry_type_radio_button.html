@@ -8,7 +8,8 @@
 <div class="form-element ${entry.CSSClass!}">
 	 
 	 <span class="form-label">
-		 <label for="form${entry.idEntry}" id="form${entry.idEntry}">	
+		 <div class="control-group">
+		<label class="control-label" for="form${entry.idEntry}" id="form${entry.idEntry}">	
 			${entry.title}
 			<#if entry.mandatory>
 				*
@@ -25,9 +26,13 @@
 	    	 <#list entry.fields as field>
 	    	  <#assign cpt=cpt+1>
 			 	<li>
-			 	 <label for="form${entry.idEntry}_${field.idField}"> 
-			  <input type="radio" id="form${entry.idEntry}_${field.idField}" name="form${entry.idEntry}" value="${field.idField}"
+			 	 <div class="control-group">
+		<label class="control-label" for="form${entry.idEntry}_${field.idField}"> 
+			  <div class="controls">
+	<input type="radio" id="form${entry.idEntry}_${field.idField}" name="form${entry.idEntry}" value="${field.idField}"
 				<#if list_responses??>
+		</div>
+	</div>
 					<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry && response.field??>
 							<#if response.field.idField == field.idField>
@@ -68,13 +73,16 @@
 	<#if list_responses??>
 		<#list list_responses as response>
 			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
-				<span class="form-label"><label>&nbsp;</label></span>
+				<span class="form-label"><div class="control-group">
+		<label class="control-label" > &nbsp;</label></span>
 				<span class="form-field-column">
 					<#assign formError = response.entry.formError>
 					<#if formError.mandatoryError>
-						<label class="error">#i18n{form.message.mandatory.entry}</label>
+						<div class="control-group">
+		<label class="control-label" class="error">#i18n{form.message.mandatory.entry}</label>
 					<#else>
-						<label class="error">${formError.errorMessage}</label>
+						<div class="control-group">
+		<label class="control-label" class="error">${formError.errorMessage}</label>
 					</#if>
 				</span>
 			</#if>

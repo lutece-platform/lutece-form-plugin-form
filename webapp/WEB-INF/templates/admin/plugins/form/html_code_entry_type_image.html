@@ -1,7 +1,8 @@
 <#include "/admin/plugins/form/commons.html" />
 <div class="form-element ${entry.CSSClass!}">
 	 <span class="form-label">
-		 <label for="form_${entry.idEntry}" id="form${entry.idEntry}">	
+		 <div class="control-group">
+		<label class="control-label" for="form_${entry.idEntry}" id="form${entry.idEntry}">	
 				${entry.title}
 				<#if entry.mandatory>
 					*
@@ -12,8 +13,11 @@
 	<span class="form-field-column">	 
 		<#list entry.fields as field>
 			<#if !field.title??>
-				<input type="file" name="form_${entry.idEntry}" id="form_${entry.idEntry}" size="${field.width}"
+				<div class="controls">
+	<input type="file" name="form_${entry.idEntry}" id="form_${entry.idEntry}" size="${field.width}"
 					<#if list_responses??>
+		</div>
+	</div>
 						<#list list_responses as response>
 							<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
 								class="error"
@@ -36,13 +40,16 @@
 		<#assign response_error = list_responses[0]>
 		<#if response_error.entry.idEntry == entry.idEntry && response_error.entry.formError??>
 			<br />
-			<span class="form-label"><label>&nbsp;</label></span>
+			<span class="form-label"><div class="control-group">
+		<label class="control-label" > &nbsp;</label></span>
 			<span class="form-field-column">
 				<#assign formError = response_error.entry.formError>
 				<#if formError.mandatoryError>
-					<label class="error">#i18n{form.message.mandatory.entry}</label>
+					<div class="control-group">
+		<label class="control-label" class="error">#i18n{form.message.mandatory.entry}</label>
 				<#else>
-					<label class="error">${formError.errorMessage}</label>
+					<div class="control-group">
+		<label class="control-label" class="error">${formError.errorMessage}</label>
 				</#if>
 			</span>
 		</#if>
@@ -51,10 +58,12 @@
 
 <div class="form-element">
 	<span class="form-label">
-		<label for="${entry.idEntry}">&nbsp;</label>
+		<div class="control-group">
+		<label class="control-label" for="${entry.idEntry}">&nbsp;</label>
 	</span>
 	<span class="form-field-column">
-		<input type="submit" id="_form_upload_submit_form_${entry.idEntry}" name="_form_upload_submit_form_${entry.idEntry}" value="#i18n{form.action.send.name}" />
+		<button class="btn btn-primary" type="submit" >#i18n{form.action.send.name}</button>
+	
 	</span>
 </div>
 
@@ -69,7 +78,8 @@
 
 <div class="form-element <#if !has_files>hide</#if>" id="_file_deletion_label_form_${entry.idEntry}">
 	<span class="form-label">
-		<label for="delete_${entry.idEntry}">#i18n{form.file.uploadedFile} :</label>
+		<div class="control-group">
+		<label class="control-label" for="delete_${entry.idEntry}">#i18n{form.file.uploadedFile} :</label>
 	</span>
 	<span class="form-field-column" id="_filename_form_${entry.idEntry}">
 		&nbsp;
@@ -83,7 +93,10 @@
 			<div class="form-element">
 				<span class="form-label" id="_file_deletion_${entry.idEntry}">&nbsp;</span>
 				<span class="form-field-column" id="_filename_form_${entry.idEntry}">
-					<input type="checkbox" name="_form_upload_checkbox_form_${entry.idEntry}${file_index}" value="1" />
+					<div class="controls">
+	<input type="checkbox" name="_form_upload_checkbox_form_${entry.idEntry}${file_index}" value="1" />
+		</div>
+	</div>
 					${response.fileName}
 				</span>
 			</div>
@@ -94,9 +107,11 @@
 </div>
 <div class="form-element <#if !has_files>hide</#if>" id="_file_deletion_button_form_${entry.idEntry}">
 	<span class="form-label">
-		<label for="${entry.idEntry}">&nbsp;</label>
+		<div class="control-group">
+		<label class="control-label" for="${entry.idEntry}">&nbsp;</label>
 	</span>
 	<span class="form-field-column">
-		<input type="submit" name="_form_upload_delete_form_${entry.idEntry}" value="#i18n{form.action.delete.name}" />
+		<button class="btn btn-primary" type="submit" >#i18n{form.action.delete.name}</button>
+	
 	</span>
 </div>

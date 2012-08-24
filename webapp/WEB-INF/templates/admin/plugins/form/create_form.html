@@ -44,183 +44,300 @@
 	}
 </script>
 
-<div id="content-box-actions">	
-	  	<form id="button_advanced_settings" method="post" action="javascript:doDisplayAdvancedSettings(true)" style="visibility:hidden;display:none;">
-			<input type="submit" value="#i18n{form.manageForm.button_manage_advanced_parameters}" class="button bt-toolbar" />
-	  	</form>	
-	  	<form id="button_publication_settings" method="post" action="javascript:doDisplayPublicationSettings(true)" style="visibility:hidden;display:none;">
-			<input type="submit" value="#i18n{form.manageForm.button_manage_publication_parameters}" class="button bt-toolbar" />
-	  	</form>	
-	  	<form id="button_back" method="post" action="javascript:doDisplayAdvancedSettings(false)" style="visibility:hidden;display:none;">
-			<input type="submit" value="#i18n{form.manageForm.button_back}" class="button bt-toolbar" />
-	  	</form>	
+<div class="btn-group pull-right">	
+	  	<form class="form-horizontal" id="button_advanced_settings" method="post" action="javascript:doDisplayAdvancedSettings(true)" style="visibility:hidden;display:none;">
+	<fieldset>
+			<button class="btn btn-primary pull-right" type="submit" >
+	<i class="icon-plus icon-white" ></i>
+<span class="hidden-phone" >#i18n{form.manageForm.button_manage_advanced_parameters}</span>
+</button>
+	
+	  	</fieldset>
+</form>	
+	  	<form class="form-horizontal" id="button_publication_settings" method="post" action="javascript:doDisplayPublicationSettings(true)" style="visibility:hidden;display:none;">
+	<fieldset>
+			<button class="btn btn-primary pull-right" type="submit" >
+	<i class="icon-plus icon-white" ></i>
+<span class="hidden-phone" >#i18n{form.manageForm.button_manage_publication_parameters}</span>
+</button>
+	
+	  	</fieldset>
+</form>	
+	  	<form class="form-horizontal" id="button_back" method="post" action="javascript:doDisplayAdvancedSettings(false)" style="visibility:hidden;display:none;">
+	<fieldset>
+			<button class="btn btn-primary pull-right" type="submit" >
+	<i class="icon-plus icon-white" ></i>
+<span class="hidden-phone" >#i18n{form.manageForm.button_back}</span>
+</button>
+	
+	  	</fieldset>
+</form>	
 </div>
 
-<form action="jsp/admin/plugins/form/DoCreateForm.jsp?plugin_name=form" method="post">
-	<div id="settings" class="content-box">
-		<h2>#i18n{form.createForm.title}</h2>
+<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateForm.jsp?plugin_name=form" method="post">
+	<fieldset>
+	<div id="settings" class="row">
+		<legend>#i18n{form.createForm.title}</legend>
 		
-		<p>
-			<label for="title">#i18n{form.createForm.labelTitle} * :</label>
-			<input type="text" name="title" value="" size="80" maxlength="255" />
+		
+			<div class="control-group">
+		<label class="control-label" for="title">#i18n{form.createForm.labelTitle} * :</label>
+			<div class="controls">
+	<input type="text" name="title" value="" size="80" maxlength="255" />
+		</div>
+	</div>
 			<br />
-			<label>&nbsp;</label>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 			#i18n{form.createForm.labelTitleComment}
-		</p>
-		<p>
-			<label for="description">#i18n{form.createForm.labelDescription} * :</label>
+		
+		
+			<div class="control-group">
+		<label class="control-label" for="description">#i18n{form.createForm.labelDescription} * :</label>
 			<textarea class="-lutece-input -lutece-border-radius-mini" name="description" cols="80" rows="2"></textarea>
 			<br />
-			<label>&nbsp;</label>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 			#i18n{form.createForm.labelDescriptionComment}
-		</p>
-		<p>
-			<label for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
-			<@combo name="id_category" items=category_list default_value="-2" />
+		
+		
+			<div class="control-group">
+		<label class="control-label" for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
+			<div class="controls">
+	<@combo name="id_category" items=category_list default_value="-2" />
+		</div>
+	</div>
 			<br />
-			<label>&nbsp;</label>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 			#i18n{form.createForm.labelCategoryComment}
-		</p>
-		<p>
-			<input type="submit" class="button" name="save" value="#i18n{form.createForm.buttonSave}" />
-			<input type="submit" class="button" name="cancel" value="#i18n{form.createForm.buttonCancel}" />
-		</p>
+		
+		
+			<button class="btn btn-primary" type="submit" >#i18n{form.createForm.buttonSave}</button>
+	
+			<button class="btn btn-primary" type="submit" >#i18n{form.createForm.buttonCancel}</button>
+	
+		
 		<br/>
 	</div>
 		
 	
-	<div id="advanced_settings"  class="content-box">
-		<h2>		
+	<div id="advanced_settings"  class="row">
+		<legend>		
 			#i18n{form.createForm.labelAdvancedSettings}
-		</h2>			
-		<p>
-			<label for="workgroup">#i18n{form.createForm.labelWorkgroup} :</label>
-			<@combo name="workgroup" items=user_workgroup_list default_value="${workgroup_key_default_value}" />
+		</legend>			
+		
+			<div class="control-group">
+		<label class="control-label" for="workgroup">#i18n{form.createForm.labelWorkgroup} :</label>
+			<div class="controls">
+	<@combo name="workgroup" items=user_workgroup_list default_value="${workgroup_key_default_value}" />
+		</div>
+	</div>
 			<br />
-			<label>&nbsp;</label>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 			#i18n{form.createForm.labelWorkgroupComment}
-		</p>
-		<p>
-			<label for="id_mailing_list">#i18n{form.createForm.labelNotify} :</label>
-			<@combo name="id_mailing_list" items=mailing_list default_value=-1 />
+		
+		
+			<div class="control-group">
+		<label class="control-label" for="id_mailing_list">#i18n{form.createForm.labelNotify} :</label>
+			<div class="controls">
+	<@combo name="id_mailing_list" items=mailing_list default_value=-1 />
+		</div>
+	</div>
 			<br />
-			<label>&nbsp;</label>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 			#i18n{form.createForm.labelNotifyComment}
-		</p>
+		
 		<#if is_active_captcha>
-			<p>
-				<label for="active_captcha">#i18n{form.createForm.labelActiveCaptcha} :</label>
-				<input type="checkbox" name="active_captcha" value="1" ${getChecked('active_captcha',list_param_default_values)}/>
+			
+				<div class="control-group">
+		<label class="control-label" for="active_captcha">#i18n{form.createForm.labelActiveCaptcha} :</label>
+				<div class="controls">
+	<input type="checkbox" name="active_captcha" value="1" ${getChecked('active_captcha',list_param_default_values)}/>
+		</div>
+	</div>
 				<br />
-				<label>&nbsp;</label>
+				<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 				#i18n{form.createForm.labelActiveCaptchaComment}
-			</p>
+			
 		</#if>
-		<p>
-			<label for="id_theme_list">#i18n{form.createForm.labelThemeXpage} :</label>
-			<@combo name="id_theme_list" items=theme_list default_value=getName('id_theme_list',list_param_default_values)!default_theme />
-		</p>
-		<p>
-			<label for="limit_number_response">#i18n{form.createForm.labelLimitNumberResponse} :</label>
-			<input type="checkbox" name="limit_number_response" value="1" ${getChecked('limit_number_response',list_param_default_values)}/>
+		
+			<div class="control-group">
+		<label class="control-label" for="id_theme_list">#i18n{form.createForm.labelThemeXpage} :</label>
+			<div class="controls">
+	<@combo name="id_theme_list" items=theme_list default_value=getName('id_theme_list',list_param_default_values)!default_theme />
+		</div>
+	</div>
+		
+		
+			<div class="control-group">
+		<label class="control-label" for="limit_number_response">#i18n{form.createForm.labelLimitNumberResponse} :</label>
+			<div class="controls">
+	<input type="checkbox" name="limit_number_response" value="1" ${getChecked('limit_number_response',list_param_default_values)}/>
+		</div>
+	</div>
 			<br />
-			<label>&nbsp;</label>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 			#i18n{form.createForm.labelLimitNumberResponseComment}
-		</p>
-		<p>
-			<label for="active_store_adresse">#i18n{form.createForm.labelStoreAdresse} :</label>
-			<input type="checkbox" name="active_store_adresse" value="1" ${getChecked('active_store_adresse',list_param_default_values)}/>
+		
+		
+			<div class="control-group">
+		<label class="control-label" for="active_store_adresse">#i18n{form.createForm.labelStoreAdresse} :</label>
+			<div class="controls">
+	<input type="checkbox" name="active_store_adresse" value="1" ${getChecked('active_store_adresse',list_param_default_values)}/>
+		</div>
+	</div>
 			<br />
-			<label>&nbsp;</label>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 			#i18n{form.createForm.labelStoreAdresseComment}
-		</p>
+		
 		<#if is_active_mylutece_authentification>
-			<p>
-				<label for="active_mylutece_authentification">#i18n{form.createForm.labelActiveMyLuteceAuthentification} :</label>
-				<input type="checkbox" name="active_mylutece_authentification" value="1" ${getChecked('active_mylutece_authentification',list_param_default_values)} />
+			
+				<div class="control-group">
+		<label class="control-label" for="active_mylutece_authentification">#i18n{form.createForm.labelActiveMyLuteceAuthentification} :</label>
+				<div class="controls">
+	<input type="checkbox" name="active_mylutece_authentification" value="1" ${getChecked('active_mylutece_authentification',list_param_default_values)} />
+		</div>
+	</div>
 				<br />
-				<label>&nbsp;</label>
+				<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 				#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}
-			</p>
+			
 		</#if>
-		<p>
-			<label for="active_requirement">#i18n{form.createForm.labelActiveRequirement} :</label>
-			<input type="checkbox" name="active_requirement" value="1" ${getChecked('active_requirement',list_param_default_values)}/>
+		
+			<div class="control-group">
+		<label class="control-label" for="active_requirement">#i18n{form.createForm.labelActiveRequirement} :</label>
+			<div class="controls">
+	<input type="checkbox" name="active_requirement" value="1" ${getChecked('active_requirement',list_param_default_values)}/>
+		</div>
+	</div>
 			<br />
-			<label>&nbsp;</label>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 			#i18n{form.createForm.labelActiveRequirementComment}
-		</p>
+		
 	
 		
-		<div class="highlight-box">
-			<p>
-				<label for="information_complementary_1">#i18n{form.createForm.labelInformationComplementary_1} :</label>
-				<input type="text" name="information_complementary_1" value="" size="80" maxlength="255" />
-			</p>
-			<p>
-				<label for="information_complementary_2">#i18n{form.createForm.labelInformationComplementary_2} :</label>
-				<input type="text" name="information_complementary_2" value="" size="80" maxlength="255" />
-			</p>
-			<p>
-				<label for="information_complementary_3">#i18n{form.createForm.labelInformationComplementary_3} :</label>
-				<input type="text" name="information_complementary_3" value="" size="80" maxlength="255" />
-			</p>
-			<p>
-				<label for="information_complementary_4">#i18n{form.createForm.labelInformationComplementary_4} :</label>
-				<input type="text" name="information_complementary_4" value="" size="80" maxlength="255" />
-			</p>
-			<p>
-				<label for="information_complementary_5">#i18n{form.createForm.labelInformationComplementary_5} :</label>
-				<input type="text" name="information_complementary_5" value="" size="80" maxlength="255" />
+		<div class="well">
+			
+				<div class="control-group">
+		<label class="control-label" for="information_complementary_1">#i18n{form.createForm.labelInformationComplementary_1} :</label>
+				<div class="controls">
+	<input type="text" name="information_complementary_1" value="" size="80" maxlength="255" />
+		</div>
+	</div>
+			
+			
+				<div class="control-group">
+		<label class="control-label" for="information_complementary_2">#i18n{form.createForm.labelInformationComplementary_2} :</label>
+				<div class="controls">
+	<input type="text" name="information_complementary_2" value="" size="80" maxlength="255" />
+		</div>
+	</div>
+			
+			
+				<div class="control-group">
+		<label class="control-label" for="information_complementary_3">#i18n{form.createForm.labelInformationComplementary_3} :</label>
+				<div class="controls">
+	<input type="text" name="information_complementary_3" value="" size="80" maxlength="255" />
+		</div>
+	</div>
+			
+			
+				<div class="control-group">
+		<label class="control-label" for="information_complementary_4">#i18n{form.createForm.labelInformationComplementary_4} :</label>
+				<div class="controls">
+	<input type="text" name="information_complementary_4" value="" size="80" maxlength="255" />
+		</div>
+	</div>
+			
+			
+				<div class="control-group">
+		<label class="control-label" for="information_complementary_5">#i18n{form.createForm.labelInformationComplementary_5} :</label>
+				<div class="controls">
+	<input type="text" name="information_complementary_5" value="" size="80" maxlength="255" />
+		</div>
+	</div>
 				<br />
-				<label>&nbsp;</label>
+				<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 				#i18n{form.createForm.labelInformationComplementary_comment}
-			</p>
-			<p>
-				<label for="support_https">#i18n{form.createForm.supportHTTPS} :</label>
-				<input type="checkbox" name="support_https" value="1" ${getChecked('support_https',list_param_default_values)}/>
+			
+			
+				<div class="control-group">
+		<label class="control-label" for="support_https">#i18n{form.createForm.supportHTTPS} :</label>
+				<div class="controls">
+	<input type="checkbox" name="support_https" value="1" ${getChecked('support_https',list_param_default_values)}/>
+		</div>
+	</div>
 				<br />
-				<label>&nbsp;</label>
+				<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 				#i18n{form.createForm.labelSupportHTTPS_comment}
-			</p>
+			
 		</div>
 		<div class="alert">
 			 #i18n{form.message.warning.advanced_parameters_save}
 		</div>
 	</div>		
 		
-		<div id="publication_settings" class="content-box">
-			<h2>				
+		<div id="publication_settings" class="row">
+			<legend>				
 				#i18n{form.createForm.labelPublication}
-			</h2>
-			<p>
-				<label for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
-				<input type="radio" name="publication_mode" id="publication_mode_user" onchange="javascript:doChangePublicationMode(this.form.publication_mode);" checked="checked" value="0" /> #i18n{form.createForm.labelPublicationModeUser}
-				<input type="radio" name="publication_mode" id="publication_mode_auto" onchange="javascript:doChangePublicationMode(this.form.publication_mode);" value="1" /> #i18n{form.createForm.labelPublicationModeAuto}
+			</legend>
+			
+				<div class="control-group">
+		<label class="control-label" for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
+				<div class="controls">
+	<input type="radio" name="publication_mode" id="publication_mode_user" onchange="javascript:doChangePublicationMode(this.form.publication_mode);" checked="checked" value="0" />
+		</div>
+	</div> #i18n{form.createForm.labelPublicationModeUser}
+				<div class="controls">
+	<input type="radio" name="publication_mode" id="publication_mode_auto" onchange="javascript:doChangePublicationMode(this.form.publication_mode);" value="1" />
+		</div>
+	</div> #i18n{form.createForm.labelPublicationModeAuto}
 				<br />
-				<label>&nbsp;</label>
+				<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 				#i18n{form.createForm.labelPublicationModeComment}
-			</p>
-			<p>
-				<label for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
-				<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="" size="10" onchange="javascript:doChangeDate(this.form.publication_mode);" />
+			
+			
+				<div class="control-group">
+		<label class="control-label" for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
+				<div class="controls">
+	<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="" size="10" onchange="javascript:doChangeDate(this.form.publication_mode);" />
+		</div>
+	</div>
 				<input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="" />
 				<br />
-				<label>&nbsp;</label>
+				<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 				#i18n{form.createForm.labelDateBeginDisponibilityComment}
-			</p>
-			<p>
-				<label for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
-				<input type="text" name="date_end_disponibility" id="date_end_disponibility" value="" size="10" onchange="javascript:doChangeDate(this.form.publication_mode);" />
+			
+			
+				<div class="control-group">
+		<label class="control-label" for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
+				<div class="controls">
+	<input type="text" name="date_end_disponibility" id="date_end_disponibility" value="" size="10" onchange="javascript:doChangeDate(this.form.publication_mode);" />
+		</div>
+	</div>
 				<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="" />
 				<br />
-				<label>&nbsp;</label>
+				<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 				#i18n{form.createForm.labelDateEndDisponibilityComment}
-			</p>
+			
 		</div>
 		
 			
 	</div>
+</fieldset>
 </form>
 <@initEditor />
 

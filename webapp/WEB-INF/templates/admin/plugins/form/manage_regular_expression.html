@@ -1,8 +1,9 @@
-<div class="content-box">
-        <h2>#i18n{form.manageRegularExpression.title}</h2>
+<div class="row">
+        <legend>#i18n{form.manageRegularExpression.title}</legend>
         
         
-         <form method="post"  action="jsp/admin/plugins/form/ManageRegularExpression.jsp">
+         <form class="form-horizontal" method="post"  action="jsp/admin/plugins/form/ManageRegularExpression.jsp">
+	<fieldset>
         <@pagination paginator=paginator />
 	<!-- Number of feeds per page selector -->
         #i18n{form.manageRegularExpression.labelItemsPerPage} :
@@ -15,10 +16,12 @@
             	</#if>
             </#list>
         </select>
-        <input type="submit" class="button" value="#i18n{form.manageRegularExpression.buttonItemsPerPage}" />
-    </form>
+        <button class="btn btn-primary" type="submit" >#i18n{form.manageRegularExpression.buttonItemsPerPage}</button>
+	
+    </fieldset>
+</form>
          
-          <table> 
+          <table class="table table-striped table-condensed"> 
             <tr>
               <th width="20%" >
                #i18n{form.manageRegularExpression.rowTitle}
@@ -33,24 +36,31 @@
              <#list expression_list as expression>	
 	            <tr>
 	              <td width="20%" >
-	                <a href="jsp/admin/plugins/form/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}" class="bullet-link">${expression.title}</a>
+	                <a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}"  title="null" >
+	<i class="icon-question-sign icon-white"></i>
+	</a>
+
 	              </td>
 	              <td width="40%">
 	               ${expression.value}
 	                </td>
 	                <td width="40%">
-	               	<a href="jsp/admin/plugins/form/ConfirmRemoveRegularExpression.jsp?id_expression=${expression.idExpression}">
-	         			 <img src="images/admin/skin/plugins/form/actions/delete.png" alt="#i18n{form.manageForm.altDelete}" title="#i18n{form.manageForm.altDelete}" />
-	       			 </a>
+	               	<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/ConfirmRemoveRegularExpression.jsp?id_expression=${expression.idExpression}"  title="#i18n{form.manageForm.altDelete}" >
+	<i class="icon-trash icon-white"></i>
+	</a>
+
 	                </td>
 	            </tr>
 	         </#list>
           </table> 
          
-          <form method="post"  action="jsp/admin/plugins/form/CreateRegularExpression.jsp" >
-            <p>
-              <input type="submit" class="button" value="#i18n{form.manageRegularExpression.buttonCreate}"   />
-            </p>
-          </form>
+          <form class="form-horizontal" method="post"  action="jsp/admin/plugins/form/CreateRegularExpression.jsp" >
+	<fieldset>
+            
+              <button class="btn btn-primary" type="submit" >#i18n{form.manageRegularExpression.buttonCreate}</button>
+	
+            
+          </fieldset>
+</form>
         
       </div> 

@@ -1,52 +1,78 @@
 <#include "/admin/plugins/form/commons.html" />
 <#include "/admin/util/editor/editor.html" />
-<div class="content-box">
-	<h2>#i18n{form.createEntry.titleQuestion} : '${entry.form.title}'</h2>
-	<form action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
+<div class="row">
+	<legend>#i18n{form.createEntry.titleQuestion} : '${entry.form.title}'</legend>
+	<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
+	<fieldset>
 		<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
 		<#if entry.fieldDepend?exists>
 			<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
 		</#if>
-		<p>
-			<label for="title">#i18n{form.createEntry.labelTitle} * : </label>
-			<input class="-lutece-input -lutece-border-radius-mini" type="text" name="title" id="title" size="80" value=""  maxlength="255"/>
+		
+			<div class="control-group">
+		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
+			<div class="controls">
+	<input class="-lutece-input -lutece-border-radius-mini" type="text" name="title" id="title" size="80" value=""  maxlength="255"/>
+		</div>
+	</div>
 			<br/>
-			<label>&nbsp;</label>#i18n{form.createEntry.labelTitleComment}
-		</p>
-		<p>
-			<label> #i18n{form.createEntry.labelHelpMessage} :  </label>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label>#i18n{form.createEntry.labelTitleComment}
+		
+		
+			<div class="control-group">
+		<label class="control-label" >  #i18n{form.createEntry.labelHelpMessage} :  </label>
 			<textarea class="-lutece-input -lutece-border-radius-mini" name="help_message" id="help_message"  rows="20" cols="90"></textarea>
 			<br/>
-			<label>&nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
-		</p>
-		<p>
-			<label for="comment"> #i18n{form.createEntry.labelComment} : </label>
+			<div class="control-group">
+		<label class="control-label" > &nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
+		
+		
+			<div class="control-group">
+		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
 			<textarea class="-lutece-input -lutece-border-radius-mini" name="comment" cols="80" rows="2"></textarea>
-		</p>
-		<p>
-			<label for="">#i18n{form.createEntry.labelType} : </label>
+		
+		
+			<div class="control-group">
+		<label class="control-label" for="">#i18n{form.createEntry.labelType} : </label>
 			${entry.entryType.title}
-		</p>
-		<p>
-			<label for="date">#i18n{form.createEntry.labelValueDefault}</label>
-			<input class="-lutece-input -lutece-border-radius-mini"  type="text" name="value" id="date" size="10" value="" />
-		</p>
-		<p>
-			<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
-			<input class="-lutece-input -lutece-border-radius-mini"  name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />
-		</p>
-		<p>
-			<label for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-			<input type="text" name="css_class" value="" maxlength="255" size="80" />
+		
+		
+			<div class="control-group">
+		<label class="control-label" for="date">#i18n{form.createEntry.labelValueDefault}</label>
+			<div class="controls">
+	<input class="-lutece-input -lutece-border-radius-mini"  type="text" name="value" id="date" size="10" value="" />
+		</div>
+	</div>
+		
+		
+			<div class="control-group">
+		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+			<div class="controls">
+	<input class="-lutece-input -lutece-border-radius-mini"  name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />
+		</div>
+	</div>
+		
+		
+			<div class="control-group">
+		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+			<div class="controls">
+	<input type="text" name="css_class" value="" maxlength="255" size="80" />
+		</div>
+	</div>
 			<br />
-			<label for="">&nbsp;</label>
+			<div class="control-group">
+		<label class="control-label" for="">&nbsp;</label>
 			#i18n{form.createEntry.labelCSSClassComment}
-		</p>
-		<p>
-			<input class="button"  type="submit" value="#i18n{form.createEntry.buttonSave}" name="save" />
-			<input class="button"  type="submit" value="#i18n{form.createEntry.buttonCancel}" name="cancel" />
-		</p>
-	</form>
+		
+		
+			<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.buttonSave}</button>
+	
+			<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.buttonCancel}</button>
+	
+		
+	</fieldset>
+</form>
 </div>
 <@initEditor />
 <@getDatePicker idField="date" language=locale /> 

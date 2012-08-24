@@ -1,6 +1,7 @@
 <div class="form-element ${entry.CSSClass!}">
   <span class="form-label">
-	<label  for="form${entry.idEntry}">	
+	<div class="control-group">
+		<label class="control-label"  for="form${entry.idEntry}">	
 		${entry.title}
 	<#if entry.mandatory>
 		*
@@ -53,13 +54,16 @@
 		<#list list_responses as response>
 			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
 				<br />
-				<span class="form-label"><label>&nbsp;</label></span>
+				<span class="form-label"><div class="control-group">
+		<label class="control-label" > &nbsp;</label></span>
 				<span class="form-field-column">
 					<#assign formError = response.entry.formError>
 					<#if formError.mandatoryError>
-						<label class="error">#i18n{form.message.mandatory.entry}</label>
+						<div class="control-group">
+		<label class="control-label" class="error">#i18n{form.message.mandatory.entry}</label>
 					<#else>
-						<label class="error">${formError.errorMessage}</label>
+						<div class="control-group">
+		<label class="control-label" class="error">${formError.errorMessage}</label>
 					</#if>
 				</span>
 			</#if>

@@ -1,59 +1,33 @@
-
-<SCRIPT LANGUAGE="JavaScript">
-	function makeArray(q){
-		for(i=1 ; i <= q ; i++)
-		{
-			this[i]=0;
-		}
-	}
-
-	 Colors = new makeArray(7);
-	 Colors[1] = "00";
-	 Colors[2] = "33";
-	 Colors[3] = "66";
-	 Colors[4] = "99";
-	 Colors[5] = "CC";
-	 Colors[6] = "FF";
- </script>
-<div class="content-box">
-    <h2> #i18n{form.createCategory.title}</h2>
-    <form method="post" action="jsp/admin/plugins/form/DoCreateCategory.jsp" >
-        
-        <p>
-            <label for="title" >#i18n{form.createCategory.labelTitle} : * </label>
-            <input type="text" size="20" id="title" name="title" maxlength="50"/>
-        </p>
-        <p>
-            <label for="color" >#i18n{form.createCategory.labelColor} : * </label>
-            <input type="text" size="10" id="color" name="color" maxlength="7"/>
-        </p>
-        <p>
-            <label for="color_picker" >#i18n{form.createCategory.labelColorPicker} : </label>
-			<table id="color_picker" style='width: 10%;' border="0" align=center>
- 				<tr>
-					<script language="JavaScript">
- 						for(i=1 ; i <= 6 ; i++)
- 	 					{
- 							for(j=1 ; j <= 6 ; j++)
- 	 						{
- 								for(k=1 ; k <= 6 ; k++)
- 	 							{
-									var thiscolor = Colors[i] + Colors[j] + Colors[k];
-									document.writeln("<td style='cursor:pointer; padding:0 0 0 0; border: none;' bgcolor = \"#" + thiscolor + "\" align = center><a ");
-									document.writeln("\'\' onClick = \"document.getElementById('color').value = \'#" + thiscolor + "\'\">" + '_' + "</a></td>");
-
- 								}
- 							}
- 							document.writeln("<TR>");
- 						}
- 					</script>
- 				</tr>
- 			</table>
-        </p>  
-      <p>
-      		<input type="submit" value="#i18n{form.createCategory.buttonSave}" class="button" />
-            <input type="button" value="#i18n{form.createCategory.buttonCancel}" class="button" onclick="javascript:history.go(-1)" />
-     </p>
-   </form>
- </div>
-  
+<div class="row">
+    <div class="span12">
+        <fieldset>
+            <legend> #i18n{form.createCategory.title}</legend>
+            <form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoCreateCategory.jsp" >
+                <div class="control-group">
+                    <label class="control-label" for="title" >#i18n{form.createCategory.labelTitle} : * </label>
+                    <div class="controls">
+                        <input type="text" size="20" id="title" name="title" maxlength="50"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="color" >#i18n{form.createCategory.labelColor} : * </label>
+                    <div class="controls">
+                        <input type="text" class="span2" id="color" name="color" maxlength="7"/>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>#i18n{form.createCategory.buttonSave}</button>
+                    <button class="btn btn-primary" onclick="javascript:history.back();return false;" ><i class="icon-remove-circle icon-white"></i>#i18n{form.createCategory.buttonCancel}</button>
+                </div>
+        </fieldset>
+        </form>
+    </div>
+</div>
+<script type="javascript" src="js/bootstrap-colorpicker.js" ></script>
+<script>
+$(function(){
+$('#color').colorpicker({
+    format: 'hex'
+    });
+});
+</script>

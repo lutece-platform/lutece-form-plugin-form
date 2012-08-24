@@ -1,6 +1,7 @@
 <div class="form-element ${entry.CSSClass!}">
 	 <span class="form-label">
-		 <label for="form${entry.idEntry}">	
+		 <div class="control-group">
+		<label class="control-label" for="form${entry.idEntry}">	
 				${entry.title}
 				<#if entry.mandatory>
 					*
@@ -11,8 +12,11 @@
 	</span>
 	 <span class="form-field-column">	 
 		<#list entry.fields as field>
-			<input type="text" name="form${entry.idEntry}" id="form${entry.idEntry}" size="${field.width}" 
+			<div class="controls">
+	<input type="text" name="form${entry.idEntry}" id="form${entry.idEntry}" size="${field.width}" 
 				<#if list_responses??>
+		</div>
+	</div>
 					<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry>
 							<#if response.toStringValueResponse??>
@@ -48,13 +52,16 @@
 			<#list list_responses as response>
 				<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
 					<br />
-					<span class="form-label"><label>&nbsp;</label></span>
+					<span class="form-label"><div class="control-group">
+		<label class="control-label" > &nbsp;</label></span>
 					<span class="form-field-column">
 						<#assign formError = response.entry.formError>
 						<#if formError.mandatoryError>
-							<label class="error">#i18n{form.message.mandatory.entry}</label>
+							<div class="control-group">
+		<label class="control-label" class="error">#i18n{form.message.mandatory.entry}</label>
 						<#else>
-							<label class="error">${formError.errorMessage}</label>
+							<div class="control-group">
+		<label class="control-label" class="error">${formError.errorMessage}</label>
 						</#if>
 					</span>
 				</#if>
@@ -64,7 +71,8 @@
 <#if entry.confirmField>
 <div class="form-element">
 	 <span class="form-label">
-		 <label for="form${entry.idEntry}_confirm_field">	
+		 <div class="control-group">
+		<label class="control-label" for="form${entry.idEntry}_confirm_field">	
 				${entry.confirmFieldTitle}
 				<#if entry.mandatory>
 					*
@@ -74,8 +82,11 @@
 	</span>
 	<#list entry.fields as field>
 	<span class="form-field-column">
-		<input type="text" name="form${entry.idEntry}_confirm_field" id="form${entry.idEntry}_confirm_field" size="${field.width}" value="" 
+		<div class="controls">
+	<input type="text" name="form${entry.idEntry}_confirm_field" id="form${entry.idEntry}_confirm_field" size="${field.width}" value="" 
 			<#if field.maxSizeEnter!=-1>
+		</div>
+	</div>
 				maxlength="${field.maxSizeEnter}"
 			</#if>
 			/>

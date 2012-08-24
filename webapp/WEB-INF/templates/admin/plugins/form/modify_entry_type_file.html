@@ -1,101 +1,152 @@
 <#include "/admin/util/editor/editor.html" />
 <#include "/admin/plugins/form/commons.html" />
-<div class="content-box">
- <h2>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</h2>
- <form action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+<div class="row">
+ <legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
+ <form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+	<fieldset>
     <input name="id_entry" value="${entry.idEntry}" type="hidden" />
-	<p>
-    	<label for="title">#i18n{form.createEntry.labelTitle} *  : </label>
-    	<input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255"/>
+	
+    	<div class="control-group">
+		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} *  : </label>
+    	<div class="controls">
+	<input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255"/>
+		</div>
+	</div>
     	<br/>
-		<label>&nbsp;</label>#i18n{form.createEntry.labelTitleComment}
- 	</p>
-   <p>
-     <label for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
+		<div class="control-group">
+		<label class="control-label" > &nbsp;</label>#i18n{form.createEntry.labelTitleComment}
+ 	
+   
+     <div class="control-group">
+		<label class="control-label" for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
     
      	<textarea class="-lutece-input -lutece-border-radius-mini" name="help_message" id="help_message" rows="20" cols="90">${entry.helpMessage}</textarea>
 
 	 <br/>
-	 <label>&nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
-	</p>
-    <p>
-     <label for="comment"> #i18n{form.createEntry.labelComment} : </label>
+	 <div class="control-group">
+		<label class="control-label" > &nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
+	
+    
+     <div class="control-group">
+		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
 
      <textarea class="-lutece-input -lutece-border-radius-mini" name="comment" cols="80" rows="2">${entry.comment}</textarea>
-     </p>
-    <p>
-     <label for="">#i18n{form.createEntry.labelType} : </label>
+     
+    
+     <div class="control-group">
+		<label class="control-label" for="">#i18n{form.createEntry.labelType} : </label>
              ${entry.entryType.title}
-	</p>
-	<p>
-    	<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+	
+	
+    	<div class="control-group">
+		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
    		 <#if entry.mandatory>
-   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" />
+   		 	<div class="controls">
+	<input name="mandatory" value="1" type="checkbox" checked="checked" />
+		</div>
+	</div>
    		 <#else>
-   			<input name="mandatory" value="1" type="checkbox" />
+   			<div class="controls">
+	<input name="mandatory" value="1" type="checkbox" />
+		</div>
+	</div>
    		 </#if>	
-   	</p>
-    <p>
-	    <label for="width">#i18n{form.createEntry.labelWidth} * : </label>
+   	
+    
+	    <div class="control-group">
+		<label class="control-label" for="width">#i18n{form.createEntry.labelWidth} * : </label>
 	    <#list entry.fields as field>
     		<#if !field.title??>
-	    		<input type="text" name="width" id="width" size="5" value="${field.width}" />
+	    		<div class="controls">
+	<input type="text" name="width" id="width" size="5" value="${field.width}" />
+		</div>
+	</div>
 	    		<#assign id_field=field.idField>
 	    		<#break>
 	    	</#if> 
     	</#list>
-	</p>
-	<p>
-		<label for="file_max_size">#i18n{form.createEntry.labelFileMaxSize} * : </label>
-		<input type="text" name="file_max_size" id="file_max_size" size="10" value="${getFileMaxSize(entry)}" />
-	</p>
-	<p>
-		<label for="max_files">#i18n{form.createEntry.labelMaxFiles} * :</label>
-		<input name="max_files" type="text" size="2" value="${getMaxFiles(entry)}" maxlength="2" />
-	</p>
-	<p>
-		<label for="export_binary">#i18n{form.createEntry.labelExportBinary} : </label>
-		<input name="export_binary" value="1" type="checkbox" <#if exportBinary( entry )>checked="checked"</#if> />
+	
+	
+		<div class="control-group">
+		<label class="control-label" for="file_max_size">#i18n{form.createEntry.labelFileMaxSize} * : </label>
+		<div class="controls">
+	<input type="text" name="file_max_size" id="file_max_size" size="10" value="${getFileMaxSize(entry)}" />
+		</div>
+	</div>
+	
+	
+		<div class="control-group">
+		<label class="control-label" for="max_files">#i18n{form.createEntry.labelMaxFiles} * :</label>
+		<div class="controls">
+	<input name="max_files" type="text" size="2" value="${getMaxFiles(entry)}" maxlength="2" />
+		</div>
+	</div>
+	
+	
+		<div class="control-group">
+		<label class="control-label" for="export_binary">#i18n{form.createEntry.labelExportBinary} : </label>
+		<div class="controls">
+	<input name="export_binary" value="1" type="checkbox" <#if exportBinary( entry )>
+		</div>
+	</div>checked="checked"</#if> />
 		<br />
-		<label>&nbsp;</label>
+		<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 		#i18n{form.createEntry.labelExportBinaryComment}
 		<br />
-		<label>&nbsp;</label>
+		<div class="control-group">
+		<label class="control-label" > &nbsp;</label>
 		<span class="alert">#i18n{form.createEntry.labelExportBinaryWarning}</span>
-	</p>
-	<p>
-		<label for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-		<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" size="80" />
+	
+	
+		<div class="control-group">
+		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+		<div class="controls">
+	<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" size="80" />
+		</div>
+	</div>
 		<br />
-		<label for="">&nbsp;</label>
+		<div class="control-group">
+		<label class="control-label" for="">&nbsp;</label>
 		#i18n{form.createEntry.labelCSSClassComment}
-	</p>
-    <p>
-  		<input type="submit" value="#i18n{form.modifyEntry.buttonSave}" class="button"  name="save" />
-  		<input type="submit" value="#i18n{form.modifyEntry.buttonApply}" class="button"  name="apply" />
-  		<input type="submit" value="#i18n{form.modifyEntry.buttonCancel}" class="button" name="cancel" />
-   </p>
-  </form>
+	
+    
+  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonSave}</button>
+	
+  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonApply}</button>
+	
+  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonCancel}</button>
+	
+   
+  </fieldset>
+</form>
  </div>
 
 <#if regular_expression_list?exists>
-	<div class="content-box">
-		<h2>#i18n{form.createEntry.manageRegularExpression.title}</h2>
-		<div class="highlight-box">
-			<p>
-				<form  method="post"  action="jsp/admin/plugins/form/DoInsertVerification.jsp#list"> 
+	<div class="row">
+		<legend>#i18n{form.createEntry.manageRegularExpression.title}</legend>
+		<div class="well">
+			
+				<form class="form-horizontal"  method="post"  action="jsp/admin/plugins/form/DoInsertVerification.jsp#list">
+	<fieldset> 
 					<input name="id_field" value="${id_field}" type="hidden" />
-					<label for="id_expression">
+					<div class="control-group">
+		<label class="control-label" for="id_expression">
 						#i18n{form.createEntry.manageRegularExpression.labelInsert} :
 					</label>
-					<@combo name="id_expression"  items=regular_expression_list default_value=-1 />
-					<input value="#i18n{form.createEntry.manageRegularExpression.buttonInsert}" class="button"  type="submit">
+					<div class="controls">
+	<@combo name="id_expression"  items=regular_expression_list default_value=-1 />
+		</div>
+	</div>
+					<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.manageRegularExpression.buttonInsert}</button>
+	
 					<br/>
-					<br/>
-					<label>&nbsp;</label> #i18n{form.createEntry.manageRegularExpression.labelInsertComment}
-				</form>
-			</p>
-			<p>&nbsp;</p>
+					<div class="control-group">
+		<label class="control-label" > &nbsp;</label> #i18n{form.createEntry.manageRegularExpression.labelInsertComment}
+				</fieldset>
+</form>
+			
+			&nbsp;
 		</div>
 		<@paginationAdmin paginator=paginator combo=1/>
 		<a name="list" id="list"></a>
@@ -122,9 +173,10 @@
 	       			  ${expression.validExemple}  	
 	            </td >
 	            <td >
-	             	  <a href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list">
-	                  <img src="images/admin/skin/plugins/form/actions/delete.png" alt="#i18n{form.createEntry.manageField.titleDelete}" title="#i18n{form.createEntry.manageField.titleDelete}" />
-	                </a>
+	             	  <a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
+	<i class="icon-trash icon-white"></i>
+	</a>
+
 	             </td>
 	          </tr>
 			</#list> 

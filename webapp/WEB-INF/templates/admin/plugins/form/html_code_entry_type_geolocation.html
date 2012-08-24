@@ -13,7 +13,8 @@
 </#if>
 <div class="form-element ${entry.CSSClass!}">
 	 <span class="form-label">
-		<label for="form${entry.idEntry}_address" id="form${entry.idEntry}">	
+		<div class="control-group">
+		<label class="control-label" for="form${entry.idEntry}_address" id="form${entry.idEntry}">	
 			${entry.title}
 			<#if entry.mandatory>
 				*
@@ -33,8 +34,11 @@
 						<#elseif response.field.title == "idAddress">
 							<input type="hidden" name="${entry.idEntry}_idAddress" id="${entry.idEntry}_idAddress" value="${response.toStringValueResponse!}"/>
 						<#else>
-							<input type="text" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50" 
+							<div class="controls">
+	<input type="text" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50" 
 								<#if response.entry.formError??>
+		</div>
+	</div>
 									class="error"
 								</#if>
 							value="${response.toStringValueResponse!}" />
@@ -42,7 +46,10 @@
 					</#if>
 				</#list>
 			<#else>
-				<input type="text" value="" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50" />
+				<div class="controls">
+	<input type="text" value="" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50" />
+		</div>
+	</div>
 				<input type="hidden" name="${entry.idEntry}_x" id="${entry.idEntry}_x" value=""/>
 		    	<input type="hidden" name="${entry.idEntry}_y" id="${entry.idEntry}_y" value=""/>
 		    	<input type="hidden" name="${entry.idEntry}_idAddress" id="${entry.idEntry}_idAddress" value=""/>
@@ -62,13 +69,16 @@
 			<#if response.entry.idEntry == entry.idEntry && response.entry.formError?? && show_error == 0>
 				<#assign show_error = 1>
 				<br />
-				<span class="form-label"><label>&nbsp;</label></span>
+				<span class="form-label"><div class="control-group">
+		<label class="control-label" > &nbsp;</label></span>
 				<span class="form-field-column">
 					<#assign formError = response.entry.formError>
 					<#if formError.mandatoryError>
-						<label class="error">#i18n{form.message.mandatory.entry}</label>
+						<div class="control-group">
+		<label class="control-label" class="error">#i18n{form.message.mandatory.entry}</label>
 					<#else>
-						<label class="error">${formError.errorMessage}</label>
+						<div class="control-group">
+		<label class="control-label" class="error">${formError.errorMessage}</label>
 					</#if>
 				</span>
 			</#if>

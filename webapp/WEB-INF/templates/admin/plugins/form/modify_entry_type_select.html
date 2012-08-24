@@ -1,59 +1,85 @@
  <#include "/admin/util/editor/editor.html" />
-<div class="content-box">
- <h2>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</h2>
- <form action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+<div class="row">
+ <legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
+ <form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+	<fieldset>
     <input name="id_entry" value="${entry.idEntry}" type="hidden" />
-	<p>
-    	<label for="title">#i18n{form.createEntry.labelTitle} * : </label>
-    	<input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255"/>
+	
+    	<div class="control-group">
+		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
+    	<div class="controls">
+	<input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255"/>
+		</div>
+	</div>
     	<br/>
-		<label>&nbsp;</label>#i18n{form.createEntry.labelTitleComment}
- 	</p>
-   <p>
-     <label for="help_message">#i18n{form.createEntry.labelHelpMessage} :  </label>
+		<div class="control-group">
+		<label class="control-label" > &nbsp;</label>#i18n{form.createEntry.labelTitleComment}
+ 	
+   
+     <div class="control-group">
+		<label class="control-label" for="help_message">#i18n{form.createEntry.labelHelpMessage} :  </label>
     
      	<textarea class="-lutece-input -lutece-border-radius-mini" name="help_message" id="help_message" rows="20" cols="90">${entry.helpMessage}</textarea>
 	
 	 <br/>
-	 <label>&nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
-	</p>
-    <p>
-     <label for="comment"> #i18n{form.createEntry.labelComment} : </label>
+	 <div class="control-group">
+		<label class="control-label" > &nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
+	
+    
+     <div class="control-group">
+		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
 
      <textarea class="-lutece-input -lutece-border-radius-mini" name="comment" cols="80" rows="2">${entry.comment}</textarea>
-     </p>
-    <p>
-     <label for="">#i18n{form.createEntry.labelType} :</label>
+     
+    
+     <div class="control-group">
+		<label class="control-label" for="">#i18n{form.createEntry.labelType} :</label>
              ${entry.entryType.title}
-	</p>
-	  <p>
-    	<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+	
+	  
+    	<div class="control-group">
+		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
    		 <#if entry.mandatory>
-   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" />
+   		 	<div class="controls">
+	<input name="mandatory" value="1" type="checkbox" checked="checked" />
+		</div>
+	</div>
    		 <#else>
-   			<input name="mandatory" value="1" type="checkbox" /	>
+   			<div class="controls">
+	<input name="mandatory" value="1" type="checkbox" /	>
+		</div>
+	</div>
    		 </#if>	
-   </p>
-   	<p>
-		<label for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-		<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" size="80" />
+   
+   	
+		<div class="control-group">
+		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+		<div class="controls">
+	<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" size="80" />
+		</div>
+	</div>
 		<br />
-		<label for="">&nbsp;</label>
+		<div class="control-group">
+		<label class="control-label" for="">&nbsp;</label>
 		#i18n{form.createEntry.labelCSSClassComment}
-	</p>
+	
     
   	
-      <p>
-  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonSave}" name="save" />
-  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonApply}" name="apply" />
-  		<input class="button" type="submit" value="#i18n{form.modifyEntry.buttonCancel}" name="cancel" />
-   </p>
-  </form>
+      
+  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonSave}</button>
+	
+  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonApply}</button>
+	
+  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonCancel}</button>
+	
+   
+  </fieldset>
+</form>
  </div>
 
 
-<div class="content-box">
-	<h2>#i18n{form.createEntry.manageField.title}</h2>
+<div class="row">
+	<legend>#i18n{form.createEntry.manageField.title}</legend>
 	<@paginationAdmin paginator=paginator combo=1/>
 	<a name="list" id="list"></a>
 	<table width="100%">
@@ -73,9 +99,10 @@
           	<#assign cpt=cpt+1>
           	<tr>
             	<td >
-            			<a href="jsp/admin/plugins/form/ModifyField.jsp?id_field=${field.idField}"  class="bullet-link">
-              				${field.title}
-              			</a>
+            			<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/ModifyField.jsp?id_field=${field.idField}"  title="null" >
+	<i class="icon-question-sign icon-white"></i>
+	</a>
+
            		</td>
 	            <td>
 	           		${field.value}
@@ -87,28 +114,34 @@
 	            </td >
 	           	<td >
 	               <#if cpt!=1>
-	              		<a href="jsp/admin/plugins/form/DoMoveUpField.jsp?id_field=${field.idField}#list">
-	                 	 <img src="images/admin/skin/plugins/form/actions/up.png"  alt="#i18n{form.createEntry.manageField.titleMoveUp}" title="#i18n{form.createEntry.manageField.titleMoveUp}" />
-	               	  </a>
+	              		<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/DoMoveUpField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveUp}" >
+	<i class="icon-question-sign icon-white"></i>
+	</a>
+
 	                </#if> 
 	               <#if field_has_next>
-	               	 <a href="jsp/admin/plugins/form/DoMoveDownField.jsp?id_field=${field.idField}#list">
-	                 	 <img src="images/admin/skin/plugins/form/actions/down.png" alt="#i18n{form.createEntry.manageField.titleMoveDown}" title="#i18n{form.createEntry.manageField.titleMoveDown}" />
-	                 </a>
+	               	 <a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/DoMoveDownField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveDown}" >
+	<i class="icon-question-sign icon-white"></i>
+	</a>
+
 	               </#if>
-	                <a href="jsp/admin/plugins/form/ConfirmRemoveField.jsp?id_field=${field.idField}#list">
-	                  <img src="images/admin/skin/plugins/form/actions/delete.png" alt="#i18n{form.createEntry.manageField.titleDelete}" title="#i18n{form.createEntry.manageField.titleDelete}" />
-	                </a>
+	                <a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/ConfirmRemoveField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
+	<i class="icon-trash icon-white"></i>
+	</a>
+
 	             </td>
 	          </tr>
 			</#list> 
         </table>
         <@paginationAdmin paginator=paginator/>
-        <form method="post"  action="jsp/admin/plugins/form/CreateField.jsp">
-          <p>
-            <input type="submit" value="#i18n{form.createEntry.manageField.buttonInsert}" class="button" />
-          </p>
-        </form>
+        <form class="form-horizontal" method="post"  action="jsp/admin/plugins/form/CreateField.jsp">
+	<fieldset>
+          
+            <button class="btn btn-primary" type="submit" >#i18n{form.createEntry.manageField.buttonInsert}</button>
+	
+          
+        </fieldset>
+</form>
     </div>
 
  <@initEditor />

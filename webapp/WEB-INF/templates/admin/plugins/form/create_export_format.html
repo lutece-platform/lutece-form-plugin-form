@@ -1,29 +1,37 @@
-  <div class="content-box">
-            
-    <h2> #i18n{form.createExportFormat.title}</h2>
-    <form method="post" action="jsp/admin/plugins/form/DoCreateExportFormat.jsp" enctype="multipart/form-data">
-        
-        <p>
-            <label for="title" >#i18n{form.createExportFormat.labelTitle} * : </label>
-            <input type="text" size="20" id="title" name="title" maxlength="20"/>
-        </p>  
-        <p>
-            <label for="description" >#i18n{form.createExportFormat.labelDescription} * : </label>
-            <input type="text" size="60" id="description" name="description" maxlength="255" value=""/>
-        </p>	
-        <p>
-            <label for="extension" >#i18n{form.createExportFormat.labelExtension} * : </label>
-            <input type="text" size="10" id="extension" name="extension" maxlength="10" value=""/>
-        </p>		
-        <p>
-            <label for="stylesheet_source" >#i18n{form.createExportFormat.labelXsl} * : </label>
-            <input type="file" id="stylesheet_source" name="stylesheet_source" size="60" maxlength="100"/>
-        </p>
-      	 <p>
-            
-            <input type="submit" value="#i18n{form.createExportFormat.buttonSave}" class="button" />
-            <input type="button" value="#i18n{form.createExportFormat.buttonCancel}" class="button" onclick="javascript:history.go(-1)" />
-        </p>
-
-    </form>
-        </div>
+<div class="row">
+    <div class="span12">
+        <fieldset>
+            <legend> #i18n{form.createExportFormat.title}</legend>
+            <form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoCreateExportFormat.jsp" enctype="multipart/form-data">
+                <div class="control-group">
+                    <label class="control-label" for="title" >#i18n{form.createExportFormat.labelTitle} * : </label>
+                    <div class="controls">
+                        <input type="text" size="20" id="title" name="title" maxlength="20"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="description" >#i18n{form.createExportFormat.labelDescription} * : </label>
+                    <div class="controls">
+                        <input type="text" size="60" id="description" name="description" maxlength="255" value=""/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="extension" >#i18n{form.createExportFormat.labelExtension} * : </label>
+                    <div class="controls">
+                        <input type="text" size="10" id="extension" name="extension" maxlength="10" value=""/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="stylesheet_source" >#i18n{form.createExportFormat.labelXsl} * : </label>
+                    <div class="controls">
+                        <input type="file" id="stylesheet_source" name="stylesheet_source" size="60" maxlength="100"/>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createExportFormat.buttonSave}</button>
+                    <button class="btn btn-primary" onclick="javascript:history.back();return false;" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createExportFormat.buttonCancel}</button>
+                </div>    
+        </fieldset>
+        </form>
+    </div>
+</div>

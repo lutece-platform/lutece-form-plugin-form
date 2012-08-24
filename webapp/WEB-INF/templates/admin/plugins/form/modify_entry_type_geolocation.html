@@ -1,64 +1,96 @@
  <#include "/admin/util/editor/editor.html" />
-<div class="content-box">
- <h2>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</h2>
- <form action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+<div class="row">
+ <legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
+ <form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+	<fieldset>
   	<input name="id_entry" value="${entry.idEntry}" type="hidden" />
-	<p>
-    	<label for="title">#i18n{form.createEntry.labelTitle} * : </label>
-    	<input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255"/>
+	
+    	<div class="control-group">
+		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
+    	<div class="controls">
+	<input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255"/>
+		</div>
+	</div>
     	<br/>
-		<label>&nbsp;</label>#i18n{form.createEntry.labelTitleComment}
- 	</p>
-    <p>
-     <label for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
+		<div class="control-group">
+		<label class="control-label" > &nbsp;</label>#i18n{form.createEntry.labelTitleComment}
+ 	
+    
+     <div class="control-group">
+		<label class="control-label" for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
      
      	<textarea class="-lutece-input -lutece-border-radius-mini" name="help_message"  id="help_message" rows="20" cols="90">${entry.helpMessage}</textarea>
 	
 	 <br/>
-	 <label>&nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
-	</p>
-    <p>
-     <label for="comment"> #i18n{form.createEntry.labelComment} : </label>
+	 <div class="control-group">
+		<label class="control-label" > &nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
+	
+    
+     <div class="control-group">
+		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
 
      <textarea class="-lutece-input -lutece-border-radius-mini" name="comment" cols="80" rows="2">${entry.comment}</textarea>
-     </p>
+     
     
-    <p>
-     <label for="">#i18n{form.createEntry.labelType} : </label>
+    
+     <div class="control-group">
+		<label class="control-label" for="">#i18n{form.createEntry.labelType} : </label>
              ${entry.entryType.title}
-	</p>
 	
-	<p>
-	 	<label for="map_provider">#i18n{form.createEntry.mapProvider} : </label>
+	
+	
+	 	<div class="control-group">
+		<label class="control-label" for="map_provider">#i18n{form.createEntry.mapProvider} : </label>
 	 	<#if entry.mapProvider?has_content && entry.mapProvider.key?has_content>
-	 	<@combo name="map_provider" items=entry.mapProvidersRefList default_value="${entry.mapProvider.key}"/>
+	 	<div class="controls">
+	<@combo name="map_provider" items=entry.mapProvidersRefList default_value="${entry.mapProvider.key}"/>
+		</div>
+	</div>
 	 	<#else>
-	 	<@combo name="map_provider" items=entry.mapProvidersRefList default_value="-1"/>
+	 	<div class="controls">
+	<@combo name="map_provider" items=entry.mapProvidersRefList default_value="-1"/>
+		</div>
+	</div>
 	 	</#if>
-	 </p>
 	 
-	  <p>
-    	<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+	 
+	  
+    	<div class="control-group">
+		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
    		 <#if entry.mandatory>
-   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" />
+   		 	<div class="controls">
+	<input name="mandatory" value="1" type="checkbox" checked="checked" />
+		</div>
+	</div>
    		 <#else>
-   			<input name="mandatory" value="1" type="checkbox" />
+   			<div class="controls">
+	<input name="mandatory" value="1" type="checkbox" />
+		</div>
+	</div>
    		 </#if>	
-   </p>
-	<p>
-		<label for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-		<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" size="80" />
+   
+	
+		<div class="control-group">
+		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+		<div class="controls">
+	<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" size="80" />
+		</div>
+	</div>
 		<br />
-		<label for="">&nbsp;</label>
+		<div class="control-group">
+		<label class="control-label" for="">&nbsp;</label>
 		#i18n{form.createEntry.labelCSSClassComment}
-	</p>
+	
     
   	
-    <p>
-  		<input type="submit" value="#i18n{form.modifyEntry.buttonSave}" class="button"  name="save" />
-  		<input type="submit" value="#i18n{form.modifyEntry.buttonCancel}" class="button" name="cancel" />
-   </p>
-  </form>
+    
+  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonSave}</button>
+	
+  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonCancel}</button>
+	
+   
+  </fieldset>
+</form>
  </div>
 
  <@initEditor />
