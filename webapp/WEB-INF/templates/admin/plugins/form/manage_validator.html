@@ -1,15 +1,16 @@
 <div class="row">
-	<legend>#i18n{form.manageValidator.title}</legend>
-	<#if validator_list?has_content>
-		<#list validator_list as validator>
-			<div class="well">
-				${validator}
-			</div>
-		</#list>
-	<#else>
-		
-			#i18n{form.manageValidator.noValidator}
-		
-		<br/>
-	</#if>
+    <div class="span12">
+        <fieldset>
+            <legend> #i18n{form.manageValidator.title}</legend>
+            <#if validator_list?has_content>
+                <#list validator_list as validator>
+                <div class="well">
+                    ${validator}
+                </div>
+                </#list>
+            <#else>
+                <p class="label label-warnig">#i18n{form.manageValidator.noValidator}</p>
+            </#if>
+        </fieldset>
+    </div>
 </div>

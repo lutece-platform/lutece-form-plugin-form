@@ -1,6 +1,224 @@
+<div class="row">
+<div class="span4">
+<form action="jsp/admin/plugins/form/DoModifyForm.jsp" method="post">
+<fieldset>
+<legend>#i18n{form.modifyForm.title}</legend>
+<input type="hidden" name="id_form" value="${form.idForm}" />		
+<label for="title">#i18n{form.createForm.labelTitle} * :</label>
+<input type="text" name="title" value="${form.title}" size="80" maxlength="255" />
+<p class="help-text">#i18n{form.createForm.labelTitleComment}&nbsp;</p>
+<label for="description">#i18n{form.createForm.labelDescription} * :</label>
+<textarea class="span3" name="description" rows="2">${form.description}</textarea>
+<p class="help-text">#i18n{form.createForm.labelDescriptionComment}</p>
+<label for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
+<#if !form.category?exists>
+	<#assign category_default_value="-2" />
+<#else>
+	<#assign category_default_value="${form.category.idCategory!}" />
+</#if>
+<@combo name="id_category" items=category_list default_value=category_default_value />
+<p class="help-text">#i18n{form.createForm.labelCategoryComment}</p>
+<div class="form-actions">
+	<button type="submit" class="btn btn-primary" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
+	<button type="submit" class="btn btn-primary" name="apply"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyForm.buttonApply}</button>
+	<button type="submit" class="btn btn-primary" name="cancel" onclick="javascript:window.history.back();"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
+</div>
+</fieldset>		
+<fieldset>
+<legend id="advanced_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelAdvancedSettings}</legend>
+<div id="advanced_settings_content">
+<label for="workgroup">#i18n{form.createForm.labelWorkgroup} :</label>
+<@combo name="workgroup" items=user_workgroup_list default_value=form.workgroup />
+<p class="help-text">#i18n{form.createForm.labelWorkgroupComment}</p>
+<label for="id_mailing_list">#i18n{form.createForm.labelNotify} :</label>
+<@combo name="id_mailing_list" items=mailing_list default_value=form.idMailingList />
+<p class="help-text">#i18n{form.createForm.labelNotifyComment}</p>
+<#if is_active_captcha>
+<label for="active_captcha">#i18n{form.createForm.labelActiveCaptcha} :</label>
+<input type="checkbox" name="active_captcha" value="1" <#if form?exists && form.activeCaptcha> checked="checked"</#if> />
+<p class="help-text">#i18n{form.createForm.labelActiveCaptchaComment}</p>
+</#if>
+<label for="id_theme_list">#i18n{form.createForm.labelThemeXpage} :</label>
+<@combo name="id_theme_list" items=theme_list default_value=form.codeTheme />
+<label class="checkbox" for="limit_number_response">#i18n{form.createForm.labelLimitNumberResponse} :
+<input type="checkbox" name="limit_number_response" value="1" <#if form?exists && form.limitNumberResponse>checked="checked"</#if> />
+</label>
+<p class="help-text">#i18n{form.createForm.labelLimitNumberResponseComment}</p>
+<label class="checkbox" for="active_store_adresse">#i18n{form.createForm.labelStoreAdresse} :
+	<input type="checkbox" name="active_store_adresse" value="1" <#if form?exists && form.activeStoreAdresse>checked="checked"</#if> />
+</label>
+<p class="help-text">#i18n{form.createForm.labelStoreAdresseComment}</p>
+<#if is_active_mylutece_authentification>
+<label for="active_mylutece_authentification">#i18n{form.createForm.labelActiveMyLuteceAuthentification} :</label>
+<input type="checkbox" name="active_mylutece_authentification" value="1" <#if form?exists && form.activeMyLuteceAuthentification>checked="checked"</#if> />
+<p class="help-text">#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}</p>
+</#if>
+<label class="checkbox" for="active_requirement">#i18n{form.createForm.labelActiveRequirement} :
+	<input type="checkbox" name="active_requirement" value="1" <#if form?exists && form.activeRequirement>checked="checked"</#if> />
+</label>
+<p class="help-text">#i18n{form.createForm.labelActiveRequirementComment}</p>
+<label for="information_complementary_1">#i18n{form.createForm.labelInformationComplementary_1}:</label>
+<input type="text" name="information_complementary_1" value="${form.infoComplementary1?if_exists}" class="input-normal" maxlength="255" />
+<label for="information_complementary_2">#i18n{form.createForm.labelInformationComplementary_2} :</label>
+<input type="text" name="information_complementary_2" value="${form.infoComplementary2?if_exists}" class="input-normal" maxlength="255" />
+<label for="information_complementary_3">#i18n{form.createForm.labelInformationComplementary_3} :</label>
+<input type="text" name="information_complementary_3" value="${form.infoComplementary3?if_exists}" class="input-normal" maxlength="255" />
+<label for="information_complementary_4">#i18n{form.createForm.labelInformationComplementary_4} :</label>
+<input type="text" name="information_complementary_4" value="${form.infoComplementary4?if_exists}" class="input-normal" maxlength="255" />
+<label for="information_complementary_5">#i18n{form.createForm.labelInformationComplementary_5} :</label>
+<input type="text" name="information_complementary_5" value="${form.infoComplementary5?if_exists}" class="input-normal" maxlength="255" />
+<p class="help-text">#i18n{form.createForm.labelInformationComplementary_comment}</p>
+<label for="support_https">#i18n{form.createForm.supportHTTPS} :</label>
+<input type="checkbox" name="support_https" value="1" <#if form.supportHTTPS?has_content && form.supportHTTPS>checked="checked"</#if> />
+<p class="help-text">#i18n{form.createForm.labelSupportHTTPS_comment}</p>
+<!-- p class="label label-warning"> #i18n{form.message.warning.advanced_parameters_save}</p -->
+</div>
+</fieldset>	
+<fieldset>
+<legend id="publication_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelPublication}</legend>
+<div id="publication_settings_content">
+<label for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
+<input type="radio" name="publication_mode" id="publication_mode_user" value="0" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
+<#if !form.dateBeginDisponibility?? && !form.dateEndDisponibility??>checked="checked"</#if>	/> #i18n{form.createForm.labelPublicationModeUser}
+<input type="radio" name="publication_mode" id="publication_mode_auto" value="1" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
+<#if form.dateBeginDisponibility?? || form.dateEndDisponibility??>checked="checked"</#if> /> #i18n{form.createForm.labelPublicationModeAuto}
+<p class="help-text">#i18n{form.createForm.labelPublicationModeComment}</p>
+<label for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
+<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="${form.dateBeginDisponibility?if_exists}" size="10" onchange="javascript:doChangeDate(this.form.publication_mode);" />
+<input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="${form.dateBeginDisponibility?if_exists}" />
+<p class="help-text">#i18n{form.createForm.labelDateBeginDisponibilityComment}</p>
+<label for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
+<input type="text" name="date_end_disponibility" id="date_end_disponibility" value="${form.dateEndDisponibility?if_exists}" size="10" onchange="javascript:doChangeDate(this.form.publication_mode);" />
+<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="${form.dateEndDisponibility?if_exists}" />
+<p class="help-text">#i18n{form.createForm.labelDateEndDisponibilityComment}</p>
+</div>
+</fieldset>
+</form>
+</div>
+<div id="questions" class="span8">
+<a name="list" id="list"></a>
+<fieldset>
+<legend>#i18n{form.modifyForm.manageEnter.title}</legend>
+<form method="post" class="form-inline" action="jsp/admin/plugins/form/DoCreateEntry.jsp?id_type=${entry_type_group.idType}#list">
+<label for="title">#i18n{form.modifyForm.manageEnter.labelInsertGroup} :</label><input type="text" name="title" value="" />
+<button type="submit" class="btn btn-primary"><i class="icon-plus icon-white"></i>&nbsp;#i18n{form.modifyForm.manageEnter.buttonInsertGroup}</button>
+</form>
+<form method="post" class="form-inline" action="jsp/admin/plugins/form/CreateEntry.jsp">
+<label for="id_type">#i18n{form.modifyForm.manageEnter.labelInsertEntry} :</label>
+<@combo name="id_type" items=entry_type_list default_value=-1 />
+<button type="submit" class="btn btn-primary"><i class="icon-plus icon-white"></i>&nbsp;#i18n{form.modifyForm.manageEnter.buttonInsertEntry}"</button>
+</form>
+<@paginationAdmin paginator=paginator combo=1/>
+<table class="table">
+<tr> 
+	<th>#i18n{form.modifyForm.manageEnter.rowTitle}</th>
+	<th>#i18n{form.modifyForm.manageEnter.rowType}</th>
+	<th>#i18n{form.modifyForm.manageEnter.rowConditionalQuestion}</th>
+	<th>#i18n{form.modifyForm.manageEnter.rowActions}</th>
+</tr>
+<#list entry_list as entry>
+<tr>
+	<#if entry.entryType.group>
+	<td>
+		<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="bullet-link-blue" style="font-weight: bold;color: #364C5E;">
+		${entry.title}
+		</a>
+	</td>
+	<#elseif entry.parent?exists>
+					<td class="cell-indent">
+						<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="bullet-link">
+							<#if entry.entryType.comment>
+								${entry.comment}
+							<#else>
+								${entry.title}
+							</#if>
+						</a>
+					</td>
+				<#elseif entry.entryType.myLuteceUser>
+					<td>
+						<a class="bullet-link">
+							${entry.title}
+						</a>
+					</td>
+				<#else>
+					<td>
+						<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="bullet-link">
+							<#if entry.entryType.comment>
+								${entry.comment}
+							<#else>
+								${entry.title}
+							</#if>
+						</a>
+					</td>
+				</#if>
+				
+				<td>
+					<#if !entry.entryType.group>
+						${entry.entryType.title}
+					</#if>
+				</td>
+				<td>
+					<#if entry.numberConditionalQuestion!=0>
+						${entry.numberConditionalQuestion}
+					</#if>
+				</td>
+				<td>
+					<#if !entry.firstInTheList>
+						<a href="jsp/admin/plugins/form/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}#list">
+							<img src="images/admin/skin/plugins/form/actions/up.png" alt="#i18n{form.modifyForm.manageEnter.titleMoveUp}" title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" />
+						</a>
+					</#if>
+					<#if !entry.lastInTheList>
+						<a href="jsp/admin/plugins/form/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}#list">
+							<img src="images/admin/skin/plugins/form/actions/down.png" alt="#i18n{form.modifyForm.manageEnter.titleMoveDown}" title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" />
+						</a>
+					</#if>
+					<#if entry.parent?exists>
+						<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list">
+							<img src="images/admin/skin/plugins/form/actions/exit.png" alt="#i18n{form.modifyForm.manageEnter.titleGoOut} " title="#i18n{form.modifyForm.manageEnter.titleGoOut}" />
+						</a>
+					<#elseif !entry.entryType.group && !entry.entryType.myLuteceUser>
+						<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list">
+							<img src="images/admin/skin/plugins/form/actions/move.png" alt="#i18n{form.modifyForm.manageEnter.titleMove}" title="#i18n{form.modifyForm.manageEnter.titleMove}" />
+						</a>
+					</#if>
+					<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
+						<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list">
+							<img src="images/admin/skin/plugins/form/actions/editcopy.png" alt="#i18n{form.modifyForm.manageEnter.titleCopy}" title="#i18n{form.modifyForm.manageEnter.titleCopy}" />
+						</a>
+					</#if>
+					<#if !entry.entryType.myLuteceUser>
+						<a href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#list">
+							<img src="images/admin/skin/plugins/form/actions/delete.png" alt="#i18n{form.modifyForm.manageEnter.titleDelete}" title="#i18n{form.modifyForm.manageEnter.titleDelete}" />
+						</a>
+					</#if>
+				</td>
+			</tr>
+		</#list>
+	</table>
+	<@paginationAdmin paginator=paginator/>
+</div>
+</div>
 <#include "/admin/util/editor/editor.html" />
 <#include "/admin/util/calendar/calendar.html" />
 <#include "/admin/plugins/form/commons.html" />
+
+<script>
+$(document).ready( function () {
+	$("#advanced_settings").next().toggle();
+	doToggleId( "#advanced_settings" );
+	$("#publication_settings").next().toggle();
+	doToggleId( "#publication_settings" );
+});
+
+function doToggleId( idParent ){
+	$( idParent ).click( function(){ 
+		$(this).next().toggle();
+		$(this).nextSibling().toggleClass('icon-chevron-up');
+	});
+}
+
+</script>
 
 <script type="text/javascript">
 	
@@ -40,529 +258,8 @@
 			radio[1].checked=false;
 		}
 	}
-	
-	window.onload = function() 
-	{
-		doDisplayAdvancedSettings( false );
-	}
-	
 </script>
-
-<div class="btn-group pull-right">	
-	  	<form class="form-horizontal" id="button_advanced_settings" method="post" action="javascript:doDisplayAdvancedSettings(true, 'questions')" style="visibility:hidden;display:none;">
-	<fieldset>
-			<button class="btn btn-primary pull-right" type="submit" >
-	<i class="icon-plus icon-white" ></i>
-<span class="hidden-phone" >#i18n{form.manageForm.button_manage_advanced_parameters}</span>
-</button>
-	
-	  	</fieldset>
-</form>	
-	  	<form class="form-horizontal" id="button_publication_settings" method="post" action="javascript:doDisplayPublicationSettings(true, 'questions')" style="visibility:hidden;display:none;">
-	<fieldset>
-			<button class="btn btn-primary pull-right" type="submit" >
-	<i class="icon-plus icon-white" ></i>
-<span class="hidden-phone" >#i18n{form.manageForm.button_manage_publication_parameters}</span>
-</button>
-	
-	  	</fieldset>
-</form>	
-	  	<form class="form-horizontal" id="button_back" method="post" action="javascript:doDisplayAdvancedSettings(false, 'questions')" style="visibility:hidden;display:none;">
-	<fieldset>
-			<button class="btn btn-primary pull-right" type="submit" >
-	<i class="icon-plus icon-white" ></i>
-<span class="hidden-phone" >#i18n{form.manageForm.button_back}</span>
-</button>
-	
-	  	</fieldset>
-</form>	
-</div>
-
-<form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyForm.jsp" method="post">
-	<fieldset>
-	<div id="settings" class="row">
-		<legend>#i18n{form.modifyForm.title}</legend>
-		<input type="hidden" name="id_form" value="${form.idForm}" />		
-		
-		
-			<div class="control-group">
-		<label class="control-label" for="title">#i18n{form.createForm.labelTitle} * :</label>
-			<div class="controls">
-	<input type="text" name="title" value="${form.title}" size="80" maxlength="255" />
-		</div>
-	</div>
-			<br />
-			<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-			#i18n{form.createForm.labelTitleComment}
-		
-		
-			<div class="control-group">
-		<label class="control-label" for="description">#i18n{form.createForm.labelDescription} * :</label>
-			<textarea class="-lutece-input -lutece-border-radius-mini" name="description" cols="80" rows="2">${form.description}</textarea>
-			<br />
-			<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-			#i18n{form.createForm.labelDescriptionComment}
-		
-		
-			<div class="control-group">
-		<label class="control-label" for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
-			<#if !form.category?exists>
-				<#assign category_default_value="-2" />
-			<#else>
-				<#assign category_default_value="${form.category.idCategory!}" />
-			</#if>
-			<div class="controls">
-	<@combo name="id_category" items=category_list default_value=category_default_value />
-		</div>
-	</div>
-			<br />
-			<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-			#i18n{form.createForm.labelCategoryComment}
-		
-		
-			<button class="btn btn-primary" type="submit" >#i18n{form.createForm.buttonSave}</button>
-	
-			<button class="btn btn-primary" type="submit" >#i18n{form.modifyForm.buttonApply}</button>
-	
-			<button class="btn btn-primary" type="submit" >#i18n{form.createForm.buttonCancel}</button>
-	
-		
-		<br/>
-	</div>		
-		
-	<div id="advanced_settings"  class="row">
-		<legend>			
-			#i18n{form.createForm.labelAdvancedSettings}
-		</legend>
-	
-		
-			<div class="control-group">
-		<label class="control-label" for="workgroup">#i18n{form.createForm.labelWorkgroup} :</label>
-			<div class="controls">
-	<@combo name="workgroup" items=user_workgroup_list default_value=form.workgroup />
-		</div>
-	</div>
-			<br />
-			<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-			#i18n{form.createForm.labelWorkgroupComment}
-		
-		
-			<div class="control-group">
-		<label class="control-label" for="id_mailing_list">#i18n{form.createForm.labelNotify} :</label>
-			<div class="controls">
-	<@combo name="id_mailing_list" items=mailing_list default_value=form.idMailingList />
-		</div>
-	</div>
-			<br />
-			<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-			#i18n{form.createForm.labelNotifyComment}
-		
-		<#if is_active_captcha>
-			
-				<div class="control-group">
-		<label class="control-label" for="active_captcha">#i18n{form.createForm.labelActiveCaptcha} :</label>
-				<#if form?exists && form.activeCaptcha> 
-					<div class="controls">
-	<input type="checkbox" name="active_captcha" value="1" checked="checked" />
-		</div>
-	</div>
-				<#else>
-					<div class="controls">
-	<input type="checkbox" name="active_captcha" value="1" />
-		</div>
-	</div>
-				</#if>
-				<br />
-				<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-				#i18n{form.createForm.labelActiveCaptchaComment}
-			
-		</#if>
-		
-			<div class="control-group">
-		<label class="control-label" for="id_theme_list">#i18n{form.createForm.labelThemeXpage} :</label>
-			<div class="controls">
-	<@combo name="id_theme_list" items=theme_list default_value=form.codeTheme />
-		</div>
-	</div>
-		
-		
-			<div class="control-group">
-		<label class="control-label" for="limit_number_response">#i18n{form.createForm.labelLimitNumberResponse} :</label>
-			<#if form?exists && form.limitNumberResponse>
-				<div class="controls">
-	<input type="checkbox" name="limit_number_response" value="1" checked="checked" />
-		</div>
-	</div>
-			<#else>
-				<div class="controls">
-	<input type="checkbox" name="limit_number_response" value="1" />
-		</div>
-	</div>
-			</#if>	
-			<br />
-			<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-			#i18n{form.createForm.labelLimitNumberResponseComment}
-		
-		
-			<div class="control-group">
-		<label class="control-label" for="active_store_adresse">#i18n{form.createForm.labelStoreAdresse} :</label>
-			<#if form?exists && form.activeStoreAdresse>
-				<div class="controls">
-	<input type="checkbox" name="active_store_adresse" value="1" checked="checked" />
-		</div>
-	</div>
-			<#else>
-				<div class="controls">
-	<input type="checkbox" name="active_store_adresse" value="1" />
-		</div>
-	</div>
-			</#if>
-			<br />
-			<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-			#i18n{form.createForm.labelStoreAdresseComment}
-		
-		<#if is_active_mylutece_authentification>
-			
-				<div class="control-group">
-		<label class="control-label" for="active_mylutece_authentification">#i18n{form.createForm.labelActiveMyLuteceAuthentification} :</label>
-				<#if form?exists && form.activeMyLuteceAuthentification>
-					<div class="controls">
-	<input type="checkbox" name="active_mylutece_authentification" value="1" checked="checked" />
-		</div>
-	</div>
-				<#else>
-					<div class="controls">
-	<input type="checkbox" name="active_mylutece_authentification" value="1" />
-		</div>
-	</div>
-				</#if>
-				<br />
-				<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-				#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}
-			
-		</#if>
-		
-			<div class="control-group">
-		<label class="control-label" for="active_requirement">#i18n{form.createForm.labelActiveRequirement} :</label>
-			<#if form?exists && form.activeRequirement>
-				<div class="controls">
-	<input type="checkbox" name="active_requirement" value="1" checked="checked" />
-		</div>
-	</div>
-			<#else>
-				<div class="controls">
-	<input type="checkbox" name="active_requirement" value="1" />
-		</div>
-	</div>
-			</#if>
-			<br />
-			<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-			#i18n{form.createForm.labelActiveRequirementComment}
-			
-			
-		<div class="well">
-			
-				<div class="control-group">
-		<label class="control-label" for="information_complementary_1">#i18n{form.createForm.labelInformationComplementary_1} :</label>
-				<#if form.infoComplementary1??>
-					<div class="controls">
-	<input type="text" name="information_complementary_1" value="${form.infoComplementary1}" size="80" maxlength="255" />
-		</div>
-	</div>
-				<#else>
-					<div class="controls">
-	<input type="text" name="information_complementary_1" value="" size="80" maxlength="255" />
-		</div>
-	</div>
-				</#if>
-			
-			
-				<div class="control-group">
-		<label class="control-label" for="information_complementary_2">#i18n{form.createForm.labelInformationComplementary_2} :</label>
-				<#if form.infoComplementary2??>
-					<div class="controls">
-	<input type="text" name="information_complementary_2" value="${form.infoComplementary2}" size="80" maxlength="255" />
-		</div>
-	</div>
-				<#else>
-					<div class="controls">
-	<input type="text" name="information_complementary_2" value="" size="80" maxlength="255" />
-		</div>
-	</div>
-				</#if>
-			
-			
-				<div class="control-group">
-		<label class="control-label" for="information_complementary_3">#i18n{form.createForm.labelInformationComplementary_3} :</label>
-				<#if form.infoComplementary3??>
-					<div class="controls">
-	<input type="text" name="information_complementary_3" value="${form.infoComplementary3}" size="80" maxlength="255" />
-		</div>
-	</div>
-				<#else>
-					<div class="controls">
-	<input type="text" name="information_complementary_3" value="" size="80" maxlength="255" />
-		</div>
-	</div>
-				</#if>
-			
-			
-				<div class="control-group">
-		<label class="control-label" for="information_complementary_4">#i18n{form.createForm.labelInformationComplementary_4} :</label>
-				<#if form.infoComplementary4??>
-					<div class="controls">
-	<input type="text" name="information_complementary_4" value="${form.infoComplementary4}" size="80" maxlength="255" />
-		</div>
-	</div>
-				<#else>
-					<div class="controls">
-	<input type="text" name="information_complementary_4" value="" size="80" maxlength="255" />
-		</div>
-	</div>
-				</#if>
-			
-			
-				<div class="control-group">
-		<label class="control-label" for="information_complementary_5">#i18n{form.createForm.labelInformationComplementary_5} :</label>
-				<#if form.infoComplementary5??>
-					<div class="controls">
-	<input type="text" name="information_complementary_5" value="${form.infoComplementary5}" size="80" maxlength="255" />
-		</div>
-	</div>
-				<#else>
-					<div class="controls">
-	<input type="text" name="information_complementary_5" value="" size="80" maxlength="255" />
-		</div>
-	</div>
-				</#if>
-				<br />
-				<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-				#i18n{form.createForm.labelInformationComplementary_comment}
-			
-			
-				<div class="control-group">
-		<label class="control-label" for="support_https">#i18n{form.createForm.supportHTTPS} :</label>
-				<#if form.supportHTTPS?has_content && form.supportHTTPS>
-					<div class="controls">
-	<input type="checkbox" name="support_https" checked="checked" value="1" />
-		</div>
-	</div>
-				<#else>
-					<div class="controls">
-	<input type="checkbox" name="support_https" value="1" />
-		</div>
-	</div>
-				</#if>
-				<br />
-				<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-				#i18n{form.createForm.labelSupportHTTPS_comment}
-			
-		</div>
-		<div class="alert">
-			 #i18n{form.message.warning.advanced_parameters_save}
-		</div>
-	</div>	
-	
-		<div id="publication_settings" class="row">
-			<legend>			
-				#i18n{form.createForm.labelPublication}
-			</legend>
-			
-				<div class="control-group">
-		<label class="control-label" for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
-				<div class="controls">
-	<input type="radio" name="publication_mode" id="publication_mode_user" value="0" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
-					<#if !form.dateBeginDisponibility?? && !form.dateEndDisponibility??>
-		</div>
-	</div>checked="checked"</#if>
-				/> #i18n{form.createForm.labelPublicationModeUser}
-				<div class="controls">
-	<input type="radio" name="publication_mode" id="publication_mode_auto" value="1" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
-					<#if form.dateBeginDisponibility?? || form.dateEndDisponibility??>
-		</div>
-	</div>checked="checked"</#if>
-				/> #i18n{form.createForm.labelPublicationModeAuto}
-				<br />
-				<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-				#i18n{form.createForm.labelPublicationModeComment}
-			
-			
-				<div class="control-group">
-		<label class="control-label" for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
-				<div class="controls">
-	<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="${form.dateBeginDisponibility?if_exists}" size="10" onchange="javascript:doChangeDate(this.form.publication_mode);" />
-		</div>
-	</div>
-				<input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="${form.dateBeginDisponibility?if_exists}" />
-				<br />
-				<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-				#i18n{form.createForm.labelDateBeginDisponibilityComment}
-			
-			
-				<div class="control-group">
-		<label class="control-label" for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
-				<div class="controls">
-	<input type="text" name="date_end_disponibility" id="date_end_disponibility" value="${form.dateEndDisponibility?if_exists}" size="10" onchange="javascript:doChangeDate(this.form.publication_mode);" />
-		</div>
-	</div>
-				<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="${form.dateEndDisponibility?if_exists}" />
-				<br />
-				<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-				#i18n{form.createForm.labelDateEndDisponibilityComment}
-			
-		</div>
-</fieldset>
-</form>
-
-
-
-<div id="questions" class="row">
-	<a name="list" id="list"></a>
-	<legend>#i18n{form.modifyForm.manageEnter.title}</legend>
-	<div class="well">
-		
-			<div class="control-group">
-		<label class="control-label" for="title">#i18n{form.modifyForm.manageEnter.labelInsertGroup} :</label>
-			<form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoCreateEntry.jsp?id_type=${entry_type_group.idType}#list">
-	<fieldset>
-				<div class="controls">
-	<input type="text" name="title" value="" size="60" />
-		</div>
-	</div>
-				<button class="btn btn-primary" type="submit" >#i18n{form.modifyForm.manageEnter.buttonInsertGroup}</button>
-	
-			</fieldset>
-</form>
-		 
-		
-			<form class="form-horizontal" method="post" action="jsp/admin/plugins/form/CreateEntry.jsp">
-	<fieldset>
-				<div class="control-group">
-		<label class="control-label" for="id_type">#i18n{form.modifyForm.manageEnter.labelInsertEntry} :</label>
-				<div class="controls">
-	<@combo name="id_type" items=entry_type_list default_value=-1 />
-		</div>
-	</div>
-				<button class="btn btn-primary" type="submit" >#i18n{form.modifyForm.manageEnter.buttonInsertEntry}</button>
-	
-			</fieldset>
-</form>
-		
-		&nbsp;
-	</div>
-	
-	<br />
-	
-	<@paginationAdmin paginator=paginator combo=1/>
-	
-	<table width="100%">
-		<tr> 
-			<th width="50%">#i18n{form.modifyForm.manageEnter.rowTitle}</th>
-			<th width="15%">#i18n{form.modifyForm.manageEnter.rowType}</th>
-			<th width="15%">#i18n{form.modifyForm.manageEnter.rowConditionalQuestion}</th>
-			<th width="20%">#i18n{form.modifyForm.manageEnter.rowActions}</th>
-		</tr>
-		
-		<#list entry_list as entry>
-			<tr>
-				<#if entry.entryType.group>
-					<td>
-						<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}"  title="null" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
-					</td>
-				<#elseif entry.parent?exists>
-					<td class="cell-indent">
-						<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}"  title="null" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
-					</td>
-				<#elseif entry.entryType.myLuteceUser>
-					<td>
-						<a class="btn btn-primary btn-mini" href="null"  title="null" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
-					</td>
-				<#else>
-					<td>
-						<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}"  title="null" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
-					</td>
-				</#if>
-				
-				<td>
-					<#if !entry.entryType.group>
-						${entry.entryType.title}
-					</#if>
-				</td>
-				<td>
-					<#if entry.numberConditionalQuestion!=0>
-						${entry.numberConditionalQuestion}
-					</#if>
-				</td>
-				<td>
-					<#if !entry.firstInTheList>
-						<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}#list"  title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
-					</#if>
-					<#if !entry.lastInTheList>
-						<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}#list"  title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
-					</#if>
-					<#if entry.parent?exists>
-						<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list"  title="#i18n{form.modifyForm.manageEnter.titleGoOut}" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
-					<#elseif !entry.entryType.group && !entry.entryType.myLuteceUser>
-						<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list"  title="#i18n{form.modifyForm.manageEnter.titleMove}" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
-					</#if>
-					<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
-						<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list"  title="#i18n{form.modifyForm.manageEnter.titleCopy}" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
-					</#if>
-					<#if !entry.entryType.myLuteceUser>
-						<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#list"  title="#i18n{form.modifyForm.manageEnter.titleDelete}" >
-	<i class="icon-trash icon-white"></i>
-	</a>
-
-					</#if>
-				</td>
-			</tr>
-		</#list>
-	</table>
-	<@paginationAdmin paginator=paginator/>
-</div>
-
 <@initEditor />
-
+<script src="js/jquery/plugins/ui/datepicker/ui.datepicker.js"></script>
+<script src="js/jquery/plugins/ui/datepicker/ui.datepicker-fr.js"></script>
 <@getDatePickerRange idFieldFrom="date_begin_disponibility" idFieldTo="date_end_disponibility" language=locale />

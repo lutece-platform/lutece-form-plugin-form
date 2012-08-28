@@ -1,33 +1,29 @@
 <div class="row">
-  	<legend> #i18n{form.manageOutputProcessor.title}</legend>
-	<#list processor_list as processor>
-		<div class="well">
-			<form class="form-horizontal" action="jsp/admin/plugins/form/DoManageOutputProcessor.jsp" method="post" >
-	<fieldset>
-				<input name="id_form" value="${form.idForm}" type="hidden" />
-				
-					<div class="control-group">
-		<label class="control-label" for="use_output_processor"> #i18n{form.manageOutputProcessor.useOutputProcessor} * :</label>
-					<#if processor.is_selected>
-						<div class="controls">
-	<input type="checkbox" name="is_selected" checked="checked" />
-		</div>
-	</div>
-					<#else>
-						<div class="controls">
-	<input type="checkbox" name="is_selected" />
-		</div>
-	</div>
-					</#if>
-				
-				<input type="hidden" name="processor_key" value= "${processor.processor_key}"/>
-				<div class="row">
-					${processor.processor_configuration}
-				</div>
-				<button class="btn btn-primary" type="submit" >#i18n{form.createForm.buttonSave}</button>
-			
-		    </fieldset>
-</form>
-		 </div>
-	</#list>
+    <div class="span12">
+        <fieldset>
+            <legend> #i18n{form.manageOutputProcessor.title}</legend>
+            <#list processor_list as processor>
+            <div class="well">
+            <form class="form-horizontal" action="jsp/admin/plugins/form/DoManageOutputProcessor.jsp" method="post" >
+            <input name="id_form" value="${form.idForm}" type="hidden" />
+            <div class="control-group">
+              <label class="control-label" for="use_output_processor"> #i18n{form.manageOutputProcessor.useOutputProcessor} * :</label>
+               <div class="controls">
+            <label class="checkbox" for="use_output_processor">#i18n{form.manageOutputProcessor.useOutputProcessor}
+                   <input type="checkbox" name="is_selected" <#if processor.is_selected>checked="checked"</#if> />
+               </label>   
+              </div>
+               </div>
+             <input type="hidden" name="processor_key" value= "${processor.processor_key}"/>
+            <div class="span12">
+                ${processor.processor_configuration}
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
+            </div>		
+            </form>
+            </div>
+            </#list>
+        </fieldset>
+    </div>
 </div>

@@ -1,27 +1,18 @@
 <script type="text/javascript" src="js/plugins/form/form.js"></script>
 <div class="row">
-  <legend> #i18n{form.testForm.title}</legend>
-	 <div class="well">
-	   ${str_form}
-	 </div>
-		        
-	 <form class="form-horizontal" action="jsp/admin/plugins/form/DoExportResponseTestForm.jsp" method="post" name="" id=""  >
-	<fieldset>
- 			 <input name="id_form" value="${form.idForm}" type="hidden" />
- 			 <div class="control-group">
-		<label class="control-label" for="">#i18n{form.testForm.labelExportResponse} : </label>	
- 			 <div class="controls">
-	<@combo name="id_export_format"  items=export_format_list default_value=-1 />
-		</div>
-	</div>
-			<button class="btn btn-primary" type="submit" >#i18n{form.testForm.buttonExportResponse}</button>
-	
- 	 </fieldset>
-</form>
- 	
-		   
- 	
-  		
-   		 
+  <div class="span12">
+    <fieldset>
+    <legend> #i18n{form.testForm.title}</legend>
+    <div class="well">
+        ${str_form}
+    </div>
+    <form class="form-inline" action="jsp/admin/plugins/form/DoExportResponseTestForm.jsp" method="post" name="" id=""  >
+    <input name="id_form" value="${form.idForm}" type="hidden" />
+    <label for="">#i18n{form.testForm.labelExportResponse} : </label>	
+    <@combo name="id_export_format"  items=export_format_list default_value=-1 />
+    <button class="btn btn-primary" type="submit" ><i class="icon-download icon-white"></i>&nbsp;#i18n{form.testForm.buttonExportResponse}</button>
+    </form>
+    </fieldset>
+    </div>	 
 </div>	 
 	 

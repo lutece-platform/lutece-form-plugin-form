@@ -1,25 +1,20 @@
 <div class="row">
-  <legend>#i18n{form.moveEntry.title}:'${entry.form.title}''</legend>
-  <form class="form-horizontal" action="jsp/admin/plugins/form/DoMoveEntry.jsp#list" method="post">
-	<fieldset>
-    <div class="well">
-		
-				#i18n{form.moveEntry.labelSelectEntry} :
-				     
-     
-	 
-			<#list entry_list as entry>
-					<div class="controls">
-	<input class="radio" name="id_entry" value="${entry.idEntry}" type="radio">
-		</div>
-	</div>
-					${entry.title}
-				<br>
-			</#list>
-       
-     </div>
-		<button class="btn btn-primary" type="submit" >#i18n{form.moveEntry.buttonSave}</button>
-	
-     <button class="btn btn-primary" onclick="javascript:history.go(-1)" >#i18n{form.moveEntry.buttonCancel}</button>
-	
- </div>
+    <div class="span12">
+    <fieldset>
+    <legend>#i18n{form.moveEntry.title}:'${entry.form.title}'</legend>
+    <form class="form-horizontal" action="jsp/admin/plugins/form/DoMoveEntry.jsp#list" method="post">
+    <h3>#i18n{form.moveEntry.labelSelectEntry} :</h3>
+    <#list entry_list as entry>
+    <div class="controls">
+        <label>${entry.title}</label>
+            <input class="radio" name="id_entry" value="${entry.idEntry}" type="radio">
+    </div>
+    </#list>
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.moveEntry.buttonSave}</button>
+        <button class="btn btn-primary" onclick="javascript:window.history.back();" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.moveEntry.buttonCancel}</button>
+     </div>  
+     </form>    
+    </fieldset>    
+    </div>	
+</div>
