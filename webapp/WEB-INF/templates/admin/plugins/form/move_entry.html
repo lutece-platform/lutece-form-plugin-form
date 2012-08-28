@@ -3,16 +3,17 @@
     <fieldset>
     <legend>#i18n{form.moveEntry.title}:'${entry.form.title}'</legend>
     <form class="form-horizontal" action="jsp/admin/plugins/form/DoMoveEntry.jsp#list" method="post">
-    <h3>#i18n{form.moveEntry.labelSelectEntry} :</h3>
+    <div class="control-group">
+	<label class="control-group">#i18n{form.moveEntry.labelSelectEntry} :</label>
     <#list entry_list as entry>
-    <div class="controls">
-        <label>${entry.title}</label>
-            <input class="radio" name="id_entry" value="${entry.idEntry}" type="radio">
-    </div>
+		<div class="controls">
+			<label><input class="radio" name="id_entry" value="${entry.idEntry}" type="radio"> ${entry.title} </label>
+		</div>
     </#list>
+	</div>
     <div class="form-actions">
         <button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.moveEntry.buttonSave}</button>
-        <button class="btn btn-primary" onclick="javascript:window.history.back();" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.moveEntry.buttonCancel}</button>
+        <button class="btn btn-primary" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.moveEntry.buttonCancel}</button>
      </div>  
      </form>    
     </fieldset>    

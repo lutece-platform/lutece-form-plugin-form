@@ -98,7 +98,7 @@
 <div id="questions" class="span8">
 <a name="list" id="list"></a>
 <fieldset>
-<legend>#i18n{form.modifyForm.manageEnter.title}</legend>
+<legend>#i18n{form.modifyForm.manageEnter.title} <a href="jsp/admin/plugins/form/TestForm.jsp?id_form=${form.idForm}&plugin_name=form" title="Test" class="btn pull-right"><i class="fam-cog"></i></a></legend>
 <form method="post" class="form-inline" action="jsp/admin/plugins/form/DoCreateEntry.jsp?id_type=${entry_type_group.idType}#list">
 <label for="title">#i18n{form.modifyForm.manageEnter.labelInsertGroup} :</label><input type="text" name="title" value="" />
 <button type="submit" class="btn btn-primary"><i class="icon-plus icon-white"></i>&nbsp;#i18n{form.modifyForm.manageEnter.buttonInsertGroup}</button>
@@ -113,87 +113,75 @@
 <tr> 
 	<th>#i18n{form.modifyForm.manageEnter.rowTitle}</th>
 	<th>#i18n{form.modifyForm.manageEnter.rowType}</th>
-	<th>#i18n{form.modifyForm.manageEnter.rowConditionalQuestion}</th>
+	<th><i class="icon-question-sign" title="#i18n{form.modifyForm.manageEnter.rowConditionalQuestion}"></i></th>
 	<th>#i18n{form.modifyForm.manageEnter.rowActions}</th>
 </tr>
 <#list entry_list as entry>
 <tr>
-	<#if entry.entryType.group>
 	<td>
-		<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="bullet-link-blue" style="font-weight: bold;color: #364C5E;">
-		${entry.title}
+		<#if entry.entryType.group>
+			${entry.title}
+		<#elseif entry.parent?exists>
+			<#if entry.entryType.comment>
+				<blockquote>${entry.comment}</blockquote>
+			<#else>
+				<blockquote>${entry.title}</blockquote>
+			</#if>
+		<#elseif entry.entryType.myLuteceUser>
+				${entry.title}
+		<#else>
+			<#if entry.entryType.comment>
+				${entry.comment}
+			<#else>
+				${entry.title}
+			</#if>
+		</#if>
+		</td>
+		<td>
+			<#if !entry.entryType.group>
+				${entry.entryType.title}
+			</#if>
+		</td>
+		<td>
+			<#if entry.numberConditionalQuestion!=0>
+				${entry.numberConditionalQuestion}
+			</#if>
+		</td>
+		<td>
+		<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-mini">
+			<i class="fam-application-form"></i>
 		</a>
-	</td>
-	<#elseif entry.parent?exists>
-					<td class="cell-indent">
-						<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="bullet-link">
-							<#if entry.entryType.comment>
-								${entry.comment}
-							<#else>
-								${entry.title}
-							</#if>
-						</a>
-					</td>
-				<#elseif entry.entryType.myLuteceUser>
-					<td>
-						<a class="bullet-link">
-							${entry.title}
-						</a>
-					</td>
-				<#else>
-					<td>
-						<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="bullet-link">
-							<#if entry.entryType.comment>
-								${entry.comment}
-							<#else>
-								${entry.title}
-							</#if>
-						</a>
-					</td>
-				</#if>
-				
-				<td>
-					<#if !entry.entryType.group>
-						${entry.entryType.title}
-					</#if>
-				</td>
-				<td>
-					<#if entry.numberConditionalQuestion!=0>
-						${entry.numberConditionalQuestion}
-					</#if>
-				</td>
-				<td>
-					<#if !entry.firstInTheList>
-						<a href="jsp/admin/plugins/form/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}#list">
-							<img src="images/admin/skin/plugins/form/actions/up.png" alt="#i18n{form.modifyForm.manageEnter.titleMoveUp}" title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" />
-						</a>
-					</#if>
-					<#if !entry.lastInTheList>
-						<a href="jsp/admin/plugins/form/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}#list">
-							<img src="images/admin/skin/plugins/form/actions/down.png" alt="#i18n{form.modifyForm.manageEnter.titleMoveDown}" title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" />
-						</a>
-					</#if>
-					<#if entry.parent?exists>
-						<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list">
-							<img src="images/admin/skin/plugins/form/actions/exit.png" alt="#i18n{form.modifyForm.manageEnter.titleGoOut} " title="#i18n{form.modifyForm.manageEnter.titleGoOut}" />
-						</a>
-					<#elseif !entry.entryType.group && !entry.entryType.myLuteceUser>
-						<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list">
-							<img src="images/admin/skin/plugins/form/actions/move.png" alt="#i18n{form.modifyForm.manageEnter.titleMove}" title="#i18n{form.modifyForm.manageEnter.titleMove}" />
-						</a>
-					</#if>
-					<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
-						<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list">
-							<img src="images/admin/skin/plugins/form/actions/editcopy.png" alt="#i18n{form.modifyForm.manageEnter.titleCopy}" title="#i18n{form.modifyForm.manageEnter.titleCopy}" />
-						</a>
-					</#if>
-					<#if !entry.entryType.myLuteceUser>
-						<a href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#list">
-							<img src="images/admin/skin/plugins/form/actions/delete.png" alt="#i18n{form.modifyForm.manageEnter.titleDelete}" title="#i18n{form.modifyForm.manageEnter.titleDelete}" />
-						</a>
-					</#if>
-				</td>
-			</tr>
+		<#if !entry.firstInTheList>
+		<a href="jsp/admin/plugins/form/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" class="btn btn-mini">
+			<i class="icon-chevron-up"></i>
+		</a>
+		</#if>
+		<#if !entry.lastInTheList>
+			<a href="jsp/admin/plugins/form/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" class="btn btn-mini">
+				<i class="icon-chevron-down"></i>
+			</a>
+		</#if>
+		<#if entry.parent?exists>
+			<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleGoOut}" class="btn btn-mini">
+				<i class=" icon-share-alt"></i>
+			</a>
+		<#elseif !entry.entryType.group && !entry.entryType.myLuteceUser>
+			<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMove}" class="btn btn-mini">
+				<i class=" icon-move"></i>
+			</a>
+		</#if>
+		<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
+			<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleCopy}" class="btn btn-mini">
+				<i class="fam-page-white-picture"></i>
+			</a>
+		</#if>
+		<#if !entry.entryType.myLuteceUser>
+			<a href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleDelete}" class="btn btn-danger btn-mini">
+				<i class="icon-trash icon-white"></i>
+			</a>
+		</#if>
+		</td>
+		</tr>
 		</#list>
 	</table>
 	<@paginationAdmin paginator=paginator/>
@@ -214,7 +202,6 @@ $(document).ready( function () {
 function doToggleId( idParent ){
 	$( idParent ).click( function(){ 
 		$(this).next().toggle();
-		$(this).nextSibling().toggleClass('icon-chevron-up');
 	});
 }
 
