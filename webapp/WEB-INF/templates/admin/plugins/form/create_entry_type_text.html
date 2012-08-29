@@ -1,127 +1,99 @@
  <#include "/admin/plugins/form/commons.html" />
- <#include "/admin/util/editor/editor.html" />
 <div class="row">
- <legend>#i18n{form.createEntry.titleQuestion} : '${entry.form.title}'</legend>
- <form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
+	<div class="span12">
 	<fieldset>
-   <input name="id_type" value="${entry.entryType.idType}" type="hidden" />
-   <#if entry.fieldDepend?exists>
+	<legend>#i18n{form.createEntry.titleQuestion} : '${entry.form.title}'</legend>
+	<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
+	<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
+	<#if entry.fieldDepend?exists>
    		<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
-   </#if>
-	
-    	<div class="control-group">
-		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
+	</#if>
+	<div class="control-group">
+	<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
     	<div class="controls">
-	<input type="text" name="title" id="title" size="80" value=""  maxlength="255" />
+			<input type="text" name="title" id="title"class="input-large"value=""  maxlength="255" />
+			#i18n{form.createEntry.labelTitleComment}
 		</div>
 	</div>
-    	<br/>
-		<div class="control-group">
-		<label class="control-label" > &nbsp;</label>#i18n{form.createEntry.labelTitleComment}
- 	
- 	
-       <div class="control-group">
+    <div class="control-group">
 		<label class="control-label" >  #i18n{form.createEntry.labelHelpMessage} : </label>
-      
-     	<textarea class="-lutece-input -lutece-border-radius-mini" name="help_message" id="help_message"  rows="20" cols="90"></textarea>
-    
-	 <br/>
-	 <div class="control-group">
-		<label class="control-label" > &nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
-	
-    
-     <div class="control-group">
+		<div class="controls"><textarea  name="help_message" id="help_message"  rows="5" class="span4"></textarea></div>
+		<span class="help-text">#i18n{form.createEntry.labelHelpMessageComment}</span>
+    </div>
+	<div class="control-group">
 		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
-
-     <textarea class="-lutece-input -lutece-border-radius-mini" name="comment" cols="80" rows="2"></textarea>
-     
-    
-     <div class="control-group">
-		<label class="control-label" for="">#i18n{form.createEntry.labelType} : </label>
-             ${entry.entryType.title}
-	
-	 
-	    <div class="control-group">
-		<label class="control-label" for="value">#i18n{form.createEntry.labelValueDefault} : </label>
+		<div class="controls"><textarea  name="comment" class="span4" rows="2"></textarea></div>
+    </div>
+    <div class="control-group">
+	<label class="control-label" for="">#i18n{form.createEntry.labelType} :  ${entry.entryType.title}</label>
 		<div class="controls">
-	<input type="text" name="value" id="value" size="80" />
+			<label for="value">#i18n{form.createEntry.labelValueDefault} : </label>
+			<input type="text" name="value" id="value" class="input-xlarge" />
 		</div>
 	</div>
-	
-  
- 	
-    	<div class="control-group">
-		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+	<div class="control-group">
+		<label class="control-label" for="">&nbsp;</label>
    		 <div class="controls">
-	<input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />
+			<label for="mandatory">#i18n{form.createEntry.labelMandatory} : 
+				<input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />
+			</label>
 		</div>
 	</div>
-   
-     
-   		 <div class="control-group">
+   <div class="control-group">
 		<label class="control-label" for="width">#i18n{form.createEntry.labelWidth} * : </label>
    		 <div class="controls">
-	<input type="text" name="width" id="width" size="5" value="${getName('width_text',list_param_default_values)}" />
+			<input type="text" name="width" id="width" value="${getName('width_text',list_param_default_values)}" />
 		</div>
 	</div>
-   
-    
-   		 <div class="control-group">
-		<label class="control-label" for="max_size_enter">#i18n{form.createEntry.labelMaxSizeEnter}  : </label>
+	<div class="control-group">
+	<label class="control-label" for="max_size_enter">#i18n{form.createEntry.labelMaxSizeEnter}  : </label>
    		 <div class="controls">
-	<input type="text" name="max_size_enter" id="max_size_enter" size="5" value="${getName('max_size_enter',list_param_default_values)}" />
+			<input type="text" name="max_size_enter" id="max_size_enter" value="${getName('max_size_enter',list_param_default_values)}" />
 		</div>
 	</div>
-   
-    
-   		 <div class="control-group">
-		<label class="control-label" for="confirm_field">#i18n{form.createEntry.labelConfirmField}  : </label>
+   <div class="control-group">
+		<label class="control-label" for="">&nbsp;</label>
    		 <div class="controls">
-	<input name="confirm_field" id="confirm_field" value="1" type="checkbox" onchange="javascript:changeVisilityConfirmFieldTitle();"/>
+			<label for="confirm_field">#i18n{form.createEntry.labelConfirmField}
+				<input name="confirm_field" id="confirm_field" value="1" type="checkbox" onchange="javascript:changeVisilityConfirmFieldTitle();"/>
+			</label>
 		</div>
 	</div>
-   
-    <p id="confirm_field_title_p">
-   		 <div class="control-group">
+	<div class="control-group">
 		<label class="control-label" for="confirm_field_title">#i18n{form.createEntry.labelConfirmFieldTitle} * : </label>
    		 <div class="controls">
-	<input type="text" name="confirm_field_title" id="confirm_field_title" size="80" value=""  maxlength="255" />
+			<input type="text" name="confirm_field_title" id="confirm_field_title" class="input-xlarge" value=""  maxlength="255" />
 		</div>
 	</div>
-   
-   
-   		 <div class="control-group">
-		<label class="control-label" for="unique_field">#i18n{form.createEntry.labelUniqueField}  : </label>
-   		 <div class="controls">
-	<input name="unique_field" id="unique_field" value="1" type="checkbox" />
+	<div class="control-group">
+	<label class="control-label" for="">&nbsp;</label>
+   		 <div class="controls">		
+			<label for="unique_field">#i18n{form.createEntry.labelUniqueField}
+				<input name="unique_field" id="unique_field" value="1" type="checkbox" />
+			</label>
 		</div>
 	</div>
-   
-   
-		<div class="control-group">
-		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+	<div class="control-group">
+	<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
 		<div class="controls">
-	<input type="text" name="css_class" value="" maxlength="255" size="80" />
+			<input type="text" name="css_class" value="" maxlength="255" class="input-xlarge" />
+		<span class="help-text">#i18n{form.createEntry.labelCSSClassComment}</span>
+	</div>
+	</div>
+		<div class="form-action">
+			<button class="btn btn-primary" name="save" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.buttonSave}</button>
+			<button class="btn btn-primary" name="apply" type="submit" ><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.createEntry.buttonApplyAndManageVerification}</button>
+			<button class="btn btn-primary" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createEntry.buttonCancel}</button>
 		</div>
 	</div>
-		<br />
-		<div class="control-group">
-		<label class="control-label" for="">&nbsp;</label>
-		#i18n{form.createEntry.labelCSSClassComment}
-	
-	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.buttonSave}</button>
-	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.buttonApplyAndManageVerification}</button>
-	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.buttonCancel}</button>
-	
-   
-  </fieldset>
-</form>
-  <script type="text/javascript">
-  	changeVisilityConfirmFieldTitle();
-	function changeVisilityConfirmFieldTitle()
+	</form>
+	</fieldset>
+	</div>
+</div>
+<#include "/admin/util/editor/editor.html" />
+ <script type="text/javascript">
+changeVisilityConfirmFieldTitle();
+function changeVisilityConfirmFieldTitle()
 	{
 		if(document.getElementById("confirm_field").checked)
 		{
@@ -133,7 +105,7 @@
 		}
 	} 
   </script>
- </div>
+ 
  <@initEditor />
 
  

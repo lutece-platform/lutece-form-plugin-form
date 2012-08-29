@@ -1,8 +1,6 @@
-﻿<br />
-<fieldset> 
-	<legend> #i18n{form.recapFormSubmit.labelLegendRecap} </legend>
-	<div>
-		<table>
+﻿<fieldset> 
+<legend> #i18n{form.recapFormSubmit.labelLegendRecap} </legend>
+<table class="table">
 		<#list formSubmit.listResponse as response>
 			<#if entry_type_session.idType != response.entry.entryType.idType>
 				<#if !entrySave?exists || entrySave.idEntry != response.entry.idEntry>
@@ -27,7 +25,5 @@
 				</#if>
 			</#if>
 		</#list>
-		</table>
-	</div>
+</table>
 </fieldset>
-<br />

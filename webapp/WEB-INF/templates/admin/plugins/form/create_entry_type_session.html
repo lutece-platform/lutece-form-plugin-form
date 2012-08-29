@@ -1,56 +1,39 @@
 <#include "/admin/plugins/form/commons.html" />
 <div class="row">
-	<legend>#i18n{form.createEntry.titleQuestion} : '${entry.form.title}'</legend>
-	<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post">
+	<div class="span12">
 	<fieldset>
+	<legend>#i18n{form.createEntry.titleQuestion} : '${entry.form.title}'</legend>
+		<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post">
 		<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
 		<#if entry.fieldDepend?exists>
 			<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
 		</#if>
-		
-			<div class="control-group">
+		<div class="control-group">
 		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
 			<div class="controls">
-	<input type="text" name="title" id="title" size="80" value=""  maxlength="255" />
+				<input type="text" name="title" id="title"class="input-large"value=""  maxlength="255" />
+			</div>
 		</div>
-	</div>
-		
-		
-			<div class="control-group">
-		<label class="control-label" for="">#i18n{form.createEntry.labelType} : </label>
-			${entry.entryType.title}
-		
-		
-			<div class="control-group">
-		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+		<div class="control-group">
+		<label class="control-label" for="">#i18n{form.createEntry.labelType} : ${entry.entryType.title}</label>
 			<div class="controls">
-	<input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />
+				<label  for="mandatory">#i18n{form.createEntry.labelMandatory} <input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} /></label>		
+				<span class="help-text">#i18n{form.createEntry.labelMandatoryCommentForEntryTypeSession}</span>
+			</div>
 		</div>
-	</div>
-			<br />
-			<div class="control-group">
-		<label class="control-label" > &nbsp;</label>
-			#i18n{form.createEntry.labelMandatoryCommentForEntryTypeSession}
-		
-		
-			<div class="control-group">
+		<div class="control-group">
 		<label class="control-label" for="value">#i18n{form.createEntry.labelAttributeName} * : </label>
 			<div class="controls">
-	<input type="text" name="value" id="value" size="80" maxlength="255" value ="" />
+				<input type="text" name="value" id="value" class="input-large" maxlength="255" value ="" />
+				<span class="help-text">#i18n{form.createEntry.labelAttributeNameComment}</span>
+			</div>
 		</div>
-	</div>
-			<br />
-			<div class="control-group">
-		<label class="control-label" > &nbsp;</label>#i18n{form.createEntry.labelAttributeNameComment}
-		
-		
-			<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.buttonSave}</button>
-	
-			<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.buttonApplyAndManageVerification}</button>
-	
-			<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.buttonCancel}</button>
-	
-		
+		<div class="form-actions">
+			<button class="btn btn-primary" name="save" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.buttonSave}</button>
+			<button class="btn btn-primary" name="apply" type="submit" ><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.createEntry.buttonApplyAndManageVerification}</button>
+			<button class="btn btn-primary" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createEntry.buttonCancel}</button>
+		</div>
+		</form>
 	</fieldset>
-</form>
+	</div>
  </div>

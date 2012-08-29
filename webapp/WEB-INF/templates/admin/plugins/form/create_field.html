@@ -1,57 +1,46 @@
 <div class="row">
- <legend>#i18n{form.createField.title} : '${field.parentEntry.title}'</legend>
- <form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateField.jsp#list" method="post" name="" id=""  >
+	<div class="span12">
 	<fieldset>
-   
-    	<div class="control-group">
+	<legend>#i18n{form.createField.title} : '${field.parentEntry.title}'</legend>
+	<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateField.jsp#list" method="post" name="" id=""  >
+	<div class="control-group">
 		<label class="control-label" for="title">#i18n{form.createField.labelTitle} * :</label>
     	<div class="controls">
-	<input type="text" name="title" id="title" size="80" value=""  maxlength="255" />
+			<input type="text" name="title" id="title" class="input-xlarge" value=""  maxlength="255" />
 		</div>
 	</div>
-    
-    
-    	<div class="control-group">
+    <div class="control-group">
 		<label class="control-label" for="value">#i18n{form.createField.labelValue} * :</label>
     	<div class="controls">
-	<input type="text" name="value" id="value" size="80" value="" />
+			<input type="text" name="value" id="value" class="input-xlarge" value="" />
 		</div>
 	</div>
-    
-  	
-    	<div class="control-group">
-		<label class="control-label" for="defaultValue">#i18n{form.createField.labelDefaultValue}</label>
+    <div class="control-group">
+		<label class="control-label" for="">&nbsp;</label>
     	<div class="controls">
-	<input name="defaultValue" value="1" type="checkbox" >
+			<label class="checkbox"  for="defaultValue">#i18n{form.createField.labelDefaultValue}
+				<input name="defaultValue" value="1" type="checkbox" >
+			</label>
 		</div>
 	</div>
-  	
   	<#if option_no_display_title>
-  	
-    	<div class="control-group">
-		<label class="control-label" for="no_display_title">#i18n{form.createField.labelNoDisplayTitle}</label>
-    	<#if field.noDisplayTitle>
-    		<div class="controls">
-	<input name="no_display_title" value="1" type="checkbox"  checked="checked">
+	<div class="control-group">
+	<label class="control-label" for="">&nbsp;</label>
+		<div class="controls">
+			<label for="no_display_title">#i18n{form.createField.labelNoDisplayTitle}
+				<input name="no_display_title" value="1" type="checkbox"  <#if field.noDisplayTitle>checked="checked"</#if>>
+			</label>
 		</div>
 	</div>
-  		<#else>
-  			<div class="controls">
-	<input name="no_display_title" value="1" type="checkbox">
-		</div>
-	</div>
-  		</#if>	
-  	
   	</#if>
-  	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.createForm.buttonSave}</button>
-	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.createForm.buttonCancel}</button>
-	
-   
-  </fieldset>
-</form>
- </div>
+  	<div class="form-actions">
+  		<button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
+  		<button class="btn btn-primary" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
+	</div>
+	</form>
+	</fieldset>
+	</div>
+</div>
 
 
  

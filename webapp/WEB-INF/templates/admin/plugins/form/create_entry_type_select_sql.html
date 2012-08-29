@@ -1,72 +1,51 @@
 <#include "/admin/plugins/form/commons.html" />
-<#include "/admin/util/editor/editor.html" />
 <div class="row">
-	<legend>#i18n{form.createEntry.titleQuestion} : '${entry.form.title}'</legend>
-	<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
-	<fieldset>
-   	<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
-   	<#if entry.fieldDepend?exists>
-   		<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
-   	</#if>
-	
-    	<div class="control-group">
-		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
-    	<div class="controls">
-	<input type="text" name="title" id="title" size="80" value=""  maxlength="255"/>
-		</div>
-	</div>
-    	<br/>
-		<div class="control-group">
-		<label class="control-label" > &nbsp;</label>#i18n{form.createEntry.labelTitleComment}
- 	
-  	
-       <div class="control-group">
-		<label class="control-label" >  #i18n{form.createEntry.labelHelpMessage} : </label>
-
-     	<textarea class="-lutece-input -lutece-border-radius-mini" name="help_message" id="help_message"  rows="20" cols="90"></textarea>
-
-	<br/>
-	<div class="control-group">
-		<label class="control-label" > &nbsp;</label> #i18n{form.createEntry.labelHelpSqlQuery}
-	
-    
-		<div class="control-group">
-		<label class="control-label" for="comment"> #i18n{form.createEntry.labelSqlQuery} * : </label>
-     	<textarea class="-lutece-input -lutece-border-radius-mini" name="comment" cols="80" rows="2"></textarea>
-	
-	
-		<div class="control-group">
-		<label class="control-label" for="">#i18n{form.createEntry.labelType} : </label>
-		${entry.entryType.title}
-	
-	
-    	<div class="control-group">
-		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
-		<div class="controls">
-	<input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />
-		</div>
-	</div>
-	
-	
-		<div class="control-group">
-		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-		<div class="controls">
-	<input type="text" name="css_class" value="" maxlength="255" size="80" />
-		</div>
-	</div>
-		<br />
-		<div class="control-group">
-		<label class="control-label" for="">&nbsp;</label>
-		#i18n{form.createEntry.labelCSSClassComment}
-	
-	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.buttonSave}</button>
-	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.buttonCancel}</button>
-	
-	
-</fieldset>
-</form>
+	<div class="span12">
+		<fieldset>
+		<legend>#i18n{form.createEntry.titleQuestion} :  '${entry.form.title}'</legend>
+		<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
+			<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
+			<#if entry.fieldDepend?exists>
+				<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
+			</#if>
+			<div class="control-group">
+				<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
+					<div class="controls">
+						<input type="text" name="title" id="title"class="input-large"value=""  maxlength="255"/>
+						<span class="help-text">#i18n{form.createEntry.labelTitleComment}</span>
+					</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" >  #i18n{form.createEntry.labelHelpMessage} : </label>
+				<div class="controls">
+				<textarea  name="help_message" id="help_message" rows="5" class="span4"></textarea>
+				<p class="help-text">#i18n{form.createEntry.labelHelpSqlQuery}</p>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="comment"> #i18n{form.createEntry.labelSqlQuery} * : </label>
+				<div class="controls"><textarea  name="comment" class="span4" rows="2"></textarea></div>
+			</div>
+			<div class="control-group">
+			<label class="control-label" for="">#i18n{form.createEntry.labelType} : ${entry.entryType.title}</label>
+				<div class="controls">
+					<label  for="mandatory">#i18n{form.createEntry.labelMandatory} <input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} /></label>
+				</div>
+			</div>
+			<div class="control-group">
+			<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+				<div class="controls">
+					<input type="text" name="css_class" value="" maxlength="255"class="input-large"/>
+					<span class="help-text">#i18n{form.createEntry.labelCSSClassComment}</span>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.buttonSave}</button>
+				<button class="btn btn-primary" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createEntry.buttonCancel}</button>
+			</div>
+		</form>
+	</fieldset>
  </div>
-
+ </div>
+<#include "/admin/util/editor/editor.html" />
  <@initEditor />

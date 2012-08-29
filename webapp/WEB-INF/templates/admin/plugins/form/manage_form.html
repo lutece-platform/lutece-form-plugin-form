@@ -2,7 +2,7 @@
     <div class="span12">
         <legend>#i18n{form.manageForm.title}
             <#if permission_manage_advanced_parameters>
-            <form class="form-inline pull-right" method="post" action="jsp/admin/plugins/form/ManageAdvancedParameters.jsp">
+            <form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/form/ManageAdvancedParameters.jsp">
                 <button class="btn btn-primary" type="submit" >
                     <i class="icon-cog icon-white" ></i>
                     <span class="hidden-phone" >#i18n{form.manageForm.button_manage_advanced_parameters}</span>
@@ -10,15 +10,13 @@
             </form>
             </#if>
             <#if permission_create_form>
-            <form class="form-inline pull-right" method="post" action="jsp/admin/plugins/form/CreateForm.jsp">
+            <form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/form/CreateForm.jsp">
                 <button class="btn btn-primary" type="submit" >
                     <i class="icon-plus icon-white" ></i>
                     <span class="hidden-phone" >#i18n{form.manageForm.buttonCreate}</span>
                 </button>
             </form>
             </#if>
-
-
         </legend>
         <div class="well well-small">
             <form class="form-search" action="" method="" name="" id="">

@@ -1,181 +1,119 @@
  <#include "/admin/util/editor/editor.html" />
 <div class="row">
+<div class="span12">
  <legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
  <form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
-	<fieldset>
-    <input name="id_entry" value="${entry.idEntry}" type="hidden" />
-	
-    	<div class="control-group">
-		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} *  : </label>
-    	<div class="controls">
-	<input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255" />
-		</div>
-	</div>
-    	<br/>
+		<fieldset>
+		<input name="id_entry" value="${entry.idEntry}" type="hidden" />
 		<div class="control-group">
-		<label class="control-label" > &nbsp;</label>#i18n{form.createEntry.labelTitleComment}
- 	
-   
-     <div class="control-group">
-		<label class="control-label" for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
-   
-     	<textarea class="-lutece-input -lutece-border-radius-mini" name="help_message" id="help_message" rows="20" cols="90">${entry.helpMessage}</textarea>
-	
-	 <br/>
-	 <div class="control-group">
-		<label class="control-label" > &nbsp;</label> #i18n{form.createEntry.labelHelpMessageComment}
-	
-    
-     <div class="control-group">
-		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
-
-     <textarea class="-lutece-input -lutece-border-radius-mini" name="comment" cols="80" rows="2">${entry.comment}</textarea>
-     
-    
-     <div class="control-group">
-		<label class="control-label" for="">#i18n{form.createEntry.labelType} : </label>
-             ${entry.entryType.title}
-	
-	 
-  		<div class="control-group">
-		<label class="control-label" for="value">#i18n{form.createEntry.labelValueDefault} : </label>
+			<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} *  : </label>
+			<div class="controls">
+				<input type="text" name="title" id="title" value="${entry.title}"  maxlength="255" />
+				<span class="help-text">#i18n{form.createEntry.labelTitleComment}</span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
+				<textarea  name="help_message" id="help_message" rows="20" class="span4">${entry.helpMessage}</textarea>
+				<span class="help-text">#i18n{form.createEntry.labelHelpMessageComment}</span>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
+				<textarea  name="comment" class="span4" rows="2">${entry.comment}</textarea>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="">#i18n{form.createEntry.labelType} : ${entry.entryType.title}</label>
 			<#list entry.fields as field>
-				<div class="controls">
-	<input type="text" name="value" id="value" size="80" value="${field.value}"/>
-		</div>
-	</div>
+				<div class="controls">					<label for="value">#i18n{form.createEntry.labelValueDefault} : </label>
+						<input type="text" name="value" id="value" value="${field.value}"/>
+				</div>
 			</#list>
-	
-  
-    	<div class="control-group">
-		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
-   		 <#if entry.mandatory>
-   		 	<div class="controls">
-	<input name="mandatory" value="1" type="checkbox" checked="checked" />
 		</div>
-	</div>
-   		 <#else>
-   			<div class="controls">
-	<input name="mandatory" value="1" type="checkbox" />
-		</div>
-	</div>
-   		 </#if>	
-   
-     
-	    <div class="control-group">
-		<label class="control-label" for="width">#i18n{form.createEntry.labelWidth} * : </label>
-	    	<#list entry.fields as field>
-	    		<div class="controls">
-	<input class="-lutece-input -lutece-border-radius-mini" type="text" name="width" id="width" size="5" value="${field.width}" />
-		</div>
-	</div>
-	    		<#assign id_field=field.idField> 
-	    	</#list>	
-  	 
-  	 
-	    <div class="control-group">
-		<label class="control-label" for="max_size_enter">#i18n{form.createEntry.labelMaxSizeEnter} : </label>
-	    	<#list entry.fields as field>
-	    		<#if field.maxSizeEnter!=-1>
-	    			<div class="controls">
-	<input class="-lutece-input -lutece-border-radius-mini" type="text" name="max_size_enter" id="max_size_enter" size="5" value="${field.maxSizeEnter}" />
-		</div>
-	</div>
-	    		<#else>
-	    			<div class="controls">
-	<input class="-lutece-input -lutece-border-radius-mini" type="text" name="max_size_enter" id="max_size_enter" size="5" value="" />
-		</div>
-	</div>
-	    		</#if>	
-	    	</#list>	
-  	 
-  	 
-  	
-    	<div class="control-group">
-		<label class="control-label" for="confirm_field">#i18n{form.createEntry.labelConfirmField} : </label>
-    	<div class="controls">
-	<input name="confirm_field" id="confirm_field" value="1" type="checkbox" onchange="javascript:changeVisilityConfirmFieldTitle();" 
-		<#if entry.confirmField>
-		</div>
-	</div>
-  			 checked="checked"
-		</#if>
-		/>
-   	
-    <p id="confirm_field_title_p">
-   		 <div class="control-group">
-		<label class="control-label" for="confirm_field_title">#i18n{form.createEntry.labelConfirmFieldTitle}  * : </label>
-   		 <div class="controls">
-	<input type="text" name="confirm_field_title" id="confirm_field_title" size="80" value="${entry.confirmFieldTitle!}"  maxlength="255" />
-		</div>
-	</div>
-   	
-    
-   		 <div class="control-group">
-		<label class="control-label" for="unique_field">#i18n{form.createEntry.labelUniqueField}  : </label>
-   		 <div class="controls">
-	<input name="unique_field" id="unique_field" value="1" type="checkbox" 
-   		 <#if entry.unique>
-		</div>
-	</div>
-   		 	checked="checked" 
-   		 </#if>
-   		 />
-    
-    
-		<div class="control-group">
-		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-		<div class="controls">
-	<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" size="80" />
-		</div>
-	</div>
-		<br />
 		<div class="control-group">
 		<label class="control-label" for="">&nbsp;</label>
-		#i18n{form.createEntry.labelCSSClassComment}
-	
-   	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonSave}</button>
-	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonApply}</button>
-	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyEntry.buttonCancel}</button>
-	
-   
-  </fieldset>
+			<div class="controls">
+				<label class="checkbox" for="mandatory">#i18n{form.createEntry.labelMandatory}
+					<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked" </#if> />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+		<label class="control-label" for="width">#i18n{form.createEntry.labelWidth} * : </label>
+			<#list entry.fields as field>
+			<div class="controls">
+				<input  type="text" name="width" id="width" value="${field.width}" />
+			</div>
+			<#assign id_field=field.idField> 
+			</#list>
+		</div>
+		 <div class="control-group">
+		<label class="control-label" for="max_size_enter">#i18n{form.createEntry.labelMaxSizeEnter} : </label>
+		<#list entry.fields as field>
+			<div class="controls">
+			<#if field.maxSizeEnter!=-1>
+				<input  type="text" name="max_size_enter" id="max_size_enter" size="5" value="${field.maxSizeEnter}" />
+			</div>
+			<#else>
+			<input  type="text" name="max_size_enter" id="max_size_enter" size="5" value="" />
+			</#if>	
+			</div>
+		</#list>	
+		</div>
+		<div class="control-group">
+		<label class="control-label" for="">&nbsp; </label>
+			<div class="controls">
+				<label class="checkbox" for="confirm_field">#i18n{form.createEntry.labelConfirmField} : >
+					<input name="confirm_field" id="confirm_field" value="1" type="checkbox" onchange="javascript:changeVisilityConfirmFieldTitle();" <#if entry.confirmField> 	checked="checked"</#if>/>
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="confirm_field_title">#i18n{form.createEntry.labelConfirmFieldTitle}  * : </label>
+			 <div class="controls">
+				<input type="text" name="confirm_field_title" id="confirm_field_title" value="${entry.confirmFieldTitle!}"  maxlength="255" />
+			</div>
+		</div>
+		<div class="control-group">
+		<label class="control-label" for="">&nbsp;</label>
+			 <div class="controls">
+				<label class="checkbox" for="unique_field">#i18n{form.createEntry.labelUniqueField}  :
+					<input name="unique_field" id="unique_field" value="1" type="checkbox" <#if entry.unique>checked="checked" </#if> /> 
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+			<div class="controls">
+				<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" class="span3" />
+				<span clas="help-text">#i18n{form.createEntry.labelCSSClassComment}</span>
+			</div>
+		</div>
+		<div class="form-actions">
+			<button class="btn btn-primary" name="save" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}</button>
+			<button class="btn btn-primary" name="apply" type="submit" ><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonApply}</button>
+			<button class="btn btn-primary" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonCancel}</button>
+		</div>
+	   
+	  </fieldset>
 </form>
- </div>
-
 <#if regular_expression_list?exists>
-	<div class="row">
-	          <legend>#i18n{form.createEntry.manageRegularExpression.title}</legend>
-				<div class="well">
-		            
-		            <form class="form-horizontal"  method="post"  action="jsp/admin/plugins/form/DoInsertVerification.jsp#list">
 	<fieldset> 
-		              <input name="id_field" value="${id_field}" type="hidden" />
-						<div class="control-group">
-		<label class="control-label" for="id_expression">
-		                	 #i18n{form.createEntry.manageRegularExpression.labelInsert} :
-		              	</label>
-		               	<div class="controls">
-	<@combo name="id_expression"  items=regular_expression_list default_value=-1 />
+	<legend>#i18n{form.createEntry.manageRegularExpression.title}</legend>
+	<div class="well">
+	<form class="form-horizontal"  method="post"  action="jsp/admin/plugins/form/DoInsertVerification.jsp#list">
+	<input name="id_field" value="${id_field}" type="hidden" />
+	<div class="control-group">
+	<label class="control-label" for="id_expression">#i18n{form.createEntry.manageRegularExpression.labelInsert} :</label>
+		<div class="controls">
+			<@combo name="id_expression"  items=regular_expression_list default_value=-1 /><button class="btn btn-primary" type="submit" >#i18n{form.createEntry.manageRegularExpression.buttonInsert}</button>
+			<span class="help-text">#i18n{form.createEntry.manageRegularExpression.labelInsertComment}</span>
 		</div>
 	</div>
-						<button class="btn btn-primary" type="submit" >#i18n{form.createEntry.manageRegularExpression.buttonInsert}</button>
-	
-						 <br/>
-	 				
-	 					<div class="control-group">
-		<label class="control-label" > &nbsp;</label> #i18n{form.createEntry.manageRegularExpression.labelInsertComment}
-		            </fieldset>
-</form>
-		        
-		        &nbsp;
-	        </div>
-		<@paginationAdmin paginator=paginator combo=1/>
-	    <a name="list" id="list"></a>
-        <table width="100%">
+	</fieldset>
+	</form>
+	<@paginationAdmin paginator=paginator combo=1/>
+	<a name="list" id="list"></a>
+    <table class="table table-striped">
           <tr> 
             <th > #i18n{form.createEntry.manageRegularExpression.rowTitle}
             </th>
@@ -198,19 +136,20 @@
 	       			  ${expression.validExemple}  	
 	            </td >
 	            <td >
-	             	  <a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
-	<i class="icon-trash icon-white"></i>
-	</a>
-
-	             </td>
+	              <a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
+					<i class="icon-trash icon-white"></i>
+					</a>
+				</td>
 	          </tr>
 			</#list> 
         </table>
         <@paginationAdmin paginator=paginator/>
     </div>
 </#if>
-    
-  <script type="text/javascript">
+
+	</div>
+</div>
+<script type="text/javascript">
   	changeVisilityConfirmFieldTitle();
 	function changeVisilityConfirmFieldTitle()
 	{
@@ -224,5 +163,4 @@
 		}
 	} 
   </script>
-
  <@initEditor />

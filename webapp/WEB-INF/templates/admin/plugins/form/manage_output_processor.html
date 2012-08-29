@@ -3,26 +3,24 @@
         <fieldset>
             <legend> #i18n{form.manageOutputProcessor.title}</legend>
             <#list processor_list as processor>
-            <div class="well">
-            <form class="form-horizontal" action="jsp/admin/plugins/form/DoManageOutputProcessor.jsp" method="post" >
-            <input name="id_form" value="${form.idForm}" type="hidden" />
-            <div class="control-group">
-              <label class="control-label" for="use_output_processor"> #i18n{form.manageOutputProcessor.useOutputProcessor} * :</label>
-               <div class="controls">
-            <label class="checkbox" for="use_output_processor">#i18n{form.manageOutputProcessor.useOutputProcessor}
-                   <input type="checkbox" name="is_selected" <#if processor.is_selected>checked="checked"</#if> />
-               </label>   
-              </div>
-               </div>
-             <input type="hidden" name="processor_key" value= "${processor.processor_key}"/>
-            <div class="span12">
-                ${processor.processor_configuration}
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
-            </div>		
-            </form>
-            </div>
+			<div class="well">
+				<form class="form-horizontal" action="jsp/admin/plugins/form/DoManageOutputProcessor.jsp" method="post" >
+				<input name="id_form" value="${form.idForm}" type="hidden" />
+				<input type="hidden" name="processor_key" value= "${processor.processor_key}"/>
+				<div class="control-group">
+				  <label class="control-label" for=""></label>
+				   <div class="controls">
+					<label class="checkbox" for="use_output_processor"><strong>#i18n{form.manageOutputProcessor.useOutputProcessor}</strong>
+					   <input type="checkbox" name="is_selected" <#if processor.is_selected>checked="checked"</#if> />
+				   </label>   
+				  </div>
+				${processor.processor_configuration}
+				</div>
+				<div class="form-actions">
+					<button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
+				</div>		
+				</form>
+			</div>
             </#list>
         </fieldset>
     </div>
