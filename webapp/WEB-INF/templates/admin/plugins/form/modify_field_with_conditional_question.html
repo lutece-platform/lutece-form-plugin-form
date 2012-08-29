@@ -1,85 +1,53 @@
-<div class="row">
- <legend>#i18n{form.modifyField.title} : '${field.parentEntry.title}'</legend>
- <form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyField.jsp#list" method="post" name="" id=""  >
-	<fieldset>
+<div class="content-box">
+ <h2>#i18n{form.modifyField.title} : '${field.parentEntry.title}'</h2>
+ <form action="jsp/admin/plugins/form/DoModifyField.jsp#list" method="post" name="" id=""  >
     <input name="id_field" value="${field.idField}" type="hidden" />
-   
-    	<div class="control-group">
-		<label class="control-label" for="title">#i18n{form.createField.labelTitle} * : </label>
-    	<div class="controls">
-	<input type="text" name="title" id="title" size="80" value="${field.title}"  maxlength="255" />
-		</div>
-	</div>
-    
-    
-    	<div class="control-group">
-		<label class="control-label" for="value">#i18n{form.createField.labelValue} * : </label>
-    	<div class="controls">
-	<input type="text" name="value" id="value" size="80" value="${field.value}"/>
-		</div>
-	</div>
-    
-  	
-    	<div class="control-group">
-		<label class="control-label" for="default_value">#i18n{form.createField.labelDefaultValue}</label>
+   <p>
+    	<label for="title">#i18n{form.createField.labelTitle} * : </label>
+    	<input type="text" name="title" id="title" size="80" value="${field.title}"  maxlength="255" />
+    </p>
+    <p>
+    	<label for="value">#i18n{form.createField.labelValue} * : </label>
+    	<input type="text" name="value" id="value" size="80" value="${field.value}"/>
+    </p>
+  	<p>
+    	<label for="default_value">#i18n{form.createField.labelDefaultValue}</label>
     	<#if field.defaultValue>
-    		<div class="controls">
-	<input name="default_value" value="1" type="checkbox"  checked="checked">
-		</div>
-	</div>
+    		<input name="default_value" value="1" type="checkbox"  checked="checked">
   		<#else>
-  			<div class="controls">
-	<input name="default_value" value="1" type="checkbox">
-		</div>
-	</div>
+  			<input name="default_value" value="1" type="checkbox">
   		</#if>	
-  	
-  	
-    	<div class="control-group">
-		<label class="control-label" for="no_display_title">#i18n{form.createField.labelNoDisplayTitle}</label>
+  	</p>
+  	<p>
+    	<label for="no_display_title">#i18n{form.createField.labelNoDisplayTitle}</label>
     	<#if field.noDisplayTitle>
-    		<div class="controls">
-	<input name="no_display_title" value="1" type="checkbox"  checked="checked">
-		</div>
-	</div>
+    		<input name="no_display_title" value="1" type="checkbox"  checked="checked">
   		<#else>
-  			<div class="controls">
-	<input name="no_display_title" value="1" type="checkbox">
-		</div>
-	</div>
+  			<input name="no_display_title" value="1" type="checkbox">
   		</#if>	
-  	
-  	 
-  		<button class="btn btn-primary" type="submit" >#i18n{form.createForm.buttonSave}</button>
-	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.modifyForm.buttonApply}</button>
-	
-  		<button class="btn btn-primary" type="submit" >#i18n{form.createForm.buttonCancel}</button>
-	
-   
-  </fieldset>
-</form>
+  	</p>
+  	 <p>
+  		<input type="submit" value="#i18n{form.createForm.buttonSave}" class="button"  name="save" />
+  		<input type="submit" value="#i18n{form.modifyForm.buttonApply}" class="button"  name="apply"/>
+  		<input type="submit" value="#i18n{form.createForm.buttonCancel}" class="button" name="cancel" />
+   </p>
+  </form>
  </div>
 
- <div class="row">
-	          <legend>#i18n{form.modifyField.manageConditionalQuestion.title}</legend>
-				 <div class="well">
-		            
-		            <form class="form-horizontal"  method="post"  action="jsp/admin/plugins/form/CreateEntry.jsp">
-	<fieldset> 
+ <div class="content-box">
+	          <h2>#i18n{form.modifyField.manageConditionalQuestion.title}</h2>
+				 <div class="highlight-box">
+		            <p>
+		            <form  method="post"  action="jsp/admin/plugins/form/CreateEntry.jsp"> 
 		              	 <input name="id_field" value="${field.idField}" type="hidden" />
-		              	<div class="control-group">
-		<label class="control-label" for="id_type">
+		              	<label for="id_type">
 		                	 #i18n{form.modifyForm.manageEnter.labelInsertEntry} : 
 		              	</label>
-		               	<div class="controls">
-	<@combo name="id_type"  items=entry_type_list default_value=-1 />
-		</div>
-	</div>
-						<button class="btn btn-primary" type="submit" >#i18n{form.modifyForm.manageEnter.buttonInsertEntry} </button>
-	
-		        
-		        &nbsp;
+		               	<@combo name="id_type"  items=entry_type_list default_value=-1 />
+						<input value="#i18n{form.modifyForm.manageEnter.buttonInsertEntry} " class="button"  type="submit">
+		            </form>
+		        </p>
+		        <p>&nbsp;</p>
 	        </div>
         <br />
 	    <@paginationAdmin paginator=paginator combo=1/>
@@ -101,10 +69,13 @@
           	<#assign cpt=cpt+1>
           	<tr>
 	            	<td >
-		            		<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}"  title="null" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
+		            		<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="bullet-link">
+		              					<#if entry.entryType.comment>
+              								${entry.comment}
+              							<#else>
+											${entry.title}
+										</#if>
+							</a>
 										
 	              	</td>
 	            	<td>
@@ -117,21 +88,18 @@
 	            	</td >
 	              <td >
 	                <#if cpt!=1>
-	              		<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
+	              		<a href="jsp/admin/plugins/form/DoMoveUpEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}">
+	                 		 <img src="images/admin/skin/plugins/form/actions/up.png"  alt="#i18n{form.modifyForm.manageEnter.titleMoveUp}" title="#i18n{form.modifyForm.manageEnter.titleMoveUp}">
+	                 	</a>
 	                 </#if>	
 	                  <#if entry_has_next>
-	                	<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" >
-	<i class="icon-question-sign icon-white"></i>
-	</a>
-
+	                	<a href="jsp/admin/plugins/form/DoMoveDownEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}">
+	                  		<img src="images/admin/skin/plugins/form/actions/down.png" alt="#i18n{form.modifyForm.manageEnter.titleMoveDown}" title="#i18n{form.modifyForm.manageEnter.titleMoveDown}">
+	                 	</a>
 	                 </#if>	
-	                <a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleDelete}" >
-	<i class="icon-trash icon-white"></i>
-	</a>
-
+	                <a href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}">
+	                  <img src="images/admin/skin/plugins/form/actions/delete.png" alt="#i18n{form.modifyForm.manageEnter.titleDelete}" title="#i18n{form.modifyForm.manageEnter.titleDelete}" />
+	                </a>
 	             </td>
 	          </tr>
 			</#list> 

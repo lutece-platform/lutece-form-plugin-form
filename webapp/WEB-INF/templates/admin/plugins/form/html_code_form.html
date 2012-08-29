@@ -1,13 +1,11 @@
 <div class="hide" id="locale">${locale}</div>
 <div id="form-content">
-	<form class="form-horizontal" id="form-validate" action="${url_action}" method="post" enctype="multipart/form-data">
-	<fieldset>
+	<form id="form-validate" action="${url_action}" method="post" enctype="multipart/form-data">
 		<input name="page" value="form" type="hidden" />
 		<input name="id_form" value="${form.idForm}" type="hidden" />
 		<input name="session" value="session" type="hidden" />
 		<div>
-			<div class="control-group">
-		<label class="control-label" class="form-title" >${form.title} </label><br/>
+			<label class="form-title" ><#if form.frontOfficeTitle?? && form.frontOfficeTitle!="" && form.shownFrontOfficeTitle! > ${form.frontOfficeTitle} <#else> ${form.title!} </#if> </label><br/>
 		</div>
 		<fieldset class="form-fieldset">
 			<legend></legend>
@@ -16,13 +14,9 @@
 		${str_entry}   
 		<#if form.activeRequirement>
 			<div>
-				<div class="control-group">
-		<label class="control-label" for="comment" class="form-comment">
-					<div class="controls">
-	<input type="checkbox" name="requirement" id="requirement" value="requirement}" 
+				<label for="comment" class="form-comment">
+					<input type="checkbox" name="requirement" id="requirement" value="requirement}" 
 						<#if validate_requirement?? && validate_requirement>
-		</div>
-	</div>
 							checked="checked"
 						</#if>
 					/>
@@ -30,8 +24,7 @@
 				</label>
 				<#if validate_requirement?? && !validate_requirement>
 					<br />
-					<div class="control-group">
-		<label class="control-label" class="error">
+					<label class="error">
 						#i18n{form.message.requirementError}
 					</label>
 				</#if>
@@ -41,19 +34,13 @@
 			<fieldset class="form-fieldset">${jcaptcha}</fieldset>
 		</#if>
 		<div align="center" class="form-steps">
-			<button class="btn btn-primary" type="submit" >${form.libelleValidateButton}</button>
-	
+			<input type="submit" value="${form.libelleValidateButton}" class="-lutece-input -lutece-border-radius-mini" name="save" />
 			<#if draft_supported>
-			<button class="btn btn-primary" type="submit" >#i18n{form.button.saveDraft}</button>
-	
+			<input type="submit" value="#i18n{form.button.saveDraft}" class="-lutece-input -lutece-border-radius-mini" name="save_draft" />
 			</#if>
 			<#if form.libelleResetButton?has_content>
-				<div class="controls">
-	<input type="reset" value="${form.libelleResetButton}" class="-lutece-input -lutece-border-radius-mini" name="reset" />
-		</div>
-	</div>
+				<input type="reset" value="${form.libelleResetButton}" class="-lutece-input -lutece-border-radius-mini" name="reset" />
 			</#if>
 		</div>
-	</fieldset>
-</form>
+	</form>
 </div>
