@@ -5,7 +5,7 @@
 		<#if forms_list?has_content >	
 			<ul>
 				<#list forms_list as form>
-					<li><a href="jsp/site/Portal.jsp?page=form&id_form=${form.idForm}">${form.title} (${form.description!})</a></li>
+					<li><a href="jsp/site/Portal.jsp?page=form&id_form=${form.idForm}"> <#if form.frontOfficeTitle?? && form.frontOfficeTitle!=""> ${form.frontOfficeTitle} <#else> ${form.title} </#if> (${form.description!})</a></li>
 					<#if (form.infoComplementary1?? && form.infoComplementary1!="") || (form.infoComplementary2?? && form.infoComplementary2!="") || (form.infoComplementary3?? && form.infoComplementary3!="")|| (form.infoComplementary4?? && form.infoComplementary4!="") || (form.infoComplementary5??  && form.infoComplementary5!="")>
 						<ul>
 						<#if form.infoComplementary1?? && form.infoComplementary1!=""><li>${form.infoComplementary1}</li></#if>
