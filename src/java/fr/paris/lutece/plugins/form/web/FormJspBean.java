@@ -113,6 +113,7 @@ import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 import org.jfree.chart.ChartRenderingInfo;
@@ -228,6 +229,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String PROPERTY_MODIFY_MESSAGE_TITLE = "form.modifyMessage.title";
     private static final String PROPERTY_MANAGE_VALIDATOR_TITLE = "form.manageValidator.title";
     private static final String PROPERTY_MANAGE_OUTPUT_PROCESSOR_TITLE = "form.manageOutputProcessor.title";
+    private static final String PROPERTY_NO_GROUP = "form.manageForm.noGroup";
 
     // Markers
     private static final String MARK_WEBAPP_URL = "webapp_url";
@@ -250,6 +252,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String MARK_PERMISSION_CREATE_FORM = "permission_create_form";
     private static final String MARK_ENTRY_TYPE_GROUP = "entry_type_group";
     private static final String MARK_ENTRY_LIST = "entry_list";
+    private static final String MARK_GROUP_ENTRY_LIST = "entry_group_list";
     private static final String MARK_THEME_REF_LIST = "theme_list";
     private static final String MARK_STR_FORM = "str_form";
     private static final String MARK_LIST = "list";
@@ -276,6 +279,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String MARK_PERMISSION_MANAGE_ADVANCED_PARAMETERS = "permission_manage_advanced_parameters";
     private static final String MARK_LIST_PARAM_DEFAULT_VALUES = "list_param_default_values";
     private static final String MARK_DEFAULT_VALUE_WORKGROUP_KEY = "workgroup_key_default_value";
+    private static final String MARK_MAP_CHILD = "mapChild";
 
     // Jsp Definition
     private static final String JSP_DO_DISABLE_FORM = "jsp/admin/plugins/form/DoDisableForm.jsp";
@@ -315,6 +319,10 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ID_MAILINIG_LIST = "id_mailing_list";
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_ID_ENTRY = "id_entry";
+    private static final String PARAMETER_ENTRY_ID = "entry_id";
+    private static final String PARAMETER_MOVE_BUTTON = "move";
+    private static final String PARAMETER_ID_ENTRY_GROUP = "id_entry_group";
+    private static final String PARAMETER_ORDER_ID = "order_id";
     private static final String PARAMETER_ID_CATEGORY = "id_category";
     private static final String PARAMETER_ID_FIELD = "id_field";
     private static final String PARAMETER_ID_EXPRESSION = "id_expression";
@@ -348,6 +356,9 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_OPTION_NO_DISPLAY_TITLE = "option_no_display_title";
     private static final String PARAMETER_THEME_XPAGE = "id_theme_list";
     private static final String PARAMETER_ACTIVE_MYLUTECE_AUTHENTIFICATION = "active_mylutece_authentification";
+    private static final String PARAMETER_LIST = "list";
+    private static final String PARAMETER_FRONT_OFFICE_TITLE = "front_office_title";
+    private static final String PARAMETER_IS_SHOWN_FRONT_OFFICE_TITLE = "is_shown_front_office_title";
 
     // other constants
     private static final String EMPTY_STRING = "";
@@ -590,6 +601,8 @@ public class FormJspBean extends PluginAdminPageJspBean
     private String getFormData( HttpServletRequest request, Form form )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
+        String strFrontOfficeTitle = request.getParameter( PARAMETER_FRONT_OFFICE_TITLE );
+        String strIsShownFrontOfficeTitle = request.getParameter( PARAMETER_IS_SHOWN_FRONT_OFFICE_TITLE );
         String strDescription = request.getParameter( PARAMETER_DESCRIPTION );
         String strWorkgroup = request.getParameter( PARAMETER_WORKGROUP );
         String strMailingListId = request.getParameter( PARAMETER_ID_MAILINIG_LIST );
@@ -635,6 +648,11 @@ public class FormJspBean extends PluginAdminPageJspBean
         form.setTitle( strTitle );
         form.setDescription( strDescription );
         form.setWorkgroup( strWorkgroup );
+
+        if ( ( strFrontOfficeTitle != null ) )
+        {
+            form.setFrontOfficeTitle( strFrontOfficeTitle );
+        }
 
         if ( ( strInformationComplementary1 != null ) )
         {
@@ -718,6 +736,15 @@ public class FormJspBean extends PluginAdminPageJspBean
         else
         {
             form.setActiveMyLuteceAuthentification( false );
+        }
+
+        if ( strIsShownFrontOfficeTitle != null )
+        {
+            form.setIsShownFrontOfficeTitle( true );
+        }
+        else
+        {
+            form.setIsShownFrontOfficeTitle( false );
         }
 
         try
@@ -978,34 +1005,23 @@ public class FormJspBean extends PluginAdminPageJspBean
         filter.setIdIsGroup( EntryFilter.FILTER_FALSE );
         nNumberQuestion = EntryHome.getNumberEntryByFilter( filter, plugin );
 
+        Map<String, List<Integer>> mapIdParentOrdersChildren = new HashMap<String, List<Integer>>(  );
+
+        // List of entry first level order
+        List<Integer> listOrderEntryFirstLevel = new ArrayList<Integer>(  );
+        initOrderFirstLevel( listEntryFirstLevel, listOrderEntryFirstLevel );
+
+        mapIdParentOrdersChildren.put( "0", listOrderEntryFirstLevel );
+
         if ( listEntryFirstLevel.size(  ) != 0 )
         {
             listEntryFirstLevel.get( 0 ).setFirstInTheList( true );
             listEntryFirstLevel.get( listEntryFirstLevel.size(  ) - 1 ).setLastInTheList( true );
         }
 
-        for ( IEntry entry : listEntryFirstLevel )
-        {
-            listEntry.add( entry );
+        fillEntryListWithEntryFirstLevel( plugin, listEntry, listEntryFirstLevel );
 
-            if ( entry.getEntryType(  ).getGroup(  ) )
-            {
-                filter = new EntryFilter(  );
-                filter.setIdEntryParent( entry.getIdEntry(  ) );
-                entry.setChildren( EntryHome.getEntryList( filter, plugin ) );
-
-                if ( entry.getChildren(  ).size(  ) != 0 )
-                {
-                    entry.getChildren(  ).get( 0 ).setFirstInTheList( true );
-                    entry.getChildren(  ).get( entry.getChildren(  ).size(  ) - 1 ).setLastInTheList( true );
-                }
-
-                for ( IEntry entryChild : entry.getChildren(  ) )
-                {
-                    listEntry.add( entryChild );
-                }
-            }
-        }
+        populateEntryMap( listEntry, mapIdParentOrdersChildren );
 
         _strCurrentPageIndexEntry = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexEntry );
@@ -1056,6 +1072,22 @@ public class FormJspBean extends PluginAdminPageJspBean
             form.setCodeTheme( ThemeHome.getGlobalTheme(  ) );
         }
 
+        //get only the group type entries
+        filter = new EntryFilter(  );
+        filter.setIdForm( nIdForm );
+        filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+        filter.setIdEntryType( EntryFilter.FILTER_GROUP_ENTRY );
+
+        List<IEntry> listGroupEntry = EntryHome.getEntryList( filter, plugin );
+
+        ReferenceList refListGroupEntry = ReferenceList.convert( listGroupEntry, "idEntry", "title", true );
+
+        //add the root choice to the reference list
+        ReferenceItem emptyItem = new ReferenceItem(  );
+        emptyItem.setCode( StringUtils.EMPTY );
+        emptyItem.setName( StringEscapeUtils.escapeHtml( I18nService.getLocalizedString( PROPERTY_NO_GROUP, locale ) ) );
+        refListGroupEntry.add( 0, emptyItem );
+
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageEntry );
@@ -1067,6 +1099,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_ENTRY_LIST, paginator.getPageItems(  ) );
         model.put( MARK_THEME_REF_LIST, themesRefList );
+        model.put( MARK_GROUP_ENTRY_LIST, refListGroupEntry );
         model.put( MARK_NUMBER_QUESTION, nNumberQuestion );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
@@ -1074,9 +1107,77 @@ public class FormJspBean extends PluginAdminPageJspBean
         model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
         setPageTitleProperty( PROPERTY_MODIFY_FORM_TITLE );
 
+        model.put( MARK_MAP_CHILD, mapIdParentOrdersChildren );
+
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_FORM, locale, model );
 
         return getAdminPage( template.getHtml(  ) );
+    }
+
+    /**
+     * Fill an entry list with all the entries of the first level
+     * @param plugin the plugin
+     * @param listEntry the list of all the entries
+     * @param listEntryFirstLevel the list of all the entries of the first level
+     */
+    private void fillEntryListWithEntryFirstLevel( Plugin plugin, List<IEntry> listEntry,
+        List<IEntry> listEntryFirstLevel )
+    {
+        EntryFilter filter;
+
+        for ( IEntry entry : listEntryFirstLevel )
+        {
+            listEntry.add( entry );
+
+            if ( entry.getEntryType(  ).getGroup(  ) )
+            {
+                filter = new EntryFilter(  );
+                filter.setIdEntryParent( entry.getIdEntry(  ) );
+                entry.setChildren( EntryHome.getEntryList( filter, plugin ) );
+
+                if ( entry.getChildren(  ).size(  ) != 0 )
+                {
+                    entry.getChildren(  ).get( 0 ).setFirstInTheList( true );
+                    entry.getChildren(  ).get( entry.getChildren(  ).size(  ) - 1 ).setLastInTheList( true );
+                }
+
+                for ( IEntry entryChild : entry.getChildren(  ) )
+                {
+                    listEntry.add( entryChild );
+                }
+            }
+        }
+    }
+
+    /**
+     * Populate map with ( idParent : List<Orders> ) except for entry with
+     * parent
+     * @param listEntry
+     * @param mapIdParentOrdersChildren
+     */
+    private void populateEntryMap( List<IEntry> listEntry, Map<String, List<Integer>> mapIdParentOrdersChildren )
+    {
+        List<Integer> listOrder;
+
+        for ( IEntry entry : listEntry )
+        {
+            if ( entry.getParent(  ) != null )
+            {
+                Integer key = Integer.valueOf( entry.getParent(  ).getIdEntry(  ) );
+                String strKey = key.toString(  );
+
+                if ( mapIdParentOrdersChildren.get( strKey ) != null )
+                {
+                    mapIdParentOrdersChildren.get( key.toString(  ) ).add( entry.getPosition(  ) );
+                }
+                else
+                {
+                    listOrder = new ArrayList<Integer>(  );
+                    listOrder.add( entry.getPosition(  ) );
+                    mapIdParentOrdersChildren.put( key.toString(  ), listOrder );
+                }
+            }
+        }
     }
 
     /**
@@ -1943,6 +2044,24 @@ public class FormJspBean extends PluginAdminPageJspBean
             return AdminMessageService.getMessageUrl( request, MESSAGE_CANT_REMOVE_ENTRY, args, AdminMessage.TYPE_STOP );
         }
 
+        // Update order
+        List<IEntry> listEntry;
+        EntryFilter filter = new EntryFilter(  );
+        filter.setIdForm( entry.getForm(  ).getIdForm(  ) );
+        listEntry = EntryHome.getEntryList( filter, plugin );
+
+        if ( entry.getFieldDepend(  ) == null )
+        {
+            this.moveDownEntryOrder( plugin, listEntry.size(  ), entry, entry.getForm(  ).getIdForm(  ) );
+        }
+        else
+        {
+            //conditional questions
+            EntryHome.decrementOrderByOne( entry.getPosition(  ), entry.getFieldDepend(  ).getIdField(  ),
+                entry.getForm(  ).getIdForm(  ) );
+        }
+
+        // Remove entry
         EntryHome.remove( nIdEntry, plugin );
 
         if ( entry.getFieldDepend(  ) != null )
@@ -2102,192 +2221,26 @@ public class FormJspBean extends PluginAdminPageJspBean
             return getJspManageForm( request );
         }
 
-        int nPosition = 1;
         entryToMove = EntryHome.findByPrimaryKey( _nIdEntry, plugin );
         entryGroup = EntryHome.findByPrimaryKey( nIdEntryGroup, plugin );
 
-        if ( ( entryGroup.getChildren(  ) != null ) && ( entryGroup.getChildren(  ).size(  ) != 0 ) )
+        Integer nPosition;
+
+        if ( entryToMove.getPosition(  ) < entryGroup.getPosition(  ) )
         {
-            nPosition = entryGroup.getChildren(  ).get( entryGroup.getChildren(  ).size(  ) - 1 ).getPosition(  ) + 1;
-            entryToMove.setPosition( nPosition );
+            nPosition = entryGroup.getPosition(  );
+            this.moveDownEntryOrder( plugin, nPosition, entryToMove, entryToMove.getForm(  ).getIdForm(  ) );
+        }
+        else
+        {
+            nPosition = entryGroup.getPosition(  ) + entryGroup.getChildren(  ).size(  ) + 1;
+            this.moveUpEntryOrder( plugin, nPosition, entryToMove, entryToMove.getForm(  ).getIdForm(  ) );
         }
 
         entryToMove.setParent( entryGroup );
         EntryHome.update( entryToMove, plugin );
 
         return getJspModifyForm( request, _nIdForm );
-    }
-
-    /**
-     * Move up the entry
-     * @param request The HTTP request
-     * @return The URL to go after performing the action
-     */
-    public String doMoveUpEntry( HttpServletRequest request )
-    {
-        Plugin plugin = getPlugin(  );
-        IEntry entry;
-
-        String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
-        int nIdEntry = -1;
-
-        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
-        {
-            try
-            {
-                nIdEntry = Integer.parseInt( strIdEntry );
-            }
-            catch ( NumberFormatException ne )
-            {
-                AppLogService.error( ne );
-
-                return getJspManageForm( request );
-            }
-        }
-
-        if ( ( nIdEntry == -1 ) ||
-                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
-                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
-        {
-            return getJspManageForm( request );
-        }
-
-        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
-
-        List<IEntry> listEntry;
-        EntryFilter filter = new EntryFilter(  );
-        filter.setIdForm( entry.getForm(  ).getIdForm(  ) );
-
-        if ( entry.getParent(  ) != null )
-        {
-            filter.setIdEntryParent( entry.getParent(  ).getIdEntry(  ) );
-        }
-        else
-        {
-            filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-        }
-
-        if ( entry.getFieldDepend(  ) != null )
-        {
-            filter.setIdFieldDepend( entry.getFieldDepend(  ).getIdField(  ) );
-        }
-        else
-        {
-            filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        }
-
-        listEntry = EntryHome.getEntryList( filter, plugin );
-
-        int nIndexEntry = FormUtils.getIndexEntryInTheEntryList( nIdEntry, listEntry );
-
-        if ( nIndexEntry != 0 )
-        {
-            int nNewPosition;
-            IEntry entryToInversePosition;
-            entryToInversePosition = listEntry.get( nIndexEntry - 1 );
-            entryToInversePosition = EntryHome.findByPrimaryKey( entryToInversePosition.getIdEntry(  ), plugin );
-
-            nNewPosition = entryToInversePosition.getPosition(  );
-            entryToInversePosition.setPosition( entry.getPosition(  ) );
-            entry.setPosition( nNewPosition );
-            EntryHome.update( entry, plugin );
-            EntryHome.update( entryToInversePosition, plugin );
-        }
-
-        if ( entry.getFieldDepend(  ) != null )
-        {
-            return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
-        }
-        else
-        {
-            return getJspModifyForm( request, _nIdForm );
-        }
-    }
-
-    /**
-     * Move down the entry
-     * @param request The HTTP request
-     * @return The URL to go after performing the action
-     */
-    public String doMoveDownEntry( HttpServletRequest request )
-    {
-        Plugin plugin = getPlugin(  );
-        IEntry entry;
-
-        String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
-        int nIdEntry = -1;
-
-        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
-        {
-            try
-            {
-                nIdEntry = Integer.parseInt( strIdEntry );
-            }
-            catch ( NumberFormatException ne )
-            {
-                AppLogService.error( ne );
-
-                return getJspManageForm( request );
-            }
-        }
-
-        if ( ( nIdEntry == -1 ) ||
-                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
-                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
-        {
-            return getJspManageForm( request );
-        }
-
-        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
-
-        List<IEntry> listEntry;
-        EntryFilter filter = new EntryFilter(  );
-        filter.setIdForm( entry.getForm(  ).getIdForm(  ) );
-
-        if ( entry.getParent(  ) != null )
-        {
-            filter.setIdEntryParent( entry.getParent(  ).getIdEntry(  ) );
-        }
-        else
-        {
-            filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-        }
-
-        if ( entry.getFieldDepend(  ) != null )
-        {
-            filter.setIdFieldDepend( entry.getFieldDepend(  ).getIdField(  ) );
-        }
-        else
-        {
-            filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        }
-
-        listEntry = EntryHome.getEntryList( filter, plugin );
-
-        int nIndexEntry = FormUtils.getIndexEntryInTheEntryList( nIdEntry, listEntry );
-
-        if ( nIndexEntry != ( listEntry.size(  ) - 1 ) )
-        {
-            int nNewPosition;
-            IEntry entryToInversePosition;
-            entryToInversePosition = listEntry.get( nIndexEntry + 1 );
-            entryToInversePosition = EntryHome.findByPrimaryKey( entryToInversePosition.getIdEntry(  ), plugin );
-
-            nNewPosition = entryToInversePosition.getPosition(  );
-            entryToInversePosition.setPosition( entry.getPosition(  ) );
-            entry.setPosition( nNewPosition );
-            EntryHome.update( entry, plugin );
-            EntryHome.update( entryToInversePosition, plugin );
-        }
-
-        if ( entry.getFieldDepend(  ) != null )
-        {
-            return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
-        }
-        else
-        {
-            return getJspModifyForm( request, _nIdForm );
-        }
     }
 
     /**
@@ -2324,17 +2277,18 @@ public class FormJspBean extends PluginAdminPageJspBean
         }
 
         entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
-        entry.setParent( null );
 
         List<IEntry> listEntry;
         EntryFilter filter = new EntryFilter(  );
-        filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+        filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         filter.setIdForm( entry.getForm(  ).getIdForm(  ) );
         listEntry = EntryHome.getEntryList( filter, plugin );
-        entry.setPosition( listEntry.get( listEntry.size(  ) - 1 ).getPosition(  ) + 1 );
-        EntryHome.update( entry, plugin );
 
-        return getJspModifyForm( request, _nIdForm );
+        Integer nListEntrySize = listEntry.size(  );
+
+        this.doMoveOutEntry( plugin, entry.getForm(  ).getIdForm(  ), nListEntrySize, entry );
+
+        return this.getJspModifyForm( request, entry.getForm(  ).getIdForm(  ) );
     }
 
     /**
@@ -4271,5 +4225,542 @@ public class FormJspBean extends PluginAdminPageJspBean
         }
 
         return getJspManageAdvancedParameters( request );
+    }
+
+    /**
+     * Change the attribute's order (move up or move down in the list)
+     * @param request the request
+     * @return The URL of the form management page
+     */
+    public String doChangeOrderEntry( HttpServletRequest request )
+    {
+        //gets the entry which needs to be changed (order)
+        Plugin plugin = getPlugin(  );
+
+        String strEntryId = StringUtils.EMPTY;
+        String strOrderToSet = StringUtils.EMPTY;
+        Integer nEntryId = 0;
+        Integer nOrderToSet = 0;
+        String strIdForm = request.getParameter( PARAMETER_ID_FORM );
+        int nIdForm = FormUtils.convertStringToInt( strIdForm );
+        IEntry entry;
+
+        // To execute mass action "Move into"
+        if ( request.getParameter( PARAMETER_MOVE_BUTTON + ".x" ) != null )
+        {
+            String strIdNewParent = request.getParameter( PARAMETER_ID_ENTRY_GROUP );
+            Integer nIdNewParent = 0;
+
+            if ( StringUtils.isNotBlank( strIdNewParent ) )
+            {
+                nIdNewParent = FormUtils.convertStringToInt( strIdNewParent );
+            }
+
+            // gets the entries which needs to be changed
+            String[] entryToMoveList = request.getParameterValues( PARAMETER_ENTRY_ID );
+
+            IEntry entryParent = EntryHome.findByPrimaryKey( nIdNewParent, plugin );
+            List<IEntry> listEntry = new ArrayList<IEntry>(  );
+
+            if ( entryParent == null )
+            {
+                EntryFilter filter = new EntryFilter(  );
+                filter.setIdForm( nIdForm );
+                filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+                listEntry = EntryHome.getEntryList( filter, plugin );
+            }
+
+            Integer nListEntrySize = listEntry.size(  );
+
+            if ( entryToMoveList != null )
+            {
+                // for each entry, move it into selected group
+                for ( String strIdEntryToMove : entryToMoveList )
+                {
+                    IEntry entryToMove = EntryHome.findByPrimaryKey( FormUtils.convertStringToInt( strIdEntryToMove ),
+                            plugin );
+                    entryParent = EntryHome.findByPrimaryKey( nIdNewParent, plugin );
+
+                    if ( ( entryToMove == null ) )
+                    {
+                        return AdminMessageService.getMessageUrl( request, MESSAGE_SELECT_GROUP, AdminMessage.TYPE_STOP );
+                    }
+
+                    // if entryParent is null, move out selected entries
+                    if ( ( entryParent == null ) && ( entryToMove.getParent(  ) != null ) )
+                    {
+                        doMoveOutEntry( plugin, nIdForm, nListEntrySize, entryToMove );
+                    }
+
+                    // Move entry into group if not already in
+                    else if ( ( entryParent != null ) &&
+                            ( ( entryToMove.getParent(  ) == null ) ||
+                            ( ( entryToMove.getParent(  ) != null ) &&
+                            ( entryToMove.getParent(  ).getIdEntry(  ) != entryParent.getIdEntry(  ) ) ) ) )
+                    {
+                        this.doMoveEntryIntoGroup( plugin, entryToMove, entryParent );
+                    }
+                }
+            }
+        }
+
+        // To change order of one entry
+        else
+        {
+            EntryFilter filter = new EntryFilter(  );
+            filter.setIdForm( nIdForm );
+
+            List<IEntry> entryList = EntryHome.getEntryList( filter, getPlugin(  ) );
+
+            for ( int i = 0; i < entryList.size(  ); i++ )
+            {
+                entry = entryList.get( i );
+                nEntryId = entry.getIdEntry(  );
+                strEntryId = request.getParameter( PARAMETER_MOVE_BUTTON + "_" + nEntryId.toString(  ) );
+
+                if ( StringUtils.isNotBlank( strEntryId ) )
+                {
+                    strEntryId = nEntryId.toString(  );
+                    strOrderToSet = request.getParameter( PARAMETER_ORDER_ID + "_" + nEntryId.toString(  ) );
+                    i = entryList.size(  );
+                }
+            }
+
+            if ( StringUtils.isNotBlank( strEntryId ) )
+            {
+                nEntryId = FormUtils.convertStringToInt( strEntryId );
+            }
+
+            if ( StringUtils.isNotBlank( strOrderToSet ) )
+            {
+                nOrderToSet = FormUtils.convertStringToInt( strOrderToSet );
+            }
+
+            IEntry entryToChangeOrder = EntryHome.findByPrimaryKey( nEntryId, plugin );
+
+            // entry goes up in the list 
+            if ( nOrderToSet < entryToChangeOrder.getPosition(  ) )
+            {
+                moveUpEntryOrder( plugin, nOrderToSet, entryToChangeOrder, entryToChangeOrder.getForm(  ).getIdForm(  ) );
+            }
+
+            // entry goes down in the list
+            else
+            {
+                moveDownEntryOrder( plugin, nOrderToSet, entryToChangeOrder,
+                    entryToChangeOrder.getForm(  ).getIdForm(  ) );
+            }
+        }
+
+        UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_MODIFY_FORM );
+        url.addParameter( PARAMETER_ID_FORM, nIdForm );
+        url.setAnchor( PARAMETER_LIST );
+
+        return url.getUrl(  );
+    }
+
+    /**
+     * Change the attribute's order to a greater one (move down in the list)
+     * @param plugin the plugin
+     * @param nOrderToSet the new order for the attribute
+     * @param entryToChangeOrder the attribute which will change
+     * @param nIdForm the id of the form
+     */
+    private void moveDownEntryOrder( Plugin plugin, int nOrderToSet, IEntry entryToChangeOrder, int nIdForm )
+    {
+        if ( entryToChangeOrder.getParent(  ) == null )
+        {
+            int nNbChild = 0;
+            int nNewOrder = 0;
+
+            EntryFilter filter = new EntryFilter(  );
+            filter.setIdForm( nIdForm );
+            filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+            filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+
+            List<IEntry> listEntryFirstLevel = EntryHome.findEntriesWithoutParent( plugin,
+                    entryToChangeOrder.getForm(  ).getIdForm(  ) );
+
+            List<Integer> orderFirstLevel = new ArrayList<Integer>(  );
+            initOrderFirstLevel( listEntryFirstLevel, orderFirstLevel );
+
+            Integer nbChildEntryToChangeOrder = 0;
+
+            if ( entryToChangeOrder.getChildren(  ) != null )
+            {
+                nbChildEntryToChangeOrder = entryToChangeOrder.getChildren(  ).size(  );
+            }
+
+            for ( IEntry entry : listEntryFirstLevel )
+            {
+                for ( int i = 0; i < orderFirstLevel.size(  ); i++ )
+                {
+                    if ( ( orderFirstLevel.get( i ) == entry.getPosition(  ) ) &&
+                            ( entry.getPosition(  ) > entryToChangeOrder.getPosition(  ) ) &&
+                            ( entry.getPosition(  ) <= nOrderToSet ) )
+                    {
+                        if ( nNbChild == 0 )
+                        {
+                            nNewOrder = orderFirstLevel.get( i - 1 );
+
+                            if ( orderFirstLevel.get( i - 1 ) != entryToChangeOrder.getPosition(  ) )
+                            {
+                                nNewOrder -= nbChildEntryToChangeOrder;
+                            }
+                        }
+                        else
+                        {
+                            nNewOrder += ( nNbChild + 1 );
+                        }
+
+                        entry.setPosition( nNewOrder );
+                        EntryHome.update( entry, plugin );
+                        nNbChild = 0;
+
+                        if ( entry.getChildren(  ) != null )
+                        {
+                            for ( IEntry child : entry.getChildren(  ) )
+                            {
+                                nNbChild++;
+                                child.setPosition( nNewOrder + nNbChild );
+                                EntryHome.update( child, plugin );
+                            }
+                        }
+                    }
+                }
+            }
+
+            entryToChangeOrder.setPosition( nNewOrder + nNbChild + 1 );
+            EntryHome.update( entryToChangeOrder, plugin );
+            nNbChild = 0;
+
+            for ( IEntry child : entryToChangeOrder.getChildren(  ) )
+            {
+                nNbChild++;
+                child.setPosition( entryToChangeOrder.getPosition(  ) + nNbChild );
+                EntryHome.update( child, plugin );
+            }
+        }
+        else
+        {
+            EntryFilter filter = new EntryFilter(  );
+            filter.setIdForm( nIdForm );
+            filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+
+            List<IEntry> listAllEntry = EntryHome.getEntryList( filter, plugin );
+
+            for ( IEntry entry : listAllEntry )
+            {
+                if ( ( entry.getPosition(  ) > entryToChangeOrder.getPosition(  ) ) &&
+                        ( entry.getPosition(  ) <= nOrderToSet ) )
+                {
+                    entry.setPosition( entry.getPosition(  ) - 1 );
+                    EntryHome.update( entry, plugin );
+                }
+            }
+
+            entryToChangeOrder.setPosition( nOrderToSet );
+            EntryHome.update( entryToChangeOrder, plugin );
+        }
+    }
+
+    /**
+     * Init the list of the attribute's orders (first level only)
+     * @param listEntryFirstLevel the list of all the attributes of the first
+     *            level
+     * @param orderFirstLevel the list to set
+     */
+    private void initOrderFirstLevel( List<IEntry> listEntryFirstLevel, List<Integer> orderFirstLevel )
+    {
+        for ( IEntry entry : listEntryFirstLevel )
+        {
+            orderFirstLevel.add( entry.getPosition(  ) );
+        }
+    }
+
+    /**
+     * Change the attribute's order to a lower one (move up in the list)
+     * @param plugin the plugin
+     * @param nOrderToSet the new order for the attribute
+     * @param entryToChangeOrder the attribute which will change
+     * @parem nIdForm the id of the form
+     */
+    private void moveUpEntryOrder( Plugin plugin, int nOrderToSet, IEntry entryToChangeOrder, int nIdForm )
+    {
+        if ( entryToChangeOrder.getParent(  ) == null )
+        {
+            List<Integer> orderFirstLevel = new ArrayList<Integer>(  );
+
+            int nNbChild = 0;
+            int nNewOrder = nOrderToSet;
+            int nEntryToMoveOrder = entryToChangeOrder.getPosition(  );
+
+            EntryFilter filter = new EntryFilter(  );
+            filter.setIdForm( nIdForm );
+            filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+            filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+
+            List<IEntry> listEntryFirstLevel = EntryHome.findEntriesWithoutParent( plugin,
+                    entryToChangeOrder.getForm(  ).getIdForm(  ) );
+            //the list of all the orders in the first level
+            initOrderFirstLevel( listEntryFirstLevel, orderFirstLevel );
+
+            for ( IEntry entry : listEntryFirstLevel )
+            {
+                Integer entryInitialPosition = entry.getPosition(  );
+
+                for ( int i = 0; i < orderFirstLevel.size(  ); i++ )
+                {
+                    if ( ( orderFirstLevel.get( i ) == entryInitialPosition ) &&
+                            ( entryInitialPosition < nEntryToMoveOrder ) && ( entryInitialPosition >= nOrderToSet ) )
+                    {
+                        if ( entryToChangeOrder.getPosition(  ) == nEntryToMoveOrder )
+                        {
+                            entryToChangeOrder.setPosition( nNewOrder );
+                            EntryHome.update( entryToChangeOrder, plugin );
+
+                            for ( IEntry child : entryToChangeOrder.getChildren(  ) )
+                            {
+                                nNbChild++;
+                                child.setPosition( entryToChangeOrder.getPosition(  ) + nNbChild );
+                                EntryHome.update( child, plugin );
+                            }
+                        }
+
+                        nNewOrder = nNewOrder + nNbChild + 1;
+                        entry.setPosition( nNewOrder );
+                        EntryHome.update( entry, plugin );
+                        nNbChild = 0;
+
+                        for ( IEntry child : entry.getChildren(  ) )
+                        {
+                            nNbChild++;
+                            child.setPosition( nNewOrder + nNbChild );
+                            EntryHome.update( child, plugin );
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            EntryFilter filter = new EntryFilter(  );
+            filter.setIdForm( nIdForm );
+            filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+
+            List<IEntry> listAllEntry = EntryHome.getEntryList( filter, plugin );
+
+            for ( IEntry entry : listAllEntry )
+            {
+                if ( ( entry.getPosition(  ) < entryToChangeOrder.getPosition(  ) ) &&
+                        ( entry.getPosition(  ) >= nOrderToSet ) )
+                {
+                    entry.setPosition( entry.getPosition(  ) + 1 );
+                    EntryHome.update( entry, plugin );
+                }
+            }
+
+            entryToChangeOrder.setPosition( nOrderToSet );
+            EntryHome.update( entryToChangeOrder, plugin );
+        }
+    }
+
+    /**
+     * Move down the entry (conditional questions only)
+     * @param request The HTTP request
+     * @return The URL to go after performing the action
+     */
+    public String doMoveDownEntryConditional( HttpServletRequest request )
+    {
+        Plugin plugin = getPlugin(  );
+        IEntry entry;
+
+        String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
+        int nIdEntry = -1;
+
+        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
+        {
+            try
+            {
+                nIdEntry = Integer.parseInt( strIdEntry );
+            }
+            catch ( NumberFormatException ne )
+            {
+                AppLogService.error( ne );
+
+                return getJspManageForm( request );
+            }
+        }
+
+        if ( ( nIdEntry == -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
+        {
+            return getJspManageForm( request );
+        }
+
+        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
+
+        EntryFilter filter = new EntryFilter(  );
+        filter.setIdForm( entry.getForm(  ).getIdForm(  ) );
+
+        if ( entry.getParent(  ) != null )
+        {
+            filter.setIdEntryParent( entry.getParent(  ).getIdEntry(  ) );
+        }
+        else
+        {
+            filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+        }
+
+        if ( entry.getFieldDepend(  ) != null )
+        {
+            filter.setIdFieldDepend( entry.getFieldDepend(  ).getIdField(  ) );
+        }
+        else
+        {
+            filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+        }
+
+        int nOrderToSet = entry.getPosition(  ) + 1;
+        IEntry entryWithTheSelectedOrder = EntryHome.findByOrderAndIdFieldAndIdForm( plugin, nOrderToSet,
+                entry.getFieldDepend(  ).getIdField(  ), entry.getForm(  ).getIdForm(  ) );
+
+        entryWithTheSelectedOrder.setPosition( entry.getPosition(  ) );
+        EntryHome.update( entryWithTheSelectedOrder, plugin );
+
+        entry.setPosition( nOrderToSet );
+        EntryHome.update( entry, plugin );
+
+        if ( entry.getFieldDepend(  ) != null )
+        {
+            return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
+        }
+        else
+        {
+            return getJspModifyForm( request, _nIdForm );
+        }
+    }
+
+    /**
+     * Move up the entry (conditional questions only)
+     * @param request The HTTP request
+     * @return The URL to go after performing the action
+     */
+    public String doMoveUpEntryConditional( HttpServletRequest request )
+    {
+        Plugin plugin = getPlugin(  );
+        IEntry entry;
+
+        String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
+        int nIdEntry = -1;
+
+        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
+        {
+            try
+            {
+                nIdEntry = Integer.parseInt( strIdEntry );
+            }
+            catch ( NumberFormatException ne )
+            {
+                AppLogService.error( ne );
+
+                return getJspManageForm( request );
+            }
+        }
+
+        if ( ( nIdEntry == -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
+        {
+            return getJspManageForm( request );
+        }
+
+        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
+
+        List<IEntry> listEntry;
+        EntryFilter filter = new EntryFilter(  );
+        filter.setIdForm( entry.getForm(  ).getIdForm(  ) );
+
+        if ( entry.getParent(  ) != null )
+        {
+            filter.setIdEntryParent( entry.getParent(  ).getIdEntry(  ) );
+        }
+        else
+        {
+            filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+        }
+
+        if ( entry.getFieldDepend(  ) != null )
+        {
+            filter.setIdFieldDepend( entry.getFieldDepend(  ).getIdField(  ) );
+        }
+        else
+        {
+            filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+        }
+
+        int nOrderToSet = entry.getPosition(  ) - 1;
+        IEntry entryWithTheSelectedOrder = EntryHome.findByOrderAndIdFieldAndIdForm( plugin, nOrderToSet,
+                entry.getFieldDepend(  ).getIdField(  ), entry.getForm(  ).getIdForm(  ) );
+
+        entryWithTheSelectedOrder.setPosition( entry.getPosition(  ) );
+        EntryHome.update( entryWithTheSelectedOrder, plugin );
+
+        entry.setPosition( nOrderToSet );
+        EntryHome.update( entry, plugin );
+
+        if ( entry.getFieldDepend(  ) != null )
+        {
+            return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
+        }
+        else
+        {
+            return getJspModifyForm( request, _nIdForm );
+        }
+    }
+
+    /**
+     * Move EntryToMove into entryGroup
+     * @param plugin the plugin
+     * @param entryToMove the entry which will be moved
+     * @param entryGroup the entry group
+     */
+    private void doMoveEntryIntoGroup( Plugin plugin, IEntry entryToMove, IEntry entryGroup )
+    {
+        int nPosition;
+
+        if ( ( entryGroup.getChildren(  ) != null ) && ( !entryGroup.getChildren(  ).isEmpty(  ) ) )
+        {
+            nPosition = entryGroup.getPosition(  ) + entryGroup.getChildren(  ).size(  ) + 1;
+        }
+
+        if ( entryToMove.getPosition(  ) < entryGroup.getPosition(  ) )
+        {
+            nPosition = entryGroup.getPosition(  );
+            this.moveDownEntryOrder( plugin, nPosition, entryToMove, entryToMove.getForm(  ).getIdForm(  ) );
+        }
+        else
+        {
+            nPosition = entryGroup.getPosition(  ) + entryGroup.getChildren(  ).size(  ) + 1;
+            this.moveUpEntryOrder( plugin, nPosition, entryToMove, entryToMove.getForm(  ).getIdForm(  ) );
+        }
+
+        entryToMove.setParent( entryGroup );
+        EntryHome.update( entryToMove, plugin );
+    }
+
+    /**
+     * Move out entry (no parent)
+     * @param plugin the plugin
+     * @param nIdForm the id form
+     * @param nListEntrySize the number of entry
+     * @param entryToMove the entry to move
+     */
+    private void doMoveOutEntry( Plugin plugin, int nIdForm, Integer nListEntrySize, IEntry entryToMove )
+    {
+        this.moveDownEntryOrder( plugin, nListEntrySize, entryToMove, nIdForm );
+        entryToMove.setParent( null );
+        EntryHome.update( entryToMove, plugin );
     }
 }

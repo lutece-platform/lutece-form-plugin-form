@@ -166,6 +166,8 @@ CREATE TABLE form_form (
 	code_theme varchar(25)default NULL,
 	active_mylutece_authentification smallint default NULL,
 	id_category int default NULL,
+	front_office_title varchar(255) default NULL,
+	is_shown_front_office_title SMALLINT(6) default 0,
 	PRIMARY KEY (id_form)
 );
 
@@ -196,6 +198,7 @@ CREATE TABLE form_entry (
 	field_unique smallint default NULL,
 	map_provider varchar(45) default NULL,
 	css_class varchar(255) default NULL,
+	pos_conditional int default 0,
 	PRIMARY KEY (id_entry)
 );
 

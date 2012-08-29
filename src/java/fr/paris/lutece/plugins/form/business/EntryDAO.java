@@ -37,10 +37,10 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -49,29 +49,31 @@ import java.util.List;
 public final class EntryDAO implements IEntryDAO
 {
     // Constants
+    private static final int CONSTANT_ZERO = 0;
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_entry ) FROM form_entry";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
         "ent.id_entry,ent.id_form,form.title,ent.id_parent,ent.title,ent.help_message," +
         "ent.comment,ent.mandatory,ent.fields_in_line," +
-        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class " +
+        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class, ent.pos_conditional " +
         "FROM form_entry ent,form_entry_type typ	,form_form form  WHERE ent.id_entry = ? and ent.id_type=typ.id_type and " +
         "ent.id_form=form.id_form";
     private static final String SQL_QUERY_INSERT = "INSERT INTO form_entry ( " +
         "id_entry,id_form,id_type,id_parent,title,help_message," + "comment,mandatory,fields_in_line," +
-        "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class, pos_conditional ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_entry WHERE id_entry = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE  form_entry SET " +
         "id_entry=?,id_form=?,id_type=?,id_parent=?,title=?,help_message=?," +
         "comment=?,mandatory=?,fields_in_line=?," +
-        "pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=?,css_class=? WHERE id_entry=?";
+        "pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=?,css_class=?, pos_conditional=? WHERE id_entry=?";
     private static final String SQL_QUERY_SELECT_ENTRY_BY_FILTER = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
         "ent.id_entry,ent.id_form,ent.id_parent,ent.title,ent.help_message," +
         "ent.comment,ent.mandatory,ent.fields_in_line," +
-        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider,ent.css_class " +
+        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider,ent.css_class, ent.pos_conditional " +
         "FROM form_entry ent,form_entry_type typ WHERE ent.id_type=typ.id_type ";
     private static final String SQL_QUERY_SELECT_NUMBER_ENTRY_BY_FILTER = "SELECT COUNT(ent.id_entry) " +
         "FROM form_entry ent,form_entry_type typ WHERE ent.id_type=typ.id_type ";
-    private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos) " + "FROM form_entry ";
+    private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos) " + "FROM form_entry WHERE id_form=?";
+    private static final String SQL_QUERY_NEW_POSITION_CONDITIONAL_QUESTION = "SELECT MAX(pos_conditional) FROM form_entry WHERE id_field_depend=?";
     private static final String SQL_QUERY_NUMBER_CONDITIONAL_QUESTION = "SELECT  COUNT(e2.id_entry) " +
         "FROM form_entry e1,form_field f1,form_entry e2 WHERE e1.id_entry=? AND e1.id_entry=f1.id_entry and e2.id_field_depend=f1.id_field ";
     private static final String SQL_FILTER_ID_FORM = " AND ent.id_form = ? ";
@@ -82,12 +84,25 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_FILTER_ID_FIELD_DEPEND = " AND ent.id_field_depend = ? ";
     private static final String SQL_FILTER_ID_FIELD_DEPEND_IS_NULL = " AND ent.id_field_depend IS NULL ";
     private static final String SQL_FILTER_ID_TYPE = " AND ent.id_type = ? ";
-    private static final String SQL_ORDER_BY_POSITION = " ORDER BY ent.pos ";
+    private static final String SQL_ORDER_BY_POSITION = " ORDER BY ent.pos, ent.pos_conditional ";
     private static final String SQL_GROUP_BY_POSITION = " GROUP BY ent.pos ";
     private static final String SQL_GROUP_BY_FORM_ENTRY_ENTRY_TYPE = "GROUP BY ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
         "ent.id_entry,ent.id_form,ent.id_parent,ent.title,ent.help_message," +
         "ent.comment,ent.mandatory,ent.fields_in_line," +
         "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider,ent.css_class ";
+    private static final String SQL_QUERY_ENTRIES_PARENT_NULL = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
+        "ent.id_entry,ent.id_form,ent.id_parent,ent.title,ent.help_message," +
+        "ent.comment,ent.mandatory,ent.fields_in_line," +
+        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider,ent.css_class " +
+        "FROM form_entry ent,form_entry_type typ WHERE ent.id_type=typ.id_type AND id_parent IS NULL AND id_form=? " +
+        SQL_FILTER_ID_FIELD_DEPEND_IS_NULL + " ORDER BY ent.pos";
+    private static final String SQL_QUERY_ENTRY_CONDITIONAL_WITH_ORDER_BY_FIELD_FORM = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
+        "ent.id_entry,ent.id_form,ent.id_parent,ent.title,ent.help_message," +
+        "ent.comment,ent.mandatory,ent.fields_in_line," +
+        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique,ent.map_provider,ent.css_class, ent.pos_conditional " +
+        "FROM form_entry ent,form_entry_type typ WHERE ent.id_type=typ.id_type " +
+        " AND pos_conditional = ?  AND ent.id_field_depend = ? AND id_form=? ";
+    private static final String SQL_QUERY_DECREMENT_ORDER_CONDITIONAL = "UPDATE form_entry SET pos_conditional = pos_conditional - 1 WHERE pos_conditional > ? AND id_field_depend=? AND id_form=? ";
 
     /**
      * Generates a new primary key
@@ -117,23 +132,71 @@ public final class EntryDAO implements IEntryDAO
     /**
      * Generates a new entry position
      * @param plugin the plugin
+     * @param entry the entry
      * @return the new entry position
      */
-    private int newPosition( Plugin plugin )
+    private int newPosition( IEntry entry, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_POSITION, plugin );
-        daoUtil.executeQuery(  );
-
+        DAOUtil daoUtil = null;
         int nPos;
 
-        if ( !daoUtil.next(  ) )
+        if ( entry.getFieldDepend(  ) == null )
         {
-            // if the table is empty
-            nPos = 1;
+            daoUtil = new DAOUtil( SQL_QUERY_NEW_POSITION, plugin );
+
+            daoUtil.setInt( 1, entry.getForm(  ).getIdForm(  ) );
+            daoUtil.executeQuery(  );
+
+            if ( !daoUtil.next(  ) )
+            {
+                // if the table is empty
+                nPos = 1;
+            }
+
+            nPos = daoUtil.getInt( 1 ) + 1;
+            daoUtil.free(  );
+        }
+        else
+        {
+            //case of conditional question only
+            nPos = 0;
         }
 
-        nPos = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free(  );
+        return nPos;
+    }
+
+    /**
+     * Generates a new entry position
+     * @param plugin the plugin
+     * @param entry the entry
+     * @return the new entry position
+     */
+    private int newPositionConditional( IEntry entry, Plugin plugin )
+    {
+        DAOUtil daoUtil = null;
+        int nPos;
+
+        if ( entry.getFieldDepend(  ) != null )
+        {
+            //case of conditional question only
+            daoUtil = new DAOUtil( SQL_QUERY_NEW_POSITION_CONDITIONAL_QUESTION, plugin );
+
+            daoUtil.setInt( 1, entry.getFieldDepend(  ).getIdField(  ) );
+            daoUtil.executeQuery(  );
+
+            if ( !daoUtil.next(  ) )
+            {
+                // if the table is empty
+                nPos = 1;
+            }
+
+            nPos = daoUtil.getInt( 1 ) + 1;
+            daoUtil.free(  );
+        }
+        else
+        {
+            nPos = 0;
+        }
 
         return nPos;
     }
@@ -192,7 +255,8 @@ public final class EntryDAO implements IEntryDAO
         daoUtil.setString( 7, entry.getComment(  ) );
         daoUtil.setBoolean( 8, entry.isMandatory(  ) );
         daoUtil.setBoolean( 9, entry.isFieldInLine(  ) );
-        daoUtil.setInt( 10, newPosition( plugin ) );
+
+        daoUtil.setInt( 10, newPosition( entry, plugin ) );
 
         if ( entry.getFieldDepend(  ) != null )
         {
@@ -211,6 +275,7 @@ public final class EntryDAO implements IEntryDAO
                                                                         : entry.getMapProvider(  ).getKey(  );
         daoUtil.setString( 15, strMapProviderKey );
         daoUtil.setString( 16, ( entry.getCSSClass(  ) == null ) ? StringUtils.EMPTY : entry.getCSSClass(  ) );
+        daoUtil.setInt( 17, newPositionConditional( entry, plugin ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -308,6 +373,11 @@ public final class EntryDAO implements IEntryDAO
             entry.setMapProvider( MapProviderManager.getMapProvider( daoUtil.getString( 21 ) ) );
             entry.setCSSClass( daoUtil.getString( 22 ) );
 
+            if ( daoUtil.getInt( 23 ) != 0 )
+            {
+                entry.setPosition( daoUtil.getInt( 23 ) );
+            }
+
             entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry(  ), plugin ) );
         }
 
@@ -358,7 +428,15 @@ public final class EntryDAO implements IEntryDAO
         daoUtil.setString( 7, entry.getComment(  ) );
         daoUtil.setBoolean( 8, entry.isMandatory(  ) );
         daoUtil.setBoolean( 9, entry.isFieldInLine(  ) );
-        daoUtil.setInt( 10, entry.getPosition(  ) );
+
+        if ( entry.getFieldDepend(  ) == null )
+        {
+            daoUtil.setInt( 10, entry.getPosition(  ) );
+        }
+        else
+        {
+            daoUtil.setInt( 10, CONSTANT_ZERO );
+        }
 
         if ( entry.getFieldDepend(  ) != null )
         {
@@ -378,7 +456,16 @@ public final class EntryDAO implements IEntryDAO
         daoUtil.setString( 15, strMapProviderKey );
         daoUtil.setString( 16, ( entry.getCSSClass(  ) == null ) ? StringUtils.EMPTY : entry.getCSSClass(  ) );
 
-        daoUtil.setInt( 17, entry.getIdEntry(  ) );
+        if ( entry.getFieldDepend(  ) != null )
+        {
+            daoUtil.setInt( 17, entry.getPosition(  ) );
+        }
+        else
+        {
+            daoUtil.setInt( 17, CONSTANT_ZERO );
+        }
+
+        daoUtil.setInt( 18, entry.getIdEntry(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -524,7 +611,11 @@ public final class EntryDAO implements IEntryDAO
             entry.setComment( daoUtil.getString( 12 ) );
             entry.setMandatory( daoUtil.getBoolean( 13 ) );
             entry.setFieldInLine( daoUtil.getBoolean( 14 ) );
-            entry.setPosition( daoUtil.getInt( 15 ) );
+
+            if ( daoUtil.getInt( 15 ) != 0 )
+            {
+                entry.setPosition( daoUtil.getInt( 15 ) );
+            }
 
             if ( daoUtil.getObject( 16 ) != null )
             {
@@ -538,6 +629,12 @@ public final class EntryDAO implements IEntryDAO
             entry.setUnique( daoUtil.getBoolean( 19 ) );
             entry.setMapProvider( MapProviderManager.getMapProvider( daoUtil.getString( 20 ) ) );
             entry.setCSSClass( daoUtil.getString( 21 ) );
+
+            //position for conditional questions only
+            if ( daoUtil.getInt( 22 ) != 0 )
+            {
+                entry.setPosition( daoUtil.getInt( 22 ) );
+            }
 
             entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry(  ), plugin ) );
             entryList.add( entry );
@@ -634,5 +731,216 @@ public final class EntryDAO implements IEntryDAO
         daoUtil.free(  );
 
         return nNumberEntry;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<IEntry> findEntriesWithoutParent( Plugin plugin, int nIdForm )
+    {
+        List<IEntry> listResult = new ArrayList<IEntry>(  );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ENTRIES_PARENT_NULL );
+        daoUtil.setInt( 1, nIdForm );
+        daoUtil.executeQuery(  );
+
+        while ( daoUtil.next(  ) )
+        {
+            EntryType entryType = new EntryType(  );
+            IEntry entry = null;
+
+            entryType.setIdType( daoUtil.getInt( 1 ) );
+            entryType.setTitle( daoUtil.getString( 2 ) );
+            entryType.setGroup( daoUtil.getBoolean( 3 ) );
+            entryType.setComment( daoUtil.getBoolean( 4 ) );
+            entryType.setClassName( daoUtil.getString( 5 ) );
+            entryType.setMyLuteceUser( daoUtil.getBoolean( 6 ) );
+
+            try
+            {
+                entry = (IEntry) Class.forName( entryType.getClassName(  ) ).newInstance(  );
+            }
+            catch ( ClassNotFoundException e )
+            {
+                //  class doesn't exist
+                AppLogService.error( e );
+
+                return null;
+            }
+            catch ( InstantiationException e )
+            {
+                // Class is abstract or is an  interface or haven't accessible builder
+                AppLogService.error( e );
+
+                return null;
+            }
+            catch ( IllegalAccessException e )
+            {
+                // can't access to rhe class
+                AppLogService.error( e );
+
+                return null;
+            }
+
+            entry.setEntryType( entryType );
+            entry.setIdEntry( daoUtil.getInt( 7 ) );
+
+            // insert form
+            Form form = new Form(  );
+            form.setIdForm( daoUtil.getInt( 8 ) );
+            entry.setForm( form );
+
+            if ( daoUtil.getObject( 9 ) != null )
+            {
+                IEntry entryParent = new Entry(  );
+                entryParent.setIdEntry( daoUtil.getInt( 9 ) );
+                entry.setParent( entryParent );
+            }
+
+            entry.setTitle( daoUtil.getString( 10 ) );
+            entry.setHelpMessage( daoUtil.getString( 11 ) );
+            entry.setComment( daoUtil.getString( 12 ) );
+            entry.setMandatory( daoUtil.getBoolean( 13 ) );
+            entry.setFieldInLine( daoUtil.getBoolean( 14 ) );
+            entry.setPosition( daoUtil.getInt( 15 ) );
+
+            if ( daoUtil.getObject( 16 ) != null )
+            {
+                Field fieldDepend = new Field(  );
+                fieldDepend.setIdField( daoUtil.getInt( 16 ) );
+                entry.setFieldDepend( fieldDepend );
+            }
+
+            entry.setConfirmField( daoUtil.getBoolean( 17 ) );
+            entry.setConfirmFieldTitle( daoUtil.getString( 18 ) );
+            entry.setUnique( daoUtil.getBoolean( 19 ) );
+            entry.setMapProvider( MapProviderManager.getMapProvider( daoUtil.getString( 20 ) ) );
+            entry.setCSSClass( daoUtil.getString( 21 ) );
+
+            entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry(  ), plugin ) );
+            listResult.add( entry );
+        }
+
+        daoUtil.free(  );
+
+        return listResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IEntry findByOrderAndIdFieldAndIdForm( Plugin plugin, int nOrder, int nIdField, int nIdForm )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ENTRY_CONDITIONAL_WITH_ORDER_BY_FIELD_FORM );
+        daoUtil.setInt( 1, nOrder );
+        daoUtil.setInt( 2, nIdField );
+        daoUtil.setInt( 3, nIdForm );
+        daoUtil.executeQuery(  );
+
+        IEntry entry = null;
+        EntryType entryType = null;
+        IEntry entryParent = null;
+        Field fieldDepend = null;
+        Form form = null;
+
+        while ( daoUtil.next(  ) )
+        {
+            entryType = new EntryType(  );
+            entryType.setIdType( daoUtil.getInt( 1 ) );
+            entryType.setTitle( daoUtil.getString( 2 ) );
+            entryType.setGroup( daoUtil.getBoolean( 3 ) );
+            entryType.setComment( daoUtil.getBoolean( 4 ) );
+            entryType.setClassName( daoUtil.getString( 5 ) );
+            entryType.setMyLuteceUser( daoUtil.getBoolean( 6 ) );
+
+            try
+            {
+                entry = (IEntry) Class.forName( entryType.getClassName(  ) ).newInstance(  );
+            }
+            catch ( ClassNotFoundException e )
+            {
+                //  class doesn't exist
+                AppLogService.error( e );
+
+                return null;
+            }
+            catch ( InstantiationException e )
+            {
+                // Class is abstract or is an  interface or haven't accessible builder
+                AppLogService.error( e );
+
+                return null;
+            }
+            catch ( IllegalAccessException e )
+            {
+                // can't access to rhe class
+                AppLogService.error( e );
+
+                return null;
+            }
+
+            entry.setEntryType( entryType );
+            entry.setIdEntry( daoUtil.getInt( 7 ) );
+            // insert form
+            form = new Form(  );
+            form.setIdForm( daoUtil.getInt( 8 ) );
+            entry.setForm( form );
+
+            if ( daoUtil.getObject( 9 ) != null )
+            {
+                entryParent = new Entry(  );
+                entryParent.setIdEntry( daoUtil.getInt( 9 ) );
+                entry.setParent( entryParent );
+            }
+
+            entry.setTitle( daoUtil.getString( 10 ) );
+            entry.setHelpMessage( daoUtil.getString( 11 ) );
+            entry.setComment( daoUtil.getString( 12 ) );
+            entry.setMandatory( daoUtil.getBoolean( 13 ) );
+            entry.setFieldInLine( daoUtil.getBoolean( 14 ) );
+
+            if ( daoUtil.getInt( 15 ) != 0 )
+            {
+                entry.setPosition( daoUtil.getInt( 15 ) );
+            }
+
+            if ( daoUtil.getObject( 16 ) != null )
+            {
+                fieldDepend = new Field(  );
+                fieldDepend.setIdField( daoUtil.getInt( 16 ) );
+                entry.setFieldDepend( fieldDepend );
+            }
+
+            entry.setConfirmField( daoUtil.getBoolean( 17 ) );
+            entry.setConfirmFieldTitle( daoUtil.getString( 18 ) );
+            entry.setUnique( daoUtil.getBoolean( 19 ) );
+            entry.setMapProvider( MapProviderManager.getMapProvider( daoUtil.getString( 20 ) ) );
+            entry.setCSSClass( daoUtil.getString( 21 ) );
+
+            //position for conditional questions only
+            if ( daoUtil.getInt( 22 ) != 0 )
+            {
+                entry.setPosition( daoUtil.getInt( 22 ) );
+            }
+
+            entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry(  ), plugin ) );
+        }
+
+        return entry;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void decrementOrderByOne( int nOrder, int nIdField, int nIdForm )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DECREMENT_ORDER_CONDITIONAL );
+        daoUtil.setInt( 1, nOrder );
+        daoUtil.setInt( 2, nIdField );
+        daoUtil.setInt( 3, nIdForm );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 }

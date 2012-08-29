@@ -180,13 +180,64 @@ public final class EntryHome
     }
 
     /**
-         * Return  the number of entry who verify the filter
-         * @param filter the filter
-         * @param plugin the plugin
-         * @return   the number of entry who verify the filter
-         */
+     * Return the number of entry who verify the filter
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return the number of entry who verify the filter
+     */
     public static int getNumberEntryByFilter( EntryFilter filter, Plugin plugin )
     {
         return _dao.selectNumberEntryByFilter( filter, plugin );
+    }
+
+    /**
+     * Finds all the entries without any parent
+     * 
+     * @param plugin the plugin
+     * @param nIdForm the id of the form
+     * @return List<IEntry> the list of all the entries without parent
+     */
+    public static List<IEntry> findEntriesWithoutParent( Plugin plugin, int nIdForm )
+    {
+        List<IEntry> listEntry = _dao.findEntriesWithoutParent( plugin, nIdForm );
+
+        for ( IEntry entry : listEntry )
+        {
+            if ( entry != null )
+            {
+                EntryFilter filter = new EntryFilter(  );
+                filter.setIdEntryParent( entry.getIdEntry(  ) );
+                entry.setChildren( getEntryList( filter, plugin ) );
+            }
+        }
+
+        return listEntry;
+    }
+
+    /**
+     * Finds the entry (conditional question) with a given order, idDependField
+     * and idform
+     *
+     * @param plugin the plugin
+     * @param nOrder the order
+     * @param nIdField the id of the field
+     * @param nIdForm the id of the form
+     * @return List<IEntry> the list of all the entries without parent
+     */
+    public static IEntry findByOrderAndIdFieldAndIdForm( Plugin plugin, int nOrder, int nIdField, int nIdForm )
+    {
+        return _dao.findByOrderAndIdFieldAndIdForm( plugin, nOrder, nIdField, nIdForm );
+    }
+
+    /**
+     * Decrements the order of all the entries (conditional questions) after the
+     * one which will be removed
+     * @param nOrder the order of the entry which will be removed
+     * @param nIdField the id of the field
+     * @param nIdForm the id of the form
+     */
+    public static void decrementOrderByOne( int nOrder, int nIdField, int nIdForm )
+    {
+        _dao.decrementOrderByOne( nOrder, nIdField, nIdForm );
     }
 }

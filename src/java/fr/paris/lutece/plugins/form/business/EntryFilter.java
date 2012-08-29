@@ -45,6 +45,7 @@ public class EntryFilter
     public static final int ALL_INT = -1;
     public static final int FILTER_FALSE = 0;
     public static final int FILTER_TRUE = 1;
+    public static final int FILTER_GROUP_ENTRY = 9;
     private int _nIdForm = ALL_INT;
     private int _nIdFieldDepend = ALL_INT;
     private int _nIdEntryParent = ALL_INT;

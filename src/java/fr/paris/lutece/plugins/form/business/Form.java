@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionRemovalListenerService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
@@ -59,6 +58,8 @@ public class Form implements AdminWorkgroupResource, RBACResource
     private static FormRegularExpressionRemovalListener _listenerRegularExpression = new FormRegularExpressionRemovalListener(  );
     private int _nIdForm;
     private String _strTitle;
+    private String _strFrontOfficeTitle;
+    private boolean _bIsShownFrontOfficeTitle;
     private String _strDescription;
     private String _strWelcomeMessage;
     private String _strUnavailabilityMessage;
@@ -259,6 +260,42 @@ public class Form implements AdminWorkgroupResource, RBACResource
     public void setTitle( String strTitle )
     {
         this._strTitle = strTitle;
+    }
+
+    /**
+     * gets the front office's title
+     * @return the title of the form in the front office
+     */
+    public String getFrontOfficeTitle(  )
+    {
+        return _strFrontOfficeTitle;
+    }
+
+    /**
+     * Set the front office's title
+     * @param strFrontOfficeTitle the title to set
+     */
+    public void setFrontOfficeTitle( String strFrontOfficeTitle )
+    {
+        this._strFrontOfficeTitle = strFrontOfficeTitle;
+    }
+
+    /**
+     * get the value of the boolean isShownFrontOfficeTitle
+     * @return bIsShownFrontOfficeTitle
+     */
+    public boolean isShownFrontOfficeTitle(  )
+    {
+        return _bIsShownFrontOfficeTitle;
+    }
+
+    /**
+     * set the value of the boolean isShownFrontOfficeTitle
+     * @param bIsShownFrontOfficeTitle
+     */
+    public void setIsShownFrontOfficeTitle( boolean bIsShownFrontOfficeTitle )
+    {
+        this._bIsShownFrontOfficeTitle = bIsShownFrontOfficeTitle;
     }
 
     /**

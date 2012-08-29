@@ -493,8 +493,16 @@ public class FormApp implements XPageApplication
         // Check if the form needs MyLutece authentication
         checkMyLuteceAuthentification( form, request );
 
-        page.setTitle( form.getTitle(  ) );
-        page.setPathLabel( form.getTitle(  ) );
+        if ( StringUtils.isNotBlank( form.getFrontOfficeTitle(  ) ) )
+        {
+            page.setTitle( form.getFrontOfficeTitle(  ) );
+            page.setPathLabel( form.getFrontOfficeTitle(  ) );
+        }
+        else
+        {
+            page.setTitle( form.getTitle(  ) );
+            page.setPathLabel( form.getTitle(  ) );
+        }
 
         if ( !form.isActive(  ) )
         {

@@ -374,7 +374,6 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         {
             strFieldError = FIELD_TITLE;
         }
-
         else if ( ( strDescription == null ) || strDescription.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_DESCRIPTION;
@@ -383,7 +382,6 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         {
             strFieldError = FIELD_EXTENSION;
         }
-
         else if ( ( strFilename == null ) || ( strFilename.equals( "" ) && ( exportFormat.getXsl(  ) == null ) ) )
         {
             strFieldError = FIELD_XSL;

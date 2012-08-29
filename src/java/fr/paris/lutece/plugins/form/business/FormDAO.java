@@ -55,28 +55,28 @@ public final class FormDAO implements IFormDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_form ) FROM form_form";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_form,title,description, welcome_message," +
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message," +
         "unavailability_message, requirement_message,workgroup," +
         "id_mailing_list,active_captcha,active_store_adresse," +
         "libelle_validate_button,libelle_reset_button,date_begin_disponibility,date_end_disponibility," +
         " active,auto_publication,date_creation,limit_number_response,id_recap,active_requirement,information_1," +
         " information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification, id_category" +
         " FROM form_form WHERE id_form = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO form_form ( id_form,title,description, welcome_message," +
+    private static final String SQL_QUERY_INSERT = "INSERT INTO form_form ( id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message," +
         "unavailability_message,requirement_message,workgroup," +
         "id_mailing_list,active_captcha,active_store_adresse," +
         "libelle_validate_button,libelle_reset_button,date_begin_disponibility," +
         " date_end_disponibility,active,auto_publication,date_creation,limit_number_response," +
         " id_recap,active_requirement,information_1,information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification, id_category ) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_form WHERE id_form = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE form_form SET id_form=?,title=?,description=?, welcome_message=?," +
+    private static final String SQL_QUERY_UPDATE = "UPDATE form_form SET id_form=?,title=?,front_office_title=?,is_shown_front_office_title=?,description=?, welcome_message=?," +
         "unavailability_message=?, requirement_message=?,workgroup=?," +
         "id_mailing_list=?,active_captcha=?,active_store_adresse=?," +
         "libelle_validate_button=?,libelle_reset_button=?,date_begin_disponibility=?,date_end_disponibility=?,active=?,auto_publication=?,limit_number_response=? ,active_requirement=?," +
         "information_1=? ,information_2=? ,information_3=? ,information_4=? ,information_5=?, supports_https = ?, code_theme = ?, " +
         "active_mylutece_authentification=? ,id_category=? WHERE id_form=?";
-    private static final String SQL_QUERY_SELECT_FORM_BY_FILTER = "SELECT id_form,title,description, welcome_message," +
+    private static final String SQL_QUERY_SELECT_FORM_BY_FILTER = "SELECT id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message," +
         "unavailability_message, requirement_message,workgroup," +
         "id_mailing_list,active_captcha,active_store_adresse," +
         "libelle_validate_button,libelle_reset_button,date_begin_disponibility,date_end_disponibility,active," +
@@ -137,6 +137,8 @@ public final class FormDAO implements IFormDAO
         int nIndex = 1;
         daoUtil.setInt( nIndex++, form.getIdForm(  ) );
         daoUtil.setString( nIndex++, form.getTitle(  ) );
+        daoUtil.setString( nIndex++, form.getFrontOfficeTitle(  ) );
+        daoUtil.setBoolean( nIndex++, form.isShownFrontOfficeTitle(  ) );
         daoUtil.setString( nIndex++, form.getDescription(  ) );
         daoUtil.setString( nIndex++, form.getWelcomeMessage(  ) );
         daoUtil.setString( nIndex++, form.getUnavailabilityMessage(  ) );
@@ -204,6 +206,8 @@ public final class FormDAO implements IFormDAO
             form = new Form(  );
             form.setIdForm( daoUtil.getInt( nIndex++ ) );
             form.setTitle( daoUtil.getString( nIndex++ ) );
+            form.setFrontOfficeTitle( daoUtil.getString( nIndex++ ) );
+            form.setIsShownFrontOfficeTitle( daoUtil.getBoolean( nIndex++ ) );
             form.setDescription( daoUtil.getString( nIndex++ ) );
             form.setWelcomeMessage( daoUtil.getString( nIndex++ ) );
             form.setUnavailabilityMessage( daoUtil.getString( nIndex++ ) );
@@ -272,6 +276,8 @@ public final class FormDAO implements IFormDAO
         int nIndex = 1;
         daoUtil.setInt( nIndex++, form.getIdForm(  ) );
         daoUtil.setString( nIndex++, form.getTitle(  ) );
+        daoUtil.setString( nIndex++, form.getFrontOfficeTitle(  ) );
+        daoUtil.setBoolean( nIndex++, form.isShownFrontOfficeTitle(  ) );
         daoUtil.setString( nIndex++, form.getDescription(  ) );
         daoUtil.setString( nIndex++, form.getWelcomeMessage(  ) );
         daoUtil.setString( nIndex++, form.getUnavailabilityMessage(  ) );
@@ -416,6 +422,8 @@ public final class FormDAO implements IFormDAO
             form = new Form(  );
             form.setIdForm( daoUtil.getInt( nIndex++ ) );
             form.setTitle( daoUtil.getString( nIndex++ ) );
+            form.setFrontOfficeTitle( daoUtil.getString( nIndex++ ) );
+            form.setIsShownFrontOfficeTitle( daoUtil.getBoolean( nIndex++ ) );
             form.setDescription( daoUtil.getString( nIndex++ ) );
             form.setWelcomeMessage( daoUtil.getString( nIndex++ ) );
             form.setUnavailabilityMessage( daoUtil.getString( nIndex++ ) );

@@ -3,6 +3,6 @@
 <jsp:useBean id="formForm" scope="session" class="fr.paris.lutece.plugins.form.web.FormJspBean" />
 
 <% 
-	formForm.init( request, formForm.RIGHT_MANAGE_FORM );
-    response.sendRedirect( formForm.doMoveDownEntry( request ) );
+	formForm.init( request,formForm.RIGHT_MANAGE_FORM);
+    response.sendRedirect( formForm.doMoveUpEntryConditional( request ) );
 %>
