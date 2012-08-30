@@ -740,7 +740,7 @@ public final class EntryDAO implements IEntryDAO
     public List<IEntry> findEntriesWithoutParent( Plugin plugin, int nIdForm )
     {
         List<IEntry> listResult = new ArrayList<IEntry>(  );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ENTRIES_PARENT_NULL );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ENTRIES_PARENT_NULL, plugin );
         daoUtil.setInt( 1, nIdForm );
         daoUtil.executeQuery(  );
 
@@ -832,7 +832,7 @@ public final class EntryDAO implements IEntryDAO
     @Override
     public IEntry findByOrderAndIdFieldAndIdForm( Plugin plugin, int nOrder, int nIdField, int nIdForm )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ENTRY_CONDITIONAL_WITH_ORDER_BY_FIELD_FORM );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ENTRY_CONDITIONAL_WITH_ORDER_BY_FIELD_FORM, plugin );
         daoUtil.setInt( 1, nOrder );
         daoUtil.setInt( 2, nIdField );
         daoUtil.setInt( 3, nIdForm );
@@ -934,9 +934,9 @@ public final class EntryDAO implements IEntryDAO
      * {@inheritDoc}
      */
     @Override
-    public void decrementOrderByOne( int nOrder, int nIdField, int nIdForm )
+    public void decrementOrderByOne( Plugin plugin, int nOrder, int nIdField, int nIdForm )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DECREMENT_ORDER_CONDITIONAL );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DECREMENT_ORDER_CONDITIONAL, plugin );
         daoUtil.setInt( 1, nOrder );
         daoUtil.setInt( 2, nIdField );
         daoUtil.setInt( 3, nIdForm );

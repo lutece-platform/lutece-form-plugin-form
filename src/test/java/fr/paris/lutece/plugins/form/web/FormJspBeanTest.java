@@ -547,50 +547,6 @@ public class FormJspBeanTest extends LuteceTestCase
     }
 
     /**
-     * Test method for {@link fr.paris.lutece.plugins.form.web.FormJspBean#doMoveUpEntry(javax.servlet.http.HttpServletRequest)}.
-     */
-    public void testDoMoveUpEntry(  ) throws AccessDeniedException
-    {
-        System.out.println( "testDoMoveUpEntry" );
-
-        MokeHttpServletRequest request = new MokeHttpServletRequest(  );
-
-        AdminUser user = AdminUserHome.findUserByLogin( "admin" );
-        user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
-        request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
-
-        FormJspBean instance = new FormJspBean(  );
-
-        instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
-
-        String result = instance.doMoveUpEntry( request );
-
-        assertNotNull( result );
-    }
-
-    /**
-     * Test method for {@link fr.paris.lutece.plugins.form.web.FormJspBean#doMoveDownEntry(javax.servlet.http.HttpServletRequest)}.
-     */
-    public void testDoMoveDownEntry(  ) throws AccessDeniedException
-    {
-        System.out.println( "testDoMoveDownEntry" );
-
-        MokeHttpServletRequest request = new MokeHttpServletRequest(  );
-
-        AdminUser user = AdminUserHome.findUserByLogin( "admin" );
-        user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
-        request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
-
-        FormJspBean instance = new FormJspBean(  );
-
-        instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
-
-        String result = instance.doMoveDownEntry( request );
-
-        assertNotNull( result );
-    }
-
-    /**
      * Test method for {@link fr.paris.lutece.plugins.form.web.FormJspBean#doMoveOutEntry(javax.servlet.http.HttpServletRequest)}.
      */
     public void testDoMoveOutEntry(  ) throws AccessDeniedException

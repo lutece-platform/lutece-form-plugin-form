@@ -236,8 +236,8 @@ public final class EntryHome
      * @param nIdField the id of the field
      * @param nIdForm the id of the form
      */
-    public static void decrementOrderByOne( int nOrder, int nIdField, int nIdForm )
+    public static void decrementOrderByOne( Plugin plugin, int nOrder, int nIdField, int nIdForm )
     {
-        _dao.decrementOrderByOne( nOrder, nIdField, nIdForm );
+        _dao.decrementOrderByOne( plugin, nOrder, nIdField, nIdForm );
     }
 }

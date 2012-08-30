@@ -126,5 +126,5 @@ public interface IEntryDAO
      * @param nIdField the id of the field
      * @param nIdForm the id of the form
      */
-    void decrementOrderByOne( int nOrder, int nIdField, int nIdForm );
+    void decrementOrderByOne( Plugin plugin, int nOrder, int nIdField, int nIdForm );
 }

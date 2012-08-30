@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
-import com.keypoint.PngEncoder;
-
 import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.CategoryHome;
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
@@ -112,23 +110,12 @@ import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.entity.StandardEntityCollection;
-
 import java.awt.image.BufferedImage;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-
 import java.sql.Timestamp;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -139,6 +126,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
+
+import com.keypoint.PngEncoder;
 
 
 /**
@@ -2057,7 +2053,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         else
         {
             //conditional questions
-            EntryHome.decrementOrderByOne( entry.getPosition(  ), entry.getFieldDepend(  ).getIdField(  ),
+            EntryHome.decrementOrderByOne( plugin, entry.getPosition( ), entry.getFieldDepend( ).getIdField( ),
                 entry.getForm(  ).getIdForm(  ) );
         }
 
