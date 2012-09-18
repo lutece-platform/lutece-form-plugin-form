@@ -36,8 +36,8 @@
             </td>   
             <td>
                 <#if authorized_form_modification_list?seq_contains(form.idForm)>
-                <a class="btn btn-mini" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form"  title="${form.title}" >
-                    <i class="fam-application-form"></i>
+                <a class="btn btn-mini btn-primary" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form"  title="${form.title}" >
+                    <i class="icon-edit icon-white"></i>
                 </a>
                 </#if>
                 <#if form.actions?exists>
@@ -45,8 +45,8 @@
                 <#if (action.permission=='CHANGE_STATE') || (action.permission=='CHANGE_STATE_AUTO_PUBLICATION') || (action.permission=='VIEW_RESULT') || (action.permission=='DELETE') >
                 <#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
                 <#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && !((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
-                <a class="btn btn-mini" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
-                    <i class="${action.iconUrl}"></i>
+                <a class="btn btn-mini btn-primary" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
+                    <i class="${action.iconUrl} icon-white"></i>
                 </a>
                 </#if>
                 </#if>
