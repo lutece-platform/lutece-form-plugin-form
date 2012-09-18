@@ -1,27 +1,19 @@
 <div class="well">
-    <fieldset>
-        <legend>
-            <img src="${icon}" />
-            <a href="${url}" >
-                #i18n{form.dashboard.formList}
-            </a>
-            <div class="btn-toolbar pull-right">
-                <div class="btn-group">
-                     <#if permission_create>
-                    <div class="btn btn-info">
+<fieldset>
+	<legend>
+	    <img src="${icon}" title="logo #i18n{form.dashboard.addForm}" alt="logo #i18n{form.dashboard.addForm}"/>
+	    <a href="${url}" title="#i18n{form.dashboard.addForm}"> #i18n{form.dashboard.addForm} </a>
+		<div class="pull-right">
+			<#if permission_create>
+                    <div class="btn btn-mini btn-primary">
                         <a href="jsp/admin/plugins/form/CreateForm.jsp" title="#i18n{form.dashboard.addForm}">
                             <i class="icon-plus icon-white" ></i>
                         </a>
                     </div>
                     </#if>
-                    <div class="btn btn-info">
-                        <a href="jsp/admin/plugins/form/CreateForm.jsp" title="#i18n{form.dashboard.addForm}">
-                            <i class="icon-circle-arrow-up icon-white"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </legend>
-        <#include "form_dashboard.html" />
-    </fieldset>
+			<a href="jsp/admin/AdminMenu.jsp#top" title="#i18n{document.dashboard.top}"><i class="icon-arrow-up"></i></a>
+		</div>
+    </legend>
+     <#include "form_dashboard.html" />
+</fieldset>
 </div>
