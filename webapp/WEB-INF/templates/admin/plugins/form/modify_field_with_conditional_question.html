@@ -33,9 +33,9 @@
 		</div>
 	</div>
   	<div class="form-actions">
-		<button class="btn btn-primary" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
-		<button class="btn btn-primary" type="submit" name="apply"><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.modifyForm.buttonApply}</button>
-		<button class="btn btn-primary" type="submit" name="cancel" onclick="javascript:window.history.back();"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
+		<button class="btn btn-primary btn-small" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
+		<button class="btn btn-primary btn-small" type="submit" name="apply"><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.modifyForm.buttonApply}</button>
+		<button class="btn btn-primary btn-small" type="submit" name="cancel" onclick="javascript:window.history.back();"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
 	</div>
 	</fieldset>
 	</form>
@@ -46,7 +46,7 @@
 			<input name="id_field" value="${field.idField}" type="hidden" />
 			<label for="id_type">#i18n{form.modifyForm.manageEnter.labelInsertEntry} :</label>
 			<@combo name="id_type"  items=entry_type_list default_value=-1 />
-			<button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyForm.manageEnter.buttonInsertEntry} </button>
+			<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyForm.manageEnter.buttonInsertEntry} </button>
 		</form>
 	</div>
     <@paginationAdmin paginator=paginator combo=1/>

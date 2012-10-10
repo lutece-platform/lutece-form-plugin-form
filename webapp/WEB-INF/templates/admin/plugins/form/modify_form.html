@@ -116,10 +116,10 @@
 <legend>#i18n{form.modifyForm.manageEnter.title} </legend>
 <form method="post" class="form-inline pull-left spaced" action="jsp/admin/plugins/form/DoCreateEntry.jsp?id_type=${entry_type_group.idType}#list">
 <input type="text" name="title" value="" placeholder="#i18n{form.modifyForm.manageEnter.labelInsertGroup}"/>
-<button type="submit" class="btn btn-primary" title="#i18n{form.modifyForm.manageEnter.buttonInsertGroup}"><i class="icon-plus icon-white"></i></button>
+<button type="submit" class="btn btn-primary btn-small" title="#i18n{form.modifyForm.manageEnter.buttonInsertGroup}"><i class="icon-plus icon-white"></i></button>
 </form>
 <form method="post" class="form-inline pull-left" action="jsp/admin/plugins/form/CreateEntry.jsp">
-<@combo name="id_type" items=entry_type_list default_value=-1 /><button type="submit" class="btn btn-primary" title="#i18n{form.modifyForm.manageEnter.buttonInsertEntry}"><i class="icon-plus icon-white"></i></button>
+<@combo name="id_type" items=entry_type_list default_value=-1 /><button type="submit" class="btn btn-primary btn-small" title="#i18n{form.modifyForm.manageEnter.buttonInsertEntry}"><i class="icon-plus icon-white"></i></button>
 </form>
 <@paginationAdmin paginator=paginator combo=1/>
 <#if entry_group_list?has_content>

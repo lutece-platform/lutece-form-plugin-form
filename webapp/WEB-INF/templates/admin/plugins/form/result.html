@@ -9,7 +9,7 @@
 		<input type="text" name="fist_response_date_filter" id="fist_response_date_filter" class="input-small" value="<#if fist_response_date_filter?has_content>${fist_response_date_filter?date}</#if>" />
 				<span class="help-text">#i18n{form.result.labelAnd}</span>
 			<input type="text" name="last_response_date_filter" id="last_response_date_filter" class="input-small" value="<#if last_response_date_filter?has_content>${last_response_date_filter?if_exists?date}</#if>" />
-		<button class="btn btn-primary" type="submit" ><i class="icon-filter icon-white"></i> #i18n{form.result.buttonSearch}</button>
+		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-filter icon-white"></i> #i18n{form.result.buttonSearch}</button>
 	</div>
 	<fieldset>
 	<legend>#i18n{form.result.titleStatistic}</legend>
@@ -69,7 +69,7 @@
 		</#if>	
 		<label  for="">#i18n{form.result.labelExportResult} : </label>	
  		<@combo name="id_export_format"  items=export_format_list default_value=-1 />
-		<button class="btn btn-primary" type="submit" ><i class="icon-download icon-white"></i>#i18n{form.result.buttonExportResult}</button>
+		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-download icon-white"></i>#i18n{form.result.buttonExportResult}</button>
 		</div>
 		</form>
 	</fieldset>

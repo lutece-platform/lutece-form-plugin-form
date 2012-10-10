@@ -3,7 +3,7 @@
         <legend>#i18n{form.manageForm.title}
             <#if permission_manage_advanced_parameters>
             <form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/form/ManageAdvancedParameters.jsp">
-                <button class="btn btn-primary" type="submit" >
+                <button class="btn btn-primary btn-small" type="submit" >
                     <i class="icon-cog icon-white" ></i>
                     <span class="hidden-phone" >#i18n{form.manageForm.button_manage_advanced_parameters}</span>
                 </button>
@@ -11,7 +11,7 @@
             </#if>
             <#if permission_create_form>
             <form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/form/CreateForm.jsp">
-                <button class="btn btn-primary" type="submit" >
+                <button class="btn btn-primary btn-small" type="submit" >
                     <i class="icon-plus icon-white" ></i>
                     <span class="hidden-phone" >#i18n{form.manageForm.buttonCreate}</span>
                 </button>
@@ -24,7 +24,7 @@
                 <@combo name="active"  items=active_list default_value=active_selected />
                 <label for="">#i18n{form.manageForm.labelWorkGroup}</label>
                 <@combo name="workgroup"  items=user_workgroup_list default_value=user_workgroup_selected />
-                <button class="btn btn-primary" type="submit" ><i class="icon-search icon-white"></i>&nbsp;#i18n{form.manageForm.buttonSearch}</button>
+                <button class="btn btn-primary btn-small" type="submit" ><i class="icon-search icon-white"></i>&nbsp;#i18n{form.manageForm.buttonSearch}</button>
             </form>
         </div>
         <@paginationAdmin paginator=paginator combo=1/>
