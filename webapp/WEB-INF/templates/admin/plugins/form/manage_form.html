@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row-fluid">
     <div class="span12">
         <legend>#i18n{form.manageForm.title}
             <#if permission_manage_advanced_parameters>
@@ -90,7 +90,7 @@
                     <#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
                     <#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && 
                     !((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
-                    <a class="btn btn-mini <#if action.permission=='DELETE'>btn-danger</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
+                    <a class="btn btn-small <#if action.permission=='DELETE'>btn-danger</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
                         <i class="${action.iconUrl}"></i>
                     </a>
                     </#if>

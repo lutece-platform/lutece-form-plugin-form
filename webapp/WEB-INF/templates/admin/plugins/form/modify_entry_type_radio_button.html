@@ -1,5 +1,5 @@
  <#include "/admin/util/editor/editor.html" />
-<div class="row">
+<div class="row-fluid">
 <div class="span12">
 <fieldset>
 <legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
@@ -94,20 +94,20 @@
 	       			</#if>     	
 	            </td>
 	            <td>
-					<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/ModifyFieldWithConditionalQuestion.jsp?id_field=${field.idField}"  title="null" >
+					<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyFieldWithConditionalQuestion.jsp?id_field=${field.idField}"  title="null" >
 						<i class="icon-edit icon-white"></i>
 					</a>
 					<#if cpt!=1>
-	              	<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/DoMoveUpField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveUp}" >
+	              	<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/DoMoveUpField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveUp}" >
 						<i class="icon-question-sign icon-white"></i>
 					</a>
 					</#if> 
 					<#if field_has_next>
-	                <a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/DoMoveDownField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveDown}" >
+	                <a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/DoMoveDownField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveDown}" >
 						<i class="icon-question-sign icon-white"></i>
 					</a>
 					</#if>
-					<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/ConfirmRemoveField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
+					<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/ConfirmRemoveField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
 						<i class="icon-trash icon-white"></i>
 					</a>
 				</td>

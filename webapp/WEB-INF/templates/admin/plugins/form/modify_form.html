@@ -127,7 +127,7 @@
 <input type="hidden" name="id_form" value="${form.idForm}" />
 <!-- List all entry of type group  -->
 <@combo name="id_entry_group" default_value="" items=entry_group_list />  
-<button type="submit" class="btn btn-mini btn-primary" title="#i18n{directory.modifyForm.moveAll}" name="move">
+<button type="submit" class="btn btn-small btn-primary" title="#i18n{directory.modifyForm.moveAll}" name="move">
 	<i class="icon-move icon-white"></i>&nbsp;#i18n{form.modifyForm.moveAll}
 </button>
 </form>
@@ -188,45 +188,45 @@
 			<td>
 				<blockquote>
 					<@comboOrders name="order_id_${entry.idEntry!}" default_value=entry.position idParent=entry.parent.idEntry />
-					<button class="btn btn-mini" type="submit"	name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}" ><i class="icon-move"></i></button>
+					<button class="btn btn-small" type="submit"	name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}" ><i class="icon-move"></i></button>
 				</blockquote>
 				</td>
 			<#else>
 			<td>
 				<@comboOrders name="order_id_${entry.idEntry!}"	default_value=entry.position idParent=0 />
-				<button class="btn btn-mini"	type="submit" name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}"><i class="icon-move"></i></button>
+				<button class="btn btn-small"	type="submit" name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}"><i class="icon-move"></i></button>
 			</td> 
 			</#if>
 			<td>
-			<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-mini">
+			<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-small">
 				<i class="fam-application-form"></i>
 			</a>
 			<#if !entry.firstInTheList>
-			<a href="jsp/admin/plugins/form/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" class="btn btn-mini">
+			<a href="jsp/admin/plugins/form/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" class="btn btn-small">
 				<i class="icon-chevron-up"></i>
 			</a>
 			</#if>
 			<#if !entry.lastInTheList>
-				<a href="jsp/admin/plugins/form/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" class="btn btn-mini">
+				<a href="jsp/admin/plugins/form/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" class="btn btn-small">
 					<i class="icon-chevron-down"></i>
 				</a>
 			</#if>
 			<#if entry.parent?exists>
-				<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleGoOut}" class="btn btn-mini">
+				<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleGoOut}" class="btn btn-small">
 					<i class=" icon-share-alt"></i>
 				</a>
 			<#elseif !entry.entryType.group && !entry.entryType.myLuteceUser>
-				<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMove}" class="btn btn-mini">
+				<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMove}" class="btn btn-small">
 					<i class=" icon-move"></i>
 				</a>
 			</#if>
 			<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
-				<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleCopy}" class="btn btn-mini">
+				<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleCopy}" class="btn btn-small">
 					<i class="fam-page-white-picture"></i>
 				</a>
 			</#if>
 			<#if !entry.entryType.myLuteceUser>
-				<a href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleDelete}" class="btn btn-danger btn-mini">
+				<a href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleDelete}" class="btn btn-danger btn-small">
 					<i class="icon-trash icon-white"></i>
 				</a>
 			</#if>

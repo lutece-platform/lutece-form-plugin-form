@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row-fluid">
 	<div class="span12">
 	<fieldset>
 	<legend>#i18n{form.modifyField.title} : '${field.parentEntry.title}'</legend>
@@ -69,20 +69,20 @@
 	        <td></td>
 			<td><#if entry.numberConditionalQuestion!=0>${entry.numberConditionalQuestion}</#if></td>
 	        <td>
-			<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}"  title="null" >
+			<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}"  title="null" >
 					<i class="icon-edit icon-white"></i>
 				</a>
 	        <#if cpt!=1>
-				<a class="btn btn-mini" href="jsp/admin/plugins/form/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" >
+				<a class="btn btn-small" href="jsp/admin/plugins/form/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" >
 					<i class="icon-chevron-up"></i>
 				</a>
 			</#if>	
 	        <#if entry_has_next>
-				<a class="btn btn-mini" href="jsp/admin/plugins/form/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" >
+				<a class="btn btn-small" href="jsp/admin/plugins/form/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" >
 					<i class="icon-chevron-down"></i>
 				</a>
 			</#if>	
-				<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleDelete}" >
+				<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleDelete}" >
 					<i class="icon-trash icon-white"></i>
 				</a>
 			</td>

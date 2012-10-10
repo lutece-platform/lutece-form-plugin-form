@@ -1,6 +1,6 @@
 <#include "/admin/util/editor/editor.html" />
 <#include "/admin/plugins/form/commons.html" />
-<div class="row">
+<div class="row-fluid">
 <div class="span12">
 <fieldset>
 <legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
@@ -108,7 +108,7 @@
             	<td>${expression.informationMessage}</td>
 	            <td>${expression.validExemple}</td>
 	            <td>
-					<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
+					<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
 					<i class="icon-trash icon-white"></i>
 					</a>
 				</td>

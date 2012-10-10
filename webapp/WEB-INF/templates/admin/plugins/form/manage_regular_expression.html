@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row-fluid">
         <legend>#i18n{form.manageRegularExpression.title}</legend>
         
         
@@ -36,7 +36,7 @@
              <#list expression_list as expression>	
 	            <tr>
 	              <td width="20%" >
-	                <a class="btn btn-primary btn-mini" href="jsp/admin/plugins/form/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}"  title="null" >
+	                <a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}"  title="null" >
 	<i class="icon-question-sign icon-white"></i>
 	</a>
 
@@ -45,7 +45,7 @@
 	               ${expression.value}
 	                </td>
 	                <td width="40%">
-	               	<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/form/ConfirmRemoveRegularExpression.jsp?id_expression=${expression.idExpression}"  title="#i18n{form.manageForm.altDelete}" >
+	               	<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/ConfirmRemoveRegularExpression.jsp?id_expression=${expression.idExpression}"  title="#i18n{form.manageForm.altDelete}" >
 	<i class="icon-trash icon-white"></i>
 	</a>
 
