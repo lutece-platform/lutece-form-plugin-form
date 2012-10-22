@@ -121,6 +121,13 @@
 <form method="post" class="form-inline pull-left" action="jsp/admin/plugins/form/CreateEntry.jsp">
 <@combo name="id_type" items=entry_type_list default_value=-1 /><button type="submit" class="btn btn-primary btn-small" title="#i18n{form.modifyForm.manageEnter.buttonInsertEntry}"><i class="icon-plus icon-white"></i></button>
 </form>
+<p>
+	<a href="jsp/admin/plugins/form/UpdateEntryOrder.jsp?id_form=${form.idForm}&plugin_name=form">
+       	<img src="images/admin/skin/plugins/form/actions/initOrder.png"
+			alt="#i18n{form.modifyForm.initOrder}"
+			title="#i18n{form.modifyForm.initOrder}" />
+	</a>
+</p>
 <@paginationAdmin paginator=paginator combo=1/>
 <#if entry_group_list?has_content>
 <form method="post"	action="jsp/admin/plugins/form/DoChangeOrderEntry.jsp" 	class="form-inline">

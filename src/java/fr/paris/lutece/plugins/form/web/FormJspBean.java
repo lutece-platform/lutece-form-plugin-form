@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
+import com.keypoint.PngEncoder;
+
 import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.CategoryHome;
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
@@ -110,12 +112,23 @@ import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
+
 import java.awt.image.BufferedImage;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+
 import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -126,15 +139,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.entity.StandardEntityCollection;
-
-import com.keypoint.PngEncoder;
 
 
 /**
@@ -2053,7 +2057,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         else
         {
             //conditional questions
-            EntryHome.decrementOrderByOne( plugin, entry.getPosition( ), entry.getFieldDepend( ).getIdField( ),
+            EntryHome.decrementOrderByOne( plugin, entry.getPosition(  ), entry.getFieldDepend(  ).getIdField(  ),
                 entry.getForm(  ).getIdForm(  ) );
         }
 
@@ -4758,5 +4762,75 @@ public class FormJspBean extends PluginAdminPageJspBean
         this.moveDownEntryOrder( plugin, nListEntrySize, entryToMove, nIdForm );
         entryToMove.setParent( null );
         EntryHome.update( entryToMove, plugin );
+    }
+
+    /**
+     * Updates the entries position for a form
+     * @param request The HTTP request
+     * @return The URL to go after performing the action
+     */
+    public String updateEntryOrder( HttpServletRequest request )
+    {
+        Plugin plugin = getPlugin(  );
+        List<IEntry> listEntryFirstLevel = new ArrayList<IEntry>(  );
+        EntryFilter filter;
+        String strIdForm = request.getParameter( PARAMETER_ID_FORM );
+        int nIdForm = -1;
+        Form form;
+
+        if ( ( strIdForm != null ) && !strIdForm.equals( EMPTY_STRING ) )
+        {
+            try
+            {
+                nIdForm = Integer.parseInt( strIdForm );
+            }
+            catch ( NumberFormatException ne )
+            {
+                AppLogService.error( ne );
+
+                return getManageForm( request );
+            }
+        }
+
+        form = FormHome.findByPrimaryKey( nIdForm, plugin );
+
+        if ( ( form == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
+                    getUser(  ) ) )
+        {
+            return getManageForm( request );
+        }
+
+        filter = new EntryFilter(  );
+        filter.setIdForm( nIdForm );
+        filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+        filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+        listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
+
+        int nPosition = 1;
+
+        for ( IEntry entry : listEntryFirstLevel )
+        {
+            entry.setPosition( nPosition );
+            EntryHome.update( entry, plugin );
+            nPosition++;
+
+            EntryFilter filterSecondLevel = new EntryFilter(  );
+            filterSecondLevel.setIdEntryParent( entry.getIdEntry(  ) );
+
+            List<IEntry> listEntrySecondLevel = EntryHome.getEntryList( filterSecondLevel, plugin );
+
+            if ( listEntrySecondLevel != null )
+            {
+                for ( IEntry entrySecondLevel : listEntrySecondLevel )
+                {
+                    entrySecondLevel.setPosition( nPosition );
+                    EntryHome.update( entrySecondLevel, plugin );
+                    nPosition++;
+                }
+            }
+        }
+
+        return getJspModifyForm( request, nIdForm );
     }
 }
