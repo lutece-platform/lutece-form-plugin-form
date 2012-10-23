@@ -13,23 +13,32 @@
             <td>${form.title}</td>
             <td>
                 <#if form.active>
-                <#if form.autoPublished>
-                <img src="images/admin/skin/plugins/form/actions/enable_auto_publication.png" alt="#i18n{form.manageForm.stateEnabledAutoPublication}" title="#i18n{form.manageForm.stateEnabledAutoPublication}" />
-                <i class="fam-clock-red"></i>
-                <#else>
-                <i class="fam-tick"></i>
-                </#if>
-                <#else>
-                <#if form.autoPublished>
-                <#if form.autoPublicationActive>
-                <i class="fam-clock-play"></i>
-                <#else>
-                <i class="fam-clock-red"></i>
-                </#if>
-                <#else>
-                <i class="fam-cross"></i>
-                </#if>
-                </#if>		     
+						<#if form.autoPublished>
+						<span class="label label-success">
+							<i class="icon-time icon-white" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
+						</span>			
+						<#else>
+						<span class="label label-success">
+							<i class="icon-ok-sign icon-white"></i>
+						</span>			
+						</#if>
+                    <#else>
+						<#if form.autoPublished>
+							<#if form.autoPublicationActive>
+								<span class="label label-success">
+									<i class="icon-time icon-white"></i>
+								</span>
+							<#else>
+								<span class="label label-important">
+									<i class="icon-time"></i>
+								</span>
+							</#if>
+						<#else>
+							<span class="label label-important" >
+								<i class="icon-remove-sign icon-white"></i>
+							</span>	
+						</#if>
+                    </#if>		     
             </td>
             <td>
                 ${response_count_map[form.idForm?string]}

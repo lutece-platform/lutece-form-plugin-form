@@ -66,22 +66,29 @@
                 </td>
                 <td>
                     <#if form.active>
-                    <#if form.autoPublished>
-                    <img src="images/admin/skin/plugins/form/actions/enable_auto_publication.png" alt="#i18n{form.manageForm.stateEnabledAutoPublication}" title="#i18n{form.manageForm.stateEnabledAutoPublication}" />
-                    <i class="fam-clock-red"></i>
+						<#if form.autoPublished>
+							<i class="icon-time" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
+						<#else>
+						<span class="label label-success">
+							<i class="icon-ok-sign icon-white"></i>
+						</span>			
+						</#if>
                     <#else>
-                    <span class="label label-success"><i class=" icon-ok-sign icon-white"></i>&nbsp;</span>			
-                    </#if>
-                    <#else>
-                    <#if form.autoPublished>
-                    <#if form.autoPublicationActive>
-                    <i class="fam-clock-play"></i>
-                    <#else>
-                    <i class="fam-clock-red"></i>
-                    </#if>
-                    <#else>
-                    <span class="label label-important" ><i class="icon-remove-sign icon-white"></i></span>	
-                    </#if>
+						<#if form.autoPublished>
+							<#if form.autoPublicationActive>
+								<span class="label label-success">
+									<i class="icon-time icon-white"></i>
+								</span>
+							<#else>
+								<span class="label label-important">
+									<i class="icon-time"></i>
+								</span>
+							</#if>
+						<#else>
+							<span class="label label-important" >
+								<i class="icon-remove-sign icon-white"></i>
+							</span>	
+						</#if>
                     </#if>		     
                 </td>
                 <td>
@@ -90,8 +97,8 @@
                     <#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
                     <#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && 
                     !((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
-                    <a class="btn btn-small <#if action.permission=='DELETE'>btn-danger</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
-                        <i class="${action.iconUrl}"></i>
+                    <a class="btn btn-small <#if action.permission=='DELETE'>btn-danger<#else>btn-primary</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
+                        <i class="${action.iconUrl} icon-white"></i>
                     </a>
                     </#if>
                     </#list>
