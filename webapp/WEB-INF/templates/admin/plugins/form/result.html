@@ -6,25 +6,30 @@
 	<input name="id_form" value="${form.idForm}" type="hidden" />
 	<div class="well">
 		<label for="fist_response_date_filter" >#i18n{form.result.labelValidationDate}</label>
-		<input type="text" name="fist_response_date_filter" id="fist_response_date_filter" class="input-small" value="<#if fist_response_date_filter?has_content>${fist_response_date_filter?date}</#if>" />
-				<span class="help-text">#i18n{form.result.labelAnd}</span>
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-calendar"></i></span>
+			<input type="text" name="fist_response_date_filter" id="fist_response_date_filter" class="input-small" value="<#if fist_response_date_filter?has_content>${fist_response_date_filter?date}</#if>" />
+		</div>
+			<span class="help-text">#i18n{form.result.labelAnd}</span>
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-calendar"></i></span>
 			<input type="text" name="last_response_date_filter" id="last_response_date_filter" class="input-small" value="<#if last_response_date_filter?has_content>${last_response_date_filter?if_exists?date}</#if>" />
+		</div>	
 		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-filter icon-white"></i> #i18n{form.result.buttonSearch}</button>
 	</div>
 	<fieldset>
 	<legend>#i18n{form.result.titleStatistic}</legend>
 	<div class="span3">
-		<label  for="">#i18n{form.result.labelNumberResponse} </label>
+		<label for="">#i18n{form.result.labelNumberResponse} </label>
 	       <span>${number_response}</span> 
 
-		<label  for="">#i18n{form.result.labelFistResponseDate}</label>
+		<label for="">#i18n{form.result.labelFistResponseDate}</label>
 	    	<#if fist_response_date?exists>
 	    		<span >${fist_response_date?date}</span> 
 	   		 <#else>
 	   		 	<span >-</span> 
 	   		 </#if>
-	    
-		<label class="control-label" class="text-label" for="">#i18n{form.result.labelLastResponseDate}</label>
+	    <label class="control-label" class="text-label" for="">#i18n{form.result.labelLastResponseDate}</label>
 	       </span> 
 	       <#if last_response_date?exists>
 	          <span >${last_response_date?date}</span>
@@ -75,7 +80,7 @@
 	</fieldset>
 	</div>
 </div>
-<script src="js/jquery/plugins/ui/datepicker/ui.datepicker.js"></script>
-<script src="js/jquery/plugins/ui/datepicker/ui.datepicker-fr.js"></script>     
+<script src="js/jquery/plugins/ui/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="js/jquery/plugins/ui/ui.datepicker-fr.js"></script>    
 <@getDatePickerRange idFieldFrom="fist_response_date_filter" idFieldTo="last_response_date_filter" language=locale />
 	 

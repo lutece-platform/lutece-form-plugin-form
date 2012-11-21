@@ -3,14 +3,14 @@
         <tr>
             <th>#i18n{form.dashboard.columnTitleLabel}</th>   		
             <th>#i18n{form.dashboard.row_state}</th>  
-            <th>#i18n{form.dashboard.nb_answers}</th>   	 		
+           
             <th>#i18n{form.dashboard.columnTitleActions}</th>  
         </tr>
     </thead>
     <tbody>
         <#list form_list as form>
         <tr>
-            <td>${form.title}</td>
+            <td>${form.title} <br> #i18n{form.dashboard.nb_answers} <strong>${response_count_map[form.idForm?string]}</strong></td>
             <td>
                 <#if form.active>
 						<#if form.autoPublished>
@@ -30,7 +30,7 @@
 								</span>
 							<#else>
 								<span class="label label-important">
-									<i class="icon-time"></i>
+									<i class="icon-time icon-white"></i>
 								</span>
 							</#if>
 						<#else>
@@ -40,9 +40,6 @@
 						</#if>
                     </#if>		     
             </td>
-            <td>
-                ${response_count_map[form.idForm?string]}
-            </td>   
             <td>
                 <#if authorized_form_modification_list?seq_contains(form.idForm)>
                 <a class="btn btn-small btn-primary" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form"  title="${form.title}" >

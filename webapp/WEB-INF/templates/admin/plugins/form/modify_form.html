@@ -9,7 +9,7 @@
 	<input type="text" name="title" value="${form.title}" class="input-xlarge"  maxlength="255" />
 	<p class="help-text">#i18n{form.createForm.labelTitleComment}&nbsp;</p>
 	<label for="description">#i18n{form.createForm.labelDescription} * :</label>
-	<textarea class="span3" name="description" rows="2">${form.description}</textarea>
+	<textarea class="span8" name="description" rows="4">${form.description}</textarea>
 	<p class="help-text">#i18n{form.createForm.labelDescriptionComment}</p>
 	<label for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
 	<#if !form.category?exists>
@@ -99,11 +99,17 @@
 		<#if form.dateBeginDisponibility?? || form.dateEndDisponibility??>checked="checked"</#if> /> #i18n{form.createForm.labelPublicationModeAuto}
 		<p class="help-text">#i18n{form.createForm.labelPublicationModeComment}</p>
 		<label for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
-		<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="${form.dateBeginDisponibility?if_exists}" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-calendar"></i></span>
+			<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="${form.dateBeginDisponibility?if_exists}" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
+		</div>
 		<input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="${form.dateBeginDisponibility?if_exists}" />
 		<p class="help-text">#i18n{form.createForm.labelDateBeginDisponibilityComment}</p>
 		<label for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
-		<input type="text" name="date_end_disponibility" id="date_end_disponibility" value="${form.dateEndDisponibility?if_exists}" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-calendar"></i></span>
+			<input type="text" name="date_end_disponibility" id="date_end_disponibility" value="${form.dateEndDisponibility?if_exists}" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
+		</div>
 		<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="${form.dateEndDisponibility?if_exists}" />
 		<p class="help-text">#i18n{form.createForm.labelDateEndDisponibilityComment}</p>
 		</div>
@@ -121,21 +127,14 @@
 <form method="post" class="form-inline pull-left" action="jsp/admin/plugins/form/CreateEntry.jsp">
 <@combo name="id_type" items=entry_type_list default_value=-1 /><button type="submit" class="btn btn-primary btn-small" title="#i18n{form.modifyForm.manageEnter.buttonInsertEntry}"><i class="icon-plus icon-white"></i></button>
 </form>
-<p>
-	<a href="jsp/admin/plugins/form/UpdateEntryOrder.jsp?id_form=${form.idForm}&plugin_name=form">
-       	<img src="images/admin/skin/plugins/form/actions/initOrder.png"
-			alt="#i18n{form.modifyForm.initOrder}"
-			title="#i18n{form.modifyForm.initOrder}" />
-	</a>
-</p>
 <@paginationAdmin paginator=paginator combo=1/>
 <#if entry_group_list?has_content>
 <form method="post"	action="jsp/admin/plugins/form/DoChangeOrderEntry.jsp" 	class="form-inline">
 <input type="hidden" name="id_form" value="${form.idForm}" />
 <!-- List all entry of type group  -->
-<@combo name="id_entry_group" default_value="" items=entry_group_list />  
-<button type="submit" class="btn btn-small btn-primary" title="#i18n{form.modifyForm.moveAll}" name="move.x" value="#i18n{form.modifyForm.moveAll}">
-	<i class="icon-move icon-white"></i>&nbsp;#i18n{form.modifyForm.moveAll}
+<@comboWithParams name="id_entry_group" default_value="" additionalParameters="class=\"input-xlarge\"" items=entry_group_list />  
+<button type="submit" class="btn btn-small" title="#i18n{form.modifyForm.moveAll}" name="move.x" value="#i18n{form.modifyForm.moveAll}">
+	<i class="icon-resize-vertical"></i>
 </button>
 
 </#if>
@@ -145,11 +144,16 @@
 			<th>
 				<input type="checkbox" name="selectAll" id="selectAll" value="selectAll" title="#i18n{form.modifyForm.selectAll}" />
 			</th>
-			<th>#i18n{form.modifyForm.manageEnter.rowTitle}</th>
-			<th>#i18n{form.modifyForm.manageEnter.rowType}</th>
+			<th>#i18n{form.modifyForm.manageEnter.rowTitle} #i18n{form.modifyForm.manageEnter.rowType}</th>
 			<th><i class="icon-question-sign" title="#i18n{form.modifyForm.manageEnter.rowConditionalQuestion}"></i></th>
-			<th>#i18n{form.modifyForm.modifyForm.rowOrder}</th>
-			<th>#i18n{form.modifyForm.manageEnter.rowActions}</th>
+			<th>#i18n{form.modifyForm.manageEnter.rowOrder}
+				<a href="jsp/admin/plugins/form/UpdateEntryOrder.jsp?id_form=${form.idForm}&plugin_name=form" class="btn btn-small spaced" title="#i18n{form.modifyForm.initOrder}">
+					<i class="icon-refresh"></i>
+				</a>
+			</th>
+			<th>#i18n{form.modifyForm.manageEnter.rowActions}&nbsp;
+				
+			</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -179,11 +183,9 @@
 					${entry.title}
 				</#if>
 			</#if>
-			</td>
-			<td>
-				<#if !entry.entryType.group>
-					${entry.entryType.title}
-				</#if>
+			<#if !entry.entryType.group>
+				<span class="badge">${entry.entryType.title}</span>
+			</#if>
 			</td>
 			<td>
 				<#if entry.numberConditionalQuestion!=0>
@@ -195,31 +197,31 @@
 			<td>
 				<blockquote>
 					<@comboOrders name="order_id_${entry.idEntry!}" default_value=entry.position idParent=entry.parent.idEntry />
-					<button class="btn btn-small" type="submit"	name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}" value="#i18n{directory.modify_directory.move}"><i class="icon-move"></i></button>
+					<button class="btn btn-primary btn-small" type="submit"	name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}" value="#i18n{directory.modify_directory.move}"><i class="icon-resize-vertical icon-white"></i></button>
 				</blockquote>
 				</td>
 			<#else>
 			<td>
 				<@comboOrders name="order_id_${entry.idEntry!}"	default_value=entry.position idParent=0 />
-				<button class="btn btn-small"	type="submit" name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}" value="#i18n{directory.modify_directory.move}"><i class="icon-move"></i></button>
+				<button class="btn btn-primary btn-small" type="submit" name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}" value="#i18n{directory.modify_directory.move}"><i class="icon-resize-vertical icon-white"></i></button>
 			</td> 
 			</#if>
 			<td>
-			<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-small">
-				<i class="fam-application-form"></i>
+			<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-primary btn-small">
+				<i class="icon-edit icon-white"></i>
 			</a>
 			<#if entry.parent?exists>
-				<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleGoOut}" class="btn btn-small">
-					<i class=" icon-share-alt"></i>
+				<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleGoOut}" class="btn btn-primary btn-small">
+					<i class="icon-chevron-right icon-white"></i>
 				</a>
 			<#elseif !entry.entryType.group && !entry.entryType.myLuteceUser>
-				<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMove}" class="btn btn-small">
-					<i class=" icon-move"></i>
+				<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMove}" class="btn btn-primary btn-small">
+					<i class="icon-user icon-white"></i>
 				</a>
 			</#if>
 			<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
-				<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleCopy}" class="btn btn-small">
-					<i class="fam-page-white-picture"></i>
+				<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleCopy}" class="btn btn-primary btn-small">
+					<i class="icon-move icon-white"></i>
 				</a>
 			</#if>
 			<#if !entry.entryType.myLuteceUser>
@@ -257,20 +259,13 @@ function doToggleId( idParent ){
 </script>
 
 <script type="text/javascript">
-	
-	function doChangePublicationMode(radio)
-	{
-		for (var i=0; i<radio.length; i++)
-		{
-			if (radio[i].checked)
-			{
-				if (radio[i].value=="0")
-				{
+function doChangePublicationMode(radio){
+		for (var i=0; i<radio.length; i++){
+			if (radio[i].checked){
+				if (radio[i].value=="0"){
 					document.getElementById('date_begin_disponibility').value="";
 					document.getElementById('date_end_disponibility').value="";
-				}
-				else
-				{
+				} else	{
 					document.getElementById('date_begin_disponibility').value=document.getElementById('date_begin_disponibility_save').value;
 					document.getElementById('date_end_disponibility').value=document.getElementById('date_end_disponibility_save').value;
 				}
@@ -296,13 +291,14 @@ function doToggleId( idParent ){
 	}
 </script>
 <@initEditor />
-<script src="js/jquery/plugins/ui/datepicker/ui.datepicker.js"></script>
-<script src="js/jquery/plugins/ui/datepicker/ui.datepicker-fr.js"></script>
+
+<script src="js/jquery/plugins/ui/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="js/jquery/plugins/ui/ui.datepicker-fr.js"></script>
 <@getDatePickerRange idFieldFrom="date_begin_disponibility" idFieldTo="date_end_disponibility" language=locale />
 
 <#macro comboOrders name default_value idParent >
 <#if mapChild?exists>
-<select id="${name}" name="${name}"> 
+<select id="${name}" name="${name}" class="input-mini"> 
 	<#list mapChild[idParent!?string] as i> <#if default_value == i>
 		<option selected="selected" value="${i}">${i}</option> <#else>
 		<option value="${i}">${i}</option> </#if>

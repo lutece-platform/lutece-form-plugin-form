@@ -4,18 +4,17 @@ Theses Java objects can be used in this template :
  - form : the form object 
  - form_inactive : the message when the form is not active
 -->
-<div id="content" class="span-22 prepend-1 append-1 append-bottom last">
-	<div class="portlet -lutece-border-radius">
+<div class="row">
+	<div class="span12">
 		<#if is_draft_saved>
-			<h2 class="error">#i18n{form.xpage.form.draftSaved}</h2>
+			<div class="alert alert-error">#i18n{form.xpage.form.draftSaved}</div>
 		</#if>
 		<#if form_errors?? && form_errors?has_content>
-			<h2 class="error">
+			<div class="alert alert-error">
 				<#list form_errors as form_error>
-					<a href="${form_error.url!}">${form_error.errorMessage!}</a>
-					<br />
+					<p><a href="${form_error.url!}">${form_error.errorMessage!}</a></p>
 				</#list>
-			</h2>
+			</div>
 		</#if>
 		<#if !form_inactive?has_content>
 			${form_html!}

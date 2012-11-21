@@ -1,15 +1,6 @@
-<div class="form-element ${entry.CSSClass!}">
-  <span class="form-label">
-	<div class="control-group">
-		<label class="control-label"  for="form${entry.idEntry}">	
-		${entry.title}
-	<#if entry.mandatory>
-		*
-	</#if>
-		: 
-	</label>
-	</span>
-	<span class="form-field-column">	 
+<div class="control-group">
+	<label class="control-label"  for="form${entry.idEntry}">${entry.title} <#if entry.mandatory>*</#if></label>
+	<div class="controls">	 
 		<select name="form${entry.idEntry}" id="form${entry.idEntry}"
 			<#if list_responses??>
 				<#list list_responses as response>
@@ -18,8 +9,8 @@
 						<#break>
 					</#if>
 				</#list>
-			</#if>
-		>
+				class="${entry.CSSClass!}"
+		</#if>	>
 		<option value="">#i18n{form.xpage.form.noValue}</option>
 		<#list entry.fields as field>
 			<option  value="${field.idField}"
@@ -41,32 +32,23 @@
 					${field.title}
 			</option>	
 		</#list>
-		</select>
-	</span>
-   <#if entry.helpMessage?exists&&entry.helpMessage!=''>
-		<span class="form-help">
-			<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/form/help.gif" />
-				<span><pre> ${entry.helpMessage}</pre></span>
-			</a>
-		</span>
+	</select>
+	<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+	<p class="help-block">${entry.helpMessage}</p>
 	</#if>
 	<#if list_responses??>
+		<div class="alert alert-error">
 		<#list list_responses as response>
 			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
-				<br />
-				<span class="form-label"><div class="control-group">
-		<label class="control-label" > &nbsp;</label></span>
-				<span class="form-field-column">
 					<#assign formError = response.entry.formError>
 					<#if formError.mandatoryError>
-						<div class="control-group">
-		<label class="control-label" class="error">#i18n{form.message.mandatory.entry}</label>
+						#i18n{form.message.mandatory.entry}
 					<#else>
-						<div class="control-group">
-		<label class="control-label" class="error">${formError.errorMessage}</label>
+						${formError.errorMessage}
 					</#if>
-				</span>
-			</#if>
-		</#list>
+				</#if>
+			</#list>
+		</div>	
 	</#if>
-</div>	
+	</div>
+</div>

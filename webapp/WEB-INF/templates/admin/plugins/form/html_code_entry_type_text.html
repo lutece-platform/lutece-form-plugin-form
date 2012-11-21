@@ -1,96 +1,52 @@
-<div class="form-element ${entry.CSSClass!}">
-	 <span class="form-label">
-		 <div class="control-group">
-		<label class="control-label" for="form${entry.idEntry}">	
-				${entry.title}
-				<#if entry.mandatory>
-					*
-				</#if>
-				 : 
-		</label>
-		
-	</span>
-	 <span class="form-field-column">	 
-		<#list entry.fields as field>
-			<div class="controls">
-	<input type="text" name="form${entry.idEntry}" id="form${entry.idEntry}" size="${field.width}" 
-				<#if list_responses??>
-		</div>
-	</div>
-					<#list list_responses as response>
-						<#if response.entry.idEntry == entry.idEntry>
-							<#if response.toStringValueResponse??>
-								value="${response.toStringValueResponse}"
-							</#if>
-							<#if response.entry.formError??>
-								class="error"
-							</#if>
-						</#if>
-					</#list>
-				<#else>
-					<#if field.value?exists>
-						value="${field.value}" 
-				 	<#else>
-						 value="" 
-					</#if>
-				</#if>
-				<#if field.maxSizeEnter!=-1>
-					maxlength="${field.maxSizeEnter}"
-				</#if>
-				/>
-			</#list>
-			
-		</span>	
-		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-			<span class="form-help">
-				<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/form/help.gif" />
-					<span><pre> ${entry.helpMessage}</pre></span>
-				</a>
-			</span>
-		</#if>
-		<#if list_responses??>
-			<#list list_responses as response>
-				<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
-					<br />
-					<span class="form-label"><div class="control-group">
-		<label class="control-label" > &nbsp;</label></span>
-					<span class="form-field-column">
-						<#assign formError = response.entry.formError>
-						<#if formError.mandatoryError>
-							<div class="control-group">
-		<label class="control-label" class="error">#i18n{form.message.mandatory.entry}</label>
-						<#else>
-							<div class="control-group">
-		<label class="control-label" class="error">${formError.errorMessage}</label>
-						</#if>
-					</span>
-				</#if>
-			</#list>
-		</#if>
-</div>	
-<#if entry.confirmField>
-<div class="form-element">
-	 <span class="form-label">
-		 <div class="control-group">
-		<label class="control-label" for="form${entry.idEntry}_confirm_field">	
-				${entry.confirmFieldTitle}
-				<#if entry.mandatory>
-					*
-				</#if>
-				 : 
-		</label>
-	</span>
+<div class="control-group">
+	<label class="control-label" for="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
 	<#list entry.fields as field>
-	<span class="form-field-column">
-		<div class="controls">
-	<input type="text" name="form${entry.idEntry}_confirm_field" id="form${entry.idEntry}_confirm_field" size="${field.width}" value="" 
+	<div class="controls">
+		<input type="text" name="form${entry.idEntry}" id="form${entry.idEntry}" size="${field.width}" 
+			<#if list_responses??>
+				<#list list_responses as response>
+				<#if response.entry.idEntry == entry.idEntry>
+					<#if response.toStringValueResponse??>
+						value="${response.toStringValueResponse}"
+					</#if>
+					<#if response.entry.formError??>
+						class="error"
+					</#if>
+					</#if>
+				</#list>
+			<#else>
+				<#if field.value?exists>
+					value="${field.value}" 
+			 	<#else>
+					 value="" 
+				</#if>
+			</#if>
 			<#if field.maxSizeEnter!=-1>
-		</div>
-	</div>
 				maxlength="${field.maxSizeEnter}"
 			</#if>
-			/>
-	</span>
+			class="${entry.CSSClass!} "	/>
+		</#list>
+		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+			<p class="help-block">${entry.helpMessage}</p>
+		</#if>
+	</div>
+</div>
+<#if list_responses??>
+	<#list list_responses as response>
+		<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+			<#assign formError = response.entry.formError>
+			<div class="alert alert-error"><#if formError.mandatoryError>#i18n{form.message.mandatory.entry}<#else>${formError.errorMessage}</#if></div>
+		</#if>
+	</#list>
+</#if>
+<#if entry.confirmField>
+<div class="control-group">
+	<label class="control-label" for="form${entry.idEntry}_confirm_field">${entry.confirmFieldTitle}<#if entry.mandatory> *</#if></label>
+	<#list entry.fields as field>
+	<div class="controls">
+		<input type="text" name="form${entry.idEntry}_confirm_field" id="form${entry.idEntry}_confirm_field" size="${field.width}" value="" 
+		<#if field.maxSizeEnter!=-1>maxlength="${field.maxSizeEnter}"</#if>/>
+	</div>
 	</#list>
 </div>
 </#if>

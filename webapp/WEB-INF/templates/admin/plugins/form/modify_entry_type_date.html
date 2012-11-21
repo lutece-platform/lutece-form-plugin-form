@@ -14,19 +14,22 @@
 	</div>
 	<div class="control-group">
 	<label class="control-label" for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
-		<textarea  name="help_message" id="help_message" rows="20" class="span4">${entry.helpMessage}</textarea>
+		<textarea  name="help_message" id="help_message" rows="5" class="span3">${entry.helpMessage}</textarea>
 		<span class="help-text">#i18n{form.createEntry.labelHelpMessageComment}</span>
 	</div>
 	<div class="control-group">
 	<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
-		<textarea  name="comment" rows="20" class="span4">${entry.comment}</textarea>
+		<textarea  name="comment" rows="5" class="span3">${entry.comment}</textarea>
 		<span class="help-text">#i18n{form.createEntry.labelType} :  ${entry.entryType.title}</span>
 	</div>
 	<div class="control-group">
 	<label class="control-label" for="date">#i18n{form.createEntry.labelValueDefault} : </label>
 		<div class="controls">
 		<#list entry.fields as field>
-			<input type="text" name="value" id="date" size="10" value="${field.valueTypeDate?if_exists}" />
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-calendar"></i></span>
+				<input type="text" name="value" id="date" class="input-large" value="${field.valueTypeDate?if_exists}" />
+		</div>
 		</#list>
 		</div>
 	</div>
@@ -44,8 +47,8 @@
 		</div>
 	</div>
 	<div class="form-actions">
-		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-okicon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}</button>
-		<button class="btn btn-primary btn-small" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;>#i18n{form.modifyEntry.buttonCancel}</button>
+		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}</button>
+		<button class="btn btn-primary btn-small" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonCancel}</button>
 	</div>	
 	</form>
   </fieldset>
@@ -53,6 +56,6 @@
 </div>
 
  <@initEditor />
-<script src="js/jquery/plugins/ui/datepicker/ui.datepicker.js"></script>
-<script src="js/jquery/plugins/ui/datepicker/ui.datepicker-fr.js"></script>
+<script src="js/jquery/plugins/ui/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="js/jquery/plugins/ui/ui.datepicker-fr.js"></script>
 <@getDatePicker idField="date" language=locale />

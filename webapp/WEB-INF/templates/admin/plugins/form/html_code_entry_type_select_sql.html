@@ -1,15 +1,6 @@
-<div class="form-element ${entry.CSSClass!}">
-  <span class="form-label">
-	<div class="control-group">
-		<label class="control-label" for="form${entry.idEntry}">
-		${entry.title}
-	<#if entry.mandatory>
-		*
-	</#if>
-		:
-	</label>
-	</span>
-	<span class="form-field-column">
+<div class="control-group">
+	<label class="control-label" for="form${entry.idEntry}">${entry.title}<#if entry.mandatory>* </#if></label>
+	<div class="controls">
 		<select name="form${entry.idEntry}" id="form${entry.idEntry}"
 			<#if list_responses??>
 				<#list list_responses as response>
@@ -18,11 +9,10 @@
 						<#break>
 					</#if>
 				</#list>
-			</#if>
-		>
-			<option value="">#i18n{form.xpage.form.noValue}</option>
-			<#list entry.fields as field>
-				<option  value="${field.idField}"
+				class="${entry.CSSClass!}"</#if> >
+				<option value="">#i18n{form.xpage.form.noValue}</option>
+				<#list entry.fields as field>
+					<option  value="${field.idField}"
 					<#if list_responses??>
 						<#list list_responses as response>
 							<#if response.entry.idEntry == entry.idEntry && response.field??>
@@ -38,35 +28,26 @@
 						</#if>
 					</#if>
 					>
-						${field.title}
+					${field.title}
 				</option>
 			</#list>
 		</select>
-	</span>
    <#if entry.helpMessage?exists&&entry.helpMessage!=''>
-		<span class="form-help">
-			<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/form/help.gif" />
-				<span><pre> ${entry.helpMessage}</pre></span>
-			</a>
-		</span>
+		<p class="help-block">${entry.helpMessage}</p>
 	</#if>
-	<#if list_responses??>
-		<#list list_responses as response>
-			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
-				<br />
-				<span class="form-label"><div class="control-group">
-		<label class="control-label" > &nbsp;</label></span>
-				<span class="form-field-column">
-					<#assign formError = response.entry.formError>
-					<#if formError.mandatoryError>
-						<div class="control-group">
-		<label class="control-label" class="error">#i18n{form.message.mandatory.entry}</label>
-					<#else>
-						<div class="control-group">
-		<label class="control-label" class="error">${formError.errorMessage}</label>
-					</#if>
-				</span>
-			</#if>
-		</#list>
-	</#if>
+	</div>
 </div>
+<#if list_responses??>
+<div class="alert alert-error">
+<#list list_responses as response>
+	<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+		<#assign formError = response.entry.formError>
+		<#if formError.mandatoryError>
+			#i18n{form.message.mandatory.entry}
+		<#else>
+			${formError.errorMessage}
+		</#if>
+	</#if>
+</#list>
+</div>	
+</#if>

@@ -1,11 +1,11 @@
-<div class="span-22 prepend-1 append-1 append-bottom last">
-<div id="form-content" class="portlet -lutece-border-radius">
+<div class="row">
+	<div class="span12">
 	<#if validate_recap?exists>
-		<fieldset class="-lutece-border-radius"> 
-			<legend class="form-legend"> #i18n{form.recapFormSubmit.labelLegendRecap} </legend>
+		<fieldset> 
+			<legend> #i18n{form.recapFormSubmit.labelLegendRecap} </legend>
 			<#list formSubmit.listResponse as response>
 				<#if response.toStringValueResponse?has_content>
-					<div class="form-element">
+					<div class="contr">
 						<span class="form-label">
 							<label>
 								<#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>
@@ -21,18 +21,22 @@
 			</#list>
 		</fieldset>
 		<div align="center" class="form-steps">
-			<form action="${url_action}" method="post" name="" id=""  >
+			<form action="${url_action}" method="post" name="" id="" class="form-inline" >
 				<input name="validate_recap" value="validate_recap" type="hidden" />
-				<input type="submit" value="#i18n{form.recapFormSubmit.buttonValidate}" class="-lutece-input -lutece-border-radius-mini"  name="validate_recap" />
-				<input type="button" value="#i18n{form.recapFormSubmit.buttonCancel}" class="-lutece-input -lutece-border-radius-mini" onclick="javascript:history.go(-1)" />
+				<button type="submit"  class="btn btn-primary btn-small"  name="validate_recap" >
+					#i18n{form.recapFormSubmit.buttonValidate}
+				</button>
+				<button type="button" class="" onclick="javascript:history.go(-1)" >
+					<i class="icon-remove-circle"></i>&nbsp;#i18n{form.recapFormSubmit.buttonCancel}
+				</button>
 			</form>
 		</div>
 	<#else>
 		<div><label class="form-title" >${formSubmit.form.title}</label><br/></div>
 		<fieldset class="-lutece-border-radius">${recap.recapMessage}</fieldset>
 		<#if recap.graph>
-			<fieldset class="-lutece-border-radius">
-				<legend class="form-legend"> #i18n{form.recapFormSubmit.labelLegendStatistic}</legend> 
+			<fieldset>
+				<legend> #i18n{form.recapFormSubmit.labelLegendStatistic}</legend> 
 				<#list formSubmit.listResponse as response>
 					<#if entry_type_session.idType != response.entry.entryType.idType && entry_type_numbering.idType != response.entry.entryType.idType && ( !entrySave?exists || entrySave.idEntry != response.entry.idEntry )>
 						<#assign entrySave=response.entry>
@@ -50,7 +54,9 @@
 		</#if>	
 		<div align="center" class="form-steps">
 			<form action="${recap.backUrl}" method="post" name="" id=""  >
-				<input type="submit" value="#i18n{form.recapFormSubmit.buttonBack}" class="-lutece-input -lutece-border-radius-mini"  name="back" />
+				<button type="submit" class=""  name="back" />
+					#i18n{form.recapFormSubmit.buttonBack}" 
+				</>	
 			</form>	
 		</div> 
 	</#if>

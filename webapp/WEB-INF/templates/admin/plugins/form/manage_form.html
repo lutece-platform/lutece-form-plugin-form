@@ -1,5 +1,6 @@
 <div class="row-fluid">
     <div class="span12">
+	<fieldset>
         <legend>#i18n{form.manageForm.title}
             <#if permission_manage_advanced_parameters>
             <form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/form/ManageAdvancedParameters.jsp">
@@ -81,7 +82,7 @@
 								</span>
 							<#else>
 								<span class="label label-important">
-									<i class="icon-time"></i>
+									<i class="icon-time icon-white"></i>
 								</span>
 							</#if>
 						<#else>
@@ -93,20 +94,21 @@
                 </td>
                 <td>
                     <#if form.actions?exists>
-                    <#list form.actions as action>
-                    <#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
-                    <#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && 
-                    !((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
-                    <a class="btn btn-small <#if action.permission=='DELETE'>btn-danger<#else>btn-primary</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
-                        <i class="${action.iconUrl} icon-white"></i>
-                    </a>
-                    </#if>
-                    </#list>
+						<#list form.actions as action>
+						<#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
+							<#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && 
+							!((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
+							<a class="btn btn-small <#if action.permission=='DELETE'>btn-danger<#elseif action.permission=='DELETE'><#else>btn-primary</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
+								<i class="${action.iconUrl} icon-white"></i>
+							</a>
+							</#if>
+						</#list>
                     </#if>	
                 </td>
             </tr>
             </#list>
         </table>
         <@paginationAdmin paginator=paginator/>
+	</fieldset>
     </div>
 </div>

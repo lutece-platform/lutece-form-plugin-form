@@ -27,7 +27,10 @@
 		<div class="control-group">
 		<label class="control-label" for="">#i18n{form.createEntry.labelType} : ${entry.entryType.title}</label>
 			<div class="controls">			<labelfor="date">#i18n{form.createEntry.labelValueDefault}</label>
-				<input type="text" name="value" id="date" class="input-xlarge" value="" />
+				<div class="input-prepend">
+				<span class="add-on"><i class="icon-calendar"></i></span>
+					<input type="text" name="value" id="date" class="input-small" value="" />
+				</div>
 			</div>
 		</div>
 		<div class="control-group">
@@ -55,6 +58,6 @@
 </div>
 <#include "/admin/util/editor/editor.html" />
 <@initEditor />
-<script src="js/jquery/plugins/ui/datepicker/ui.datepicker.js"></script>
-<script src="js/jquery/plugins/ui/datepicker/ui.datepicker-fr.js"></script>
+<script src="js/jquery/plugins/ui/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="js/jquery/plugins/ui/ui.datepicker-fr.js"></script>
 <@getDatePicker idField="date" language=locale /> 
