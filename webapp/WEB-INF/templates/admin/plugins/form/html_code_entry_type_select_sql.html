@@ -38,16 +38,16 @@
 	</div>
 </div>
 <#if list_responses??>
-<div class="alert alert-error">
 <#list list_responses as response>
 	<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+		<div class="alert alert-error">
 		<#assign formError = response.entry.formError>
 		<#if formError.mandatoryError>
 			#i18n{form.message.mandatory.entry}
 		<#else>
 			${formError.errorMessage}
 		</#if>
+		</div>	
 	</#if>
 </#list>
-</div>	
 </#if>

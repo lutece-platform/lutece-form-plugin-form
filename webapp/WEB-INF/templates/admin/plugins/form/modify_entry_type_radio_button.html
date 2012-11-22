@@ -1,127 +1,95 @@
  <#include "/admin/util/editor/editor.html" />
 <div class="row-fluid">
-<div class="span12">
-<fieldset>
-<legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
-	<form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
- 	<input name="id_entry" value="${entry.idEntry}" type="hidden" />
-	<div class="control-group">
-	<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
-    	<div class="controls">
-			<input type="text" name="title" id="title" class="span3" value="${entry.title}"  maxlength="255"/>
-			<span class="help-text">#i18n{form.createEntry.labelTitleComment}</span>
-		</div>
-	</div>
-    <div class="control-group">
-		<label class="control-label" for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
-     	<textarea  name="help_message"  id="help_message" rows="20" class="span4">${entry.helpMessage}</textarea>
-		<span class="help-text">#i18n{form.createEntry.labelHelpMessageComment}</span>
-	</div>
-	<div class="control-group">
-		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
-		<textarea  name="comment" class="span4" rows="2">${entry.comment}</textarea>
-	</div>
-	<div class="control-group">
-		<label class="control-label" for="width">#i18n{form.createEntry.labelPresentation} : </label>
-	    <select  id="field_in_line" name="field_in_line">
-				<option value=1 <#if entry.fieldInLine >selected="selected" </#if> >#i18n{form.createEntry.selectPresentationInLine}</option>
-				<option value=0 <#if !entry.fieldInLine >selected="selected" </#if>>#i18n{form.createEntry.selectPresentationNotInLine}</option>
-		</select>
-	</div>
-	<div class="control-group">
-		<label class="control-label" for="">#i18n{form.createEntry.labelType} : ${entry.entryType.title}</label>
-        <div class="controls">
-			<label  for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
-				<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked" </#if>	 />
-		</div>
-	</div>
-   	<div class="control-group">
-	<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-		<div class="controls">
-			<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" class="span3" />
-			<span class="help-text">#i18n{form.createEntry.labelCSSClassComment}</span>
-		</div>
-	</div>
-	<div class="form-actions">
-		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}</button>
-		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonApply}</button>
-		<button class="btn btn-small" type="submit" ><i class="icon-remove-circle"></i>&nbsp;#i18n{form.modifyEntry.buttonCancel}</button>
-	</div>
-   </form>
-	</fieldset>
 	<fieldset>
-	<legend>#i18n{form.createEntry.manageField.title}</legend>
-	<@paginationAdmin paginator=paginator combo=1/>
-	<a name="list" id="list"></a>
-	<table class="table table-striped">
-          <tr> 
-            <th > #i18n{form.createEntry.manageField.rowTitle}
-            </th>
-            <th > #i18n{form.createEntry.manageField.rowValue}
-            </th>
-            <th> #i18n{form.createEntry.manageField.rowDefaultValue}
-            </th>
-			<th> #i18n{form.createEntry.manageField.rowConditionalQuestion}
-            </th>
-            <th> #i18n{form.createEntry.manageField.rowActions}
-            </th>
-          </tr>
-         <#assign cpt=0>
-           <#list list as field>
-          	<#assign cpt=cpt+1>
-          	<tr>
-            	<td>
-            		${field.title}
-           		</td>
-	            <td>
-	           		${field.value}
-	           </td>
-	            <td >
-	       			 <#if field.defaultValue>
-	       				<span class="label label-success"><i class="icon-ok icon-white"></i> </span>   
-	       			</#if> 	 		
-	            </td >
-	            <td >
-	       			<#if field.conditionalQuestions?exists>
-	       					 <#list field.conditionalQuestions as entry>
-	       							 <#if entry.entryType.comment>
-	              							${entry.comment}
-	              						<#else>
-											${entry.title}
-										</#if><br>
-	       					</#list>
-	       					
-	       			</#if>     	
-	            </td>
-	            <td>
-					<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyFieldWithConditionalQuestion.jsp?id_field=${field.idField}"  title="null" >
-						<i class="icon-edit icon-white"></i>
-					</a>
-					<#if cpt!=1>
-	              	<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/DoMoveUpField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveUp}" >
-						<i class="icon-chevron-up icon-white"></i>
-					</a>
-					</#if> 
-					<#if field_has_next>
-	                <a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/DoMoveDownField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveDown}" >
-						<i class="icon-chevron-down icon-white"></i>
-					</a>
-					</#if>
-					<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/ConfirmRemoveField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
-						<i class="icon-trash icon-white"></i>
-					</a>
-				</td>
-	          </tr>
-			</#list> 
-        </table>
+		<legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
+		<div class="span4">
+			<form class="form" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+				<input name="id_entry" value="${entry.idEntry}" type="hidden" />
+				<label for="title">#i18n{form.createEntry.labelTitle} * : </label>
+				<input type="text" name="title" id="title" class="input-xlarge" value="${entry.title}"  maxlength="255"/>
+				<span class="help-block">#i18n{form.createEntry.labelTitleComment}</span>
+				<label for="help_message">#i18n{form.createEntry.labelHelpMessage}</label>
+				<textarea  name="help_message"  id="help_message" rows="2" class="span10">${entry.helpMessage}</textarea>
+				<span class="help-block">#i18n{form.createEntry.labelHelpMessageComment}</span>
+				<label for="comment"> #i18n{form.createEntry.labelComment} </label>
+				<textarea  name="comment" class="span10" rows="2">${entry.comment}</textarea>
+				<label for="width">#i18n{form.createEntry.labelPresentation}</label>
+				<select  id="field_in_line" name="field_in_line">
+					<option value=1 <#if entry.fieldInLine >selected="selected" </#if> >#i18n{form.createEntry.selectPresentationInLine}</option>
+					<option value=0 <#if !entry.fieldInLine >selected="selected" </#if>>#i18n{form.createEntry.selectPresentationNotInLine}</option>
+				</select>
+				<p>#i18n{form.createEntry.labelType} : ${entry.entryType.title} </p>
+				<label class="checkbox" for="mandatory">
+					<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked" </#if>	/>&nbsp;#i18n{form.createEntry.labelMandatory} 
+				</label>
+				<label for="css_class">#i18n{form.createEntry.labelCSSClass}</label>
+				<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" class="input-large" />
+				<span class="help-block">#i18n{form.createEntry.labelCSSClassComment}</span>
+				<div class="form-actions">
+					<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}</button>
+					<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonApply}</button>
+					<button class="btn btn-small" type="submit" ><i class="icon-remove-circle"></i>&nbsp;#i18n{form.modifyEntry.buttonCancel}</button>
+				</div>
+		   </form>
+		</div>
+	<div class="span7">
+		<fieldset>
+		<legend>
+			#i18n{form.createEntry.manageField.title}
+			<form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/form/CreateField.jsp?option_no_display_title=true">
+				<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.manageField.buttonInsert}</button>
+			</form>
+		</legend>
+		<@paginationAdmin paginator=paginator combo=1/>
+		<a name="list" id="list"></a>
+		<table class="table table-striped">
+			<tr> 
+				<th>#i18n{form.createEntry.manageField.rowTitle}</th>
+				<th>#i18n{form.createEntry.manageField.rowValue}</th>
+				<th><i class="icon-question-sign" title="#i18n{form.createEntry.manageField.rowConditionalQuestion}"></i>&nbsp;</th>
+				<th>#i18n{form.createEntry.manageField.rowActions}</th>
+			</tr>
+			<#assign cpt=0>
+				<#list list as field>
+				<#assign cpt=cpt+1>
+				<tr>
+					<td>${field.title}</td>
+					<td><#if field.defaultValue><span class="label label-success"><i class="icon-ok icon-white" title="#i18n{form.createEntry.manageField.rowDefaultValue}"></i></span></#if>&nbsp;${field.value}</td>
+					<td>
+						<#if field.conditionalQuestions?exists>
+							 <#list field.conditionalQuestions as entry>
+								<#if entry.entryType.comment>
+									${entry.comment}
+								<#else>
+									${entry.title}
+								</#if><br>
+							</#list>
+						</#if>     	
+					</td>
+					<td>
+						<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyFieldWithConditionalQuestion.jsp?id_field=${field.idField}"  title="null" >
+							<i class="icon-edit icon-white"></i>
+						</a>
+						<#if cpt!=1>
+						<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/DoMoveUpField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveUp}" >
+							<i class="icon-chevron-up icon-white"></i>
+						</a>
+						</#if> 
+						<#if field_has_next>
+						<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/DoMoveDownField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveDown}" >
+							<i class="icon-chevron-down icon-white"></i>
+						</a>
+						</#if>
+						<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/ConfirmRemoveField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
+							<i class="icon-trash icon-white"></i>
+						</a>
+					</td>
+				</tr>
+				</#list> 
+		</table>
         <@paginationAdmin paginator=paginator/>
-    <form class="form-inline" method="post"  action="jsp/admin/plugins/form/CreateField.jsp?option_no_display_title=true">
-	<div class="form-actions">
-		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>#i18n{form.createEntry.manageField.buttonInsert}</button>
-	</div>
-	</form>
-    </fieldset>
+		</fieldset>
    </div>
+   </fieldset>
 </div>
-
- <@initEditor />
+<@initEditor />

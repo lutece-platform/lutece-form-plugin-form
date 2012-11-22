@@ -1,11 +1,11 @@
 <div class="row-fluid">
 	<div class="span12">
-	<legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
+		<fieldset>
+		<legend>#i18n{form.modifyEntry.titleQuestion} : '${entry.form.title}'</legend>
 		<form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post">
-			<fieldset>
 			<input name="id_entry" value="${entry.idEntry}" type="hidden" />
 			<div class="control-group">
-			<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} *  : </label>
+			<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} *</label>
 				<div class="controls">
 					<input type="text" name="title" id="title" class="span3" value="${entry.title}" maxlength="255" />
 				</div>
@@ -13,25 +13,25 @@
 			<div class="control-group">
 			<label class="control-label" for="">#i18n{form.createEntry.labelType} : ${entry.entryType.title}</label>
 				<div class="controls">
-					<label for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+					<label for="mandatory">#i18n{form.createEntry.labelMandatory}</label>
 					<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked"</#if> />
+				</div>
 			</div>
-		</div>
-		<div class="control-group">
+			<div class="control-group">
 			<label class="control-label" >#i18n{form.createEntry.labelMandatoryCommentForEntryTypeSession}</label>
 				<#list entry.fields as field>
 				<div class="controls">
-					<label  for="value">#i18n{form.createEntry.labelAttributeName} * : </label>
+					<label  for="value">#i18n{form.createEntry.labelAttributeName} *</label>
 						<input type="text" name="value" id="value" maxlength="255" value="${field.value}"/>
 						<span class="help-text">#i18n{form.createEntry.labelAttributeNameComment}</span>
 				</div>
 				</#list>
-		</div>
-		<div class="form-actions">
-			<button class="btn btn-primary btn-small" name="save" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}</button>
-			<button class="btn btn-primary btn-small" name="apply" type="submit" ><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonApply}</button>
-			<button class="btn btn-primary btn-small" name="cancel" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonCancel}</button>
-		</div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary btn-small" name="save" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}</button>
+				<button class="btn btn-primary btn-small" name="apply" type="submit" ><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonApply}</button>
+				<button class="btn btn-small" name="cancel" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle"></i>&nbsp;#i18n{form.modifyEntry.buttonCancel}</button>
+			</div>
 		</form>
 	</fieldset>
 	</div>

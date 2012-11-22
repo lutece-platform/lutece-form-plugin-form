@@ -14,7 +14,7 @@
 	</div>
     <div class="control-group">
 		<label class="control-label" for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
-     	<textarea  name="help_message"  id="help_message" rows="20" class="span4">${entry.helpMessage}</textarea>
+     	<textarea  name="help_message"  id="help_message" rows="10" class="span4">${entry.helpMessage}</textarea>
 		<span class="help-text">#i18n{form.createEntry.labelHelpMessageComment}</span>
 	</div>
 	<div class="control-group">
@@ -25,7 +25,7 @@
 	<label class="control-label" for="">#i18n{form.createEntry.labelType} : ${entry.entryType.title}</label>
 		<div class="controls">
 			<label for="value">#i18n{form.createEntry.labelValueDefault} : </label>
-			<textarea  name="value" id="value" rows="20" class="span4"><#list entry.fields as field>${field.value}</#list></textarea>
+			<textarea  name="value" id="value" rows="10" class="span4"><#list entry.fields as field>${field.value}</#list></textarea>
 		</div>
 	</div>
 	<div class="control-group">
@@ -72,8 +72,8 @@
 		</div>
 	</div>
 	<div class="form-actions">
-		<button class="btn btn-primary btn-small" type="submit" >#i18n{form.modifyEntry.buttonSave}</button>
-		<button class="btn btn-primary btn-small" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonCancel}</button>
+		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}</button>
+		<button class="btn btn-small" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle"></i>&nbsp;#i18n{form.modifyEntry.buttonCancel}</button>
 	</div>
    </form>
   </fieldset>

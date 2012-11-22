@@ -19,18 +19,7 @@
 	</#if>
 	<@combo name="id_category" items=category_list default_value=category_default_value />
 	<p class="help-text">#i18n{form.createForm.labelCategoryComment}</p>
-	<div class="form-actions">
-		<button type="submit" class="btn btn-primary btn-small" name="save">
-			<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}
-		</button>
-		<button type="submit" class="btn btn-primary btn-small" name="apply">
-			<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyForm.buttonApply}
-		</button>
-		<button type="submit" class="btn btn-primary btn-small" name="cancel" onclick="javascript:window.history.back();">
-			<i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}
-		</button>
-	</div>
-	</fieldset>		
+		
 	<fieldset>
 	<legend id="advanced_settings">
 		<i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelAdvancedSettings}
@@ -114,6 +103,18 @@
 		<p class="help-text">#i18n{form.createForm.labelDateEndDisponibilityComment}</p>
 		</div>
 	</fieldset>
+	<div class="form-actions">
+		<button type="submit" class="btn btn-primary btn-small" name="save">
+			<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}
+		</button>
+		<button type="submit" class="btn btn-primary btn-small" name="apply">
+			<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyForm.buttonApply}
+		</button>
+		<button type="submit" class="btn btn-primary btn-small" name="cancel" onclick="javascript:window.history.back();">
+			<i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}
+		</button>
+	</div>
+	</fieldset>	
 </form>
 </div>
 <div id="questions" class="span8">

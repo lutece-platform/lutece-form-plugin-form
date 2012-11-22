@@ -48,7 +48,7 @@
             <#list form_list as form>	
             <tr>
                 <td>
-                    ${form.title} 
+                    ${form.title}&nbsp;<a href="jsp/site/Portal.jsp?page=form&id_form=${form.idForm}" title="Voir ${form.title}" target="_blank"><i class="icon-globe"></i></a>
                 </td>
                 <td>
                     <#setting locale=locale.language>
@@ -98,13 +98,13 @@
 						<#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
 							<#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && 
 							!((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
-							<a class="btn btn-small <#if action.permission=='DELETE'>btn-danger<#elseif action.permission=='DELETE'><#else>btn-primary</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
+							<a class="btn btn-small <#if action.permission=='DELETE'>btn-danger<#elseif action.nameKey=='form.action.disable.name'>btn-danger<#elseif action.nameKey=='form.action.enable.name'>btn-success<#else>btn-primary</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
 								<i class="${action.iconUrl} icon-white"></i>
 							</a>
 							</#if>
 						</#list>
-                    </#if>	
-                </td>
+                    </#if>
+			    </td>
             </tr>
             </#list>
         </table>
