@@ -1,15 +1,13 @@
 <div class="row-fluid">
     <div class="span12">
         <fieldset>
-            <legend> #i18n{form.manageValidator.title}</legend>
+            <legend>#i18n{form.manageValidator.title}</legend>
             <#if validator_list?has_content>
                 <#list validator_list as validator>
-                <div class="well">
                     ${validator}
-                </div>
                 </#list>
             <#else>
-                <p class="label label-warnig">#i18n{form.manageValidator.noValidator}</p>
+                <div class="alert alert-danger">#i18n{form.manageValidator.noValidator}</div>
             </#if>
         </fieldset>
     </div>
