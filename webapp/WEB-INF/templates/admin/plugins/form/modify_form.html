@@ -21,9 +21,9 @@
 	<p class="help-text">#i18n{form.createForm.labelCategoryComment}</p>
 		
 	<fieldset>
-	<legend id="advanced_settings">
+		<legend id="advanced_settings">
 		<i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelAdvancedSettings}
-	</legend>
+		</legend>
 		<div id="advanced_settings_content">
 		<label for="front_office_title">#i18n{form.createForm.frontOfficeTitle}:</label>
 		<input type="text" name="front_office_title" value="${form.frontOfficeTitle!}" maxlength="255" />
@@ -79,28 +79,28 @@
 		</div>
 	</fieldset>	
 	<fieldset>
-	<legend id="publication_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelPublication}</legend>
+		<legend id="publication_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelPublication}</legend>
 		<div id="publication_settings_content">
-		<label for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
-		<input type="radio" name="publication_mode" id="publication_mode_user" value="0" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
-		<#if !form.dateBeginDisponibility?? && !form.dateEndDisponibility??>checked="checked"</#if>	/> #i18n{form.createForm.labelPublicationModeUser}
-		<input type="radio" name="publication_mode" id="publication_mode_auto" value="1" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
-		<#if form.dateBeginDisponibility?? || form.dateEndDisponibility??>checked="checked"</#if> /> #i18n{form.createForm.labelPublicationModeAuto}
-		<p class="help-text">#i18n{form.createForm.labelPublicationModeComment}</p>
-		<label for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
-		<div class="input-prepend">
-			<span class="add-on"><i class="icon-calendar"></i></span>
-			<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="${form.dateBeginDisponibility?if_exists}" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
-		</div>
-		<input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="${form.dateBeginDisponibility?if_exists}" />
-		<p class="help-text">#i18n{form.createForm.labelDateBeginDisponibilityComment}</p>
-		<label for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
-		<div class="input-prepend">
-			<span class="add-on"><i class="icon-calendar"></i></span>
-			<input type="text" name="date_end_disponibility" id="date_end_disponibility" value="${form.dateEndDisponibility?if_exists}" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
-		</div>
-		<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="${form.dateEndDisponibility?if_exists}" />
-		<p class="help-text">#i18n{form.createForm.labelDateEndDisponibilityComment}</p>
+			<label for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
+			<input type="radio" name="publication_mode" id="publication_mode_user" value="0" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
+			<#if !form.dateBeginDisponibility?? && !form.dateEndDisponibility??>checked="checked"</#if>	/> #i18n{form.createForm.labelPublicationModeUser}
+			<input type="radio" name="publication_mode" id="publication_mode_auto" value="1" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
+			<#if form.dateBeginDisponibility?? || form.dateEndDisponibility??>checked="checked"</#if> /> #i18n{form.createForm.labelPublicationModeAuto}
+			<p class="help-text">#i18n{form.createForm.labelPublicationModeComment}</p>
+			<label for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
+			<div class="input-prepend">
+				<span class="add-on"><i class="icon-calendar"></i></span>
+				<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="${form.dateBeginDisponibility?if_exists}" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
+			</div>
+			<input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="${form.dateBeginDisponibility?if_exists}" />
+			<p class="help-text">#i18n{form.createForm.labelDateBeginDisponibilityComment}</p>
+			<label for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
+			<div class="input-prepend">
+				<span class="add-on"><i class="icon-calendar"></i></span>
+				<input type="text" name="date_end_disponibility" id="date_end_disponibility" value="${form.dateEndDisponibility?if_exists}" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
+			</div>
+			<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="${form.dateEndDisponibility?if_exists}" />
+			<p class="help-text">#i18n{form.createForm.labelDateEndDisponibilityComment}</p>
 		</div>
 	</fieldset>
 	<div class="form-actions">
@@ -108,10 +108,10 @@
 			<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}
 		</button>
 		<button type="submit" class="btn btn-primary btn-small" name="apply">
-			<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyForm.buttonApply}
+			<i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.modifyForm.buttonApply}
 		</button>
-		<button type="submit" class="btn btn-primary btn-small" name="cancel" onclick="javascript:window.history.back();">
-			<i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}
+		<button type="submit" class="btn btn-small" name="cancel" onclick="javascript:window.history.back();">
+			<i class="icon-remove-circle"></i>&nbsp;#i18n{form.createForm.buttonCancel}
 		</button>
 	</div>
 	</fieldset>	
