@@ -89,7 +89,6 @@ public final class FormHome
         recap = RecapHome.findByPrimaryKey( form.getRecap(  ).getIdRecap(  ), plugin );
         recap.setIdRecap( RecapHome.copy( recap, plugin ) );
         form.setRecap( recap );
-        form.setActive( false );
         form.setDateCreation( FormUtils.getCurrentTimestamp(  ) );
         form.setIdForm( create( form, plugin ) );
 
