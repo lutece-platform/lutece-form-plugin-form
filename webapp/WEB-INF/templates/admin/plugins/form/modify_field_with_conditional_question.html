@@ -73,12 +73,12 @@
 					<i class="icon-edit icon-white"></i>
 				</a>
 	        <#if cpt!=1>
-				<a class="btn btn-small" href="jsp/admin/plugins/form/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" >
+				<a class="btn btn-small" href="jsp/admin/plugins/form/DoMoveUpEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" >
 					<i class="icon-chevron-up"></i>
 				</a>
 			</#if>	
 	        <#if entry_has_next>
-				<a class="btn btn-small" href="jsp/admin/plugins/form/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" >
+				<a class="btn btn-small" href="jsp/admin/plugins/form/DoMoveDownEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" >
 					<i class="icon-chevron-down"></i>
 				</a>
 			</#if>	
