@@ -1,3 +1,17 @@
+<script>
+$(document).ready(function() {
+	
+	$("#selectAll").change( function() {
+    if ( $(this).attr("checked") ){
+		// check all
+        $("input[name='entry_id']").prop( "checked", "checked");
+		} else {
+        // uncheck all
+        $("input[name='entry_id']").prop( "checked", "");
+		}
+    });
+});
+</script>
 <#include "/admin/plugins/form/commons.html" />
 <div class="row-fluid">
 	<div class="span4">
@@ -307,3 +321,4 @@ function doChangePublicationMode(radio){
 </select>
 </#if>
 </#macro>
+
