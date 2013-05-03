@@ -210,11 +210,11 @@ public class Response
     // DEPRECATED METHODS
 
     /**
-     *
+     * 
      * @return the value of the response
      * @deprecated The response is now in String and not in byte
      * @since 2.4.8
-     * @see {@link File}
+     * @see File
      */
     public byte[] getValueResponse(  )
     {
@@ -239,7 +239,7 @@ public class Response
      * @param valueResponse the value of the response
      * @deprecated The response is now in String and not in byte
      * @since 2.4.8
-     * @see {@link File}
+     * @see File
      */
     public void setValueResponse( byte[] valueResponse )
     {
@@ -247,23 +247,23 @@ public class Response
     }
 
     /**
-    * the file name if the response value is a file
-    * @param fileName the file name if the response value is a file
-    * @deprecated the file name is now stored in class File
-    * @since 2.4.8
-    * @see {@link File}
-    */
+     * the file name if the response value is a file
+     * @param fileName the file name if the response value is a file
+     * @deprecated the file name is now stored in class File
+     * @since 2.4.8
+     * @see File
+     */
     public void setFileName( String fileName )
     {
         _strFileName = fileName;
     }
 
     /**
-     *
+     * 
      * @return the file extension if the response value is a file
      * @deprecated the file is now stored in class File
      * @since 2.4.8
-     * @see {@link File}
+     * @see File
      */
     public String getFileExtension(  )
     {
@@ -285,7 +285,7 @@ public class Response
      * @param fileExtension the file extension if the response value is a file
      * @deprecated the file is now stored in class File
      * @since 2.4.8
-     * @see {@link File}
+     * @see File
      */
     public void setFileExtension( String fileExtension )
     {
@@ -297,7 +297,7 @@ public class Response
      * @return the file name if the response value is a file
      * @deprecated the file name is now stored in class File
      * @since 2.4.8
-     * @see {@link File}
+     * @see File
      */
     public String getFileName(  )
     {

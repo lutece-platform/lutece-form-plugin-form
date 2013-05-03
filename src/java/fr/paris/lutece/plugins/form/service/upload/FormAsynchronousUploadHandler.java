@@ -49,11 +49,6 @@ import fr.paris.lutece.portal.web.upload.IAsynchronousUploadHandler;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.UploadUtil;
 
-import net.sf.json.JSONObject;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -66,6 +61,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import net.sf.json.JSONObject;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -99,8 +99,7 @@ public class FormAsynchronousUploadHandler implements IAsynchronousUploadHandler
      */
     public static FormAsynchronousUploadHandler getHandler(  )
     {
-        return (FormAsynchronousUploadHandler) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-            BEAN_FORM_ASYNCHRONOUS_UPLOAD_HANDLER );
+        return SpringContextService.getBean( BEAN_FORM_ASYNCHRONOUS_UPLOAD_HANDLER );
     }
 
     /**
@@ -243,7 +242,6 @@ public class FormAsynchronousUploadHandler implements IAsynchronousUploadHandler
      *
      * @param request the HTTP request
      * @param strUploadAction the name of the upload action
-     * @return the name of the subform to display after having performed the requested action
      */
     public void doUploadAction( HttpServletRequest request, String strUploadAction )
     {

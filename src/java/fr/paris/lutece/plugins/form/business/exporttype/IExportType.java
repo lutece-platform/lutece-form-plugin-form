@@ -80,7 +80,7 @@ public interface IExportType
      * Get the response filter
      * @param form
      * @param locale the locale
-     * @return
+     * @return The response filter
      */
     ResponseFilter getResponseFilter( Form form, Locale locale );
 

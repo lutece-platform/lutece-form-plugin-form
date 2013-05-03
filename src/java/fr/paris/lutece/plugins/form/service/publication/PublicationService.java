@@ -80,7 +80,6 @@ public final class PublicationService
         for ( Form form : listForm )
         {
             boolean active = form.isActive(  );
-            boolean autoPublicationActive = form.isAutoPublicationActive(  );
             boolean bAuthorizedAccordingToDateBegin = ( form.getDateBeginDisponibility(  ) == null ) ||
                 form.getDateBeginDisponibility(  ).before( now.getTime(  ) ) ||
                 form.getDateBeginDisponibility(  ).equals( now.getTime(  ) );

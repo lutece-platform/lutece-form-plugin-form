@@ -45,6 +45,9 @@ import fr.paris.lutece.plugins.form.utils.FormUtils;
  */
 public class PhysicalFileService
 {
+    /**
+     * The name of the bean of this service
+     */
     public static final String BEAN_SERVICE = "form.physicalFileService";
 
     /**

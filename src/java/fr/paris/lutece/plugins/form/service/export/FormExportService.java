@@ -44,7 +44,6 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.io.IOException;
-
 import java.util.List;
 
 
@@ -55,6 +54,9 @@ import java.util.List;
  */
 public class FormExportService extends AbstractExportService
 {
+    /**
+     * The name of the bean of this service
+     */
     public static final String BEAN_SERVICE = "form.formExportService";
 
     /**

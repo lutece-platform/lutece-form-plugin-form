@@ -108,8 +108,9 @@ public class FormFilter
     }
 
     /**
-     * set true if the date end disponibility must be before current date
-     * @param  bCurrentDate true if the date end disponibility must be before current date
+     * set true if the date end availability must be before current date
+     * @param bCurrentDate true if the date end availability must be before
+     *            current date
      */
     public void setDateEndDisponibilityBeforeCurrentDate( boolean bCurrentDate )
     {
@@ -117,8 +118,8 @@ public class FormFilter
     }
 
     /**
-     *
-     * @return true if the date end disponibility must be before current date
+     * 
+     * @return true if the date end availability must be before current date
      */
     public boolean containsDateEndDisponibilityBeforeCurrentDate(  )
     {
@@ -126,17 +127,18 @@ public class FormFilter
     }
 
     /**
-     * Set true if the date begin disponibility must be after current date
-     * @param _bDateBeginDisponibilityAfterCurrentDate
+     * Set true if the date begin availability must be after current date
+     * @param bDateBeginDisponibilityAfterCurrentDate true if the date begin
+     *            availability must be after current date, false otherwise
      */
-    public void setDateBeginDisponibilityAfterCurrentDate( boolean _bDateBeginDisponibilityAfterCurrentDate )
+    public void setDateBeginDisponibilityAfterCurrentDate( boolean bDateBeginDisponibilityAfterCurrentDate )
     {
-        this._bDateBeginDisponibilityAfterCurrentDate = _bDateBeginDisponibilityAfterCurrentDate;
+        this._bDateBeginDisponibilityAfterCurrentDate = bDateBeginDisponibilityAfterCurrentDate;
     }
 
     /**
-     *
-     * @return true if the date begin disponibility must be after current date
+     * 
+     * @return true if the date begin availability must be after current date
      */
     public boolean isDateBeginDisponibilityAfterCurrentDate(  )
     {

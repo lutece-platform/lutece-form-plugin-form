@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -48,8 +47,7 @@ import java.util.List;
 public final class FormSubmitHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormSubmitDAO _dao = (IFormSubmitDAO) SpringContextService.getPluginBean( "form",
-            "form.formSubmitDAO" );
+    private static IFormSubmitDAO _dao = SpringContextService.getBean( "form.formSubmitDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -91,8 +89,7 @@ public final class FormSubmitHome
      */
     public static void remove( int nIdFormSubmit, Plugin plugin )
     {
-        IResponseService responseService = (IResponseService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-                FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+        IResponseService responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
         responseService.remove( nIdFormSubmit );
         _dao.delete( nIdFormSubmit, plugin );
     }

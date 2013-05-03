@@ -41,13 +41,13 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -163,15 +163,16 @@ public class EntryTypeCheckBox extends Entry
     /**
      * The paginator who is use in the template modify of the entry
      * @param nItemPerPage Number of items to display per page
-    * @param strBaseUrl The base Url for build links on each page link
-    * @param strPageIndexParameterName The parameter name for the page index
-    * @param strPageIndex The current page index
+     * @param strBaseUrl The base Url for build links on each page link
+     * @param strPageIndexParameterName The parameter name for the page index
+     * @param strPageIndex The current page index
      * @return the paginator who is use in the template modify of the entry
      */
     public Paginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
         String strPageIndex )
     {
-        return new Paginator( this.getFields(  ), nItemPerPage, strBaseUrl, strPageIndexParameterName, strPageIndex );
+        return new Paginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
+                strPageIndex );
     }
 
     /**
@@ -281,7 +282,7 @@ public class EntryTypeCheckBox extends Entry
     public LocalizedPaginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
         String strPageIndex, Locale locale )
     {
-        return new LocalizedPaginator( this.getFields(  ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
+        return new LocalizedPaginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
             strPageIndex, locale );
     }
 }

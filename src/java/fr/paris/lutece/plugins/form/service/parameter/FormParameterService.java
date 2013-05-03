@@ -130,8 +130,9 @@ public final class FormParameterService
 
     /**
      * Update the parameter value
-     * @param strParameterKey The parameter key
-     * @param strParameterValue The parameter value
+     * @param param A reference item contain the association key/value to
+     *            update. The key must be in the code parameter of the reference
+     *            item, and the value in the value parameter
      */
     public void update( ReferenceItem param )
     {

@@ -53,9 +53,7 @@ import java.util.Locale;
  */
 public class ExportFormatResourceIdService extends ResourceIdService
 {
-    public static final String PLUGIN_NAME = "form";
-
-    /** Permission for manage a export format*/
+    /** Permission for manage a export format */
     public static final String PERMISSION_MANAGE = "MANAGE";
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "form.permission.label.resourceType.exportFormat";
     private static final String PROPERTY_LABEL_MANAGE = "form.permission.label.manage.exportFormat";
@@ -63,7 +61,7 @@ public class ExportFormatResourceIdService extends ResourceIdService
     /** Creates a new instance of DocumentTypeResourceIdService */
     public ExportFormatResourceIdService(  )
     {
-        setPluginName( PLUGIN_NAME );
+        setPluginName( FormPlugin.PLUGIN_NAME );
     }
 
     /**
@@ -73,7 +71,7 @@ public class ExportFormatResourceIdService extends ResourceIdService
     {
         ResourceType rt = new ResourceType(  );
         rt.setResourceIdServiceClass( ExportFormatResourceIdService.class.getName(  ) );
-        rt.setPluginName( PLUGIN_NAME );
+        rt.setPluginName( FormPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( ExportFormat.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
@@ -91,7 +89,7 @@ public class ExportFormatResourceIdService extends ResourceIdService
      */
     public ReferenceList getResourceIdList( Locale locale )
     {
-        return ExportFormatHome.getListExport( PluginService.getPlugin( PLUGIN_NAME ) );
+        return ExportFormatHome.getListExport( PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
     }
 
     /**
@@ -113,7 +111,8 @@ public class ExportFormatResourceIdService extends ResourceIdService
             AppLogService.error( ne );
         }
 
-        ExportFormat export = ExportFormatHome.findByPrimaryKey( nIdExport, PluginService.getPlugin( PLUGIN_NAME ) );
+        ExportFormat export = ExportFormatHome.findByPrimaryKey( nIdExport,
+                PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
 
         return export.getTitle(  );
     }

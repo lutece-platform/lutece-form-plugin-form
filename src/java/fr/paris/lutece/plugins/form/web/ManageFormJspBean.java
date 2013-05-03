@@ -96,7 +96,7 @@ public class ManageFormJspBean extends PluginAdminPageJspBean
         Map<String, Boolean> model = new HashMap<String, Boolean>(  );
 
         List<ExportFormat> listExportFormat = ExportFormatHome.getList( plugin );
-        listExportFormat = (List) RBACService.getAuthorizedCollection( listExportFormat,
+        listExportFormat = (List<ExportFormat>) RBACService.getAuthorizedCollection( listExportFormat,
                 ExportFormatResourceIdService.PERMISSION_MANAGE, adminUser );
 
         if ( ( listExportFormat.size(  ) != 0 ) ||

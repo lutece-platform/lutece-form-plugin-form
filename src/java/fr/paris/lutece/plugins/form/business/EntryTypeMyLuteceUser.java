@@ -148,7 +148,6 @@ public class EntryTypeMyLuteceUser extends Entry
      * @param listResponse the list of response associate to the entry in the form submit
      * @param locale the locale
      * @return a Form error object if there is an error in the response
-     * @throws UserNotSignedException
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {

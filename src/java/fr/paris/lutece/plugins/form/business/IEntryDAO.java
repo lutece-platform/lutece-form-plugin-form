@@ -100,9 +100,9 @@ public interface IEntryDAO
 
     /**
      * Finds all the entries without any parent
-     *
+     * 
      * @param plugin the plugin
-     * @parem nIdForm the id of the form
+     * @param nIdForm the id of the form
      * @return List<IEntry> the list of all the entries without parent
      */
     List<IEntry> findEntriesWithoutParent( Plugin plugin, int nIdForm );
@@ -122,6 +122,7 @@ public interface IEntryDAO
     /**
      * Decrements the order of all the entries (conditional questions) after the
      * one which will be removed
+     * @param plugin The plugin
      * @param nOrder the order of the entry which will be removed
      * @param nIdField the id of the field
      * @param nIdForm the id of the form

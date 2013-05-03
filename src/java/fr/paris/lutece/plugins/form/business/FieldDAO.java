@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.sql.Date;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -322,12 +321,11 @@ public final class FieldDAO implements IFieldDAO
     }
 
     /**
-          * verify if the regular expresssion is use
-          *
-          * @param nIdEntry The identifier of the entry
-          * @param plugin the plugin
-          * @return true if the regular expression is use
-          */
+     * Check if the regular expression is use
+     * @param nIdExpression The identifier of the regular expression
+     * @param plugin the plugin
+     * @return true if the regular expression is use
+     */
     public boolean isRegularExpressionIsUse( int nIdExpression, Plugin plugin )
     {
         int nNumberEntry = 0;

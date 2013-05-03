@@ -36,15 +36,15 @@ package fr.paris.lutece.plugins.form.utils;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.io.UnsupportedEncodingException;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
- *
+ * 
  * StringUtil
- *
+ * 
  */
 public final class StringUtil
 {
@@ -54,23 +54,23 @@ public final class StringUtil
     /**
      * Private constructor
      */
-    private StringUtil(  )
+    private StringUtil( )
     {
     }
 
     /**
-     * Convert a byte[] to a String.
-     * <br />
-     * If the conversion with a specified encoding is not enable, then it will use
-     * the default encoding.
-     * @param strToConvert the String to convert
-     * @return the convert String if there is no error, the String in the parameter otherwise
+     * Convert a byte[] to a String. <br />
+     * If the conversion with a specified encoding is not enable, then it will
+     * use the default encoding.
+     * @param toConvert the String to convert
+     * @return the convert String if there is no error, the String in the
+     *         parameter otherwise
      */
     public static String convertToString( byte[] toConvert )
     {
-        String strEncoding = getConversionEncoding(  );
+        String strEncoding = getConversionEncoding( );
 
-        if ( isConversionEnable(  ) && StringUtils.isNotBlank( strEncoding ) )
+        if ( isConversionEnable( ) && StringUtils.isNotBlank( strEncoding ) )
         {
             try
             {
@@ -86,8 +86,7 @@ public final class StringUtil
     }
 
     /**
-     * Convert a String to byte[].
-     * <br />
+     * Convert a String to byte[]. <br />
      * If the conversion encoding is enable, then it will use the
      * encoding defined in <code>form.response.encoding</code>, otherwise
      * it will use the default encoding
@@ -96,9 +95,9 @@ public final class StringUtil
      */
     public static byte[] convertToByte( String strToConvert )
     {
-        String strEncoding = getConversionEncoding(  );
+        String strEncoding = getConversionEncoding( );
 
-        if ( isConversionEnable(  ) && StringUtils.isNotBlank( strEncoding ) )
+        if ( isConversionEnable( ) && StringUtils.isNotBlank( strEncoding ) )
         {
             try
             {
@@ -110,25 +109,25 @@ public final class StringUtil
             }
         }
 
-        return strToConvert.getBytes(  );
+        return strToConvert.getBytes( );
     }
 
     /**
-     * Check if the conversion is enable.
-     * <br />
+     * Check if the conversion is enable. <br />
      * It is defined in the <code>form.response.encoding.enable</code>.
      * @return true if the conversion is enable, false otherwise
      */
-    public static boolean isConversionEnable(  )
+    public static boolean isConversionEnable( )
     {
         return Boolean.valueOf( AppPropertiesService.getProperty( PROPERTY_ENCODING_ENABLE ) );
     }
 
     /**
-     * Get the conversion encoding defined in <code>form.response.encoding</code>
+     * Get the conversion encoding defined in
+     * <code>form.response.encoding</code>
      * @return the conversion encoding
      */
-    public static String getConversionEncoding(  )
+    public static String getConversionEncoding( )
     {
         return AppPropertiesService.getProperty( PROPERTY_ENCODING );
     }

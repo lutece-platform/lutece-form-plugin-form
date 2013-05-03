@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.sql.Timestamp;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -248,7 +248,7 @@ public class ResponseFilter
 
     /**
      * Set order by
-     * @param strOrderBy
+     * @param strOrderBy The order by
      */
     public void setOrderBy( String strOrderBy )
     {

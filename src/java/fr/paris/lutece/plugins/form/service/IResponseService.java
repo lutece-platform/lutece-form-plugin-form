@@ -39,9 +39,9 @@ import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.StatisticEntrySubmit;
 import fr.paris.lutece.plugins.form.service.file.FileService;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -56,6 +56,10 @@ public interface IResponseService
      */
     void setFileService( FileService fileService );
 
+    /**
+     * Create a form submit
+     * @param formSubmit The form submit to create
+     */
     @Transactional( "form.transactionManager" )
     void create( FormSubmit formSubmit );
 

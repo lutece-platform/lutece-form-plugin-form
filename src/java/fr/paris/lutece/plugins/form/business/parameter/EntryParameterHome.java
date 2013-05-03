@@ -47,8 +47,7 @@ import fr.paris.lutece.util.ReferenceList;
 public final class EntryParameterHome
 {
     // Static variable pointed at the DAO instance
-    private static IEntryParameterDAO _dao = (IEntryParameterDAO) SpringContextService.getPluginBean( "form",
-            "form.entryParameterDAO" );
+    private static IEntryParameterDAO _dao = SpringContextService.getBean( "form.entryParameterDAO" );
 
     /**
      * Load all the parameter default values
@@ -61,11 +60,11 @@ public final class EntryParameterHome
     }
 
     /**
-    * Load the parameter value
-    * @param strParameterKey the parameter key
-    * @param plugin
-    * @return The parameter value
-    */
+     * Load the parameter value
+     * @param strParameterKey the parameter key
+     * @param plugin The plugin
+     * @return The parameter value
+     */
     public static ReferenceItem findByKey( String strParameterKey, Plugin plugin )
     {
         return _dao.load( strParameterKey, plugin );
@@ -73,9 +72,10 @@ public final class EntryParameterHome
 
     /**
      * Update the parameter value
-     * @param strParameterKey The parameter key
-     * @param strParameterValue The parameter value
-     * @param plugin
+     * @param param A reference item contain the association key/value to
+     *            update. The key must be in the code parameter of the reference
+     *            item, and the value in the value parameter
+     * @param plugin The plugin
      */
     public static void update( ReferenceItem param, Plugin plugin )
     {

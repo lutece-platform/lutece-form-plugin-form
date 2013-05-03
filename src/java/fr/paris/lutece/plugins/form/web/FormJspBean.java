@@ -143,6 +143,8 @@ import com.keypoint.PngEncoder;
 public class FormJspBean extends PluginAdminPageJspBean
 {
     public static final String RIGHT_MANAGE_FORM = "FORM_MANAGEMENT";
+    public static final String PARAMETER_ACTION_REDIRECT = "redirect";
+    public static final String PUBLICATION_MODE_AUTO = "1";
 
     // templates
     private static final String TEMPLATE_MANAGE_FORM = "admin/plugins/form/manage_form.html";
@@ -342,7 +344,6 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_TIMES_UNIT = "times_unit";
     private static final String PARAMETER_PROCESSOR_KEY = "processor_key";
     private static final String PARAMETER_IS_SELECTED = "is_selected";
-    public static final String PARAMETER_ACTION_REDIRECT = "redirect";
     private static final String PARAMETER_INFORMATION_COMPLEMENTARY_1 = "information_complementary_1";
     private static final String PARAMETER_INFORMATION_COMPLEMENTARY_2 = "information_complementary_2";
     private static final String PARAMETER_INFORMATION_COMPLEMENTARY_3 = "information_complementary_3";
@@ -359,7 +360,6 @@ public class FormJspBean extends PluginAdminPageJspBean
     // other constants
     private static final String EMPTY_STRING = "";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
-    public static final String PUBLICATION_MODE_AUTO = "1";
     private static final String QUESTION_MARK_STRING = "?";
     private static final String EQUAL_STRING = "=";
     private static final String MYLUTECE_PLUGIN = "mylutece";
@@ -516,7 +516,8 @@ public class FormJspBean extends PluginAdminPageJspBean
      * Modify form parameter default values
      * @param request HttpServletRequest
      * @return JSP return
-     * @throws AccessDeniedException
+     * @throws AccessDeniedException If the user is not authorized to access
+     *             this feature
      */
     public String doModifyFormParameterDefaultValues( HttpServletRequest request )
         throws AccessDeniedException
@@ -549,7 +550,8 @@ public class FormJspBean extends PluginAdminPageJspBean
      * Modify entry parameter default values
      * @param request HttpServletRequest
      * @return JSP return
-     * @throws AccessDeniedException
+     * @throws AccessDeniedException If the user is not authorized to access
+     *             this feature
      */
     public String doModifyEntryParameterDefaultValues( HttpServletRequest request )
         throws AccessDeniedException
@@ -806,13 +808,10 @@ public class FormJspBean extends PluginAdminPageJspBean
                     return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_DATE_END_DISPONIBILITY,
                         AdminMessage.TYPE_STOP );
                 }
-                else
+                if ( tDateEndDisponibility.before( FormUtils.getCurrentDate( ) ) )
                 {
-                    if ( tDateEndDisponibility.before( FormUtils.getCurrentDate(  ) ) )
-                    {
-                        return AdminMessageService.getMessageUrl( request,
+                    return AdminMessageService.getMessageUrl( request,
                             MESSAGE_DATE_END_DISPONIBILITY_BEFORE_CURRENT_DATE, AdminMessage.TYPE_STOP );
-                    }
                 }
             }
 
@@ -881,7 +880,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         List<Category> listCategoriesView = CategoryHome.getList( getPlugin(  ) );
         Category emptyCategory = new Category(  );
         emptyCategory.setIdCategory( -2 );
-        emptyCategory.setTitle( "" );
+        emptyCategory.setTitle( EMPTY_STRING );
         listCategoriesView.add( emptyCategory );
 
         ReferenceList refCategoryList = FormUtils.getRefListCategory( listCategoriesView );
@@ -1046,7 +1045,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         List<Category> listCategoriesView = CategoryHome.getList( plugin );
         Category emptyCategory = new Category(  );
         emptyCategory.setIdCategory( -2 );
-        emptyCategory.setTitle( "" );
+        emptyCategory.setTitle( EMPTY_STRING );
         listCategoriesView.add( emptyCategory );
 
         ReferenceList refCategoryList = FormUtils.getRefListCategory( listCategoriesView );
@@ -1208,10 +1207,7 @@ public class FormJspBean extends PluginAdminPageJspBean
 
                 Form form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
-                String strOldTheme = updatedForm.getCodeTheme(  );
-
-                if ( ( updatedForm == null ) ||
-                        !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm,
+                if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm,
                             FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
                 {
                     return getJspManageForm( request );
@@ -1756,10 +1752,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         {
             return getJspModifyField( request, fieldDepend.getIdField(  ) );
         }
-        else
-        {
-            return getJspModifyForm( request, _nIdForm );
-        }
+        return getJspModifyForm( request, _nIdForm );
     }
 
     /**
@@ -1926,15 +1919,9 @@ public class FormJspBean extends PluginAdminPageJspBean
             {
                 return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
             }
-            else
-            {
-                return getJspModifyForm( request, _nIdForm );
-            }
+            return getJspModifyForm( request, _nIdForm );
         }
-        else
-        {
-            return getJspModifyEntry( request, nIdEntry );
-        }
+        return getJspModifyEntry( request, nIdEntry );
     }
 
     /**
@@ -2064,10 +2051,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         {
             return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
         }
-        else
-        {
-            return getJspModifyForm( request, _nIdForm );
-        }
+        return getJspModifyForm( request, _nIdForm );
     }
 
     /**
@@ -2120,10 +2104,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         {
             return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
         }
-        else
-        {
-            return getJspModifyForm( request, _nIdForm );
-        }
+        return getJspModifyForm( request, _nIdForm );
     }
 
     /**
@@ -2562,6 +2543,8 @@ public class FormJspBean extends PluginAdminPageJspBean
      * return url of the jsp modify form
      * @param request The HTTP request
      * @param nIdForm the key of form to modify
+     * @param parameterName The name of the additional parameter of the url
+     * @param parameterValue The value of the additional parameter of the url
      * @return return url of the jsp modify form
      */
     public static String getJspManageOutputProcessForm( HttpServletRequest request, int nIdForm, String parameterName,
@@ -2797,10 +2780,10 @@ public class FormJspBean extends PluginAdminPageJspBean
             _nItemsPerPageConditionalEntry = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                     _nItemsPerPageConditionalEntry, _nDefaultItemsPerPage );
 
-            LocalizedPaginator paginator = new LocalizedPaginator( field.getConditionalQuestions(  ),
-                    _nItemsPerPageConditionalEntry,
-                    AppPathService.getBaseUrl( request ) + JSP_MODIFY_FIELD + "?id_field=" + nIdField,
-                    PARAMETER_PAGE_INDEX, _strCurrentPageIndexConditionalEntry, getLocale(  ) );
+            LocalizedPaginator<IEntry> paginator = new LocalizedPaginator<IEntry>( field.getConditionalQuestions( ),
+                    _nItemsPerPageConditionalEntry, AppPathService.getBaseUrl( request ) + JSP_MODIFY_FIELD
+                            + "?id_field=" + nIdField, PARAMETER_PAGE_INDEX, _strCurrentPageIndexConditionalEntry,
+                    getLocale( ) );
 
             model.put( MARK_ENTRY_TYPE_REF_LIST, refEntryType );
             model.put( MARK_PAGINATOR, paginator );
@@ -2896,10 +2879,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         {
             return getJspModifyEntry( request, field.getParentEntry(  ).getIdEntry(  ) );
         }
-        else
-        {
-            return getJspModifyField( request, nIdField );
-        }
+        return getJspModifyField( request, nIdField );
     }
 
     /**
@@ -3579,7 +3559,7 @@ public class FormJspBean extends PluginAdminPageJspBean
                 formSubmit.setListResponse( _responseService.getResponseList( filter, false ) );
             }
 
-            if ( ( listFormSubmit != null ) && ( listFormSubmit.size(  ) != 0 ) )
+            if ( listFormSubmit.size( ) != 0 )
             {
                 XmlTransformerService xmlTransformerService = new XmlTransformerService(  );
                 String strXmlSource = XmlUtil.getXmlHeader(  ) +
@@ -3794,7 +3774,7 @@ public class FormJspBean extends PluginAdminPageJspBean
                 listForm.add( form );
             }
 
-            listForm = (List) AdminWorkgroupService.getAuthorizedCollection( listForm, adminUser );
+            listForm = (List<Form>) AdminWorkgroupService.getAuthorizedCollection( listForm, adminUser );
 
             if ( ( listForm.size(  ) == 0 ) ||
                     ( ( listForm.size(  ) != 0 ) &&
@@ -4176,7 +4156,8 @@ public class FormJspBean extends PluginAdminPageJspBean
      * Modify form export parameter default values
      * @param request HttpServletRequest
      * @return JSP return
-     * @throws AccessDeniedException
+     * @throws AccessDeniedException If the user is not authorized to acces this
+     *             feature
      */
     public String doModifyExportParameters( HttpServletRequest request )
         throws AccessDeniedException
@@ -4485,7 +4466,7 @@ public class FormJspBean extends PluginAdminPageJspBean
      * @param plugin the plugin
      * @param nOrderToSet the new order for the attribute
      * @param entryToChangeOrder the attribute which will change
-     * @parem nIdForm the id of the form
+     * @param nIdForm the id of the form
      */
     private void moveUpEntryOrder( Plugin plugin, int nOrderToSet, IEntry entryToChangeOrder, int nIdForm )
     {
@@ -4638,10 +4619,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         {
             return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
         }
-        else
-        {
-            return getJspModifyForm( request, _nIdForm );
-        }
+        return getJspModifyForm( request, _nIdForm );
     }
 
     /**
@@ -4680,7 +4658,6 @@ public class FormJspBean extends PluginAdminPageJspBean
 
         entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
 
-        List<IEntry> listEntry;
         EntryFilter filter = new EntryFilter(  );
         filter.setIdForm( entry.getForm(  ).getIdForm(  ) );
 
@@ -4716,10 +4693,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         {
             return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
         }
-        else
-        {
-            return getJspModifyForm( request, _nIdForm );
-        }
+        return getJspModifyForm( request, _nIdForm );
     }
 
     /**

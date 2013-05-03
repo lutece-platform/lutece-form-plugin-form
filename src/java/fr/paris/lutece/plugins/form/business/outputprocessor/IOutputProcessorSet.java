@@ -36,6 +36,9 @@ package fr.paris.lutece.plugins.form.business.outputprocessor;
 import java.util.Collection;
 
 
+/**
+ * IOutputProcessorSet
+ */
 public interface IOutputProcessorSet
 {
     /**

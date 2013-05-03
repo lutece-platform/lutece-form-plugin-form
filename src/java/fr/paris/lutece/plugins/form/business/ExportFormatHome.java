@@ -46,8 +46,7 @@ import java.util.List;
 public final class ExportFormatHome
 {
     // Static variable pointed at the DAO instance
-    private static IExportFormatDAO _dao = (IExportFormatDAO) SpringContextService.getPluginBean( "form",
-            "form.exportFormatDAO" );
+    private static IExportFormatDAO _dao = SpringContextService.getBean( "form.exportFormatDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

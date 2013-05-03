@@ -78,7 +78,7 @@ public class FormPortletJspBean extends PortletJspBean
      */
     public String getCreate( HttpServletRequest request )
     {
-        HashMap model = new HashMap(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         String strIdPage = request.getParameter( PARAMETER_PAGE_ID );
         String strIdPortletType = request.getParameter( PARAMETER_PORTLET_TYPE_ID );
         PortletType portletType = PortletTypeHome.findByPrimaryKey( strIdPortletType );
@@ -101,7 +101,7 @@ public class FormPortletJspBean extends PortletJspBean
     public String getModify( HttpServletRequest request )
     {
         Form form;
-        HashMap model = new HashMap(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         String strPortletId = request.getParameter( PARAMETER_PORTLET_ID );
         int nPortletId = -1;
 

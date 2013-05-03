@@ -43,7 +43,7 @@ $(document).ready(function() {
 		<input type="text" name="front_office_title" value="${form.frontOfficeTitle!}" maxlength="255" />
 		<p class="help-text">#i18n{form.createForm.frontOfficeTitleComment}</p>
 		<label for="is_shown_front_office_title"#i18n{form.createForm.frontOfficeTitleIsShown}:</label> 
-		<input type="checkbox" name="is_shown_front_office_title" value="1" <#if form?exists && form.shownFrontOfficeTitle?exists> checked="checked"</#if> />
+		<input type="checkbox" name="is_shown_front_office_title" value="1" <#if form?exists && form.shownFrontOfficeTitle?exists && form.shownFrontOfficeTitle> checked="checked"</#if> />
 		<p class="help-text">#i18n{form.createForm.frontOfficeTitleIsShownComment}</p>
 		<label for="workgroup">#i18n{form.createForm.labelWorkgroup} :</label>
 		<@combo name="workgroup" items=user_workgroup_list default_value=form.workgroup />

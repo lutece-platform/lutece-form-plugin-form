@@ -117,8 +117,7 @@ public class FormError
 
     /**
      * Set the url
-     * @param nIdForm the id form
-     * @param nIdEntry the id entry
+     * @param entry the entry
      */
     public void setUrl( IEntry entry )
     {

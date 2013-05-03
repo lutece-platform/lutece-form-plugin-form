@@ -45,8 +45,7 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class DefaultMessageHome
 {
     // Static variable pointed at the DAO instance
-    private static IDefaultMessageDAO _dao = (IDefaultMessageDAO) SpringContextService.getPluginBean( "form",
-            "form.defaultMessageDAO" );
+    private static IDefaultMessageDAO _dao = SpringContextService.getBean( "form.defaultMessageDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

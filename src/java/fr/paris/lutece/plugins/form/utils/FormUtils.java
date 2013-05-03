@@ -69,26 +69,9 @@ import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.xml.XmlUtil;
 
-import org.apache.commons.lang.StringUtils;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-
-import org.jfree.data.time.Day;
-import org.jfree.data.time.Month;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.time.Week;
-import org.jfree.data.xy.XYDataset;
-
 import java.awt.Color;
-
 import java.sql.Timestamp;
-
 import java.text.DateFormat;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -102,6 +85,18 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.Month;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.time.Week;
+import org.jfree.data.xy.XYDataset;
 
 
 /**
@@ -124,6 +119,12 @@ public final class FormUtils
     public static final String BEAN_EXPORT_DAEMON_TYPE_FACTORY = "form.exportTypeFactory";
     public static final int CONSTANT_ID_NULL = -1;
     public static final String CONSTANT_UNDERSCORE = "_";
+
+    // session
+    public static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
+    public static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
+    public static final String SESSION_FORM_ERRORS = "form_errors";
+
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_URL_ACTION = "url_action";
     private static final String MARK_ENTRY = "entry";
@@ -143,10 +144,6 @@ public final class FormUtils
     private static final String CONSTANT_AND = " AND ";
     private static final String SLASH = "/";
 
-    // session
-    public static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
-    public static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
-    public static final String SESSION_FORM_ERRORS = "form_errors";
 
     //	 Xml Tags
     private static final String TAG_FORM = "form";
@@ -722,7 +719,6 @@ public final class FormUtils
      * @param locale the locale
      * @param request HttpServletRequest
      */
-    @SuppressWarnings( "unchecked" )
     public static void getHtmlEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale,
         HttpServletRequest request )
     {
@@ -1223,7 +1219,7 @@ public final class FormUtils
 
             for ( StatisticFormSubmit statistic : listStatistic )
             {
-                series.add( new Day( (Date) statistic.getStatisticDate(  ) ), statistic.getNumberResponse(  ) );
+                series.add( new Day( statistic.getStatisticDate( ) ), statistic.getNumberResponse( ) );
             }
         }
         else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_WEEK ) )
@@ -1232,7 +1228,7 @@ public final class FormUtils
 
             for ( StatisticFormSubmit statistic : listStatistic )
             {
-                series.add( new Week( (Date) statistic.getStatisticDate(  ) ), statistic.getNumberResponse(  ) );
+                series.add( new Week( statistic.getStatisticDate( ) ), statistic.getNumberResponse( ) );
             }
         }
 
@@ -1242,7 +1238,7 @@ public final class FormUtils
 
             for ( StatisticFormSubmit statistic : listStatistic )
             {
-                series.add( new Month( (Date) statistic.getStatisticDate(  ) ), statistic.getNumberResponse(  ) );
+                series.add( new Month( statistic.getStatisticDate( ) ), statistic.getNumberResponse( ) );
             }
         }
 
@@ -1258,11 +1254,10 @@ public final class FormUtils
      * @param user the current user
      * @return  a  reference list of form
      */
-    @SuppressWarnings( "unchecked" )
     public static ReferenceList getFormList( Plugin plugin, AdminUser user )
     {
         List<Form> listForms = FormHome.getFormList( new FormFilter(  ), plugin );
-        listForms = (List) AdminWorkgroupService.getAuthorizedCollection( listForms, user );
+        listForms = (List<Form>) AdminWorkgroupService.getAuthorizedCollection( listForms, user );
 
         ReferenceList refListForms = new ReferenceList(  );
 
@@ -1522,7 +1517,7 @@ public final class FormUtils
     }
 
     /**
-     * Deactivate mylutece authentification for the form
+     * Deactivate mylutece authentication for the form
      * @param form Form
      * @param plugin Plugin
      */

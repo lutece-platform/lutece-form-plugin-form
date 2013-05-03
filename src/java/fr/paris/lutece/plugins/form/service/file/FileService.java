@@ -46,6 +46,9 @@ import fr.paris.lutece.plugins.form.utils.FormUtils;
  */
 public class FileService
 {
+    /**
+     * The name of the bean of this service
+     */
     public static final String BEAN_SERVICE = "form.fileService";
     private PhysicalFileService _physicalFileService;
 
@@ -105,7 +108,9 @@ public class FileService
 
     /**
      * Returns an instance of a file whose identifier is specified in parameter
-     * @param nKey The file  primary key
+     * @param nKey The file primary key
+     * @param bGetFileData True to get the physical file of the file, false
+     *            otherwise
      * @return an instance of file
      */
     public File findByPrimaryKey( int nKey, boolean bGetFileData )

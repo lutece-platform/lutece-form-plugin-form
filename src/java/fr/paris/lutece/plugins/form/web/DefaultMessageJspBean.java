@@ -89,7 +89,7 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
     private static final String FIELD_REQUIREMENT_MESSAGE = "form.manageDefaultMessage.labelRequirementMessage";
     private static final String FIELD_RECAP_MESSAGE = "form.manageDefaultMessage.labelRecapMessage";
     private static final String FIELD_LIBELLE_VALIDATE_BUTTON = "form.manageDefaultMessage.labelLibelleValidateButton";
-    private static final String FIELD_LIBELLE_RESET_BUTTON = "form.manageDefaultMessage.labelLibelleResetButton";
+    //    private static final String FIELD_LIBELLE_RESET_BUTTON = "form.manageDefaultMessage.labelLibelleResetButton";
     private static final String FIELD_BACK_URL = "form.manageDefaultMessage.labelBackUrl";
 
     //properties
@@ -103,7 +103,7 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
     public String getManageDefaultMessage( HttpServletRequest request )
     {
         Locale locale = getLocale(  );
-        HashMap model = new HashMap(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         DefaultMessage defaultMessage = DefaultMessageHome.find( getPlugin(  ) );
 
         model.put( MARK_DEFAULT_MESSAGE, defaultMessage );

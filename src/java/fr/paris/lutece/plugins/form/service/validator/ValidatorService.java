@@ -85,7 +85,7 @@ public class ValidatorService
      * @param request {@link HttpServletRequest}
      * @param formSubmit the form submit
      * @param plugin the plugin
-     * @throws SiteMessageException
+     * @throws SiteMessageException If a site message should be displayed
      */
     public void validateForm( HttpServletRequest request, FormSubmit formSubmit, Plugin plugin )
         throws SiteMessageException

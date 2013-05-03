@@ -167,7 +167,7 @@ CREATE TABLE form_form (
 	active_mylutece_authentification smallint default NULL,
 	id_category int default NULL,
 	front_office_title varchar(255) default NULL,
-	is_shown_front_office_title SMALLINT(6) default 0,
+	is_shown_front_office_title smallint default 0,
 	PRIMARY KEY (id_form)
 );
 

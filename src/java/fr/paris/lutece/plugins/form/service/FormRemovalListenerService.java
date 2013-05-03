@@ -57,7 +57,6 @@ public final class FormRemovalListenerService
      */
     public static RemovalListenerService getService(  )
     {
-        return (RemovalListenerService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-            BEAN_FORM_REMOVAL_SERVICE );
+        return SpringContextService.getBean( BEAN_FORM_REMOVAL_SERVICE );
     }
 }

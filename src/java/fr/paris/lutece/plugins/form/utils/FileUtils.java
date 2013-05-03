@@ -36,9 +36,6 @@ package fr.paris.lutece.plugins.form.utils;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.string.StringUtil;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,6 +43,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -107,7 +107,7 @@ public final class FileUtils
 
     /**
      * Build the file name
-     * @param form the form
+     * @param strFileName the name of the file
      * @param strFormatExtension the format extension
      * @return the file name
      */
@@ -143,18 +143,6 @@ public final class FileUtils
         }
         catch ( FileNotFoundException e )
         {
-            if ( in != null )
-            {
-                try
-                {
-                    in.close(  );
-                }
-                catch ( IOException e1 )
-                {
-                    AppLogService.error( e.getMessage(  ), e );
-                }
-            }
-
             return StringUtils.EMPTY;
         }
 

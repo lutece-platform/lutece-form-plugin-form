@@ -55,26 +55,23 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.fileupload.FileItem;
-
-import org.xml.sax.InputSource;
-
 import java.io.ByteArrayInputStream;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.fileupload.FileItem;
+import org.xml.sax.InputSource;
+
 
 /**
- *
+ * 
  * class ExportFormatJspBean
- *
+ * 
  */
 public class ExportFormatJspBean extends PluginAdminPageJspBean
 {
@@ -132,69 +129,70 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
      */
     public String getManageExportFormat( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin(  );
-        Locale locale = getLocale(  );
-        HashMap model = new HashMap(  );
+        Plugin plugin = getPlugin( );
+        Locale locale = getLocale( );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         List<ExportFormat> listExportFormat = ExportFormatHome.getList( plugin );
-        listExportFormat = (List) RBACService.getAuthorizedCollection( listExportFormat,
-                ExportFormatResourceIdService.PERMISSION_MANAGE, getUser(  ) );
+        listExportFormat = (List<ExportFormat>) RBACService.getAuthorizedCollection( listExportFormat,
+                ExportFormatResourceIdService.PERMISSION_MANAGE, getUser( ) );
         _strCurrentPageIndexExport = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexExport );
         _nItemsPerPageForm = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                 _nItemsPerPageForm, _nDefaultItemsPerPage );
 
-        LocalizedPaginator paginator = new LocalizedPaginator( listExportFormat, _nItemsPerPageForm,
-                getJspManageExportFormat( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport, getLocale(  ) );
+        LocalizedPaginator<ExportFormat> paginator = new LocalizedPaginator<ExportFormat>( listExportFormat,
+                _nItemsPerPageForm, getJspManageExportFormat( request ), PARAMETER_PAGE_INDEX,
+                _strCurrentPageIndexExport, getLocale( ) );
 
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageForm );
-        model.put( MARK_EXPORT_LIST, paginator.getPageItems(  ) );
+        model.put( MARK_EXPORT_LIST, paginator.getPageItems( ) );
         setPageTitleProperty( PROPERTY_MANAGE_EXPORT_FORMAT_TITLE );
 
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_EXPORT, locale, model );
 
         //ReferenceList refMailingList;
         //refMailingList=AdminMailingListService.getMailingLists(adminUser);
-        return getAdminPage( templateList.getHtml(  ) );
+        return getAdminPage( templateList.getHtml( ) );
     }
 
     /**
-    * Gets the export format creation page
-    * @param request The HTTP request
-    * @return The export format creation page
-    */
+     * Gets the export format creation page
+     * @param request The HTTP request
+     * @return The export format creation page
+     */
     public String getCreateExportFormat( HttpServletRequest request )
     {
         if ( !RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    ExportFormatResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+                ExportFormatResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             return getManageExportFormat( request );
         }
 
-        Locale locale = getLocale(  );
-        HashMap model = new HashMap(  );
+        Locale locale = getLocale( );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         setPageTitleProperty( PROPERTY_CREATE_EXPORT_FORMAT_TITLE );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_EXPORT, locale, model );
 
-        return getAdminPage( template.getHtml(  ) );
+        return getAdminPage( template.getHtml( ) );
     }
 
     /**
-    * Perform the export format  creation
-    * @param request The HTTP request
-    * @return The URL to go after performing the action
-    */
+     * Perform the export format creation
+     * @param request The HTTP request
+     * @return The URL to go after performing the action
+     */
     public String doCreateExportFormat( HttpServletRequest request )
     {
         if ( !RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    ExportFormatResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+                ExportFormatResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             return getJspManageExportFormat( request );
         }
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        ExportFormat exportFormat = new ExportFormat(  );
+        ExportFormat exportFormat = new ExportFormat( );
         String strError = getExportFormatData( multipartRequest, exportFormat );
 
         if ( strError != null )
@@ -202,28 +200,29 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             return strError;
         }
 
-        ExportFormatHome.create( exportFormat, getPlugin(  ) );
+        ExportFormatHome.create( exportFormat, getPlugin( ) );
 
         return getJspManageExportFormat( request );
     }
 
     /**
-    * Gets the export format modification page
-    * @param request The HTTP request
-    * @return The export format creation page
-    */
+     * Gets the export format modification page
+     * @param request The HTTP request
+     * @return The export format creation page
+     */
     public String getModifyExportFormat( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin(  );
-        Locale locale = getLocale(  );
+        Plugin plugin = getPlugin( );
+        Locale locale = getLocale( );
         ExportFormat exportFormat;
         String strIdExport = request.getParameter( PARAMETER_ID_EXPORT );
-        HashMap model = new HashMap(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         int nIdExport = -1;
 
-        if ( ( strIdExport != null ) && !strIdExport.equals( EMPTY_STRING ) &&
-                RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, strIdExport,
-                    ExportFormatResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+        if ( ( strIdExport != null )
+                && !strIdExport.equals( EMPTY_STRING )
+                && RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, strIdExport,
+                        ExportFormatResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             try
             {
@@ -247,25 +246,26 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_EXPORT, locale, model );
 
-        return getAdminPage( template.getHtml(  ) );
+        return getAdminPage( template.getHtml( ) );
     }
 
     /**
-    * Perform the export format modification
-    * @param request The HTTP request
-    * @return The URL to go after performing the action
-    */
+     * Perform the export format modification
+     * @param request The HTTP request
+     * @return The URL to go after performing the action
+     */
     public String doModifyExportFormat( HttpServletRequest request )
     {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        Plugin plugin = getPlugin(  );
+        Plugin plugin = getPlugin( );
         ExportFormat exportFormat;
         String strIdExport = multipartRequest.getParameter( PARAMETER_ID_EXPORT );
         int nIdExport = -1;
 
-        if ( ( strIdExport != null ) && !strIdExport.equals( EMPTY_STRING ) &&
-                RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, strIdExport,
-                    ExportFormatResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+        if ( ( strIdExport != null )
+                && !strIdExport.equals( EMPTY_STRING )
+                && RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, strIdExport,
+                        ExportFormatResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             try
             {
@@ -292,7 +292,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             return strError;
         }
 
-        ExportFormatHome.update( exportFormat, getPlugin(  ) );
+        ExportFormatHome.update( exportFormat, getPlugin( ) );
 
         return getJspManageExportFormat( request );
     }
@@ -313,23 +313,23 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_EXPORT_FORMAT );
         url.addParameter( PARAMETER_ID_EXPORT, strIdExport );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_EXPORT, url.getUrl(  ),
-            AdminMessage.TYPE_CONFIRMATION );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_EXPORT, url.getUrl( ),
+                AdminMessage.TYPE_CONFIRMATION );
     }
 
     /**
-    * Perform the export format supression
-    * @param request The HTTP request
-    * @return The URL to go after performing the action
-    */
+     * Perform the export format supression
+     * @param request The HTTP request
+     * @return The URL to go after performing the action
+     */
     public String doRemoveExportFormat( HttpServletRequest request )
     {
         String strIdExport = request.getParameter( PARAMETER_ID_EXPORT );
         int nIdExport = -1;
 
-        if ( ( request.getParameter( PARAMETER_ID_EXPORT ) == null ) ||
-                !RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, strIdExport,
-                    ExportFormatResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+        if ( ( request.getParameter( PARAMETER_ID_EXPORT ) == null )
+                || !RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, strIdExport,
+                        ExportFormatResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             return getJspManageExportFormat( request );
         }
@@ -347,16 +347,17 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
 
         if ( nIdExport != -1 )
         {
-            ExportFormatHome.remove( nIdExport, getPlugin(  ) );
+            ExportFormatHome.remove( nIdExport, getPlugin( ) );
         }
 
         return getJspManageExportFormat( request );
     }
 
     /**
-     * Get the request data and if there is no error insert the data in the exportFormat object specified in parameter.
+     * Get the request data and if there is no error insert the data in the
+     * exportFormat object specified in parameter.
      * return null if there is no error or else return the error page url
-     * @param  multipartRequest the request
+     * @param multipartRequest the request
      * @param exportFormat the exportFormat Object
      * @return null if there is no error or else return the error page url
      */
@@ -370,19 +371,19 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         FileItem fileSource = multipartRequest.getFile( Parameters.STYLESHEET_SOURCE );
         String strFilename = FileUploadService.getFileNameOnly( fileSource );
 
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        if ( ( strTitle == null ) || strTitle.trim( ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_TITLE;
         }
-        else if ( ( strDescription == null ) || strDescription.trim(  ).equals( EMPTY_STRING ) )
+        else if ( ( strDescription == null ) || strDescription.trim( ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_DESCRIPTION;
         }
-        else if ( ( strExtension == null ) || strExtension.trim(  ).equals( EMPTY_STRING ) )
+        else if ( ( strExtension == null ) || strExtension.trim( ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_EXTENSION;
         }
-        else if ( ( strFilename == null ) || ( strFilename.equals( "" ) && ( exportFormat.getXsl(  ) == null ) ) )
+        else if ( ( strFilename == null ) || ( strFilename.equals( "" ) && ( exportFormat.getXsl( ) == null ) ) )
         {
             strFieldError = FIELD_XSL;
         }
@@ -390,13 +391,13 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         //Mandatory fields
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale(  ) ) };
+            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale( ) ) };
 
             return AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+                    AdminMessage.TYPE_STOP );
         }
 
-        byte[] baXslSource = fileSource.get(  );
+        byte[] baXslSource = fileSource.get( );
 
         //Check the XML validity of the XSL stylesheet
         if ( ( strFilename != null ) && !strFilename.equals( "" ) && ( isValid( baXslSource ) != null ) )
@@ -404,7 +405,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             Object[] args = { isValid( baXslSource ) };
 
             return AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_STYLESHEET_NOT_VALID, args,
-                AdminMessage.TYPE_STOP );
+                    AdminMessage.TYPE_STOP );
         }
 
         exportFormat.setTitle( strTitle );
@@ -420,9 +421,9 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     *  Use parsing for validate the modify xsl file
-     *  @param baXslSource the xsl source
-     *  @return the message exception when the validation is false
+     * Use parsing for validate the modify xsl file
+     * @param baXslSource the xsl source
+     * @return the message exception when the validation is false
      */
     private String isValid( byte[] baXslSource )
     {
@@ -430,14 +431,14 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
 
         try
         {
-            SAXParserFactory factory = SAXParserFactory.newInstance(  );
-            SAXParser analyzer = factory.newSAXParser(  );
+            SAXParserFactory factory = SAXParserFactory.newInstance( );
+            SAXParser analyzer = factory.newSAXParser( );
             InputSource is = new InputSource( new ByteArrayInputStream( baXslSource ) );
-            analyzer.getXMLReader(  ).parse( is );
+            analyzer.getXMLReader( ).parse( is );
         }
         catch ( Exception e )
         {
-            strError = e.getMessage(  );
+            strError = e.getMessage( );
         }
 
         return strError;

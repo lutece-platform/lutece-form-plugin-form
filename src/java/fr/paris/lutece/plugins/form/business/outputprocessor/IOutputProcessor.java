@@ -63,6 +63,7 @@ public interface IOutputProcessor
 
     /**
      * Return the processor configuration interface
+     * @param request The request
      * @param form the form wich using the processor
      * @param locale {@link Locale}
      * @param plugin {@link Plugin}

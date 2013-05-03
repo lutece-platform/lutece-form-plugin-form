@@ -62,7 +62,7 @@ public class CategoryDAO implements ICategoryDAO
      * @param plugin the plugin
      * @return The new primary key
      */
-    public int newPrimaryKey( Plugin plugin )
+    protected int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
         daoUtil.executeQuery(  );
@@ -82,11 +82,9 @@ public class CategoryDAO implements ICategoryDAO
     }
 
     /**
-     * Insert a new record in the table.
-     *
-     * @param category instance of the Category object to insert
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void insert( Category category, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -99,11 +97,9 @@ public class CategoryDAO implements ICategoryDAO
     }
 
     /**
-     * update record in the table.
-     *
-     * @param category instance of the Category object to update
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void store( Category category, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -117,12 +113,9 @@ public class CategoryDAO implements ICategoryDAO
     }
 
     /**
-     * Load the data of the category from the table
-     *
-     * @param idKey The identifier of the category
-     * @param plugin the plugin
-     * @return the instance of the Category
+     * {@inheritDoc}
      */
+    @Override
     public Category load( int idKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
@@ -145,10 +138,9 @@ public class CategoryDAO implements ICategoryDAO
     }
 
     /**
-     * Load the data of all category returns them in a  list
-     * @param plugin the plugin
-     * @return  the list of category
+     * {@inheritDoc}
      */
+    @Override
     public List<Category> select( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
@@ -172,11 +164,9 @@ public class CategoryDAO implements ICategoryDAO
     }
 
     /**
-     * Delete a record from the table
-     *
-     * @param  nIdCategory The identifier of the category
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void delete( int nIdCategory, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -186,11 +176,9 @@ public class CategoryDAO implements ICategoryDAO
     }
 
     /**
-     * true if there is a  form associate to the category
-     * @param nIdCategory the key of the category
-     * @param plugin the plugin
-     * @return true if there is a form associate to the category
+     * {@inheritDoc}
      */
+    @Override
     public boolean isAssociateToForm( int nIdCategory, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_NUMBER_OF_FORM_ASSOCIATE_TO_THE_CATEGORY, plugin );

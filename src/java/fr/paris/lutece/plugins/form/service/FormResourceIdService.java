@@ -53,9 +53,6 @@ import java.util.Locale;
  */
 public class FormResourceIdService extends ResourceIdService
 {
-    public static final String PLUGIN_NAME = "form";
-
-    /** Permission for creating a form */
     public static final String PERMISSION_CREATE = "CREATE";
 
     /** Permission for testing a form */
@@ -103,7 +100,7 @@ public class FormResourceIdService extends ResourceIdService
     /** Creates a new instance of DocumentTypeResourceIdService */
     public FormResourceIdService(  )
     {
-        setPluginName( PLUGIN_NAME );
+        setPluginName( FormPlugin.PLUGIN_NAME );
     }
 
     /**
@@ -113,7 +110,7 @@ public class FormResourceIdService extends ResourceIdService
     {
         ResourceType rt = new ResourceType(  );
         rt.setResourceIdServiceClass( FormResourceIdService.class.getName(  ) );
-        rt.setPluginName( PLUGIN_NAME );
+        rt.setPluginName( FormPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( Form.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
@@ -182,7 +179,7 @@ public class FormResourceIdService extends ResourceIdService
      */
     public ReferenceList getResourceIdList( Locale locale )
     {
-        return FormHome.getFormList( PluginService.getPlugin( PLUGIN_NAME ) );
+        return FormHome.getFormList( PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
     }
 
     /**
@@ -204,7 +201,7 @@ public class FormResourceIdService extends ResourceIdService
             AppLogService.error( ne );
         }
 
-        Form form = FormHome.findByPrimaryKey( nIdForm, PluginService.getPlugin( PLUGIN_NAME ) );
+        Form form = FormHome.findByPrimaryKey( nIdForm, PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
 
         return form.getTitle(  );
     }

@@ -62,10 +62,9 @@ public class FormParameterDAO implements IFormParameterDAO
     private static final String COMMA = ",";
 
     /**
-     * Load all the default values
-     * @param plugin Plugin
-     * @return a list of ReferenceItem
+     * {@inheritDoc}
      */
+    @Override
     public ReferenceList selectAll( Plugin plugin )
     {
         ReferenceList listParams = new ReferenceList(  );
@@ -93,11 +92,9 @@ public class FormParameterDAO implements IFormParameterDAO
     }
 
     /**
-     * Load the parameter value
-     * @param strParameterKey the parameter key
-     * @param plugin
-     * @return The parameter value
+     * {@inheritDoc}
      */
+    @Override
     public ReferenceItem load( String strParameterKey, Plugin plugin )
     {
         ReferenceItem param = null;
@@ -118,11 +115,9 @@ public class FormParameterDAO implements IFormParameterDAO
     }
 
     /**
-     * Update the parameter value
-     * @param strParameterValue The parameter value
-     * @param strParameterKey The parameter key
-     * @param plugin
+     * {@inheritDoc}
      */
+    @Override
     public void store( ReferenceItem param, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );

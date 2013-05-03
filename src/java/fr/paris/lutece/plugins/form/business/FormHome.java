@@ -49,7 +49,7 @@ import java.util.Map;
 public final class FormHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormDAO _dao = (IFormDAO) SpringContextService.getPluginBean( "form", "form.formDAO" );
+    private static IFormDAO _dao = SpringContextService.getBean( "form.formDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

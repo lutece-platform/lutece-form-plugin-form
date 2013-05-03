@@ -34,10 +34,7 @@
 package fr.paris.lutece.plugins.form.service.parameter;
 
 import fr.paris.lutece.plugins.form.business.parameter.EntryParameterHome;
-import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
@@ -58,8 +55,7 @@ public final class EntryParameterService
      */
     public static EntryParameterService getService(  )
     {
-        return (EntryParameterService) SpringContextService.getPluginBean( FormPlugin.PLUGIN_NAME,
-            BEAN_ENTRY_PARAMETER_SERVICE );
+        return SpringContextService.getBean( BEAN_ENTRY_PARAMETER_SERVICE );
     }
 
     /**
@@ -83,8 +79,9 @@ public final class EntryParameterService
 
     /**
      * Update the parameter value
-     * @param strParameterKey The parameter key
-     * @param strParameterValue The parameter value
+     * @param param A reference item contain the association key/value to
+     *            update. The key must be in the code parameter of the reference
+     *            item, and the value in the value parameter
      */
     public void update( ReferenceItem param )
     {

@@ -47,7 +47,7 @@ import java.util.List;
 public final class GraphTypeHome
 {
     // Static variable pointed at the DAO instance
-    private static IGraphTypeDAO _dao = (IGraphTypeDAO) SpringContextService.getPluginBean( "form", "form.graphTypeDAO" );
+    private static IGraphTypeDAO _dao = SpringContextService.getBean( "form.graphTypeDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

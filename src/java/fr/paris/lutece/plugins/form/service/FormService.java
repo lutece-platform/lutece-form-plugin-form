@@ -68,8 +68,6 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -78,6 +76,8 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -252,7 +252,7 @@ public final class FormService
                 {
                     return false;
                 }
-                else if ( ( session != null ) && ( listFields != null ) && !listFields.isEmpty(  ) &&
+                else if ( ( listFields != null ) && !listFields.isEmpty( ) &&
                         ( listFields.get( 0 ) != null ) && StringUtils.isNotBlank( listFields.get( 0 ).getValue(  ) ) )
                 {
                     String strAttributeName = listFields.get( 0 ).getValue(  );
@@ -319,15 +319,14 @@ public final class FormService
 
     /**
      * Get the max number
-     * @param nIdEntryTypeNumbering the id entry type numbering
-     * @param nIdDirectory the id directory
+     * @param entry the id of the entry type numbering
      * @return the max number
      */
     public int getMaxNumber( IEntry entry )
     {
         int nMaxNumber = 1;
 
-        if ( entry instanceof EntryTypeNumbering && ( entry != null ) && ( entry.getEntryType(  ) != null ) &&
+        if ( entry instanceof EntryTypeNumbering && ( entry.getEntryType( ) != null ) &&
                 ( entry.getForm(  ) != null ) )
         {
             nMaxNumber = ResponseHome.findMaxNumber( entry.getIdEntry(  ), entry.getForm(  ).getIdForm(  ),

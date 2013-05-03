@@ -62,8 +62,10 @@ public interface IEntryParameterDAO
 
     /**
      * Update the parameter value
-     * @param param The parameter
-     * @param plugin Plugin
+     * @param param A reference item contain the association key/value to
+     *            update. The key must be in the code parameter of the reference
+     *            item, and the value in the value parameter
+     * @param plugin The plugin
      */
     void store( ReferenceItem param, Plugin plugin );
 }

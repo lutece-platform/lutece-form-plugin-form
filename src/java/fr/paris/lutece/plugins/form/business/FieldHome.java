@@ -48,7 +48,7 @@ import java.util.List;
 public final class FieldHome
 {
     // Static variable pointed at the DAO instance
-    private static IFieldDAO _dao = (IFieldDAO) SpringContextService.getPluginBean( "form", "form.fieldDAO" );
+    private static IFieldDAO _dao = SpringContextService.getBean( "form.fieldDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

@@ -40,18 +40,18 @@ import java.util.List;
 
 
 /**
- * This class provides instances management methods (create, find, ...) for  FormProcessor objects
+ * This class provides instances management methods (create, find, ...) for
+ * FormProcessor objects
  */
 public final class FormProcessorHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormProcessorDAO _dao = (IFormProcessorDAO) SpringContextService.getPluginBean( "form",
-            "form.formProcessorDAO" );
+    private static IFormProcessorDAO _dao = SpringContextService.getBean( "form.formProcessorDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private FormProcessorHome(  )
+    private FormProcessorHome( )
     {
     }
 
@@ -67,8 +67,8 @@ public final class FormProcessorHome
 
     /**
      * remove the FormProcessor Object which is specified in parameter
-     * @param formProcessor
-     * @param plugin
+     * @param formProcessor The form processor to remove
+     * @param plugin The plugin
      */
     public static void remove( FormProcessor formProcessor, Plugin plugin )
     {
@@ -78,16 +78,19 @@ public final class FormProcessorHome
     ///////////////////////////////////////////////////////////////////////////
     // Finders
 
-    /** Load the data of all the FormProcessor and returns them as a List
+    /**
+     * Load the data of all the FormProcessor and returns them as a List
      * @param plugin the plugin
-     * @return  a List of FormProcessor Object
+     * @return a List of FormProcessor Object
      */
     public static List<FormProcessor> getAllList( Plugin plugin )
     {
         return _dao.selectAll( plugin );
     }
 
-    /**Load the data of all the  FormProcessor wich is associate to the form and returns them as a list
+    /**
+     * Load the data of all the FormProcessor wich is associate to the form and
+     * returns them as a list
      * @param nIdForm the id of the form
      * @param plugin the plugin
      * @return a List of FormProcessor Object

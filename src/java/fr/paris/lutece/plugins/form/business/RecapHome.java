@@ -43,7 +43,7 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class RecapHome
 {
     // Static variable pointed at the DAO instance
-    private static IRecapDAO _dao = (IRecapDAO) SpringContextService.getPluginBean( "form", "form.recapDAO" );
+    private static IRecapDAO _dao = SpringContextService.getBean( "form.recapDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

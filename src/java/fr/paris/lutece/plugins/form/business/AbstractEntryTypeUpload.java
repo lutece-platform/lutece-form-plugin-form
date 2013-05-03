@@ -48,9 +48,6 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,6 +55,9 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -304,12 +304,12 @@ public abstract class AbstractEntryTypeUpload extends Entry
     }
 
     /**
-    * Check the record field data
-    * @param fileSource the file source to upload
-    * @param locale the locale
-    * @param request the HTTP request
-    * @return form error exception if there is an error
-    */
+     * Check the record field data
+     * @param listFilesSource the list of source files to upload
+     * @param locale the locale
+     * @param request the HTTP request
+     * @return form error exception if there is an error
+     */
     protected FormError checkResponseData( List<FileItem> listFilesSource, Locale locale, HttpServletRequest request )
     {
         // Check if the user can upload the file. The File is already uploaded in the asynchronous uploaded files map

@@ -39,13 +39,13 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -164,6 +164,7 @@ public class EntryTypeNumbering extends Entry
 
     /**
      * @return the response value of the response for this entry
+     * @param response The response
      */
     public String getResponseValue( Response response )
     {

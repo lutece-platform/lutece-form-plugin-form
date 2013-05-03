@@ -39,23 +39,22 @@ import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
 import fr.paris.lutece.portal.service.workgroup.WorkgroupRemovalListenerService;
 
 import java.sql.Timestamp;
-
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
- *
  * Class form
- *
  */
 public class Form implements AdminWorkgroupResource, RBACResource
 {
     public static final String RESOURCE_TYPE = "FORM_FORM_TYPE";
     public static final int STATE_ENABLE = 1;
     public static final int STATE_DISABLE = 0;
-    private static FormWorkgroupRemovalListener _listenerWorkgroup = new FormWorkgroupRemovalListener(  );
-    private static FormRegularExpressionRemovalListener _listenerRegularExpression = new FormRegularExpressionRemovalListener(  );
+    private static FormWorkgroupRemovalListener _listenerWorkgroup = new FormWorkgroupRemovalListener( );
+    private static FormRegularExpressionRemovalListener _listenerRegularExpression = new FormRegularExpressionRemovalListener( );
     private int _nIdForm;
     private String _strTitle;
     private String _strFrontOfficeTitle;
@@ -93,18 +92,18 @@ public class Form implements AdminWorkgroupResource, RBACResource
     /**
      * Initialize the Form
      */
-    public static void init(  )
+    public static void init( )
     {
         // Create removal listeners and register them
-        WorkgroupRemovalListenerService.getService(  ).registerListener( _listenerWorkgroup );
-        RegularExpressionRemovalListenerService.getService(  ).registerListener( _listenerRegularExpression );
+        WorkgroupRemovalListenerService.getService( ).registerListener( _listenerWorkgroup );
+        RegularExpressionRemovalListenerService.getService( ).registerListener( _listenerRegularExpression );
     }
 
     /**
-     *
+     * Get the id of the mailing list associate to the form
      * @return the id of the mailing list associate to the form
      */
-    public int getIdMailingList(  )
+    public int getIdMailingList( )
     {
         return _nIdMailingList;
     }
@@ -119,10 +118,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-    *
-    * @return the theme code
-    */
-    public String getCodeTheme(  )
+     * Get the code theme
+     * @return the theme code
+     */
+    public String getCodeTheme( )
     {
         return _strCodeTheme;
     }
@@ -137,10 +136,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Check if the form contain a captcha
      * @return true if the form contain a captcha
      */
-    public boolean isActiveCaptcha(  )
+    public boolean isActiveCaptcha( )
     {
         return _bActiveCaptcha;
     }
@@ -155,17 +154,17 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     * true if the  ip adresse of the user must be store
-     * @return true if the  ip adresse of the user must be store
+     * true if the ip adresse of the user must be store
+     * @return true if the ip adresse of the user must be store
      */
-    public boolean isActiveStoreAdresse(  )
+    public boolean isActiveStoreAdresse( )
     {
         return _bActiveStoreAdresse;
     }
 
     /**
-     * set true if the  ip adresse of the user must be store
-     * @param activeStoreAdrese true if the  ip adresse of the user must be store
+     * set true if the ip adresse of the user must be store
+     * @param activeStoreAdrese true if the ip adresse of the user must be store
      */
     public void setActiveStoreAdresse( boolean activeStoreAdrese )
     {
@@ -173,16 +172,16 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-    *
-    * @return true if the requirement must be activate
-    */
-    public boolean isActiveRequirement(  )
+     * Check if the requirement must be activate
+     * @return true if the requirement must be activate
+     */
+    public boolean isActiveRequirement( )
     {
         return _bActiveRequirement;
     }
 
     /**
-     * set  true if the requirement must be activate
+     * set true if the requirement must be activate
      * @param activeRequirement true if the form contain requirement
      */
     public void setActiveRequirement( boolean activeRequirement )
@@ -191,17 +190,17 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
-     * @return the libelle of the validate button
+     * Get the label of the validate button
+     * @return the label of the validate button
      */
-    public String getLibelleValidateButton(  )
+    public String getLibelleValidateButton( )
     {
         return _strLibelleValidateButton;
     }
 
     /**
-     * set the libelle of the validate button
-     * @param libelleValidateButton the libelle of the validate button
+     * set the label of the validate button
+     * @param libelleValidateButton the label of the validate button
      */
     public void setLibelleValidateButton( String libelleValidateButton )
     {
@@ -209,17 +208,17 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
-     * @return the date of end diosponibility
+     * Get the date of end of disponibility
+     * @return the date of end disponibility
      */
-    public Date getDateEndDisponibility(  )
+    public Date getDateEndDisponibility( )
     {
         return _tDateEndDisponibility;
     }
 
     /**
-     * set the date of end disponibility
-     * @param dateEndDisponibility the date of end disponibility
+     * set the date of end of disponibility
+     * @param dateEndDisponibility the date of end of disponibility
      */
     public void setDateEndDisponibility( Date dateEndDisponibility )
     {
@@ -227,17 +226,17 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the requirement of the form
      * @return the requirement of the form
      */
-    public String getRequirement(  )
+    public String getRequirement( )
     {
         return _strRequirement;
     }
 
     /**
      * set the requirement of the form
-     * @param requirement the requierement of the form
+     * @param requirement the requirement of the form
      */
     public void setRequirement( String requirement )
     {
@@ -245,10 +244,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the title of the form
      * @return the title of the form
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
@@ -266,7 +265,7 @@ public class Form implements AdminWorkgroupResource, RBACResource
      * gets the front office's title
      * @return the title of the form in the front office
      */
-    public String getFrontOfficeTitle(  )
+    public String getFrontOfficeTitle( )
     {
         return _strFrontOfficeTitle;
     }
@@ -284,14 +283,15 @@ public class Form implements AdminWorkgroupResource, RBACResource
      * get the value of the boolean isShownFrontOfficeTitle
      * @return bIsShownFrontOfficeTitle
      */
-    public boolean isShownFrontOfficeTitle(  )
+    public boolean isShownFrontOfficeTitle( )
     {
         return _bIsShownFrontOfficeTitle;
     }
 
     /**
      * set the value of the boolean isShownFrontOfficeTitle
-     * @param bIsShownFrontOfficeTitle
+     * @param bIsShownFrontOfficeTitle The value of the boolean
+     *            isShownFrontOfficeTitle
      */
     public void setIsShownFrontOfficeTitle( boolean bIsShownFrontOfficeTitle )
     {
@@ -299,10 +299,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the description of the form
      * @return the description of the form
      */
-    public String getDescription(  )
+    public String getDescription( )
     {
         return _strDescription;
     }
@@ -317,10 +317,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the welcome message of the form
      * @return the welcome message of the form
      */
-    public String getWelcomeMessage(  )
+    public String getWelcomeMessage( )
     {
         return _strWelcomeMessage;
     }
@@ -335,10 +335,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the unavailability message of the form
      * @return the unavailability message of the form
      */
-    public String getUnavailabilityMessage(  )
+    public String getUnavailabilityMessage( )
     {
         return _strUnavailabilityMessage;
     }
@@ -353,17 +353,17 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the work group associate to the form
      * @return the work group associate to the form
      */
-    public String getWorkgroup(  )
+    public String getWorkgroup( )
     {
         return _strWorkgroup;
     }
 
     /**
-     * set  the work group associate to the form
-     * @param workGroup  the work group associate to the form
+     * set the work group associate to the form
+     * @param workGroup the work group associate to the form
      */
     public void setWorkgroup( String workGroup )
     {
@@ -371,10 +371,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the id of the form
      * @return the id of the form
      */
-    public int getIdForm(  )
+    public int getIdForm( )
     {
         return _nIdForm;
     }
@@ -389,10 +389,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Check if the form is active or not
      * @return true if the form is active
      */
-    public boolean isActive(  )
+    public boolean isActive( )
     {
         return _nActive;
     }
@@ -407,17 +407,17 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
-     * @return true if the user can submit just one  form
+     * Check the user can only submit one form, or if he can submit several
+     * @return true if the user can submit just one form
      */
-    public boolean isLimitNumberResponse(  )
+    public boolean isLimitNumberResponse( )
     {
         return _bLimitNumberResponse;
     }
 
     /**
-     * set true if the user can submit just one  form
-     * @param numberResponse true if the user can submit just one  form
+     * set true if the user can submit just one form
+     * @param numberResponse true if the user can submit just one form
      */
     public void setLimitNumberResponse( boolean numberResponse )
     {
@@ -425,10 +425,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the creation date
      * @return the creation date
      */
-    public Timestamp getDateCreation(  )
+    public Timestamp getDateCreation( )
     {
         return _tDateCreation;
     }
@@ -443,17 +443,17 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
-     * @return the recap associate to the form
+     * Get the recap associated to the form
+     * @return the recap associated to the form
      */
-    public Recap getRecap(  )
+    public Recap getRecap( )
     {
         return _recap;
     }
 
     /**
-     * set  the recap associate to the form
-     * @param recap  the recap associate to the form
+     * set the recap associated to the form
+     * @param recap the recap associated to the form
      */
     public void setRecap( Recap recap )
     {
@@ -461,28 +461,28 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-    * RBAC resource implmentation
-    * @return The resource type code
-    */
-    public String getResourceTypeCode(  )
+     * RBAC resource implementation
+     * @return The resource type code
+     */
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
 
     /**
-     * RBAC resource implmentation
+     * RBAC resource implementation
      * @return The resourceId
      */
-    public String getResourceId(  )
+    public String getResourceId( )
     {
-        return "" + _nIdForm;
+        return StringUtils.EMPTY + _nIdForm;
     }
 
     /**
-     *
+     * 
      * @return a list of action can be use for the form
      */
-    public List<FormAction> getActions(  )
+    public List<FormAction> getActions( )
     {
         return _listActions;
     }
@@ -497,17 +497,17 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
-     * @return the id of the  page which contain the form
+     * Get the recap associate to the form
+     * @return the id of the page which contain the form
      */
-    public int getFormPageId(  )
+    public int getFormPageId( )
     {
         return _nFormPageId;
     }
 
     /**
-     * set  the id of the  page which contain the form
-     * @param formPageId  the id of the  page which contain the form
+     * set the id of the page which contain the form
+     * @param formPageId the id of the page which contain the form
      */
     public void setFormPageId( int formPageId )
     {
@@ -516,36 +516,37 @@ public class Form implements AdminWorkgroupResource, RBACResource
 
     /**
      * Define the date begin of the publication
-     * @param _tDateBeginDisponibility The date begin of the publication
+     * @param tDateBeginDisponibility The date begin of the publication
      */
-    public void setDateBeginDisponibility( Date _tDateBeginDisponibility )
+    public void setDateBeginDisponibility( Date tDateBeginDisponibility )
     {
-        this._tDateBeginDisponibility = _tDateBeginDisponibility;
+        this._tDateBeginDisponibility = tDateBeginDisponibility;
     }
 
     /**
      * Return the date begin of the publication
      * @return The date begin of the publication
      */
-    public Date getDateBeginDisponibility(  )
+    public Date getDateBeginDisponibility( )
     {
         return _tDateBeginDisponibility;
     }
 
     /**
      * Set if Auto publication is effectively active
-     * @param _bAutoPublicationActive
+     * @param bAutoPublicationActive True if Auto publication is effectively
+     *            active
      */
-    public void setAutoPublicationActive( boolean _bAutoPublicationActive )
+    public void setAutoPublicationActive( boolean bAutoPublicationActive )
     {
-        this._bAutoPublicationActive = _bAutoPublicationActive;
+        this._bAutoPublicationActive = bAutoPublicationActive;
     }
 
     /**
      * Return true if auto publication is effectively active
      * @return true of false
      */
-    public boolean isAutoPublicationActive(  )
+    public boolean isAutoPublicationActive( )
     {
         return _bAutoPublicationActive;
     }
@@ -554,9 +555,9 @@ public class Form implements AdminWorkgroupResource, RBACResource
      * Return true if the form is in auto publication mode, false else
      * @return true if the form is auto published
      */
-    public boolean isAutoPublished(  )
+    public boolean isAutoPublished( )
     {
-        return ( getDateBeginDisponibility(  ) != null ) || ( getDateEndDisponibility(  ) != null );
+        return ( getDateBeginDisponibility( ) != null ) || ( getDateEndDisponibility( ) != null );
     }
 
     /**
@@ -572,16 +573,16 @@ public class Form implements AdminWorkgroupResource, RBACResource
      * The label to display for the Reset button
      * @return the Reset button name
      */
-    public String getLibelleResetButton(  )
+    public String getLibelleResetButton( )
     {
         return _strLibelleResetButton;
     }
 
     /**
-    *
-    * @return the Information Complementary 1
-    */
-    public String getInfoComplementary1(  )
+     * Get the Information Complementary 1
+     * @return the Information Complementary 1
+     */
+    public String getInfoComplementary1( )
     {
         return _strInfoComplementary1;
     }
@@ -596,10 +597,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-    *
-    * @return the Information Complementary 1
-    */
-    public String getInfoComplementary2(  )
+     * Get the Information Complementary 2
+     * @return the Information Complementary 2
+     */
+    public String getInfoComplementary2( )
     {
         return _strInfoComplementary2;
     }
@@ -614,10 +615,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the Information Complementary 3
      * @return the Information Complementary 3
      */
-    public String getInfoComplementary3(  )
+    public String getInfoComplementary3( )
     {
         return _strInfoComplementary3;
     }
@@ -632,10 +633,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the Information Complementary 4
      * @return the Information Complementary 4
      */
-    public String getInfoComplementary4(  )
+    public String getInfoComplementary4( )
     {
         return _strInfoComplementary4;
     }
@@ -650,10 +651,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     *
+     * Get the Information Complementary 5
      * @return the Information Complementary 5
      */
-    public String getInfoComplementary5(  )
+    public String getInfoComplementary5( )
     {
         return _strInfoComplementary5;
     }
@@ -669,7 +670,7 @@ public class Form implements AdminWorkgroupResource, RBACResource
 
     /**
      * Set to <b>true</b> if the form support HTTPS, <b>false</b> otherwise
-     * @param _bSupportHTTPS the support value
+     * @param bSupportHTTPS the support value
      */
     public void setSupportHTTPS( boolean bSupportHTTPS )
     {
@@ -680,23 +681,24 @@ public class Form implements AdminWorkgroupResource, RBACResource
      * Returns <b>true</b> if the form support HTTPS, <b>false</b> otherwise
      * @return <b>true</b> if the form support HTTPS, <b>false</b> otherwise
      */
-    public boolean isSupportHTTPS(  )
+    public boolean isSupportHTTPS( )
     {
         return _bSupportHTTPS;
     }
 
     /**
-    *
-    * @return true if the form require mylutece authentification
-    */
-    public boolean isActiveMyLuteceAuthentification(  )
+     * Check if the form require mylutece authentication
+     * @return true if the form require mylutece authentication
+     */
+    public boolean isActiveMyLuteceAuthentification( )
     {
         return _bActiveMyLuteceAuthentification;
     }
 
     /**
-     * set true if the form require mylutece authentification
-     * @param active true if the form require mylutece authentification
+     * set true if the form require mylutece authentication
+     * @param bActiveMyLuteceAuthentification true if the form require mylutece
+     *            authentication
      */
     public void setActiveMyLuteceAuthentification( boolean bActiveMyLuteceAuthentification )
     {
@@ -704,10 +706,10 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-    *
-    * @return the category associate to the form
-    */
-    public Category getCategory(  )
+     * Get the category associate to the form
+     * @return the category associate to the form
+     */
+    public Category getCategory( )
     {
         return _category;
     }

@@ -41,7 +41,6 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.sql.Date;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,8 +93,9 @@ public final class FormDAO implements IFormDAO
     private static final String SQL_FILTER_STATE_BEGIN_DISPONIBILTY_AFTER_CURRENT_DATE = " date_begin_disponibility > ? ";
     private static final String SQL_FILTER_STATE_END_DISPONIBILTY_BEFORE_CURRENT_DATE = " date_end_disponibility < ? ";
     private static final String SQL_ORDER_BY_DATE_CREATION = " ORDER BY date_creation DESC ";
-    private static final String SQL_QUERY_SELECT_CATEGORY_BY_ID_FORM = "SELECT cat.id_category,cat.title FROM form_form form,form_category cat " +
-        " WHERE form.id_category=cat.id_category AND form.id_form=?";
+
+    //    private static final String SQL_QUERY_SELECT_CATEGORY_BY_ID_FORM = "SELECT cat.id_category,cat.title FROM form_form form,form_category cat " +
+    //        " WHERE form.id_category=cat.id_category AND form.id_form=?";
 
     /**
      * Generates a new primary key

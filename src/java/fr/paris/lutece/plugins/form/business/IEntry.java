@@ -38,12 +38,12 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 
-import org.apache.commons.fileupload.FileItem;
-
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
 
 
 /**
@@ -333,7 +333,8 @@ public interface IEntry
 
     /**
      * set true if the question must be confirmed by a duplicated field
-     * @param  mandatory true if the question must be confirmed by a duplicated field
+     * @param bConfirmField mandatory true if the question must be confirmed by
+     *            a duplicated field
      */
     void setConfirmField( boolean bConfirmField );
 
@@ -345,6 +346,8 @@ public interface IEntry
 
     /**
      * Set to true if the value of the response to this question must be unique
+     * @param bUnique true if the value of the response to this question must be
+     *            unique, false otherwise
      */
     void setUnique( boolean bUnique );
 

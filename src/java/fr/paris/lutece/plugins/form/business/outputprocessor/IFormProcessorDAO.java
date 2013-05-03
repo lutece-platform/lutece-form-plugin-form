@@ -38,6 +38,9 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import java.util.List;
 
 
+/**
+ * Interface for {@link FormProcessorDAO}
+ */
 public interface IFormProcessorDAO
 {
     /**
