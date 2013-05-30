@@ -65,8 +65,8 @@
 		<#list entry_list as entry>
         <#assign cpt=cpt+1>
         <tr>
+	        <td>${entry.title}</td>
 	        <td>${entry.entryType.title}</td>
-	        <td></td>
 			<td><#if entry.numberConditionalQuestion!=0>${entry.numberConditionalQuestion}</#if></td>
 	        <td>
 			<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}"  title="null" >
