@@ -1,18 +1,20 @@
 var uploading = 0;
-var baseUrl = document.getElementsByTagName("base")[0].href;
+var baseUrl = $("base").attr("href");
+
 function addAsynchronousUploadField(fieldId) {
 	var flashVersion = swfobject.getFlashPlayerVersion();
 	/* Flash Player 9.0.24 or greater  - simple mode otherwise */
-	if ( swfobject.hasFlashPlayerVersion( "9.0.24" ) )
-	{
+	if ( swfobject.hasFlashPlayerVersion( "9.0.24" ) ){
 		$("#_form_upload_submit_" + fieldId).hide();
-	    $('#' + fieldId).uploadify({
-	        'uploader' : 'js/plugins/form/uploadify/swf/uploadify.swf',
-	        'script' : baseUrl + '/jsp/site/upload',
-	        'cancelImg' : 'js/plugins/form/uploadify/cancel.png',
+	    $('#' + fieldId ).uploadify({
+	        'swf' : 'js/plugins/form/uploadify/uploadify.swf',
+	        'uploader' : baseUrl + '/jsp/site/upload',
+	        'cancelImg' : 'js/plugins/form/uploadify/uploadify-cancel.png',
 			'auto' : true,
 			'buttonText' : 'Parcourir',
 			'displayData' : 'percentage',
+			// Max Files Numbers 
+			'uploadLimit' : getMaxFiles( fieldId ),
 			
 			// file types & size limit
 			'sizeLimit' : getMaxLengthValue( fieldId ),
@@ -56,12 +58,13 @@ function addAsynchronousUploadField(fieldId) {
 
 function canUploadFile( fieldId )
 {
-	// return true since onSelect does not work properly...
+	// return true since onSelect does not work properly...*/
 	return true;
 	/* var filesCount = getUploadedFilesCount( fieldId );
 	var maxFiles = getMaxUploadFiles( fieldId )
 	return maxFiles == 0 ? true : filesCount < maxFiles; */
 }
+
 
 /**
  * Handles error
@@ -171,18 +174,14 @@ function formDisplayUploadedFiles( jsonData )
 			// jsonData.uploadedFiles.length is str length when file count is 1 so using fileCount instead.
 			// so if jsonData.fileCount == 1, the index should not be used
 			for ( var index = 0; index < jsonData.fileCount; index++ ) {
-					strContent = strContent + "<div class=\"form-element\"> \
-						<span class=\"form-label\">&nbsp;</span>  \
-						<span class=\"form-field\" >  \
-							<label>  \
+					strContent = strContent + "<label class=\"checkbox\">  \
 								<input type=\"checkbox\"  \
 									name=\"" + checkboxPrefix + index + "\"  \
 									id=\"" + checkboxPrefix + index + "\"  \
-								/>  \
+								>  \
 								&#160;" + ( (jsonData.fileCount == 1) ? jsonData.uploadedFiles : jsonData.uploadedFiles[index] ) + 
 							"</label>  \
-						</span>  \
-					</div> ";
+						 ";
 			}
 			
 			$("#_file_deletion_" + fieldName ).html(
@@ -223,6 +222,15 @@ function getMaxLengthValue( fieldId ) {
 }
 
 /**
+ * Gets the max files value for the file
+ * @param fieldId the file
+ * @return the max files
+ */
+function getMaxFiles( fieldId ) {
+	return getInputValue( '#_form_upload_maxFiles_' + fieldId );
+}
+
+/**
  * Get the value of the input 
  * @param inputId the input id
  * @return the input value
@@ -232,7 +240,6 @@ function getInputValue( inputId ) {
 	if ( input != null ) {
 		return input.value;
 	}
-	
 	return null;
 }
 
