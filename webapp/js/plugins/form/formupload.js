@@ -1,18 +1,19 @@
 var uploading = 0;
-var baseUrl = $("base").attr("href");
-
+var baseUrl = document.getElementsByTagName("base")[0].href;
 function addAsynchronousUploadField(fieldId) {
 	var flashVersion = swfobject.getFlashPlayerVersion();
 	/* Flash Player 9.0.24 or greater  - simple mode otherwise */
-	if ( swfobject.hasFlashPlayerVersion( "9.0.24" ) ){
+	if ( swfobject.hasFlashPlayerVersion( "9.0.24" ) )
+	{
 		$("#_form_upload_submit_" + fieldId).hide();
-	    $('#' + fieldId ).uploadify({
-	        'swf' : 'js/plugins/form/uploadify/uploadify.swf',
-	        'uploader' : baseUrl + '/jsp/site/upload',
-	        'cancelImg' : 'js/plugins/form/uploadify/uploadify-cancel.png',
+	    $('#' + fieldId).uploadify({
+	        'uploader' : 'js/plugins/form/uploadify/swf/uploadify.swf',
+	        'script' : baseUrl + '/jsp/site/upload',
+	        'cancelImg' : 'js/plugins/form/uploadify/cancel.png',
 			'auto' : true,
 			'buttonText' : 'Parcourir',
 			'displayData' : 'percentage',
+			'multi' : true,
 			// Max Files Numbers 
 			'uploadLimit' : getMaxFiles( fieldId ),
 			
@@ -58,13 +59,12 @@ function addAsynchronousUploadField(fieldId) {
 
 function canUploadFile( fieldId )
 {
-	// return true since onSelect does not work properly...*/
+	// return true since onSelect does not work properly...
 	return true;
 	/* var filesCount = getUploadedFilesCount( fieldId );
 	var maxFiles = getMaxUploadFiles( fieldId )
 	return maxFiles == 0 ? true : filesCount < maxFiles; */
 }
-
 
 /**
  * Handles error
@@ -178,10 +178,9 @@ function formDisplayUploadedFiles( jsonData )
 								<input type=\"checkbox\"  \
 									name=\"" + checkboxPrefix + index + "\"  \
 									id=\"" + checkboxPrefix + index + "\"  \
-								>  \
+								/>  \
 								&#160;" + ( (jsonData.fileCount == 1) ? jsonData.uploadedFiles : jsonData.uploadedFiles[index] ) + 
-							"</label>  \
-						 ";
+							"</label>";
 			}
 			
 			$("#_file_deletion_" + fieldName ).html(
@@ -213,21 +212,22 @@ $('input[type=submit]').each(function() {
 });
 
 /**
- * Gets the max size value for the file
- * @param fieldId the file
- * @return the max size
- */
-function getMaxLengthValue( fieldId ) {
-	return getInputValue( '#_form_upload_maxLength_' + fieldId );
-}
-
-/**
  * Gets the max files value for the file
  * @param fieldId the file
  * @return the max files
  */
 function getMaxFiles( fieldId ) {
 	return getInputValue( '#_form_upload_maxFiles_' + fieldId );
+}
+
+
+/**
+ * Gets the max size value for the file
+ * @param fieldId the file
+ * @return the max size
+ */
+function getMaxLengthValue( fieldId ) {
+	return getInputValue( '#_form_upload_maxLength_' + fieldId );
 }
 
 /**
@@ -240,6 +240,7 @@ function getInputValue( inputId ) {
 	if ( input != null ) {
 		return input.value;
 	}
+	
 	return null;
 }
 
