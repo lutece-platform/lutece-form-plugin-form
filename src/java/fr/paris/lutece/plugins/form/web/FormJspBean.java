@@ -278,6 +278,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String MARK_LIST_PARAM_DEFAULT_VALUES = "list_param_default_values";
     private static final String MARK_DEFAULT_VALUE_WORKGROUP_KEY = "workgroup_key_default_value";
     private static final String MARK_MAP_CHILD = "mapChild";
+    private static final String MARK_ANONYMIZE_ENTRY_LIST = "anonymize_entry_list";
 
     // Jsp Definition
     private static final String JSP_DO_DISABLE_FORM = "jsp/admin/plugins/form/DoDisableForm.jsp";
@@ -356,6 +357,9 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_LIST = "list";
     private static final String PARAMETER_FRONT_OFFICE_TITLE = "front_office_title";
     private static final String PARAMETER_IS_SHOWN_FRONT_OFFICE_TITLE = "is_shown_front_office_title";
+    private static final String PARAMETER_ANONYMIZE_ENTRIES = "anonymizeEntries";
+    private static final String PARAMETER_AUTOMATIC_CLEANING = "automaticCleaning";
+    private static final String PARAMETER_CLEANING_BY_REMOVAL = "cleaningByRemoval";
 
     // other constants
     private static final String EMPTY_STRING = "";
@@ -622,6 +626,8 @@ public class FormJspBean extends PluginAdminPageJspBean
         String strInformationComplementary5 = request.getParameter( PARAMETER_INFORMATION_COMPLEMENTARY_5 );
         String strSupportsHTTPS = request.getParameter( PARAMETER_SUPPORT_HTTPS );
         String strThemeXpage = request.getParameter( PARAMETER_THEME_XPAGE );
+        String strAutomaticCleaning = request.getParameter( PARAMETER_AUTOMATIC_CLEANING );
+        String strCleaningRemove = request.getParameter( PARAMETER_CLEANING_BY_REMOVAL );
 
         String strFieldError = EMPTY_STRING;
 
@@ -743,6 +749,19 @@ public class FormJspBean extends PluginAdminPageJspBean
         else
         {
             form.setIsShownFrontOfficeTitle( false );
+        }
+
+        if ( StringUtils.isNotEmpty( strAutomaticCleaning ) )
+        {
+            form.setAutomaticCleaning( Boolean.parseBoolean( strAutomaticCleaning ) );
+        }
+        else
+        {
+            form.setAutomaticCleaning( false );
+        }
+        if ( StringUtils.isNotEmpty( strCleaningRemove ) )
+        {
+            form.setCleaningByRemoval( Boolean.parseBoolean( strCleaningRemove ) );
         }
 
         try
@@ -940,6 +959,17 @@ public class FormJspBean extends PluginAdminPageJspBean
 
             FormHome.create( form, plugin );
 
+            String[] arrayIdEntries = request.getParameterValues( PARAMETER_ANONYMIZE_ENTRIES );
+            if ( arrayIdEntries != null )
+            {
+                List<Integer> listIdEntries = new ArrayList<Integer>( arrayIdEntries.length );
+                for ( String strIdEntry : arrayIdEntries )
+                {
+                    listIdEntries.add( Integer.parseInt( strIdEntry ) );
+                }
+                FormService.getInstance( ).updateAnonymizeEntryList( form.getIdForm( ), listIdEntries );
+            }
+
             if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) && form.isActiveMyLuteceAuthentification(  ) )
             {
                 FormUtils.activateMyLuteceAuthentification( form, plugin, getLocale(  ), request );
@@ -1083,6 +1113,8 @@ public class FormJspBean extends PluginAdminPageJspBean
         emptyItem.setName( StringEscapeUtils.escapeHtml( I18nService.getLocalizedString( PROPERTY_NO_GROUP, locale ) ) );
         refListGroupEntry.add( 0, emptyItem );
 
+        List<Integer> listAnonymizeEntry = FormService.getInstance( ).getAnonymizeEntryList( form.getIdForm( ) );
+
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageEntry );
@@ -1100,6 +1132,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
         model.put( MARK_IS_ACTIVE_CAPTCHA, PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) );
         model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
+        model.put( MARK_ANONYMIZE_ENTRY_LIST, listAnonymizeEntry );
         setPageTitleProperty( PROPERTY_MODIFY_FORM_TITLE );
 
         model.put( MARK_MAP_CHILD, mapIdParentOrdersChildren );
@@ -1222,6 +1255,17 @@ public class FormJspBean extends PluginAdminPageJspBean
 
                 updatedForm.setIdForm( nIdForm );
                 FormHome.update( updatedForm, getPlugin(  ) );
+
+                String[] arrayIdEntries = request.getParameterValues( PARAMETER_ANONYMIZE_ENTRIES );
+                if ( arrayIdEntries != null )
+                {
+                    List<Integer> listIdEntries = new ArrayList<Integer>( arrayIdEntries.length );
+                    for ( String strIdEntry : arrayIdEntries )
+                    {
+                        listIdEntries.add( Integer.parseInt( strIdEntry ) );
+                    }
+                    FormService.getInstance( ).updateAnonymizeEntryList( nIdForm, listIdEntries );
+                }
 
                 if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) &&
                         updatedForm.isActiveMyLuteceAuthentification(  ) && !form.isActiveMyLuteceAuthentification(  ) )

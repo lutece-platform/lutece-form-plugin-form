@@ -1,12 +1,9 @@
 package fr.paris.lutece.plugins.form.service.daemon;
 
 import fr.paris.lutece.plugins.form.business.Form;
-import fr.paris.lutece.plugins.form.business.FormFilter;
 import fr.paris.lutece.plugins.form.business.FormHome;
-import fr.paris.lutece.plugins.form.business.FormSubmit;
-import fr.paris.lutece.plugins.form.business.FormSubmitHome;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
+import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -29,19 +26,11 @@ public class RemoveResponsesDaemon extends Daemon
     public void run( )
     {
         Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
-        List<Form> listForms = FormHome.getFormList( new FormFilter( ), plugin );
+        List<Form> listForms = FormHome.getFormListForAutomaticCleaning( plugin );
         int nNbResponses = 0;
         for ( Form form : listForms )
         {
-            ResponseFilter responseFilter = new ResponseFilter( );
-            responseFilter.setIdForm( form.getIdForm( ) );
-
-            List<FormSubmit> listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
-            for ( FormSubmit formSubmit : listFormSubmit )
-            {
-                FormSubmitHome.remove( formSubmit.getIdFormSubmit( ), plugin );
-            }
-            nNbResponses += listFormSubmit.size( );
+            nNbResponses += FormService.getInstance( ).cleanFormResponses( form );
         }
         if ( nNbResponses > 0 )
         {

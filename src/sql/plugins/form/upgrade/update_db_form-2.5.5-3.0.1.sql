@@ -23,3 +23,11 @@ REPLACE INTO form_action (id_action, name_key, description_key, action_url, icon
 REPLACE INTO form_action (id_action, name_key, description_key, action_url, icon_url, action_permission, form_state) VALUES (20,'form.action.manageValidator.name','form.action.manageValidator.description','jsp/admin/plugins/form/ManageValidator.jsp','icon-check','MANAGE_VALIDATOR',1);
 REPLACE INTO form_action (id_action, name_key, description_key, action_url, icon_url, action_permission, form_state) VALUES (21,'form.action.manageValidator.name','form.action.manageValidator.description','jsp/admin/plugins/form/ManageValidator.jsp','icon-check','MANAGE_VALIDATOR',0);
 
+CREATE TABLE form_anonymize_fields (
+	id_form int default 0 NOT NULL,
+	id_entry int default 0 NOT NULL,
+	PRIMARY KEY (id_form,id_entry)
+);
+
+ALTER TABLE form_form ADD COLUMN automatic_cleaning SMALLINT default 0;
+ALTER TABLE form_form ADD COLUMN cleaning_by_removal SMALLINT default 0;

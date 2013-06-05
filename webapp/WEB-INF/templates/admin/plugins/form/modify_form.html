@@ -15,7 +15,7 @@ $(document).ready(function() {
 <#include "/admin/plugins/form/commons.html" />
 <div class="row-fluid">
 	<div class="span4">
-	<form action="jsp/admin/plugins/form/DoModifyForm.jsp" method="post">
+	<form class="form" action="jsp/admin/plugins/form/DoModifyForm.jsp" method="post">
 	<fieldset>
 	<legend>#i18n{form.modifyForm.title}</legend>
 	<input type="hidden" name="id_form" value="${form.idForm}" />		
@@ -115,6 +115,29 @@ $(document).ready(function() {
 			</div>
 			<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="${form.dateEndDisponibility?if_exists}" />
 			<p class="help-text">#i18n{form.createForm.labelDateEndDisponibilityComment}</p>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend id="answers_cleaning_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.modifyForm.labelAnswersRemoval}</legend>
+		<div id="answers_cleaning_settings_content" class="form-inline">
+			<div class="control-group">
+				<label class="control-label" for="automaticCleaning"><input type="checkbox" name="automaticCleaning" value="true" <#if form.automaticCleaning>checked="checked"</#if>>&nbsp;#i18n{form.createForm.labelAutomaticCleaning}</label>
+			</div>
+			<div class="control-group">
+				<label for="cleaningByRemoval">#i18n{form.createForm.labelCleaningMethod} :</label>
+				<div class="controls">
+					<label for="cleaningByRemoval"><input type="radio" name="cleaningByRemoval" value="true" <#if form.cleaningByRemoval>checked="checked"</#if> >&nbsp;#i18n{form.createForm.labelRemove}</label>
+					<label for="cleaningByRemoval"><input type="radio" name="cleaningByRemoval" value="false" <#if !form.cleaningByRemoval>checked="checked"</#if> >&nbsp;#i18n{form.createForm.labelAnonymize}</label>
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="anonymizeEntries">#i18n{form.createForm.labelAnonymizeEntries} :</label>
+				<div class="controls">
+					<#list entry_list as entry>
+						<label for="anonymizeEntries"><input type="checkbox" name="anonymizeEntries" value="${entry.idEntry}" <#if anonymize_entry_list?seq_contains(entry.idEntry)>checked="checked"</#if>>&nbsp;${entry.title}<br /><label for="cleaningByRemoving">
+					</#list>
+				</div>
+			</div>
 		</div>
 	</fieldset>
 	<div class="form-actions">
@@ -264,6 +287,8 @@ $(document).ready( function () {
 	doToggleId( "#advanced_settings" );
 	$("#publication_settings").next().toggle();
 	doToggleId( "#publication_settings" );
+	$("#answers_cleaning_settings").next().toggle();
+	doToggleId( "#answers_cleaning_settings" );
 });
 
 function doToggleId( idParent ){

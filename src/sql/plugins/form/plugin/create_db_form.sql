@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS form_rss_cf;
 DROP TABLE IF EXISTS form_category;
 DROP TABLE IF EXISTS form_file;
 DROP TABLE IF EXISTS form_physical_file;
+DROP TABLE IF EXISTS form_anonymize_fields;
 
 --
 -- Table structure for table form_action
@@ -168,6 +169,8 @@ CREATE TABLE form_form (
 	id_category int default NULL,
 	front_office_title varchar(255) default NULL,
 	is_shown_front_office_title smallint default 0,
+	automatic_cleaning SMALLINT default 0,
+	cleaning_by_removal SMALLINT default 0,
 	PRIMARY KEY (id_form)
 );
 
@@ -336,4 +339,10 @@ CREATE TABLE form_physical_file (
   id_physical_file INT DEFAULT 0 NOT NULL,
   file_value LONG VARBINARY,  
   PRIMARY KEY (id_physical_file)
+);
+
+CREATE TABLE form_anonymize_fields (
+	id_form int default 0 NOT NULL,
+	id_entry int default 0 NOT NULL,
+	PRIMARY KEY (id_form,id_entry)
 );

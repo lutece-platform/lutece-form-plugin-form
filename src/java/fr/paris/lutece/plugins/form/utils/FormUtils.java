@@ -112,7 +112,6 @@ public final class FormUtils
     public static final String CONSTANT_GROUP_BY_MONTH = "2";
     public static final String EMPTY_STRING = "";
     public static final String CONSTANT_EQUAL = "=";
-    public static final String PARAMETER_ID_ENTRY = "id_entry";
     public static final String PARAMETER_DELETE_PREFIX = "delete_";
     public static final String BEAN_ENTRY_TYPE_SERVICE = "form.entryTypeService";
     public static final String BEAN_FORM_RESPONSE_SERVICE = "form.responseService";
@@ -125,6 +124,12 @@ public final class FormUtils
     public static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
     public static final String SESSION_FORM_ERRORS = "form_errors";
 
+    // parameters
+    public static final String PARAMETER_ID_ENTRY = "id_entry";
+    public static final String PARAMETER_KEY = "key";
+    public static final String PROPERTY_CLEAN_FORM_ANSWERS_KEY = "form.cleanResponses.key";
+
+    // marks
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_URL_ACTION = "url_action";
     private static final String MARK_ENTRY = "entry";

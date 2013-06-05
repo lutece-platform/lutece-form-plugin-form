@@ -79,6 +79,7 @@ import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.portal.web.xpages.XPageApplication;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.http.SecurityUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -947,5 +948,23 @@ public class FormApp implements XPageApplication
                 FormAsynchronousUploadHandler.getHandler( ).buildFieldName( strIdEntry ) );
 
         return json.toString( );
+    }
+
+    /**
+     * Do clean responses of a form
+     * @param request The request
+     */
+    public static void doCleanFormAnswers( HttpServletRequest request )
+    {
+        String strKey = request.getParameter( FormUtils.PARAMETER_KEY );
+        String strPrivateKey = AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_KEY );
+        if ( !StringUtils.equals( strKey, strPrivateKey ) )
+        {
+            AppLogService.error( "Illegal attempt to clean form responses : " + SecurityUtil.getRealIp( request ) );
+            return;
+        }
+        String strIdForm = request.getParameter( PARAMETER_ID_FORM );
+
+
     }
 }

@@ -1,7 +1,7 @@
 -- LUTECE-1493 : Bootstrap CSS Framework integration 
 -- update actions icons
 
-REPLACE INTO `form_action` (`id_action`, `name_key`, `description_key`, `action_url`, `icon_url`, `action_permission`, `form_state`) VALUES
+REPLACE INTO form_action (id_action, name_key, description_key, action_url, icon_url, action_permission, form_state) VALUES
 	(1, 'form.action.modify.name', 'form.action.modify.description', 'jsp/admin/plugins/form/ModifyForm.jsp', 'icon-edit', 'MODIFY', 0),
 	(2, 'form.action.modify.name', 'form.action.modify.description', 'jsp/admin/plugins/form/ModifyForm.jsp', 'icon-edit', 'MODIFY', 1),
 	(3, 'form.action.viewRecap.name', 'form.action.viewRecap.description', 'jsp/admin/plugins/form/ModifyRecap.jsp', 'icon-list', 'MODIFY', 0),

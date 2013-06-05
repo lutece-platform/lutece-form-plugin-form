@@ -88,6 +88,8 @@ public class Form implements AdminWorkgroupResource, RBACResource
     private String _strCodeTheme;
     private boolean _bActiveMyLuteceAuthentification;
     private Category _category;
+    private boolean _bAutomaticCleaning;
+    private boolean _bCleaningByRemoval;
 
     /**
      * Initialize the Form
@@ -721,5 +723,47 @@ public class Form implements AdminWorkgroupResource, RBACResource
     public void setCategory( Category category )
     {
         _category = category;
+    }
+
+    /**
+     * Check if this form should be cleaned automatically by the daemon
+     * @return True if this form should be cleaned automatically by the daemon,
+     *         false otherwise
+     */
+    public boolean getAutomaticCleaning( )
+    {
+        return _bAutomaticCleaning;
+    }
+
+    /**
+     * Set if this form should be cleaned automatically by the daemon
+     * @param bAutomaticCleaning True if this form should be cleaned
+     *            automatically by the daemon, false otherwise
+     */
+    public void setAutomaticCleaning( boolean bAutomaticCleaning )
+    {
+        this._bAutomaticCleaning = bAutomaticCleaning;
+    }
+
+    /**
+     * Check if the cleaning operation is a remove operation or an anonymization
+     * operation
+     * @return true if the cleaning operation is a remove operation, false if it
+     *         is an anonymization operation
+     */
+    public boolean getCleaningByRemoval( )
+    {
+        return _bCleaningByRemoval;
+    }
+
+    /**
+     * Set the cleaning operation a a remove operation or as an anonymization
+     * operation
+     * @param bCleaningByRemoval true if the cleaning operation is a remove
+     *            operation, false if it is an anonymization operation
+     */
+    public void setCleaningByRemoval( boolean bCleaningByRemoval )
+    {
+        this._bCleaningByRemoval = bCleaningByRemoval;
     }
 }
