@@ -15,7 +15,7 @@ $(document).ready(function() {
 <#include "/admin/plugins/form/commons.html" />
 <div class="row-fluid">
 	<div class="span4">
-	<form class="form" action="jsp/admin/plugins/form/DoModifyForm.jsp" method="post">
+	<form action="jsp/admin/plugins/form/DoModifyForm.jsp" method="post">
 	<fieldset>
 	<legend>#i18n{form.modifyForm.title}</legend>
 	<input type="hidden" name="id_form" value="${form.idForm}" />		
@@ -43,7 +43,7 @@ $(document).ready(function() {
 		<input type="text" name="front_office_title" value="${form.frontOfficeTitle!}" maxlength="255" />
 		<p class="help-text">#i18n{form.createForm.frontOfficeTitleComment}</p>
 		<label for="is_shown_front_office_title"#i18n{form.createForm.frontOfficeTitleIsShown}:</label> 
-		<input type="checkbox" name="is_shown_front_office_title" value="1" <#if form?exists && form.shownFrontOfficeTitle?exists && form.shownFrontOfficeTitle> checked="checked"</#if> />
+		<input type="checkbox" name="is_shown_front_office_title" value="1" <#if form?exists && form.shownFrontOfficeTitle?exists> checked="checked"</#if> />
 		<p class="help-text">#i18n{form.createForm.frontOfficeTitleIsShownComment}</p>
 		<label for="workgroup">#i18n{form.createForm.labelWorkgroup} :</label>
 		<@combo name="workgroup" items=user_workgroup_list default_value=form.workgroup />
@@ -115,29 +115,6 @@ $(document).ready(function() {
 			</div>
 			<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="${form.dateEndDisponibility?if_exists}" />
 			<p class="help-text">#i18n{form.createForm.labelDateEndDisponibilityComment}</p>
-		</div>
-	</fieldset>
-	<fieldset>
-		<legend id="answers_cleaning_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.modifyForm.labelAnswersRemoval}</legend>
-		<div id="answers_cleaning_settings_content" class="form-inline">
-			<div class="control-group">
-				<label class="control-label" for="automaticCleaning"><input type="checkbox" name="automaticCleaning" value="true" <#if form.automaticCleaning>checked="checked"</#if>>&nbsp;#i18n{form.createForm.labelAutomaticCleaning}</label>
-			</div>
-			<div class="control-group">
-				<label for="cleaningByRemoval">#i18n{form.createForm.labelCleaningMethod} :</label>
-				<div class="controls">
-					<label for="cleaningByRemoval"><input type="radio" name="cleaningByRemoval" value="true" <#if form.cleaningByRemoval>checked="checked"</#if> >&nbsp;#i18n{form.createForm.labelRemove}</label>
-					<label for="cleaningByRemoval"><input type="radio" name="cleaningByRemoval" value="false" <#if !form.cleaningByRemoval>checked="checked"</#if> >&nbsp;#i18n{form.createForm.labelAnonymize}</label>
-				</div>
-			</div>
-			<div class="control-group">
-				<label for="anonymizeEntries">#i18n{form.createForm.labelAnonymizeEntries} :</label>
-				<div class="controls">
-					<#list entry_list as entry>
-						<label for="anonymizeEntries"><input type="checkbox" name="anonymizeEntries" value="${entry.idEntry}" <#if anonymize_entry_list?seq_contains(entry.idEntry)>checked="checked"</#if>>&nbsp;${entry.title}<br /><label for="cleaningByRemoving">
-					</#list>
-				</div>
-			</div>
 		</div>
 	</fieldset>
 	<div class="form-actions">
@@ -241,7 +218,9 @@ $(document).ready(function() {
 			<#else>
 			<td>
 				<@comboOrders name="order_id_${entry.idEntry!}"	default_value=entry.position idParent=0 />
-				<button class="btn btn-primary btn-small" type="submit" name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}" value="#i18n{directory.modify_directory.move}"><i class="icon-resize-vertical icon-white"></i></button>
+				<button class="btn btn-primary btn-small" type="submit" name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}" value="#i18n{directory.modify_directory.move}">
+					<i class="icon-ok icon-white"></i>
+				</button>
 			</td> 
 			</#if>
 			<td>
@@ -259,7 +238,7 @@ $(document).ready(function() {
 			</#if>
 			<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
 				<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleCopy}" class="btn btn-primary btn-small">
-					<i class="icon-move icon-white"></i>
+					<i class="icon-plus-sign icon-white"></i>
 				</a>
 			</#if>
 			<#if !entry.entryType.myLuteceUser>
@@ -287,8 +266,6 @@ $(document).ready( function () {
 	doToggleId( "#advanced_settings" );
 	$("#publication_settings").next().toggle();
 	doToggleId( "#publication_settings" );
-	$("#answers_cleaning_settings").next().toggle();
-	doToggleId( "#answers_cleaning_settings" );
 });
 
 function doToggleId( idParent ){

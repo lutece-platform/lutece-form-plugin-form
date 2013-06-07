@@ -5,6 +5,7 @@
             <#if validator_list?has_content>
                 <#list validator_list as validator>
                     ${validator}
+					<hr>
                 </#list>
             <#else>
                 <div class="alert alert-danger">#i18n{form.manageValidator.noValidator}</div>
