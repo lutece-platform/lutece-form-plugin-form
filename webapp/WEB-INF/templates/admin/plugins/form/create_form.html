@@ -25,11 +25,7 @@
 						<span class="help-block">#i18n{form.createForm.labelCategoryComment}</span>
 					</div>
 				</div>
-				<div class="form-actions">
-					<button type="submit" class="btn btn-primary btn-small" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
-					<button type="submit" class="btn btn-primary btn-small" name="cancel" onclick="javascript:window.history.back();"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
-				</div>
-			</fieldset>	
+			</fieldset>
 			<fieldset>
 				<legend id="advanced_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelAdvancedSettings}</legend>
 				<div id="advanced_settings_content">
@@ -100,7 +96,7 @@
 						</div>
 					</#if>
 					<div class="control-group">
-						<label class="control-label" class="checkbox" for="active_requirement">#i18n{form.createForm.labelActiveRequirement} :</label>
+						<label class="control-label" for="active_requirement">#i18n{form.createForm.labelActiveRequirement} :</label>
 						<div class="controls">
 							<input type="checkbox" name="active_requirement" value="1" <#if form?exists && form.activeRequirement>checked="checked"</#if> />
 							<span class="help-block">#i18n{form.createForm.labelActiveRequirementComment}</span>
@@ -200,6 +196,10 @@
 					</div>
 				</div>
 			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary btn-small" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
+				<button type="submit" class="btn btn-small" name="cancel" onclick="javascript:window.history.back();"><i class="icon-remove-circle"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
+			</div>
 		</form>
 	</div>
 </div>
