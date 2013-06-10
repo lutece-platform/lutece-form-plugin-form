@@ -71,7 +71,10 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -398,29 +401,36 @@ public final class FormService
     /**
      * Clean answers of a given form
      * @param form The form the clean the answers of
-     * @return The number of submissions cleaned
      */
-    public int cleanFormResponses( Form form )
+    public void cleanFormResponses( Form form )
     {
         Plugin plugin = FormUtils.getPlugin( );
         ResponseFilter responseFilter = new ResponseFilter( );
         responseFilter.setIdForm( form.getIdForm( ) );
 
-        List<FormSubmit> listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
+        Calendar calendar = new GregorianCalendar( );
+        calendar.add( Calendar.DAY_OF_WEEK, -1 * form.getNbDaysBeforeCleaning( ) );
+
+        Timestamp dateCleanTo = new Timestamp( calendar.getTimeInMillis( ) );
 
         if ( form.getCleaningByRemoval( ) )
         {
+            List<FormSubmit> listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
             for ( FormSubmit formSubmit : listFormSubmit )
             {
-                FormSubmitHome.remove( formSubmit.getIdFormSubmit( ), plugin );
+                if ( formSubmit.getDateResponse( ).getTime( ) < dateCleanTo.getTime( ) )
+                {
+                    FormSubmitHome.remove( formSubmit.getIdFormSubmit( ), plugin );
+                }
             }
         }
+        // We anonymize answers of the form
         else
         {
             List<Integer> listIdEntryToAnonymize = getAnonymizeEntryList( form.getIdForm( ) );
             IResponseService responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
-            // TODO : finish me !
+
+            responseService.anonymizeEntries( listIdEntryToAnonymize, dateCleanTo );
         }
-        return listFormSubmit.size( );
     }
 }

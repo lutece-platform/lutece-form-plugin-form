@@ -31,3 +31,8 @@ CREATE TABLE form_anonymize_fields (
 
 ALTER TABLE form_form ADD COLUMN automatic_cleaning SMALLINT default 0;
 ALTER TABLE form_form ADD COLUMN cleaning_by_removal SMALLINT default 0;
+ALTER TABLE form_form ADD COLUMN nb_days_before_cleaning INT default 0;
+
+ALTER TABLE form_response ADD COLUMN status smallint default 1;
+
+

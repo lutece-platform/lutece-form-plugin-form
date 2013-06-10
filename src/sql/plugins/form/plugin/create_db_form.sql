@@ -171,6 +171,7 @@ CREATE TABLE form_form (
 	is_shown_front_office_title smallint default 0,
 	automatic_cleaning SMALLINT default 0,
 	cleaning_by_removal SMALLINT default 0,
+	nb_days_before_cleaning INT default 0,
 	PRIMARY KEY (id_form)
 );
 
@@ -266,6 +267,7 @@ CREATE TABLE form_response (
 	id_entry int default NULL,
 	id_field int default NULL,
 	id_file int default NULL,
+	status smallint default 1,
 	PRIMARY KEY (id_response)
 );
 

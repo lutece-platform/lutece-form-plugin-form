@@ -41,9 +41,10 @@ import fr.paris.lutece.plugins.form.business.StatisticEntrySubmit;
 import fr.paris.lutece.plugins.form.service.file.FileService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 
-import org.springframework.transaction.annotation.Transactional;
-
+import java.sql.Timestamp;
 import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -175,5 +176,14 @@ public class ResponseService implements IResponseService
     public List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry )
     {
         return ResponseHome.getStatisticByIdEntry( nIdEntry, FormUtils.getPlugin(  ) );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo )
+    {
+        ResponseHome.anonymizeEntries( listIdEntries, dateCleanTo, FormUtils.getPlugin( ) );
     }
 }

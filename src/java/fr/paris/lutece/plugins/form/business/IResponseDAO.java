@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -102,4 +103,12 @@ public interface IResponseDAO
      * @return the max number
      */
     int getMaxNumber( int nIdEntry, int nIdForm, Plugin plugin );
+
+    /**
+     * Anonymize entries of responses
+     * @param listIdEntries The list of id of entries to anonymize responses of
+     * @param dateCleanTo Anonymize responses posted before this date
+     * @param plugin The plugin
+     */
+    void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo, Plugin plugin );
 }

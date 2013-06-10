@@ -958,13 +958,18 @@ public class FormApp implements XPageApplication
     {
         String strKey = request.getParameter( FormUtils.PARAMETER_KEY );
         String strPrivateKey = AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_KEY );
-        if ( !StringUtils.equals( strKey, strPrivateKey ) )
+        if ( strPrivateKey != null && StringUtils.isNotEmpty( strPrivateKey )
+                && !StringUtils.equals( strKey, strPrivateKey ) )
         {
             AppLogService.error( "Illegal attempt to clean form responses : " + SecurityUtil.getRealIp( request ) );
             return;
         }
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
-
-
+        if ( strIdForm != null && StringUtils.isNumeric( strIdForm ) )
+        {
+            int nIdForm = Integer.parseInt( strIdForm );
+            Form form = FormHome.findByPrimaryKey( nIdForm, FormUtils.getPlugin( ) );
+            FormService.getInstance( ).cleanFormResponses( form );
+        }
     }
 }

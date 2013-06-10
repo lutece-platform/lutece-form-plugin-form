@@ -129,6 +129,8 @@ public final class FormUtils
     public static final String PARAMETER_KEY = "key";
     public static final String PROPERTY_CLEAN_FORM_ANSWERS_KEY = "form.cleanResponses.key";
 
+    public static final String CONSTANT_RESPONSE_VALUE_ANONYMIZED = "anonymized";
+    
     // marks
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_URL_ACTION = "url_action";

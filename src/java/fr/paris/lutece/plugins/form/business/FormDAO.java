@@ -59,34 +59,36 @@ public final class FormDAO implements IFormDAO
             + "id_mailing_list,active_captcha,active_store_adresse,"
             + "libelle_validate_button,libelle_reset_button,date_begin_disponibility,date_end_disponibility,"
             + " active,auto_publication,date_creation,limit_number_response,id_recap,active_requirement,information_1,"
-            + " information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification, id_category, automatic_cleaning, cleaning_by_removal"
+            + " information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification,"
+            + " id_category, automatic_cleaning, cleaning_by_removal, nb_days_before_cleaning"
             + " FROM form_form WHERE id_form = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO form_form ( id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message,"
             + "unavailability_message,requirement_message,workgroup,"
             + "id_mailing_list,active_captcha,active_store_adresse,"
             + "libelle_validate_button,libelle_reset_button,date_begin_disponibility,"
             + " date_end_disponibility,active,auto_publication,date_creation,limit_number_response,"
-            + " id_recap,active_requirement,information_1,information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification, id_category, automatic_cleaning, cleaning_by_removal ) "
-            + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + " id_recap,active_requirement,information_1,information_2,information_3,information_4,information_5, "
+            + " supports_https, code_theme, active_mylutece_authentification, id_category, automatic_cleaning, cleaning_by_removal, nb_days_before_cleaning ) "
+            + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_form WHERE id_form = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE form_form SET id_form=?,title=?,front_office_title=?,is_shown_front_office_title=?,description=?, welcome_message=?,"
             + "unavailability_message=?, requirement_message=?,workgroup=?,"
             + "id_mailing_list=?,active_captcha=?,active_store_adresse=?,"
             + "libelle_validate_button=?,libelle_reset_button=?,date_begin_disponibility=?,date_end_disponibility=?,active=?,auto_publication=?,limit_number_response=? ,active_requirement=?,"
             + "information_1=? ,information_2=? ,information_3=? ,information_4=? ,information_5=?, supports_https = ?, code_theme = ?, "
-            + "active_mylutece_authentification=? ,id_category=?, automatic_cleaning = ?, cleaning_by_removal = ? WHERE id_form=?";
+            + "active_mylutece_authentification=? ,id_category=?, automatic_cleaning = ?, cleaning_by_removal = ?, nb_days_before_cleaning = ? WHERE id_form=?";
     private static final String SQL_QUERY_SELECT_FORM_BY_FILTER = "SELECT id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message,"
             + "unavailability_message, requirement_message,workgroup,"
             + "id_mailing_list,active_captcha,active_store_adresse,"
             + "libelle_validate_button,libelle_reset_button,date_begin_disponibility,date_end_disponibility,active,"
             + " auto_publication,date_creation,limit_number_response,id_recap,active_requirement,information_1,"
-            + " information_2,information_3,information_4,information_5,supports_https, code_theme, active_mylutece_authentification, id_category, automatic_cleaning, cleaning_by_removal "
+            + " information_2,information_3,information_4,information_5,supports_https, code_theme, active_mylutece_authentification, id_category, automatic_cleaning, cleaning_by_removal, nb_days_before_cleaning "
             + " FROM form_form ";
     private static final String SQL_QUERY_SELECT_ALL_THEMES = "SELECT id_form, code_theme FROM form_form";
     private static final String SQL_QUERY_FIND_ANONYMIZE_ENTRIES = " SELECT id_entry FROM form_anonymize_fields WHERE id_form = ? ";
     private static final String SQL_QUERY_REMOVE_ANONYMIZE_ENTRIES = " DELETE FROM form_anonymize_fields WHERE id_form = ? ";
     private static final String SQL_QUERY_INSERT_ANONYMIZE_ENTRIES = " INSERT INTO form_anonymize_fields( id_form, id_entry ) VALUES ( ?, ? ) ";
-    private static final String SQL_QUERY_SELECT_BY_AUTOMATIC_CLEANING = " SELECT id_form, automatic_cleaning, cleaning_by_removal FROM form_form WHERE automatic_cleaning = 1 ";
+    private static final String SQL_QUERY_SELECT_BY_AUTOMATIC_CLEANING = " SELECT id_form, automatic_cleaning, cleaning_by_removal, nb_days_before_cleaning FROM form_form WHERE automatic_cleaning = 1 ";
     private static final String SQL_FILTER_OR = " OR ";
     private static final String SQL_FILTER_OPEN_PARENTHESIS = " ( ";
     private static final String SQL_FILTER_CLOSE_PARENTHESIS = " ) ";
@@ -182,6 +184,7 @@ public final class FormDAO implements IFormDAO
         }
         daoUtil.setBoolean( nIndex++, form.getAutomaticCleaning( ) );
         daoUtil.setBoolean( nIndex++, form.getCleaningByRemoval( ) );
+        daoUtil.setInt( nIndex++, form.getNbDaysBeforeCleaning( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -250,6 +253,7 @@ public final class FormDAO implements IFormDAO
             }
             form.setAutomaticCleaning( daoUtil.getBoolean( nIndex++ ) );
             form.setCleaningByRemoval( daoUtil.getBoolean( nIndex++ ) );
+            form.setNbDaysBeforeCleaning( daoUtil.getInt( nIndex++ ) );
         }
 
         daoUtil.free( );
@@ -322,6 +326,7 @@ public final class FormDAO implements IFormDAO
         }
         daoUtil.setBoolean( nIndex++, form.getAutomaticCleaning( ) );
         daoUtil.setBoolean( nIndex++, form.getCleaningByRemoval( ) );
+        daoUtil.setInt( nIndex++, form.getNbDaysBeforeCleaning( ) );
 
         daoUtil.setInt( nIndex++, form.getIdForm( ) );
 
@@ -471,6 +476,7 @@ public final class FormDAO implements IFormDAO
             }
             form.setAutomaticCleaning( daoUtil.getBoolean( nIndex++ ) );
             form.setCleaningByRemoval( daoUtil.getBoolean( nIndex++ ) );
+            form.setNbDaysBeforeCleaning( daoUtil.getInt( nIndex++ ) );
 
             formList.add( form );
         }
@@ -594,6 +600,7 @@ public final class FormDAO implements IFormDAO
             form.setIdForm( daoUtil.getInt( nIndex++ ) );
             form.setAutomaticCleaning( daoUtil.getBoolean( nIndex++ ) );
             form.setCleaningByRemoval( daoUtil.getBoolean( nIndex++ ) );
+            form.setNbDaysBeforeCleaning( daoUtil.getInt( nIndex++ ) );
             listForms.add( form );
         }
 

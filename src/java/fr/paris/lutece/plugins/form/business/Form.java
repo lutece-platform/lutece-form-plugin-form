@@ -90,6 +90,7 @@ public class Form implements AdminWorkgroupResource, RBACResource
     private Category _category;
     private boolean _bAutomaticCleaning;
     private boolean _bCleaningByRemoval;
+    private int _nNbDaysBeforeCleaning;
 
     /**
      * Initialize the Form
@@ -765,5 +766,24 @@ public class Form implements AdminWorkgroupResource, RBACResource
     public void setCleaningByRemoval( boolean bCleaningByRemoval )
     {
         this._bCleaningByRemoval = bCleaningByRemoval;
+    }
+
+    /**
+     * Get the number of days to keep responses before cleaning them
+     * @return The number of days to keep responses before cleaning them
+     */
+    public int getNbDaysBeforeCleaning( )
+    {
+        return _nNbDaysBeforeCleaning;
+    }
+
+    /**
+     * Set the number of days to keep responses before cleaning them
+     * @param nNbDaysBeforeCleaning The number of days to keep responses before
+     *            cleaning them
+     */
+    public void setNbDaysBeforeCleaning( int nNbDaysBeforeCleaning )
+    {
+        this._nNbDaysBeforeCleaning = nNbDaysBeforeCleaning;
     }
 }

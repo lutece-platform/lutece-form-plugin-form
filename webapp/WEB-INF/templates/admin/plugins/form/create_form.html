@@ -1,97 +1,206 @@
 <#include "/admin/plugins/form/commons.html" />
 <div class="row-fluid">
 	<div class="span12">
-	<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateForm.jsp?plugin_name=form" method="post">
-	<fieldset>
-		<legend>#i18n{form.createForm.title}</legend>
-		<label for="title">#i18n{form.createForm.labelTitle} * :</label>
-		<input type="text" name="title" value="" class="input-xlarge" maxlength="255" />
-		<span class="help-text">#i18n{form.createForm.labelTitleComment}&nbsp;</span>
-		<label for="description">#i18n{form.createForm.labelDescription} * :</label>
-		<textarea class="span3" name="description" rows="2"></textarea>
-		<span class="help-text">#i18n{form.createForm.labelDescriptionComment}</span>
-		<label for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
-		<@combo name="id_category" items=category_list default_value=-2 />
-		<span class="help-text">#i18n{form.createForm.labelCategoryComment}</span>
-		<div class="form-actions">
-			<button type="submit" class="btn btn-primary btn-small" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
-			<button type="submit" class="btn btn-primary btn-small" name="cancel" onclick="javascript:window.history.back();"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
-		</div>
-	</fieldset>	
-	<fieldset>
-		<legend id="advanced_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelAdvancedSettings}</legend>
-		<div id="advanced_settings_content">
-			<label for="front_office_title">#i18n{form.createForm.frontOfficeTitle}:</label>
-			<input type="text" name="front_office_title" value="" maxlength="255" />
-			<span class="help-text">#i18n{form.createForm.frontOfficeTitleComment}</span>
-			<label for="is_shown_front_office_title"#i18n{form.createForm.frontOfficeTitleIsShown}:</label> 
-			<input type="checkbox" name="is_shown_front_office_title" value="1" />
-			<span class="help-text">#i18n{form.createForm.frontOfficeTitleIsShownComment}</span>
-			<label for="workgroup">#i18n{form.createForm.labelWorkgroup} :</label>
-			<@combo name="workgroup" items=user_workgroup_list default_value="${workgroup_key_default_value}" />
-			<span class="help-text">#i18n{form.createForm.labelWorkgroupComment}</span>
-			<label for="id_mailing_list">#i18n{form.createForm.labelNotify} :</label>
-			<@combo name="id_mailing_list" items=mailing_list default_value=-1 />
-			<span class="help-text">#i18n{form.createForm.labelNotifyComment}</span>
-			<#if is_active_captcha>
-			<label for="active_captcha">#i18n{form.createForm.labelActiveCaptcha} :</label>
-			<input type="checkbox" name="active_captcha" value="1" ${getChecked('active_captcha',list_param_default_values)} />
-			<span class="help-text">#i18n{form.createForm.labelActiveCaptchaComment}</span>
-			</#if>
-			<label for="id_theme_list">#i18n{form.createForm.labelThemeXpage} :</label>
-			<@combo name="id_theme_list" items=theme_list default_value=getName('id_theme_list',list_param_default_values)!default_theme />
-			<label class="checkbox" for="limit_number_response">#i18n{form.createForm.labelLimitNumberResponse} :
-			<input type="checkbox" name="limit_number_response" value="1" ${getChecked('limit_number_response',list_param_default_values)} />
-			</label>
-			<span class="help-text">#i18n{form.createForm.labelLimitNumberResponseComment}</span>
-			<label class="checkbox" for="active_store_adresse">#i18n{form.createForm.labelStoreAdresse} :
-				<input type="checkbox" name="active_store_adresse" value="1" ${getChecked('active_store_adresse',list_param_default_values)} />
-			</label>
-			<span class="help-text">#i18n{form.createForm.labelStoreAdresseComment}</span>
-			<#if is_active_mylutece_authentification>
-			<label for="active_mylutece_authentification">#i18n{form.createForm.labelActiveMyLuteceAuthentification} :</label>
-			<input type="checkbox" name="active_mylutece_authentification" value="1" ${getChecked('active_mylutece_authentification',list_param_default_values)} />
-			<span class="help-text">#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}</span>
-			</#if>
-			<label class="checkbox" for="active_requirement">#i18n{form.createForm.labelActiveRequirement} :
-				<input type="checkbox" name="active_requirement" value="1" <#if form?exists && form.activeRequirement>checked="checked"</#if> />
-			</label>
-			<span class="help-text">#i18n{form.createForm.labelActiveRequirementComment}</span>
-			<label for="information_complementary_1">#i18n{form.createForm.labelInformationComplementary_1}:</label>
-			<input type="text" name="information_complementary_1" value="" class="input-normal" maxlength="255" />
-			<label for="information_complementary_2">#i18n{form.createForm.labelInformationComplementary_2} :</label>
-			<input type="text" name="information_complementary_2" value="" class="input-normal" maxlength="255" />
-			<label for="information_complementary_3">#i18n{form.createForm.labelInformationComplementary_3} :</label>
-			<input type="text" name="information_complementary_3" value="" class="input-normal" maxlength="255" />
-			<label for="information_complementary_4">#i18n{form.createForm.labelInformationComplementary_4} :</label>
-			<input type="text" name="information_complementary_4" value="" class="input-normal" maxlength="255" />
-			<label for="information_complementary_5">#i18n{form.createForm.labelInformationComplementary_5} :</label>
-			<input type="text" name="information_complementary_5" value="" class="input-normal" maxlength="255" />
-			<span class="help-text">#i18n{form.createForm.labelInformationComplementary_comment}</span>
-			<label for="support_https">#i18n{form.createForm.supportHTTPS} :</label>
-			<input type="checkbox" name="support_https" value="1" ${getChecked('support_https',list_param_default_values)} />
-			<span class="help-text">#i18n{form.createForm.labelSupportHTTPS_comment}</span>
-			<!--span class="label label-warning"> #i18n{form.message.warning.advanced_parameters_save}</span-->
-		</div>
-		</fieldset>	
-		<fieldset>
-		<legend id="publication_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelPublication}</legend>
-		<div id="publication_settings_content">
-			<label for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
-			<input type="radio" name="publication_mode" id="publication_mode_user" checked="checked" value="0" onclick="javascript:doChangePublicationMode(this.form.publication_mode);" /> #i18n{form.createForm.labelPublicationModeUser}
-			<input type="radio" name="publication_mode" id="publication_mode_auto" value="1" onclick="javascript:doChangePublicationMode(this.form.publication_mode);" /> #i18n{form.createForm.labelPublicationModeAuto}
-			<span class="help-text">#i18n{form.createForm.labelPublicationModeComment}</span>
-			<label for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
-			<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
-			<input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="" />
-			<span class="help-text">#i18n{form.createForm.labelDateBeginDisponibilityComment}</span>
-			<label for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
-			<input type="text" name="date_end_disponibility" id="date_end_disponibility" value="" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
-			<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="" />
-			<span class="help-text">#i18n{form.createForm.labelDateEndDisponibilityComment}</span>
-		</div>
-		</fieldset>
-	</form>
+		<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateForm.jsp?plugin_name=form" method="post">
+			<fieldset>
+				<legend>#i18n{form.createForm.title}</legend>
+				<div class="control-group">
+					<label class="control-label" for="title">#i18n{form.createForm.labelTitle} * :</label>
+					<div class="controls">
+						<input type="text" name="title" value="" class="input-xlarge" maxlength="255" />
+						<span class="help-block">#i18n{form.createForm.labelTitleComment}&nbsp;</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="description">#i18n{form.createForm.labelDescription} * :</label>
+					<div class="controls">
+						<textarea class="span3" name="description" rows="2"></textarea>
+						<span class="help-block">#i18n{form.createForm.labelDescriptionComment}</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
+					<div class="controls">
+						<@combo name="id_category" items=category_list default_value=-2 />
+						<span class="help-block">#i18n{form.createForm.labelCategoryComment}</span>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary btn-small" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
+					<button type="submit" class="btn btn-primary btn-small" name="cancel" onclick="javascript:window.history.back();"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
+				</div>
+			</fieldset>	
+			<fieldset>
+				<legend id="advanced_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelAdvancedSettings}</legend>
+				<div id="advanced_settings_content">
+					<div class="control-group">
+						<label class="control-label" for="front_office_title">#i18n{form.createForm.frontOfficeTitle}:</label>
+						<div class="controls">
+							<input type="text" name="front_office_title" value="" maxlength="255" />
+							<span class="help-block">#i18n{form.createForm.frontOfficeTitleComment}</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="is_shown_front_office_title">#i18n{form.createForm.frontOfficeTitleIsShown}</label> 
+						<div class="controls">
+							<input type="checkbox" name="is_shown_front_office_title" value="1" />
+							<span class="help-block">#i18n{form.createForm.frontOfficeTitleIsShownComment}</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="workgroup">#i18n{form.createForm.labelWorkgroup} :</label>
+						<div class="controls">
+							<@combo name="workgroup" items=user_workgroup_list default_value="${workgroup_key_default_value}" />
+							<span class="help-block">#i18n{form.createForm.labelWorkgroupComment}</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="id_mailing_list">#i18n{form.createForm.labelNotify} :</label>
+						<div class="controls">
+							<@combo name="id_mailing_list" items=mailing_list default_value=-1 />
+							<span class="help-block">#i18n{form.createForm.labelNotifyComment}</span>
+						</div>
+					</div>
+					<#if is_active_captcha>
+					<div class="control-group">
+						<label class="control-label" for="active_captcha">#i18n{form.createForm.labelActiveCaptcha} :</label>
+						<div class="controls">
+							<input type="checkbox" name="active_captcha" value="1" ${getChecked('active_captcha',list_param_default_values)} />
+							<span class="help-block">#i18n{form.createForm.labelActiveCaptchaComment}</span>
+						</div>
+					</div>
+					</#if>
+					<div class="control-group">
+						<label class="control-label" for="id_theme_list">#i18n{form.createForm.labelThemeXpage} :</label>
+						<div class="controls">
+							<@combo name="id_theme_list" items=theme_list default_value=getName('id_theme_list',list_param_default_values)!default_theme />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="limit_number_response">#i18n{form.createForm.labelLimitNumberResponse} :</label>
+						<div class="controls">
+							<input type="checkbox" name="limit_number_response" value="1" ${getChecked('limit_number_response',list_param_default_values)} />
+							<span class="help-block">#i18n{form.createForm.labelLimitNumberResponseComment}</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="active_store_adresse">#i18n{form.createForm.labelStoreAdresse} :</label>
+						<div class="controls">
+							<input type="checkbox" name="active_store_adresse" value="1" ${getChecked('active_store_adresse',list_param_default_values)} />
+							<span class="help-block">#i18n{form.createForm.labelStoreAdresseComment}</span>
+						</div>
+					</div>
+					<#if is_active_mylutece_authentification>
+						<div class="control-group">
+							<label class="control-label" for="active_mylutece_authentification">#i18n{form.createForm.labelActiveMyLuteceAuthentification} :</label>
+							<div class="controls">
+								<input type="checkbox" name="active_mylutece_authentification" value="1" ${getChecked('active_mylutece_authentification',list_param_default_values)} />
+								<span class="help-block">#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}</span>
+							</div>
+						</div>
+					</#if>
+					<div class="control-group">
+						<label class="control-label" class="checkbox" for="active_requirement">#i18n{form.createForm.labelActiveRequirement} :</label>
+						<div class="controls">
+							<input type="checkbox" name="active_requirement" value="1" <#if form?exists && form.activeRequirement>checked="checked"</#if> />
+							<span class="help-block">#i18n{form.createForm.labelActiveRequirementComment}</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="information_complementary_1">#i18n{form.createForm.labelInformationComplementary_1}:</label>
+						<div class="controls">
+							<input type="text" name="information_complementary_1" value="" class="input-normal" maxlength="255" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="information_complementary_2">#i18n{form.createForm.labelInformationComplementary_2} :</label>
+						<div class="controls">
+							<input type="text" name="information_complementary_2" value="" class="input-normal" maxlength="255" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="information_complementary_3">#i18n{form.createForm.labelInformationComplementary_3} :</label>
+						<div class="controls">
+							<input type="text" name="information_complementary_3" value="" class="input-normal" maxlength="255" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="information_complementary_4">#i18n{form.createForm.labelInformationComplementary_4} :</label>
+						<div class="controls">
+							<input type="text" name="information_complementary_4" value="" class="input-normal" maxlength="255" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="information_complementary_5">#i18n{form.createForm.labelInformationComplementary_5} :</label>
+						<div class="controls">
+							<input type="text" name="information_complementary_5" value="" class="input-normal" maxlength="255" />
+							<span class="help-block">#i18n{form.createForm.labelInformationComplementary_comment}</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="support_https">#i18n{form.createForm.supportHTTPS} :</label>
+						<div class="controls">
+							<input type="checkbox" name="support_https" value="1" ${getChecked('support_https',list_param_default_values)} />
+							<span class="help-block">#i18n{form.createForm.labelSupportHTTPS_comment}</span>
+							<!--span class="label label-warning"> #i18n{form.message.warning.advanced_parameters_save}</span-->
+						</div>
+					</div>
+				</div>
+			</fieldset>	
+			<fieldset>
+				<legend id="publication_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.createForm.labelPublication}</legend>
+				<div id="publication_settings_content">
+					<div class="control-group">
+						<label class="control-label" for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
+						<div class="controls">
+							<input type="radio" name="publication_mode" id="publication_mode_user" checked="checked" value="0" onclick="javascript:doChangePublicationMode(this.form.publication_mode);" /> #i18n{form.createForm.labelPublicationModeUser}
+							<input type="radio" name="publication_mode" id="publication_mode_auto" value="1" onclick="javascript:doChangePublicationMode(this.form.publication_mode);" /> #i18n{form.createForm.labelPublicationModeAuto}
+							<span class="help-block">#i18n{form.createForm.labelPublicationModeComment}</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
+						<div class="controls">
+							<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
+							<input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="" />
+							<span class="help-block">#i18n{form.createForm.labelDateBeginDisponibilityComment}</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
+						<div class="controls">
+							<input type="text" name="date_end_disponibility" id="date_end_disponibility" value="" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
+							<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="" />
+							<span class="help-block">#i18n{form.createForm.labelDateEndDisponibilityComment}</span>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend id="answers_cleaning_settings"><i class="icon-chevron-down"></i>&nbsp;#i18n{form.modifyForm.labelAnswersRemoval}</legend>
+				<div id="answers_cleaning_settings_content">
+					<div class="control-group">
+						<label class="control-label" for="automaticCleaning">#i18n{form.createForm.labelAutomaticCleaning}</label>
+						<div class="controls">
+							<input type="checkbox" name="automaticCleaning" value="true">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="cleaningByRemoval">#i18n{form.createForm.labelCleaningMethod} :</label>
+						<div class="controls">
+							<input type="radio" name="cleaningByRemoval" value="true" checked="checked">&nbsp;#i18n{form.createForm.labelRemove}&nbsp;
+							<input type="radio" name="cleaningByRemoval" value="false">&nbsp;#i18n{form.createForm.labelAnonymize}
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="nb_days_before_cleaning">#i18n{form.createForm.labelNbDaysBeforeCleaning} :</label>
+						<div class="controls">
+							<input id="nb_days_before_cleaning" name="nb_days_before_cleaning" value="30">
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</form>
 	</div>
 </div>
 <script>
@@ -100,6 +209,8 @@ $(document).ready( function () {
 	doToggleId( "#advanced_settings" );
 	$("#publication_settings").next().toggle();
 	doToggleId( "#publication_settings" );
+	$("#answers_cleaning_settings").next().toggle();
+	doToggleId( "#answers_cleaning_settings" );
 });
 
 function doToggleId( idParent ){
@@ -149,6 +260,6 @@ function doChangePublicationMode(radio)
 </script>
 <#include "/admin/util/editor/editor.html" />
 <@initEditor />
-<script src="js/jquery/plugins/ui/datepicker/ui.datepicker.js"></script>
-<script src="js/jquery/plugins/ui/datepicker/ui.datepicker-fr.js"></script>
+<script src="js/jquery/plugins/ui/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="js/jquery/plugins/ui/ui.datepicker-fr.js"></script>
 <@getDatePickerRange idFieldFrom="date_begin_disponibility" idFieldTo="date_end_disponibility" language=locale />

@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.form.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -136,5 +137,16 @@ public final class ResponseHome
     public static int findMaxNumber( int nIdEntry, int nIdForm, Plugin plugin )
     {
         return _dao.getMaxNumber( nIdEntry, nIdForm, plugin );
+    }
+
+    /**
+     * Anonymize entries of responses
+     * @param listIdEntries The list of id of entries to anonymize responses of
+     * @param dateCleanTo Anonymize responses posted before this date
+     * @param plugin The plugin
+     */
+    public static void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo, Plugin plugin )
+    {
+        _dao.anonymizeEntries( listIdEntries, dateCleanTo, plugin );
     }
 }

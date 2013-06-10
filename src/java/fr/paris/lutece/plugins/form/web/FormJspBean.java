@@ -360,6 +360,7 @@ public class FormJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ANONYMIZE_ENTRIES = "anonymizeEntries";
     private static final String PARAMETER_AUTOMATIC_CLEANING = "automaticCleaning";
     private static final String PARAMETER_CLEANING_BY_REMOVAL = "cleaningByRemoval";
+    private static final String PARAMETER_NB_DAYS_BEFORE_CLEANING = "nb_days_before_cleaning";
 
     // other constants
     private static final String EMPTY_STRING = "";
@@ -628,6 +629,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         String strThemeXpage = request.getParameter( PARAMETER_THEME_XPAGE );
         String strAutomaticCleaning = request.getParameter( PARAMETER_AUTOMATIC_CLEANING );
         String strCleaningRemove = request.getParameter( PARAMETER_CLEANING_BY_REMOVAL );
+        String strNbDaysBeforeCleaning = request.getParameter( PARAMETER_NB_DAYS_BEFORE_CLEANING );
 
         String strFieldError = EMPTY_STRING;
 
@@ -759,9 +761,14 @@ public class FormJspBean extends PluginAdminPageJspBean
         {
             form.setAutomaticCleaning( false );
         }
+
         if ( StringUtils.isNotEmpty( strCleaningRemove ) )
         {
             form.setCleaningByRemoval( Boolean.parseBoolean( strCleaningRemove ) );
+        }
+        if ( strNbDaysBeforeCleaning != null && StringUtils.isNumeric( strNbDaysBeforeCleaning ) )
+        {
+            form.setNbDaysBeforeCleaning( Integer.parseInt( strNbDaysBeforeCleaning ) );
         }
 
         try
@@ -773,7 +780,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         }
         catch ( NumberFormatException ne )
         {
-            AppLogService.error( ne );
+            AppLogService.error( ne.getMessage( ), ne );
 
             return getHomeUrl( request );
         }
@@ -790,7 +797,7 @@ public class FormJspBean extends PluginAdminPageJspBean
         }
         catch ( NumberFormatException ne )
         {
-            AppLogService.error( ne );
+            AppLogService.error( ne.getMessage( ), ne );
 
             return getHomeUrl( request );
         }
@@ -1124,7 +1131,19 @@ public class FormJspBean extends PluginAdminPageJspBean
         model.put( MARK_ENTRY_TYPE_GROUP, entryTypeGroup );
         model.put( MARK_FORM, form );
         model.put( MARK_CATEGORY_LIST, refCategoryList );
-        model.put( MARK_ENTRY_LIST, paginator.getPageItems(  ) );
+        List<IEntry> listEntriesPaginated = paginator.getPageItems( );
+        for ( IEntry entry : listEntriesPaginated )
+        {
+            List<Field> listFields = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ), plugin );
+            for ( Field field : listFields )
+            {
+                EntryFilter fieldFilter = new EntryFilter( );
+                fieldFilter.setIdFieldDepend( field.getIdField( ) );
+                field.setConditionalQuestions( EntryHome.getEntryList( fieldFilter, plugin ) );
+            }
+            entry.setFields( listFields );
+        }
+        model.put( MARK_ENTRY_LIST, listEntriesPaginated );
         model.put( MARK_THEME_REF_LIST, themesRefList );
         model.put( MARK_GROUP_ENTRY_LIST, refListGroupEntry );
         model.put( MARK_NUMBER_QUESTION, nNumberQuestion );

@@ -47,6 +47,9 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Response
 {
+    public static final int CONSTANT_STATUS_ACTIVE = 1;
+    public static final int CONSTANT_STATUS_ANONYMIZED = 10;
+
     private int _nIdResponse;
     private String _strToStringValueResponse;
     private IEntry _entry;
@@ -54,6 +57,7 @@ public class Response
     private FormSubmit _formSubmit;
     private File _file;
     private String _strResponseValue;
+    private int _nStatus;
 
     /**
      * @deprecated The response value is stored in String
@@ -312,5 +316,23 @@ public class Response
         }
 
         return null;
+    }
+
+    /**
+     * Get the status of this response
+     * @return The status of this response
+     */
+    public int getStatus( )
+    {
+        return _nStatus;
+    }
+
+    /**
+     * Set the status of this response
+     * @param nStatus The status of this response
+     */
+    public void setStatus( int nStatus )
+    {
+        this._nStatus = nStatus;
     }
 }

@@ -39,6 +39,7 @@ import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.StatisticEntrySubmit;
 import fr.paris.lutece.plugins.form.service.file.FileService;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -104,4 +105,12 @@ public interface IResponseService
      *  @return return a list of statistic on the entry
      */
     List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry );
+
+    /**
+     * Anonymize entries of responses
+     * @param listIdEntries The list of id of responses to anonymize responses
+     *            of
+     * @param dateCleanTo Anonymize responses posted before this date
+     */
+    void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo );
 }
