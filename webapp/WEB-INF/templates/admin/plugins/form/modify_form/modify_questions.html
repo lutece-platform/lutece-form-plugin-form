@@ -1,0 +1,167 @@
+<#include "/admin/plugins/form/modify_form/tabs.html" />
+<script>
+$(document).ready(function() {
+	
+	$("#selectAll").change( function() {
+    if ( $(this).attr("checked") ){
+		// check all
+        $("input[name='entry_id']").prop( "checked", "checked");
+		} else {
+        // uncheck all
+        $("input[name='entry_id']").prop( "checked", "");
+		}
+    });
+});
+</script>
+<#include "/admin/plugins/form/commons.html" />
+<div class="row-fluid">
+	<div class="span4">
+		<form class="form" action="jsp/admin/plugins/form/DoModifyForm.jsp" method="post">
+			<@modifyFormLeftColumn form=form category_list=category_list />
+		</form>
+	</div>
+	<div id="questions" class="span8">
+		<a name="list" id="list"></a>
+		<form method="post" action="jsp/admin/plugins/form/DoCreateEntry.jsp?id_type=${entry_type_group.idType}#list">
+			<@tabs tab="questions" />
+			<fieldset class="form-inline pull-left spaced">
+				<input type="text" name="title" value="" placeholder="#i18n{form.modifyForm.manageEnter.labelInsertGroup}"/>
+				<button type="submit" class="btn btn-primary btn-small" title="#i18n{form.modifyForm.manageEnter.buttonInsertGroup}"><i class="icon-plus icon-white"></i></button>
+			</fieldset>
+		</form>
+		<form method="post" class="form-inline pull-left" action="jsp/admin/plugins/form/CreateEntry.jsp">
+			<@combo name="id_type" items=entry_type_list default_value=-1 /><button type="submit" class="btn btn-primary btn-small" title="#i18n{form.modifyForm.manageEnter.buttonInsertEntry}"><i class="icon-plus icon-white"></i></button>
+		</form>
+	
+		<@paginationAdmin paginator=paginator combo=1/>
+		
+		<form method="post"	action="jsp/admin/plugins/form/DoChangeOrderEntry.jsp" 	class="form-inline">
+			<#if entry_group_list?has_content>
+				<input type="hidden" name="id_form" value="${form.idForm}" />
+				<!-- List all entry of type group  -->
+				<@comboWithParams name="id_entry_group" default_value="" additionalParameters="class=\"input-xlarge\"" items=entry_group_list />  
+				<button type="submit" class="btn btn-small" title="#i18n{form.modifyForm.moveAll}" name="move.x" value="#i18n{form.modifyForm.moveAll}">
+					<i class="icon-resize-vertical"></i>
+				</button>
+			</#if>
+			<table class="table table-striped">
+				<thead>
+					<tr> 
+						<th>
+							<input type="checkbox" name="selectAll" id="selectAll" value="selectAll" title="#i18n{form.modifyForm.selectAll}" />
+						</th>
+						<th>
+							#i18n{form.modifyForm.manageEnter.rowTitle} #i18n{form.modifyForm.manageEnter.rowType}
+						</th>
+						<th>
+							<i class="icon-question-sign" title="#i18n{form.modifyForm.manageEnter.rowConditionalQuestion}"></i>
+						</th>
+						<th>
+							#i18n{form.modifyForm.manageEnter.rowOrder}
+						</th>
+						<th>
+							#i18n{form.modifyForm.manageEnter.rowActions}&nbsp;
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list entry_list as entry>
+						<tr>
+							<td>
+								<!--  add checkbox if entry isn't a group --> 
+								<#if !entry.entryType.group>
+									<input type="checkbox" name="entry_id"value="${entry.idEntry!}" title="#i18n{form.modifyForm.select}" />
+								</#if>
+							</td>
+							<td>
+								<#if entry.entryType.group>
+									${entry.title}
+								<#elseif entry.parent?exists>
+									<#if entry.entryType.comment>
+										<blockquote>${entry.comment}</blockquote>
+									<#else>
+										<blockquote>${entry.title}</blockquote>
+									</#if>
+								<#elseif entry.entryType.myLuteceUser>
+										${entry.title}
+								<#else>
+									<#if entry.entryType.comment>
+										${entry.comment}
+									<#else>
+										${entry.title}
+									</#if>
+								</#if>
+								<#if !entry.entryType.group>
+									<span class="badge">${entry.entryType.title}</span>
+								</#if>
+							</td>
+							<td>
+								<#if entry.numberConditionalQuestion!=0>
+									${entry.numberConditionalQuestion}
+								</#if>
+							</td>
+							<!--  Change the order of the attribute -->
+							<#if entry.parent?exists>
+								<td>
+									<blockquote>
+										<@comboOrders name="order_id_${entry.idEntry!}" default_value=entry.position idParent=entry.parent.idEntry />
+										<button class="btn btn-primary btn-small" type="submit"	name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}" value="#i18n{directory.modify_directory.move}"><i class="icon-resize-vertical icon-white"></i></button>
+									</blockquote>
+								</td>
+							<#else>
+								<td>
+									<@comboOrders name="order_id_${entry.idEntry!}"	default_value=entry.position idParent=0 />
+									<button class="btn btn-primary btn-small" type="submit" name="move_${entry.idEntry!}" title="#i18n{directory.modify_directory.move}" value="#i18n{directory.modify_directory.move}">
+										<i class="icon-ok icon-white"></i>
+									</button>
+								</td>
+							</#if>
+							<td>
+								<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-primary btn-small">
+									<i class="icon-edit icon-white"></i>
+								</a>
+								<#if entry.parent?exists>
+									<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleGoOut}" class="btn btn-primary btn-small">
+										<i class="icon-chevron-right icon-white"></i>
+									</a>
+								<#elseif !entry.entryType.group && !entry.entryType.myLuteceUser>
+									<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMove}" class="btn btn-primary btn-small">
+										<i class="icon-user icon-white"></i>
+									</a>
+								</#if>
+								<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
+									<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleCopy}" class="btn btn-primary btn-small">
+										<i class="icon-plus-sign icon-white"></i>
+									</a>
+								</#if>
+								<#if !entry.entryType.myLuteceUser>
+									<a href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleDelete}" class="btn btn-danger btn-small">
+										<i class="icon-trash icon-white"></i>
+									</a>
+								</#if>
+							</td>
+						</tr>
+					</#list>
+				</tbody>
+			</table>
+		</form>
+		<@paginationAdmin paginator=paginator/>
+	</div>
+</div>
+<#include "/admin/util/editor/editor.html" />
+
+<@initEditor />
+
+<script src="js/jquery/plugins/ui/jquery-ui-1.8.16.custom.min.js"></script>
+
+<#macro comboOrders name default_value idParent >
+	<#if mapChild?exists>
+	<select id="${name}" name="${name}" class="input-mini"> 
+		<#list mapChild[idParent!?string] as i> <#if default_value == i>
+			<option selected="selected" value="${i}">${i}</option> <#else>
+			<option value="${i}">${i}</option> </#if>
+		</#list>
+	</select>
+	</#if>
+</#macro>
+

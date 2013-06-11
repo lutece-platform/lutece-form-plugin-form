@@ -46,20 +46,17 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.Paginator;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
 import java.awt.image.BufferedImage;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
 import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
-
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -271,10 +268,11 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
     * @param strPageIndex The current page index
      * @return the paginator who is use in the template modify of the entry
      */
-    public Paginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
+    public Paginator<?> getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
         String strPageIndex )
     {
-        return new Paginator( this.getFields(  ).get( 0 ).getRegularExpressionList(  ), nItemPerPage, strBaseUrl,
+        return new Paginator<RegularExpression>( this.getFields( ).get( 0 ).getRegularExpressionList( ), nItemPerPage,
+                strBaseUrl,
             strPageIndexParameterName, strPageIndex );
     }
 
@@ -321,21 +319,18 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
         {
             return response.getFile(  ).getTitle(  );
         }
-        else
-        {
-            return StringUtils.EMPTY;
-        }
+        return StringUtils.EMPTY;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public LocalizedPaginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
+    public LocalizedPaginator<?> getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
         String strPageIndex, Locale locale )
     {
-        return new LocalizedPaginator( this.getFields(  ).get( 0 ).getRegularExpressionList(  ), nItemPerPage,
-            strBaseUrl, strPageIndexParameterName, strPageIndex, locale );
+        return new LocalizedPaginator<RegularExpression>( this.getFields( ).get( 0 ).getRegularExpressionList( ),
+                nItemPerPage, strBaseUrl, strPageIndexParameterName, strPageIndex, locale );
     }
 
     /**

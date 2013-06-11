@@ -953,23 +953,34 @@ public class FormApp implements XPageApplication
     /**
      * Do clean responses of a form
      * @param request The request
+     * @return The error code
      */
-    public static void doCleanFormAnswers( HttpServletRequest request )
+    public static String doCleanFormAnswers( HttpServletRequest request )
     {
-        String strKey = request.getParameter( FormUtils.PARAMETER_KEY );
-        String strPrivateKey = AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_KEY );
-        if ( strPrivateKey != null && StringUtils.isNotEmpty( strPrivateKey )
-                && !StringUtils.equals( strKey, strPrivateKey ) )
+        try
         {
-            AppLogService.error( "Illegal attempt to clean form responses : " + SecurityUtil.getRealIp( request ) );
-            return;
+            String strKey = request.getParameter( FormUtils.PARAMETER_KEY );
+            String strPrivateKey = AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_KEY );
+            if ( strPrivateKey != null && StringUtils.isNotEmpty( strPrivateKey )
+                    && !StringUtils.equals( strKey, strPrivateKey ) )
+            {
+                AppLogService.error( "Illegal attempt to clean form responses : " + SecurityUtil.getRealIp( request ) );
+                return AppPropertiesService
+                        .getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_UNAUTHORIZED );
+            }
+            String strIdForm = request.getParameter( PARAMETER_ID_FORM );
+            if ( strIdForm != null && StringUtils.isNumeric( strIdForm ) )
+            {
+                int nIdForm = Integer.parseInt( strIdForm );
+                Form form = FormHome.findByPrimaryKey( nIdForm, FormUtils.getPlugin( ) );
+                FormService.getInstance( ).cleanFormResponses( form );
+            }
+            return AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_OK );
         }
-        String strIdForm = request.getParameter( PARAMETER_ID_FORM );
-        if ( strIdForm != null && StringUtils.isNumeric( strIdForm ) )
+        catch ( Exception e )
         {
-            int nIdForm = Integer.parseInt( strIdForm );
-            Form form = FormHome.findByPrimaryKey( nIdForm, FormUtils.getPlugin( ) );
-            FormService.getInstance( ).cleanFormResponses( form );
+            AppLogService.error( e.getMessage( ), e );
+            return AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_KO );
         }
     }
 }

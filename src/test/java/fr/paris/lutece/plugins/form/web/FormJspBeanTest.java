@@ -29,7 +29,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -51,7 +51,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -73,7 +73,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -95,7 +95,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -117,7 +117,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -139,7 +139,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -161,7 +161,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -183,7 +183,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -205,7 +205,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -227,7 +227,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -249,7 +249,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -273,7 +273,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -295,7 +295,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -317,7 +317,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -339,7 +339,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -361,7 +361,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -383,7 +383,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -405,7 +405,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -427,7 +427,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -449,7 +449,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -471,7 +471,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -493,7 +493,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -515,7 +515,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -537,7 +537,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -559,7 +559,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -581,7 +581,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -603,7 +603,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -625,7 +625,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -647,7 +647,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -669,7 +669,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -691,7 +691,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -713,7 +713,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -735,7 +735,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -757,7 +757,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
@@ -779,7 +779,7 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId(  ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormJspBean instance = new FormJspBean(  );
+        FormEntryJspBean instance = new FormEntryJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 

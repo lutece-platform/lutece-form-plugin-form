@@ -168,7 +168,7 @@ public class EntryTypeCheckBox extends Entry
      * @param strPageIndex The current page index
      * @return the paginator who is use in the template modify of the entry
      */
-    public Paginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
+    public Paginator<Field> getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
         String strPageIndex )
     {
         return new Paginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
@@ -279,8 +279,8 @@ public class EntryTypeCheckBox extends Entry
      * {@inheritDoc}
      */
     @Override
-    public LocalizedPaginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
-        String strPageIndex, Locale locale )
+    public LocalizedPaginator<Field> getPaginator( int nItemPerPage, String strBaseUrl,
+            String strPageIndexParameterName, String strPageIndex, Locale locale )
     {
         return new LocalizedPaginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
             strPageIndex, locale );

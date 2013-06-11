@@ -127,7 +127,10 @@ public final class FormUtils
     // parameters
     public static final String PARAMETER_ID_ENTRY = "id_entry";
     public static final String PARAMETER_KEY = "key";
-    public static final String PROPERTY_CLEAN_FORM_ANSWERS_KEY = "form.cleanResponses.key";
+    public static final String PROPERTY_CLEAN_FORM_ANSWERS_KEY = "form.cleanFormAnswers.key";
+    public static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_UNAUTHORIZED = "form.cleanFormAnswers.returnCode.unauthorized";
+    public static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_OK = "form.cleanFormAnswers.returnCode.ok";
+    public static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_KO = "form.cleanFormAnswers.returnCode.ko";
 
     public static final String CONSTANT_RESPONSE_VALUE_ANONYMIZED = "anonymized";
     

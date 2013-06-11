@@ -38,19 +38,19 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
 
 /**
- *
+ * 
  * class Entry
- *
+ * 
  */
 public class Entry implements IEntry
 {
@@ -123,107 +123,107 @@ public class Entry implements IEntry
     private String _strCSSClass;
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public List<IEntry> getChildren(  )
+    public List<IEntry> getChildren( )
     {
         return _listEntryChildren;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public String getComment(  )
+    public String getComment( )
     {
         return _strComment;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public EntryType getEntryType(  )
+    public EntryType getEntryType( )
     {
         return _entryType;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public List<Field> getFields(  )
+    public List<Field> getFields( )
     {
         return _listFields;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public String getHelpMessage(  )
+    public String getHelpMessage( )
     {
         return _strHelpMessage;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public int getIdEntry(  )
+    public int getIdEntry( )
     {
         return _nIdEntry;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public IEntry getParent(  )
+    public IEntry getParent( )
     {
         return _entryParent;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public int getPosition(  )
+    public int getPosition( )
     {
         return _nPosition;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isFieldInLine(  )
+    public boolean isFieldInLine( )
     {
         return _bFieldInLine;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isMandatory(  )
+    public boolean isMandatory( )
     {
         return _bMandatory;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setChildren( List<IEntry> children )
     {
@@ -231,8 +231,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setComment( String comment )
     {
@@ -240,8 +240,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setEntryType( EntryType entryType )
     {
@@ -249,8 +249,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setFieldInLine( boolean fieldInLine )
     {
@@ -258,8 +258,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setFields( List<Field> fields )
     {
@@ -267,8 +267,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setHelpMessage( String helpMessage )
     {
@@ -276,8 +276,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setIdEntry( int idEntry )
     {
@@ -285,8 +285,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setMandatory( boolean mandatory )
     {
@@ -294,8 +294,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setParent( IEntry parent )
     {
@@ -303,8 +303,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setPosition( int position )
     {
@@ -312,8 +312,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setTitle( String title )
     {
@@ -321,17 +321,17 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public Form getForm(  )
+    public Form getForm( )
     {
         return _form;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setForm( Form form )
     {
@@ -339,17 +339,17 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public Field getFieldDepend(  )
+    public Field getFieldDepend( )
     {
         return _fieldDepend;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setFieldDepend( Field depend )
     {
@@ -357,17 +357,17 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public String getHtmlCode(  )
+    public String getHtmlCode( )
     {
         return null;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public String getRequestData( HttpServletRequest request, Locale locale )
     {
@@ -375,8 +375,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
@@ -384,35 +384,35 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public String getTemplateCreate(  )
+    public String getTemplateCreate( )
     {
         return null;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public String getTemplateModify(  )
+    public String getTemplateModify( )
     {
         return null;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public int getNumberConditionalQuestion(  )
+    public int getNumberConditionalQuestion( )
     {
         return _nNumberConditionalQuestion;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
@@ -420,8 +420,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
@@ -429,8 +429,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setNumberConditionalQuestion( int numberConditionalQuestion )
     {
@@ -438,28 +438,28 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public Paginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
-        String strPageIndex )
+    public Paginator<?> getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
+            String strPageIndex )
     {
         return null;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public LocalizedPaginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
-        String strPageIndex, Locale locale )
+    public LocalizedPaginator<?> getPaginator( int nItemPerPage, String strBaseUrl,
+            String strPageIndexParameterName, String strPageIndex, Locale locale )
     {
         return null;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public ReferenceList getReferenceListRegularExpression( IEntry entry, Plugin plugin )
     {
@@ -467,17 +467,17 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isLastInTheList(  )
+    public boolean isLastInTheList( )
     {
         return _nLastInTheList;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setLastInTheList( boolean lastInTheList )
     {
@@ -485,17 +485,17 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isFirstInTheList(  )
+    public boolean isFirstInTheList( )
     {
         return _nFirstInTheList;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setFirstInTheList( boolean firstInTheList )
     {
@@ -503,8 +503,8 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setConfirmField( boolean bConfirmField )
     {
@@ -512,17 +512,17 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isConfirmField(  )
+    public boolean isConfirmField( )
     {
         return _bConfirmField;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setConfirmFieldTitle( String strConfirmFieldTitle )
     {
@@ -530,17 +530,17 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public String getConfirmFieldTitle(  )
+    public String getConfirmFieldTitle( )
     {
         return _strConfirmFieldTitle;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setUnique( boolean _bUnique )
     {
@@ -548,26 +548,26 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isUnique(  )
+    public boolean isUnique( )
     {
         return _bUnique;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public IMapProvider getMapProvider(  )
+    public IMapProvider getMapProvider( )
     {
         return _mapProvider;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setMapProvider( IMapProvider mapProvider )
     {
@@ -575,17 +575,17 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public FormError getFormError(  )
+    public FormError getFormError( )
     {
         return _formError;
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setFormError( FormError formError )
     {
@@ -593,19 +593,19 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
     public void setResponseToStringValue( Response response, Locale locale )
     {
-        response.setToStringValueResponse( response.getResponseValue(  ) );
+        response.setToStringValueResponse( response.getResponseValue( ) );
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isFile(  )
+    public boolean isFile( )
     {
         return false;
     }
@@ -615,7 +615,7 @@ public class Entry implements IEntry
      */
     @Override
     public FormError canUploadFiles( List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload,
-        Locale locale )
+            Locale locale )
     {
         return null;
     }
@@ -630,10 +630,10 @@ public class Entry implements IEntry
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public String getCSSClass(  )
+    public String getCSSClass( )
     {
         return _strCSSClass;
     }

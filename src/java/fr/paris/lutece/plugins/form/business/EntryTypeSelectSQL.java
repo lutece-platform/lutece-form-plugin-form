@@ -38,16 +38,17 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -153,10 +154,11 @@ public class EntryTypeSelectSQL extends Entry
      * @return the paginator who is use in the template modify of the entry
      */
     @Override
-    public Paginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
+    public Paginator<Field> getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
         String strPageIndex )
     {
-        return new Paginator( this.getFields(  ), nItemPerPage, strBaseUrl, strPageIndexParameterName, strPageIndex );
+        return new Paginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
+                strPageIndex );
     }
 
     /**
@@ -260,5 +262,16 @@ public class EntryTypeSelectSQL extends Entry
         daoUtil.free(  );
 
         return list;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public LocalizedPaginator<Field> getPaginator( int nItemPerPage, String strBaseUrl,
+            String strPageIndexParameterName, String strPageIndex, Locale locale )
+    {
+        return new LocalizedPaginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
+                strPageIndex, locale );
     }
 }
