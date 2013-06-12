@@ -17,7 +17,7 @@
 				<div class="control-group">
 					<label class="control-label" for="is_shown_front_office_title">#i18n{form.createForm.frontOfficeTitleIsShown} :</label> 
 					<div class="controls">
-						<input type="checkbox" name="is_shown_front_office_title" value="1" <#if form?exists && form.shownFrontOfficeTitle?exists> checked="checked"</#if> />
+						<input type="checkbox" name="is_shown_front_office_title" value="1" <#if form?exists && form.shownFrontOfficeTitle?? && form.shownFrontOfficeTitle> checked="checked"</#if> />
 						<span class="help-block">#i18n{form.createForm.frontOfficeTitleIsShownComment}</span>
 					</div>
 				</div>

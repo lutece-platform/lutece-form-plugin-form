@@ -228,18 +228,6 @@ public abstract class ModifyFormJspBean extends FormJspBean
             Plugin plugin = getPlugin( );
             Form form = new Form( );
             String strError = getFormData( request, form );
-            if ( strError == null )
-            {
-                strError = getFormAdvancedParametersData( request, form );
-            }
-            if ( strError != null )
-            {
-                strError = getFormPublicationData( request, form );
-            }
-            if ( strError != null )
-            {
-                strError = getAnswerManagementData( request, form );
-            }
             if ( strError != null )
             {
                 return strError;
@@ -257,8 +245,9 @@ public abstract class ModifyFormJspBean extends FormJspBean
             form.setRequirement( defaultMessage.getRequirement( ) );
             form.setLibelleValidateButton( defaultMessage.getLibelleValidateButton( ) );
             form.setLibelleResetButton( defaultMessage.getLibelleResetButton( ) );
-
-            FormHome.create( form, plugin );
+            form.setWorkgroup( StringUtils.EMPTY );
+            form.setCodeTheme( StringUtils.EMPTY );
+            int nIdForm = FormHome.create( form, plugin );
 
             String[] arrayIdEntries = request.getParameterValues( PARAMETER_ANONYMIZE_ENTRIES );
             if ( arrayIdEntries != null )
@@ -275,6 +264,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
             {
                 FormUtils.activateMyLuteceAuthentification( form, plugin, getLocale( ), request );
             }
+            return getJspModifyForm( request, nIdForm );
         }
 
         return getJspManageForm( request );
