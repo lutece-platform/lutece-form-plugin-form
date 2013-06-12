@@ -1,59 +1,58 @@
  <#include "/admin/plugins/form/commons.html" />
 <div class="row-fluid">
 	<div class="span12">
-	<fieldset>
-	<legend>#i18n{form.createEntry.titleQuestion} : '${entry.form.title}'</legend>
 		<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
-		<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
-		<#if entry.fieldDepend?exists>
-			<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
-		</#if>
-		<div class="control-group">
-		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
-			<div class="controls">
-				<input type="text" name="title" id="title" class="input-large" value=""  maxlength="255" />
-				<span class="help-text">#i18n{form.createEntry.labelTitleComment}
-			</div>
-		</div>
-    	<div class="control-group">
-		<label class="control-label" >  #i18n{form.createEntry.labelHelpMessage} : </label>
-			<div class="controls"><textarea  name="help_message" id="help_message"  rows="5" class="span4"></textarea></div>
-			<span class="help-text">#i18n{form.createEntry.labelHelpMessageComment}</span>
-     	</div>
-		<div class="control-group">
-		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
-			<div class="controls"><textarea  name="comment" class="span4" rows="2"></textarea></div>
-		</div>
-		<div class="control-group">
-		<label class="control-label" for="">#i18n{form.createEntry.labelType} : ${entry.entryType.title}</label>
-        <div class="control-group">
-			<div class="controls">
-			<label for="map_provider">#i18n{form.createEntry.mapProvider} : </label>
-				<@combo name="map_provider" items=entry.mapProvidersRefList default_value="-1"/>
-			</div>
-		</div>
-		<div class="control-group">
-		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
-			<div class="controls">	
-				<label class="checkbox" for="mandatory">#i18n{form.createEntry.labelMandatory} 
-					<input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-			<div class="controls">
-				<input type="text" name="css_class" value="" maxlength="255"class="input-large"/>
-				<span class="help-text">#i18n{form.createEntry.labelCSSClassComment}</span>
-			</div>
-		</div>
-		<div class="form-actions">
-			<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.buttonSave}</button>
-	  		<a class="btn btn-small" type="button" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${entry.form.idForm}&plugin_name=form" >
-				<i class="icon-remove-circle"></i>&nbsp;#i18n{form.createEntry.buttonCancel}
-			</a>
+			<fieldset>
+				<legend>#i18n{form.createEntry.titleQuestion} : '${entry.form.title}'</legend>
+				<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
+				<#if entry.fieldDepend?exists>
+					<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
+				</#if>
+				<div class="control-group">
+				<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
+					<div class="controls">
+						<input type="text" name="title" id="title" class="input-large" value=""  maxlength="255" />
+						<span class="help-block">#i18n{form.createEntry.labelTitleComment}</span>
+					</div>
+				</div>
+		    	<div class="control-group">
+					<label class="control-label" >  #i18n{form.createEntry.labelHelpMessage} : </label>
+					<div class="controls">						<textarea  name="help_message" id="help_message"  rows="5" class="span4"></textarea>
+						<span class="help-block">#i18n{form.createEntry.labelHelpMessageComment}</span>					</div>
+		     	</div>
+				<div class="control-group">
+					<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} : </label>
+					<div class="controls">						<textarea  name="comment" class="span4" rows="2"></textarea>					</div>
+				</div>
+		        <div class="control-group">
+		        	<label class="control-label" for="">#i18n{form.createEntry.mapProvider} : </label>
+					<div class="controls">
+						<@combo name="map_provider" items=entry.mapProvidersRefList default_value="-1"/>
+					</div>
+				</div>
+				<div class="control-group">
+				<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+					<div class="controls">	
+						<label class="checkbox" for="mandatory">#i18n{form.createEntry.labelMandatory} 
+							<input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />
+						</label>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+					<div class="controls">
+						<input type="text" name="css_class" value="" maxlength="255"class="input-large"/>
+						<span class="help-block">#i18n{form.createEntry.labelCSSClassComment}</span>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.buttonSave}</button>
+			  		<a class="btn btn-small" type="button" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${entry.form.idForm}&plugin_name=form" >
+						<i class="icon-remove-circle"></i>&nbsp;#i18n{form.createEntry.buttonCancel}
+					</a>
+				</div>
+			</fieldset>
 		</form>
-	</fieldset>
 	</div>
 </div>
   <#include "/admin/util/editor/editor.html" />

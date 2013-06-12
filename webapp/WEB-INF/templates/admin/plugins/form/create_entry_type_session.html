@@ -15,17 +15,17 @@
 			</div>
 		</div>
 		<div class="control-group">
-		<label class="control-label" for="">#i18n{form.createEntry.labelType} : ${entry.entryType.title}</label>
+		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory}</label>
 			<div class="controls">
-				<label  for="mandatory">#i18n{form.createEntry.labelMandatory} <input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} /></label>		
-				<span class="help-text">#i18n{form.createEntry.labelMandatoryCommentForEntryTypeSession}</span>
+				<input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />		
+				<span class="help-block">#i18n{form.createEntry.labelMandatoryCommentForEntryTypeSession}</span>
 			</div>
 		</div>
 		<div class="control-group">
 		<label class="control-label" for="value">#i18n{form.createEntry.labelAttributeName} * : </label>
 			<div class="controls">
 				<input type="text" name="value" id="value" class="input-large" maxlength="255" value ="" />
-				<span class="help-text">#i18n{form.createEntry.labelAttributeNameComment}</span>
+				<span class="help-block">#i18n{form.createEntry.labelAttributeNameComment}</span>
 			</div>
 		</div>
 		<div class="form-actions">

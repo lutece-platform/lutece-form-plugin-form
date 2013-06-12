@@ -1,32 +1,34 @@
 <#include "/admin/plugins/form/commons.html" />
 <div class="row-fluid">
-<div class="span12">
-	<fieldset>
-	<legend>#i18n{form.createEntry.titleComment} : '${entry.form.title}'</legend>
+	<div class="span12">
 		<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
-		<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
-		<#if entry.fieldDepend?exists>
-			<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
-		</#if>
-		<div class="control-group">
-		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} * : </label>
-			<textarea name="comment" id="comment" rows="5" class="span4" class="richtext"></textarea>
-		</div>
-		<div class="control-group">
-		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-				<div class="controls">
-				<input type="text" name="css_class" value="" maxlength="255"class="input-large"/>
-				#i18n{form.createEntry.labelCSSClassComment}
-			</div>
-		</div>
-		<div class="form-actions">
-			<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.buttonSave}</button>
-			<a class="btn btn-small" type="button" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${entry.form.idForm}&plugin_name=form" >
-				<i class="icon-remove-circle"></i>&nbsp;#i18n{form.createEntry.buttonCancel}
-			</a>
-		</div>
+			<fieldset>
+				<legend>#i18n{form.createEntry.titleComment} : '${entry.form.title}'</legend>
+				<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
+				<#if entry.fieldDepend?exists>
+					<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
+				</#if>
+				<div class="control-group">
+					<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} * : </label>
+					<div class="controls">
+						<textarea name="comment" id="comment" rows="5" class="span4" class="richtext"></textarea>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+					<div class="controls">
+						<input type="text" name="css_class" value="" maxlength="255"class="input-large"/>
+						<span class="help-block">#i18n{form.createEntry.labelCSSClassComment}</span>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.buttonSave}</button>
+					<a class="btn btn-small" type="button" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${entry.form.idForm}&plugin_name=form" >
+						<i class="icon-remove-circle"></i>&nbsp;#i18n{form.createEntry.buttonCancel}
+					</a>
+				</div>
+			</fieldset>
 		</form>
-	</fieldset>
 	</div>
 </div>
 <#include "/admin/util/editor/editor.html" />
