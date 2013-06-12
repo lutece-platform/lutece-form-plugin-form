@@ -1,33 +1,33 @@
 <div class="row-fluid">
-    <div class="span12">
-        <fieldset>
-            <legend> #i18n{form.createCategory.title}</legend>
-            <form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoCreateCategory.jsp" >
-                <div class="control-group">
-                    <label class="control-label" for="title" >#i18n{form.createCategory.labelTitle} : * </label>
-                    <div class="controls">
-                        <input type="text" size="20" id="title" name="title" maxlength="50"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="color" >#i18n{form.createCategory.labelColor} : * </label>
-                    <div class="controls">
-                        <input type="text" class="span2" id="color" name="color" maxlength="7"/>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>#i18n{form.createCategory.buttonSave}</button>
-                    <button class="btn btn-primary btn-small" onclick="javascript:history.back();return false;" ><i class="icon-remove-circle icon-white"></i>#i18n{form.createCategory.buttonCancel}</button>
-                </div>
-        </fieldset>
-        </form>
-    </div>
+	<div class="span12">
+		<form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoCreateCategory.jsp" >
+			<fieldset>
+				<legend> #i18n{form.createCategory.title}</legend>
+				<div class="control-group">
+					<label class="control-label" for="title" >#i18n{form.createCategory.labelTitle} : * </label>
+					<div class="controls">
+						<input type="text" size="20" id="title" name="title" maxlength="50"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="color" >#i18n{form.createCategory.labelColor} : * </label>
+					<div class="controls">
+						<input type="text" class="span2" id="color" name="color" maxlength="7"/>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>#i18n{form.createCategory.buttonSave}</button>
+					<button class="btn btn-primary btn-small" onclick="javascript:history.back();return false;" ><i class="icon-remove-circle icon-white"></i>#i18n{form.createCategory.buttonCancel}</button>
+				</div>
+		</fieldset>
+		</form>
+	</div>
 </div>
 <script type="javascript" src="js/bootstrap-colorpicker.js" ></script>
 <script>
 $(function(){
 $('#color').colorpicker({
-    format: 'hex'
-    });
+	format: 'hex'
+	});
 });
 </script>

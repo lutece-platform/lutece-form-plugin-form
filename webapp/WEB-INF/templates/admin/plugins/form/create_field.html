@@ -16,20 +16,16 @@
 		</div>
 	</div>
     <div class="control-group">
-		<label class="control-label" for="">&nbsp;</label>
+		<label class="control-label" for="">#i18n{form.createField.labelDefaultValue} :</label>
     	<div class="controls">
-			<label class="checkbox"  for="defaultValue">#i18n{form.createField.labelDefaultValue}
-				<input name="defaultValue" value="1" type="checkbox" >
-			</label>
+			<input name="defaultValue" value="1" type="checkbox" >
 		</div>
 	</div>
   	<#if option_no_display_title>
 	<div class="control-group">
-	<label class="control-label" for="">&nbsp;</label>
+		<label class="control-label" for="">#i18n{form.createField.labelNoDisplayTitle} :</label>
 		<div class="controls">
-			<label for="no_display_title">#i18n{form.createField.labelNoDisplayTitle}
-				<input name="no_display_title" value="1" type="checkbox"  <#if field.noDisplayTitle>checked="checked"</#if>>
-			</label>
+			<input name="no_display_title" value="1" type="checkbox"  <#if field.noDisplayTitle>checked="checked"</#if>>
 		</div>
 	</div>
   	</#if>

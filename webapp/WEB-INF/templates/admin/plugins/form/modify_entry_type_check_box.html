@@ -9,12 +9,12 @@
 			<input type="text" name="title" id="title" class="input-xlarge" value="${entry.title}"  maxlength="255" />
 			<span class="help-block">#i18n{form.createEntry.labelTitleComment}</span>
 			<label for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
-			<textarea  name="help_message" id="help_message" rows="2" class="span4">${entry.helpMessage}</textarea>
+			<textarea  name="help_message" id="help_message" rows="2" class="input-xlarge">${entry.helpMessage}</textarea>
 			<span class="help-block">#i18n{form.createEntry.labelHelpMessageComment}</span>
 			<label for="comment"> #i18n{form.createEntry.labelComment} : </label>
-			<textarea  name="comment" class="span4" rows="2">${entry.comment}</textarea>
+			<textarea  name="comment" class="input-xlarge" rows="2">${entry.comment}</textarea>
 		 	<label for="width">#i18n{form.createEntry.labelPresentation} : </label>
-			<select  id="field_in_line" name="field_in_line">
+			<select  id="field_in_line" name="field_in_line" class="input-xlarge">
 				<option value=1 <#if entry.fieldInLine >selected="selected" </#if> >#i18n{form.createEntry.selectPresentationInLine}</option>
 				<option value=0 <#if !entry.fieldInLine >selected="selected" </#if>>#i18n{form.createEntry.selectPresentationNotInLine}</option>
 			</select>
@@ -22,7 +22,7 @@
 			<label for="mandatory">#i18n{form.createEntry.labelMandatory} : 
 			<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked"</#if> /></label>
 			<label for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-			<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" />
+			<input type="text" name="css_class" value="${entry.CSSClass!}" class="input-xlarge" maxlength="255" />
 			<span class="help-block">#i18n{form.createEntry.labelCSSClassComment}</span>
 			<div class="form-actions">
 				<button class="btn btn-primary btn-small" name="save" type="submit" >

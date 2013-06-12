@@ -1,49 +1,39 @@
 <div class="row-fluid">
- <legend>#i18n{form.modifyField.title} : '${field.parentEntry.title}'</legend>
- <form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyField.jsp#list" method="post" name="" id=""  >
-	<fieldset>
-  <input name="id_field" value="${field.idField}" type="hidden" />
-   
-    	<div class="control-group">
-		<label class="control-label" for="title">#i18n{form.createField.labelTitle} * : </label>
-    	<div class="controls">
-	<input type="text" name="title" id="title" size="80" value="${field.title}"  maxlength="255" />
-		</div>
-	</div>
-    
-    
-    	<div class="control-group">
-		<label class="control-label" for="value">#i18n{form.createField.labelValue} * : </label>
-    	<div class="controls">
-	<input type="text" name="value" id="value" size="80" value="${field.value}"/>
-		</div>
-	</div>
-    
-  	
-    	<div class="control-group">
-		<label class="control-label" for="default_value">#i18n{form.createField.labelDefaultValue}</label>
-    	<#if field.defaultValue>
-    		<div class="controls">
-	<input name="default_value" value="1" type="checkbox"  checked="checked">
-		</div>
-	</div>
-  		<#else>
-  			<div class="controls">
-	<input name="default_value" value="1" type="checkbox">
-		</div>
-	</div>
-  		</#if>
-  			
-  	
-  	 
-  		<button class="btn btn-primary btn-small" type="submit" >#i18n{form.createForm.buttonSave}</button>
-	
-  		<button class="btn btn-primary btn-small" type="submit" >#i18n{form.createForm.buttonCancel}</button>
-	
-   
-  </fieldset>
-</form>
- </div>
+	<form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyField.jsp#list" method="post" name="" id=""  >
+		<fieldset>
+			<legend>#i18n{form.modifyField.title} : '${field.parentEntry.title}'</legend>
+ 			<input name="id_field" value="${field.idField}" type="hidden" />
+    		<div class="control-group">
+				<label class="control-label" for="title">#i18n{form.createField.labelTitle} * : </label>
+		    	<div class="controls">
+					<input type="text" name="title" id="title" size="80" value="${field.title}"  maxlength="255" />
+				</div>
+			</div>
+	    	<div class="control-group">
+				<label class="control-label" for="value">#i18n{form.createField.labelValue} * : </label>
+	    		<div class="controls">
+					<input type="text" name="value" id="value" size="80" value="${field.value}"/>
+				</div>
+			</div>
+	    	<div class="control-group">
+				<label class="control-label" for="default_value">#i18n{form.createField.labelDefaultValue}</label>
+		    	<#if field.defaultValue>
+		    		<div class="controls">
+						<input name="default_value" value="1" type="checkbox"  checked="checked">
+					</div>
+		  		<#else>
+		  			<div class="controls">
+						<input name="default_value" value="1" type="checkbox">
+					</div>
+		  		</#if>
+			</div>
+			<div class="form-actions">
+	  			<button class="btn btn-primary btn-small" type="submit" >#i18n{form.createForm.buttonSave}</button>
+	  			<button class="btn btn-primary btn-small" type="submit" >#i18n{form.createForm.buttonCancel}</button>
+	  		</div>
+		</fieldset>
+	</form>
+</div>
 
 
  
