@@ -150,6 +150,8 @@ public abstract class ModifyFormJspBean extends FormJspBean
     private static final String EMPTY_STRING = "";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String MYLUTECE_PLUGIN = "mylutece";
+    private static final String CONSTANT_DOUBLE_QUOTE = "\"";
+    private static final String CONSTANT_TWO_SIMPLE_QUOTES = "''";
 
     protected int _nItemsPerPageEntry;
     private String _strCurrentPageIndexEntry;
@@ -893,6 +895,10 @@ public abstract class ModifyFormJspBean extends FormJspBean
         if ( ( strTitle == null ) || strTitle.trim( ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_TITLE;
+        }
+        if ( StringUtils.contains( strTitle, CONSTANT_DOUBLE_QUOTE ) )
+        {
+            strTitle = StringUtils.replace( strTitle, CONSTANT_DOUBLE_QUOTE, CONSTANT_TWO_SIMPLE_QUOTES );
         }
 
         else if ( ( strDescription == null ) || strDescription.trim( ).equals( EMPTY_STRING ) )
