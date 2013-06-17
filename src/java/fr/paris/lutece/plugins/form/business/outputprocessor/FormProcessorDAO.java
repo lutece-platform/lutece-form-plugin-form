@@ -54,9 +54,10 @@ public class FormProcessorDAO implements IFormProcessorDAO
         "VALUES(?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_form_processor WHERE id_form =? AND key_processor=? ";
 
-    /* (non-Javadoc)
-         * @see fr.paris.lutece.plugins.form.business.outputprocessor.IFormProcessorDAO#selectByIdForm(int, fr.paris.lutece.portal.service.plugin.Plugin)
-         */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<FormProcessor> selectByIdForm( int nIdForm, Plugin plugin )
     {
         List<FormProcessor> listFormProcessor = new ArrayList<FormProcessor>(  );
@@ -79,9 +80,10 @@ public class FormProcessorDAO implements IFormProcessorDAO
         return listFormProcessor;
     }
 
-    /* (non-Javadoc)
-         * @see fr.paris.lutece.plugins.form.business.outputprocessor.IFormProcessorDAO#selectAll(fr.paris.lutece.portal.service.plugin.Plugin)
-         */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<FormProcessor> selectAll( Plugin plugin )
     {
         List<FormProcessor> listFormProcessor = new ArrayList<FormProcessor>(  );
@@ -104,9 +106,10 @@ public class FormProcessorDAO implements IFormProcessorDAO
         return listFormProcessor;
     }
 
-    /* (non-Javadoc)
-         * @see fr.paris.lutece.plugins.form.business.outputprocessor.IFormProcessorDAO#insert(fr.paris.lutece.plugins.form.business.outputprocessor.FormProcessor, fr.paris.lutece.portal.service.plugin.Plugin)
-         */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void insert( FormProcessor formProcessor, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -118,9 +121,10 @@ public class FormProcessorDAO implements IFormProcessorDAO
         daoUtil.free(  );
     }
 
-    /* (non-Javadoc)
-         * @see fr.paris.lutece.plugins.form.business.outputprocessor.IFormProcessorDAO#delete(fr.paris.lutece.plugins.form.business.outputprocessor.FormProcessor, fr.paris.lutece.portal.service.plugin.Plugin)
-         */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void delete( FormProcessor formProcessor, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );

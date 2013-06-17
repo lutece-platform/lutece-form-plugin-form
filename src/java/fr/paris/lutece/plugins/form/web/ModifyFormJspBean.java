@@ -1214,8 +1214,8 @@ public abstract class ModifyFormJspBean extends FormJspBean
     /**
      * Populate map with ( idParent : List<Orders> ) except for entry with
      * parent
-     * @param listEntry
-     * @param mapIdParentOrdersChildren
+     * @param listEntry The list of entries
+     * @param mapIdParentOrdersChildren The map to add items in
      */
     private void populateEntryMap( List<IEntry> listEntry, Map<String, List<Integer>> mapIdParentOrdersChildren )
     {
@@ -1242,6 +1242,11 @@ public abstract class ModifyFormJspBean extends FormJspBean
         }
     }
 
+    /**
+     * Get a reference list with categories
+     * @param plugin The plugin
+     * @return A reference list containing categories
+     */
     private ReferenceList getCategoriesReferenceList( Plugin plugin )
     {
         List<Category> listCategoriesView = CategoryHome.getList( plugin );

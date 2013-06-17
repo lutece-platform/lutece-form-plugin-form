@@ -1339,11 +1339,6 @@ public class FormEntryJspBean extends ModifyFormJspBean
     {
         int nPosition;
 
-        if ( ( entryGroup.getChildren( ) != null ) && ( !entryGroup.getChildren( ).isEmpty( ) ) )
-        {
-            nPosition = entryGroup.getPosition( ) + entryGroup.getChildren( ).size( ) + 1;
-        }
-
         if ( entryToMove.getPosition( ) < entryGroup.getPosition( ) )
         {
             nPosition = entryGroup.getPosition( );
@@ -1381,7 +1376,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
     public String updateEntryOrder( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
-        List<IEntry> listEntryFirstLevel = new ArrayList<IEntry>( );
+        List<IEntry> listEntryFirstLevel;
         EntryFilter filter;
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         int nIdForm = -1;

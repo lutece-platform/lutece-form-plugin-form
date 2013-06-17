@@ -77,6 +77,10 @@ import org.apache.commons.lang.StringUtils;
  */
 public class FormAsynchronousUploadHandler implements IAsynchronousUploadHandler
 {
+    /** <sessionId,<fieldName,fileItems>> */
+    /** contains uploaded file items */
+    public static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>( );
+
     public static final String UPLOAD_SUBMIT_PREFIX = "_form_upload_submit_form_";
     public static final String UPLOAD_DELETE_PREFIX = "_form_upload_delete_form_";
     public static final String UPLOAD_CHECKBOX_PREFIX = "_form_upload_checkbox_form_";
@@ -88,10 +92,6 @@ public class FormAsynchronousUploadHandler implements IAsynchronousUploadHandler
 
     // PROPERTIES
     private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_SESSION_LOST = "form.message.error.uploading_file.session_lost";
-
-    /** contains uploaded file items */
-    /** <sessionId,<fieldName,fileItems>> */
-    public static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>(  );
 
     /**
      * Get the handler
@@ -324,32 +324,35 @@ public class FormAsynchronousUploadHandler implements IAsynchronousUploadHandler
         // Check if this file has not already been uploaded
         List<FileItem> uploadedFiles = getFileItems( strIdEntry, session.getId(  ) );
 
-        if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty(  ) )
+        if ( uploadedFiles != null )
         {
-            Iterator<FileItem> iterUploadedFiles = uploadedFiles.iterator(  );
-            boolean bNew = true;
-
-            while ( bNew && iterUploadedFiles.hasNext(  ) )
+            if ( !uploadedFiles.isEmpty( ) )
             {
-                FileItem uploadedFile = iterUploadedFiles.next(  );
-                String strUploadedFileName = UploadUtil.cleanFileName( FileUploadService.getFileNameOnly( uploadedFile ) );
-                // If we find a file with the same name and the same
-                // length, we consider that the current file has
-                // already been uploaded
-                bNew = !( strUploadedFileName.equals( strFileName ) &&
-                    ( uploadedFile.getSize(  ) == fileItem.getSize(  ) ) );
-            }
+                Iterator<FileItem> iterUploadedFiles = uploadedFiles.iterator( );
+                boolean bNew = true;
 
-            if ( !bNew )
-            {
+                while ( bNew && iterUploadedFiles.hasNext( ) )
+                {
+                    FileItem uploadedFile = iterUploadedFiles.next( );
+                    String strUploadedFileName = UploadUtil.cleanFileName( FileUploadService
+                            .getFileNameOnly( uploadedFile ) );
+                    // If we find a file with the same name and the same
+                    // length, we consider that the current file has
+                    // already been uploaded
+                    bNew = !( strUploadedFileName.equals( strFileName ) && ( uploadedFile.getSize( ) == fileItem
+                            .getSize( ) ) );
+                }
+
+                //            if ( !bNew )
+                //            {
                 // Delete the temporary file
                 // file.delete(  );
 
                 // TODO : Raise an error
+                //            }
             }
+            uploadedFiles.add( fileItem );
         }
-
-        uploadedFiles.add( fileItem );
     }
 
     /**

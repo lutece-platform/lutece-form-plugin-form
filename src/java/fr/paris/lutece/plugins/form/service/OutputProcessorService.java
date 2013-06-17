@@ -53,12 +53,12 @@ public class OutputProcessorService
 {
     private static final String BEAN_MAP_OUTPUT_PROCESSOR = "form.outputProcessorSet";
     private static OutputProcessorService _singleton;
-    private IOutputProcessorSet _OutputProcessorSet;
+    private IOutputProcessorSet _outputProcessorSet;
 
     /** Creates a new instance of DirectorySearchService */
     private OutputProcessorService( )
     {
-        _OutputProcessorSet = SpringContextService.getBean( BEAN_MAP_OUTPUT_PROCESSOR );
+        _outputProcessorSet = SpringContextService.getBean( BEAN_MAP_OUTPUT_PROCESSOR );
     }
 
     /**
@@ -81,7 +81,7 @@ public class OutputProcessorService
      */
     public Collection<IOutputProcessor> getAllProcessors( )
     {
-        return _OutputProcessorSet.getAllOutputProcessor( );
+        return _outputProcessorSet.getAllOutputProcessor( );
     }
 
     /**
@@ -99,7 +99,7 @@ public class OutputProcessorService
 
         for ( FormProcessor formProcessor : listFormProcessor )
         {
-            outputProcessor = _OutputProcessorSet.getOutputProcessor( formProcessor.getKeyProcessor( ) );
+            outputProcessor = _outputProcessorSet.getOutputProcessor( formProcessor.getKeyProcessor( ) );
 
             if ( outputProcessor != null )
             {
@@ -182,6 +182,6 @@ public class OutputProcessorService
      */
     public IOutputProcessor getProcessorByKey( String strKey )
     {
-        return _OutputProcessorSet.getOutputProcessor( strKey );
+        return _outputProcessorSet.getOutputProcessor( strKey );
     }
 }

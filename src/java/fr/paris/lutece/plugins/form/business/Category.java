@@ -92,7 +92,7 @@ public class Category implements RBACResource
      */
     public boolean equals( Object obj )
     {
-        if ( ( (Category) obj ).getIdCategory(  ) == _nIdCategory )
+        if ( obj != null && ( (Category) obj ).getIdCategory( ) == _nIdCategory )
         {
             return true;
         }

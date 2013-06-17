@@ -63,7 +63,7 @@ public final class FormDraftBackupService
      * Sets the {@link DraftBackupService}
      * @param draftBackupService the backup service
      */
-    public synchronized static void setDraftBackupService( DraftBackupService draftBackupService )
+    public static synchronized void setDraftBackupService( DraftBackupService draftBackupService )
     {
         _draftBackupService = draftBackupService;
         AppLogService.debug( "Using " + draftBackupService.getClass(  ) + " as draftBackupService" );
