@@ -1,8 +1,8 @@
 <#macro getTextAreaContent responseContent has_error entry field>
 	<#if has_error>
-		<textarea name="form${entry.idEntry}" id="form${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="alert alert-error">${responseContent}</textarea>
+		<textarea name="form${entry.idEntry}" id="form${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="alert alert-error<#if entry.useRichText> richtext</#if>">${responseContent}</textarea>
 	<#else>
-		<textarea name="form${entry.idEntry}" id="form${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="${entry.CSSClass!}" >${responseContent}</textarea>
+		<textarea name="form${entry.idEntry}" id="form${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="${entry.CSSClass!}<#if entry.useRichText> richtext</#if>" >${responseContent}</textarea>
 	</#if>
 </#macro>
 
@@ -43,4 +43,9 @@
 	</#if>
 	</div>
 </div>
+
+<#if entry.useRichText>
+	<#include "/util/editor/editor.html" />
+	<@initEditor />
+</#if>
 		

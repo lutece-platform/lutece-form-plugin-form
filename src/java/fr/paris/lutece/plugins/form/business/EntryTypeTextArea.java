@@ -33,12 +33,11 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.util.string.StringUtil;
-
-import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,24 +45,29 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
- *
+ * 
  * class EntryTypeTextArea
- *
+ * 
  */
 public class EntryTypeTextArea extends Entry
 {
+    private static final String PARAMETER_USE_RICH_TEXT = "useRichText";
+
     private final String _template_create = "admin/plugins/form/create_entry_type_text_area.html";
     private final String _template_modify = "admin/plugins/form/modify_entry_type_text_area.html";
     private final String _template_html_code = "admin/plugins/form/html_code_entry_type_text_area.html";
 
+
     /**
-     * Get the HtmlCode  of   the entry
-     * @return the HtmlCode  of   the entry
-     *
+     * Get the HtmlCode of the entry
+     * @return the HtmlCode of the entry
+     * 
      * */
-    public String getHtmlCode(  )
+    public String getHtmlCode( )
     {
         return _template_html_code;
     }
@@ -72,13 +76,14 @@ public class EntryTypeTextArea extends Entry
      * Get the request data
      * @param request HttpRequest
      * @param locale the locale
-     * @return null if all data requiered are in the request else the url of jsp error
+     * @return null if all data requiered are in the request else the url of jsp
+     *         error
      */
     public String getRequestData( HttpServletRequest request, Locale locale )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter(
+                PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
@@ -86,6 +91,7 @@ public class EntryTypeTextArea extends Entry
         String strHeight = request.getParameter( PARAMETER_HEIGHT );
         String strMaxSizeEnter = request.getParameter( PARAMETER_MAX_SIZE_ENTER );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
+        String strUseRichText = request.getParameter( PARAMETER_USE_RICH_TEXT );
 
         int nWidth = -1;
         int nHeight = -1;
@@ -112,7 +118,7 @@ public class EntryTypeTextArea extends Entry
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+                    AdminMessage.TYPE_STOP );
         }
 
         try
@@ -150,26 +156,27 @@ public class EntryTypeTextArea extends Entry
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+                    AdminMessage.TYPE_STOP );
         }
 
         this.setTitle( strTitle );
         this.setHelpMessage( strHelpMessage );
         this.setComment( strComment );
         this.setCSSClass( strCSSClass );
+        this.setUseRichText( Boolean.parseBoolean( strUseRichText ) );
 
-        if ( this.getFields(  ) == null )
+        if ( this.getFields( ) == null )
         {
-            ArrayList<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
+            ArrayList<Field> listFields = new ArrayList<Field>( );
+            Field field = new Field( );
             listFields.add( field );
             this.setFields( listFields );
         }
 
-        this.getFields(  ).get( 0 ).setValue( strValue );
-        this.getFields(  ).get( 0 ).setWidth( nWidth );
-        this.getFields(  ).get( 0 ).setHeight( nHeight );
-        this.getFields(  ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
+        this.getFields( ).get( 0 ).setValue( strValue );
+        this.getFields( ).get( 0 ).setWidth( nWidth );
+        this.getFields( ).get( 0 ).setHeight( nHeight );
+        this.getFields( ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
 
         if ( strMandatory != null )
         {
@@ -187,41 +194,59 @@ public class EntryTypeTextArea extends Entry
      * Get template create url of the entry
      * @return template create url of the entry
      */
-    public String getTemplateCreate(  )
+    public String getTemplateCreate( )
     {
         return _template_create;
     }
 
     /**
-     * Get the template modify url  of the entry
-     * @return template modify url  of the entry
+     * Get the template modify url of the entry
+     * @return template modify url of the entry
      */
-    public String getTemplateModify(  )
+    public String getTemplateModify( )
     {
         return _template_modify;
     }
 
     /**
-     * save in the list of response the response associate to the entry in the form submit
+     * save in the list of response the response associate to the entry in the
+     * form submit
      * @param request HttpRequest
-     * @param listResponse the list of response associate to the entry in the form submit
+     * @param listResponse the list of response associate to the entry in the
+     *            form submit
      * @param locale the locale
      * @return a Form error object if there is an error in the response
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( PREFIX_FORM + this.getIdEntry(  ) );
-        Response response = new Response(  );
+        String strValueEntry = request.getParameter( PREFIX_FORM + this.getIdEntry( ) );
+        Response response = new Response( );
         response.setEntry( this );
 
         if ( strValueEntry != null )
         {
-            int nMaxSize = getFields(  ).get( 0 ).getMaxSizeEnter(  );
-            response.setResponseValue( strValueEntry );
+            int nMaxSize = getFields( ).get( 0 ).getMaxSizeEnter( );
 
-            if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
+            if ( this.getUseRichText( ) )
             {
-                response.setToStringValueResponse( getResponseValueForRecap( request, response, locale ) );
+                response.setResponseValue( EditorBbcodeService.getInstance( ).parse( strValueEntry ) );
+            }
+            else
+            {
+                response.setResponseValue( strValueEntry );
+            }
+
+            if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
+            {
+                // if we use a rich text, we set the toStringValueResponse to the BBCode string
+                if ( this.getUseRichText( ) )
+                {
+                    response.setToStringValueResponse( strValueEntry );
+                }
+                else
+                {
+                    response.setToStringValueResponse( getResponseValueForRecap( request, response, locale ) );
+                }
             }
             else
             {
@@ -233,60 +258,97 @@ public class EntryTypeTextArea extends Entry
             // Checks if the entry value contains XSS characters
             if ( StringUtil.containsXssCharacters( strValueEntry ) )
             {
-                FormError formError = new FormError(  );
+                FormError formError = new FormError( );
                 formError.setMandatoryError( false );
-                formError.setTitleQuestion( this.getTitle(  ) );
-                formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale(  ) ) );
+                formError.setTitleQuestion( this.getTitle( ) );
+                formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale( ) ) );
                 formError.setUrl( this );
-
+                if ( this.getUseRichText( ) )
+                {
+                    response.setToStringValueResponse( strValueEntry );
+                    response.setResponseValue( strValueEntry );
+                }
                 return formError;
             }
 
             // check max size for the field. 0 means no limit
-            if ( ( nMaxSize != -1 ) && ( strValueEntry.length(  ) > nMaxSize ) )
+            if ( ( nMaxSize != -1 ) && ( strValueEntry.length( ) > nMaxSize ) )
             {
-                FormError formError = new FormError(  );
+                FormError formError = new FormError( );
                 formError.setMandatoryError( false );
-                formError.setTitleQuestion( this.getTitle(  ) );
+                formError.setTitleQuestion( this.getTitle( ) );
 
                 Object[] messageArgs = new Object[] { nMaxSize, };
                 formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MAXLENGTH, messageArgs,
-                        request.getLocale(  ) ) );
+                        request.getLocale( ) ) );
                 formError.setUrl( this );
-
+                if ( this.getUseRichText( ) )
+                {
+                    response.setToStringValueResponse( strValueEntry );
+                    response.setResponseValue( strValueEntry );
+                }
                 return formError;
             }
 
-            if ( this.isMandatory(  ) && StringUtils.isBlank( strValueEntry ) )
+            if ( this.isMandatory( ) && StringUtils.isBlank( strValueEntry ) )
             {
+                if ( this.getUseRichText( ) )
+                {
+                    response.setToStringValueResponse( strValueEntry );
+                    response.setResponseValue( strValueEntry );
+                }
                 return new MandatoryFormError( this, locale );
             }
+
         }
 
         return null;
     }
 
     /**
-     * Get the response value  associate to the entry  to export in the file export
+     * Get the response value associate to the entry to export in the file
+     * export
      * @param response the response associate to the entry
      * @param locale the locale
      * @param request the request
-     * @return  the response value  associate to the entry  to export in the file export
+     * @return the response value associate to the entry to export in the file
+     *         export
      */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
-     * Get the response value  associate to the entry  to write in the recap
+     * Get the response value associate to the entry to write in the recap
      * @param response the response associate to the entry
      * @param locale the locale
      * @param request the request
-     * @return the response value  associate to the entry  to write in the recap
+     * @return the response value associate to the entry to write in the recap
      */
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
+    }
+
+    /**
+     * Check if the text area should be a rich text
+     * @return True if the text area should be a rich text, false otherwise
+     */
+    public boolean getUseRichText( )
+    {
+        // We use the fieldInLine attribute to avoid creating a specific attribute for entries of type text area
+        return this.isFieldInLine( );
+    }
+
+    /**
+     * Set if the text area should be a rich text
+     * @param bUseRichText True if the text area should be a rich text, false
+     *            otherwise
+     */
+    public void setUseRichText( boolean bUseRichText )
+    {
+        // We use the fieldInLine attribute to avoid creating a specific attribute for entries of type text area
+        this.setFieldInLine( bUseRichText );
     }
 }
