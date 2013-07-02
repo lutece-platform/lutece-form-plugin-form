@@ -263,11 +263,6 @@ public class EntryTypeTextArea extends Entry
                 formError.setTitleQuestion( this.getTitle( ) );
                 formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale( ) ) );
                 formError.setUrl( this );
-                if ( this.getUseRichText( ) )
-                {
-                    response.setToStringValueResponse( strValueEntry );
-                    response.setResponseValue( strValueEntry );
-                }
                 return formError;
             }
 
@@ -282,21 +277,11 @@ public class EntryTypeTextArea extends Entry
                 formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MAXLENGTH, messageArgs,
                         request.getLocale( ) ) );
                 formError.setUrl( this );
-                if ( this.getUseRichText( ) )
-                {
-                    response.setToStringValueResponse( strValueEntry );
-                    response.setResponseValue( strValueEntry );
-                }
                 return formError;
             }
 
             if ( this.isMandatory( ) && StringUtils.isBlank( strValueEntry ) )
             {
-                if ( this.getUseRichText( ) )
-                {
-                    response.setToStringValueResponse( strValueEntry );
-                    response.setResponseValue( strValueEntry );
-                }
                 return new MandatoryFormError( this, locale );
             }
 
