@@ -569,7 +569,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
                 return getJspModifyFormAdvancedParameters( request, nIdForm );
             }
         }
-        return getManageForm( request );
+        return getJspManageForm( request );
     }
 
     /**
