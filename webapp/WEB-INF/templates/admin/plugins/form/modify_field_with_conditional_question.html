@@ -67,7 +67,7 @@
 			<#list entry_list as entry>
 		        <#assign cpt=cpt+1>
 		        <tr>
-			        <td>${entry.title}</td>
+			        <td>${entry.title!}</td>
 			        <td>${entry.entryType.title}</td>
 					<td><#if entry.numberConditionalQuestion!=0>${entry.numberConditionalQuestion}</#if></td>
 			        <td>
