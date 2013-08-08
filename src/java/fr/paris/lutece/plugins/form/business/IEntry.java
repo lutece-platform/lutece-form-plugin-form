@@ -425,4 +425,20 @@ public interface IEntry
      * @return the _strCSSClass
      */
     String getCSSClass( );
+
+    /**
+     * Get the error message associated with this entry. This error message
+     * should be used by the right entry type. For example, EntryTypeCheckBox
+     * use it as a message to indicates that this field is mandatory.
+     * @return The error message of this entry
+     */
+    String getErrorMessage( );
+
+    /**
+     * Set the error message associated with this entry. This error message
+     * should be used by the right entry type. For example, EntryTypeCheckBox
+     * use it as a message to indicates that this field is mandatory.
+     * @param srErrorMessage The error message of this entry
+     */
+    void setErrorMessage( String srErrorMessage );
 }

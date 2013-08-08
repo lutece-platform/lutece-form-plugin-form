@@ -70,6 +70,7 @@ public class Entry implements IEntry
     protected static final String PREFIX_FORM = "form";
     protected static final String PARAMETER_UNIQUE = "unique_field";
     protected static final String PARAMETER_CSS_CLASS = "css_class";
+    protected static final String PARAMETER_ERROR_MESSAGE = "errorMessage";
 
     //	message
     protected static final String MESSAGE_MANDATORY_FIELD = "form.message.mandatory.field";
@@ -121,6 +122,7 @@ public class Entry implements IEntry
     private boolean _bUnique;
     private FormError _formError;
     private String _strCSSClass;
+    private String _strErrorMessage;
 
     /**
      * {@inheritDoc}
@@ -636,5 +638,23 @@ public class Entry implements IEntry
     public String getCSSClass( )
     {
         return _strCSSClass;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getErrorMessage( )
+    {
+        return _strErrorMessage;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setErrorMessage( String strErrorMessage )
+    {
+        this._strErrorMessage = strErrorMessage;
     }
 }

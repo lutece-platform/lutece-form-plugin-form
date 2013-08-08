@@ -6,13 +6,19 @@
     		<div class="control-group">
 				<label class="control-label" for="title">#i18n{form.createField.labelTitle} * : </label>
 		    	<div class="controls">
-					<input type="text" name="title" id="title" size="80" value="${field.title}"  maxlength="255" />
+					<input type="text" name="title" id="title" size="80" value="${field.title}" class="input-xlarge" maxlength="255" />
 				</div>
 			</div>
 	    	<div class="control-group">
 				<label class="control-label" for="value">#i18n{form.createField.labelValue} * : </label>
 	    		<div class="controls">
-					<input type="text" name="value" id="value" size="80" value="${field.value}"/>
+					<input type="text" name="value" id="value" size="80" class="input-xlarge" value="${field.value}"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="value">#i18n{form.createField.labelComment} : </label>
+		    	<div class="controls">
+					<textarea name="comment" id="comment" >${field.comment!}</textarea>
 				</div>
 			</div>
 	    	<div class="control-group">

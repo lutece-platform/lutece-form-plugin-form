@@ -43,6 +43,13 @@
 					</div>
 				</div>
 				<div class="control-group">
+					<label class="control-label" for="errorMessage"> #i18n{form.createEntry.labelMandatoryErrorMessage} : </label>
+					<div class="controls">
+						<textarea name="errorMessage" class="input-xlarge" rows="2"></textarea>
+						<span class="help-block">#i18n{form.createEntry.labelMandatoryErrorMessageHelp}</span>
+					</div>
+				</div>
+				<div class="control-group">
 					<label class="control-label" for="width">#i18n{form.createEntry.labelWidth} * : </label>
 			   		<div class="controls">
 						<input type="text" name="width" id="width" value="${getName('width_text',list_param_default_values)}" />

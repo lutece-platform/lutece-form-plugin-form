@@ -203,6 +203,7 @@ CREATE TABLE form_entry (
 	map_provider varchar(45) default NULL,
 	css_class varchar(255) default NULL,
 	pos_conditional int default 0,
+	error_message long varchar default NULL,
 	PRIMARY KEY (id_entry)
 );
 
@@ -229,6 +230,7 @@ CREATE TABLE form_field (
 	pos int default NULL,
 	value_type_date date NULL,
 	no_display_title smallint default NULL,
+	comment long varchar default null,
 	PRIMARY KEY (id_field)
 );
 

@@ -117,6 +117,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
     private static final String PARAMETER_VALUE = "value";
     private static final String PARAMETER_DEFAULT_VALUE = "default_value";
     private static final String PARAMETER_NO_DISPLAY_TITLE = "no_display_title";
+    private static final String PARAMETER_COMMENT = "comment";
     private static final String PARAMETER_OPTION_NO_DISPLAY_TITLE = "option_no_display_title";
     private static final String PARAMETER_LIST = "list";
     // other constants
@@ -1440,7 +1441,6 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
     /* -------- Fields management ---------- */
 
-
     /**
      * Gets the field creation page
      * @param request The HTTP request
@@ -1808,7 +1808,6 @@ public class FormEntryJspBean extends ModifyFormJspBean
         return getJspModifyEntry( request, _nIdEntry );
     }
 
-
     /**
      * Get the request data and if there is no error insert the data in the
      * field specified in parameter. return null if there is no error or else
@@ -1823,6 +1822,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strDefaultValue = request.getParameter( PARAMETER_DEFAULT_VALUE );
         String strNoDisplayTitle = request.getParameter( PARAMETER_NO_DISPLAY_TITLE );
+        String strComment = request.getParameter( PARAMETER_COMMENT );
 
         String strFieldError = EMPTY_STRING;
 
@@ -1849,6 +1849,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         field.setTitle( strTitle );
         field.setValue( strValue );
+        field.setComment( strComment );
 
         if ( strDefaultValue == null )
         {

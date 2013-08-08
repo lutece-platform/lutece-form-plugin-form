@@ -40,9 +40,9 @@ import java.util.List;
 
 
 /**
- *
+ * 
  * class Field
- *
+ * 
  */
 public class Field
 {
@@ -50,6 +50,7 @@ public class Field
     private IEntry _parentEntry;
     private String _strTitle;
     private String _strValue;
+    private String _strComment;
     private int _nHeight;
     private int _nWidth;
     private int _nMaxSizeEnter;
@@ -61,10 +62,10 @@ public class Field
     private boolean _bNoDisplayTitle;
 
     /**
-     *
+     * 
      * @return the id of the field
      */
-    public int getIdField(  )
+    public int getIdField( )
     {
         return _nIdField;
     }
@@ -79,10 +80,10 @@ public class Field
     }
 
     /**
-     *
+     * 
      * @return the position of the field in the list of the entry's fields
      */
-    public int getPosition(  )
+    public int getPosition( )
     {
         return _nPosition;
     }
@@ -97,10 +98,10 @@ public class Field
     }
 
     /**
-     *
+     * 
      * @return the entry of the field
      */
-    public IEntry getParentEntry(  )
+    public IEntry getParentEntry( )
     {
         return _parentEntry;
     }
@@ -115,17 +116,18 @@ public class Field
     }
 
     /**
-     *
+     * 
      * @return a list of regular expression which is associate to the field
      */
-    public List<RegularExpression> getRegularExpressionList(  )
+    public List<RegularExpression> getRegularExpressionList( )
     {
         return _listRegularExpressionList;
     }
 
     /**
      * set a list of regular expression which is associate to the field
-     * @param regularExpressionList a list of regular expression which is associate to the field
+     * @param regularExpressionList a list of regular expression which is
+     *            associate to the field
      */
     public void setRegularExpressionList( List<RegularExpression> regularExpressionList )
     {
@@ -133,10 +135,10 @@ public class Field
     }
 
     /**
-     *
+     * 
      * @return the title of the field
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
@@ -151,10 +153,10 @@ public class Field
     }
 
     /**
-     *
+     * 
      * @return the value of the field
      */
-    public String getValue(  )
+    public String getValue( )
     {
         return _strValue;
     }
@@ -169,10 +171,28 @@ public class Field
     }
 
     /**
-     *
+     * Get the comment of the field
+     * @return The comment of the field
+     */
+    public String getComment( )
+    {
+        return _strComment;
+    }
+
+    /**
+     * Set the comment of the field
+     * @param strComment The comment of the field
+     */
+    public void setComment( String strComment )
+    {
+        this._strComment = strComment;
+    }
+
+    /**
+     * 
      * @return the width of the field
      */
-    public int getWidth(  )
+    public int getWidth( )
     {
         return _nWidth;
     }
@@ -187,17 +207,17 @@ public class Field
     }
 
     /**
-     *
-     * @return  the height of the field
+     * 
+     * @return the height of the field
      */
-    public int getHeight(  )
+    public int getHeight( )
     {
         return _nHeight;
     }
 
     /**
      * set the height of the field
-     * @param height  the height of the field
+     * @param height the height of the field
      */
     public void setHeight( int height )
     {
@@ -205,17 +225,18 @@ public class Field
     }
 
     /**
-     *
+     * 
      * @return a list of Entry which is associate to the field
      */
-    public List<IEntry> getConditionalQuestions(  )
+    public List<IEntry> getConditionalQuestions( )
     {
         return _listConditionalQuestions;
     }
 
     /**
      * set a list of Entry which is associate to the field
-     * @param conditionalQuestions a list of Entry which is associate to the field
+     * @param conditionalQuestions a list of Entry which is associate to the
+     *            field
      */
     public void setConditionalQuestions( List<IEntry> conditionalQuestions )
     {
@@ -223,10 +244,10 @@ public class Field
     }
 
     /**
-     *
+     * 
      * @return true if the field is a default field of the entry
      */
-    public boolean isDefaultValue(  )
+    public boolean isDefaultValue( )
     {
         return _bDefaultValue;
     }
@@ -241,10 +262,10 @@ public class Field
     }
 
     /**
-     *
+     * 
      * @return the max size of enter user
      */
-    public int getMaxSizeEnter(  )
+    public int getMaxSizeEnter( )
     {
         return _nMaxSizeEnter;
     }
@@ -259,10 +280,10 @@ public class Field
     }
 
     /**
-     *
+     * 
      * @return the value of type Date
      */
-    public Date getValueTypeDate(  )
+    public Date getValueTypeDate( )
     {
         return _tValueTypeDate;
     }
@@ -277,10 +298,10 @@ public class Field
     }
 
     /**
-    *
-    * @return true if the title of field is not display
-    */
-    public boolean isNoDisplayTitle(  )
+     * 
+     * @return true if the title of field is not display
+     */
+    public boolean isNoDisplayTitle( )
     {
         return _bNoDisplayTitle;
     }

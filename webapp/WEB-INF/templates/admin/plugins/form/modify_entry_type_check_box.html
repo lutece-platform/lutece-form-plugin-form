@@ -21,6 +21,9 @@
 			<label for="">#i18n{form.createEntry.labelType} :  ${entry.entryType.title}</label>
 			<label for="mandatory">#i18n{form.createEntry.labelMandatory} : 
 			<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked"</#if> /></label>
+			<label for="errorMessage"> #i18n{form.createEntry.labelMandatoryErrorMessage} : </label>
+			<textarea name="errorMessage" class="input-xlarge" rows="2">${entry.errorMessage!}</textarea>
+			<span class="help-block">#i18n{form.createEntry.labelMandatoryErrorMessageHelp}</span>
 			<label for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
 			<input type="text" name="css_class" value="${entry.CSSClass!}" class="input-xlarge" maxlength="255" />
 			<span class="help-block">#i18n{form.createEntry.labelCSSClassComment}</span>

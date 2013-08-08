@@ -35,4 +35,5 @@ ALTER TABLE form_form ADD COLUMN nb_days_before_cleaning INT default 0;
 
 ALTER TABLE form_response ADD COLUMN status smallint default 1;
 
-
+ALTER TABLE form_field ADD COLUMN comment long varchar default null;
+ALTER TABLE form_entry ADD COLUMN error_message long varchar default NULL;

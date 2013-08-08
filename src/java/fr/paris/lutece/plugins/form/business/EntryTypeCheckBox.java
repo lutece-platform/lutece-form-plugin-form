@@ -51,9 +51,9 @@ import org.apache.commons.lang.StringUtils;
 
 
 /**
- *
+ * 
  * class EntryTypeCheckBox
- *
+ * 
  */
 public class EntryTypeCheckBox extends Entry
 {
@@ -62,11 +62,11 @@ public class EntryTypeCheckBox extends Entry
     private final String _template_html_code = "admin/plugins/form/html_code_entry_type_check_box.html";
 
     /**
-     * Get the HtmlCode  of   the entry
-     * @return the HtmlCode  of   the entry
-     *
+     * Get the HtmlCode of the entry
+     * @return the HtmlCode of the entry
+     * 
      * */
-    public String getHtmlCode(  )
+    public String getHtmlCode( )
     {
         return _template_html_code;
     }
@@ -75,18 +75,19 @@ public class EntryTypeCheckBox extends Entry
      * Get the request data
      * @param request HttpRequest
      * @param locale the locale
-     * @return null if all data requiered are in the request else the url of jsp error
+     * @return null if all data requiered are in the request else the url of jsp
+     *         error
      */
     public String getRequestData( HttpServletRequest request, Locale locale )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter(
+                PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
+        String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-
         int nFieldInLine = -1;
 
         String strFieldError = StringUtils.EMPTY;
@@ -101,7 +102,7 @@ public class EntryTypeCheckBox extends Entry
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+                    AdminMessage.TYPE_STOP );
         }
 
         // for don't update fields listFields=null
@@ -120,6 +121,7 @@ public class EntryTypeCheckBox extends Entry
         {
             this.setMandatory( false );
         }
+        this.setErrorMessage( strErrorMessage );
 
         try
         {
@@ -146,16 +148,16 @@ public class EntryTypeCheckBox extends Entry
      * Get template create url of the entry
      * @return template create url of the entry
      */
-    public String getTemplateCreate(  )
+    public String getTemplateCreate( )
     {
         return _template_create;
     }
 
     /**
-     * Get the template modify url  of the entry
-     * @return template modify url  of the entry
+     * Get the template modify url of the entry
+     * @return template modify url of the entry
      */
-    public String getTemplateModify(  )
+    public String getTemplateModify( )
     {
         return _template_modify;
     }
@@ -169,23 +171,25 @@ public class EntryTypeCheckBox extends Entry
      * @return the paginator who is use in the template modify of the entry
      */
     public Paginator<Field> getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
-        String strPageIndex )
+            String strPageIndex )
     {
         return new Paginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
                 strPageIndex );
     }
 
     /**
-     * save in the list of response the response associate to the entry in the form submit
+     * save in the list of response the response associate to the entry in the
+     * form submit
      * @param request HttpRequest
-     * @param listResponse the list of response associate to the entry in the form submit
+     * @param listResponse the list of response associate to the entry in the
+     *            form submit
      * @param locale the locale
      * @return a Form error object if there is an error in the response
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String[] strTabIdField = request.getParameterValues( PREFIX_FORM + this.getIdEntry(  ) );
-        List<Field> listFieldInResponse = new ArrayList<Field>(  );
+        String[] strTabIdField = request.getParameterValues( PREFIX_FORM + this.getIdEntry( ) );
+        List<Field> listFieldInResponse = new ArrayList<Field>( );
         int nIdField = -1;
         Field field = null;
         Response response;
@@ -203,7 +207,7 @@ public class EntryTypeCheckBox extends Entry
                     AppLogService.error( ne );
                 }
 
-                field = FormUtils.findFieldByIdInTheList( nIdField, this.getFields(  ) );
+                field = FormUtils.findFieldByIdInTheList( nIdField, this.getFields( ) );
 
                 if ( field != null )
                 {
@@ -212,9 +216,9 @@ public class EntryTypeCheckBox extends Entry
             }
         }
 
-        if ( listFieldInResponse.size(  ) == 0 )
+        if ( listFieldInResponse.size( ) == 0 )
         {
-            response = new Response(  );
+            response = new Response( );
             response.setEntry( this );
             listResponse.add( response );
         }
@@ -222,21 +226,21 @@ public class EntryTypeCheckBox extends Entry
         {
             for ( Field fieldInResponse : listFieldInResponse )
             {
-                response = new Response(  );
+                response = new Response( );
                 response.setEntry( this );
-                response.setResponseValue( fieldInResponse.getValue(  ) );
+                response.setResponseValue( fieldInResponse.getValue( ) );
                 response.setField( fieldInResponse );
                 listResponse.add( response );
             }
         }
 
-        if ( this.isMandatory(  ) )
+        if ( this.isMandatory( ) )
         {
             boolean bAllFieldEmpty = true;
 
             for ( Field fieldInResponse : listFieldInResponse )
             {
-                if ( !fieldInResponse.getValue(  ).equals( FormUtils.EMPTY_STRING ) )
+                if ( !fieldInResponse.getValue( ).equals( FormUtils.EMPTY_STRING ) )
                 {
                     bAllFieldEmpty = false;
                 }
@@ -244,6 +248,13 @@ public class EntryTypeCheckBox extends Entry
 
             if ( bAllFieldEmpty )
             {
+                if ( StringUtils.isNotBlank( getErrorMessage( ) ) )
+                {
+                    FormError formError = new FormError( );
+                    formError.setMandatoryError( true );
+                    formError.setErrorMessage( getErrorMessage( ) );
+                    return formError;
+                }
                 return new MandatoryFormError( this, locale );
             }
         }
@@ -252,27 +263,29 @@ public class EntryTypeCheckBox extends Entry
     }
 
     /**
-     * Get the response value  associate to the entry  to export in the file export
+     * Get the response value associate to the entry to export in the file
+     * export
      * @param response the response associate to the entry
      * @param locale the locale
      * @param request the request
-     * @return  the response value  associate to the entry  to export in the file export
+     * @return the response value associate to the entry to export in the file
+     *         export
      */
     public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
-     * Get the response value  associate to the entry  to write in the recap
+     * Get the response value associate to the entry to write in the recap
      * @param response the response associate to the entry
      * @param locale the locale
      * @param request the request
-     * @return the response value  associate to the entry  to write in the recap
+     * @return the response value associate to the entry to write in the recap
      */
     public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getField(  ).getTitle(  );
+        return response.getField( ).getTitle( );
     }
 
     /**
@@ -283,6 +296,6 @@ public class EntryTypeCheckBox extends Entry
             String strPageIndexParameterName, String strPageIndex, Locale locale )
     {
         return new LocalizedPaginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
-            strPageIndex, locale );
+                strPageIndex, locale );
     }
 }
