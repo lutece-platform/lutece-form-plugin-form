@@ -3,62 +3,56 @@
 	<#if validate_recap?exists>
 		<fieldset> 
 			<legend> #i18n{form.recapFormSubmit.labelLegendRecap} </legend>
+			<form action="${url_action}" method="post" name="" id="" class="form-horizontal" >
+			<input name="validate_recap" value="validate_recap" type="hidden">
 			<#list formSubmit.listResponse as response>
 				<#if response.toStringValueResponse?has_content>
-					<div class="contr">
-						<span class="form-label">
-							<label>
-								<#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>
-									${response.entry.title}:
-									<#assign entrySave=response.entry>
-								</#if>
-								&nbsp;
-							</label>
-						</span>
-						<span class="form-field-column">${response.toStringValueResponse}</span>
+				<div class="control-group">
+					<label class="control-label"><#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>${response.entry.title}<#assign entrySave=response.entry></#if></label>
+					<div class="controls">
+						<input type="text" value="${response.toStringValueResponse}" class="input-xxlarge" disabled>
 					</div>
+				</div>
 				</#if>
 			</#list>
-		</fieldset>
-		<div align="center" class="form-steps">
-			<form action="${url_action}" method="post" name="" id="" class="form-inline" >
-				<input name="validate_recap" value="validate_recap" type="hidden" />
+			<div class="form-actions">
 				<button type="submit"  class="btn btn-primary btn-small"  name="validate_recap" >
-					#i18n{form.recapFormSubmit.buttonValidate}
+					<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.recapFormSubmit.buttonValidate}
 				</button>
-				<button type="button" class="btn btn-primary btn-small" onclick="javascript:history.go(-1)" >
+				<button type="button" class="btn btn-small" onclick="javascript:history.go(-1)" >
 					<i class="icon-remove-circle"></i>&nbsp;#i18n{form.recapFormSubmit.buttonCancel}
 				</button>
+			</div>
 			</form>
-		</div>
+		</fieldset>
 	<#else>
-		<div><label class="form-title" >${formSubmit.form.title}</label><br/></div>
-		<fieldset class="-lutece-border-radius">${recap.recapMessage}</fieldset>
+	<div class="well well-small">
+		<h2>${formSubmit.form.title}</h2>
+		<p class="lead">${recap.recapMessage}</p>
+		<form action="${recap.backUrl}" method="post" name="" id="" class="form-horizontal">
 		<#if recap.graph>
 			<fieldset>
-				<legend> #i18n{form.recapFormSubmit.labelLegendStatistic}</legend> 
+				<legend> #i18n{form.recapFormSubmit.labelLegendStatistic}</legend>
 				<#list formSubmit.listResponse as response>
 					<#if entry_type_session.idType != response.entry.entryType.idType && entry_type_numbering.idType != response.entry.entryType.idType && ( !entrySave?exists || entrySave.idEntry != response.entry.idEntry )>
 						<#assign entrySave=response.entry>
-						<div class="form-element">
-							<span class="form-label">
-								<label>${response.entry.title}:&nbsp;</label>
-							</span>
-							<span class="form-field-column">
+						<div class="control-group">
+							<label class="control-label">${response.entry.title}:&nbsp;</label>
+							<div class="controls">
 								<img src="jsp/site/plugins/form/DoGenerateGraph.jsp?id_entry=${response.entry.idEntry}&amp;plugin_name=form<#if recap.graphThreeDimension>&amp;graph_three_dimension=1<#else>&amp;graph_three_dimension=0</#if><#if recap.graphLabelValue>&amp;graph_label_value=1<#else>&amp;graph_label_value=0</#if>&amp;id_graph_type=${recap.graphType.idGraphType}"/>
-							</span>	
+							</div>	
 						</div>	
 					</#if>
 				</#list>
 			</fieldset>	
 		</#if>	
-		<div align="center" class="form-steps">
-			<form action="${recap.backUrl}" method="post" name="" id=""  >
-				<button type="submit" class="btn btn-primary btn-small"  name="back" >
-					#i18n{form.recapFormSubmit.buttonBack}
+			<div class="form-actions form-steps">
+			<button type="submit" class="btn btn-small" name="back" >
+					<i class="icon-remove-circle"></i>&nbsp;#i18n{form.recapFormSubmit.buttonBack}
 				</button>
+				</div>
 			</form>	
 		</div> 
 	</#if>
-</div>	 
+	</div>	 
 </div>	 
