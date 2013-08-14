@@ -16,17 +16,16 @@
 	${str_entry}   
 	<#if form.activeRequirement>
 		<div class="control-group">
-		<label class="control-label" for="comment" >
+			<label class="control-label" for="" >&nbsp;</label>
 			<div class="controls">
-			<label class="checkbox">#i18n{form.htmlCodeForm.requirement}
-				<input type="checkbox" name="requirement" id="requirement" value="requirement}" <#if validate_requirement?? && validate_requirement>checked="checked"</#if>/>
+			<label class="checkbox"  for="requirement">
+				<input type="checkbox" name="requirement" id="requirement" value="" <#if validate_requirement?? && validate_requirement>checked="checked"</#if>> <a href="jsp/site/RunStandaloneApp.jsp?page=form&view_requirement=view_requirement&id_form=${form.idForm}" onclick="javascript:openFrontRequirement(this.href); return false;" target="_blank"> #i18n{form.htmlCodeForm.requirement}</a>
 			</label>
-			<p class="help-block"><a href="jsp/site/RunStandaloneApp.jsp?page=form&view_requirement=view_requirement&id_form=${form.idForm}" onclick="javascript:openFrontRequirement(this.href); return false;" target="_blank"> #i18n{form.htmlCodeForm.requirement}</a></p>
+			<#if validate_requirement?? && !validate_requirement>
+					<div class="alert alert-error">#i18n{form.message.requirementError}</div>
+			</#if>
 			</div>
-		</div>		
-		<#if validate_requirement?? && !validate_requirement>
-			<p class="label label-important">#i18n{form.message.requirementError}</p>
-		</#if>
+		</div>
 	</#if>	
 	<#if jcaptcha?exists>
 	<div class="span12">${jcaptcha}</div>
