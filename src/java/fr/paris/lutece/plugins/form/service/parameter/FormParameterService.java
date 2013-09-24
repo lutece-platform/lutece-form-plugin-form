@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.form.service.parameter;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.form.business.exporttype.IExportType;
 import fr.paris.lutece.plugins.form.business.exporttype.IExportTypeFactory;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterFilter;
@@ -45,8 +47,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -78,7 +78,7 @@ public final class FormParameterService
     }
 
     /**
-     * Find all directory parameters
+     * Find all form parameters
      * @return a {@link ReferenceList}
      */
     public ReferenceList findAll(  )
@@ -87,7 +87,7 @@ public final class FormParameterService
     }
 
     /**
-     * Find the default value parameters of the directory
+     * Find the default value parameters of the form
      * @return a {@link ReferenceList}
      */
     public ReferenceList findDefaultValueParameters(  )
@@ -207,7 +207,7 @@ public final class FormParameterService
     }
 
     /**
-     * Get tge export daemon type configured in the advanced parameters of
+     * Get the export daemon type configured in the advanced parameters of
      * the plugin-form.
      * @return a {@link IExportType}
      */
@@ -226,7 +226,7 @@ public final class FormParameterService
     }
 
     /**
-     * Get tge export daemon type configured in the advanced parameters of
+     * Get the export daemon type configured in the advanced parameters of
      * the plugin-form.
      * @return a {@link IExportType}
      */

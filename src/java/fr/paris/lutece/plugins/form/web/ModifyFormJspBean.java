@@ -1,5 +1,17 @@
 package fr.paris.lutece.plugins.form.web;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.CategoryHome;
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
@@ -39,18 +51,6 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -248,7 +248,15 @@ public abstract class ModifyFormJspBean extends FormJspBean
             form.setLibelleValidateButton( defaultMessage.getLibelleValidateButton( ) );
             form.setLibelleResetButton( defaultMessage.getLibelleResetButton( ) );
             form.setWorkgroup( StringUtils.EMPTY );
-            form.setCodeTheme( StringUtils.EMPTY );
+            ReferenceItem defaultCodeTheme = FormParameterService.getService( ).findByKey( PARAMETER_THEME_XPAGE );
+            if ( defaultCodeTheme != null )
+            {
+                form.setCodeTheme( defaultCodeTheme.getName( ) );
+            }
+            else
+            {
+                form.setCodeTheme( StringUtils.EMPTY );
+            }
             int nIdForm = FormHome.create( form, plugin );
 
             String[] arrayIdEntries = request.getParameterValues( PARAMETER_ANONYMIZE_ENTRIES );
@@ -482,7 +490,6 @@ public abstract class ModifyFormJspBean extends FormJspBean
         // Style management
         Collection<Theme> themes = ThemeHome.getThemesList( );
         ReferenceList themesRefList = new ReferenceList( );
-
 
         for ( Theme theme : themes )
         {
