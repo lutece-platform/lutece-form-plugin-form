@@ -1,12 +1,16 @@
 var uploading = 0;
 var baseUrl = document.getElementsByTagName("base")[0].href;
+
 function addAsynchronousUploadField(fieldId) {
 	var flashVersion = swfobject.getFlashPlayerVersion();
 	/* Flash Player 9.0.24 or greater  - simple mode otherwise */
 	if ( swfobject.hasFlashPlayerVersion( "9.0.24" ) )
 	{
-		$("#_form_upload_submit_" + fieldId).hide();
 	    $('#' + fieldId).uploadify({
+			/*
+			'swf'      : 'js/plugins/form/uploadify/swf/uploadify.swf',
+			'uploader' : baseUrl + '/jsp/site/upload',
+			*/
 	        'uploader' : 'js/plugins/form/uploadify/swf/uploadify.swf',
 	        'script' : baseUrl + '/jsp/site/upload',
 	        'cancelImg' : 'js/plugins/form/uploadify/cancel.png',
@@ -53,7 +57,9 @@ function addAsynchronousUploadField(fieldId) {
 		var formQueue = $( '#' + fieldId + 'Queue' );
 		formQueue.appendTo( formHelp );
 		
-		$( '#_form_upload_submit_' + fieldId ).hide(  );
+		$( '#_form_upload_submit_' + fieldId ).hide();
+		$( '#_file_deletion_button_' + fieldId ).hide();
+		
 	}
 }
 
@@ -154,19 +160,12 @@ function formDisplayUploadedFiles( jsonData )
 	
 	if ( fieldName != null )
 	{
-		if ( jsonData.fileCount == 0 )
-		{
+		if ( jsonData.fileCount == 0 ){
 			// no file uploaded, hiding content
 			$("#_file_deletion_" + fieldName ).hide(  );
 			$("#_file_deletion_label_" + fieldName ).hide(  );
 			$("#_file_deletion_button_" + fieldName ).hide(  );
-		}
-		else
-		{
-			// show the hidden div (if not already)
-			$("#_file_deletion_" + fieldName ).show(  );
-			$("#_file_deletion_label_" + fieldName ).show(  );
-			$("#_file_deletion_button_" + fieldName ).show(  );
+		} else {
 
 			var strContent = "";
 			var checkboxPrefix = '_form_upload_checkbox_' + fieldName;
@@ -182,10 +181,12 @@ function formDisplayUploadedFiles( jsonData )
 								&#160;" + ( (jsonData.fileCount == 1) ? jsonData.uploadedFiles : jsonData.uploadedFiles[index] ) + 
 							"</label>";
 			}
-			
-			$("#_file_deletion_" + fieldName ).html(
-					strContent
-			);
+
+			$("#_file_deletion_" + fieldName ).html( strContent );
+			// show the hidden div (if not already)
+			$("#_file_deletion_" + fieldName ).show(  );
+			$("#_file_deletion_label_" + fieldName ).show(  );
+			$("#_file_deletion_button_" + fieldName ).show(  );
 		}
 	}
 }
