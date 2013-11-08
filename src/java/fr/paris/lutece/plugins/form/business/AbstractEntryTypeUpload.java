@@ -382,7 +382,6 @@ public abstract class AbstractEntryTypeUpload extends Entry
     /**
      * Get the file source from the session
      * @param request the HttpServletRequest
-     * @param session the HttpSession
      * @return the file item
      */
     protected List<FileItem> getFileSources( HttpServletRequest request )

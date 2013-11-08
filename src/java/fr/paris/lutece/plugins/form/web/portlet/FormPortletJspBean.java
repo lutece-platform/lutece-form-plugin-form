@@ -62,6 +62,9 @@ public class FormPortletJspBean extends PortletJspBean
     ////////////////////////////////////////////////////////////////////////////
     // Constants
     public static final String RIGHT_MANAGE_FORM = "FORM_MANAGEMENT";
+
+    private static final long serialVersionUID = -2619049973871862337L;
+
     private static final String MARK_ID_FORM = "id_form";
     private static final String MARK_FORM_LIST = "form_list";
     private static final String PARAMETER_ID_FORM = "id_form";

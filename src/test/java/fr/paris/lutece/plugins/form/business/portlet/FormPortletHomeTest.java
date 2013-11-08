@@ -33,10 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.business.portlet;
 
-import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.portal.business.portlet.IPortletInterfaceDAO;
-import fr.paris.lutece.portal.business.portlet.Portlet;
-import fr.paris.lutece.portal.business.portlet.PortletDAO;
 import fr.paris.lutece.portal.business.portlet.PortletHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;

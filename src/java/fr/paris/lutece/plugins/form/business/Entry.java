@@ -544,9 +544,9 @@ public class Entry implements IEntry
      * {@inheritDoc}
      */
     @Override
-    public void setUnique( boolean _bUnique )
+    public void setUnique( boolean bUnique )
     {
-        this._bUnique = _bUnique;
+        this._bUnique = bUnique;
     }
 
     /**

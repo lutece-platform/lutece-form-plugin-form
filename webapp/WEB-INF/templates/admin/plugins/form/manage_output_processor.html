@@ -4,26 +4,27 @@
             <legend> #i18n{form.manageOutputProcessor.title}</legend>
 			<#assign nIndex=1>
             <#list processor_list as processor>
-			<div class="well well-small">
-				<form class="form" action="jsp/admin/plugins/form/DoManageOutputProcessor.jsp" method="post" >
-				<input name="id_form" value="${form.idForm}" type="hidden" />
-				<input type="hidden" name="processor_key" value= "${processor.processor_key}"/>
-				<fieldset>
-				<legend>
-				<label class="checkbox" for="is_selected_${nIndex}">
-					<strong>#i18n{form.manageOutputProcessor.useOutputProcessor}</strong>
-					<input type="checkbox" name="is_selected" id="is_selected_${nIndex}" <#if processor.is_selected>checked="checked"</#if> />
-				</label>   
-				</legend>
-				${processor.processor_configuration}
-				<div class="form-actions">
-					<button class="btn btn-primary btn-small" type="submit" >
-						<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}
-					</button>
-				</div>		
-				</form>
-			</div>
-			<#assign nIndex = nIndex + 1 >
+				<div class="well well-small">
+					<form class="form" action="jsp/admin/plugins/form/DoManageOutputProcessor.jsp" method="post" >
+						<input name="id_form" value="${form.idForm}" type="hidden" />
+						<input type="hidden" name="processor_key" value= "${processor.processor_key}"/>
+						<fieldset>
+							<legend>
+								<label class="checkbox" for="is_selected_${nIndex}">
+									<strong>#i18n{form.manageOutputProcessor.useOutputProcessor}</strong>
+									<input type="checkbox" name="is_selected" id="is_selected_${nIndex}" <#if processor.is_selected>checked="checked"</#if> />
+								</label>   
+							</legend>
+							${processor.processor_configuration}
+							<div class="form-actions">
+								<button class="btn btn-primary btn-small" type="submit" >
+									<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}
+								</button>
+							</div>
+						</fieldset>	
+					</form>
+				</div>
+				<#assign nIndex = nIndex + 1 >
             </#list>
         </fieldset>
     </div>

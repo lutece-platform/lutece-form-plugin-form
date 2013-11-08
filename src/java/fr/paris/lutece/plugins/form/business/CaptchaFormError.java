@@ -52,7 +52,7 @@ public class CaptchaFormError extends FormError
     private static final String MESSAGE_CAPTCHA_ERROR = "form.message.captchaError";
     private static final String ANCHOR_CAPTCHA = "captchaImage";
     private static final String PARAMETER_ID_FORM = "id_form";
-    private int _nIdForm;
+    private final int _nIdForm;
 
     /**
      * Constructor
