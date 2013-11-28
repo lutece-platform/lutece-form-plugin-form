@@ -10,7 +10,7 @@
 			<span class="add-on"><i class="icon-calendar"></i></span>
 			<input type="text" name="fist_response_date_filter" id="fist_response_date_filter" class="input-small" value="<#if fist_response_date_filter?has_content>${fist_response_date_filter?date}</#if>" />
 		</div>
-			<span class="help-text">#i18n{form.result.labelAnd}</span>
+			<span class="help-block">#i18n{form.result.labelAnd}</span>
 		<div class="input-prepend">
 			<span class="add-on"><i class="icon-calendar"></i></span>
 			<input type="text" name="last_response_date_filter" id="last_response_date_filter" class="input-small" value="<#if last_response_date_filter?has_content>${last_response_date_filter?if_exists?date}</#if>" />

@@ -337,10 +337,10 @@ public final class FormService
     {
         int nMaxNumber = 1;
 
-        if ( entry instanceof EntryTypeNumbering && ( entry.getEntryType( ) != null ) && ( entry.getForm( ) != null ) )
+        if ( entry instanceof EntryTypeNumbering && ( entry.getEntryType( ) != null ) && ( entry.getIdResource( ) > 0 ) )
         {
-            nMaxNumber = ResponseHome.findMaxNumber( entry.getIdEntry( ), entry.getForm( ).getIdForm( ),
-                    FormUtils.getPlugin( ) );
+            nMaxNumber = ResponseHome.findMaxNumber( entry.getIdEntry( ), entry.getIdResource( ),
+                    entry.getResourceType( ) );
         }
 
         return nMaxNumber;

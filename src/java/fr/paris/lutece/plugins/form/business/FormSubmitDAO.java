@@ -33,10 +33,12 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import fr.paris.lutece.plugins.form.util.GenericAttributesUtils;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,19 +50,21 @@ public final class FormSubmitDAO implements IFormSubmitDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_form_submit ) FROM form_submit";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_form_submit,date_response,ip,id_form " +
-        "FROM form_submit WHERE id_form_submit=? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO form_submit ( " +
-        "id_form_submit,date_response,day_date_response,week_date_response,month_date_response,year_date_response,ip,id_form) VALUES(?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_form_submit,date_response,ip,id_form "
+            + "FROM form_submit WHERE id_form_submit=? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO form_submit ( "
+            + "id_form_submit,date_response,day_date_response,week_date_response,month_date_response,year_date_response,ip,id_form) VALUES(?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_submit WHERE id_form_submit = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE  form_submit SET " +
-        "id_form_submit=?,date_response=?,ip=?,id_form=? WHERE id_form_submit=?";
-    private static final String SQL_QUERY_SELECT_FORM_RESPONSE_BY_FILTER = "SELECT id_form_submit,date_response,ip,id_form " +
-        "FROM form_submit ";
-    private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(id_form_submit) " +
-        "FROM form_submit ";
-    private static final String SQL_QUERY_SELECT_STATISTIC_FORM_SUBMIT = "SELECT COUNT(*),date_response " +
-        "FROM form_submit ";
+    private static final String SQL_QUERY_DELETE_RESPONSES = "DELETE FROM form_reponse WHERE id_response IN (SELECT id_response FROM form_response_submit WHERE id_form_submit = ?)";
+    private static final String SQL_QUERY_DELETE_FORM_SUBMIT_RESPONSES = "DELETE FROM form_response_submit WHERE id_form_submit = ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE  form_submit SET "
+            + "id_form_submit=?,date_response=?,ip=?,id_form=? WHERE id_form_submit=?";
+    private static final String SQL_QUERY_SELECT_FORM_RESPONSE_BY_FILTER = "SELECT id_form_submit,date_response,ip,id_form "
+            + "FROM form_submit ";
+    private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(id_form_submit) "
+            + "FROM form_submit ";
+    private static final String SQL_QUERY_SELECT_STATISTIC_FORM_SUBMIT = "SELECT COUNT(*),date_response "
+            + "FROM form_submit ";
     private static final String SQL_FILTER_ID_FORM = " id_form = ? ";
     private static final String SQL_FILTER_DATE_FIRST_SUBMIT = " date_response >= ? ";
     private static final String SQL_FILTER_DATE_LAST_SUBMIT = " date_response <= ? ";
@@ -68,144 +72,158 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     private static final String SQL_GROUP_BY_WEEK = " GROUP BY week_date_response,year_date_response ";
     private static final String SQL_GROUP_BY_MONTH = " GROUP BY month_date_response,year_date_response ";
     private static final String SQL_ORDER_BY_DATE_RESPONSE_ASC = " ORDER BY date_response ASC ";
+    private static final String SQL_QUERY_ANONYMIZE_RESPONSES = " UPDATE form_response fr SET response_value = ?, status = ? WHERE status < ? AND ( SELECT date_response FROM form_submit fs WHERE fs.id_form_submit = fr.id_form_submit) < ? AND id_entry IN ( ";
+
+    private static final String SQL_QUERY_FIND_FORM_SUBMIT_FROM_ID_RESPONSE = "SELECT fs.id_form_submit,fs.date_response,fs.ip,fs.id_form "
+            + "FROM form_submit fs INNER JOIN form_response_submit frs ON fs.id_form_submit = frs.id_form_submit WHERE frs.id_response = ?";
+
+    private static final String SQL_QUERY_FIND_ID_RESPONSE_FROM_FORM_SUBMIT = "SELECT id_response FROM form_response_submit WHERE id_form_submit = ?";
+    private static final String SQL_QUERY_ASSOCIATE_RESPONSE_WITH_FORM_SUBMIT = "INSERT INTO form_response_submit (id_response,id_form_submit) VALUES (?,?)";
+    private static final String SQL_QUERY_REMOVE_RESPONSE_FORM_SUBMIT_ASSOCIATION = "DELETE FROM form_response_submit (id_response,id_form_submit) WHERE id_response = ? ";
+
+    private static final String CONSTANT_COMMA = ",";
+    private static final String CONSTANT_QUESTION_MARK = "?";
+    private static final String CONSTANT_CLOSE_PARENTHESIS = ")";
 
     /**
      * Generates a new primary key
-     *
+     * 
      * @param plugin the plugin
      * @return The new primary key
      */
     private int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey;
 
-        if ( !daoUtil.next(  ) )
+        if ( !daoUtil.next( ) )
         {
             // if the table is empty
             nKey = 1;
         }
 
         nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
 
     /**
-         * Insert a new record in the table.
-         *
-         * @param formSubmit instance of the formResponse object to insert
-         * @param plugin the plugin
-         * @return the id of the new form Submit
-         */
+     * Insert a new record in the table.
+     * 
+     * @param formSubmit instance of the formResponse object to insert
+     * @param plugin the plugin
+     * @return the id of the new form Submit
+     */
     public synchronized int insert( FormSubmit formSubmit, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         formSubmit.setIdFormSubmit( newPrimaryKey( plugin ) );
-        daoUtil.setInt( 1, formSubmit.getIdFormSubmit(  ) );
-        daoUtil.setTimestamp( 2, formSubmit.getDateResponse(  ) );
-        daoUtil.setInt( 3, FormUtils.getDay( formSubmit.getDateResponse(  ) ) );
-        daoUtil.setInt( 4, FormUtils.getWeek( formSubmit.getDateResponse(  ) ) );
-        daoUtil.setInt( 5, FormUtils.getMonth( formSubmit.getDateResponse(  ) ) );
-        daoUtil.setInt( 6, FormUtils.getYear( formSubmit.getDateResponse(  ) ) );
-        daoUtil.setString( 7, formSubmit.getIp(  ) );
-        daoUtil.setInt( 8, formSubmit.getForm(  ).getIdForm(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( 1, formSubmit.getIdFormSubmit( ) );
+        daoUtil.setTimestamp( 2, formSubmit.getDateResponse( ) );
+        daoUtil.setInt( 3, FormUtils.getDay( formSubmit.getDateResponse( ) ) );
+        daoUtil.setInt( 4, FormUtils.getWeek( formSubmit.getDateResponse( ) ) );
+        daoUtil.setInt( 5, FormUtils.getMonth( formSubmit.getDateResponse( ) ) );
+        daoUtil.setInt( 6, FormUtils.getYear( formSubmit.getDateResponse( ) ) );
+        daoUtil.setString( 7, formSubmit.getIp( ) );
+        daoUtil.setInt( 8, formSubmit.getForm( ).getIdForm( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
 
-        return formSubmit.getIdFormSubmit(  );
+        return formSubmit.getIdFormSubmit( );
     }
 
     /**
-         * Load the data of the formResponse from the table
-         *
-         * @param nIdFormSubmit The identifier of the formResponse
-         * @param plugin the plugin
-         * @return the instance of the formSubmit
-         */
+     * Load the data of the formResponse from the table
+     * 
+     * @param nIdFormSubmit The identifier of the formResponse
+     * @param plugin the plugin
+     * @return the instance of the formSubmit
+     */
     public FormSubmit load( int nIdFormSubmit, Plugin plugin )
     {
         FormSubmit formSubmit = null;
         Form form;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nIdFormSubmit );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            formSubmit = new FormSubmit(  );
+            formSubmit = new FormSubmit( );
             formSubmit.setIdFormSubmit( daoUtil.getInt( 1 ) );
             formSubmit.setDateResponse( daoUtil.getTimestamp( 2 ) );
             formSubmit.setIp( daoUtil.getString( 3 ) );
-            form = new Form(  );
+            form = new Form( );
             form.setIdForm( daoUtil.getInt( 4 ) );
             formSubmit.setForm( form );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return formSubmit;
     }
 
     /**
-         * Delete  all  response  associate to the form submit whose identifier is specified in parameter
-         *
-         * @param nIdFormSubmit The identifier of the formResponse
-         * @param plugin the plugin
-         */
+     * Delete all response associate to the form submit whose identifier is
+     * specified in parameter
+     * 
+     * @param nIdFormSubmit The identifier of the formResponse
+     * @param plugin the plugin
+     */
     public void delete( int nIdFormSubmit, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nIdFormSubmit );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
-         * Update the the formSubmit in the table
-         *
-         * @param formSubmit instance of the formSubmit object to update
-         * @param plugin the plugin
-         */
+     * Update the the formSubmit in the table
+     * 
+     * @param formSubmit instance of the formSubmit object to update
+     * @param plugin the plugin
+     */
     public void store( FormSubmit formSubmit, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        daoUtil.setInt( 1, formSubmit.getIdFormSubmit(  ) );
-        daoUtil.setTimestamp( 2, formSubmit.getDateResponse(  ) );
-        daoUtil.setString( 3, formSubmit.getIp(  ) );
-        daoUtil.setInt( 4, formSubmit.getForm(  ).getIdForm(  ) );
-        daoUtil.setInt( 5, formSubmit.getIdFormSubmit(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( 1, formSubmit.getIdFormSubmit( ) );
+        daoUtil.setTimestamp( 2, formSubmit.getDateResponse( ) );
+        daoUtil.setString( 3, formSubmit.getIp( ) );
+        daoUtil.setInt( 4, formSubmit.getForm( ).getIdForm( ) );
+        daoUtil.setInt( 5, formSubmit.getIdFormSubmit( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
-         * Load the data of all the formSubmit who verify the filter and returns them in a  list
-         * @param filter the filter
-         * @param plugin the plugin
-         * @return  the list of formResponse
-         */
+     * Load the data of all the formSubmit who verify the filter and returns
+     * them in a list
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return the list of formResponse
+     */
     public List<FormSubmit> selectListByFilter( ResponseFilter filter, Plugin plugin )
     {
-        List<FormSubmit> formResponseList = new ArrayList<FormSubmit>(  );
+        List<FormSubmit> formResponseList = new ArrayList<FormSubmit>( );
         FormSubmit formSubmit;
         Form form;
-        List<String> listStrFilter = new ArrayList<String>(  );
+        List<String> listStrFilter = new ArrayList<String>( );
 
-        if ( filter.containsIdForm(  ) )
+        if ( filter.containsIdForm( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_FORM );
         }
 
-        if ( filter.containsDateFirst(  ) )
+        if ( filter.containsDateFirst( ) )
         {
             listStrFilter.add( SQL_FILTER_DATE_FIRST_SUBMIT );
         }
 
-        if ( filter.containsDateLast(  ) )
+        if ( filter.containsDateLast( ) )
         {
             listStrFilter.add( SQL_FILTER_DATE_LAST_SUBMIT );
         }
@@ -215,65 +233,66 @@ public final class FormSubmitDAO implements IFormSubmitDAO
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         int nIndex = 1;
 
-        if ( filter.containsIdForm(  ) )
+        if ( filter.containsIdForm( ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdForm(  ) );
+            daoUtil.setInt( nIndex, filter.getIdForm( ) );
             nIndex++;
         }
 
-        if ( filter.containsDateFirst(  ) )
+        if ( filter.containsDateFirst( ) )
         {
-            daoUtil.setTimestamp( nIndex, filter.getDateFirst(  ) );
+            daoUtil.setTimestamp( nIndex, filter.getDateFirst( ) );
             nIndex++;
         }
 
-        if ( filter.containsDateLast(  ) )
+        if ( filter.containsDateLast( ) )
         {
-            daoUtil.setTimestamp( nIndex, filter.getDateLast(  ) );
+            daoUtil.setTimestamp( nIndex, filter.getDateLast( ) );
             nIndex++;
         }
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            formSubmit = new FormSubmit(  );
+            formSubmit = new FormSubmit( );
             formSubmit.setIdFormSubmit( daoUtil.getInt( 1 ) );
             formSubmit.setDateResponse( daoUtil.getTimestamp( 2 ) );
             formSubmit.setIp( daoUtil.getString( 3 ) );
-            form = new Form(  );
+            form = new Form( );
             form.setIdForm( daoUtil.getInt( 4 ) );
             formSubmit.setForm( form );
             formResponseList.add( formSubmit );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return formResponseList;
     }
 
     /**
-         * Load the data of all the formSubmit who verify the filter and returns them in a  list
-         * @param filter the filter
-         * @param plugin the plugin
-         * @return  the list of formResponse
-         */
+     * Load the data of all the formSubmit who verify the filter and returns
+     * them in a list
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return the list of formResponse
+     */
     public int selectCountByFilter( ResponseFilter filter, Plugin plugin )
     {
         int nIdCount = 0;
-        List<String> listStrFilter = new ArrayList<String>(  );
+        List<String> listStrFilter = new ArrayList<String>( );
 
-        if ( filter.containsIdForm(  ) )
+        if ( filter.containsIdForm( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_FORM );
         }
 
-        if ( filter.containsDateFirst(  ) )
+        if ( filter.containsDateFirst( ) )
         {
             listStrFilter.add( SQL_FILTER_DATE_FIRST_SUBMIT );
         }
 
-        if ( filter.containsDateLast(  ) )
+        if ( filter.containsDateLast( ) )
         {
             listStrFilter.add( SQL_FILTER_DATE_LAST_SUBMIT );
         }
@@ -282,75 +301,76 @@ public final class FormSubmitDAO implements IFormSubmitDAO
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         int nIndex = 1;
 
-        if ( filter.containsIdForm(  ) )
+        if ( filter.containsIdForm( ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdForm(  ) );
+            daoUtil.setInt( nIndex, filter.getIdForm( ) );
             nIndex++;
         }
 
-        if ( filter.containsDateFirst(  ) )
+        if ( filter.containsDateFirst( ) )
         {
-            daoUtil.setTimestamp( nIndex, filter.getDateFirst(  ) );
+            daoUtil.setTimestamp( nIndex, filter.getDateFirst( ) );
             nIndex++;
         }
 
-        if ( filter.containsDateLast(  ) )
+        if ( filter.containsDateLast( ) )
         {
-            daoUtil.setTimestamp( nIndex, filter.getDateLast(  ) );
+            daoUtil.setTimestamp( nIndex, filter.getDateLast( ) );
             nIndex++;
         }
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             nIdCount = daoUtil.getInt( 1 );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nIdCount;
     }
 
     /**
-         * Load the number of formSubmit group by day  who verify the filter and returns them in a  list of statistic
-         * @param filter the filter
-         * @param plugin the plugin
-         * @return  the list of statistic
-         */
+     * Load the number of formSubmit group by day who verify the filter and
+     * returns them in a list of statistic
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return the list of statistic
+     */
     public List<StatisticFormSubmit> selectStatisticFormSubmit( ResponseFilter filter, Plugin plugin )
     {
-        List<StatisticFormSubmit> statList = new ArrayList<StatisticFormSubmit>(  );
+        List<StatisticFormSubmit> statList = new ArrayList<StatisticFormSubmit>( );
         StatisticFormSubmit statistic;
-        List<String> listStrFilter = new ArrayList<String>(  );
-        List<String> listStrGroupBy = new ArrayList<String>(  );
+        List<String> listStrFilter = new ArrayList<String>( );
+        List<String> listStrGroupBy = new ArrayList<String>( );
 
-        if ( filter.containsIdForm(  ) )
+        if ( filter.containsIdForm( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_FORM );
         }
 
-        if ( filter.containsDateFirst(  ) )
+        if ( filter.containsDateFirst( ) )
         {
             listStrFilter.add( SQL_FILTER_DATE_FIRST_SUBMIT );
         }
 
-        if ( filter.containsDateLast(  ) )
+        if ( filter.containsDateLast( ) )
         {
             listStrFilter.add( SQL_FILTER_DATE_LAST_SUBMIT );
         }
 
-        if ( filter.isGroupbyDay(  ) )
+        if ( filter.isGroupbyDay( ) )
         {
             listStrGroupBy.add( SQL_GROUP_BY_DAY );
         }
 
-        if ( filter.isGroupbyWeek(  ) )
+        if ( filter.isGroupbyWeek( ) )
         {
             listStrGroupBy.add( SQL_GROUP_BY_WEEK );
         }
 
-        if ( filter.isGroupbyMonth(  ) )
+        if ( filter.isGroupbyMonth( ) )
         {
             listStrGroupBy.add( SQL_GROUP_BY_MONTH );
         }
@@ -360,36 +380,159 @@ public final class FormSubmitDAO implements IFormSubmitDAO
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         int nIndex = 1;
 
-        if ( filter.containsIdForm(  ) )
+        if ( filter.containsIdForm( ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdForm(  ) );
+            daoUtil.setInt( nIndex, filter.getIdForm( ) );
             nIndex++;
         }
 
-        if ( filter.containsDateFirst(  ) )
+        if ( filter.containsDateFirst( ) )
         {
-            daoUtil.setTimestamp( nIndex, filter.getDateFirst(  ) );
+            daoUtil.setTimestamp( nIndex, filter.getDateFirst( ) );
             nIndex++;
         }
 
-        if ( filter.containsDateLast(  ) )
+        if ( filter.containsDateLast( ) )
         {
-            daoUtil.setTimestamp( nIndex, filter.getDateLast(  ) );
+            daoUtil.setTimestamp( nIndex, filter.getDateLast( ) );
             nIndex++;
         }
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            statistic = new StatisticFormSubmit(  );
+            statistic = new StatisticFormSubmit( );
             statistic.setNumberResponse( daoUtil.getInt( 1 ) );
             statistic.setStatisticDate( daoUtil.getTimestamp( 2 ) );
             statList.add( statistic );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return statList;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo, Plugin plugin )
+    {
+        if ( listIdEntries == null || listIdEntries.size( ) <= 0 )
+        {
+            return;
+        }
+        StringBuilder sbSql = new StringBuilder( SQL_QUERY_ANONYMIZE_RESPONSES );
+        sbSql.append( CONSTANT_QUESTION_MARK );
+        for ( int i = 1; i < listIdEntries.size( ); i++ )
+        {
+            sbSql.append( CONSTANT_COMMA ).append( CONSTANT_QUESTION_MARK );
+        }
+        sbSql.append( CONSTANT_CLOSE_PARENTHESIS );
+
+        DAOUtil daoUtil = new DAOUtil( sbSql.toString( ), plugin );
+        int nIndex = 1;
+        daoUtil.setString( nIndex++, GenericAttributesUtils.CONSTANT_RESPONSE_VALUE_ANONYMIZED );
+        // We put the anonymized status twice : once for the new status, and once for the filter
+        daoUtil.setInt( nIndex++, Response.CONSTANT_STATUS_ANONYMIZED );
+        daoUtil.setInt( nIndex++, Response.CONSTANT_STATUS_ANONYMIZED );
+        daoUtil.setTimestamp( nIndex++, dateCleanTo );
+
+        for ( Integer nIdEntry : listIdEntries )
+        {
+            daoUtil.setInt( nIndex++, nIdEntry );
+        }
+
+        daoUtil.executeUpdate( );
+
+        daoUtil.free( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteResponses( int nIdFormSubmit, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_RESPONSES, plugin );
+        daoUtil.setInt( 1, nIdFormSubmit );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+        daoUtil = new DAOUtil( SQL_QUERY_DELETE_FORM_SUBMIT_RESPONSES );
+        daoUtil.setInt( 1, nIdFormSubmit );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FormSubmit findFormSubmitFromResponseId( int nIdResponse, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_FORM_SUBMIT_FROM_ID_RESPONSE, plugin );
+        daoUtil.setInt( 1, nIdResponse );
+        FormSubmit formSubmit = null;
+        daoUtil.executeQuery( );
+        if ( daoUtil.next( ) )
+        {
+            formSubmit = new FormSubmit( );
+            formSubmit.setIdFormSubmit( daoUtil.getInt( 1 ) );
+            formSubmit.setDateResponse( daoUtil.getTimestamp( 2 ) );
+            formSubmit.setIp( daoUtil.getString( 3 ) );
+            Form form = new Form( );
+            form.setIdForm( daoUtil.getInt( 4 ) );
+            formSubmit.setForm( form );
+        }
+        daoUtil.free( );
+        return formSubmit;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Integer> getResponseListFromIdFormSubmit( int nIdFormSubmit, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ID_RESPONSE_FROM_FORM_SUBMIT, plugin );
+        daoUtil.setInt( 1, nIdFormSubmit );
+        List<Integer> listIdResponse = new ArrayList<Integer>( );
+        daoUtil.executeQuery( );
+        while ( daoUtil.next( ) )
+        {
+            listIdResponse.add( daoUtil.getInt( 1 ) );
+        }
+        daoUtil.free( );
+        return listIdResponse;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void associateResponseWithFormSubmit( int nIdResponse, int nIdFormSubmit, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ASSOCIATE_RESPONSE_WITH_FORM_SUBMIT, plugin );
+
+        daoUtil.setInt( 1, nIdResponse );
+        daoUtil.setInt( 2, nIdFormSubmit );
+        daoUtil.executeUpdate( );
+
+        daoUtil.free( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeResponseFormSubmitAssociation( int nIdResponse, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_REMOVE_RESPONSE_FORM_SUBMIT_ASSOCIATION, plugin );
+
+        daoUtil.setInt( 1, nIdResponse );
+        daoUtil.executeUpdate( );
+
+        daoUtil.free( );
     }
 }

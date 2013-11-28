@@ -59,9 +59,9 @@ import com.keypoint.PngEncoder;
 
 
 /**
- *
- *  class DoDownloadGraph
- *
+ * 
+ * class DoDownloadGraph
+ * 
  */
 public class DoDownloadGraph
 {
@@ -77,7 +77,7 @@ public class DoDownloadGraph
      * Write in the http response the statistic graph of a question
      * @param request the http request
      * @param response The http response
-     *
+     * 
      */
     public void doGenerateGraph( HttpServletRequest request, HttpServletResponse response )
     {
@@ -107,9 +107,9 @@ public class DoDownloadGraph
             nGraphLabelValue = true;
         }
 
-        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) && ( strIdGraphType != null ) &&
-                !strIdGraphType.equals( EMPTY_STRING ) && ( strPluginName != null ) &&
-                !strPluginName.equals( EMPTY_STRING ) )
+        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) && ( strIdGraphType != null )
+                && !strIdGraphType.equals( EMPTY_STRING ) && ( strPluginName != null )
+                && !strPluginName.equals( EMPTY_STRING ) )
         {
             plugin = PluginService.getPlugin( strPluginName );
 
@@ -123,29 +123,30 @@ public class DoDownloadGraph
                 AppLogService.error( ne );
             }
 
-            entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
+            entry = EntryHome.findByPrimaryKey( nIdEntry );
 
             List<StatisticEntrySubmit> listStatistic = _responseService.getStatisticByIdEntry( nIdEntry );
             graphType = GraphTypeHome.findByPrimaryKey( nIdGraphType, plugin );
 
             if ( graphType != null )
             {
-                chart = graphType.createChart( listStatistic, entry.getTitle(  ), nGraphThreeDimension, nGraphLabelValue );
-            }
+                chart = graphType
+                        .createChart( listStatistic, entry.getTitle( ), nGraphThreeDimension, nGraphLabelValue );
 
-            try
-            {
-                ChartRenderingInfo info = new ChartRenderingInfo( new StandardEntityCollection(  ) );
-                BufferedImage chartImage = chart.createBufferedImage( 600, 200, info );
-                response.setContentType( "image/PNG" );
+                try
+                {
+                    ChartRenderingInfo info = new ChartRenderingInfo( new StandardEntityCollection( ) );
+                    BufferedImage chartImage = chart.createBufferedImage( 600, 200, info );
+                    response.setContentType( "image/PNG" );
 
-                PngEncoder encoder = new PngEncoder( chartImage, false, 0, 9 );
-                response.getOutputStream(  ).write( encoder.pngEncode(  ) );
-                response.getOutputStream(  ).close(  );
-            }
-            catch ( Exception e )
-            {
-                AppLogService.error( e );
+                    PngEncoder encoder = new PngEncoder( chartImage, false, 0, 9 );
+                    response.getOutputStream( ).write( encoder.pngEncode( ) );
+                    response.getOutputStream( ).close( );
+                }
+                catch ( Exception e )
+                {
+                    AppLogService.error( e.getMessage( ), e );
+                }
             }
         }
     }

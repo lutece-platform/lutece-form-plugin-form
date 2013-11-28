@@ -38,11 +38,12 @@ import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
 /**
- *class FormSubmitHome
+ * class FormSubmitHome
  */
 public final class FormSubmitHome
 {
@@ -52,17 +53,18 @@ public final class FormSubmitHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private FormSubmitHome(  )
+    private FormSubmitHome( )
     {
     }
 
     /**
      * Creation of an instance of formSubmit
-     *
-     * @param formSubmit The instance of the formSubmit which contains the informations to store
+     * 
+     * @param formSubmit The instance of the formSubmit which contains the
+     *            informations to store
      * @param plugin the Plugin
      * @return the id of the new form submit
-     *
+     * 
      */
     public static int create( FormSubmit formSubmit, Plugin plugin )
     {
@@ -71,10 +73,11 @@ public final class FormSubmitHome
 
     /**
      * Update of the formSubmit which is specified in parameter
-     *
-     * @param formSubmit The instance of the FormSubmit which contains the informations to update
+     * 
+     * @param formSubmit The instance of the FormSubmit which contains the
+     *            informations to update
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void update( FormSubmit formSubmit, Plugin plugin )
     {
@@ -83,23 +86,34 @@ public final class FormSubmitHome
 
     /**
      * Remove the formSubmit whose identifier is specified in parameter
-     *
+     * 
      * @param nIdFormSubmit The formSubmitId
      * @param plugin the Plugin
      */
     public static void remove( int nIdFormSubmit, Plugin plugin )
     {
         IResponseService responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
-        responseService.remove( nIdFormSubmit );
+        responseService.removeFromFormSubmit( nIdFormSubmit );
         _dao.delete( nIdFormSubmit, plugin );
+    }
+
+    /**
+     * Remove the association between form responses and form submit
+     * @param nIdFormSubmit The id of the form submit
+     * @param plugin The plugin
+     */
+    public static void removeFormSubmitResponse( int nIdFormSubmit, Plugin plugin )
+    {
+        _dao.deleteResponses( nIdFormSubmit, plugin );
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a FormSubmitwhose identifier is specified in parameter
-     *
+     * Returns an instance of a FormSubmitwhose identifier is specified in
+     * parameter
+     * 
      * @param nKey The formResponse primary key
      * @param plugin the Plugin
      * @return an instance of FormResponse
@@ -110,21 +124,23 @@ public final class FormSubmitHome
     }
 
     /**
-        * Load the data of all the formSubmit who verify the filter and returns them in a  list
-        * @param filter the filter
-        * @param plugin the plugin
-        * @return  the list of formSubmit
-        */
+     * Load the data of all the formSubmit who verify the filter and returns
+     * them in a list
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return the list of formSubmit
+     */
     public static List<FormSubmit> getFormSubmitList( ResponseFilter filter, Plugin plugin )
     {
         return _dao.selectListByFilter( filter, plugin );
     }
 
     /**
-     * Load the data of all the formSubmit who verify the filter and returns them in a  list
+     * Load the data of all the formSubmit who verify the filter and returns
+     * them in a list
      * @param filter the filter
      * @param plugin the plugin
-     * @return  the list of formSubmit
+     * @return the list of formSubmit
      */
     public static int getCountFormSubmit( ResponseFilter filter, Plugin plugin )
     {
@@ -132,13 +148,70 @@ public final class FormSubmitHome
     }
 
     /**
-         * Load the number of formSubmit who verify the filter and returns them in a  list of statistic
-         * @param filter the filter
-         * @param plugin the plugin
-         * @return  the list of statistic
-         */
+     * Load the number of formSubmit who verify the filter and returns them in a
+     * list of statistic
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return the list of statistic
+     */
     public static List<StatisticFormSubmit> getStatisticFormSubmit( ResponseFilter filter, Plugin plugin )
     {
         return _dao.selectStatisticFormSubmit( filter, plugin );
+    }
+
+    /**
+     * Anonymize entries of responses
+     * @param listIdEntries The list of id of entries to anonymize responses of
+     * @param dateCleanTo Anonymize responses posted before this date
+     * @param plugin The plugin
+     */
+    public static void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo, Plugin plugin )
+    {
+        _dao.anonymizeEntries( listIdEntries, dateCleanTo, plugin );
+    }
+
+    /**
+     * Find a form submit from the id of a response associated with it
+     * @param nIdResponse The id of the response
+     * @param plugin The plugin
+     * @return The form submit, or null if no form submit is associated with the
+     *         given response
+     */
+    public static FormSubmit findFormSubmitFromResponseId( int nIdResponse, Plugin plugin )
+    {
+        return _dao.findFormSubmitFromResponseId( nIdResponse, plugin );
+    }
+
+    /**
+     * Get the list of id of responses associated with a form submit
+     * @param nIdFormSubmit The id of the form submit
+     * @param plugin The plugin
+     * @return The list of response id, or an empty list if no response is
+     *         associated with the form submit
+     */
+    public static List<Integer> getResponseListFromIdFormSubmit( int nIdFormSubmit, Plugin plugin )
+    {
+        return _dao.getResponseListFromIdFormSubmit( nIdFormSubmit, plugin );
+    }
+
+    /**
+     * Associate a response with a form submit
+     * @param nIdResponse The id of the response
+     * @param nIdFormSubmit The id of the form submit
+     * @param plugin The plugin
+     */
+    public static void associateResponseWithFormSubmit( int nIdResponse, int nIdFormSubmit, Plugin plugin )
+    {
+        _dao.associateResponseWithFormSubmit( nIdResponse, nIdFormSubmit, plugin );
+    }
+
+    /**
+     * Remove the association between a response and a form submit
+     * @param nIdResponse The id of the response
+     * @param plugin The plugin
+     */
+    public static void removeResponseFormSubmitAssociation( int nIdResponse, Plugin plugin )
+    {
+        _dao.removeResponseFormSubmitAssociation( nIdResponse, plugin );
     }
 }

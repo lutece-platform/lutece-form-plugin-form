@@ -40,6 +40,9 @@ import fr.paris.lutece.test.LuteceTestCase;
 import java.util.List;
 
 
+/**
+ * Test class for entries
+ */
 public class EntryHomeTest extends LuteceTestCase
 {
     private final static String TITLE_1 = "Title 1";
@@ -52,124 +55,138 @@ public class EntryHomeTest extends LuteceTestCase
     private final static int ID_ENTRY_TYPE_1 = 1;
     private final Plugin _plugin = PluginService.getPlugin( "form" );
 
-    public void testCreate(  )
+    /**
+     * The the creation of an entry
+     */
+    public void testCreate( )
     {
-        FormHomeTest formHomeTest = new FormHomeTest(  );
-        formHomeTest.testCreate(  );
+        FormHomeTest formHomeTest = new FormHomeTest( );
+        formHomeTest.testCreate( );
 
-        Entry entry = new Entry(  );
+        Entry entry = new Entry( );
 
-        EntryType entryType = new EntryType(  );
+        EntryType entryType = new EntryType( );
         entryType.setIdType( ID_ENTRY_TYPE_1 );
 
-        FormDAO formDAO = new FormDAO(  );
+        FormDAO formDAO = new FormDAO( );
         int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
         Form form = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
         entry.setComment( COMMENT_1 );
         entry.setEntryType( entryType );
         entry.setFieldInLine( FIELD_IN_LINE_1 );
-        entry.setForm( form );
+        entry.setIdResource( form.getIdForm( ) );
+        entry.setResourceType( Form.RESOURCE_TYPE );
         entry.setHelpMessage( HELP_MESSAGE_1 );
         entry.setMandatory( MANDATORY_1 );
         entry.setTitle( TITLE_1 );
 
-        EntryHome.create( entry, _plugin );
+        EntryHome.create( entry );
 
-        IEntry storedEntry = EntryHome.findByPrimaryKey( entry.getIdEntry(  ), _plugin );
+        IEntry storedEntry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
 
-        assertEquals( storedEntry.getComment(  ), entry.getComment(  ) );
-        assertEquals( storedEntry.getEntryType(  ).getIdType(  ), entry.getEntryType(  ).getIdType(  ) );
-        assertEquals( storedEntry.isFieldInLine(  ), entry.isFieldInLine(  ) );
-        assertEquals( storedEntry.getForm(  ).getIdForm(  ), entry.getForm(  ).getIdForm(  ) );
-        assertEquals( storedEntry.getHelpMessage(  ), entry.getHelpMessage(  ) );
-        assertEquals( storedEntry.isMandatory(  ), entry.isMandatory(  ) );
-        assertEquals( storedEntry.getTitle(  ), entry.getTitle(  ) );
+        assertEquals( storedEntry.getComment( ), entry.getComment( ) );
+        assertEquals( storedEntry.getEntryType( ).getIdType( ), entry.getEntryType( ).getIdType( ) );
+        assertEquals( storedEntry.isFieldInLine( ), entry.isFieldInLine( ) );
+        assertEquals( storedEntry.getIdResource( ), entry.getIdResource( ) );
+        assertEquals( storedEntry.getResourceType( ), entry.getResourceType( ) );
+        assertEquals( storedEntry.getHelpMessage( ), entry.getHelpMessage( ) );
+        assertEquals( storedEntry.isMandatory( ), entry.isMandatory( ) );
+        assertEquals( storedEntry.getTitle( ), entry.getTitle( ) );
     }
 
-    public void testGetEntryList(  )
+    public void testGetEntryList( )
     {
         List<IEntry> storedListEntry = null;
 
-        EntryFilter entryFilter = new EntryFilter(  );
+        EntryFilter entryFilter = new EntryFilter( );
 
-        storedListEntry = EntryHome.getEntryList( entryFilter, _plugin );
+        storedListEntry = EntryHome.getEntryList( entryFilter );
 
         assertNotNull( storedListEntry );
     }
 
-    public void testGetNumberEntryByFilter(  )
+    public void testGetNumberEntryByFilter( )
     {
         int nbEntry;
 
-        EntryFilter entryFilter = new EntryFilter(  );
+        EntryFilter entryFilter = new EntryFilter( );
 
-        nbEntry = EntryHome.getNumberEntryByFilter( entryFilter, _plugin );
+        nbEntry = EntryHome.getNumberEntryByFilter( entryFilter );
 
         assertNotNull( nbEntry );
     }
 
-    public void testUpdate(  )
+    /**
+     * Test the update of an entry
+     */
+    public void testUpdate( )
     {
-        IEntry loadEntry = EntryHome.findByPrimaryKey( ID_ENTRY_1, _plugin );
+        IEntry loadEntry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
 
-        Entry entry = new Entry(  );
+        Entry entry = new Entry( );
 
-        EntryType entryType2 = new EntryType(  );
+        EntryType entryType2 = new EntryType( );
         entryType2.setIdType( 2 );
 
-        FormDAO formDAO = new FormDAO(  );
+        FormDAO formDAO = new FormDAO( );
         int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
         Form form = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
-        entry.setIdEntry( loadEntry.getIdEntry(  ) );
+        entry.setIdEntry( loadEntry.getIdEntry( ) );
         entry.setComment( COMMENT_2 );
         entry.setEntryType( entryType2 );
         entry.setFieldInLine( FIELD_IN_LINE_1 );
-        entry.setForm( form );
+        entry.setIdResource( form.getIdForm( ) );
+        entry.setResourceType( Form.RESOURCE_TYPE );
         entry.setHelpMessage( HELP_MESSAGE_1 );
         entry.setMandatory( MANDATORY_1 );
         entry.setTitle( TITLE_1 );
 
-        EntryHome.update( entry, _plugin );
+        EntryHome.update( entry );
 
-        IEntry storedEntry = EntryHome.findByPrimaryKey( entry.getIdEntry(  ), _plugin );
+        IEntry storedEntry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
 
-        assertEquals( storedEntry.getComment(  ), entry.getComment(  ) );
-        assertEquals( storedEntry.getEntryType(  ).getIdType(  ), entry.getEntryType(  ).getIdType(  ) );
-        assertEquals( storedEntry.isFieldInLine(  ), entry.isFieldInLine(  ) );
-        assertEquals( storedEntry.getForm(  ).getIdForm(  ), entry.getForm(  ).getIdForm(  ) );
-        assertEquals( storedEntry.getHelpMessage(  ), entry.getHelpMessage(  ) );
-        assertEquals( storedEntry.isMandatory(  ), entry.isMandatory(  ) );
-        assertEquals( storedEntry.getTitle(  ), entry.getTitle(  ) );
+        assertEquals( storedEntry.getComment( ), entry.getComment( ) );
+        assertEquals( storedEntry.getEntryType( ).getIdType( ), entry.getEntryType( ).getIdType( ) );
+        assertEquals( storedEntry.isFieldInLine( ), entry.isFieldInLine( ) );
+        assertEquals( storedEntry.getIdResource( ), entry.getIdResource( ) );
+        assertEquals( storedEntry.getResourceType( ), entry.getResourceType( ) );
+        assertEquals( storedEntry.getHelpMessage( ), entry.getHelpMessage( ) );
+        assertEquals( storedEntry.isMandatory( ), entry.isMandatory( ) );
+        assertEquals( storedEntry.getTitle( ), entry.getTitle( ) );
     }
 
-    public void testRemove(  )
+    /**
+     * Test the removal of an entry
+     */
+    public void testRemove( )
     {
-        Entry entry = new Entry(  );
+        Entry entry = new Entry( );
 
-        EntryType entryType = new EntryType(  );
+        EntryType entryType = new EntryType( );
         entryType.setIdType( ID_ENTRY_TYPE_1 );
 
-        FormDAO formDAO = new FormDAO(  );
+        FormDAO formDAO = new FormDAO( );
         int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
         Form form = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
         entry.setComment( COMMENT_1 );
         entry.setEntryType( entryType );
         entry.setFieldInLine( FIELD_IN_LINE_1 );
-        entry.setForm( form );
+        entry.setIdResource( form.getIdForm( ) );
+        entry.setResourceType( Form.RESOURCE_TYPE );
         entry.setHelpMessage( HELP_MESSAGE_1 );
         entry.setMandatory( MANDATORY_1 );
         entry.setTitle( TITLE_1 );
 
-        int lastIdEntry = EntryHome.create( entry, _plugin );
+        int lastIdEntry = EntryHome.create( entry );
 
-        IEntry loadEntry = EntryHome.findByPrimaryKey( lastIdEntry, _plugin );
+        IEntry loadEntry = EntryHome.findByPrimaryKey( lastIdEntry );
 
-        EntryHome.remove( loadEntry.getIdEntry(  ), _plugin );
+        EntryHome.remove( loadEntry.getIdEntry( ) );
 
-        IEntry entryStored = EntryHome.findByPrimaryKey( loadEntry.getIdEntry(  ), _plugin );
+        IEntry entryStored = EntryHome.findByPrimaryKey( loadEntry.getIdEntry( ) );
         assertNull( entryStored );
     }
 }

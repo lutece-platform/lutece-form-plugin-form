@@ -67,6 +67,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class CategoryJspBean extends PluginAdminPageJspBean
 {
+    private static final long serialVersionUID = 4437806999245819898L;
     //	templates
     private static final String TEMPLATE_MANAGE_CATEGORY = "admin/plugins/form/manage_category.html";
     private static final String TEMPLATE_CREATE_CATEGORY = "admin/plugins/form/create_category.html";

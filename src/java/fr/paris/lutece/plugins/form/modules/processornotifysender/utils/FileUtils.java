@@ -36,16 +36,16 @@ package fr.paris.lutece.plugins.form.modules.processornotifysender.utils;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
- *
+ * 
  * FileUtils
- *
+ * 
  */
 public final class FileUtils
 {
@@ -55,7 +55,7 @@ public final class FileUtils
     /**
      * Private constructor
      */
-    private FileUtils(  )
+    private FileUtils( )
     {
     }
 
@@ -67,20 +67,20 @@ public final class FileUtils
     {
         File file = new File( strFolder );
 
-        if ( file.isDirectory(  ) )
+        if ( file.isDirectory( ) )
         {
-            File[] entries = file.listFiles(  );
+            File[] entries = file.listFiles( );
             int sz = entries.length;
 
             for ( int j = 0; j < sz; j++ )
             {
-                cleanFolder( entries[j].getPath(  ) );
+                cleanFolder( entries[j].getPath( ) );
             }
         }
 
-        if ( file.isFile(  ) )
+        if ( file.isFile( ) )
         {
-            if ( !file.delete(  ) )
+            if ( !file.delete( ) )
             {
                 AppLogService.error( MESSAGE_DELETE_ERROR + strFolder );
             }
@@ -91,31 +91,31 @@ public final class FileUtils
      * This method extracts a specific file to a tmp folder
      * @param response the response of the form
      * @param strFolder the temporary folder for extraction
-     * @throws IOException exception if the copy from byte[] to File has an error
+     * @throws IOException exception if the copy from byte[] to File has an
+     *             error
      */
-    public static void addFileResponseToFolder( Response response, String strFolder )
-        throws IOException
+    public static void addFileResponseToFolder( Response response, String strFolder ) throws IOException
     {
-        if ( ( response.getFile(  ) != null ) && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) &&
-                ( response.getFile(  ).getPhysicalFile(  ) != null ) &&
-                ( response.getFile(  ).getPhysicalFile(  ).getValue(  ) != null ) )
+        if ( ( response.getFile( ) != null ) && StringUtils.isNotBlank( response.getFile( ).getTitle( ) )
+                && ( response.getFile( ).getPhysicalFile( ) != null )
+                && ( response.getFile( ).getPhysicalFile( ).getValue( ) != null ) )
         {
             // Create the folder first
             createFolder( strFolder );
 
-            File file = new File( strFolder + response.getFile(  ).getTitle(  ) );
+            File file = new File( strFolder + response.getFile( ).getTitle( ) );
 
             // Delete the file if it exists
-            if ( file.exists(  ) )
+            if ( file.exists( ) )
             {
-                if ( !file.delete(  ) )
+                if ( !file.delete( ) )
                 {
-                    AppLogService.error( MESSAGE_DELETE_ERROR + strFolder + response.getFile(  ).getTitle(  ) );
+                    AppLogService.error( MESSAGE_DELETE_ERROR + strFolder + response.getFile( ).getTitle( ) );
                 }
             }
 
-            org.apache.commons.io.FileUtils.writeByteArrayToFile( file,
-                response.getFile(  ).getPhysicalFile(  ).getValue(  ) );
+            org.apache.commons.io.FileUtils.writeByteArrayToFile( file, response.getFile( ).getPhysicalFile( )
+                    .getValue( ) );
         }
     }
 
@@ -127,9 +127,9 @@ public final class FileUtils
     {
         File file = new File( strPath );
 
-        if ( !file.isDirectory(  ) )
+        if ( !file.isDirectory( ) )
         {
-            if ( !file.mkdirs(  ) )
+            if ( !file.mkdirs( ) )
             {
                 AppLogService.error( MESSAGE_CREATE_ERROR + strPath );
             }

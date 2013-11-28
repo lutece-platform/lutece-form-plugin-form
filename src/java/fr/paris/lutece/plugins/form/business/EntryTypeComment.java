@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -49,11 +40,11 @@ import javax.servlet.http.HttpServletRequest;
  *  class EntryTypeComment
  *
  */
-public class EntryTypeComment extends Entry
+public class EntryTypeComment extends AbstractEntryTypeComment
 {
-    private final String _template_create = "admin/plugins/form/create_entry_type_comment.html";
-    private final String _template_modify = "admin/plugins/form/modify_entry_type_comment.html";
-    private final String _template_html_code = "admin/plugins/form/html_code_entry_type_comment.html";
+    private final String _template_create = "admin/plugins/form/entries/create_entry_type_comment.html";
+    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_comment.html";
+    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_comment.html";
 
     /**
      * Get the HtmlCode  of   the entry
@@ -63,37 +54,6 @@ public class EntryTypeComment extends Entry
     public String getHtmlCode(  )
     {
         return _template_html_code;
-    }
-
-    /**
-     * Get the request data
-     * @param request HttpRequest
-     * @param locale the locale
-     * @return null if all data requiered are in the request else the url of jsp error
-     */
-    public String getRequestData( HttpServletRequest request, Locale locale )
-    {
-        String strComment = request.getParameter( PARAMETER_COMMENT );
-        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-        String strFieldError = StringUtils.EMPTY;
-
-        if ( StringUtils.isBlank( strComment ) )
-        {
-            strFieldError = FIELD_COMMENT;
-        }
-
-        if ( StringUtils.isNotBlank( strFieldError ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
-        }
-
-        this.setComment( strComment );
-        this.setCSSClass( strCSSClass );
-
-        return null;
     }
 
     /**

@@ -1,0 +1,41 @@
+<#include "/admin/plugins/form/commons.html" />
+<div class="row-fluid">
+	<div class="span12">
+	<fieldset>
+	<legend>#i18n{form.createEntry.titleQuestion} : '${form.title}'</legend>
+		<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post">
+		<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
+		<#if entry.fieldDepend?exists>
+			<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
+		</#if>
+		<div class="control-group">
+		<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
+			<div class="controls">
+				<input type="text" name="title" id="title"class="input-large"value=""  maxlength="255" />
+			</div>
+		</div>
+		<div class="control-group">
+		<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory}</label>
+			<div class="controls">
+				<input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />		
+				<span class="help-block">#i18n{form.createEntry.labelMandatoryCommentForEntryTypeSession}</span>
+			</div>
+		</div>
+		<div class="control-group">
+		<label class="control-label" for="value">#i18n{form.createEntry.labelAttributeName} * : </label>
+			<div class="controls">
+				<input type="text" name="value" id="value" class="input-large" maxlength="255" value ="" />
+				<span class="help-block">#i18n{form.createEntry.labelAttributeNameComment}</span>
+			</div>
+		</div>
+		<div class="form-actions">
+			<button class="btn btn-primary btn-small" name="save" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.buttonSave}</button>
+			<button class="btn btn-primary btn-small" name="apply" type="submit" ><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.createEntry.buttonApplyAndManageVerification}</button>
+			<a class="btn btn-small" type="button" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form" >
+				<i class="icon-remove-circle"></i>&nbsp;#i18n{form.createEntry.buttonCancel}
+			</a>
+		</div>
+		</form>
+	</fieldset>
+	</div>
+ </div>

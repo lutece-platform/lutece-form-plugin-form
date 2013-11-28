@@ -6,20 +6,20 @@
 	<div class="controls">
 		<label class="checkbox">#i18n{form.createForm.labelLimitNumberResponse}
         <input type="checkbox" name="limit_number_response" value="1" ${getChecked('limit_number_response',list_form_param_default_values)}/>
-        <span class="help-text">#i18n{form.createForm.labelLimitNumberResponseComment}</span>
+        <span class="help-block">#i18n{form.createForm.labelLimitNumberResponseComment}</span>
         </label>
     </div>
 	<div class="controls">
 	<label class="checkbox">#i18n{form.createForm.labelStoreAdresse}
 		<input type="checkbox" name="active_store_adresse" value="1" ${getChecked('active_store_adresse',list_form_param_default_values)} />
-		<span class="help-text">#i18n{form.createForm.labelStoreAdresseComment}</span>
+		<span class="help-block">#i18n{form.createForm.labelStoreAdresseComment}</span>
 	</label>
 	</div>
     <#if is_active_mylutece_authentification>
     <div class="controls">
 		<label class="checkbox">#i18n{form.createForm.labelActiveMyLuteceAuthentification}
 			<input type="checkbox" name="active_mylutece_authentification" value="1" ${getChecked('active_mylutece_authentification',list_form_param_default_values)} />
-			<span class="help-text">#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}</span>
+			<span class="help-block">#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}</span>
         </label>
     </div>
     </#if>
@@ -27,20 +27,20 @@
     <div class="controls">
 		<label class="checkbox">#i18n{form.createForm.labelActiveCaptcha}
 			<input type="checkbox" name="active_captcha" value="1" ${getChecked('active_captcha',list_form_param_default_values)} />
-            <span class="help-text">#i18n{form.createForm.labelActiveCaptchaComment}</span>
+            <span class="help-block">#i18n{form.createForm.labelActiveCaptchaComment}</span>
         </label>
     </div>
     </#if>
     <div class="controls">
 		<label class="checkbox">
 			<input type="checkbox" name="active_requirement" value="1" ${getChecked('active_requirement',list_form_param_default_values)}/>
-			<span class="help-text"> #i18n{form.createForm.labelActiveRequirementComment}</span>
+			<span class="help-block"> #i18n{form.createForm.labelActiveRequirementComment}</span>
 		</label>
     </div>
     <div class="controls">
 		<label class="checkbox">#i18n{form.createForm.supportHTTPS} :
 			<input type="checkbox" name="support_https" value="1" ${getChecked('support_https',list_form_param_default_values)}/>
-			<span class="help-text"> #i18n{form.createForm.labelSupportHTTPS_comment}</span>
+			<span class="help-block"> #i18n{form.createForm.labelSupportHTTPS_comment}</span>
         </label>
     </div>
 </div>

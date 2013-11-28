@@ -47,15 +47,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Response service
- *
+ * 
  */
 public interface IResponseService
 {
     /**
-     * Set the file service
-     * @param fileService the file service
+     * Get the file service
+     * @return the file service
      */
-    void setFileService( FileService fileService );
+    FileService getFileService( );
 
     /**
      * Create a form submit
@@ -66,25 +66,23 @@ public interface IResponseService
 
     /**
      * Creation of an instance of response
-     * @param response The instance of the response which contains the informations to store
+     * @param response The instance of the response which contains the
+     *            informations to store
+     * @param nIdFormSubmit The id of the form submit associated with this
+     *            response
      */
-    void create( Response response );
+    void create( Response response, int nIdFormSubmit );
 
     /**
      * Update of the response which is specified in parameter
-     * @param response The instance of the Response which contains the informations to update
+     * @param response The instance of the Response which contains the
+     *            informations to update
      */
     void update( Response response );
 
     /**
-     * Remove all  response  associate to the form submit whose identifier is specified in parameter
-     * @param nIdFormSubmit The formSubmitKey
-     */
-    @Transactional( "form.transactionManager" )
-    void remove( int nIdFormSubmit );
-
-    /**
-     * Returns an instance of a Response whose identifier is specified in parameter
+     * Returns an instance of a Response whose identifier is specified in
+     * parameter
      * @param nKey The entry primary key
      * @param bGetFileData get file data
      * @return an instance of Response
@@ -92,17 +90,18 @@ public interface IResponseService
     Response findByPrimaryKey( int nKey, boolean bGetFileData );
 
     /**
-     * Load the data of all the response who verify the filter and returns them in a  list
+     * Load the data of all the response who verify the filter and returns them
+     * in a list
      * @param filter the filter
      * @param bGetFileData get file data
-     * @return  the list of response
+     * @return the list of response
      */
     List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData );
 
     /**
-     *  Return a list of statistic on the entry
-     *  @param nIdEntry the id of the entry
-     *  @return return a list of statistic on the entry
+     * Return a list of statistic on the entry
+     * @param nIdEntry the id of the entry
+     * @return return a list of statistic on the entry
      */
     List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry );
 
@@ -113,4 +112,10 @@ public interface IResponseService
      * @param dateCleanTo Anonymize responses posted before this date
      */
     void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo );
+
+    /**
+     * Remove responses associated with a given form submit
+     * @param nIdFormSubmit The id of the form submit
+     */
+    void removeFromFormSubmit( int nIdFormSubmit );
 }

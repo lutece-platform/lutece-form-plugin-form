@@ -33,41 +33,22 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.service.FormService;
-import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
-
 /**
- *
- * EntryTypeNumerotation
- *
+ * EntryTypeNumbering
  */
-public class EntryTypeNumbering extends Entry
+public class EntryTypeNumbering extends AbstractEntryTypeNumbering
 {
-    // PARAMETERS
-    private static final String PARAMETER_PREFIX = "prefix";
 
     // TEMPLATES
-    private static final String TEMPLATE_CREATE = "admin/plugins/form/create_entry_type_numbering.html";
-    private static final String TEMPLATE_MODIFY = "admin/plugins/form/modify_entry_type_numbering.html";
-    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/html_code_entry_type_numbering.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_numbering.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_numbering.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_numbering.html";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode(  )
+    public String getHtmlCode( )
     {
         return TEMPLATE_HTML_CODE;
     }
@@ -76,7 +57,7 @@ public class EntryTypeNumbering extends Entry
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate(  )
+    public String getTemplateCreate( )
     {
         return TEMPLATE_CREATE;
     }
@@ -85,106 +66,8 @@ public class EntryTypeNumbering extends Entry
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateModify(  )
+    public String getTemplateModify( )
     {
         return TEMPLATE_MODIFY;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getRequestData( HttpServletRequest request, Locale locale )
-    {
-        String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strPrefix = request.getParameter( PARAMETER_PREFIX );
-
-        String strFieldError = StringUtils.EMPTY;
-
-        if ( StringUtils.isBlank( strTitle ) )
-        {
-            strFieldError = FIELD_TITLE;
-        }
-
-        if ( StringUtils.isNotBlank( strFieldError ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
-        }
-
-        this.setTitle( strTitle );
-
-        if ( this.getFields(  ) == null )
-        {
-            List<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
-            listFields.add( field );
-            this.setFields( listFields );
-        }
-
-        this.getFields(  ).get( 0 ).setTitle( StringUtils.isNotEmpty( strPrefix ) ? strPrefix : StringUtils.EMPTY );
-
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
-    {
-        int numbering = FormService.getInstance(  ).getMaxNumber( this );
-        Response response = new Response(  );
-        response.setEntry( this );
-        response.setResponseValue( String.valueOf( numbering ) );
-        listResponse.add( response );
-
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
-    {
-        return this.getResponseValue( response );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
-    {
-        return this.getResponseValue( response );
-    }
-
-    /**
-     * @return the response value of the response for this entry
-     * @param response The response
-     */
-    public String getResponseValue( Response response )
-    {
-        Field field = null;
-
-        if ( getFields(  ) == null )
-        {
-            setFields( FieldHome.getFieldListByIdEntry( getIdEntry(  ), FormUtils.getPlugin(  ) ) );
-        }
-
-        if ( ( getFields(  ) != null ) && !getFields(  ).isEmpty(  ) )
-        {
-            field = getFields(  ).get( 0 );
-        }
-
-        if ( ( field != null ) && StringUtils.isNotBlank( field.getTitle(  ) ) )
-        {
-            return field.getTitle(  ) + response.getResponseValue(  );
-        }
-
-        return response.getResponseValue(  );
     }
 }

@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.form.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
@@ -53,8 +53,8 @@ import org.apache.commons.lang.StringUtils;
 public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
 {
 
-    private final String _template_create = "admin/plugins/form/create_entry_type_mandatory_check_box.html";
-    private final String _template_modify = "admin/plugins/form/modify_entry_type_mandatory_check_box.html";
+    private final String _template_create = "admin/plugins/form/entries/create_entry_type_mandatory_check_box.html";
+    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_mandatory_check_box.html";
 
     /**
      * Get template create url of the entry
@@ -85,7 +85,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String[] strTabIdField = request.getParameterValues( PREFIX_FORM + this.getIdEntry( ) );
+        String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + this.getIdEntry( ) );
         List<Field> listFieldInResponse = new ArrayList<Field>( );
         int nIdField = -1;
         Field field = null;
@@ -104,7 +104,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
                     AppLogService.error( ne );
                 }
 
-                field = FormUtils.findFieldByIdInTheList( nIdField, this.getFields( ) );
+                field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, this.getFields( ) );
 
                 if ( field != null )
                 {

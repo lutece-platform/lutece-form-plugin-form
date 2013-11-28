@@ -40,19 +40,21 @@ import fr.paris.lutece.plugins.form.business.DefaultMessageHome;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.EntryType;
+import fr.paris.lutece.plugins.form.business.EntryTypeGroup;
 import fr.paris.lutece.plugins.form.business.EntryTypeHome;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
+import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.FormResourceIdService;
 import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
+import fr.paris.lutece.plugins.form.util.GenericAttributesUtils;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.style.Theme;
-import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -61,6 +63,7 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.portal.ThemesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -186,6 +189,9 @@ public abstract class ModifyFormJspBean extends FormJspBean
     private static final String CONSTANT_DOUBLE_QUOTE = "\"";
     private static final String CONSTANT_TWO_SIMPLE_QUOTES = "''";
 
+    /**
+     * The number of items to display per page
+     */
     protected int _nItemsPerPageEntry;
     private String _strCurrentPageIndexEntry;
 
@@ -207,7 +213,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         refMailingList.addItem( -1, strNothing );
         refMailingList.addAll( AdminMailingListService.getMailingLists( adminUser ) );
 
-        String defaultTheme = ThemeHome.getGlobalTheme( );
+        String defaultTheme = ThemesService.getGlobalTheme( );
 
         DefaultMessage defaultMessage = DefaultMessageHome.find( getPlugin( ) );
 
@@ -218,7 +224,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         }
 
         // Style management
-        Collection<Theme> themes = ThemeHome.getThemesList( );
+        Collection<Theme> themes = ThemesService.getThemesList( );
         ReferenceList themesRefList = new ReferenceList( );
 
         for ( Theme theme : themes )
@@ -352,12 +358,12 @@ public abstract class ModifyFormJspBean extends FormJspBean
         filter.setIdForm( nIdForm );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
+        listEntryFirstLevel = EntryHome.getEntryList( filter );
 
-        filter.setEntryParentNull( EntryFilter.ALL_INT );
+        filter.setEntryParentNull( GenericAttributesUtils.CONSTANT_ID_NULL );
         filter.setIdIsComment( EntryFilter.FILTER_FALSE );
         filter.setIdIsGroup( EntryFilter.FILTER_FALSE );
-        nNumberQuestion = EntryHome.getNumberEntryByFilter( filter, plugin );
+        nNumberQuestion = EntryHome.getNumberEntryByFilter( filter );
 
         Map<String, List<Integer>> mapIdParentOrdersChildren = new HashMap<String, List<Integer>>( );
 
@@ -390,15 +396,15 @@ public abstract class ModifyFormJspBean extends FormJspBean
         ReferenceList refEntryType;
 
         EntryType entryTypeGroup = new EntryType( );
-        refEntryType = initRefListEntryType( plugin, locale, entryTypeGroup );
+        refEntryType = initRefListEntryType( locale, entryTypeGroup );
 
         //get only the group type entries
         filter = new EntryFilter( );
         filter.setIdForm( nIdForm );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-        filter.setIdEntryType( EntryFilter.FILTER_GROUP_ENTRY );
+        filter.setIdEntryType( EntryTypeGroup.FILTER_GROUP_ENTRY );
 
-        List<IEntry> listGroupEntry = EntryHome.getEntryList( filter, plugin );
+        List<IEntry> listGroupEntry = EntryHome.getEntryList( filter );
 
         ReferenceList refListGroupEntry = ReferenceList.convert( listGroupEntry, "idEntry", "title", true );
 
@@ -410,7 +416,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_PAGINATOR, paginator );
-        model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageEntry );
+        model.put( MARK_NB_ITEMS_PER_PAGE, Integer.toString( _nItemsPerPageEntry ) );
         model.put( MARK_ENTRY_TYPE_REF_LIST, refEntryType );
         model.put( MARK_ENTRY_TYPE_GROUP, entryTypeGroup );
         model.put( MARK_FORM, form );
@@ -521,7 +527,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         ReferenceList refListWorkGroups = AdminWorkgroupService.getUserWorkgroups( adminUser, locale );
 
         // Style management
-        Collection<Theme> themes = ThemeHome.getThemesList( );
+        Collection<Theme> themes = ThemesService.getThemesList( );
         ReferenceList themesRefList = new ReferenceList( );
 
         for ( Theme theme : themes )
@@ -531,7 +537,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         if ( form.getCodeTheme( ) == null )
         {
-            form.setCodeTheme( ThemeHome.getGlobalTheme( ) );
+            form.setCodeTheme( ThemesService.getGlobalTheme( ) );
         }
 
         Map<String, Object> model = new HashMap<String, Object>( );
@@ -746,19 +752,8 @@ public abstract class ModifyFormJspBean extends FormJspBean
         filter.setIdForm( nIdForm );
         filter.setIdIsGroup( 0 );
         filter.setIdIsComment( 0 );
-        List<IEntry> listEntries = EntryHome.getEntryList( filter, plugin );
+        List<IEntry> listEntries = EntryHome.getEntryList( filter );
 
-        //        for ( IEntry entry : listEntries )
-        //        {
-        //            List<Field> listFields = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ), plugin );
-        //            for ( Field field : listFields )
-        //            {
-        //                EntryFilter fieldFilter = new EntryFilter( );
-        //                fieldFilter.setIdFieldDepend( field.getIdField( ) );
-        //                field.setConditionalQuestions( EntryHome.getEntryList( fieldFilter, plugin ) );
-        //            }
-        //            entry.setFields( listFields );
-        //        }
         List<Integer> listAnonymizeEntry = FormService.getInstance( ).getAnonymizeEntryList( form.getIdForm( ) );
 
         Map<String, Object> model = new HashMap<String, Object>( );
@@ -847,15 +842,14 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
     /**
      * Init reference list whidth the different entry type
-     * @param plugin the plugin
      * @param locale the locale
      * @param entryTypeGroup the entry type who represent a group
      * @return reference list of entry type
      */
-    protected ReferenceList initRefListEntryType( Plugin plugin, Locale locale, EntryType entryTypeGroup )
+    protected ReferenceList initRefListEntryType( Locale locale, EntryType entryTypeGroup )
     {
         ReferenceList refListEntryType = new ReferenceList( );
-        List<EntryType> listEntryType = EntryTypeHome.getList( plugin );
+        List<EntryType> listEntryType = EntryTypeHome.getList( FormPlugin.PLUGIN_NAME );
 
         for ( EntryType entryType : listEntryType )
         {
@@ -932,7 +926,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         String strFieldError = EMPTY_STRING;
 
-        if ( ( strTitle == null ) || strTitle.trim( ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strTitle ) )
         {
             strFieldError = FIELD_TITLE;
         }
@@ -1017,64 +1011,19 @@ public abstract class ModifyFormJspBean extends FormJspBean
             form.setFrontOfficeTitle( strFrontOfficeTitle );
         }
 
-        if ( strIsShownFrontOfficeTitle != null )
-        {
-            form.setIsShownFrontOfficeTitle( true );
-        }
-        else
-        {
-            form.setIsShownFrontOfficeTitle( false );
-        }
+        form.setIsShownFrontOfficeTitle( strIsShownFrontOfficeTitle != null );
 
         if ( strThemeXpage != null )
         {
             form.setCodeTheme( strThemeXpage );
         }
 
-        if ( ( strSupportsHTTPS != null ) )
-        {
-            form.setSupportHTTPS( true );
-        }
-        else
-        {
-            form.setSupportHTTPS( false );
-        }
-
-        if ( strActiveStoreAdresse != null )
-        {
-            form.setActiveStoreAdresse( true );
-        }
-        else
-        {
-            form.setActiveStoreAdresse( false );
-        }
-
-        if ( strLimitNumberResponse != null )
-        {
-            form.setLimitNumberResponse( true );
-        }
-        else
-        {
-            form.setLimitNumberResponse( false );
-        }
-
-        if ( strActiveRequirement != null )
-        {
-            form.setActiveRequirement( true );
-        }
-        else
-        {
-            form.setActiveRequirement( false );
-        }
-
-        if ( strActiveMyLuteceAuthentification != null )
-        {
-            form.setActiveMyLuteceAuthentification( true );
-        }
-        else
-        {
-            form.setActiveMyLuteceAuthentification( false );
-        }
+        form.setSupportHTTPS( strSupportsHTTPS != null );
+        form.setActiveStoreAdresse( strActiveStoreAdresse != null );
+        form.setLimitNumberResponse( strLimitNumberResponse != null );
+        form.setActiveRequirement( strActiveRequirement != null );
+        form.setActiveMyLuteceAuthentification( strActiveMyLuteceAuthentification != null );
+        form.setActiveCaptcha( strActiveCaptcha != null );
 
         if ( strInformationComplementary1 != null )
         {
@@ -1099,15 +1048,6 @@ public abstract class ModifyFormJspBean extends FormJspBean
         if ( strInformationComplementary5 != null )
         {
             form.setInfoComplementary5( strInformationComplementary5 );
-        }
-
-        if ( strActiveCaptcha != null )
-        {
-            form.setActiveCaptcha( true );
-        }
-        else
-        {
-            form.setActiveCaptcha( false );
         }
 
         return null; // No error
@@ -1235,7 +1175,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
             {
                 filter = new EntryFilter( );
                 filter.setIdEntryParent( entry.getIdEntry( ) );
-                entry.setChildren( EntryHome.getEntryList( filter, plugin ) );
+                entry.setChildren( EntryHome.getEntryList( filter ) );
 
                 if ( entry.getChildren( ).size( ) != 0 )
                 {

@@ -87,7 +87,7 @@ public final class FormHome
         filter.setIdForm( form.getIdForm( ) );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-        listEntry = EntryHome.getEntryList( filter, plugin );
+        listEntry = EntryHome.getEntryList( filter );
         recap = RecapHome.findByPrimaryKey( form.getRecap( ).getIdRecap( ), plugin );
         recap.setIdRecap( RecapHome.copy( recap, plugin ) );
         form.setRecap( recap );
@@ -96,9 +96,10 @@ public final class FormHome
 
         for ( IEntry entry : listEntry )
         {
-            entry = EntryHome.findByPrimaryKey( entry.getIdEntry( ), plugin );
-            entry.setForm( form );
-            EntryHome.copy( entry, plugin );
+            entry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
+            entry.setIdResource( form.getIdForm( ) );
+            entry.setResourceType( Form.RESOURCE_TYPE );
+            EntryHome.copy( entry );
         }
     }
 

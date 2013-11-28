@@ -75,7 +75,12 @@ import org.xml.sax.InputSource;
  */
 public class ExportFormatJspBean extends PluginAdminPageJspBean
 {
-    public static final String RIGHT_MANAGE_FORM = "FORM_MANAGEMENT";
+    /**
+     * Right to manage forms
+     */
+    public static final String RIGHT_MANAGE_FORM = FormJspBean.RIGHT_MANAGE_FORM;
+
+    private static final long serialVersionUID = 3584561879462442339L;
 
     //	templates
     private static final String TEMPLATE_MANAGE_EXPORT = "admin/plugins/form/manage_export_format.html";

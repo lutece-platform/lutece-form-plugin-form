@@ -35,19 +35,20 @@ package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
 /**
- *
- *  Interface IFormSubmitDAO
- *
+ * 
+ * Interface IFormSubmitDAO
+ * 
  */
 public interface IFormSubmitDAO
 {
     /**
      * Insert a new record in the table.
-     *
+     * 
      * @param formResponse instance of the formResponse object to insert
      * @param plugin the plugin
      * @return the key of the new formResponse
@@ -56,7 +57,7 @@ public interface IFormSubmitDAO
 
     /**
      * Load the data of the formResponse from the table
-     *
+     * 
      * @param nIdFormResponse The identifier of the formResponse
      * @param plugin the plugin
      * @return the instance of the formResponse
@@ -65,41 +66,92 @@ public interface IFormSubmitDAO
 
     /**
      * Delete a record from the table
-     *
+     * 
      * @param nIdFormResponse The identifier of the formResponse
      * @param plugin the plugin
      */
     void delete( int nIdFormResponse, Plugin plugin );
 
     /**
+     * Delete responses and files associated with a form submit
+     * @param nIdFormSubmit The if of the form submit to remove
+     * @param plugin The plugin
+     */
+    void deleteResponses( int nIdFormSubmit, Plugin plugin );
+
+    /**
      * Update the the formResponse in the table
-     *
+     * 
      * @param formResponse instance of the formResponse object to update
      * @param plugin the plugin
      */
     void store( FormSubmit formResponse, Plugin plugin );
 
     /**
-     * Load the data of all the formResponse who verify the filter and returns them in a  list
+     * Load the data of all the formResponse who verify the filter and returns
+     * them in a list
      * @param filter the filter
      * @param plugin the plugin
-     * @return  the list of formResponse
+     * @return the list of formResponse
      */
     List<FormSubmit> selectListByFilter( ResponseFilter filter, Plugin plugin );
 
     /**
-     * Load the data of all the formResponse who verify the filter and returns them in a  list
+     * Load the data of all the formResponse who verify the filter and returns
+     * them in a list
      * @param filter the filter
      * @param plugin the plugin
-     * @return  the list of formResponse
+     * @return the list of formResponse
      */
     int selectCountByFilter( ResponseFilter filter, Plugin plugin );
 
     /**
-    * Load the number of formSubmit who verify the filter and returns them in a  list of statistic
-    * @param filter the filter
-    * @param plugin the plugin
-    * @return  the list of statistic
-    */
+     * Load the number of formSubmit who verify the filter and returns them in a
+     * list of statistic
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return the list of statistic
+     */
     List<StatisticFormSubmit> selectStatisticFormSubmit( ResponseFilter filter, Plugin plugin );
+
+    /**
+     * Find a form submit from the id of a response associated with it
+     * @param nIdResponse The id of the response
+     * @param plugin The plugin
+     * @return The form submit, or null if no form submit is associated with the
+     *         given response
+     */
+    FormSubmit findFormSubmitFromResponseId( int nIdResponse, Plugin plugin );
+
+    /**
+     * Anonymize entries of responses
+     * @param listIdEntries The list of id of entries to anonymize responses of
+     * @param dateCleanTo Anonymize responses posted before this date
+     * @param plugin The plugin
+     */
+    void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo, Plugin plugin );
+
+    /**
+     * Get the list of id of responses associated with a form submit
+     * @param nIdFormSubmit The id of the form submit
+     * @param plugin The plugin
+     * @return The list of response id, or an empty list if no response is
+     *         associated with the form submit
+     */
+    List<Integer> getResponseListFromIdFormSubmit( int nIdFormSubmit, Plugin plugin );
+
+    /**
+     * Associate a response with a form submit
+     * @param nIdResponse The id of the response
+     * @param nIdFormSubmit The id of the form submit
+     * @param plugin The plugin
+     */
+    void associateResponseWithFormSubmit( int nIdResponse, int nIdFormSubmit, Plugin plugin );
+    
+    /**
+     * Remove the association between a response and a form submit
+     * @param nIdResponse The id of the response
+     * @param plugin The plugin
+     */
+    void removeResponseFormSubmitAssociation( int nIdResponse, Plugin plugin );
 }

@@ -695,7 +695,7 @@ public class FormJspBeanTest extends LuteceTestCase
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
-        String result = instance.doMoveUpField( request );
+        String result = instance.doMoveField( request, true );
 
         assertNotNull( result );
     }
@@ -717,7 +717,7 @@ public class FormJspBeanTest extends LuteceTestCase
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
-        String result = instance.doMoveDownField( request );
+        String result = instance.doMoveField( request, false );
 
         assertNotNull( result );
     }

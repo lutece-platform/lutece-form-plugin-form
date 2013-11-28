@@ -33,245 +33,43 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.web.util.LocalizedPaginator;
-import fr.paris.lutece.util.html.Paginator;
-import fr.paris.lutece.util.sql.DAOUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
-
 /**
- *
+ * 
  * class EntryTypeSelectSQL
- *
+ * 
  */
-public class EntryTypeSelectSQL extends Entry
+public class EntryTypeSelectSQL extends AbstractEntryTypeSelectSQL
 {
-    private final String _template_create = "admin/plugins/form/create_entry_type_select_sql.html";
-    private final String _template_modify = "admin/plugins/form/modify_entry_type_select_sql.html";
-    private final String _template_html_code = "admin/plugins/form/html_code_entry_type_select_sql.html";
+    private final String _template_create = "admin/plugins/form/entries/create_entry_type_select_sql.html";
+    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_select_sql.html";
+    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_select_sql.html";
 
     /**
-     * Get the HtmlCode  of   the entry
-     * @return the HtmlCode  of   the entry
-     *
-     * */
+     * {@inheritDoc}
+     */
     @Override
-    public String getHtmlCode(  )
+    public String getHtmlCode( )
     {
-        this.setFields( getSqlQueryFields(  ) );
+        this.setFields( this.getSqlQueryFields( ) );
 
         return _template_html_code;
-    }
-
-    /**
-     * Get the request data
-     * @param request HttpRequest
-     * @param locale the locale
-     * @return null if all data requiered are in the request else the url of jsp error
-     */
-    @Override
-    public String getRequestData( HttpServletRequest request, Locale locale )
-    {
-        String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
-        String strComment = request.getParameter( PARAMETER_COMMENT );
-        String strMandatory = request.getParameter( PARAMETER_MANDATORY );
-        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-
-        String strFieldError = StringUtils.EMPTY;
-
-        if ( StringUtils.isBlank( strTitle ) )
-        {
-            strFieldError = FIELD_TITLE;
-        }
-
-        if ( StringUtils.isNotBlank( strFieldError ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
-        }
-
-        // for don't update fields listFields=null
-        this.setFields( null );
-        this.setTitle( strTitle );
-        this.setHelpMessage( strHelpMessage );
-        this.setComment( strComment );
-        this.setCSSClass( strCSSClass );
-
-        if ( strMandatory != null )
-        {
-            this.setMandatory( true );
-        }
-        else
-        {
-            this.setMandatory( false );
-        }
-
-        return null;
-    }
-
-    /**
-     * Get template create url of the entry
-     * @return template create url of the entry
-     */
-    @Override
-    public String getTemplateCreate(  )
-    {
-        return _template_create;
-    }
-
-    /**
-     * Get the template modify url  of the entry
-     * @return template modify url  of the entry
-     */
-    @Override
-    public String getTemplateModify(  )
-    {
-        return _template_modify;
-    }
-
-    /**
-     * The paginator who is use in the template modify of the entry
-     * @param nItemPerPage Number of items to display per page
-     * @param strBaseUrl The base Url for build links on each page link
-     * @param strPageIndexParameterName The parameter name for the page index
-     * @param strPageIndex The current page index
-     * @return the paginator who is use in the template modify of the entry
-     */
-    @Override
-    public Paginator<Field> getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
-        String strPageIndex )
-    {
-        return new Paginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
-                strPageIndex );
-    }
-
-    /**
-     * save in the list of response the response associate to the entry in the form submit
-     * @param request HttpRequest
-     * @param listResponse the list of response associate to the entry in the form submit
-     * @param locale the locale
-     * @return a Form error object if there is an error in the response
-     */
-    @Override
-    public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
-    {
-        String strIdField = request.getParameter( PREFIX_FORM + this.getIdEntry(  ) );
-        int nIdField = -1;
-        Field field = null;
-        Response response = new Response(  );
-        response.setEntry( this );
-
-        if ( strIdField != null )
-        {
-            try
-            {
-                nIdField = Integer.parseInt( strIdField );
-            }
-            catch ( NumberFormatException ne )
-            {
-                AppLogService.error( ne );
-            }
-        }
-
-        if ( nIdField != -1 )
-        {
-            field = FormUtils.findFieldByIdInTheList( nIdField, getSqlQueryFields(  ) );
-        }
-
-        if ( field != null )
-        {
-            response.setResponseValue( field.getValue(  ) );
-            response.setField( field );
-        }
-
-        listResponse.add( response );
-
-        if ( this.isMandatory(  ) )
-        {
-            if ( ( field == null ) || StringUtils.isBlank( field.getValue(  ) ) )
-            {
-                return new MandatoryFormError( this, locale );
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Get the response value  associate to the entry  to export in the file export
-     * @param response the response associate to the entry
-     * @param locale the locale
-     * @param request the request
-     * @return  the response value  associate to the entry  to export in the file export
-     */
-    @Override
-    public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
-    {
-        return response.getResponseValue(  );
-    }
-
-    /**
-     * Get the response value  associate to the entry  to write in the recap
-     * @param response the response associate to the entry
-     * @param locale the locale
-     * @param request the request
-     * @return the response value  associate to the entry  to write in the recap
-     */
-    @Override
-    public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
-    {
-        return response.getField(  ).getTitle(  );
-    }
-
-    /**
-     * Return fields from a SQL query
-     * @return A list of fields
-     */
-    private List<Field> getSqlQueryFields(  )
-    {
-        List<Field> list = new ArrayList<Field>(  );
-        String strSQL = this.getComment(  );
-        DAOUtil daoUtil = new DAOUtil( strSQL );
-        daoUtil.executeQuery(  );
-
-        while ( daoUtil.next(  ) )
-        {
-            Field field = new Field(  );
-            field.setIdField( daoUtil.getInt( 1 ) );
-            field.setTitle( daoUtil.getString( 2 ) );
-            field.setValue( field.getTitle(  ) );
-            list.add( field );
-        }
-
-        daoUtil.free(  );
-
-        return list;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public LocalizedPaginator<Field> getPaginator( int nItemPerPage, String strBaseUrl,
-            String strPageIndexParameterName, String strPageIndex, Locale locale )
+    public String getTemplateCreate( )
     {
-        return new LocalizedPaginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
-                strPageIndex, locale );
+        return _template_create;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTemplateModify( )
+    {
+        return _template_modify;
     }
 }

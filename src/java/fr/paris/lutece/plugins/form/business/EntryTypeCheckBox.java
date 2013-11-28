@@ -33,21 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.web.util.LocalizedPaginator;
-import fr.paris.lutece.util.html.Paginator;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -55,11 +40,11 @@ import org.apache.commons.lang.StringUtils;
  * class EntryTypeCheckBox
  * 
  */
-public class EntryTypeCheckBox extends Entry
+public class EntryTypeCheckBox extends AbstractEntryTypeCheckBox
 {
-    private final String _template_create = "admin/plugins/form/create_entry_type_check_box.html";
-    private final String _template_modify = "admin/plugins/form/modify_entry_type_check_box.html";
-    private final String _template_html_code = "admin/plugins/form/html_code_entry_type_check_box.html";
+    private final String _template_create = "admin/plugins/form/entries/create_entry_type_check_box.html";
+    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_check_box.html";
+    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_check_box.html";
 
     /**
      * Get the HtmlCode of the entry
@@ -69,79 +54,6 @@ public class EntryTypeCheckBox extends Entry
     public String getHtmlCode( )
     {
         return _template_html_code;
-    }
-
-    /**
-     * Get the request data
-     * @param request HttpRequest
-     * @param locale the locale
-     * @return null if all data requiered are in the request else the url of jsp
-     *         error
-     */
-    public String getRequestData( HttpServletRequest request, Locale locale )
-    {
-        String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter(
-                PARAMETER_HELP_MESSAGE ).trim( ) : null;
-        String strComment = request.getParameter( PARAMETER_COMMENT );
-        String strMandatory = request.getParameter( PARAMETER_MANDATORY );
-        String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
-        String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
-        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-        int nFieldInLine = -1;
-
-        String strFieldError = StringUtils.EMPTY;
-
-        if ( StringUtils.isBlank( strTitle ) )
-        {
-            strFieldError = FIELD_TITLE;
-        }
-
-        if ( StringUtils.isNotBlank( strFieldError ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
-        }
-
-        // for don't update fields listFields=null
-        this.setFields( null );
-
-        this.setTitle( strTitle );
-        this.setHelpMessage( strHelpMessage );
-        this.setComment( strComment );
-        this.setCSSClass( strCSSClass );
-
-        if ( strMandatory != null )
-        {
-            this.setMandatory( true );
-        }
-        else
-        {
-            this.setMandatory( false );
-        }
-        this.setErrorMessage( strErrorMessage );
-
-        try
-        {
-            nFieldInLine = Integer.parseInt( strFieldInLine );
-        }
-        catch ( NumberFormatException ne )
-        {
-            AppLogService.error( ne );
-        }
-
-        if ( nFieldInLine == 1 )
-        {
-            this.setFieldInLine( true );
-        }
-        else
-        {
-            this.setFieldInLine( false );
-        }
-
-        return null;
     }
 
     /**
@@ -160,142 +72,5 @@ public class EntryTypeCheckBox extends Entry
     public String getTemplateModify( )
     {
         return _template_modify;
-    }
-
-    /**
-     * The paginator who is use in the template modify of the entry
-     * @param nItemPerPage Number of items to display per page
-     * @param strBaseUrl The base Url for build links on each page link
-     * @param strPageIndexParameterName The parameter name for the page index
-     * @param strPageIndex The current page index
-     * @return the paginator who is use in the template modify of the entry
-     */
-    public Paginator<Field> getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
-            String strPageIndex )
-    {
-        return new Paginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
-                strPageIndex );
-    }
-
-    /**
-     * save in the list of response the response associate to the entry in the
-     * form submit
-     * @param request HttpRequest
-     * @param listResponse the list of response associate to the entry in the
-     *            form submit
-     * @param locale the locale
-     * @return a Form error object if there is an error in the response
-     */
-    public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
-    {
-        String[] strTabIdField = request.getParameterValues( PREFIX_FORM + this.getIdEntry( ) );
-        List<Field> listFieldInResponse = new ArrayList<Field>( );
-        int nIdField = -1;
-        Field field = null;
-        Response response;
-
-        if ( strTabIdField != null )
-        {
-            for ( int cpt = 0; cpt < strTabIdField.length; cpt++ )
-            {
-                try
-                {
-                    nIdField = Integer.parseInt( strTabIdField[cpt] );
-                }
-                catch ( NumberFormatException ne )
-                {
-                    AppLogService.error( ne );
-                }
-
-                field = FormUtils.findFieldByIdInTheList( nIdField, this.getFields( ) );
-
-                if ( field != null )
-                {
-                    listFieldInResponse.add( field );
-                }
-            }
-        }
-
-        if ( listFieldInResponse.size( ) == 0 )
-        {
-            response = new Response( );
-            response.setEntry( this );
-            listResponse.add( response );
-        }
-        else
-        {
-            for ( Field fieldInResponse : listFieldInResponse )
-            {
-                response = new Response( );
-                response.setEntry( this );
-                response.setResponseValue( fieldInResponse.getValue( ) );
-                response.setField( fieldInResponse );
-                listResponse.add( response );
-            }
-        }
-
-        if ( this.isMandatory( ) )
-        {
-            boolean bAllFieldEmpty = true;
-
-            for ( Field fieldInResponse : listFieldInResponse )
-            {
-                if ( !fieldInResponse.getValue( ).equals( FormUtils.EMPTY_STRING ) )
-                {
-                    bAllFieldEmpty = false;
-                }
-            }
-
-            if ( bAllFieldEmpty )
-            {
-                if ( StringUtils.isNotBlank( getErrorMessage( ) ) )
-                {
-                    FormError formError = new FormError( );
-                    formError.setMandatoryError( true );
-                    formError.setErrorMessage( getErrorMessage( ) );
-                    return formError;
-                }
-                return new MandatoryFormError( this, locale );
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Get the response value associate to the entry to export in the file
-     * export
-     * @param response the response associate to the entry
-     * @param locale the locale
-     * @param request the request
-     * @return the response value associate to the entry to export in the file
-     *         export
-     */
-    public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
-    {
-        return response.getResponseValue( );
-    }
-
-    /**
-     * Get the response value associate to the entry to write in the recap
-     * @param response the response associate to the entry
-     * @param locale the locale
-     * @param request the request
-     * @return the response value associate to the entry to write in the recap
-     */
-    public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
-    {
-        return response.getField( ).getTitle( );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public LocalizedPaginator<Field> getPaginator( int nItemPerPage, String strBaseUrl,
-            String strPageIndexParameterName, String strPageIndex, Locale locale )
-    {
-        return new LocalizedPaginator<Field>( this.getFields( ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
-                strPageIndex, locale );
     }
 }

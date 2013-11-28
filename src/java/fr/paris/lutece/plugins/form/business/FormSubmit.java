@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.form.business;
 
 import java.sql.Timestamp;
-
 import java.util.List;
 
 
@@ -55,14 +54,13 @@ public class FormSubmit
      *
      * @return the form associate to the response
      */
-    public Form getForm(  )
+    public Form getForm( )
     {
         return _form;
     }
 
     /**
-     *
-     * set  the form associate to the response
+     * set the form associate to the response
      * @param form the form associate to the response
      */
     public void setForm( Form form )

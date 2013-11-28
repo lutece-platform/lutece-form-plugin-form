@@ -79,6 +79,7 @@ public class FormDashboardComponent extends DashboardComponent
     public static final String MARK_RESPONSE_COUNT_MAP = "response_count_map";
     public static final String MARK_AUTHORIZED_FORM_MODIFICATION_LIST = "authorized_form_modification_list";
     public static final String MARK_PERMISSION_CREATE = "permission_create";
+
     private static final int ZONE_1 = 1;
     private static final String TEMPLATE_DASHBOARD_ZONE_1 = "/admin/plugins/form/form_dashboard_zone_1.html";
     private static final String TEMPLATE_DASHBOARD_OTHER_ZONE = "/admin/plugins/form/form_dashboard_other_zone.html";
@@ -90,40 +91,40 @@ public class FormDashboardComponent extends DashboardComponent
      */
     public String getDashboardData( AdminUser user, HttpServletRequest request )
     {
-        Plugin plugin = getPlugin(  );
+        Plugin plugin = getPlugin( );
 
-        if ( !plugin.isInstalled(  ) || StringUtils.isBlank( plugin.getDbPoolName(  ) ) ||
-                AppConnectionService.NO_POOL_DEFINED.equals( plugin.getDbPoolName(  ) ) )
+        if ( !plugin.isInstalled( ) || StringUtils.isBlank( plugin.getDbPoolName( ) )
+                || AppConnectionService.NO_POOL_DEFINED.equals( plugin.getDbPoolName( ) ) )
         {
             return StringUtils.EMPTY;
         }
 
-        Right right = RightHome.findByPrimaryKey( getRight(  ) );
-        Locale locale = user.getLocale(  );
+        Right right = RightHome.findByPrimaryKey( getRight( ) );
+        Locale locale = user.getLocale( );
         List<FormAction> listActionsForFormEnable;
         List<FormAction> listActionsForFormDisable;
         List<FormAction> listActions;
 
-        UrlItem url = new UrlItem( right.getUrl(  ) );
-        url.addParameter( FormPlugin.PLUGIN_NAME, right.getPluginName(  ) );
+        UrlItem url = new UrlItem( right.getUrl( ) );
+        url.addParameter( FormPlugin.PLUGIN_NAME, right.getPluginName( ) );
 
         //build Filter
-        FormFilter formFilter = new FormFilter(  );
+        FormFilter formFilter = new FormFilter( );
 
-        List<Form> listForm = FormHome.getFormList( formFilter, getPlugin(  ) );
+        List<Form> listForm = FormHome.getFormList( formFilter, getPlugin( ) );
         listForm = (List<Form>) AdminWorkgroupService.getAuthorizedCollection( listForm, user );
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
         listActionsForFormEnable = FormActionHome.selectActionsByFormState( Form.STATE_ENABLE, plugin, locale );
         listActionsForFormDisable = FormActionHome.selectActionsByFormState( Form.STATE_DISABLE, plugin, locale );
 
-        Map<String, Object> nCountResponseMap = new HashMap<String, Object>(  );
-        List<Integer> nAuthorizedModificationList = new ArrayList<Integer>(  );
+        Map<String, Object> nCountResponseMap = new HashMap<String, Object>( );
+        List<Integer> nAuthorizedModificationList = new ArrayList<Integer>( );
 
         for ( Form form : listForm )
         {
-            if ( form.isActive(  ) )
+            if ( form.isActive( ) )
             {
                 listActions = listActionsForFormEnable;
             }
@@ -135,20 +136,20 @@ public class FormDashboardComponent extends DashboardComponent
             listActions = (List<FormAction>) RBACService.getAuthorizedActionsCollection( listActions, form, user );
             form.setActions( listActions );
 
-            ResponseFilter responseFilter = new ResponseFilter(  );
-            responseFilter.setIdForm( form.getIdForm(  ) );
-            nCountResponseMap.put( form.getIdForm(  ) + "", FormSubmitHome.getCountFormSubmit( responseFilter, plugin ) );
+            ResponseFilter responseFilter = new ResponseFilter( );
+            responseFilter.setIdForm( form.getIdForm( ) );
+            nCountResponseMap.put( form.getIdForm( ) + "", FormSubmitHome.getCountFormSubmit( responseFilter, plugin ) );
 
             if ( RBACService.isAuthorized( form, FormResourceIdService.PERMISSION_MODIFY, user ) )
             {
-                nAuthorizedModificationList.add( form.getIdForm(  ) );
+                nAuthorizedModificationList.add( form.getIdForm( ) );
             }
         }
 
         model.put( MARK_FORM_LIST, listForm );
 
         if ( RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    FormResourceIdService.PERMISSION_CREATE, user ) )
+                FormResourceIdService.PERMISSION_CREATE, user ) )
         {
             model.put( MARK_PERMISSION_CREATE_FORM, true );
         }
@@ -157,26 +158,25 @@ public class FormDashboardComponent extends DashboardComponent
             model.put( MARK_PERMISSION_CREATE_FORM, false );
         }
 
-        model.put( MARK_URL, url.getUrl(  ) );
-        model.put( MARK_ICON, plugin.getIconUrl(  ) );
+        model.put( MARK_URL, url.getUrl( ) );
+        model.put( MARK_ICON, plugin.getIconUrl( ) );
         model.put( MARK_RESPONSE_COUNT_MAP, nCountResponseMap );
         model.put( MARK_AUTHORIZED_FORM_MODIFICATION_LIST, nAuthorizedModificationList );
-        model.put( MARK_PERMISSION_CREATE,
-            RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        model.put( MARK_PERMISSION_CREATE, RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 FormResourceIdService.PERMISSION_CREATE, user ) );
 
-        HtmlTemplate t = AppTemplateService.getTemplate( getTemplateDashboard(  ), user.getLocale(  ), model );
+        HtmlTemplate t = AppTemplateService.getTemplate( getTemplateDashboard( ), user.getLocale( ), model );
 
-        return t.getHtml(  );
+        return t.getHtml( );
     }
 
     /**
      * Get the template
      * @return the template
      */
-    private String getTemplateDashboard(  )
+    private String getTemplateDashboard( )
     {
-        if ( getZone(  ) == ZONE_1 )
+        if ( getZone( ) == ZONE_1 )
         {
             return TEMPLATE_DASHBOARD_ZONE_1;
         }

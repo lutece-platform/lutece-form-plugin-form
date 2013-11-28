@@ -4,5 +4,5 @@
 
 <% 
 	formForm.init( request,formForm.RIGHT_MANAGE_FORM);
-    response.sendRedirect( formForm.doMoveUpEntryConditional( request ) );
+    response.sendRedirect( formForm.doMoveEntryConditional( request, true ) );
 %>

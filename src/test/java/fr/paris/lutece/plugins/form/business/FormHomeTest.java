@@ -11,7 +11,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.test.LuteceTestCase;
 
 import java.sql.Timestamp;
-
 import java.util.Date;
 import java.util.List;
 

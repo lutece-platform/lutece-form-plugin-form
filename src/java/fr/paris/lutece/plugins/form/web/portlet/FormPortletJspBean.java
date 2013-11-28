@@ -37,6 +37,7 @@ import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.portlet.FormPortlet;
 import fr.paris.lutece.plugins.form.business.portlet.FormPortletHome;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.form.web.FormJspBean;
 import fr.paris.lutece.portal.business.portlet.PortletHome;
 import fr.paris.lutece.portal.business.portlet.PortletType;
 import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
@@ -61,7 +62,10 @@ public class FormPortletJspBean extends PortletJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
     // Constants
-    public static final String RIGHT_MANAGE_FORM = "FORM_MANAGEMENT";
+    /**
+     * Right to manage forms
+     */
+    public static final String RIGHT_MANAGE_FORM = FormJspBean.RIGHT_MANAGE_FORM;
 
     private static final long serialVersionUID = -2619049973871862337L;
 
@@ -75,8 +79,8 @@ public class FormPortletJspBean extends PortletJspBean
 
     /**
      * Returns the Download portlet creation form
-     *
-     * @param request The http request
+     * 
+     * @param request The HTTP request
      * @return The HTML form
      */
     public String getCreate( HttpServletRequest request )
@@ -85,19 +89,19 @@ public class FormPortletJspBean extends PortletJspBean
         String strIdPage = request.getParameter( PARAMETER_PAGE_ID );
         String strIdPortletType = request.getParameter( PARAMETER_PORTLET_TYPE_ID );
         PortletType portletType = PortletTypeHome.findByPrimaryKey( strIdPortletType );
-        Plugin plugin = PluginService.getPlugin( portletType.getPluginName(  ) );
-        ReferenceList refList = FormUtils.getFormList( plugin, getUser(  ) );
+        Plugin plugin = PluginService.getPlugin( portletType.getPluginName( ) );
+        ReferenceList refList = FormUtils.getFormList( plugin, getUser( ) );
 
         model.put( MARK_FORM_LIST, refList );
 
         HtmlTemplate template = getCreateTemplate( strIdPage, strIdPortletType, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * Returns the Download portlet modification form
-     *
+     * 
      * @param request The Http request
      * @return The HTML form
      */
@@ -118,27 +122,27 @@ public class FormPortletJspBean extends PortletJspBean
         }
 
         FormPortlet portlet = (FormPortlet) PortletHome.findByPrimaryKey( nPortletId );
-        Plugin plugin = PluginService.getPlugin( portlet.getPluginName(  ) );
+        Plugin plugin = PluginService.getPlugin( portlet.getPluginName( ) );
         form = FormPortletHome.getFormByPortletId( nPortletId, plugin );
 
-        ReferenceList refList = FormUtils.getFormList( plugin, getUser(  ) );
+        ReferenceList refList = FormUtils.getFormList( plugin, getUser( ) );
         model.put( MARK_FORM_LIST, refList );
-        model.put( MARK_ID_FORM, form.getIdForm(  ) );
+        model.put( MARK_ID_FORM, form.getIdForm( ) );
 
         HtmlTemplate template = getModifyTemplate( portlet, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * Process portlet's creation
-     *
+     * 
      * @param request The Http request
      * @return The Jsp management URL of the process result
      */
     public String doCreate( HttpServletRequest request )
     {
-        FormPortlet portlet = new FormPortlet(  );
+        FormPortlet portlet = new FormPortlet( );
         String strPageId = request.getParameter( PARAMETER_PAGE_ID );
         String strFormId = request.getParameter( PARAMETER_ID_FORM );
         int nPageId = -1;
@@ -172,7 +176,7 @@ public class FormPortletJspBean extends PortletJspBean
         portlet.setFormId( nFormId );
 
         // Creating portlet
-        FormPortletHome.getInstance(  ).create( portlet );
+        FormPortletHome.getInstance( ).create( portlet );
 
         //Displays the page with the new Portlet
         return getPageUrl( nPageId );
@@ -180,7 +184,7 @@ public class FormPortletJspBean extends PortletJspBean
 
     /**
      * Process portlet's modification
-     *
+     * 
      * @param request The http request
      * @return Management's Url
      */
@@ -220,9 +224,9 @@ public class FormPortletJspBean extends PortletJspBean
 
         portlet.setFormId( nFormId );
         // updates the portlet
-        portlet.update(  );
+        portlet.update( );
 
         // displays the page withe the potlet updated
-        return getPageUrl( portlet.getPageId(  ) );
+        return getPageUrl( portlet.getPageId( ) );
     }
 }

@@ -55,19 +55,19 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
- *
+ * 
  * ProcessorNotifySender s
- *
+ * 
  */
 public class ProcessorNotifySender extends OutputProcessor
 {
@@ -122,25 +122,25 @@ public class ProcessorNotifySender extends OutputProcessor
      */
     public String getOutputConfigForm( HttpServletRequest request, Form form, Locale locale, Plugin plugin )
     {
-        NotifySenderConfiguration configuration = NotifySenderConfigurationHome.findByPrimaryKey( form.getIdForm(  ),
+        NotifySenderConfiguration configuration = NotifySenderConfigurationHome.findByPrimaryKey( form.getIdForm( ),
                 plugin );
 
         String strMessageRecap = I18nService.getLocalizedString( MESSAGE_RECAP_INFORMATION,
                 new String[] { AppPropertiesService.getProperty( PROPERTY_TAG_RECAP ) }, locale );
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_FORM, form );
         model.put( MARK_CONFIGURATION, configuration );
         model.put( MARK_CONFIGURATION, configuration );
         model.put( MARK_LOCALE, locale );
-        model.put( MARK_REF_LIST_ENTRY, FormUtils.getRefListAllQuestions( form.getIdForm(  ), plugin ) );
+        model.put( MARK_REF_LIST_ENTRY, FormUtils.getRefListAllQuestions( form.getIdForm( ), plugin ) );
         model.put( MARK_MESSAGE_RECAP, strMessageRecap );
-        model.put( MARK_PERMISSION_SEND_ATTACHMENTS,
-            RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        model.put( MARK_PERMISSION_SEND_ATTACHMENTS, RBACService.isAuthorized(
+                NotifySenderResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, AdminUserService.getAdminUser( request ) ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CONFIGURATION_NOTIFY_SENDER, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -161,7 +161,7 @@ public class ProcessorNotifySender extends OutputProcessor
             AppLogService.error( ne );
         }
 
-        NotifySenderConfiguration config = new NotifySenderConfiguration(  );
+        NotifySenderConfiguration config = new NotifySenderConfiguration( );
         config.setIdForm( nIdForm );
 
         String strError = getConfigurationData( request, config );
@@ -188,9 +188,8 @@ public class ProcessorNotifySender extends OutputProcessor
      */
     public String process( FormSubmit formSubmit, HttpServletRequest request, Plugin plugin )
     {
-        NotifySenderConfiguration config = NotifySenderConfigurationHome.findByPrimaryKey( formSubmit.getForm(  )
-                                                                                                     .getIdForm(  ),
-                plugin );
+        NotifySenderConfiguration config = NotifySenderConfigurationHome.findByPrimaryKey( formSubmit.getForm( )
+                .getIdForm( ), plugin );
 
         if ( config == null )
         {
@@ -198,36 +197,35 @@ public class ProcessorNotifySender extends OutputProcessor
         }
 
         String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_NOTIFY_SENDER_SUBJECT,
-                request.getLocale(  ) );
+                request.getLocale( ) );
         String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_NOTIFY_SENDER_SENDER_NAME,
-                request.getLocale(  ) );
-        String strSenderEmail = MailService.getNoReplyEmail(  );
+                request.getLocale( ) );
+        String strSenderEmail = MailService.getNoReplyEmail( );
 
         String strEmailSender = FormUtils.EMPTY_STRING;
 
         //----------------------------------
-        for ( Response response : formSubmit.getListResponse(  ) )
+        for ( Response response : formSubmit.getListResponse( ) )
         {
-            if ( response.getEntry(  ).getIdEntry(  ) == config.getIdEntryEmailSender(  ) )
+            if ( response.getEntry( ).getIdEntry( ) == config.getIdEntryEmailSender( ) )
             {
-                strEmailSender = response.getEntry(  )
-                                         .getResponseValueForExport( request, response, request.getLocale(  ) );
+                strEmailSender = response.getEntry( )
+                        .getResponseValueForExport( request, response, request.getLocale( ) );
             }
         }
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        Recap recap = RecapHome.findByPrimaryKey( formSubmit.getForm(  ).getRecap(  ).getIdRecap(  ), plugin );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        Recap recap = RecapHome.findByPrimaryKey( ( formSubmit.getForm( ) ).getRecap( ).getIdRecap( ), plugin );
 
-        if ( ( recap != null ) && recap.isRecapData(  ) )
+        if ( ( recap != null ) && recap.isRecapData( ) )
         {
             //convert the value of the object response to string 
-            for ( Response response : formSubmit.getListResponse(  ) )
+            for ( Response response : formSubmit.getListResponse( ) )
             {
-                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || ( response.getFile(  ) != null ) )
+                if ( StringUtils.isNotBlank( response.getResponseValue( ) ) || response.getFile( ) != null )
                 {
-                    response.setToStringValueResponse( response.getEntry(  )
-                                                               .getResponseValueForRecap( request, response,
-                            request.getLocale(  ) ) );
+                    response.setToStringValueResponse( response.getEntry( ).getResponseValueForRecap( request,
+                            response, request.getLocale( ) ) );
                 }
                 else
                 {
@@ -238,23 +236,23 @@ public class ProcessorNotifySender extends OutputProcessor
 
         model.put( MARK_RECAP_HTML, recap );
         model.put( MARK_FORM_SUBMIT, formSubmit );
-        model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.class.getName(  ) ) );
+        model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.class.getName( ) ) );
 
         HtmlTemplate templateRecap = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_NOTIFY_SENDER_RECAP,
-                request.getLocale(  ), model );
+                request.getLocale( ), model );
 
         //-------------------------------------------------------------
         String strTagRecap = AppPropertiesService.getProperty( PROPERTY_TAG_RECAP );
-        String strMessage = config.getMessage(  ).replace( strTagRecap, templateRecap.getHtml(  ) );
+        String strMessage = config.getMessage( ).replace( strTagRecap, templateRecap.getHtml( ) );
 
         model.put( MARK_MESSAGE, strMessage );
         model.put( MARK_TITLE, strSubject );
 
-        HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_NOTIFY_SENDER, request.getLocale(  ),
+        HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_NOTIFY_SENDER, request.getLocale( ),
                 model );
 
         _notifySenderService.sendNotification( formSubmit, strEmailSender, strSenderName, strSenderEmail, strSubject,
-            t.getHtml(  ), config.isSendAttachments(  ) );
+                t.getHtml( ), config.isSendAttachments( ) );
 
         return null;
     }
@@ -276,8 +274,8 @@ public class ProcessorNotifySender extends OutputProcessor
 
         // Check if it must send the attachments
         if ( RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, AdminUserService.getAdminUser( request ) ) &&
-                ( strSendAttachments != null ) )
+                NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, AdminUserService.getAdminUser( request ) )
+                && ( strSendAttachments != null ) )
         {
             bSendAttachments = true;
         }

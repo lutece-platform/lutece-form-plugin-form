@@ -1,23 +1,17 @@
 DROP TABLE IF EXISTS form_verify_by;
-DROP TABLE IF EXISTS form_response;
 DROP TABLE IF EXISTS form_submit;
-DROP TABLE IF EXISTS form_field;
-DROP TABLE IF EXISTS form_entry;
 DROP TABLE IF EXISTS form_form;
 DROP TABLE IF EXISTS form_recap;
 DROP TABLE IF EXISTS form_notify_sender_configuration;
 DROP TABLE IF EXISTS form_form_processor;
 DROP TABLE IF EXISTS form_graph_type;
 DROP TABLE IF EXISTS form_export_format;
-DROP TABLE IF EXISTS form_entry_type;
 DROP TABLE IF EXISTS form_default_message;
 DROP TABLE IF EXISTS form_action;
 DROP TABLE IF EXISTS form_form_parameter;
 DROP TABLE IF EXISTS form_entry_parameter;
 DROP TABLE IF EXISTS form_rss_cf;
 DROP TABLE IF EXISTS form_category;
-DROP TABLE IF EXISTS form_file;
-DROP TABLE IF EXISTS form_physical_file;
 DROP TABLE IF EXISTS form_anonymize_fields;
 
 --
@@ -45,19 +39,6 @@ CREATE TABLE form_default_message (
 	libelle_validate_button varchar(255),
 	libelle_reset_button varchar(255),
 	back_url long varchar
-);
-
---
--- Table structure for table form_entry_type
---
-CREATE TABLE form_entry_type (
-	id_type int default 0 NOT NULL,
-	title varchar(255),
-	is_group smallint default NULL,
-	is_comment int default NULL,
-	is_mylutece_user smallint default NULL,
-	class_name varchar(255),
-	PRIMARY KEY (id_type)
 );
 
 --
@@ -183,63 +164,6 @@ ALTER TABLE form_form ADD CONSTRAINT fk_form_form_category FOREIGN KEY (id_categ
 	REFERENCES form_category (id_category);
 
 --
--- Table structure for table form_entry
---
-CREATE TABLE form_entry (
-	id_entry int default 0 NOT NULL,
-	id_form int default 0 NOT NULL,
-	id_type int default 0 NOT NULL,
-	id_parent int default NULL,
-	title long varchar,
-	help_message long varchar,
-	comment long varchar,
-	mandatory smallint default NULL,
-	fields_in_line smallint default NULL,
-	pos int default NULL,
-	id_field_depend int default NULL,
-	confirm_field smallint default NULL,
-	confirm_field_title long varchar,
-	field_unique smallint default NULL,
-	map_provider varchar(45) default NULL,
-	css_class varchar(255) default NULL,
-	pos_conditional int default 0,
-	error_message long varchar default NULL,
-	PRIMARY KEY (id_entry)
-);
-
-CREATE INDEX index_form_entry_form ON form_entry (id_form);
-CREATE INDEX index_form_entry_parent ON form_entry (id_parent);
-
-ALTER TABLE form_entry ADD CONSTRAINT fk_form_entry_form FOREIGN KEY (id_form)
-	REFERENCES form_form (id_form);
-ALTER TABLE form_entry ADD CONSTRAINT fk_form_entry_type FOREIGN KEY (id_type)
-	REFERENCES form_entry_type (id_type);
-
---
--- Table structure for table form_field
---
-CREATE TABLE form_field (
-	id_field int default 0 NOT NULL,
-	id_entry int default 0 NOT NULL,
-	title varchar(255),
-	value long varchar,
-	height int default NULL,
-	width int default NULL,
-	default_value smallint default NULL,
-	max_size_enter int default NULL,
-	pos int default NULL,
-	value_type_date date NULL,
-	no_display_title smallint default NULL,
-	comment long varchar default null,
-	PRIMARY KEY (id_field)
-);
-
-CREATE INDEX index_form_field_entry ON form_field (id_entry);
-
-ALTER TABLE form_field ADD CONSTRAINT fk_form_field_entry FOREIGN KEY (id_entry)
-	REFERENCES form_entry (id_entry);
-
---
 -- Table structure for table form_submit
 --
 CREATE TABLE form_submit (
@@ -260,28 +184,6 @@ ALTER TABLE form_submit ADD CONSTRAINT fk_form_submit_form FOREIGN KEY (id_form)
 	REFERENCES form_form (id_form);
 
 --
--- Table structure for table form_response
---
-CREATE TABLE form_response (
-	id_response int default 0 NOT NULL,
-	id_form_submit int default NULL,
-	response_value long VARCHAR DEFAULT NULL,
-	id_entry int default NULL,
-	id_field int default NULL,
-	id_file int default NULL,
-	status smallint default 1,
-	PRIMARY KEY (id_response)
-);
-
-CREATE INDEX index_form_response_entry ON form_response (id_entry);
-CREATE INDEX index_form_response_submit ON form_response (id_form_submit);
-
-ALTER TABLE form_response ADD CONSTRAINT fk_form_response_entry FOREIGN KEY (id_entry)
-	REFERENCES form_entry (id_entry);
-ALTER TABLE form_response ADD CONSTRAINT fk_form_response_submit FOREIGN KEY (id_form_submit)
-	REFERENCES form_submit (id_form_submit);
-
---
 -- Table structure for table form_verify_by
 --
 CREATE TABLE form_verify_by (
@@ -291,9 +193,6 @@ CREATE TABLE form_verify_by (
 );
 
 CREATE INDEX index_form_verify_by_field ON form_verify_by (id_field);
-
-ALTER TABLE form_verify_by ADD CONSTRAINT fk_form_verify_by_field FOREIGN KEY (id_field)
-	REFERENCES form_field (id_field);
 
 --
 -- Table structure for table form_form_parameter
@@ -324,29 +223,20 @@ CREATE TABLE form_rss_cf (
 	PRIMARY KEY (id_rss)
 );
 
---
--- Table structure for table form_file
---
-CREATE TABLE form_file (
-  id_file INT DEFAULT 0 NOT NULL,
-  title LONG VARCHAR DEFAULT NULL,
-  id_physical_file INT DEFAULT NULL,
-  file_size  INT DEFAULT NULL,
-  mime_type VARCHAR(255) DEFAULT NULL,
-  PRIMARY KEY (id_file)
-);
-
---
--- Table structure for table form_physical_file
---
-CREATE TABLE form_physical_file (
-  id_physical_file INT DEFAULT 0 NOT NULL,
-  file_value LONG VARBINARY,  
-  PRIMARY KEY (id_physical_file)
-);
-
 CREATE TABLE form_anonymize_fields (
 	id_form int default 0 NOT NULL,
 	id_entry int default 0 NOT NULL,
 	PRIMARY KEY (id_form,id_entry)
+);
+
+CREATE TABLE form_response_submit (
+	id_response int default 0 NOT NULL,
+	id_form_submit int default 0 NOT NULL,
+	PRIMARY KEY (id_response,id_form_submit)
+);
+
+CREATE TABLE form_response_file (
+	id_response int default 0 NOT NULL,
+	id_file int default 0 NOT NULL,
+	PRIMARY KEY (id_response,id_file)
 );

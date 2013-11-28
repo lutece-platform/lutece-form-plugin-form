@@ -123,12 +123,22 @@ import com.keypoint.PngEncoder;
 
 
 /**
- * This class provides the user interface to manage form features ( manage, create, modify, remove)
+ * This class provides the user interface to manage form features ( manage,
+ * create, modify, remove)
  */
 public abstract class FormJspBean extends PluginAdminPageJspBean
 {
+    /**
+     * Right to manage forms
+     */
     public static final String RIGHT_MANAGE_FORM = "FORM_MANAGEMENT";
+    /**
+     * Parameter redirect
+     */
     public static final String PARAMETER_ACTION_REDIRECT = "redirect";
+    /**
+     * Automatic publication mode
+     */
     public static final String PUBLICATION_MODE_AUTO = "1";
 
     /**
@@ -181,7 +191,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     private static final String PROPERTY_LABEL_AXIS_X = "form.result.graph.labelAxisX";
     private static final String PROPERTY_LABEL_AXIS_Y = "form.result.graph.labelAxisY";
     private static final String PROPERTY_NUMBER_RESPONSE_AXIS_X = "graph.numberResponseAxisX";
-    private static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId(  ) + "form-";
+    private static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId( ) + "form-";
     private static final String PROPERTY_MODIFY_MESSAGE_TITLE = "form.modifyMessage.title";
     private static final String PROPERTY_MANAGE_VALIDATOR_TITLE = "form.manageValidator.title";
     private static final String PROPERTY_MANAGE_OUTPUT_PROCESSOR_TITLE = "form.manageOutputProcessor.title";
@@ -262,7 +272,13 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     private static final String SQL_FILTER_ENTRY_POS = " ent.pos ";
 
     // session fields
+    /**
+     * The default numbers of items to display per page for the current user
+     */
     protected final int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
+    /**
+     * Id of the current form
+     */
     protected int _nIdForm = -1;
     protected int _nIdActive = -1;
     protected String _strWorkGroup = AdminWorkgroupService.ALL_GROUPS;
@@ -281,9 +297,9 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
      */
     public String getManageForm( HttpServletRequest request )
     {
-        AdminUser adminUser = getUser(  );
-        Plugin plugin = getPlugin(  );
-        Locale locale = getLocale(  );
+        AdminUser adminUser = getUser( );
+        Plugin plugin = getPlugin( );
+        Locale locale = getLocale( );
         ReferenceList refListWorkGroups;
         ReferenceList refListActive;
         List<FormAction> listActionsForFormEnable;
@@ -315,26 +331,26 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
         }
 
         // build Filter
-        FormFilter filter = new FormFilter(  );
+        FormFilter filter = new FormFilter( );
         filter.setIdState( _nIdActive );
         filter.setWorkGroup( _strWorkGroup );
 
-        List<Form> listForm = FormHome.getFormList( filter, getPlugin(  ) );
+        List<Form> listForm = FormHome.getFormList( filter, getPlugin( ) );
         listForm = (List<Form>) AdminWorkgroupService.getAuthorizedCollection( listForm, adminUser );
 
         refListWorkGroups = AdminWorkgroupService.getUserWorkgroups( adminUser, locale );
         refListActive = initRefListActive( plugin, locale );
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         LocalizedPaginator<Form> paginator = new LocalizedPaginator<Form>( listForm, _nItemsPerPageForm,
-                getJspManageForm( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexForm, getLocale(  ) );
+                getJspManageForm( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexForm, getLocale( ) );
 
         listActionsForFormEnable = FormActionHome.selectActionsByFormState( Form.STATE_ENABLE, plugin, locale );
         listActionsForFormDisable = FormActionHome.selectActionsByFormState( Form.STATE_DISABLE, plugin, locale );
 
-        for ( Form form : paginator.getPageItems(  ) )
+        for ( Form form : paginator.getPageItems( ) )
         {
-            if ( form.isActive(  ) )
+            if ( form.isActive( ) )
             {
                 listActions = listActionsForFormEnable;
             }
@@ -343,12 +359,12 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
                 listActions = listActionsForFormDisable;
             }
 
-            listActions = (List<FormAction>) RBACService.getAuthorizedActionsCollection( listActions, form, getUser(  ) );
+            listActions = (List<FormAction>) RBACService.getAuthorizedActionsCollection( listActions, form, getUser( ) );
             form.setActions( listActions );
         }
 
         boolean bPermissionAdvancedParameter = RBACService.isAuthorized( Form.RESOURCE_TYPE,
-                RBAC.WILDCARD_RESOURCES_ID, FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) );
+                RBAC.WILDCARD_RESOURCES_ID, FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser( ) );
 
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageForm );
@@ -356,12 +372,12 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
         model.put( MARK_USER_WORKGROUP_SELECTED, _strWorkGroup );
         model.put( MARK_ACTIVE_REF_LIST, refListActive );
         model.put( MARK_ACTIVE_SELECTED, _nIdActive );
-        model.put( MARK_FORM_LIST, paginator.getPageItems(  ) );
-        model.put( MARK_LOCALE, request.getLocale(  ) );
+        model.put( MARK_FORM_LIST, paginator.getPageItems( ) );
+        model.put( MARK_LOCALE, request.getLocale( ) );
         model.put( MARK_PERMISSION_MANAGE_ADVANCED_PARAMETERS, bPermissionAdvancedParameter );
 
         if ( RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    FormResourceIdService.PERMISSION_CREATE, adminUser ) )
+                FormResourceIdService.PERMISSION_CREATE, adminUser ) )
         {
             model.put( MARK_PERMISSION_CREATE_FORM, true );
         }
@@ -376,29 +392,29 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         // ReferenceList refMailingList;
         // refMailingList=AdminMailingListService.getMailingLists(adminUser);
-        return getAdminPage( templateList.getHtml(  ) );
+        return getAdminPage( templateList.getHtml( ) );
     }
 
     /**
      * Returns advanced parameters form
-     *
+     * 
      * @param request The Http request
      * @return Html form
      */
     public String getManageAdvancedParameters( HttpServletRequest request )
     {
         if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
+                FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser( ) ) )
         {
             return getManageForm( request );
         }
 
-        Map<String, Object> model = FormService.getInstance(  ).getManageAdvancedParameters( getUser(  ) );
+        Map<String, Object> model = FormService.getInstance( ).getManageAdvancedParameters( getUser( ) );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_ADVANCED_PARAMETERS, getLocale(  ),
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_ADVANCED_PARAMETERS, getLocale( ),
                 model );
 
-        return getAdminPage( template.getHtml(  ) );
+        return getAdminPage( template.getHtml( ) );
     }
 
     /**
@@ -408,20 +424,19 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
      * @throws AccessDeniedException If the user is not authorized to access
      *             this feature
      */
-    public String doModifyFormParameterDefaultValues( HttpServletRequest request )
-        throws AccessDeniedException
+    public String doModifyFormParameterDefaultValues( HttpServletRequest request ) throws AccessDeniedException
     {
         if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
+                FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser( ) ) )
         {
-            throw new AccessDeniedException(  );
+            throw new AccessDeniedException( );
         }
 
-        ReferenceList listParams = FormParameterService.getService(  ).findDefaultValueParameters(  );
+        ReferenceList listParams = FormParameterService.getService( ).findDefaultValueParameters( );
 
         for ( ReferenceItem param : listParams )
         {
-            String strParamValue = request.getParameter( param.getCode(  ) );
+            String strParamValue = request.getParameter( param.getCode( ) );
 
             if ( strParamValue == null )
             {
@@ -429,7 +444,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
             }
 
             param.setName( strParamValue );
-            FormParameterService.getService(  ).update( param );
+            FormParameterService.getService( ).update( param );
         }
 
         return getJspManageAdvancedParameters( request );
@@ -442,20 +457,19 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
      * @throws AccessDeniedException If the user is not authorized to access
      *             this feature
      */
-    public String doModifyEntryParameterDefaultValues( HttpServletRequest request )
-        throws AccessDeniedException
+    public String doModifyEntryParameterDefaultValues( HttpServletRequest request ) throws AccessDeniedException
     {
         if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
+                FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser( ) ) )
         {
-            throw new AccessDeniedException(  );
+            throw new AccessDeniedException( );
         }
 
-        ReferenceList listParams = EntryParameterService.getService(  ).findAll(  );
+        ReferenceList listParams = EntryParameterService.getService( ).findAll( );
 
         for ( ReferenceItem param : listParams )
         {
-            String strParamValue = request.getParameter( param.getCode(  ) );
+            String strParamValue = request.getParameter( param.getCode( ) );
 
             if ( strParamValue == null )
             {
@@ -463,7 +477,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
             }
 
             param.setName( strParamValue );
-            EntryParameterService.getService(  ).update( param );
+            EntryParameterService.getService( ).update( param );
         }
 
         return getJspManageAdvancedParameters( request );
@@ -478,7 +492,6 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     {
         return AppPathService.getBaseUrl( request ) + JSP_MANAGE_ADVANCED_PARAMETERS;
     }
-
 
     /**
      * Gets the confirmation page of delete form
@@ -1169,7 +1182,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
-        Locale locale = getLocale(  );
+        Locale locale = getLocale( );
         Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_FORM, form );
 
@@ -1243,10 +1256,11 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         filter = new EntryFilter( );
         filter.setIdForm( nIdForm );
+        filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         filter.setIdIsComment( EntryFilter.FILTER_FALSE );
-        listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
+        listEntryFirstLevel = EntryHome.getEntryList( filter );
 
         Locale locale = getLocale( );
 
@@ -1391,7 +1405,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
      */
     public String getResult( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin(  );
+        Plugin plugin = getPlugin( );
         Locale locale = getLocale( );
         HtmlTemplate template;
         ResponseFilter filter = new ResponseFilter( );
@@ -1626,7 +1640,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
      */
     public void doGenerateGraph( HttpServletRequest request, HttpServletResponse response )
     {
-        Plugin plugin = getPlugin(  );
+        Plugin plugin = getPlugin( );
         Locale locale = getLocale( );
         ResponseFilter filter = new ResponseFilter( );
         int nIdForm = -1;
@@ -1780,9 +1794,8 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         if ( responseFile != null )
         {
-            // is authoried to view result
-            FormSubmit formSubmit = FormSubmitHome.findByPrimaryKey( responseFile.getFormSubmit( ).getIdFormSubmit( ),
-                    plugin );
+            // is authorized to view result
+            FormSubmit formSubmit = FormSubmitHome.findFormSubmitFromResponseId( responseFile.getIdResponse( ), plugin );
 
             List<Form> listForm = new ArrayList<Form>( );
 
@@ -1812,9 +1825,9 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
                             FilenameUtils.getExtension( responseFile.getFile( ).getTitle( ) ) );
                     response.setContentLength( byteFileOutPut.length );
 
-                    OutputStream os = response.getOutputStream(  );
+                    OutputStream os = response.getOutputStream( );
                     os.write( byteFileOutPut );
-                    os.close(  );
+                    os.close( );
                 }
                 catch ( IOException e )
                 {
@@ -1890,7 +1903,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_OUTPUT_PROCESSOR, getLocale( ), model );
 
-        return getAdminPage( template.getHtml(  ) );
+        return getAdminPage( template.getHtml( ) );
     }
 
     /**
@@ -1925,8 +1938,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
             form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
             if ( ( form == null )
-                    ||
-                    !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm,
+                    || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm,
                             FormResourceIdService.PERMISSION_MANAGE_OUTPUT_PROCESSOR, getUser( ) ) )
             {
                 return getJspManageForm( request );
@@ -2132,8 +2144,8 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         Form form = FormHome.findByPrimaryKey( nIdForm, getPlugin( ) );
 
-        if ( ( form == null ) ||
-                !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm,
+        if ( ( form == null )
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm,
                         FormResourceIdService.PERMISSION_MANAGE_VALIDATOR, getUser( ) ) )
         {
             return getManageForm( request );
@@ -2154,7 +2166,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_VALIDATOR, getLocale( ), model );
 
-        return getAdminPage( template.getHtml(  ) );
+        return getAdminPage( template.getHtml( ) );
     }
 
     /**

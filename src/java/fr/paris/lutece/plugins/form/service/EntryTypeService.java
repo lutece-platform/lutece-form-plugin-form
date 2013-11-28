@@ -35,8 +35,6 @@ package fr.paris.lutece.plugins.form.service;
 
 import fr.paris.lutece.plugins.form.business.EntryType;
 import fr.paris.lutece.plugins.form.business.EntryTypeHome;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -94,9 +92,7 @@ public final class EntryTypeService
     {
         _mapEntryTypes = new HashMap<String, EntryType>(  );
 
-        Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
-
-        for ( EntryType entryType : EntryTypeHome.getList( plugin ) )
+        for ( EntryType entryType : EntryTypeHome.getList( FormPlugin.PLUGIN_NAME ) )
         {
             _mapEntryTypes.put( entryType.getClassName(  ), entryType );
         }

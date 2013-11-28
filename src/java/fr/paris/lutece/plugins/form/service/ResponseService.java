@@ -34,12 +34,15 @@
 package fr.paris.lutece.plugins.form.service;
 
 import fr.paris.lutece.plugins.form.business.FormSubmit;
+import fr.paris.lutece.plugins.form.business.FormSubmitHome;
 import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.StatisticEntrySubmit;
 import fr.paris.lutece.plugins.form.service.file.FileService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -48,9 +51,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 /**
- *
+ * 
  * ResponseService
- *
+ * 
  */
 public class ResponseService implements IResponseService
 {
@@ -60,9 +63,13 @@ public class ResponseService implements IResponseService
      * {@inheritDoc}
      */
     @Override
-    public void setFileService( FileService fileService )
+    public FileService getFileService( )
     {
-        _fileService = fileService;
+        if ( _fileService == null )
+        {
+            _fileService = SpringContextService.getBean( FileService.BEAN_SERVICE );
+        }
+        return _fileService;
     }
 
     /**
@@ -72,10 +79,9 @@ public class ResponseService implements IResponseService
     @Transactional( "form.transactionManager" )
     public void create( FormSubmit formSubmit )
     {
-        for ( Response response : formSubmit.getListResponse(  ) )
+        for ( Response response : formSubmit.getListResponse( ) )
         {
-            response.setFormSubmit( formSubmit );
-            create( response );
+            create( response, formSubmit.getIdFormSubmit( ) );
         }
     }
 
@@ -83,14 +89,11 @@ public class ResponseService implements IResponseService
      * {@inheritDoc}
      */
     @Override
-    public void create( Response response )
+    public void create( Response response, int nIdFormSubmit )
     {
-        if ( response.getFile(  ) != null )
-        {
-            response.getFile(  ).setIdFile( _fileService.create( response.getFile(  ) ) );
-        }
-
-        ResponseHome.create( response, FormUtils.getPlugin(  ) );
+        ResponseHome.create( response );
+        FormSubmitHome
+                .associateResponseWithFormSubmit( response.getIdResponse( ), nIdFormSubmit, FormUtils.getPlugin( ) );
     }
 
     /**
@@ -99,34 +102,7 @@ public class ResponseService implements IResponseService
     @Override
     public void update( Response response )
     {
-        if ( response.getFile(  ) != null )
-        {
-            _fileService.update( response.getFile(  ) );
-        }
-
-        ResponseHome.update( response, FormUtils.getPlugin(  ) );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void remove( int nIdFormSubmit )
-    {
-        // First remove files
-        ResponseFilter filter = new ResponseFilter(  );
-        filter.setIdForm( nIdFormSubmit );
-
-        for ( Response response : getResponseList( filter, false ) )
-        {
-            if ( response.getFile(  ) != null )
-            {
-                _fileService.remove( response.getFile(  ).getIdFile(  ) );
-            }
-        }
-
-        // Then remove responses
-        ResponseHome.remove( nIdFormSubmit, FormUtils.getPlugin(  ) );
+        ResponseHome.update( response );
     }
 
     // GET
@@ -137,14 +113,7 @@ public class ResponseService implements IResponseService
     @Override
     public Response findByPrimaryKey( int nKey, boolean bGetFileData )
     {
-        Response response = ResponseHome.findByPrimaryKey( nKey, FormUtils.getPlugin(  ) );
-
-        if ( bGetFileData && ( response != null ) && ( response.getFile(  ) != null ) )
-        {
-            response.setFile( _fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), true ) );
-        }
-
-        return response;
+        return ResponseHome.findByPrimaryKey( nKey );
     }
 
     /**
@@ -153,15 +122,16 @@ public class ResponseService implements IResponseService
     @Override
     public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
     {
-        List<Response> listResponses = ResponseHome.getResponseList( filter, FormUtils.getPlugin(  ) );
+        List<Response> listResponses = ResponseHome.getResponseList( filter );
 
-        if ( bGetFileData && ( listResponses != null ) && !listResponses.isEmpty(  ) )
+        if ( bGetFileData && ( listResponses != null ) && !listResponses.isEmpty( ) )
         {
             for ( Response response : listResponses )
             {
-                if ( response.getFile(  ) != null )
+                if ( response.getFile( ) != null )
                 {
-                    response.setFile( _fileService.findByPrimaryKey( response.getFile(  ).getIdFile(  ), bGetFileData ) );
+                    response.setFile( getFileService( ).findByPrimaryKey( response.getFile( ).getIdFile( ),
+                            bGetFileData ) );
                 }
             }
         }
@@ -175,7 +145,7 @@ public class ResponseService implements IResponseService
     @Override
     public List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry )
     {
-        return ResponseHome.getStatisticByIdEntry( nIdEntry, FormUtils.getPlugin(  ) );
+        return ResponseHome.getStatisticByIdEntry( nIdEntry );
     }
 
     /**
@@ -184,6 +154,20 @@ public class ResponseService implements IResponseService
     @Override
     public void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo )
     {
-        ResponseHome.anonymizeEntries( listIdEntries, dateCleanTo, FormUtils.getPlugin( ) );
+        FormSubmitHome.anonymizeEntries( listIdEntries, dateCleanTo, FormUtils.getPlugin( ) );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeFromFormSubmit( int nIdFormSubmit )
+    {
+        Plugin plugin = FormUtils.getPlugin( );
+        List<Integer> listIdResponse = FormSubmitHome.getResponseListFromIdFormSubmit( nIdFormSubmit, plugin );
+        for ( Integer nIdResponse : listIdResponse )
+        {
+            ResponseHome.remove( nIdResponse );
+        }
     }
 }

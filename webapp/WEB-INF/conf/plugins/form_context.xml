@@ -6,13 +6,9 @@
  	 <bean id="form.formDAO"  class="fr.paris.lutece.plugins.form.business.FormDAO" />
  	 <bean id="form.defaultMessageDAO"  class="fr.paris.lutece.plugins.form.business.DefaultMessageDAO" />
  	 <bean id="form.exportFormatDAO"  class="fr.paris.lutece.plugins.form.business.ExportFormatDAO" /> 	 
- 	 <bean id="form.entryTypeDAO"  class="fr.paris.lutece.plugins.form.business.EntryTypeDAO" />
  	 <bean id="form.graphTypeDAO"  class="fr.paris.lutece.plugins.form.business.GraphTypeDAO" />
- 	 <bean id="form.entryDAO"  class="fr.paris.lutece.plugins.form.business.EntryDAO" />
- 	 <bean id="form.fieldDAO"  class="fr.paris.lutece.plugins.form.business.FieldDAO" />
  	 <bean id="form.recapDAO"  class="fr.paris.lutece.plugins.form.business.RecapDAO" />
  	 <bean id="form.formActionDAO"  class="fr.paris.lutece.plugins.form.business.FormActionDAO" />
- 	 <bean id="form.responseDAO"  class="fr.paris.lutece.plugins.form.business.ResponseDAO" />
  	 <bean id="form.formSubmitDAO"  class="fr.paris.lutece.plugins.form.business.FormSubmitDAO" />
  	 <bean id="form.formPortletDAO"  class="fr.paris.lutece.plugins.form.business.portlet.FormPortletDAO" />
  	 <bean id="form.formProcessorDAO"  class="fr.paris.lutece.plugins.form.business.outputprocessor.FormProcessorDAO" />
@@ -22,9 +18,7 @@
  	 <bean id="form.formRemovalService" class="fr.paris.lutece.portal.service.util.RemovalListenerService" />
  	 <bean id="form.entryRemovalService" class="fr.paris.lutece.portal.service.util.RemovalListenerService" />
 	 <bean id="resourceRssFormConfigDAO"  class="fr.paris.lutece.plugins.form.business.rss.FormResourceRssConfigDAO" />
-	 <bean id="form.fileDAO" class="fr.paris.lutece.plugins.form.business.file.FileDAO" />
-	 <bean id="form.physicalFileDAO" class="fr.paris.lutece.plugins.form.business.physicalfile.PhysicalFileDAO" />
-	
+	 
 	<!-- RSS -->
     <bean id="ResourceRssTypeForm" class="fr.paris.lutece.portal.business.rss.ResourceRssType" >
     	<property name="key" value="ResourceRssTypeForm" />
@@ -33,13 +27,7 @@
 	</bean>
 	
 	<!-- Services -->
-	<bean id="form.physicalFileService" class="fr.paris.lutece.plugins.form.service.physicalfile.PhysicalFileService" />
-	<bean id="form.fileService" class="fr.paris.lutece.plugins.form.service.file.FileService">
-		<property name="physicalFileService" ref="form.physicalFileService" />
-	</bean>
-	<bean id="form.responseService" class="fr.paris.lutece.plugins.form.service.ResponseService">
-		<property name="fileService" ref="form.fileService" />
-	</bean>
+	<bean id="form.responseService" class="fr.paris.lutece.plugins.form.service.ResponseService" />
 	<bean id="form.entryTypeService" class="fr.paris.lutece.plugins.form.service.EntryTypeService" />
 	<bean id="form.formParameterService" class="fr.paris.lutece.plugins.form.service.parameter.FormParameterService" />
     <bean id="form.entryParameterService" class="fr.paris.lutece.plugins.form.service.parameter.EntryParameterService" />

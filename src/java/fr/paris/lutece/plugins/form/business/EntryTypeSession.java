@@ -33,18 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -58,12 +46,11 @@ import javax.servlet.http.HttpSession;
  * module-form-exportdirectory.
  *
  */
-public class EntryTypeSession extends Entry
+public class EntryTypeSession extends AbstractEntryTypeSession
 {
-    private static final String FIELD_ATTRIBUTE_NAME = "form.createEntry.labelAttributeName";
-    private final String _template_create = "admin/plugins/form/create_entry_type_session.html";
-    private final String _template_modify = "admin/plugins/form/modify_entry_type_session.html";
-    private final String _template_html_code = "admin/plugins/form/html_code_entry_type_session.html";
+    private final String _template_create = "admin/plugins/form/entries/create_entry_type_session.html";
+    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_session.html";
+    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_session.html";
 
     /**
      * {@inheritDoc}
@@ -87,103 +74,5 @@ public class EntryTypeSession extends Entry
     public String getTemplateModify(  )
     {
         return _template_modify;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getRequestData( HttpServletRequest request, Locale locale )
-    {
-        String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strAttibuteName = request.getParameter( PARAMETER_VALUE );
-        String strMandatory = request.getParameter( PARAMETER_MANDATORY );
-
-        String strFieldError = StringUtils.EMPTY;
-
-        if ( StringUtils.isBlank( strTitle ) )
-        {
-            strFieldError = FIELD_TITLE;
-        }
-        else if ( StringUtils.isBlank( strAttibuteName ) )
-        {
-            strFieldError = FIELD_ATTRIBUTE_NAME;
-        }
-
-        if ( StringUtils.isNotBlank( strFieldError ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
-        }
-
-        this.setTitle( strTitle );
-        this.setHelpMessage( StringUtils.EMPTY );
-        this.setComment( StringUtils.EMPTY );
-        this.setMandatory( StringUtils.isNotEmpty( strMandatory ) );
-        this.setConfirmField( false );
-        this.setConfirmFieldTitle( null );
-        this.setUnique( false );
-
-        if ( this.getFields(  ) == null )
-        {
-            List<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
-            listFields.add( field );
-            this.setFields( listFields );
-        }
-
-        this.getFields(  ).get( 0 ).setValue( strAttibuteName );
-        this.getFields(  ).get( 0 ).setWidth( 0 );
-        this.getFields(  ).get( 0 ).setMaxSizeEnter( 0 );
-
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
-    {
-        String strValueEntry = StringUtils.EMPTY;
-        HttpSession session = request.getSession( false );
-
-        if ( session != null )
-        {
-            if ( ( this.getFields(  ) != null ) && !this.getFields(  ).isEmpty(  ) &&
-                    ( this.getFields(  ).get( 0 ) != null ) )
-            {
-                String strAttributeName = this.getFields(  ).get( 0 ).getValue(  );
-                strValueEntry = (String) session.getAttribute( strAttributeName );
-            }
-        }
-
-        if ( StringUtils.isNotBlank( strValueEntry ) )
-        {
-            Response response = new Response(  );
-            response.setEntry( this );
-            response.setResponseValue( strValueEntry );
-            response.setToStringValueResponse( StringUtils.EMPTY );
-
-            listResponse.add( response );
-        }
-
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getResponseValueForExport( HttpServletRequest request, Response response, Locale locale )
-    {
-        return response.getResponseValue(  );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getResponseValueForRecap( HttpServletRequest request, Response response, Locale locale )
-    {
-        return StringUtils.EMPTY;
     }
 }

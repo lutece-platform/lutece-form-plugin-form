@@ -107,6 +107,9 @@ import org.apache.commons.lang.StringUtils;
  */
 public class FormApp implements XPageApplication
 {
+    /**
+     * Parameter 'id_form'
+     */
     public static final String PARAMETER_ID_FORM = "id_form";
 
     // markers
@@ -187,7 +190,7 @@ public class FormApp implements XPageApplication
         XPage page = new XPage( );
 
         Form form = null;
-        HttpSession session = request.getSession( false );
+        HttpSession session = request.getSession( );
 
         // we find the required form
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
@@ -226,7 +229,7 @@ public class FormApp implements XPageApplication
             return getForm( request, session, nMode, plugin );
         }
 
-        if ( ( form == null ) && ( session != null ) && ( session.getAttribute( PARAMETER_FORM_SUBMIT ) != null ) )
+        if ( ( form == null ) && ( session.getAttribute( PARAMETER_FORM_SUBMIT ) != null ) )
         {
             // find form stored in session
             FormSubmit formSubmit = (FormSubmit) session.getAttribute( PARAMETER_FORM_SUBMIT );
@@ -237,8 +240,7 @@ public class FormApp implements XPageApplication
             }
         }
 
-        if ( ( session != null ) && ( form != null ) && form.isSupportHTTPS( )
-                && AppHTTPSService.isHTTPSSupportEnabled( ) )
+        if ( ( form != null ) && form.isSupportHTTPS( ) && AppHTTPSService.isHTTPSSupportEnabled( ) )
         {
             //Put real base url in session
             request.getSession( ).setAttribute( AppPathService.SESSION_BASE_URL, AppPathService.getBaseUrl( request ) );
@@ -310,7 +312,7 @@ public class FormApp implements XPageApplication
                 FormUtils.removeResponses( session );
                 FormUtils.removeFormErrors( session );
                 session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
-                FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
+                FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session );
             }
 
             // try to restore draft
@@ -355,7 +357,7 @@ public class FormApp implements XPageApplication
         // For the entry unique
         Locale locale = request.getLocale( );
         FormSubmit formSubmit = (FormSubmit) session.getAttribute( PARAMETER_FORM_SUBMIT );
-
+        Form form = formSubmit.getForm( );
         if ( formSubmit.getListResponse( ) != null )
         {
             for ( Response response : formSubmit.getListResponse( ) )
@@ -392,9 +394,9 @@ public class FormApp implements XPageApplication
 
         doPerformFormSubmit( request, session, formSubmit, plugin );
 
-        Recap recap = RecapHome.findByPrimaryKey( formSubmit.getForm( ).getRecap( ).getIdRecap( ), plugin );
+        Recap recap = RecapHome.findByPrimaryKey( form.getRecap( ).getIdRecap( ), plugin );
 
-        if ( formSubmit.getForm( ).isSupportHTTPS( ) && AppHTTPSService.isHTTPSSupportEnabled( ) )
+        if ( form.isSupportHTTPS( ) && AppHTTPSService.isHTTPSSupportEnabled( ) )
         {
             recap.setBackUrl( AppHTTPSService.getHTTPSUrl( request ) + recap.getBackUrl( ) );
         }
@@ -483,6 +485,7 @@ public class FormApp implements XPageApplication
         if ( form == null )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_ERROR );
+            return null;
         }
 
         // Check if the session contains all the attributes set by the mandatory EntryTypeSession
@@ -654,7 +657,7 @@ public class FormApp implements XPageApplication
             //convert the value of the object response to string
             for ( Response response : formSubmit.getListResponse( ) )
             {
-                if ( StringUtils.isNotBlank( response.getResponseValue( ) ) || ( response.getFile( ) != null ) )
+                if ( StringUtils.isNotBlank( response.getResponseValue( ) ) || response.getFile( ) != null )
                 {
                     response.setToStringValueResponse( response.getEntry( ).getResponseValueForRecap( request,
                             response, locale ) );
@@ -758,11 +761,12 @@ public class FormApp implements XPageApplication
 
         EntryFilter filter = new EntryFilter( );
         filter.setIdForm( formSubmit.getForm( ).getIdForm( ) );
+        filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
-        List<IEntry> listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
+        List<IEntry> listEntryFirstLevel = EntryHome.getEntryList( filter );
 
         List<Response> listResponse = new ArrayList<Response>( );
         formSubmit.setListResponse( listResponse );
@@ -794,15 +798,16 @@ public class FormApp implements XPageApplication
             Plugin plugin ) throws SiteMessageException
     {
         Locale locale = request.getLocale( );
+        Form form = formSubmit.getForm( );
 
-        if ( !formSubmit.getForm( ).isActive( ) )
+        if ( !form.isActive( ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR_FORM_INACTIVE, SiteMessage.TYPE_STOP );
         }
 
         // If the number of submitted response is set to one, then we check if the user
         // has not already answer to the form before submitting the response
-        if ( formSubmit.getForm( ).isLimitNumberResponse( ) )
+        if ( form.isLimitNumberResponse( ) )
         {
             if ( session.getAttribute( PARAMETER_ID_FORM + formSubmit.getForm( ).getIdForm( ) ) != null )
             {
@@ -838,7 +843,7 @@ public class FormApp implements XPageApplication
         FormUtils.sendNotificationMailFormSubmit( formSubmit, locale );
 
         // We can safely remove session files : they are validated
-        FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
+        FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session );
 
         //Process all outputProcess
         for ( IOutputProcessor outputProcessor : OutputProcessorService.getInstance( ).getProcessorsByIdForm(
@@ -890,7 +895,6 @@ public class FormApp implements XPageApplication
     }
 
     /**
-     * 
      * Removes the uploaded fileItem
      * @param request the request
      * @return The JSON result
@@ -898,7 +902,6 @@ public class FormApp implements XPageApplication
      */
     public String doRemoveAsynchronousUploadedFile( HttpServletRequest request )
     {
-        String strSessionId = request.getSession( ).getId( );
         String strIdEntry = request.getParameter( FormUtils.PARAMETER_ID_ENTRY );
         String strFieldIndex = request.getParameter( PARAMETER_FIELD_INDEX );
 
@@ -936,14 +939,14 @@ public class FormApp implements XPageApplication
 
         for ( int nFieldIndex : tabFieldIndex )
         {
-            FormAsynchronousUploadHandler.getHandler( ).removeFileItem( strIdEntry, strSessionId, nFieldIndex );
+            FormAsynchronousUploadHandler.getHandler( ).removeFileItem( strIdEntry, request.getSession( ), nFieldIndex );
         }
 
         JSONObject json = new JSONObject( );
         // operation successful
         json.element( JSONUtils.JSON_KEY_SUCCESS, JSONUtils.JSON_KEY_SUCCESS );
         json.accumulateAll( JSONUtils.getUploadedFileJSON( FormAsynchronousUploadHandler.getHandler( ).getFileItems(
-                strIdEntry, strSessionId ) ) );
+                strIdEntry, request.getSession( ) ) ) );
         json.element( JSONUtils.JSON_KEY_FIELD_NAME,
                 FormAsynchronousUploadHandler.getHandler( ).buildFieldName( strIdEntry ) );
 

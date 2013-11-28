@@ -33,74 +33,37 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-
 /**
- *
+ * 
  * class EntryTypeGroup
- *
+ * 
  */
-public class EntryTypeGroup extends Entry
+public class EntryTypeGroup extends AbstractEntryTypeGroup
 {
+    /**
+     * Id of entry type for groups
+     */
+    public static final int FILTER_GROUP_ENTRY = 9;
+
     //	templates
-    private final String _template_modify = "admin/plugins/form/modify_entry_type_group.html";
-    private final String _template_html_code = "admin/plugins/form/html_code_entry_type_group.html";
+    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_group.html";
+    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_group.html";
 
     /**
-     * Get the HtmlCode  of   the entry
-     * @return the HtmlCode  of   the entry
-     *
+     * Get the HtmlCode of the entry
+     * @return the HtmlCode of the entry
+     * 
      * */
-    public String getHtmlCode(  )
+    public String getHtmlCode( )
     {
         return _template_html_code;
     }
 
     /**
-     * Get the request data
-     * @param request HttpRequest
-     *@param locale the locale
-     * @return null if all data requiered are in the request else the url of jsp error
+     * Get the template modify url of the entry
+     * @return template modify url of the entry
      */
-    public String getRequestData( HttpServletRequest request, Locale locale )
-    {
-        String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strFieldError = StringUtils.EMPTY;
-        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-
-        if ( StringUtils.isBlank( strTitle ) )
-        {
-            strFieldError = FIELD_INSERT_GROUP;
-        }
-
-        if ( StringUtils.isNotBlank( strFieldError ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
-        }
-
-        this.setTitle( strTitle );
-        this.setCSSClass( strCSSClass );
-
-        return null;
-    }
-
-    /**
-     * Get the template modify url  of the entry
-     * @return template modify url  of the entry
-     */
-    public String getTemplateModify(  )
+    public String getTemplateModify( )
     {
         return _template_modify;
     }

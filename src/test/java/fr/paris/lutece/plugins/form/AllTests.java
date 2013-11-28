@@ -40,7 +40,6 @@ import fr.paris.lutece.plugins.form.business.FormSubmitHomeTest;
 import fr.paris.lutece.plugins.form.business.ResponseHomeTest;
 import fr.paris.lutece.plugins.form.business.portlet.FormPortletHomeTest;
 import fr.paris.lutece.plugins.form.web.FormJspBeanTest;
-import fr.paris.lutece.plugins.form.web.ManageFormJspBeanTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -68,7 +67,6 @@ public final class AllTests
 
         suite.addTest( new TestSuite( FormPortletHomeTest.class ) );
 
-        suite.addTest( new TestSuite( ManageFormJspBeanTest.class ) );
         suite.addTest( new TestSuite( FormJspBeanTest.class ) );
 
         //$JUnit-END$

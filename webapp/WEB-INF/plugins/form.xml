@@ -180,10 +180,4 @@
             <dashboard-feature-right>FORM_MANAGEMENT</dashboard-feature-right>
         </dashboard-component>
     </dashboard-components>
-    
-    <listeners>
-		<listener>
-			<listener-class>fr.paris.lutece.plugins.form.web.FormSessionListener</listener-class>
-		</listener>
-	</listeners>
 </plug-in>

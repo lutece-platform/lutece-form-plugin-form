@@ -4,5 +4,5 @@
 
 <% 
 	formForm.init( request, formForm.RIGHT_MANAGE_FORM );
-    response.sendRedirect( formForm.doMoveDownField( request ) );
+    response.sendRedirect( formForm.doMoveField( request, false ) );
 %>

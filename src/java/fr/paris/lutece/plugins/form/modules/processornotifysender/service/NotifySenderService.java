@@ -44,22 +44,21 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.mail.FileAttachment;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+
 
 /**
- *
+ * 
  * NotifySenderService
- *
+ * 
  */
 public final class NotifySenderService
 {
@@ -71,7 +70,7 @@ public final class NotifySenderService
     /**
      * Private constructor
      */
-    private NotifySenderService(  )
+    private NotifySenderService( )
     {
     }
 
@@ -83,21 +82,23 @@ public final class NotifySenderService
      * @param strSenderEmail the sender email
      * @param strSubject the subject
      * @param strMessage the message
-     * @param bSendAttachments true if it must send the attachments, false otherwise
+     * @param bSendAttachments true if it must send the attachments, false
+     *            otherwise
      */
     public void sendNotification( FormSubmit formSubmit, String strEmailSender, String strSenderName,
-        String strSenderEmail, String strSubject, String strMessage, boolean bSendAttachments )
+            String strSenderEmail, String strSubject, String strMessage, boolean bSendAttachments )
     {
         if ( bSendAttachments )
         {
-            sendMultiPartNotification( formSubmit, strEmailSender, strSenderName, strSenderEmail, strSubject, strMessage );
+            sendMultiPartNotification( formSubmit, strEmailSender, strSenderName, strSenderEmail, strSubject,
+                    strMessage );
         }
         else
         {
             try
             {
                 // Send Mail
-                if ( AppLogService.isDebugEnabled(  ) )
+                if ( AppLogService.isDebugEnabled( ) )
                 {
                     AppLogService.debug( "NotifySenderService : Sending email to '" + strEmailSender + "'" );
                 }
@@ -106,7 +107,7 @@ public final class NotifySenderService
             }
             catch ( Exception e )
             {
-                AppLogService.error( " Error during Process > Notify sender : " + e.getMessage(  ) );
+                AppLogService.error( " Error during Process > Notify sender : " + e.getMessage( ) );
             }
         }
     }
@@ -121,31 +122,31 @@ public final class NotifySenderService
      * @param strMessage the message
      */
     private synchronized void sendMultiPartNotification( FormSubmit formSubmit, String strEmailSender,
-        String strSenderName, String strSenderEmail, String strSubject, String strMessage )
+            String strSenderName, String strSenderEmail, String strSubject, String strMessage )
     {
-        int nIdFormSubmit = formSubmit.getIdFormSubmit(  );
+        int nIdFormSubmit = formSubmit.getIdFormSubmit( );
 
         // Add the response files to a temporary folder
-        for ( Response response : formSubmit.getListResponse(  ) )
+        for ( Response response : formSubmit.getListResponse( ) )
         {
-            if ( ( response.getFile(  ) != null ) && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) &&
-                    ( response.getFile(  ).getPhysicalFile(  ) != null ) &&
-                    ( response.getFile(  ).getPhysicalFile(  ).getValue(  ) != null ) )
+            if ( ( response.getFile( ) != null ) && StringUtils.isNotBlank( response.getFile( ).getTitle( ) )
+                    && ( response.getFile( ).getPhysicalFile( ) != null )
+                    && ( response.getFile( ).getPhysicalFile( ).getValue( ) != null ) )
             {
-                if ( AppLogService.isDebugEnabled(  ) )
+                if ( AppLogService.isDebugEnabled( ) )
                 {
-                    AppLogService.debug( "NotifySenderService : Adding '" + response.getFile(  ).getTitle(  ) +
-                        "' to folder '" + getFileFolderPath(  ) + "'" );
+                    AppLogService.debug( "NotifySenderService : Adding '" + response.getFile( ).getTitle( )
+                            + "' to folder '" + getFileFolderPath( ) + "'" );
                 }
 
                 try
                 {
-                    FileUtils.addFileResponseToFolder( response, getFileFolderPath(  ) );
+                    FileUtils.addFileResponseToFolder( response, getFileFolderPath( ) );
                 }
                 catch ( IOException e )
                 {
-                    AppLogService.error( "NotifySenderService : Cannot add file '" + response.getFile(  ).getTitle(  ) +
-                        "' to folder '" + getFileFolderPath(  ) + "'" );
+                    AppLogService.error( "NotifySenderService : Cannot add file '" + response.getFile( ).getTitle( )
+                            + "' to folder '" + getFileFolderPath( ) + "'" );
                 }
             }
         }
@@ -155,43 +156,43 @@ public final class NotifySenderService
         try
         {
             // Zip the folder where the response files are stored
-            if ( AppLogService.isDebugEnabled(  ) )
+            if ( AppLogService.isDebugEnabled( ) )
             {
-                AppLogService.debug( "NotifySenderService : Ziping folder '" + getFileFolderPath(  ) + "'" );
+                AppLogService.debug( "NotifySenderService : Ziping folder '" + getFileFolderPath( ) + "'" );
             }
 
-            ZipUtils.zipFolder( getFileFolderPath(  ), getZipFolderPath(  ), getZipName( nIdFormSubmit ) );
+            ZipUtils.zipFolder( getFileFolderPath( ), getZipFolderPath( ), getZipName( nIdFormSubmit ) );
 
             // Add the zip to the email attachment
-            if ( AppLogService.isDebugEnabled(  ) )
+            if ( AppLogService.isDebugEnabled( ) )
             {
-                AppLogService.debug( "NotifySenderService : Reading zip '" + getZipFolderPath(  ) +
-                    getZipName( nIdFormSubmit ) + "'" );
+                AppLogService.debug( "NotifySenderService : Reading zip '" + getZipFolderPath( )
+                        + getZipName( nIdFormSubmit ) + "'" );
             }
 
-            fis = new FileInputStream( getZipFolderPath(  ) + getZipName( nIdFormSubmit ) );
+            fis = new FileInputStream( getZipFolderPath( ) + getZipName( nIdFormSubmit ) );
 
             byte[] data = IOUtils.toByteArray( fis );
 
             String strAttachmentName = AppPropertiesService.getProperty( PROPERTY_ATTACHMENT_NAME );
-            List<FileAttachment> listAttachments = new ArrayList<FileAttachment>(  );
-            listAttachments.add( new FileAttachment( strAttachmentName, data,
-                    FileSystemUtil.getMIMEType( strAttachmentName ) ) );
+            List<FileAttachment> listAttachments = new ArrayList<FileAttachment>( );
+            listAttachments.add( new FileAttachment( strAttachmentName, data, FileSystemUtil
+                    .getMIMEType( strAttachmentName ) ) );
 
             try
             {
                 // Send Mail
-                if ( AppLogService.isDebugEnabled(  ) )
+                if ( AppLogService.isDebugEnabled( ) )
                 {
                     AppLogService.debug( "NotifySenderService : Sending multipart email to '" + strEmailSender + "'" );
                 }
 
                 MailService.sendMailMultipartHtml( strEmailSender, StringUtils.EMPTY, StringUtils.EMPTY, strSenderName,
-                    strSenderEmail, strSubject, strMessage, null, listAttachments );
+                        strSenderEmail, strSubject, strMessage, null, listAttachments );
             }
             catch ( Exception e )
             {
-                AppLogService.error( " Error during Process > Notify sender : " + e.getMessage(  ) );
+                AppLogService.error( " Error during Process > Notify sender : " + e.getMessage( ) );
             }
         }
         catch ( FileNotFoundException fnofe )
@@ -208,28 +209,28 @@ public final class NotifySenderService
         }
 
         // Clean folders
-        FileUtils.cleanFolder( getFileFolderPath(  ) );
-        FileUtils.cleanFolder( getZipFolderPath(  ) );
+        FileUtils.cleanFolder( getFileFolderPath( ) );
+        FileUtils.cleanFolder( getZipFolderPath( ) );
     }
 
     /**
      * Get the tmp folder in which the zip will be generated
      * @return the tmp folder
      */
-    private String getFileFolderPath(  )
+    private String getFileFolderPath( )
     {
-        return AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( 
-                PROPERTY_FILE_FOLDER_PATH ) );
+        return AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService
+                .getProperty( PROPERTY_FILE_FOLDER_PATH ) );
     }
 
     /**
      * Get the zip folder path
      * @return the zip folder path
      */
-    private String getZipFolderPath(  )
+    private String getZipFolderPath( )
     {
-        return AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( 
-                PROPERTY_ZIP_FOLDER_PATH ) );
+        return AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService
+                .getProperty( PROPERTY_ZIP_FOLDER_PATH ) );
     }
 
     /**
