@@ -40,14 +40,22 @@ import fr.paris.lutece.util.ReferenceList;
 
 
 /**
- *
+ * 
  * FormParameterHome
- *
+ * 
  */
 public final class FormParameterHome
 {
     // Static variable pointed at the DAO instance
     private static IFormParameterDAO _dao = SpringContextService.getBean( "form.formParameterDAO" );
+
+    /**
+     * Private constructor
+     */
+    private FormParameterHome( )
+    {
+        // Private constructor
+    }
 
     /**
      * Load all the parameter default values
