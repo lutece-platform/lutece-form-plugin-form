@@ -62,7 +62,6 @@ import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.style.Theme;
-import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -206,7 +205,7 @@ public final class FormService
         }
 
         // Style management
-        Collection<Theme> themes = ThemeHome.getThemesList( );
+        Collection<Theme> themes = ThemesService.getThemesList( );
         ReferenceList themesRefList = new ReferenceList( );
 
         for ( Theme theme : themes )
@@ -214,7 +213,7 @@ public final class FormService
             themesRefList.addItem( theme.getCodeTheme( ), theme.getThemeDescription( ) );
         }
 
-        model.put( MARK_DEFAULT_THEME, ThemeHome.getGlobalTheme( ) );
+        model.put( MARK_DEFAULT_THEME, ThemesService.getGlobalTheme( ) );
         model.put( MARK_THEME_REF_LIST, themesRefList );
         model.put( MARK_IS_ACTIVE_CAPTCHA, PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) );
         model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
@@ -236,8 +235,6 @@ public final class FormService
      */
     public boolean isSessionValid( Form form, HttpServletRequest request )
     {
-        Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
-
         EntryType entryTypeSession = _entryTypeService.getEntryType( EntryTypeSession.class.getName( ) );
 
         EntryFilter eFilter = new EntryFilter( );
@@ -248,7 +245,7 @@ public final class FormService
             eFilter.setIdEntryType( entryTypeSession.getIdType( ) );
         }
 
-        List<IEntry> listEntries = EntryHome.getEntryList( eFilter, plugin );
+        List<IEntry> listEntries = EntryHome.getEntryList( eFilter );
 
         HttpSession session = request.getSession( false );
 
@@ -256,7 +253,7 @@ public final class FormService
         {
             if ( entry instanceof EntryTypeSession && entry.isMandatory( ) )
             {
-                List<Field> listFields = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ), plugin );
+                List<Field> listFields = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
 
                 if ( session == null )
                 {

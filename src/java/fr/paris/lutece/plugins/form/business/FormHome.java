@@ -138,11 +138,11 @@ public final class FormHome
         EntryFilter entryFilter = new EntryFilter( );
         entryFilter.setIdForm( form.getIdForm( ) );
 
-        List<IEntry> listEntry = EntryHome.getEntryList( entryFilter, plugin );
+        List<IEntry> listEntry = EntryHome.getEntryList( entryFilter );
 
         for ( IEntry entry : listEntry )
         {
-            EntryHome.remove( entry.getIdEntry( ), plugin );
+            EntryHome.remove( entry.getIdEntry( ) );
         }
 
         _dao.delete( nIdForm, plugin );

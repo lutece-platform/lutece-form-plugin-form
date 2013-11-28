@@ -86,9 +86,9 @@ public class ResponseHomeTest extends LuteceTestCase
         //        response.setFormSubmit( formResponse );
         response.setResponseValue( VALUE_RESPONSE_1 );
 
-        ResponseHome.create( response, _plugin );
+        ResponseHome.create( response );
 
-        Response responseStored = ResponseHome.findByPrimaryKey( response.getIdResponse( ), _plugin );
+        Response responseStored = ResponseHome.findByPrimaryKey( response.getIdResponse( ) );
 
         //assertEquals( responseStored.getValueResponse(  ), response.getValueResponse(  ) );
         assertEquals( responseStored.getField( ).getIdField( ), response.getField( ).getIdField( ) );
@@ -102,7 +102,7 @@ public class ResponseHomeTest extends LuteceTestCase
      */
     public void testUpdate( )
     {
-        Response responseLoad = ResponseHome.findByPrimaryKey( ID_RESPONSE_1, _plugin );
+        Response responseLoad = ResponseHome.findByPrimaryKey( ID_RESPONSE_1 );
 
         Response response = new Response( );
 
@@ -122,9 +122,9 @@ public class ResponseHomeTest extends LuteceTestCase
         //        response.setFormSubmit( formResponse );
         response.setResponseValue( VALUE_RESPONSE_2 );
 
-        ResponseHome.update( response, _plugin );
+        ResponseHome.update( response );
 
-        Response responseStored = ResponseHome.findByPrimaryKey( response.getIdResponse( ), _plugin );
+        Response responseStored = ResponseHome.findByPrimaryKey( response.getIdResponse( ) );
 
         //assertEquals( responseStored.getValueResponse(  ), response.getValueResponse(  ) );
         assertEquals( responseStored.getField( ).getIdField( ), response.getField( ).getIdField( ) );
@@ -139,7 +139,7 @@ public class ResponseHomeTest extends LuteceTestCase
         ResponseFilter responseFilter = new ResponseFilter( );
         responseFilter.setGroupbyMonth( true );
 
-        listResponse = ResponseHome.getResponseList( responseFilter, _plugin );
+        listResponse = ResponseHome.getResponseList( responseFilter );
 
         assertNotNull( listResponse );
     }
@@ -149,11 +149,11 @@ public class ResponseHomeTest extends LuteceTestCase
      */
     public void testRemove( )
     {
-        Response responseLoad = ResponseHome.findByPrimaryKey( ID_RESPONSE_1, _plugin );
+        Response responseLoad = ResponseHome.findByPrimaryKey( ID_RESPONSE_1 );
 
-        ResponseHome.remove( responseLoad.getIdResponse( ), _plugin );
+        ResponseHome.remove( responseLoad.getIdResponse( ) );
 
-        Response responseStored = ResponseHome.findByPrimaryKey( responseLoad.getIdResponse( ), _plugin );
+        Response responseStored = ResponseHome.findByPrimaryKey( responseLoad.getIdResponse( ) );
 
         assertNull( responseStored );
     }

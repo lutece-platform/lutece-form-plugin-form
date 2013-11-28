@@ -226,7 +226,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public IGAAsyncUploadHandler getAsynchronousHandler( )
+    public IGAAsyncUploadHandler getAsynchronousUploadHandler( )
     {
         return FormAsynchronousUploadHandler.getHandler( );
     }

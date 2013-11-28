@@ -33,9 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.RemovalListener;
 
@@ -50,10 +48,10 @@ public class FormRegularExpressionRemovalListener implements RemovalListener
     private static final String PROPERTY_REGULAR_EXPRESSION_CANNOT_BE_REMOVED = "form.message.regularExpressionCanNotBeRemoved";
 
     /**
-    * Check if the object can be safely removed
-    * @param strId The object id
-    * @return true if the object can be removed otherwise false
-    */
+     * Check if the object can be safely removed
+     * @param strId The object id
+     * @return true if the object can be removed otherwise false
+     */
     public boolean canBeRemoved( String strId )
     {
         int nIdRegularExpression = -1;
@@ -72,8 +70,7 @@ public class FormRegularExpressionRemovalListener implements RemovalListener
             return true;
         }
 
-        return !FieldHome.isRegularExpressionIsUse( nIdRegularExpression,
-            PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
+        return !FieldHome.isRegularExpressionIsUse( nIdRegularExpression );
     }
 
     /**

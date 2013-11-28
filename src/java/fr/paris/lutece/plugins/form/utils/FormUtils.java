@@ -191,7 +191,6 @@ public final class FormUtils extends GenericAttributesUtils
     private static final String PROPERTY_LUTECE_PROD_URL = "lutece.prod.url";
 
     private static final String SLASH = "/";
-    private static final String REGEX_ID = "^[\\d]+$";
 
     /**
      * FormUtils
@@ -487,7 +486,6 @@ public final class FormUtils extends GenericAttributesUtils
     /**
      * Converts a java.sql.Timestamp date in a String date in a "jj/mm/aaaa"
      * format
-     * 
      * @param date java.sql.Timestamp date to convert
      * @param locale the locale
      * @return strDate The String date in the short locale format or the empty
@@ -558,7 +556,7 @@ public final class FormUtils extends GenericAttributesUtils
             return null;
         }
 
-        entryType = EntryTypeHome.findByPrimaryKey( nIdType, plugin );
+        entryType = EntryTypeHome.findByPrimaryKey( nIdType );
 
         try
         {
@@ -655,7 +653,7 @@ public final class FormUtils extends GenericAttributesUtils
         filter.setIdForm( form.getIdForm( ) );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
+        listEntryFirstLevel = EntryHome.getEntryList( filter );
 
         ArrayList<Category> listCats = new ArrayList<Category>( );
         Category category = new Category( );
@@ -753,7 +751,7 @@ public final class FormUtils extends GenericAttributesUtils
         Map<String, Object> model = new HashMap<String, Object>( );
         StringBuffer strConditionalQuestionStringBuffer = null;
         HtmlTemplate template;
-        IEntry entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
+        IEntry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
         if ( entry.getEntryType( ).getGroup( ) )
         {
@@ -772,7 +770,7 @@ public final class FormUtils extends GenericAttributesUtils
             {
                 for ( Field field : entry.getFields( ) )
                 {
-                    field.setConditionalQuestions( FieldHome.findByPrimaryKey( field.getIdField( ), plugin )
+                    field.setConditionalQuestions( FieldHome.findByPrimaryKey( field.getIdField( ) )
                             .getConditionalQuestions( ) );
                 }
             }
@@ -1111,7 +1109,7 @@ public final class FormUtils extends GenericAttributesUtils
 
                     if ( field == null )
                     {
-                        field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ), plugin );
+                        field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
                     }
 
                     response.setField( field );
@@ -1350,7 +1348,7 @@ public final class FormUtils extends GenericAttributesUtils
         filter.setIdIsComment( EntryFilter.FILTER_FALSE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
-        for ( IEntry entryFirstLevel : EntryHome.getEntryList( filter, plugin ) )
+        for ( IEntry entryFirstLevel : EntryHome.getEntryList( filter ) )
         {
             if ( entryFirstLevel.getEntryType( ).getGroup( ) )
             {
@@ -1359,7 +1357,7 @@ public final class FormUtils extends GenericAttributesUtils
                 filter.setIdEntryParent( entryFirstLevel.getIdEntry( ) );
                 filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
-                for ( IEntry entryChild : EntryHome.getEntryList( filter, plugin ) )
+                for ( IEntry entryChild : EntryHome.getEntryList( filter ) )
                 {
                     listEntry.add( entryChild );
                     addConditionnalsEntry( entryChild, listEntry, plugin );
@@ -1383,11 +1381,11 @@ public final class FormUtils extends GenericAttributesUtils
      */
     private static void addConditionnalsEntry( IEntry entryParent, List<IEntry> listEntry, Plugin plugin )
     {
-        IEntry parent = EntryHome.findByPrimaryKey( entryParent.getIdEntry( ), plugin );
+        IEntry parent = EntryHome.findByPrimaryKey( entryParent.getIdEntry( ) );
 
         for ( Field field : parent.getFields( ) )
         {
-            field = FieldHome.findByPrimaryKey( field.getIdField( ), plugin );
+            field = FieldHome.findByPrimaryKey( field.getIdField( ) );
 
             if ( field.getConditionalQuestions( ) != null )
             {
@@ -1414,7 +1412,7 @@ public final class FormUtils extends GenericAttributesUtils
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
-        for ( IEntry entryFirstLevel : EntryHome.getEntryList( filter, plugin ) )
+        for ( IEntry entryFirstLevel : EntryHome.getEntryList( filter ) )
         {
             if ( entryFirstLevel.getEntryType( ).getGroup( ) )
             {
@@ -1424,7 +1422,7 @@ public final class FormUtils extends GenericAttributesUtils
 
                 List<IEntry> listEntryChild = new ArrayList<IEntry>( );
 
-                for ( IEntry entryChild : EntryHome.getEntryList( filter, plugin ) )
+                for ( IEntry entryChild : EntryHome.getEntryList( filter ) )
                 {
                     listEntryChild.add( entryChild );
                     addConditionnalsEntry( entryChild, listEntryChild, plugin );
@@ -1549,14 +1547,14 @@ public final class FormUtils extends GenericAttributesUtils
         entry.getRequestData( request, locale );
         entry.setIdResource( form.getIdForm( ) );
         entry.setResourceType( Form.RESOURCE_TYPE );
-        entry.setIdEntry( EntryHome.create( entry, plugin ) );
+        entry.setIdEntry( EntryHome.create( entry ) );
 
         if ( entry.getFields( ) != null )
         {
             for ( Field field : entry.getFields( ) )
             {
                 field.setParentEntry( entry );
-                FieldHome.create( field, plugin );
+                FieldHome.create( field );
             }
         }
     }
@@ -1571,13 +1569,13 @@ public final class FormUtils extends GenericAttributesUtils
         EntryFilter entryFilter = new EntryFilter( );
         entryFilter.setIdForm( form.getIdForm( ) );
 
-        List<IEntry> listEntries = EntryHome.getEntryList( entryFilter, plugin );
+        List<IEntry> listEntries = EntryHome.getEntryList( entryFilter );
 
         for ( IEntry entry : listEntries )
         {
             if ( entry instanceof fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser )
             {
-                EntryHome.remove( entry.getIdEntry( ), plugin );
+                EntryHome.remove( entry.getIdEntry( ) );
 
                 break;
             }

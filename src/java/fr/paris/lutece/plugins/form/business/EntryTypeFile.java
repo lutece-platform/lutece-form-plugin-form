@@ -188,7 +188,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public IGAAsyncUploadHandler getAsynchronousHandler( )
+    public IGAAsyncUploadHandler getAsynchronousUploadHandler( )
     {
         return FormAsynchronousUploadHandler.getHandler( );
     }
