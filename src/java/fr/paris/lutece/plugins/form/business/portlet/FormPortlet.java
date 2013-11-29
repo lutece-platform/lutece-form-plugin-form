@@ -117,7 +117,7 @@ public class FormPortlet extends Portlet
             }
 
             XmlUtil.addElementHtml( strXml, TAG_FORM_PORTLET_CONTENT,
-                    FormUtils.getHtmlForm( form, strUrlAction, plugin, locale ) );
+                    FormUtils.getHtmlForm( form, strUrlAction, plugin, locale, true ) );
         }
         else
         {

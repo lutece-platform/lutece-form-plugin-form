@@ -31,9 +31,14 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
 
+import fr.paris.lutece.plugins.form.business.FormError;
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.business.Response;
+import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.service.IResponseService;
+import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeText;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -54,72 +59,71 @@ import org.apache.commons.lang.StringUtils;
  */
 public class EntryTypeText extends AbstractEntryTypeText
 {
-    private final String _template_create = "admin/plugins/form/entries/create_entry_type_text.html";
-    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_text.html";
-    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_text.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_text.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_text.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_text.html";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode( )
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
-        return _template_html_code;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate( )
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
-        return _template_create;
+        return TEMPLATE_CREATE;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateModify( )
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
     {
-        return _template_modify;
+        return TEMPLATE_MODIFY;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
+    public FormError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
     {
-        FormError formError = super.getResponseData( request, listResponse, locale );
+        FormError formError = super.getResponseData( entry, request, listResponse, locale );
 
         if ( formError != null )
         {
             return formError;
         }
 
-        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + this.getIdEntry( ) ).trim( );
-        boolean bUnique = this.isUnique( );
+        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
 
-        if ( bUnique )
+        if ( entry.isUnique( ) )
         {
             ResponseFilter filter = new ResponseFilter( );
-            filter.setIdEntry( this.getIdEntry( ) );
+            filter.setIdEntry( entry.getIdEntry( ) );
 
             IResponseService responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
             Collection<Response> listSubmittedResponses = responseService.getResponseList( filter, false );
 
             for ( Response submittedResponse : listSubmittedResponses )
             {
-                String strSubmittedResponse = submittedResponse.getEntry( ).getResponseValueForRecap( request,
-                        submittedResponse, locale );
+                String strSubmittedResponse = getResponseValueForRecap( entry, request, submittedResponse, locale );
 
                 if ( StringUtils.isNotBlank( strValueEntry ) && StringUtils.isNotBlank( strSubmittedResponse )
                         && strValueEntry.equalsIgnoreCase( strSubmittedResponse ) )
                 {
                     formError = new FormError( );
                     formError.setMandatoryError( false );
-                    formError.setTitleQuestion( this.getTitle( ) );
+                    formError.setTitleQuestion( entry.getTitle( ) );
                     formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_UNIQUE_FIELD,
                             request.getLocale( ) ) );
 

@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.form.utils;
 
 import fr.paris.lutece.plugins.form.business.Category;
+import fr.paris.lutece.plugins.form.business.Entry;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.EntryType;
@@ -50,6 +51,8 @@ import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.StatisticFormSubmit;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUser;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
@@ -235,20 +238,6 @@ public final class FormUtils extends GenericAttributesUtils
         {
             AppLogService.error( "Error during Notify end disponibilty of form : " + e.getMessage( ) );
         }
-    }
-
-    /**
-     * sendMail to the mailing list associate to the form a mail of new form
-     * submit
-     * @param form the form
-     * @param locale the locale
-     */
-    public static void sendNotificationMailFormSubmit( Form form, Locale locale )
-    {
-        Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList( ) );
-        Map<String, Object> model = new HashMap<String, Object>( );
-        model.put( MARK_FORM, form );
-        sendNotificationMailFormSubmit( model, listRecipients, locale );
     }
 
     /**
@@ -558,53 +547,10 @@ public final class FormUtils extends GenericAttributesUtils
 
         entryType = EntryTypeHome.findByPrimaryKey( nIdType );
 
-        try
-        {
-            entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
-            entry.setEntryType( entryType );
-        }
-        catch ( ClassNotFoundException e )
-        {
-            //  class doesn't exist
-            AppLogService.error( e );
-        }
-        catch ( InstantiationException e )
-        {
-            // Class is abstract or is an  interface or haven't accessible builder
-            AppLogService.error( e );
-        }
-        catch ( IllegalAccessException e )
-        {
-            // can't access to rhe class
-            AppLogService.error( e );
-        }
+        entry = new Entry( );
+        entry.setEntryType( entryType );
 
         return entry;
-    }
-
-    /**
-     * Return the index in the list of the entry whose key is specified in
-     * parameter
-     * @param nIdEntry the key of the entry
-     * @param listEntry the list of the entry
-     * @return the index in the list of the entry whose key is specified in
-     *         parameter
-     */
-    public static int getIndexEntryInTheEntryList( int nIdEntry, List<IEntry> listEntry )
-    {
-        int nIndex = 0;
-
-        for ( IEntry entry : listEntry )
-        {
-            if ( entry.getIdEntry( ) == nIdEntry )
-            {
-                return nIndex;
-            }
-
-            nIndex++;
-        }
-
-        return nIndex;
     }
 
     /**
@@ -638,11 +584,13 @@ public final class FormUtils extends GenericAttributesUtils
      * @param strUrlAction the URL who must be call after the form submit
      * @param plugin the plugin
      * @param locale the locale
+     * @param bDisplayFront True if the entry will be displayed in Front Office,
+     *            false if it will be displayed in Back Office.
      * @param request HttpServletRequest
      * @return the HTML code of the form
      */
     public static String getHtmlForm( Form form, String strUrlAction, Plugin plugin, Locale locale,
-            HttpServletRequest request )
+            boolean bDisplayFront, HttpServletRequest request )
     {
         List<IEntry> listEntryFirstLevel;
         Map<String, Object> model = new HashMap<String, Object>( );
@@ -650,7 +598,8 @@ public final class FormUtils extends GenericAttributesUtils
         EntryFilter filter;
         StringBuffer strBuffer = new StringBuffer( );
         filter = new EntryFilter( );
-        filter.setIdForm( form.getIdForm( ) );
+        filter.setIdResource( form.getIdForm( ) );
+        filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         listEntryFirstLevel = EntryHome.getEntryList( filter );
@@ -670,7 +619,7 @@ public final class FormUtils extends GenericAttributesUtils
 
         for ( IEntry entry : listEntryFirstLevel )
         {
-            FormUtils.getHtmlEntry( entry.getIdEntry( ), plugin, strBuffer, locale, request );
+            FormUtils.getHtmlEntry( entry.getIdEntry( ), plugin, strBuffer, locale, bDisplayFront, request );
         }
 
         if ( form.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
@@ -729,11 +678,14 @@ public final class FormUtils extends GenericAttributesUtils
      * @param strUrlAction the URL who must be call after the form submit
      * @param plugin the plugin
      * @param locale the locale
+     * @param bDisplayFront True if the entry will be displayed in Front Office,
+     *            false if it will be displayed in Back Office.
      * @return the HTML code of the form
      */
-    public static String getHtmlForm( Form form, String strUrlAction, Plugin plugin, Locale locale )
+    public static String getHtmlForm( Form form, String strUrlAction, Plugin plugin, Locale locale,
+            boolean bDisplayFront )
     {
-        return getHtmlForm( form, strUrlAction, plugin, locale, null );
+        return getHtmlForm( form, strUrlAction, plugin, locale, bDisplayFront, null );
     }
 
     /**
@@ -743,10 +695,12 @@ public final class FormUtils extends GenericAttributesUtils
      * @param plugin the plugin
      * @param stringBuffer the buffer which contains the HTML code
      * @param locale the locale
+     * @param bDisplayFront True if the entry will be displayed in Front Office,
+     *            false if it will be displayed in Back Office.
      * @param request HttpServletRequest
      */
     public static void getHtmlEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale,
-            HttpServletRequest request )
+            boolean bDisplayFront, HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<String, Object>( );
         StringBuffer strConditionalQuestionStringBuffer = null;
@@ -759,7 +713,7 @@ public final class FormUtils extends GenericAttributesUtils
 
             for ( IEntry entryChild : entry.getChildren( ) )
             {
-                getHtmlEntry( entryChild.getIdEntry( ), plugin, strGroupStringBuffer, locale, request );
+                getHtmlEntry( entryChild.getIdEntry( ), plugin, strGroupStringBuffer, locale, bDisplayFront, request );
             }
 
             model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
@@ -788,7 +742,8 @@ public final class FormUtils extends GenericAttributesUtils
 
                     for ( IEntry entryConditional : field.getConditionalQuestions( ) )
                     {
-                        getHtmlEntry( entryConditional.getIdEntry( ), plugin, strGroupStringBuffer, locale, request );
+                        getHtmlEntry( entryConditional.getIdEntry( ), plugin, strGroupStringBuffer, locale,
+                                bDisplayFront, request );
                     }
 
                     model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
@@ -819,21 +774,10 @@ public final class FormUtils extends GenericAttributesUtils
             }
         }
 
-        template = AppTemplateService.getTemplate( entry.getHtmlCode( ), locale, model );
+        template = AppTemplateService
+                .getTemplate( EntryTypeServiceManager.getEntryTypeService( entry ).getHtmlCode( entry, bDisplayFront ),
+                        locale, model );
         stringBuffer.append( template.getHtml( ) );
-    }
-
-    /**
-     * Insert in the string buffer the content of the HTML code of the entry
-     * @param nIdEntry the key of the entry which HTML code must be insert in
-     *            the stringBuffer
-     * @param plugin the plugin
-     * @param stringBuffer the buffer which contains the HTML code
-     * @param locale the locale
-     */
-    public static void getHtmlEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale )
-    {
-        getHtmlEntry( nIdEntry, plugin, stringBuffer, locale, null );
     }
 
     /**
@@ -881,7 +825,8 @@ public final class FormUtils extends GenericAttributesUtils
 
             if ( !bResponseNull )
             {
-                formError = entry.getResponseData( request, listResponse, locale );
+                formError = EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request,
+                        listResponse, locale );
                 if ( formError != null )
                 {
                     formError.setUrl( getEntryUrl( entry ) );
@@ -1134,7 +1079,8 @@ public final class FormUtils extends GenericAttributesUtils
                 if ( StringUtils.isNotBlank( response.getResponseValue( ) ) || ( response.getFile( ) != null ) )
                 {
                     XmlUtil.addElementHtml( buffer, TAG_RESPONSE,
-                            response.getEntry( ).getResponseValueForExport( request, response, locale ) );
+                            EntryTypeServiceManager.getEntryTypeService( response.getEntry( ) )
+                                    .getResponseValueForExport( response.getEntry( ), request, response, locale ) );
                 }
                 else
                 {
@@ -1208,36 +1154,16 @@ public final class FormUtils extends GenericAttributesUtils
 
         XYPlot xyplot = jfreechart.getXYPlot( );
 
-        //xyplot.setBackgroundPaint(Color.gray);
-        //xyplot.setRangeGridlinesVisible(true);
         xyplot.setBackgroundPaint( Color.white );
         xyplot.setBackgroundPaint( Color.lightGray );
         xyplot.setDomainGridlinePaint( Color.white );
         xyplot.setRangeGridlinePaint( Color.white );
 
-        //		DateAxis dateaxis = (DateAxis) xyplot.getDomainAxis(  );
-        //		dateaxis.setLowerMargin(0);
-        //		DateFormat formatter = new SimpleDateFormat("d-MMM-yyyy");
-        //		dateaxis.setTickUnit(new DateTickUnit(DateTickUnit.DAY,7,formatter));
-        //dateaxis.setTickUnit(new DateTickUnit(DateTickUnit.DAY,7));
-        //dateaxis.setTickUnit(new DateTickUnit(DateTickUnit.DAY,7));
-
-        //dateaxis.setMinimumDate((Date)listStatistic.get(0).getTimesUnit());
-        //dateaxis.setMaximumDate((Date)listStatistic.get(listStatistic.size()-1).getTimesUnit());
-
-        //dateaxis.setTickUnit(new DateTickUnit(DateTickUnit.MONTH,1));
-        //dateaxis.setTickUnit(new DateTickUnit(1, 1, DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRENCH)));
-        //dateaxis.setTickUnit(new DateTickUnit(DateTickUnit.MONTH, 1, new SimpleDateFormat("MM/YY")));
-        //dateaxis.setVerticalTickLabels( true );
         XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) xyplot.getRenderer( );
         renderer.setBaseShapesVisible( true );
         renderer.setSeriesFillPaint( 0, Color.RED );
         renderer.setUseFillPaint( true );
 
-        //		renderer.setToolTipGenerator( new StandardXYToolTipGenerator( "{0} {1} {2}",
-        //				DateFormat.getDateInstance( DateFormat.SHORT, Locale.FRENCH ), NumberFormat.getInstance(  ) ) );
-        //
-        //		ChartRenderingInfo info = new ChartRenderingInfo( new StandardEntityCollection(  ) );
         return jfreechart;
     }
 
@@ -1343,9 +1269,10 @@ public final class FormUtils extends GenericAttributesUtils
     {
         List<IEntry> listEntry = new ArrayList<IEntry>( );
         EntryFilter filter = new EntryFilter( );
-        filter.setIdForm( nIdForm );
+        filter.setIdResource( nIdForm );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setIdIsComment( EntryFilter.FILTER_FALSE );
+        filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
         for ( IEntry entryFirstLevel : EntryHome.getEntryList( filter ) )
@@ -1353,7 +1280,7 @@ public final class FormUtils extends GenericAttributesUtils
             if ( entryFirstLevel.getEntryType( ).getGroup( ) )
             {
                 filter = new EntryFilter( );
-                filter.setIdForm( nIdForm );
+                filter.setIdResource( nIdForm );
                 filter.setIdEntryParent( entryFirstLevel.getIdEntry( ) );
                 filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
@@ -1408,7 +1335,8 @@ public final class FormUtils extends GenericAttributesUtils
     {
         List<IEntry> listEntry = new ArrayList<IEntry>( );
         EntryFilter filter = new EntryFilter( );
-        filter.setIdForm( nIdForm );
+        filter.setIdResource( nIdForm );
+        filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
@@ -1417,7 +1345,7 @@ public final class FormUtils extends GenericAttributesUtils
             if ( entryFirstLevel.getEntryType( ).getGroup( ) )
             {
                 filter = new EntryFilter( );
-                filter.setIdForm( nIdForm );
+                filter.setIdResource( nIdForm );
                 filter.setIdEntryParent( entryFirstLevel.getIdEntry( ) );
 
                 List<IEntry> listEntryChild = new ArrayList<IEntry>( );
@@ -1497,8 +1425,7 @@ public final class FormUtils extends GenericAttributesUtils
     {
         for ( EntryType entryType : EntryTypeHome.getList( FormPlugin.PLUGIN_NAME ) )
         {
-            if ( entryType.getClassName( ).equals(
-                    fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser.class.getName( ) ) )
+            if ( StringUtils.equals( entryType.getBeanName( ), EntryTypeMyLuteceUser.BEAN_NAME ) )
             {
                 return entryType;
             }
@@ -1508,7 +1435,7 @@ public final class FormUtils extends GenericAttributesUtils
     }
 
     /**
-     * Activate mylutece authentication for the form
+     * Activate MyLutece authentication for the form
      * @param form form
      * @param plugin Plugin
      * @param locale Locale
@@ -1520,31 +1447,10 @@ public final class FormUtils extends GenericAttributesUtils
         EntryType entryType = FormUtils.getEntryTypeMyLuteceUser( plugin );
         IEntry entry = null;
 
-        try
-        {
-            entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
-            entry.setEntryType( entryType );
-        }
-        catch ( ClassNotFoundException e )
-        {
-            //  class doesn't exist
-            AppLogService.error( e.getMessage( ), e );
-            return;
-        }
-        catch ( InstantiationException e )
-        {
-            // Class is abstract or is an  interface or haven't accessible builder
-            AppLogService.error( e.getMessage( ), e );
-            return;
-        }
-        catch ( IllegalAccessException e )
-        {
-            // can't access to the class
-            AppLogService.error( e.getMessage( ), e );
-            return;
-        }
+        entry = new Entry( );
+        entry.setEntryType( entryType );
 
-        entry.getRequestData( request, locale );
+        EntryTypeServiceManager.getEntryTypeService( entry ).getRequestData( entry, request, locale );
         entry.setIdResource( form.getIdForm( ) );
         entry.setResourceType( Form.RESOURCE_TYPE );
         entry.setIdEntry( EntryHome.create( entry ) );
@@ -1560,20 +1466,21 @@ public final class FormUtils extends GenericAttributesUtils
     }
 
     /**
-     * Deactivate mylutece authentication for the form
+     * Deactivate MyLutece authentication for the form
      * @param form Form
      * @param plugin Plugin
      */
     public static void deactivateMyLuteceAuthentification( Form form, Plugin plugin )
     {
         EntryFilter entryFilter = new EntryFilter( );
-        entryFilter.setIdForm( form.getIdForm( ) );
+        entryFilter.setIdResource( form.getIdForm( ) );
+        entryFilter.setResourceType( Form.RESOURCE_TYPE );
 
         List<IEntry> listEntries = EntryHome.getEntryList( entryFilter );
 
         for ( IEntry entry : listEntries )
         {
-            if ( entry instanceof fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser )
+            if ( entry instanceof fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUser )
             {
                 EntryHome.remove( entry.getIdEntry( ) );
 

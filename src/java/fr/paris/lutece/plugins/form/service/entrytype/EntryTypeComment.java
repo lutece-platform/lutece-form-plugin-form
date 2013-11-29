@@ -31,45 +31,46 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
+
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeComment;
 
 /**
  * 
- * class EntryTypeSelectSQL
+ * class EntryTypeComment
  * 
  */
-public class EntryTypeSelectSQL extends AbstractEntryTypeSelectSQL
+public class EntryTypeComment extends AbstractEntryTypeComment
 {
-    private final String _template_create = "admin/plugins/form/entries/create_entry_type_select_sql.html";
-    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_select_sql.html";
-    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_select_sql.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_comment.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_comment.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_comment.html";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode( )
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
-        this.setFields( this.getSqlQueryFields( ) );
-
-        return _template_html_code;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate( )
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
-        return _template_create;
+        return TEMPLATE_CREATE;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateModify( )
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
     {
-        return _template_modify;
+        return TEMPLATE_MODIFY;
     }
 }

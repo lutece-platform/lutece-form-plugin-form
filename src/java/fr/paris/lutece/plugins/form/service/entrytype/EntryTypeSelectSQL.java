@@ -31,48 +31,48 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
 
-
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeSelectSQL;
 
 /**
- *
- * class EntryTypeSession
- * This entry is used to fetch the value of a session's attribute.
- * One example is when coupling form with crm, the module-crm-form
- * will put in session the ID demand and the user GUID. This entry will
- * be able to fetch the ID demand and user GUID when validating the form.
- * Then, it is easier to export the value to directory with the
- * module-form-exportdirectory.
- *
+ * 
+ * class EntryTypeSelectSQL
+ * 
  */
-public class EntryTypeSession extends AbstractEntryTypeSession
+public class EntryTypeSelectSQL extends AbstractEntryTypeSelectSQL
 {
-    private final String _template_create = "admin/plugins/form/entries/create_entry_type_session.html";
-    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_session.html";
-    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_session.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_select_sql.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_select_sql.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_select_sql.html";
 
     /**
      * {@inheritDoc}
      */
-    public String getHtmlCode(  )
+    @Override
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
-        return _template_html_code;
+        entry.setFields( getSqlQueryFields( entry ) );
+
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getTemplateCreate(  )
+    @Override
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
-        return _template_create;
+        return TEMPLATE_CREATE;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getTemplateModify(  )
+    @Override
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
     {
-        return _template_modify;
+        return TEMPLATE_MODIFY;
     }
 }

@@ -31,45 +31,28 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
+
+import fr.paris.lutece.plugins.form.business.IEntry;
+
 
 /**
- * 
- * class EntryTypeDate
- * 
+ * class EntryTypeText
  */
-public class EntryTypeDate extends AbstractEntryTypeDate
+public class EntryTypeMyLuteceUser extends AbstractEntryTypeMyLuteceUser
 {
-    private final String _template_create = "admin/plugins/form/entries/create_entry_type_date.html";
-    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_date.html";
-    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_date.html";
-
     /**
-     * Get the HtmlCode of the entry
-     * @return the HtmlCode of the entry
-     * 
-     * */
-    public String getHtmlCode( )
-    {
-        return _template_html_code;
-    }
-
-    /**
-     * Get template create url of the entry
-     * @return template create url of the entry
+     * Name of the bean of this service
      */
-    public String getTemplateCreate( )
-    {
-        return _template_create;
-    }
+    public static final String BEAN_NAME = "form.entryTypeMyLuteceUser";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_mylutece_user.html";
 
     /**
-     * Get the template modify url of the entry
-     * @return template modify url of the entry
+     * {@inheritDoc}
      */
-    public String getTemplateModify( )
+    @Override
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
-        return _template_modify;
+        return TEMPLATE_HTML_CODE;
     }
-
 }

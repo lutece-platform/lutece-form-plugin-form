@@ -37,6 +37,7 @@ import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.FormError;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.form.utils.JSONUtils;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
@@ -365,7 +366,8 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
             if ( entry != null )
             {
-                FormError formError = entry.canUploadFiles( listUploadedFileItems, listFileItemsToUpload, locale );
+                FormError formError = EntryTypeServiceManager.getEntryTypeService( entry ).canUploadFiles( entry,
+                        listUploadedFileItems, listFileItemsToUpload, locale );
 
                 if ( formError != null )
                 {

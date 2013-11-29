@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.modules.processornotifysender.business;
 
-import fr.paris.lutece.plugins.form.business.EntryTypeSession;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.Recap;
@@ -43,6 +42,8 @@ import fr.paris.lutece.plugins.form.business.outputprocessor.OutputProcessor;
 import fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderResourceIdService;
 import fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderService;
 import fr.paris.lutece.plugins.form.service.EntryTypeService;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSession;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
@@ -209,8 +210,8 @@ public class ProcessorNotifySender extends OutputProcessor
         {
             if ( response.getEntry( ).getIdEntry( ) == config.getIdEntryEmailSender( ) )
             {
-                strEmailSender = response.getEntry( )
-                        .getResponseValueForExport( request, response, request.getLocale( ) );
+                strEmailSender = EntryTypeServiceManager.getEntryTypeService( response.getEntry( ) )
+                        .getResponseValueForExport( response.getEntry( ), request, response, request.getLocale( ) );
             }
         }
 
@@ -224,8 +225,9 @@ public class ProcessorNotifySender extends OutputProcessor
             {
                 if ( StringUtils.isNotBlank( response.getResponseValue( ) ) || response.getFile( ) != null )
                 {
-                    response.setToStringValueResponse( response.getEntry( ).getResponseValueForRecap( request,
-                            response, request.getLocale( ) ) );
+                    response.setToStringValueResponse( EntryTypeServiceManager
+                            .getEntryTypeService( response.getEntry( ) ).getResponseValueForRecap(
+                                    response.getEntry( ), request, response, request.getLocale( ) ) );
                 }
                 else
                 {

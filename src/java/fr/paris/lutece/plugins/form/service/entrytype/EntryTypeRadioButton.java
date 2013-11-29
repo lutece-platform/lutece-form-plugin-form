@@ -31,24 +31,27 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
+
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeRadioButton;
 
 /**
- * EntryTypeNumbering
+ * 
+ * class EntryTypeRadioButton
+ * 
  */
-public class EntryTypeNumbering extends AbstractEntryTypeNumbering
+public class EntryTypeRadioButton extends AbstractEntryTypeRadioButton
 {
-
-    // TEMPLATES
-    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_numbering.html";
-    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_numbering.html";
-    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_numbering.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_radio_button.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_radio_button.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_radio_button.html";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode( )
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
         return TEMPLATE_HTML_CODE;
     }
@@ -57,7 +60,7 @@ public class EntryTypeNumbering extends AbstractEntryTypeNumbering
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate( )
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
         return TEMPLATE_CREATE;
     }
@@ -66,7 +69,7 @@ public class EntryTypeNumbering extends AbstractEntryTypeNumbering
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateModify( )
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
     {
         return TEMPLATE_MODIFY;
     }

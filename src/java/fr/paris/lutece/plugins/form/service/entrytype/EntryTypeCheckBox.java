@@ -31,40 +31,46 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
+
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeCheckBox;
 
 /**
- * class EntryTypeText
+ * 
+ * class EntryTypeCheckBox
+ * 
  */
-public class EntryTypeMyLuteceUser extends AbstractEntryTypeMyLuteceUser
+public class EntryTypeCheckBox extends AbstractEntryTypeCheckBox
 {
-    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_mylutece_user.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_check_box.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_check_box.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_check_box.html";
 
     /**
-     * Get the HtmlCode of the entry
-     * @return the HtmlCode of the entry
-     * 
-     * */
-    public String getHtmlCode( )
+     * {@inheritDoc}
+     */
+    @Override
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
-        return _template_html_code;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
-     * Get template create url of the entry
-     * @return template create url of the entry
+     * {@inheritDoc}
      */
-    public String getTemplateCreate( )
+    @Override
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
-        return null;
+        return TEMPLATE_CREATE;
     }
 
     /**
-     * Get the template modify url of the entry
-     * @return template modify url of the entry
+     * {@inheritDoc}
      */
-    public String getTemplateModify( )
+    @Override
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
     {
-        return null;
+        return TEMPLATE_MODIFY;
     }
 }

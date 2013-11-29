@@ -31,44 +31,47 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
+
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeDate;
 
 /**
  * 
- * class EntryTypeTextArea
+ * class EntryTypeDate
  * 
  */
-public class EntryTypeTextArea extends AbstractEntryTypeTextArea
+public class EntryTypeDate extends AbstractEntryTypeDate
 {
-    private final String _template_create = "admin/plugins/form/entries/create_entry_type_text_area.html";
-    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_text_area.html";
-    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_text_area.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_date.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_date.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_date.html";
 
     /**
-     * Get the HtmlCode of the entry
-     * @return the HtmlCode of the entry
-     * 
-     * */
-    public String getHtmlCode( )
-    {
-        return _template_html_code;
-    }
-
-    /**
-     * Get template create url of the entry
-     * @return template create url of the entry
+     * {@inheritDoc}
      */
-    public String getTemplateCreate( )
+    @Override
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
-        return _template_create;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
-     * Get the template modify url of the entry
-     * @return template modify url of the entry
+     * {@inheritDoc}
      */
-    public String getTemplateModify( )
+    @Override
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
-        return _template_modify;
+        return TEMPLATE_CREATE;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
+    {
+        return TEMPLATE_MODIFY;
+    }
+
 }

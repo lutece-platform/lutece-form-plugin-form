@@ -68,4 +68,21 @@
 	 	<property name="key" value="formSubmit" />
 	 	<property name="titleI18nKey" value="form.file.export.type.formSubmit" />
 	 </bean>
+	 
+	 <bean id="form.entryTypeCheckBox" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeCheckBox" />
+	 <bean id="form.entryTypeComment" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeComment" />
+	 <bean id="form.entryTypeDate" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeDate" />
+	 <bean id="form.entryType" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeFile" />
+	 <bean id="form.entryTypeGeolocation" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGeolocation" />
+	 <bean id="form.entryTypeGroup" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGroup" />
+	 <bean id="form.entryTypeImage" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeImage" />
+	 <bean id="form.entryTypeMandatoryCheckBox" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMandatoryCheckBox" />
+	 <bean id="form.entryTypeMyLuteceUser" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUser" />
+	 <bean id="form.entryTypeNumbering" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeNumbering" />
+	 <bean id="form.entryTypeRadioButton" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeRadioButton" />
+	 <bean id="form.entryTypeSelect" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSelect" />
+	 <bean id="form.entryTypeSelectSQL" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSelectSQL" />
+	 <bean id="form.entryTypeSession" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSession" />
+	 <bean id="form.entryTypeText" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeText" />
+	 <bean id="form.entryTypeTextArea" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeTextArea" />
  </beans>

@@ -31,8 +31,13 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
 
+import fr.paris.lutece.plugins.form.business.Field;
+import fr.paris.lutece.plugins.form.business.FormError;
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.business.MandatoryFormError;
+import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
@@ -53,39 +58,35 @@ import org.apache.commons.lang.StringUtils;
 public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
 {
 
-    private final String _template_create = "admin/plugins/form/entries/create_entry_type_mandatory_check_box.html";
-    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_mandatory_check_box.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_mandatory_check_box.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_mandatory_check_box.html";
 
     /**
-     * Get template create url of the entry
-     * @return template create url of the entry
+     * {@inheritDoc}
      */
-    public String getTemplateCreate( )
+    @Override
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
-        return _template_create;
+        return TEMPLATE_CREATE;
     }
 
     /**
-     * Get the template modify url of the entry
-     * @return template modify url of the entry
+     * {@inheritDoc}
      */
-    public String getTemplateModify( )
+    @Override
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
     {
-        return _template_modify;
+        return TEMPLATE_MODIFY;
     }
 
     /**
-     * save in the list of response the response associate to the entry in the
-     * form submit
-     * @param request HttpRequest
-     * @param listResponse the list of response associate to the entry in the
-     *            form submit
-     * @param locale the locale
-     * @return a Form error object if there is an error in the response
+     * {@inheritDoc}
      */
-    public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
+    @Override
+    public FormError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
     {
-        String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + this.getIdEntry( ) );
+        String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         List<Field> listFieldInResponse = new ArrayList<Field>( );
         int nIdField = -1;
         Field field = null;
@@ -104,7 +105,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
                     AppLogService.error( ne );
                 }
 
-                field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, this.getFields( ) );
+                field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields( ) );
 
                 if ( field != null )
                 {
@@ -116,7 +117,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
         if ( listFieldInResponse.size( ) == 0 )
         {
             response = new Response( );
-            response.setEntry( this );
+            response.setEntry( entry );
             listResponse.add( response );
         }
         else
@@ -124,7 +125,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
             for ( Field fieldInResponse : listFieldInResponse )
             {
                 response = new Response( );
-                response.setEntry( this );
+                response.setEntry( entry );
                 response.setResponseValue( fieldInResponse.getValue( ) );
                 response.setField( fieldInResponse );
                 listResponse.add( response );
@@ -141,16 +142,16 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
             }
         }
 
-        if ( nSubmitedFields < getFields( ).size( ) )
+        if ( nSubmitedFields < entry.getFields( ).size( ) )
         {
-            if ( StringUtils.isNotBlank( getErrorMessage( ) ) )
+            if ( StringUtils.isNotBlank( entry.getErrorMessage( ) ) )
             {
                 FormError formError = new FormError( );
                 formError.setMandatoryError( true );
-                formError.setErrorMessage( getErrorMessage( ) );
+                formError.setErrorMessage( entry.getErrorMessage( ) );
                 return formError;
             }
-            return new MandatoryFormError( this, locale );
+            return new MandatoryFormError( entry, locale );
         }
 
         return null;

@@ -31,45 +31,46 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
 
-
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeTextArea;
 
 /**
  * 
- * class EntryTypeRadioButton
+ * class EntryTypeTextArea
  * 
  */
-public class EntryTypeRadioButton extends AbstractEntryTypeRadioButton
+public class EntryTypeTextArea extends AbstractEntryTypeTextArea
 {
-    private final String _template_create = "admin/plugins/form/entries/create_entry_type_radio_button.html";
-    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_radio_button.html";
-    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_radio_button.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_text_area.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_text_area.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_text_area.html";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode( )
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
-        return _template_html_code;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate( )
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
-        return _template_create;
+        return TEMPLATE_CREATE;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateModify( )
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
     {
-        return _template_modify;
+        return TEMPLATE_MODIFY;
     }
 }

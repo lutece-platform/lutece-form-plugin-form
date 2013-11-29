@@ -2,37 +2,37 @@
 -- Dumping data for table form_entry_type
 --
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
-(1,'Bouton radio',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeRadioButton','form');
+(1,'Bouton radio',0,0,0,'form.entryTypeRadioButton','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
-(2,'Case à cocher',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeCheckBox','form');
+(2,'Case à cocher',0,0,0,'form.entryTypeCheckBox','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
-(3,'Commentaire',0,1,0,'fr.paris.lutece.plugins.form.business.EntryTypeComment','form');
+(3,'Commentaire',0,1,0,'form.entryTypeComment','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
-(4,'Date',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeDate','form');
+(4,'Date',0,0,0,'form.entryTypeDate','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
-(5,'Liste déroulante',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeSelect','form');
+(5,'Liste déroulante',0,0,0,'form.entryTypeSelect','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
-(6,'Zone de texte court',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeText','form');
+(6,'Zone de texte court',0,0,0,'form.entryTypeText','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
-(7,'Zone de texte long',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeTextArea','form');
+(7,'Zone de texte long',0,0,0,'form.entryTypeTextArea','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
-(8,'Fichier',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeFile','form');
+(8,'Fichier',0,0,0,'form.entryTypeFile','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
-(9,'Regroupement',1,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeGroup','form');
+(9,'Regroupement',1,0,0,'form.entryTypeGroup','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES
-(10,'Liste déroulante SQL',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeSelectSQL','form');
+(10,'Liste déroulante SQL',0,0,0,'form.entryTypeSelectSQL','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES
-(11,'Géolocalisation',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeGeolocation','form');
+(11,'Géolocalisation',0,0,0,'form.entryTypeGeolocation','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES
-(12,'Image',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeImage','form');
+(12,'Image',0,0,0,'form.entryTypeImage','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES
-(13,'Utilisateur MyLutece',0,0,1,'fr.paris.lutece.plugins.form.business.EntryTypeMyLuteceUser','form');
+(13,'Utilisateur MyLutece',0,0,1,'form.entryTypeMyLuteceUser','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES
-(14,'Session',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeSession','form');
+(14,'Session',0,0,0,'form.entryTypeSession','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES
-(15,'Numérotation',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeNumbering','form');
+(15,'Numérotation',0,0,0,'form.entryTypeNumbering','form');
 INSERT INTO form_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
-(16,'Cases à cocher obligatoires',0,0,0,'fr.paris.lutece.plugins.form.business.EntryTypeMandatoryCheckBox','form');
+(16,'Cases à cocher obligatoires',0,0,0,'form.entryTypeMandatoryCheckBox','form');
 
 
 -- register entries for the exemple form

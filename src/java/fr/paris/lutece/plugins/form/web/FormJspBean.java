@@ -1193,7 +1193,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
             strUrlAction = AppHTTPSService.getHTTPSUrl( request ) + strUrlAction;
         }
 
-        model.put( MARK_STR_FORM, FormUtils.getHtmlForm( form, strUrlAction, plugin, locale ) );
+        model.put( MARK_STR_FORM, FormUtils.getHtmlForm( form, strUrlAction, plugin, locale, false ) );
         model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( plugin ) );
         setPageTitleProperty( EMPTY_STRING );
         template = AppTemplateService.getTemplate( TEMPLATE_HTML_TEST_FORM, locale, model );
@@ -1255,7 +1255,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
         }
 
         filter = new EntryFilter( );
-        filter.setIdForm( nIdForm );
+        filter.setIdResource( nIdForm );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );

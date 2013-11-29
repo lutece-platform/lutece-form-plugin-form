@@ -31,43 +31,42 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
+
+import fr.paris.lutece.plugins.form.business.IEntry;
+
 
 /**
  * 
- * class EntryTypeSelect
+ * class EntryTypeGroup
  * 
  */
-public class EntryTypeSelect extends AbstractEntryTypeSelect
+public class EntryTypeGroup extends AbstractEntryTypeGroup
 {
-    private final String _template_create = "admin/plugins/form/entries/create_entry_type_select.html";
-    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_select.html";
-    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_select.html";
+    /**
+     * Name of the bean of this service
+     */
+    public static final String BEAN_NAME = "form.entryTypeGroup";
+
+    //	templates
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_group.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_group.html";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode( )
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
-        return _template_html_code;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate( )
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
     {
-        return _template_create;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getTemplateModify( )
-    {
-        return _template_modify;
+        return TEMPLATE_MODIFY;
     }
 }

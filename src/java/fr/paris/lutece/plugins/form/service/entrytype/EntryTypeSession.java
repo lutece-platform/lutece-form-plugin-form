@@ -31,40 +31,54 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
+
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeSession;
+
+
 
 /**
- * 
- * class EntryTypeGroup
- * 
+ *
+ * class EntryTypeSession
+ * This entry is used to fetch the value of a session's attribute.
+ * One example is when coupling form with crm, the module-crm-form
+ * will put in session the ID demand and the user GUID. This entry will
+ * be able to fetch the ID demand and user GUID when validating the form.
+ * Then, it is easier to export the value to directory with the
+ * module-form-exportdirectory.
+ *
  */
-public class EntryTypeGroup extends AbstractEntryTypeGroup
+public class EntryTypeSession extends AbstractEntryTypeSession
 {
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_session.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_session.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_session.html";
+
     /**
-     * Id of entry type for groups
+     * {@inheritDoc}
      */
-    public static final int FILTER_GROUP_ENTRY = 9;
-
-    //	templates
-    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_group.html";
-    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_group.html";
-
-    /**
-     * Get the HtmlCode of the entry
-     * @return the HtmlCode of the entry
-     * 
-     * */
-    public String getHtmlCode( )
+    @Override
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
-        return _template_html_code;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
-     * Get the template modify url of the entry
-     * @return template modify url of the entry
+     * {@inheritDoc}
      */
-    public String getTemplateModify( )
+    @Override
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
-        return _template_modify;
+        return TEMPLATE_CREATE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
+    {
+        return TEMPLATE_MODIFY;
     }
 }

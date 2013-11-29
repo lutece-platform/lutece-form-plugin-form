@@ -84,7 +84,8 @@ public final class FormHome
         Recap recap;
         List<IEntry> listEntry;
         EntryFilter filter = new EntryFilter( );
-        filter.setIdForm( form.getIdForm( ) );
+        filter.setIdResource( form.getIdForm( ) );
+        filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         listEntry = EntryHome.getEntryList( filter );
@@ -136,7 +137,8 @@ public final class FormHome
 
         Form form = findByPrimaryKey( nIdForm, plugin );
         EntryFilter entryFilter = new EntryFilter( );
-        entryFilter.setIdForm( form.getIdForm( ) );
+        entryFilter.setIdResource( form.getIdForm( ) );
+        entryFilter.setResourceType( Form.RESOURCE_TYPE );
 
         List<IEntry> listEntry = EntryHome.getEntryList( entryFilter );
 

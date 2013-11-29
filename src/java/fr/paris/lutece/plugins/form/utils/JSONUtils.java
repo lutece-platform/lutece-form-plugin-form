@@ -39,6 +39,7 @@ import fr.paris.lutece.plugins.form.business.FieldHome;
 import fr.paris.lutece.plugins.form.business.FormError;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Response;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.blobstore.BlobStoreFileItem;
@@ -185,7 +186,7 @@ public final class JSONUtils
         {
             // if the entry is not a file, we can set the string value
             // data entry as specific behavior
-            entry.setResponseToStringValue( response, locale );
+            EntryTypeServiceManager.getEntryTypeService( entry ).setResponseToStringValue( entry, response, locale );
         }
 
         return response;

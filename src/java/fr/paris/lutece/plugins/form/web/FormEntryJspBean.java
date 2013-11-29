@@ -44,6 +44,8 @@ import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.service.EntryRemovalListenerService;
 import fr.paris.lutece.plugins.form.service.FormResourceIdService;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.form.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
@@ -225,7 +227,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
             setPageTitleProperty( PROPERTY_CREATE_QUESTION_TITLE );
         }
 
-        HtmlTemplate template = AppTemplateService.getTemplate( entry.getTemplateCreate( ), getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( EntryTypeServiceManager.getEntryTypeService( entry )
+                .getTemplateCreate( entry, false ), getLocale( ), model );
 
         return getAdminPage( template.getHtml( ) );
     }
@@ -268,7 +271,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
                 return getJspManageForm( request );
             }
 
-            String strError = entry.getRequestData( request, getLocale( ) );
+            String strError = EntryTypeServiceManager.getEntryTypeService( entry ).getRequestData( entry, request,
+                    getLocale( ) );
 
             if ( strError != null )
             {
@@ -349,6 +353,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         entry.setFields( listField );
         Form form = FormHome.findByPrimaryKey( entry.getIdResource( ), plugin );
+        IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
 
         Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_ENTRY, entry );
@@ -357,7 +362,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
                 _nDefaultItemsPerPage );
 
-        LocalizedPaginator<?> paginator = entry.getPaginator( _nItemsPerPage, AppPathService.getBaseUrl( request )
+        LocalizedPaginator<?> paginator = entryTypeService.getPaginator( entry, _nItemsPerPage,
+                AppPathService.getBaseUrl( request )
                 + JSP_MODIFY_ENTRY + "?id_entry=" + nIdEntry, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
         if ( paginator != null )
@@ -368,7 +374,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
             model.put( MARK_PAGINATOR, paginator );
         }
 
-        refListRegularExpression = entry.getReferenceListRegularExpression( entry, plugin );
+        refListRegularExpression = entryTypeService.getReferenceListRegularExpression( entry, plugin );
 
         if ( refListRegularExpression != null )
         {
@@ -391,7 +397,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
             setPageTitleProperty( PROPERTY_MODIFY_QUESTION_TITLE );
         }
 
-        HtmlTemplate template = AppTemplateService.getTemplate( entry.getTemplateModify( ), getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( entryTypeService.getTemplateModify( entry, false ),
+                getLocale( ), model );
 
         return getAdminPage( template.getHtml( ) );
     }
@@ -430,7 +437,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         if ( request.getParameter( PARAMETER_CANCEL ) == null )
         {
-            String strError = entry.getRequestData( request, getLocale( ) );
+            String strError = EntryTypeServiceManager.getEntryTypeService( entry ).getRequestData( entry, request,
+                    getLocale( ) );
 
             if ( strError != null )
             {
@@ -576,7 +584,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         // Update order
         List<IEntry> listEntry;
         EntryFilter filter = new EntryFilter( );
-        filter.setIdForm( entry.getIdResource( ) );
+        filter.setIdResource( entry.getIdResource( ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         listEntry = EntryHome.getEntryList( filter );
 
@@ -692,7 +700,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         // recup group
         filter = new EntryFilter( );
-        filter.setIdForm( entry.getIdResource( ) );
+        filter.setIdResource( entry.getIdResource( ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setIdIsGroup( EntryFilter.FILTER_TRUE );
         listGroup = EntryHome.getEntryList( filter );
@@ -805,7 +813,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         List<IEntry> listEntry;
         EntryFilter filter = new EntryFilter( );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        filter.setIdForm( entry.getIdResource( ) );
+        filter.setIdResource( entry.getIdResource( ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         listEntry = EntryHome.getEntryList( filter );
 
@@ -926,7 +934,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
             if ( entryParent == null )
             {
                 EntryFilter filter = new EntryFilter( );
-                filter.setIdForm( nIdForm );
+                filter.setIdResource( nIdForm );
                 filter.setResourceType( Form.RESOURCE_TYPE );
                 filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
                 listEntry = EntryHome.getEntryList( filter );
@@ -969,7 +977,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         else
         {
             EntryFilter filter = new EntryFilter( );
-            filter.setIdForm( nIdForm );
+            filter.setIdResource( nIdForm );
             filter.setResourceType( Form.RESOURCE_TYPE );
 
             List<IEntry> entryList = EntryHome.getEntryList( filter );
@@ -1040,7 +1048,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
             int nNewOrder = 0;
 
             EntryFilter filter = new EntryFilter( );
-            filter.setIdForm( nIdForm );
+            filter.setIdResource( nIdForm );
             filter.setResourceType( Form.RESOURCE_TYPE );
             filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
@@ -1111,7 +1119,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         else
         {
             EntryFilter filter = new EntryFilter( );
-            filter.setIdForm( nIdForm );
+            filter.setIdResource( nIdForm );
             filter.setResourceType( Form.RESOURCE_TYPE );
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
@@ -1150,7 +1158,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
             int nEntryToMoveOrder = entryToChangeOrder.getPosition( );
 
             EntryFilter filter = new EntryFilter( );
-            filter.setIdForm( nIdForm );
+            filter.setIdResource( nIdForm );
             filter.setResourceType( Form.RESOURCE_TYPE );
             filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
@@ -1200,7 +1208,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         else
         {
             EntryFilter filter = new EntryFilter( );
-            filter.setIdForm( nIdForm );
+            filter.setIdResource( nIdForm );
             filter.setResourceType( Form.RESOURCE_TYPE );
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
@@ -1258,7 +1266,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         entry = EntryHome.findByPrimaryKey( nIdEntry );
 
         EntryFilter filter = new EntryFilter( );
-        filter.setIdForm( entry.getIdResource( ) );
+        filter.setIdResource( entry.getIdResource( ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
 
         if ( entry.getParent( ) != null )
@@ -1373,7 +1381,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         filter = new EntryFilter( );
-        filter.setIdForm( nIdForm );
+        filter.setIdResource( nIdForm );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );

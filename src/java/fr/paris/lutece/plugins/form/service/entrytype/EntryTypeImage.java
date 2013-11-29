@@ -31,21 +31,32 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
 
+import fr.paris.lutece.plugins.form.business.FormError;
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.business.MandatoryFormError;
+import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.upload.IGAAsyncUploadHandler;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
+import fr.paris.lutece.util.url.UrlItem;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
@@ -54,70 +65,78 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * 
- * class EntryTypeFile
+ * class EntryTypeImage
  * 
  */
-public class EntryTypeFile extends AbstractEntryTypeUpload
+public class EntryTypeImage extends AbstractEntryTypeUpload
 {
-    private final String _template_create = "admin/plugins/form/entries/create_entry_type_file.html";
-    private final String _template_modify = "admin/plugins/form/entries/modify_entry_type_file.html";
-    private final String _template_html_code = "admin/plugins/form/entries/html_code_entry_type_file.html";
+    /**
+     * Name of the bean of this service
+     */
+    public static final String BEAN_NAME = "form.entryTypeImage";
+
+    private static final String JSP_DOWNLOAD_FILE = "jsp/admin/plugins/form/DoDownloadFile.jsp";
+    private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "form.message.notAnImage";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_image.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_image.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_image.html";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode( )
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
     {
-        return _template_html_code;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate( )
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
-        return _template_create;
+        return TEMPLATE_CREATE;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateModify( )
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
     {
-        return _template_modify;
+        return TEMPLATE_MODIFY;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
+    public FormError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
     {
         List<FileItem> listFilesSource = null;
 
         if ( request instanceof MultipartHttpServletRequest )
         {
-            List<FileItem> asynchronousFileItems = getFileSources( request );
+            List<FileItem> asynchronousFileItem = getFileSources( entry, request );
 
-            if ( asynchronousFileItems != null )
+            if ( asynchronousFileItem != null )
             {
-                listFilesSource = asynchronousFileItems;
+                listFilesSource = asynchronousFileItem;
             }
 
             FormError formError = null;
 
             if ( ( listFilesSource != null ) && !listFilesSource.isEmpty( ) )
             {
-                formError = this.checkResponseData( listFilesSource, locale, request );
+                formError = checkResponseData( entry, listFilesSource, locale, request );
 
                 if ( formError != null )
                 {
                     // Add the response to the list in order to have the error message in the page
                     Response response = new Response( );
-                    response.setEntry( this );
+                    response.setEntry( entry );
                     listResponse.add( response );
                 }
 
@@ -126,12 +145,11 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
                     String strFilename = ( fileItem != null ) ? FileUploadService.getFileNameOnly( fileItem )
                             : StringUtils.EMPTY;
 
-                    // Add the file to the response list
+                    //Add the image to the response list
                     Response response = new Response( );
-                    response.setEntry( this );
+                    response.setEntry( entry );
 
-                    if ( ( fileItem != null ) && ( fileItem.get( ) != null )
-                            && ( fileItem.getSize( ) < Integer.MAX_VALUE ) )
+                    if ( ( fileItem != null ) && ( fileItem.getSize( ) < Integer.MAX_VALUE ) )
                     {
                         PhysicalFile physicalFile = new PhysicalFile( );
                         physicalFile.setValue( fileItem.get( ) );
@@ -147,9 +165,8 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
 
                     listResponse.add( response );
 
-                    String strMimeType = StringUtils.isBlank( strFilename ) ? FileSystemUtil.getMIMEType( strFilename )
-                            : StringUtils.EMPTY;
-                    List<RegularExpression> listRegularExpression = this.getFields( ).get( 0 )
+                    String strMimeType = ( fileItem != null ) ? fileItem.getContentType( ) : StringUtils.EMPTY;
+                    List<RegularExpression> listRegularExpression = entry.getFields( ).get( 0 )
                             .getRegularExpressionList( );
 
                     if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null )
@@ -162,26 +179,53 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
                             {
                                 formError = new FormError( );
                                 formError.setMandatoryError( false );
-                                formError.setTitleQuestion( this.getTitle( ) );
+                                formError.setTitleQuestion( entry.getTitle( ) );
                                 formError.setErrorMessage( regularExpression.getErrorMessage( ) );
+
+                                return formError;
                             }
                         }
                     }
+
+                    BufferedImage image = null;
+
+                    try
+                    {
+                        if ( ( fileItem != null ) && ( fileItem.get( ) != null ) )
+                        {
+                            image = ImageIO.read( new ByteArrayInputStream( fileItem.get( ) ) );
+                        }
+                    }
+                    catch ( IOException e )
+                    {
+                        AppLogService.error( e );
+                    }
+
+                    if ( ( image == null ) && StringUtils.isNotBlank( strFilename ) )
+                    {
+                        formError = new FormError( );
+                        formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE,
+                                request.getLocale( ) ) );
+                        formError.setTitleQuestion( entry.getTitle( ) );
+                    }
                 }
+
+                return formError;
             }
-            else if ( this.isMandatory( ) )
+
+            if ( entry.isMandatory( ) && ( ( listFilesSource == null ) || listFilesSource.isEmpty( ) ) )
             {
-                formError = new MandatoryFormError( this, locale );
+                formError = new MandatoryFormError( entry, locale );
 
                 Response response = new Response( );
-                response.setEntry( this );
+                response.setEntry( entry );
                 listResponse.add( response );
             }
 
             return formError;
         }
 
-        return new MandatoryFormError( this, locale );
+        return new MandatoryFormError( entry, locale );
     }
 
     /**
@@ -191,5 +235,17 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
     public IGAAsyncUploadHandler getAsynchronousUploadHandler( )
     {
         return FormAsynchronousUploadHandler.getHandler( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getUrlDownloadFile( int nResponseId, String strBaseUrl )
+    {
+        UrlItem url = new UrlItem( strBaseUrl + JSP_DOWNLOAD_FILE );
+        url.addParameter( PARAMETER_ID_RESPONSE, nResponseId );
+
+        return url.getUrl( );
     }
 }

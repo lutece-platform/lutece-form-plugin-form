@@ -36,8 +36,6 @@ package fr.paris.lutece.plugins.form.web;
 import fr.paris.lutece.plugins.form.business.CaptchaFormError;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
-import fr.paris.lutece.plugins.form.business.EntryTypeNumbering;
-import fr.paris.lutece.plugins.form.business.EntryTypeSession;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormError;
 import fr.paris.lutece.plugins.form.business.FormFilter;
@@ -56,6 +54,9 @@ import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeNumbering;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSession;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
@@ -375,8 +376,9 @@ public class FormApp implements XPageApplication
 
                         for ( Response submittedResponse : listSubmittedResponses )
                         {
-                            String strSubmittedResponse = submittedResponse.getEntry( ).getResponseValueForRecap(
-                                    request, submittedResponse, locale );
+                            String strSubmittedResponse = EntryTypeServiceManager.getEntryTypeService(
+                                    submittedResponse.getEntry( ) ).getResponseValueForRecap(
+                                    submittedResponse.getEntry( ), request, submittedResponse, locale );
 
                             if ( !strValueEntry.equals( EMPTY_STRING ) && ( strSubmittedResponse != null )
                                     && !strSubmittedResponse.equals( EMPTY_STRING )
@@ -525,7 +527,7 @@ public class FormApp implements XPageApplication
             }
 
             model.put( MARK_FORM_HTML, FormUtils.getHtmlForm( form, strUrlAction + form.getIdForm( ), plugin,
-                    request.getLocale( ), request ) );
+                    request.getLocale( ), true, request ) );
             model.put( MARK_FORM, form );
         }
 
@@ -659,8 +661,9 @@ public class FormApp implements XPageApplication
             {
                 if ( StringUtils.isNotBlank( response.getResponseValue( ) ) || response.getFile( ) != null )
                 {
-                    response.setToStringValueResponse( response.getEntry( ).getResponseValueForRecap( request,
-                            response, locale ) );
+                    response.setToStringValueResponse( EntryTypeServiceManager
+                            .getEntryTypeService( response.getEntry( ) ).getResponseValueForRecap(
+                                    response.getEntry( ), request, response, locale ) );
                 }
                 else
                 {
@@ -760,7 +763,7 @@ public class FormApp implements XPageApplication
         Locale locale = request.getLocale( );
 
         EntryFilter filter = new EntryFilter( );
-        filter.setIdForm( formSubmit.getForm( ).getIdForm( ) );
+        filter.setIdResource( formSubmit.getForm( ).getIdForm( ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );

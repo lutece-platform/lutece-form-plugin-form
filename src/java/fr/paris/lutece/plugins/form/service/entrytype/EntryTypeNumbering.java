@@ -31,23 +31,36 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.business;
+package fr.paris.lutece.plugins.form.service.entrytype;
+
+import fr.paris.lutece.plugins.form.business.IEntry;
+import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeNumbering;
 
 /**
- * The Class EntryTypeGeolocation.
+ * EntryTypeNumbering
  */
-public class EntryTypeGeolocation extends AbstractEntryTypeGeolocation
+public class EntryTypeNumbering extends AbstractEntryTypeNumbering
 {
-    /** The Constant CONSTANT_ID_ADDRESS. */
-    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_geolocation.html";
-    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_geolocation.html";
-    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_geolocation.html";
+
+    // TEMPLATES
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_numbering.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_numbering.html";
+    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_numbering.html";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate( )
+    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
+    {
+        return TEMPLATE_HTML_CODE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
     {
         return TEMPLATE_CREATE;
     }
@@ -56,18 +69,8 @@ public class EntryTypeGeolocation extends AbstractEntryTypeGeolocation
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateModify( )
+    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
     {
         return TEMPLATE_MODIFY;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getHtmlCode( )
-    {
-        return TEMPLATE_HTML_CODE;
-    }
-
 }

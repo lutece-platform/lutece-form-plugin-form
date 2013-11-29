@@ -38,8 +38,6 @@ import fr.paris.lutece.plugins.form.business.DefaultMessage;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.EntryType;
-import fr.paris.lutece.plugins.form.business.EntryTypeNumbering;
-import fr.paris.lutece.plugins.form.business.EntryTypeSession;
 import fr.paris.lutece.plugins.form.business.ExportFormat;
 import fr.paris.lutece.plugins.form.business.ExportFormatHome;
 import fr.paris.lutece.plugins.form.business.Field;
@@ -55,6 +53,8 @@ import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.exporttype.IExportTypeFactory;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeNumbering;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSession;
 import fr.paris.lutece.plugins.form.service.export.ExportServiceFactory;
 import fr.paris.lutece.plugins.form.service.export.IExportServiceFactory;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
@@ -238,7 +238,8 @@ public final class FormService
         EntryType entryTypeSession = _entryTypeService.getEntryType( EntryTypeSession.class.getName( ) );
 
         EntryFilter eFilter = new EntryFilter( );
-        eFilter.setIdForm( form.getIdForm( ) );
+        eFilter.setIdResource( form.getIdForm( ) );
+        eFilter.setResourceType( Form.RESOURCE_TYPE );
 
         if ( entryTypeSession != null )
         {

@@ -40,16 +40,17 @@ import fr.paris.lutece.plugins.form.business.DefaultMessageHome;
 import fr.paris.lutece.plugins.form.business.EntryFilter;
 import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.EntryType;
-import fr.paris.lutece.plugins.form.business.EntryTypeGroup;
 import fr.paris.lutece.plugins.form.business.EntryTypeHome;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
+import fr.paris.lutece.plugins.form.service.EntryTypeService;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.FormResourceIdService;
 import fr.paris.lutece.plugins.form.service.FormService;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGroup;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.util.GenericAttributesUtils;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
@@ -65,6 +66,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.portal.ThemesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -194,6 +196,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
      */
     protected int _nItemsPerPageEntry;
     private String _strCurrentPageIndexEntry;
+    private EntryTypeService _entryTypeService = SpringContextService.getBean( FormUtils.BEAN_ENTRY_TYPE_SERVICE );
 
     /**
      * Gets the form creation page
@@ -355,7 +358,8 @@ public abstract class ModifyFormJspBean extends FormJspBean
         }
 
         filter = new EntryFilter( );
-        filter.setIdForm( nIdForm );
+        filter.setIdResource( nIdForm );
+        filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         listEntryFirstLevel = EntryHome.getEntryList( filter );
@@ -400,9 +404,9 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         //get only the group type entries
         filter = new EntryFilter( );
-        filter.setIdForm( nIdForm );
+        filter.setIdResource( nIdForm );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-        filter.setIdEntryType( EntryTypeGroup.FILTER_GROUP_ENTRY );
+        filter.setIdEntryType( _entryTypeService.getEntryType( EntryTypeGroup.BEAN_NAME ).getIdType( ) );
 
         List<IEntry> listGroupEntry = EntryHome.getEntryList( filter );
 
@@ -749,9 +753,10 @@ public abstract class ModifyFormJspBean extends FormJspBean
         setPageTitleProperty( PROPERTY_MODIFY_FORM_TITLE );
 
         EntryFilter filter = new EntryFilter( );
-        filter.setIdForm( nIdForm );
+        filter.setIdResource( nIdForm );
         filter.setIdIsGroup( 0 );
         filter.setIdIsComment( 0 );
+        filter.setResourceType( Form.RESOURCE_TYPE );
         List<IEntry> listEntries = EntryHome.getEntryList( filter );
 
         List<Integer> listAnonymizeEntry = FormService.getInstance( ).getAnonymizeEntryList( form.getIdForm( ) );
@@ -1175,6 +1180,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
             {
                 filter = new EntryFilter( );
                 filter.setIdEntryParent( entry.getIdEntry( ) );
+                filter.setResourceType( Form.RESOURCE_TYPE );
                 entry.setChildren( EntryHome.getEntryList( filter ) );
 
                 if ( entry.getChildren( ).size( ) != 0 )
