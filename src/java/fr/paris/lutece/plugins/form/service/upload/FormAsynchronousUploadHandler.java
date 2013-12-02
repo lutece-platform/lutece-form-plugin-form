@@ -36,9 +36,9 @@ package fr.paris.lutece.plugins.form.service.upload;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.form.utils.JSONUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.genericattributes.service.upload.IGAAsyncUploadHandler;
@@ -78,13 +78,10 @@ import org.apache.commons.lang.StringUtils;
  */
 public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 {
-    /** <sessionId,<fieldName,fileItems>> */
-    /** contains uploaded file items */
-    public static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>( );
-
     public static final String UPLOAD_SUBMIT_PREFIX = "_form_upload_submit_form_";
     public static final String UPLOAD_DELETE_PREFIX = "_form_upload_delete_form_";
     public static final String UPLOAD_CHECKBOX_PREFIX = "_form_upload_checkbox_form_";
+
     private static final String PREFIX_ENTRY_ID = IEntryTypeService.PREFIX_ATTRIBUTE + "_";
     private static final String PARAMETER_PAGE = "page";
     private static final String PARAMETER_FIELD_NAME = "fieldname";
@@ -93,6 +90,10 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
     // PROPERTIES
     private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_SESSION_LOST = "form.message.error.uploading_file.session_lost";
+
+    /** <sessionId,<fieldName,fileItems>> */
+    /** contains uploaded file items */
+    private static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>( );
 
     /**
      * Get the handler

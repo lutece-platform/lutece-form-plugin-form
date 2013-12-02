@@ -54,10 +54,10 @@ import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.form.utils.JSONUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
@@ -313,8 +313,8 @@ public class FormApp implements XPageApplication
                 FormUtils.removeResponses( session );
                 FormUtils.removeFormErrors( session );
                 session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
-                String strSessionId = request.getParameter( PARAMETER_SESSION );
-                FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
+                FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles(
+                        request.getParameter( PARAMETER_SESSION ) );
             }
 
             // try to restore draft

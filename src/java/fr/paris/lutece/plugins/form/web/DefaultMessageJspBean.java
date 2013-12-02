@@ -60,6 +60,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class DefaultMessageJspBean extends PluginAdminPageJspBean
 {
+    /**
+     * Right to manage forms
+     */
     public static final String RIGHT_MANAGE_FORM = FormJspBean.RIGHT_MANAGE_FORM;
 
     private static final long serialVersionUID = -4993320302739981947L;

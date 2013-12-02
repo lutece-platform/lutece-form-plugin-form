@@ -33,28 +33,26 @@
  */
 package fr.paris.lutece.plugins.form.business.outputprocessor;
 
-
 /**
  * Abstract OutputProcessor
- *
- *
  */
 public abstract class OutputProcessor implements IOutputProcessor
 {
     private String _strKey;
 
-    /*
-     * (non-Javadoc)
-     * @see fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor#getKey()
+    /**
+     * {@inheritDoc}
      */
-    public String getKey(  )
+    @Override
+    public String getKey( )
     {
         return _strKey;
     }
 
-    /* (non-Javadoc)
-     * @see fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor#setKey(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public void setKey( String strKey )
     {
         _strKey = strKey;

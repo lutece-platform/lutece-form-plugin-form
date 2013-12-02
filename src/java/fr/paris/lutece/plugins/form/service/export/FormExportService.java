@@ -67,9 +67,8 @@ public class FormExportService extends AbstractExportService
             String strEncoding, StringBuilder sbLog, Plugin plugin )
     {
         String strFileName = FileUtils.buildFileName( form.getTitle( ), exportFormat.getExtension( ).trim( ) );
-        boolean bHasFormSubmit = ( listFormSubmit != null ) && !listFormSubmit.isEmpty( );
 
-        if ( bHasFormSubmit )
+        if ( listFormSubmit != null && !listFormSubmit.isEmpty( ) )
         {
             String strXmlSource = XmlUtil.getXmlHeader( )
                     + FormUtils.getXmlResponses( null, form, listFormSubmit, null, plugin );
@@ -88,8 +87,6 @@ public class FormExportService extends AbstractExportService
                 AppLogService.error( e.getMessage( ), e );
                 sbLog.append( "\n\tERROR when writing file " + strFileName );
             }
-
-            bHasFormSubmit = true;
         }
         else
         {

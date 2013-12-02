@@ -565,11 +565,11 @@ public class Form implements AdminWorkgroupResource, RBACResource
 
     /**
      * The label to display for the Reset button
-     * @param _strLibelleResetButton The label
+     * @param strLibelleResetButton The label
      */
-    public void setLibelleResetButton( String _strLibelleResetButton )
+    public void setLibelleResetButton( String strLibelleResetButton )
     {
-        this._strLibelleResetButton = _strLibelleResetButton;
+        this._strLibelleResetButton = strLibelleResetButton;
     }
 
     /**

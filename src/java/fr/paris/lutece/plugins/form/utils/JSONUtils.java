@@ -34,11 +34,11 @@
 package fr.paris.lutece.plugins.form.utils;
 
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.portal.business.file.File;
@@ -109,7 +109,7 @@ public final class JSONUtils
      * Builds the json string for the response map
      * @param mapResponse the response map
      * @param nIdForm the id form
-     * @param session the session
+     * @param strSessionId the session id
      * @return the json string
      */
     public static String buildJson( Map<Integer, List<Response>> mapResponse, int nIdForm, String strSessionId )
@@ -263,7 +263,7 @@ public final class JSONUtils
     /**
      * Builds the json string for the {@link Response}
      * @param response the response
-     * @param session the session
+     * @param strSessionId The session id
      * @return the json string
      */
     public static JSONObject buildJson( Response response, String strSessionId )
