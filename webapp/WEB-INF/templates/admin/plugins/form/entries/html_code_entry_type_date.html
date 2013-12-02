@@ -8,7 +8,7 @@
 			<#if list_responses??>
 			<#list list_responses as response>
 				<#if response.entry.idEntry == entry.idEntry>
-					<#if response.entry.formError??>error</#if>" <#if response.toStringValueResponse??>value="${response.toStringValueResponse}"</#if>
+					<#if response.entry.error??>error</#if>" <#if response.toStringValueResponse??>value="${response.toStringValueResponse}"</#if>
 				</#if>
 			</#list>
 		<#else>
@@ -20,13 +20,13 @@
 		</#if>	
 		<#if list_responses??>
 			<#list list_responses as response>
-				<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+				<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
 					<div class="alert alert-error">
-						<#assign formError = response.entry.formError>
-						<#if formError.mandatoryError>
+						<#assign error = response.entry.error>
+						<#if error.mandatoryError>
 							#i18n{form.message.mandatory.entry}
 						<#else>
-							${formError.errorMessage}
+							${error.errorMessage}
 						</#if>
 					</div>
 				</#if>

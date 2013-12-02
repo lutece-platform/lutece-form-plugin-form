@@ -34,9 +34,9 @@
 package fr.paris.lutece.plugins.form.modules.processornotifysender.service;
 
 import fr.paris.lutece.plugins.form.business.FormSubmit;
-import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.modules.processornotifysender.utils.FileUtils;
 import fr.paris.lutece.plugins.form.modules.processornotifysender.utils.ZipUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.mail.MailService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;

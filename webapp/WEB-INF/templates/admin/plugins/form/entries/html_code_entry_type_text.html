@@ -9,7 +9,7 @@
 					<#if response.toStringValueResponse??>
 						value="${response.toStringValueResponse}"
 					</#if>
-					<#if response.entry.formError??>
+					<#if response.entry.error??>
 						class="error"
 					</#if>
 					</#if>
@@ -33,9 +33,9 @@
 </div>
 <#if list_responses??>
 	<#list list_responses as response>
-		<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
-			<#assign formError = response.entry.formError>
-			<div class="alert alert-error"><#if formError.mandatoryError>#i18n{form.message.mandatory.entry}<#else>${formError.errorMessage}</#if></div>
+		<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
+			<#assign error = response.entry.error>
+			<div class="alert alert-error"><#if error.mandatoryError>#i18n{form.message.mandatory.entry}<#else>${error.errorMessage}</#if></div>
 		</#if>
 	</#list>
 </#if>

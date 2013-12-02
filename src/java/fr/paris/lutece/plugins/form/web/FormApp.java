@@ -34,20 +34,14 @@
 package fr.paris.lutece.plugins.form.web;
 
 import fr.paris.lutece.plugins.form.business.CaptchaFormError;
-import fr.paris.lutece.plugins.form.business.EntryFilter;
-import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.Form;
-import fr.paris.lutece.plugins.form.business.FormError;
 import fr.paris.lutece.plugins.form.business.FormFilter;
 import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.FormSubmitHome;
-import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
 import fr.paris.lutece.plugins.form.business.RequirementFormError;
-import fr.paris.lutece.plugins.form.business.Response;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
 import fr.paris.lutece.plugins.form.service.EntryTypeService;
 import fr.paris.lutece.plugins.form.service.FormService;
@@ -55,12 +49,18 @@ import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeNumbering;
-import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSession;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.form.utils.JSONUtils;
+import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
@@ -313,7 +313,8 @@ public class FormApp implements XPageApplication
                 FormUtils.removeResponses( session );
                 FormUtils.removeFormErrors( session );
                 session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
-                FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session );
+                String strSessionId = request.getParameter( PARAMETER_SESSION );
+                FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
             }
 
             // try to restore draft
@@ -407,8 +408,8 @@ public class FormApp implements XPageApplication
 
         model.put( MARK_RECAP, recap );
         model.put( MARK_FORM_SUBMIT, formSubmit );
-        model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.class.getName( ) ) );
-        model.put( MARK_ENTRY_TYPE_NUMBERING, _entryTypeService.getEntryType( EntryTypeNumbering.class.getName( ) ) );
+        model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.BEAN_NAME ) );
+        model.put( MARK_ENTRY_TYPE_NUMBERING, _entryTypeService.getEntryType( EntryTypeNumbering.BEAN_NAME ) );
 
         //String strPageId = request.getParameter( PARAMETER_PAGE_ID );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_RECAP_FORM_SUBMIT, locale, model );
@@ -568,7 +569,7 @@ public class FormApp implements XPageApplication
     private XPage getRecap( HttpServletRequest request, HttpSession session, int nMode, Plugin plugin )
             throws SiteMessageException, UserNotSignedException
     {
-        List<FormError> listFormErrors = new ArrayList<FormError>( );
+        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
         int nIdForm = -1;
         Map<String, Object> model = new HashMap<String, Object>( );
         Locale locale = request.getLocale( );
@@ -756,10 +757,10 @@ public class FormApp implements XPageApplication
      * @param plugin the Plugin
      * @return true if there is an error, false otherwise
      */
-    public List<FormError> doInsertResponseInFormSubmit( HttpServletRequest request, FormSubmit formSubmit,
+    public List<GenericAttributeError> doInsertResponseInFormSubmit( HttpServletRequest request, FormSubmit formSubmit,
             Plugin plugin )
     {
-        List<FormError> listFormErrors = new ArrayList<FormError>( );
+        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
         Locale locale = request.getLocale( );
 
         EntryFilter filter = new EntryFilter( );
@@ -846,7 +847,7 @@ public class FormApp implements XPageApplication
         FormUtils.sendNotificationMailFormSubmit( formSubmit, locale );
 
         // We can safely remove session files : they are validated
-        FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session );
+        FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
 
         //Process all outputProcess
         for ( IOutputProcessor outputProcessor : OutputProcessorService.getInstance( ).getProcessorsByIdForm(
@@ -942,14 +943,15 @@ public class FormApp implements XPageApplication
 
         for ( int nFieldIndex : tabFieldIndex )
         {
-            FormAsynchronousUploadHandler.getHandler( ).removeFileItem( strIdEntry, request.getSession( ), nFieldIndex );
+            FormAsynchronousUploadHandler.getHandler( ).removeFileItem( strIdEntry, request.getSession( ).getId( ),
+                    nFieldIndex );
         }
 
         JSONObject json = new JSONObject( );
         // operation successful
         json.element( JSONUtils.JSON_KEY_SUCCESS, JSONUtils.JSON_KEY_SUCCESS );
         json.accumulateAll( JSONUtils.getUploadedFileJSON( FormAsynchronousUploadHandler.getHandler( ).getFileItems(
-                strIdEntry, request.getSession( ) ) ) );
+                strIdEntry, request.getSession( ).getId( ) ) ) );
         json.element( JSONUtils.JSON_KEY_FIELD_NAME,
                 FormAsynchronousUploadHandler.getHandler( ).buildFieldName( strIdEntry ) );
 

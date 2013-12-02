@@ -33,14 +33,18 @@
  */
 package fr.paris.lutece.plugins.form.service.entrytype;
 
-import fr.paris.lutece.plugins.form.business.IEntry;
-import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeNumbering;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeNumbering;
 
 /**
  * EntryTypeNumbering
  */
 public class EntryTypeNumbering extends AbstractEntryTypeNumbering
 {
+    /**
+     * Name of the bean of this service
+     */
+    public static final String BEAN_NAME = "form.entryTypeNumbering";
 
     // TEMPLATES
     private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_numbering.html";

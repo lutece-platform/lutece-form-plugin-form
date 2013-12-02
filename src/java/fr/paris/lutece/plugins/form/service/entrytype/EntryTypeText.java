@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.form.service.entrytype;
 
-import fr.paris.lutece.plugins.form.business.FormError;
-import fr.paris.lutece.plugins.form.business.IEntry;
-import fr.paris.lutece.plugins.form.business.Response;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.service.IResponseService;
-import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeText;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeText;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
@@ -94,10 +94,10 @@ public class EntryTypeText extends AbstractEntryTypeText
      * {@inheritDoc}
      */
     @Override
-    public FormError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
+    public GenericAttributeError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
             Locale locale )
     {
-        FormError formError = super.getResponseData( entry, request, listResponse, locale );
+        GenericAttributeError formError = super.getResponseData( entry, request, listResponse, locale );
 
         if ( formError != null )
         {
@@ -121,7 +121,7 @@ public class EntryTypeText extends AbstractEntryTypeText
                 if ( StringUtils.isNotBlank( strValueEntry ) && StringUtils.isNotBlank( strSubmittedResponse )
                         && strValueEntry.equalsIgnoreCase( strSubmittedResponse ) )
                 {
-                    formError = new FormError( );
+                    formError = new GenericAttributeError( );
                     formError.setMandatoryError( false );
                     formError.setTitleQuestion( entry.getTitle( ) );
                     formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_UNIQUE_FIELD,

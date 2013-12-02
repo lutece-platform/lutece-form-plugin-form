@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.modules.processornotifysender.utils;
 
-import fr.paris.lutece.plugins.form.business.Response;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.io.File;

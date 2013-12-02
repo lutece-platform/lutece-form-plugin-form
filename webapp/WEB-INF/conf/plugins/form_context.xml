@@ -72,7 +72,7 @@
 	 <bean id="form.entryTypeCheckBox" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeCheckBox" />
 	 <bean id="form.entryTypeComment" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeComment" />
 	 <bean id="form.entryTypeDate" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeDate" />
-	 <bean id="form.entryType" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeFile" />
+	 <bean id="form.entryTypeFile" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeFile" />
 	 <bean id="form.entryTypeGeolocation" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGeolocation" />
 	 <bean id="form.entryTypeGroup" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGroup" />
 	 <bean id="form.entryTypeImage" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeImage" />

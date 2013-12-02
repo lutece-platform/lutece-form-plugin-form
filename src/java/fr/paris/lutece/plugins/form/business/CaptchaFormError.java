@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.service.FormPlugin;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -47,7 +48,7 @@ import java.util.Locale;
  * CaptchaFormError
  *
  */
-public class CaptchaFormError extends FormError
+public class CaptchaFormError extends GenericAttributeError
 {
     private static final String MESSAGE_CAPTCHA_ERROR = "form.message.captchaError";
     private static final String ANCHOR_CAPTCHA = "captchaImage";

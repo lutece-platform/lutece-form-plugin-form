@@ -4,7 +4,7 @@
 		<select name="attribute${entry.idEntry}" id="attribute${entry.idEntry}"
 			<#if list_responses??>
 				<#list list_responses as response>
-					<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+					<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
 						class="error"
 						<#break>
 					</#if>
@@ -38,13 +38,13 @@
 	</#if>
 	<#if list_responses??>
 		<#list list_responses as response>
-			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+			<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
 				<div class="alert alert-error">
-					<#assign formError = response.entry.formError>
-					<#if formError.mandatoryError>
+					<#assign error = response.entry.error>
+					<#if error.mandatoryError>
 						#i18n{form.message.mandatory.entry}
 					<#else>
-						${formError.errorMessage}
+						${error.errorMessage}
 					</#if>
 				</div>	
 				</#if>

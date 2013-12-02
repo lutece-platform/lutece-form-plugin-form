@@ -31,58 +31,41 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.service.entrytype;
+package fr.paris.lutece.plugins.form.web;
 
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeSession;
+import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
+import fr.paris.lutece.portal.service.util.AppLogService;
+
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 
 /**
- * 
- * class EntryTypeSession
- * This entry is used to fetch the value of a session's attribute.
- * One example is when coupling form with crm, the module-crm-form
- * will put in session the ID demand and the user GUID. This entry will
- * be able to fetch the ID demand and user GUID when validating the form.
- * Then, it is easier to export the value to directory with the
- * module-form-exportdirectory.
+ * Will remove fileItems uploaded by flash
  * 
  */
-public class EntryTypeSession extends AbstractEntryTypeSession
+public class FormSessionListener implements HttpSessionListener
 {
     /**
-     * Name of the bean of this service
-     */
-    public static final String BEAN_NAME = "form.entryTypeSession";
-
-    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_session.html";
-    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_session.html";
-    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_session.html";
-
-    /**
      * {@inheritDoc}
      */
-    @Override
-    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
+    public void sessionCreated( HttpSessionEvent se )
     {
-        return TEMPLATE_HTML_CODE;
+        // nothing to do
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
+    public void sessionDestroyed( HttpSessionEvent se )
     {
-        return TEMPLATE_CREATE;
-    }
+        String strSessionId = se.getSession( ).getId( );
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
-    {
-        return TEMPLATE_MODIFY;
+        if ( AppLogService.isDebugEnabled( ) )
+        {
+            AppLogService.debug( "FormSessionListener removing " + strSessionId );
+        }
+
+        FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( strSessionId );
     }
 }

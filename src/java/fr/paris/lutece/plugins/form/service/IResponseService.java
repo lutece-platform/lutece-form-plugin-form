@@ -34,10 +34,10 @@
 package fr.paris.lutece.plugins.form.service;
 
 import fr.paris.lutece.plugins.form.business.FormSubmit;
-import fr.paris.lutece.plugins.form.business.Response;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
-import fr.paris.lutece.plugins.form.business.StatisticEntrySubmit;
-import fr.paris.lutece.plugins.form.service.file.FileService;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
+import fr.paris.lutece.plugins.genericattributes.business.StatisticEntrySubmit;
+import fr.paris.lutece.plugins.genericattributes.service.file.FileService;
 
 import java.sql.Timestamp;
 import java.util.List;

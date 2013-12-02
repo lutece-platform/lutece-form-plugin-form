@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.form.service.entrytype;
 
-import fr.paris.lutece.plugins.form.business.IEntry;
-import fr.paris.lutece.plugins.form.service.entrytype.AbstractEntryTypeSelectSQL;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeSelectSQL;
 
 /**
  * 

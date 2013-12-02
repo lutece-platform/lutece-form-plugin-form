@@ -34,27 +34,27 @@
 package fr.paris.lutece.plugins.form.utils;
 
 import fr.paris.lutece.plugins.form.business.Category;
-import fr.paris.lutece.plugins.form.business.Entry;
-import fr.paris.lutece.plugins.form.business.EntryFilter;
-import fr.paris.lutece.plugins.form.business.EntryHome;
-import fr.paris.lutece.plugins.form.business.EntryType;
-import fr.paris.lutece.plugins.form.business.EntryTypeHome;
-import fr.paris.lutece.plugins.form.business.Field;
-import fr.paris.lutece.plugins.form.business.FieldHome;
 import fr.paris.lutece.plugins.form.business.Form;
-import fr.paris.lutece.plugins.form.business.FormError;
 import fr.paris.lutece.plugins.form.business.FormFilter;
 import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
-import fr.paris.lutece.plugins.form.business.IEntry;
-import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.StatisticFormSubmit;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUser;
-import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
-import fr.paris.lutece.plugins.form.util.GenericAttributesUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.EntryType;
+import fr.paris.lutece.plugins.genericattributes.business.EntryTypeHome;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
@@ -794,10 +794,10 @@ public final class FormUtils extends GenericAttributesUtils
      * @return null if there is no error in the response else return a FormError
      *         Object
      */
-    public static List<FormError> getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
+    public static List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
             FormSubmit formSubmit, boolean bResponseNull, Locale locale )
     {
-        List<FormError> listFormErrors = new ArrayList<FormError>( );
+        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
         List<Response> listResponse = new ArrayList<Response>( );
         IEntry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
@@ -821,7 +821,7 @@ public final class FormUtils extends GenericAttributesUtils
         }
         else if ( !entry.getEntryType( ).getComment( ) )
         {
-            FormError formError = null;
+            GenericAttributeError formError = null;
 
             if ( !bResponseNull )
             {
@@ -841,7 +841,7 @@ public final class FormUtils extends GenericAttributesUtils
 
             if ( formError != null )
             {
-                entry.setFormError( formError );
+                entry.setError( formError );
                 listFormErrors.add( formError );
             }
 
@@ -1524,7 +1524,7 @@ public final class FormUtils extends GenericAttributesUtils
      * @param session the session
      * @param listFormErrors the form errosr
      */
-    public static void restoreFormErrors( HttpSession session, List<FormError> listFormErrors )
+    public static void restoreFormErrors( HttpSession session, List<GenericAttributeError> listFormErrors )
     {
         session.setAttribute( SESSION_FORM_ERRORS, listFormErrors );
     }
@@ -1544,9 +1544,9 @@ public final class FormUtils extends GenericAttributesUtils
      * @return the form errors
      */
     @SuppressWarnings( "unchecked" )
-    public static List<FormError> getFormErrors( HttpSession session )
+    public static List<GenericAttributeError> getFormErrors( HttpSession session )
     {
-        return (List<FormError>) session.getAttribute( SESSION_FORM_ERRORS );
+        return (List<GenericAttributeError>) session.getAttribute( SESSION_FORM_ERRORS );
     }
 
     /**

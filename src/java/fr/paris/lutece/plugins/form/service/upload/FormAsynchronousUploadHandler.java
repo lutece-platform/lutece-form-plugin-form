@@ -33,13 +33,15 @@
  */
 package fr.paris.lutece.plugins.form.service.upload;
 
-import fr.paris.lutece.plugins.form.business.EntryHome;
-import fr.paris.lutece.plugins.form.business.FormError;
-import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
-import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.form.utils.JSONUtils;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.genericattributes.service.upload.IGAAsyncUploadHandler;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -78,18 +80,16 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 {
     /** <sessionId,<fieldName,fileItems>> */
     /** contains uploaded file items */
+    public static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>( );
 
     public static final String UPLOAD_SUBMIT_PREFIX = "_form_upload_submit_form_";
     public static final String UPLOAD_DELETE_PREFIX = "_form_upload_delete_form_";
     public static final String UPLOAD_CHECKBOX_PREFIX = "_form_upload_checkbox_form_";
-
-    private static final String PREFIX_ENTRY_ID = "form_";
+    private static final String PREFIX_ENTRY_ID = IEntryTypeService.PREFIX_ATTRIBUTE + "_";
     private static final String PARAMETER_PAGE = "page";
     private static final String PARAMETER_FIELD_NAME = "fieldname";
     private static final String PARAMETER_JSESSION_ID = "jsessionid";
     private static final String BEAN_FORM_ASYNCHRONOUS_UPLOAD_HANDLER = "form.asynchronousUploadHandler";
-
-    private static final String SESSION_KEY_FORM_ASYNCHRONOUS_FILE_UPLOAD = "form.asynchronousUploadHandler.mapFileItems";
 
     // PROPERTIES
     private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_SESSION_LOST = "form.message.error.uploading_file.session_lost";
@@ -104,9 +104,9 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
     }
 
     /**
-     * 
      * {@inheritDoc}
      */
+    @Override
     public boolean isInvoked( HttpServletRequest request )
     {
         return FormPlugin.PLUGIN_NAME.equals( request.getParameter( PARAMETER_PAGE ) );
@@ -115,6 +115,7 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
     /**
      * {@inheritDoc}
      */
+    @Override
     public void process( HttpServletRequest request, HttpServletResponse response, JSONObject mainObject,
             List<FileItem> listFileItemsToUpload )
     {
@@ -124,6 +125,7 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
             throw new AppException( "No file uploaded" );
         }
 
+        String strSessionId = request.getParameter( PARAMETER_JSESSION_ID );
         String strIdSession = request.getParameter( PARAMETER_JSESSION_ID );
 
         if ( StringUtils.isNotBlank( strIdSession ) )
@@ -135,10 +137,10 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
                 throw new AppException( "id entry is not provided for the current file upload" );
             }
 
-            initMap( request.getSession( ), strFieldName );
+            initMap( strSessionId, strFieldName );
 
             // find session-related files in the map
-            Map<String, List<FileItem>> mapFileItemsSession = getFileItemMapFromSession( request.getSession( ) );
+            Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
 
             List<FileItem> fileItemsSession = mapFileItemsSession.get( strFieldName );
 
@@ -166,9 +168,9 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
      * {@inheritDoc}
      */
     @Override
-    public List<FileItem> getFileItems( String strIdEntry, HttpSession session )
+    public List<FileItem> getFileItems( String strIdEntry, String strSessionId )
     {
-        initMap( session, buildFieldName( strIdEntry ) );
+        initMap( strSessionId, buildFieldName( strIdEntry ) );
 
         if ( StringUtils.isBlank( strIdEntry ) )
         {
@@ -176,7 +178,7 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
         }
 
         // find session-related files in the map
-        Map<String, List<FileItem>> mapFileItemsSession = getFileItemMapFromSession( session );
+        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
 
         return mapFileItemsSession.get( buildFieldName( strIdEntry ) );
     }
@@ -185,10 +187,10 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
      * {@inheritDoc}
      */
     @Override
-    public synchronized void removeFileItem( String strIdEntry, HttpSession session, int nIndex )
+    public synchronized void removeFileItem( String strIdEntry, String strSessionId, int nIndex )
     {
         // Remove the file (this will also delete the file physically)
-        List<FileItem> uploadedFiles = getFileItems( strIdEntry, session );
+        List<FileItem> uploadedFiles = getFileItems( strIdEntry, strSessionId );
 
         if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty( ) && ( uploadedFiles.size( ) > nIndex ) )
         {
@@ -200,11 +202,11 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
     /**
      * Removes all files associated to the session
-     * @param session The session of the current user
+     * @param strSessionId the session id
      */
-    public synchronized void removeSessionFiles( HttpSession session )
+    public synchronized void removeSessionFiles( String strSessionId )
     {
-        session.removeAttribute( SESSION_KEY_FORM_ASYNCHRONOUS_FILE_UPLOAD );
+        _mapAsynchronousUpload.remove( strSessionId );
     }
 
     /**
@@ -288,7 +290,7 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
                 for ( int nIndex : listIndexes )
                 {
-                    removeFileItem( strIdEntry, session, nIndex );
+                    removeFileItem( strIdEntry, session.getId( ), nIndex );
                 }
             }
         }
@@ -307,7 +309,7 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
         String strFileName = UploadUtil.cleanFileName( FileUploadService.getFileNameOnly( fileItem ) );
 
         // Check if this file has not already been uploaded
-        List<FileItem> uploadedFiles = getFileItems( strIdEntry, session );
+        List<FileItem> uploadedFiles = getFileItems( strIdEntry, session.getId( ) );
 
         if ( uploadedFiles != null )
         {
@@ -327,6 +329,14 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
                     bNew = !( strUploadedFileName.equals( strFileName ) && ( uploadedFile.getSize( ) == fileItem
                             .getSize( ) ) );
                 }
+
+                //            if ( !bNew )
+                //            {
+                // Delete the temporary file
+                // file.delete(  );
+
+                // TODO : Raise an error
+                //            }
             }
             uploadedFiles.add( fileItem );
         }
@@ -366,12 +376,12 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
             if ( entry != null )
             {
-                FormError formError = EntryTypeServiceManager.getEntryTypeService( entry ).canUploadFiles( entry,
-                        listUploadedFileItems, listFileItemsToUpload, locale );
+                GenericAttributeError error = EntryTypeServiceManager.getEntryTypeService( entry ).canUploadFiles(
+                        entry, listUploadedFileItems, listFileItemsToUpload, locale );
 
-                if ( formError != null )
+                if ( error != null )
                 {
-                    JSONUtils.buildJsonError( mainObject, formError.getErrorMessage( ) );
+                    JSONUtils.buildJsonError( mainObject, error.getErrorMessage( ) );
 
                     return false;
                 }
@@ -388,18 +398,19 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
      * @param strSessionId the session id
      * @param strFieldName the field name
      */
-    private void initMap( HttpSession session, String strFieldName )
+    private void initMap( String strSessionId, String strFieldName )
     {
-
         // find session-related files in the map
-        Map<String, List<FileItem>> mapFileItemsSession = (Map<String, List<FileItem>>) session
-                .getAttribute( SESSION_KEY_FORM_ASYNCHRONOUS_FILE_UPLOAD );
+        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
 
-        // create map if it does not exist
+        // create map if not exists
         if ( mapFileItemsSession == null )
         {
-            mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>( );
-            session.setAttribute( SESSION_KEY_FORM_ASYNCHRONOUS_FILE_UPLOAD, mapFileItemsSession );
+            if ( _mapAsynchronousUpload.get( strSessionId ) == null )
+            {
+                mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>( );
+                _mapAsynchronousUpload.put( strSessionId, mapFileItemsSession );
+            }
         }
 
         List<FileItem> listFileItems = mapFileItemsSession.get( strFieldName );
@@ -409,15 +420,5 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
             listFileItems = new ArrayList<FileItem>( );
             mapFileItemsSession.put( strFieldName, listFileItems );
         }
-    }
-
-    /**
-     * Get the file item map from the session
-     * @param session The session
-     * @return The file item map
-     */
-    private Map<String, List<FileItem>> getFileItemMapFromSession( HttpSession session )
-    {
-        return (Map<String, List<FileItem>>) session.getAttribute( SESSION_KEY_FORM_ASYNCHRONOUS_FILE_UPLOAD );
     }
 }

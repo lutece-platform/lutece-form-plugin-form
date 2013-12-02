@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import fr.paris.lutece.plugins.genericattributes.business.StatisticEntrySubmit;
+
 import org.jfree.chart.JFreeChart;
 
 import java.util.List;

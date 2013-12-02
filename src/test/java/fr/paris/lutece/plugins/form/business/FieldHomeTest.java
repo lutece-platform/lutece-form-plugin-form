@@ -3,6 +3,10 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
 import fr.paris.lutece.test.LuteceTestCase;
 
 import java.sql.Timestamp;
@@ -33,7 +37,7 @@ public class FieldHomeTest extends LuteceTestCase
 
     /**
      * Test method for
-     * {@link fr.paris.lutece.plugins.form.business.FieldHome#create(fr.paris.lutece.plugins.form.business.Field, fr.paris.lutece.portal.service.plugin.Plugin)}
+     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#create(fr.paris.lutece.plugins.genericattributes.business.Field, fr.paris.lutece.portal.service.plugin.Plugin)}
      * .
      */
     public void testCreate( )
@@ -69,7 +73,7 @@ public class FieldHomeTest extends LuteceTestCase
 
     /**
      * Test method for
-     * {@link fr.paris.lutece.plugins.form.business.FieldHome#update(fr.paris.lutece.plugins.form.business.Field, fr.paris.lutece.portal.service.plugin.Plugin)}
+     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#update(fr.paris.lutece.plugins.genericattributes.business.Field, fr.paris.lutece.portal.service.plugin.Plugin)}
      * .
      */
     public void testUpdate( )
@@ -105,7 +109,7 @@ public class FieldHomeTest extends LuteceTestCase
 
     /**
      * Test method for
-     * {@link fr.paris.lutece.plugins.form.business.FieldHome#getFieldListByIdEntry(int, fr.paris.lutece.portal.service.plugin.Plugin)}
+     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#getFieldListByIdEntry(int, fr.paris.lutece.portal.service.plugin.Plugin)}
      * .
      */
     public void testGetFieldListByIdEntry( )
@@ -119,7 +123,7 @@ public class FieldHomeTest extends LuteceTestCase
 
     /**
      * Test method for
-     * {@link fr.paris.lutece.plugins.form.business.FieldHome#remove(int, fr.paris.lutece.portal.service.plugin.Plugin)}
+     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#remove(int, fr.paris.lutece.portal.service.plugin.Plugin)}
      * .
      */
     public void testRemove( )

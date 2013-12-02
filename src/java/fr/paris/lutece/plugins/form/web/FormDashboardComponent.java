@@ -39,9 +39,9 @@ import fr.paris.lutece.plugins.form.business.FormActionHome;
 import fr.paris.lutece.plugins.form.business.FormFilter;
 import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.plugins.form.business.FormSubmitHome;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.FormResourceIdService;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.right.Right;
 import fr.paris.lutece.portal.business.right.RightHome;
@@ -137,7 +137,7 @@ public class FormDashboardComponent extends DashboardComponent
             form.setActions( listActions );
 
             ResponseFilter responseFilter = new ResponseFilter( );
-            responseFilter.setIdForm( form.getIdForm( ) );
+            responseFilter.setIdResource( form.getIdForm( ) );
             nCountResponseMap.put( form.getIdForm( ) + "", FormSubmitHome.getCountFormSubmit( responseFilter, plugin ) );
 
             if ( RBACService.isAuthorized( form, FormResourceIdService.PERMISSION_MODIFY, user ) )

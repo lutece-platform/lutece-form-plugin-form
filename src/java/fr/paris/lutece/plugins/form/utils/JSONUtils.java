@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.form.utils;
 
-import fr.paris.lutece.plugins.form.business.EntryHome;
-import fr.paris.lutece.plugins.form.business.Field;
-import fr.paris.lutece.plugins.form.business.FieldHome;
-import fr.paris.lutece.plugins.form.business.FormError;
-import fr.paris.lutece.plugins.form.business.IEntry;
-import fr.paris.lutece.plugins.form.business.Response;
-import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.blobstore.BlobStoreFileItem;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -112,7 +112,7 @@ public final class JSONUtils
      * @param session the session
      * @return the json string
      */
-    public static String buildJson( Map<Integer, List<Response>> mapResponse, int nIdForm, HttpSession session )
+    public static String buildJson( Map<Integer, List<Response>> mapResponse, int nIdForm, String strSessionId )
     {
         JSONObject jsonResponses = new JSONObject( );
 
@@ -120,7 +120,7 @@ public final class JSONUtils
         {
             for ( Response response : listResponse )
             {
-                jsonResponses.accumulate( JSON_KEY_RESPONSE, buildJson( response, session ) );
+                jsonResponses.accumulate( JSON_KEY_RESPONSE, buildJson( response, strSessionId ) );
             }
         }
 
@@ -146,7 +146,7 @@ public final class JSONUtils
 
         if ( json.containsKey( JSON_KEY_FORM_ERROR ) )
         {
-            response.getEntry( ).setFormError( buildFormError( json.getString( JSON_KEY_FORM_ERROR ) ) );
+            response.getEntry( ).setError( buildFormError( json.getString( JSON_KEY_FORM_ERROR ) ) );
         }
 
         if ( json.containsKey( JSON_KEY_VALUE_RESPONSE ) && !json.containsKey( JSON_KEY_FILE_NAME ) )
@@ -266,7 +266,7 @@ public final class JSONUtils
      * @param session the session
      * @return the json string
      */
-    public static JSONObject buildJson( Response response, HttpSession session )
+    public static JSONObject buildJson( Response response, String strSessionId )
     {
         JSONObject jsonResponse = new JSONObject( );
         jsonResponse.element( JSON_KEY_ID_ENTRY, response.getEntry( ).getIdEntry( ) );
@@ -292,7 +292,7 @@ public final class JSONUtils
                 jsonResponse.element( JSON_KEY_MIME_TYPE, response.getFile( ).getMimeType( ) );
 
                 List<FileItem> listFileItems = FormAsynchronousUploadHandler.getHandler( ).getFileItems(
-                        Integer.toString( response.getEntry( ).getIdEntry( ) ), session );
+                        Integer.toString( response.getEntry( ).getIdEntry( ) ), strSessionId );
 
                 if ( ( listFileItems != null ) && !listFileItems.isEmpty( ) )
                 {
@@ -312,20 +312,20 @@ public final class JSONUtils
         }
 
         // form error
-        if ( response.getEntry( ).getFormError( ) != null )
+        if ( response.getEntry( ).getError( ) != null )
         {
-            jsonResponse.element( JSON_KEY_FORM_ERROR, buildJson( response.getEntry( ).getFormError( ) ) );
+            jsonResponse.element( JSON_KEY_FORM_ERROR, buildJson( response.getEntry( ).getError( ) ) );
         }
 
         return jsonResponse;
     }
 
     /**
-     * Builds json form {@link FormError}
-     * @param formError {@link FormError}
+     * Builds json form {@link GenericAttributeError}
+     * @param formError {@link GenericAttributeError}
      * @return json string
      */
-    public static String buildJson( FormError formError )
+    public static String buildJson( GenericAttributeError formError )
     {
         JSONObject jsonError = new JSONObject( );
 
@@ -339,14 +339,14 @@ public final class JSONUtils
     }
 
     /**
-     * Builds {@link FormError} from json string
+     * Builds {@link GenericAttributeError} from json string
      * @param strJson json string
-     * @return the {@link FormError}
+     * @return the {@link GenericAttributeError}
      */
-    public static FormError buildFormError( String strJson )
+    public static GenericAttributeError buildFormError( String strJson )
     {
         JSONObject jsonObject = JSONObject.fromObject( strJson );
-        FormError formError = new FormError( );
+        GenericAttributeError formError = new GenericAttributeError( );
         formError.setErrorMessage( jsonObject.getString( JSON_KEY_ERROR_MESSAGE ) );
         formError.setMandatoryError( jsonObject.getBoolean( JSON_KEY_MANDATORY_ERROR ) );
         formError.setTitleQuestion( jsonObject.getString( JSON_KEY_TITLE_QUESTION ) );

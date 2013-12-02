@@ -35,16 +35,15 @@ package fr.paris.lutece.plugins.form.business.exporttype;
 
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.utils.DateUtils;
 import fr.paris.lutece.plugins.form.utils.FileUtils;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 import org.apache.commons.lang.StringUtils;
 
 import java.sql.Timestamp;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -74,7 +73,7 @@ public class LastDateExportType extends AbstractExportType
         Timestamp lastDate = DateUtils.formatTimestamp( strLastDate, locale );
 
         ResponseFilter filter = new ResponseFilter(  );
-        filter.setIdForm( form.getIdForm(  ) );
+        filter.setIdResource( form.getIdForm(  ) );
         filter.setDateFirst( lastDate );
 
         return filter;

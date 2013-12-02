@@ -9,14 +9,16 @@
 			<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
 		</#if>
 		<div class="control-group">
-		<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} * : </label>
-			<textarea name="comment" id="comment" rows="5" class="richtext"></textarea>
+			<label class="control-label" for="comment"> #i18n{form.createEntry.labelComment} * : </label>
+			<div class="controls">
+				<textarea name="comment" id="comment" rows="5" class="richtext"></textarea>
+			</div>
 		</div>
 		<div class="control-group">
-		<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-				<div class="controls">
+			<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+			<div class="controls">
 				<input type="text" name="css_class" value="" maxlength="255"class="input-large"/>
-				#i18n{form.createEntry.labelCSSClassComment}
+				<span class="help-block">#i18n{form.createEntry.labelCSSClassComment}</span>
 			</div>
 		</div>
 		<div class="form-actions">

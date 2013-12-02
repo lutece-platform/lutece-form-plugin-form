@@ -33,21 +33,21 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
-import fr.paris.lutece.plugins.form.business.Entry;
-import fr.paris.lutece.plugins.form.business.EntryFilter;
-import fr.paris.lutece.plugins.form.business.EntryHome;
-import fr.paris.lutece.plugins.form.business.EntryType;
-import fr.paris.lutece.plugins.form.business.Field;
-import fr.paris.lutece.plugins.form.business.FieldHome;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormHome;
-import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.service.EntryRemovalListenerService;
 import fr.paris.lutece.plugins.form.service.FormResourceIdService;
-import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
-import fr.paris.lutece.plugins.form.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.EntryType;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -1288,7 +1288,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         int nOrderToSet = bMoveUp ? entry.getPosition( ) - 1 : entry.getPosition( ) + 1;
-        IEntry entryWithTheSelectedOrder = EntryHome.findByOrderAndIdFieldAndIdForm( nOrderToSet, entry
+        IEntry entryWithTheSelectedOrder = EntryHome.findByOrderAndIdFieldAndIdResource( nOrderToSet, entry
                 .getFieldDepend( ).getIdField( ), entry.getIdResource( ), Form.RESOURCE_TYPE );
 
         entryWithTheSelectedOrder.setPosition( entry.getPosition( ) );

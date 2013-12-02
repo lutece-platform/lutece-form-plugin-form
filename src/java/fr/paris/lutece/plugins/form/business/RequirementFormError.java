@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.service.FormPlugin;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -47,7 +48,7 @@ import java.util.Locale;
  * RequirementFormError
  * 
  */
-public class RequirementFormError extends FormError
+public class RequirementFormError extends GenericAttributeError
 {
     private static final String MESSAGE_ERROR_REQUIREMENT = "form.message.requirementError";
     private static final String ANCHOR_REQUIREMENT = "requirement";

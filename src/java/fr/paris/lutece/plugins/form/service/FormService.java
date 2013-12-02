@@ -35,23 +35,14 @@ package fr.paris.lutece.plugins.form.service;
 
 import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
-import fr.paris.lutece.plugins.form.business.EntryFilter;
-import fr.paris.lutece.plugins.form.business.EntryHome;
-import fr.paris.lutece.plugins.form.business.EntryType;
 import fr.paris.lutece.plugins.form.business.ExportFormat;
 import fr.paris.lutece.plugins.form.business.ExportFormatHome;
-import fr.paris.lutece.plugins.form.business.Field;
-import fr.paris.lutece.plugins.form.business.FieldHome;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.FormSubmitHome;
-import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
-import fr.paris.lutece.plugins.form.business.Response;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
-import fr.paris.lutece.plugins.form.business.ResponseHome;
 import fr.paris.lutece.plugins.form.business.exporttype.IExportTypeFactory;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeNumbering;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSession;
@@ -60,6 +51,15 @@ import fr.paris.lutece.plugins.form.service.export.IExportServiceFactory;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.EntryType;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -235,7 +235,7 @@ public final class FormService
      */
     public boolean isSessionValid( Form form, HttpServletRequest request )
     {
-        EntryType entryTypeSession = _entryTypeService.getEntryType( EntryTypeSession.class.getName( ) );
+        EntryType entryTypeSession = _entryTypeService.getEntryType( EntryTypeSession.BEAN_NAME );
 
         EntryFilter eFilter = new EntryFilter( );
         eFilter.setIdResource( form.getIdForm( ) );
@@ -305,7 +305,7 @@ public final class FormService
             {
                 for ( Response response : param.getValue( ) )
                 {
-                    if ( ( response.getEntry( ) != null ) && ( response.getEntry( ).getFormError( ) != null ) )
+                    if ( ( response.getEntry( ) != null ) && ( response.getEntry( ).getError( ) != null ) )
                     {
                         return true;
                     }
@@ -404,7 +404,7 @@ public final class FormService
     {
         Plugin plugin = FormUtils.getPlugin( );
         ResponseFilter responseFilter = new ResponseFilter( );
-        responseFilter.setIdForm( form.getIdForm( ) );
+        responseFilter.setIdResource( form.getIdForm( ) );
 
         Calendar calendar = new GregorianCalendar( );
         calendar.add( Calendar.DAY_OF_WEEK, -1 * form.getNbDaysBeforeCleaning( ) );

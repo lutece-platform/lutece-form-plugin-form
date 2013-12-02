@@ -24,7 +24,7 @@
 				<#elseif response.field.title == "idAddress">
 					<input type="hidden" name="${entry.idEntry}_idAddress" id="${entry.idEntry}_idAddress" value="${response.toStringValueResponse!}"/>
 				<#else>
-					<input type="text" name="${entry.idEntry}_address" id="${entry.idEntry}_address" <#if response.entry.formError??>class="error"<#else>class="${entry.CSSClass!}"</#if> value="${response.toStringValueResponse!}" />
+					<input type="text" name="${entry.idEntry}_address" id="${entry.idEntry}_address" <#if response.entry.error??>class="error"<#else>class="${entry.CSSClass!}"</#if> value="${response.toStringValueResponse!}" />
 				</#if>
 			</#if>
 		</#list>
@@ -41,14 +41,14 @@
 	<#if list_responses??>
 	<#assign show_error = 0>
 		<#list list_responses as response>
-			<#if response.entry.idEntry == entry.idEntry && response.entry.formError?? && show_error == 0>
+			<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && show_error == 0>
 			<#assign show_error = 1>
 				<div class="alert alert-error">
-					<#assign formError = response.entry.formError>
-					<#if formError.mandatoryError>
+					<#assign error = response.entry.error>
+					<#if error.mandatoryError>
 						#i18n{form.message.mandatory.entry}
 					<#else>
-						${formError.errorMessage}
+						${error.errorMessage}
 					</#if>
 				</div>
 			</#if>

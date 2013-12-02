@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.form.business.exporttype;
 
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 
 import java.util.List;
 import java.util.Locale;

@@ -37,11 +37,11 @@ import fr.paris.lutece.plugins.form.business.ExportFormat;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.FormSubmitHome;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.exporttype.IExportType;
 import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -147,7 +147,7 @@ public abstract class AbstractExportService implements IExportService
         for ( FormSubmit formSubmit : listFormSubmit )
         {
             filter = new ResponseFilter(  );
-            filter.setIdForm( formSubmit.getIdFormSubmit(  ) );
+            filter.setIdResource( formSubmit.getIdFormSubmit(  ) );
             filter.setOrderBy( SQL_FILTER_ENTRY_POS );
             filter.setOrderByAsc( true );
             formSubmit.setListResponse( responseService.getResponseList( filter, false ) );

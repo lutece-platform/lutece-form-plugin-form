@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.form.service.entrytype;
 
-import fr.paris.lutece.plugins.form.business.Field;
-import fr.paris.lutece.plugins.form.business.FormError;
-import fr.paris.lutece.plugins.form.business.IEntry;
-import fr.paris.lutece.plugins.form.business.MandatoryFormError;
-import fr.paris.lutece.plugins.form.business.Response;
-import fr.paris.lutece.plugins.form.util.GenericAttributesUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
      * {@inheritDoc}
      */
     @Override
-    public FormError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
+    public GenericAttributeError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
             Locale locale )
     {
         String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
@@ -146,12 +146,12 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
         {
             if ( StringUtils.isNotBlank( entry.getErrorMessage( ) ) )
             {
-                FormError formError = new FormError( );
+                GenericAttributeError formError = new GenericAttributeError( );
                 formError.setMandatoryError( true );
                 formError.setErrorMessage( entry.getErrorMessage( ) );
                 return formError;
             }
-            return new MandatoryFormError( entry, locale );
+            return new MandatoryError( entry, locale );
         }
 
         return null;

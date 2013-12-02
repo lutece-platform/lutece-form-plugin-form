@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.form.service;
 
-import fr.paris.lutece.plugins.form.business.EntryType;
-import fr.paris.lutece.plugins.form.business.EntryTypeHome;
+import fr.paris.lutece.plugins.genericattributes.business.EntryType;
+import fr.paris.lutece.plugins.genericattributes.business.EntryTypeHome;
 
 import java.util.HashMap;
 import java.util.Map;

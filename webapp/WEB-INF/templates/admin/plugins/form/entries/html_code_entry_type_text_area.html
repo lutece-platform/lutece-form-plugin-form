@@ -1,8 +1,9 @@
 <#macro getTextAreaContent responseContent has_error entry field>
+	<!#-- 	fieldInLine means use rich text -->
 	<#if has_error>
-		<textarea name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="alert alert-error<#if entry.useRichText> richtext</#if>">${responseContent}</textarea>
+		<textarea name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="alert alert-error<#if entry.fieldInLine> richtext</#if>">${responseContent}</textarea>
 	<#else>
-		<textarea name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="${entry.CSSClass!}<#if entry.useRichText> richtext</#if>" >${responseContent}</textarea>
+		<textarea name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="${entry.CSSClass!}<#if entry.fieldInLine> richtext</#if>" >${responseContent}</textarea>
 	</#if>
 </#macro>
 
@@ -13,7 +14,7 @@
 		<#if list_responses??>
 			<#list list_responses as response>
 				<#if response.entry.idEntry == entry.idEntry && response.toStringValueResponse??>
-					<#if response.entry.formError??>
+					<#if response.entry.error??>
 						<@getTextAreaContent responseContent=response.toStringValueResponse has_error=true entry=entry field=field/>
 					<#else>
 						<@getTextAreaContent responseContent=response.toStringValueResponse has_error=false entry=entry field=field/>
@@ -33,10 +34,10 @@
 	</#if>
 	<#if list_responses??>
 		<#list list_responses as response>
-			<#if response.entry.idEntry == entry.idEntry && response.entry.formError??>
+			<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
 				<div class="alert alert-error">
-					<#assign formError = response.entry.formError>
-					<#if formError.mandatoryError>#i18n{form.message.mandatory.entry}<#else>${formError.errorMessage}</#if>
+					<#assign error = response.entry.error>
+					<#if error.mandatoryError>#i18n{form.message.mandatory.entry}<#else>${error.errorMessage}</#if>
 				</div>
 			</#if>
 		</#list>
@@ -44,7 +45,7 @@
 	</div>
 </div>
 
-<#if entry.useRichText>
+<#if entry.fieldInLine>
 	<#include "/util/editor/editor.html" />
 	<@initEditor />
 </#if>

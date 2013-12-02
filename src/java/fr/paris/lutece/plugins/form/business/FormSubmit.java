@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+
 import java.sql.Timestamp;
 import java.util.List;
 

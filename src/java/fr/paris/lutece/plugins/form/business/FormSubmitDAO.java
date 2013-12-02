@@ -33,8 +33,10 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.util.GenericAttributesUtils;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -213,7 +215,7 @@ public final class FormSubmitDAO implements IFormSubmitDAO
         Form form;
         List<String> listStrFilter = new ArrayList<String>( );
 
-        if ( filter.containsIdForm( ) )
+        if ( filter.containsIdResource( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_FORM );
         }
@@ -233,9 +235,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         int nIndex = 1;
 
-        if ( filter.containsIdForm( ) )
+        if ( filter.containsIdResource( ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdForm( ) );
+            daoUtil.setInt( nIndex, filter.getIdResource( ) );
             nIndex++;
         }
 
@@ -282,7 +284,7 @@ public final class FormSubmitDAO implements IFormSubmitDAO
         int nIdCount = 0;
         List<String> listStrFilter = new ArrayList<String>( );
 
-        if ( filter.containsIdForm( ) )
+        if ( filter.containsIdResource( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_FORM );
         }
@@ -301,9 +303,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         int nIndex = 1;
 
-        if ( filter.containsIdForm( ) )
+        if ( filter.containsIdResource( ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdForm( ) );
+            daoUtil.setInt( nIndex, filter.getIdResource( ) );
             nIndex++;
         }
 
@@ -345,7 +347,7 @@ public final class FormSubmitDAO implements IFormSubmitDAO
         List<String> listStrFilter = new ArrayList<String>( );
         List<String> listStrGroupBy = new ArrayList<String>( );
 
-        if ( filter.containsIdForm( ) )
+        if ( filter.containsIdResource( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_FORM );
         }
@@ -380,9 +382,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         int nIndex = 1;
 
-        if ( filter.containsIdForm( ) )
+        if ( filter.containsIdResource( ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdForm( ) );
+            daoUtil.setInt( nIndex, filter.getIdResource( ) );
             nIndex++;
         }
 

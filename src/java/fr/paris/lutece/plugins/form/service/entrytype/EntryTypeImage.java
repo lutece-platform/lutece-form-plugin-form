@@ -33,12 +33,13 @@
  */
 package fr.paris.lutece.plugins.form.service.entrytype;
 
-import fr.paris.lutece.plugins.form.business.FormError;
-import fr.paris.lutece.plugins.form.business.IEntry;
-import fr.paris.lutece.plugins.form.business.MandatoryFormError;
-import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
-import fr.paris.lutece.plugins.form.service.upload.IGAAsyncUploadHandler;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
+import fr.paris.lutece.plugins.genericattributes.service.upload.IGAAsyncUploadHandler;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
@@ -112,7 +113,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public FormError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
+    public GenericAttributeError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
             Locale locale )
     {
         List<FileItem> listFilesSource = null;
@@ -126,7 +127,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
                 listFilesSource = asynchronousFileItem;
             }
 
-            FormError formError = null;
+            GenericAttributeError formError = null;
 
             if ( ( listFilesSource != null ) && !listFilesSource.isEmpty( ) )
             {
@@ -177,7 +178,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
                         {
                             if ( !RegularExpressionService.getInstance( ).isMatches( strMimeType, regularExpression ) )
                             {
-                                formError = new FormError( );
+                                formError = new GenericAttributeError( );
                                 formError.setMandatoryError( false );
                                 formError.setTitleQuestion( entry.getTitle( ) );
                                 formError.setErrorMessage( regularExpression.getErrorMessage( ) );
@@ -203,7 +204,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
 
                     if ( ( image == null ) && StringUtils.isNotBlank( strFilename ) )
                     {
-                        formError = new FormError( );
+                        formError = new GenericAttributeError( );
                         formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE,
                                 request.getLocale( ) ) );
                         formError.setTitleQuestion( entry.getTitle( ) );
@@ -215,7 +216,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
 
             if ( entry.isMandatory( ) && ( ( listFilesSource == null ) || listFilesSource.isEmpty( ) ) )
             {
-                formError = new MandatoryFormError( entry, locale );
+                formError = new MandatoryError( entry, locale );
 
                 Response response = new Response( );
                 response.setEntry( entry );
@@ -225,7 +226,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
             return formError;
         }
 
-        return new MandatoryFormError( entry, locale );
+        return new MandatoryError( entry, locale );
     }
 
     /**

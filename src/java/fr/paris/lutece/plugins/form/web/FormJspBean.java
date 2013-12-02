@@ -33,25 +33,19 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
-import fr.paris.lutece.plugins.form.business.EntryFilter;
-import fr.paris.lutece.plugins.form.business.EntryHome;
 import fr.paris.lutece.plugins.form.business.ExportFormat;
 import fr.paris.lutece.plugins.form.business.ExportFormatHome;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormAction;
 import fr.paris.lutece.plugins.form.business.FormActionHome;
-import fr.paris.lutece.plugins.form.business.FormError;
 import fr.paris.lutece.plugins.form.business.FormFilter;
 import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.FormSubmitHome;
 import fr.paris.lutece.plugins.form.business.GraphType;
 import fr.paris.lutece.plugins.form.business.GraphTypeHome;
-import fr.paris.lutece.plugins.form.business.IEntry;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
-import fr.paris.lutece.plugins.form.business.Response;
-import fr.paris.lutece.plugins.form.business.ResponseFilter;
 import fr.paris.lutece.plugins.form.business.StatisticFormSubmit;
 import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
 import fr.paris.lutece.plugins.form.business.portlet.FormPortletHome;
@@ -65,6 +59,12 @@ import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.service.validator.IValidator;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
@@ -524,7 +524,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
         }
 
         ResponseFilter responseFilter = new ResponseFilter( );
-        responseFilter.setIdForm( nIdForm );
+        responseFilter.setIdResource( nIdForm );
 
         if ( FormSubmitHome.getCountFormSubmit( responseFilter, plugin ) > 0 )
         {
@@ -1279,13 +1279,13 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         for ( IEntry entry : listEntryFirstLevel )
         {
-            List<FormError> listFormError = FormUtils.getResponseEntry( request, entry.getIdEntry( ), plugin,
+            List<GenericAttributeError> listFormError = FormUtils.getResponseEntry( request, entry.getIdEntry( ), plugin,
                     formSubmit, false, locale );
 
             if ( ( listFormError != null ) && !listFormError.isEmpty( ) )
             {
                 // Only display the first error
-                FormError formError = listFormError.get( 0 );
+                GenericAttributeError formError = listFormError.get( 0 );
 
                 if ( formError != null )
                 {
@@ -1457,7 +1457,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
         }
 
         form = FormHome.findByPrimaryKey( nIdForm, plugin );
-        filter.setIdForm( nIdForm );
+        filter.setIdResource( nIdForm );
         filter.setDateFirst( tFistResponseDateFilter );
         filter.setDateLast( tLastResponseDateFilter );
 
@@ -1574,7 +1574,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
             exportFormat = ExportFormatHome.findByPrimaryKey( nIdExportFormat, plugin );
             form = FormHome.findByPrimaryKey( nIdForm, plugin );
-            filter.setIdForm( nIdForm );
+            filter.setIdResource( nIdForm );
             filter.setDateFirst( tFistResponseDateFilter );
             filter.setDateLast( tLastResponseDateFilter );
 
@@ -1583,7 +1583,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
             for ( FormSubmit formSubmit : listFormSubmit )
             {
                 filter = new ResponseFilter( );
-                filter.setIdForm( formSubmit.getIdFormSubmit( ) );
+                filter.setIdResource( formSubmit.getIdFormSubmit( ) );
                 filter.setOrderBy( SQL_FILTER_ENTRY_POS );
                 filter.setOrderByAsc( true );
                 formSubmit.setListResponse( _responseService.getResponseList( filter, false ) );
@@ -1675,7 +1675,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
             }
         }
 
-        filter.setIdForm( nIdForm );
+        filter.setIdResource( nIdForm );
         filter.setDateFirst( tFistResponseDateFilter );
         filter.setDateLast( tLastResponseDateFilter );
 

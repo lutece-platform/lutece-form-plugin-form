@@ -37,14 +37,14 @@ import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
-import fr.paris.lutece.plugins.form.business.Response;
 import fr.paris.lutece.plugins.form.business.outputprocessor.OutputProcessor;
 import fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderResourceIdService;
 import fr.paris.lutece.plugins.form.modules.processornotifysender.service.NotifySenderService;
 import fr.paris.lutece.plugins.form.service.EntryTypeService;
-import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSession;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -238,7 +238,7 @@ public class ProcessorNotifySender extends OutputProcessor
 
         model.put( MARK_RECAP_HTML, recap );
         model.put( MARK_FORM_SUBMIT, formSubmit );
-        model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.class.getName( ) ) );
+        model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.BEAN_NAME ) );
 
         HtmlTemplate templateRecap = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_NOTIFY_SENDER_RECAP,
                 request.getLocale( ), model );

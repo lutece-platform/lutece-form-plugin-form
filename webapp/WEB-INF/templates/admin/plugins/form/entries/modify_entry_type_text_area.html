@@ -84,7 +84,8 @@
 				<div class="control-group">
 					<label class="control-label" for="css_class">#i18n{form.createEntry.labelUseRichText} : </label>
 					<div class="controls">
-						<input type="checkbox" name="useRichText" value="true" <#if entry.useRichText>checked="checked"</#if> />
+						<!#-- 	fieldInLine means use rich text -->
+						<input type="checkbox" name="useRichText" value="true" <#if entry.fieldInLine>checked="checked"</#if> />
 						<span class="help-block">#i18n{form.createEntry.labelUseRichTextComment}</span>
 					</div>
 				</div>
