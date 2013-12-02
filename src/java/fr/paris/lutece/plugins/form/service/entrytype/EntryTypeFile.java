@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.form.service.entrytype;
 
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
@@ -74,7 +74,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
+    public String getHtmlCode( Entry entry, boolean bDisplayFront )
     {
         return TEMPLATE_HTML_CODE;
     }
@@ -83,7 +83,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
+    public String getTemplateCreate( Entry entry, boolean bDisplayFront )
     {
         return TEMPLATE_CREATE;
     }
@@ -92,7 +92,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
+    public String getTemplateModify( Entry entry, boolean bDisplayFront )
     {
         return TEMPLATE_MODIFY;
     }
@@ -101,7 +101,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
             Locale locale )
     {
         List<FileItem> listFilesSource = null;

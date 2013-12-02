@@ -62,7 +62,7 @@ import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.business.rbac.RBAC;
@@ -1210,7 +1210,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     public String doTestForm( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
-        List<IEntry> listEntryFirstLevel;
+        List<Entry> listEntryFirstLevel;
         EntryFilter filter;
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         String strRequirement = request.getParameter( PARAMETER_REQUIREMENT );
@@ -1277,7 +1277,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
         List<Response> listResponse = new ArrayList<Response>( );
         formSubmit.setListResponse( listResponse );
 
-        for ( IEntry entry : listEntryFirstLevel )
+        for ( Entry entry : listEntryFirstLevel )
         {
             List<GenericAttributeError> listFormError = FormUtils.getResponseEntry( request, entry.getIdEntry( ), plugin,
                     formSubmit, false, locale );

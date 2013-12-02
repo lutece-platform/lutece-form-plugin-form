@@ -38,7 +38,7 @@ import fr.paris.lutece.plugins.form.business.GraphTypeHome;
 import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.StatisticEntrySubmit;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -83,7 +83,7 @@ public class DoDownloadGraph
     {
         JFreeChart chart = null;
         Plugin plugin = null;
-        IEntry entry;
+        Entry entry;
         GraphType graphType = null;
         int nIdEntry = -1;
         int nIdGraphType = -1;

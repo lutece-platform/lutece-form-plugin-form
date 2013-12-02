@@ -51,9 +51,9 @@ import fr.paris.lutece.plugins.genericattributes.business.EntryTypeHome;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -519,11 +519,11 @@ public final class FormUtils extends GenericAttributesUtils
      * @param plugin the plugin
      * @return an instance of IEntry function of type entry
      */
-    public static IEntry createEntryByType( HttpServletRequest request, Plugin plugin )
+    public static Entry createEntryByType( HttpServletRequest request, Plugin plugin )
     {
         String strIdType = request.getParameter( PARAMETER_ID_ENTRY_TYPE );
         int nIdType = -1;
-        IEntry entry = null;
+        Entry entry = null;
         EntryType entryType;
 
         if ( ( strIdType != null ) && !strIdType.equals( EMPTY_STRING ) )
@@ -592,7 +592,7 @@ public final class FormUtils extends GenericAttributesUtils
     public static String getHtmlForm( Form form, String strUrlAction, Plugin plugin, Locale locale,
             boolean bDisplayFront, HttpServletRequest request )
     {
-        List<IEntry> listEntryFirstLevel;
+        List<Entry> listEntryFirstLevel;
         Map<String, Object> model = new HashMap<String, Object>( );
         HtmlTemplate template;
         EntryFilter filter;
@@ -617,7 +617,7 @@ public final class FormUtils extends GenericAttributesUtils
 
         ReferenceList refCategoryList = getRefListCategory( listCats );
 
-        for ( IEntry entry : listEntryFirstLevel )
+        for ( Entry entry : listEntryFirstLevel )
         {
             FormUtils.getHtmlEntry( entry.getIdEntry( ), plugin, strBuffer, locale, bDisplayFront, request );
         }
@@ -705,13 +705,13 @@ public final class FormUtils extends GenericAttributesUtils
         Map<String, Object> model = new HashMap<String, Object>( );
         StringBuffer strConditionalQuestionStringBuffer = null;
         HtmlTemplate template;
-        IEntry entry = EntryHome.findByPrimaryKey( nIdEntry );
+        Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
         if ( entry.getEntryType( ).getGroup( ) )
         {
             StringBuffer strGroupStringBuffer = new StringBuffer( );
 
-            for ( IEntry entryChild : entry.getChildren( ) )
+            for ( Entry entryChild : entry.getChildren( ) )
             {
                 getHtmlEntry( entryChild.getIdEntry( ), plugin, strGroupStringBuffer, locale, bDisplayFront, request );
             }
@@ -740,7 +740,7 @@ public final class FormUtils extends GenericAttributesUtils
                 {
                     StringBuffer strGroupStringBuffer = new StringBuffer( );
 
-                    for ( IEntry entryConditional : field.getConditionalQuestions( ) )
+                    for ( Entry entryConditional : field.getConditionalQuestions( ) )
                     {
                         getHtmlEntry( entryConditional.getIdEntry( ), plugin, strGroupStringBuffer, locale,
                                 bDisplayFront, request );
@@ -794,12 +794,12 @@ public final class FormUtils extends GenericAttributesUtils
      * @return null if there is no error in the response else return a FormError
      *         Object
      */
-    public static List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
-            FormSubmit formSubmit, boolean bResponseNull, Locale locale )
+    public static List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry,
+            Plugin plugin, FormSubmit formSubmit, boolean bResponseNull, Locale locale )
     {
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
         List<Response> listResponse = new ArrayList<Response>( );
-        IEntry entry = EntryHome.findByPrimaryKey( nIdEntry );
+        Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
         List<Field> listField = new ArrayList<Field>( );
 
@@ -813,7 +813,7 @@ public final class FormUtils extends GenericAttributesUtils
 
         if ( entry.getEntryType( ).getGroup( ) )
         {
-            for ( IEntry entryChild : entry.getChildren( ) )
+            for ( Entry entryChild : entry.getChildren( ) )
             {
                 listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry( ), plugin, formSubmit, false,
                         locale ) );
@@ -864,7 +864,7 @@ public final class FormUtils extends GenericAttributesUtils
                 {
                     if ( isFieldInTheResponseList( field.getIdField( ), listResponse ) )
                     {
-                        for ( IEntry conditionalEntry : field.getConditionalQuestions( ) )
+                        for ( Entry conditionalEntry : field.getConditionalQuestions( ) )
                         {
                             listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry( ), plugin,
                                     formSubmit, false, locale ) );
@@ -872,7 +872,7 @@ public final class FormUtils extends GenericAttributesUtils
                     }
                     else
                     {
-                        for ( IEntry conditionalEntry : field.getConditionalQuestions( ) )
+                        for ( Entry conditionalEntry : field.getConditionalQuestions( ) )
                         {
                             listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry( ), plugin,
                                     formSubmit, true, locale ) );
@@ -890,7 +890,7 @@ public final class FormUtils extends GenericAttributesUtils
      * @param entry the entry
      * @return The url to modify the entry in front office
      */
-    public static String getEntryUrl( IEntry entry )
+    public static String getEntryUrl( Entry entry )
     {
         UrlItem url = new UrlItem( AppPathService.getPortalUrl( ) );
         url.addParameter( XPageAppService.PARAM_XPAGE_APP, FormPlugin.PLUGIN_NAME );
@@ -946,7 +946,7 @@ public final class FormUtils extends GenericAttributesUtils
         // Build entries list XML
         XmlUtil.beginElement( buffer, TAG_FORM_ENTRIES );
 
-        for ( IEntry entry : getAllQuestionList( form.getIdForm( ), plugin ) )
+        for ( Entry entry : getAllQuestionList( form.getIdForm( ), plugin ) )
         {
             XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
             XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry( ) );
@@ -991,7 +991,7 @@ public final class FormUtils extends GenericAttributesUtils
         // Build entries list XML
         XmlUtil.beginElement( buffer, TAG_FORM_ENTRIES );
 
-        for ( IEntry entry : getAllQuestionList( form.getIdForm( ), plugin ) )
+        for ( Entry entry : getAllQuestionList( form.getIdForm( ), plugin ) )
         {
             XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
             XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry( ) );
@@ -1244,7 +1244,7 @@ public final class FormUtils extends GenericAttributesUtils
     {
         ReferenceList refListQuestions = new ReferenceList( );
 
-        for ( IEntry entry : getAllQuestionList( nIdForm, plugin ) )
+        for ( Entry entry : getAllQuestionList( nIdForm, plugin ) )
         {
             if ( entry.getTitle( ) != null )
             {
@@ -1265,9 +1265,9 @@ public final class FormUtils extends GenericAttributesUtils
      * @param plugin the plugin
      * @return the questions list
      */
-    public static List<IEntry> getAllQuestionList( int nIdForm, Plugin plugin )
+    public static List<Entry> getAllQuestionList( int nIdForm, Plugin plugin )
     {
-        List<IEntry> listEntry = new ArrayList<IEntry>( );
+        List<Entry> listEntry = new ArrayList<Entry>( );
         EntryFilter filter = new EntryFilter( );
         filter.setIdResource( nIdForm );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
@@ -1275,7 +1275,7 @@ public final class FormUtils extends GenericAttributesUtils
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
-        for ( IEntry entryFirstLevel : EntryHome.getEntryList( filter ) )
+        for ( Entry entryFirstLevel : EntryHome.getEntryList( filter ) )
         {
             if ( entryFirstLevel.getEntryType( ).getGroup( ) )
             {
@@ -1284,7 +1284,7 @@ public final class FormUtils extends GenericAttributesUtils
                 filter.setIdEntryParent( entryFirstLevel.getIdEntry( ) );
                 filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
-                for ( IEntry entryChild : EntryHome.getEntryList( filter ) )
+                for ( Entry entryChild : EntryHome.getEntryList( filter ) )
                 {
                     listEntry.add( entryChild );
                     addConditionnalsEntry( entryChild, listEntry, plugin );
@@ -1306,9 +1306,9 @@ public final class FormUtils extends GenericAttributesUtils
      * @param listEntry the entry list
      * @param plugin the plugin
      */
-    private static void addConditionnalsEntry( IEntry entryParent, List<IEntry> listEntry, Plugin plugin )
+    private static void addConditionnalsEntry( Entry entryParent, List<Entry> listEntry, Plugin plugin )
     {
-        IEntry parent = EntryHome.findByPrimaryKey( entryParent.getIdEntry( ) );
+        Entry parent = EntryHome.findByPrimaryKey( entryParent.getIdEntry( ) );
 
         for ( Field field : parent.getFields( ) )
         {
@@ -1316,7 +1316,7 @@ public final class FormUtils extends GenericAttributesUtils
 
             if ( field.getConditionalQuestions( ) != null )
             {
-                for ( IEntry entryConditionnal : field.getConditionalQuestions( ) )
+                for ( Entry entryConditionnal : field.getConditionalQuestions( ) )
                 {
                     listEntry.add( entryConditionnal );
                     addConditionnalsEntry( entryConditionnal, listEntry, plugin );
@@ -1331,16 +1331,16 @@ public final class FormUtils extends GenericAttributesUtils
      * @param plugin the plugin
      * @return the all entries of form
      */
-    public static List<IEntry> getEntriesList( int nIdForm, Plugin plugin )
+    public static List<Entry> getEntriesList( int nIdForm, Plugin plugin )
     {
-        List<IEntry> listEntry = new ArrayList<IEntry>( );
+        List<Entry> listEntry = new ArrayList<Entry>( );
         EntryFilter filter = new EntryFilter( );
         filter.setIdResource( nIdForm );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
-        for ( IEntry entryFirstLevel : EntryHome.getEntryList( filter ) )
+        for ( Entry entryFirstLevel : EntryHome.getEntryList( filter ) )
         {
             if ( entryFirstLevel.getEntryType( ).getGroup( ) )
             {
@@ -1348,9 +1348,9 @@ public final class FormUtils extends GenericAttributesUtils
                 filter.setIdResource( nIdForm );
                 filter.setIdEntryParent( entryFirstLevel.getIdEntry( ) );
 
-                List<IEntry> listEntryChild = new ArrayList<IEntry>( );
+                List<Entry> listEntryChild = new ArrayList<Entry>( );
 
-                for ( IEntry entryChild : EntryHome.getEntryList( filter ) )
+                for ( Entry entryChild : EntryHome.getEntryList( filter ) )
                 {
                     listEntryChild.add( entryChild );
                     addConditionnalsEntry( entryChild, listEntryChild, plugin );
@@ -1445,7 +1445,7 @@ public final class FormUtils extends GenericAttributesUtils
             HttpServletRequest request )
     {
         EntryType entryType = FormUtils.getEntryTypeMyLuteceUser( plugin );
-        IEntry entry = null;
+        Entry entry = null;
 
         entry = new Entry( );
         entry.setEntryType( entryType );
@@ -1476,11 +1476,12 @@ public final class FormUtils extends GenericAttributesUtils
         entryFilter.setIdResource( form.getIdForm( ) );
         entryFilter.setResourceType( Form.RESOURCE_TYPE );
 
-        List<IEntry> listEntries = EntryHome.getEntryList( entryFilter );
+        List<Entry> listEntries = EntryHome.getEntryList( entryFilter );
 
-        for ( IEntry entry : listEntries )
+        for ( Entry entry : listEntries )
         {
-            if ( entry instanceof fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUser )
+            IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
+            if ( entryTypeService instanceof fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUser )
             {
                 EntryHome.remove( entry.getIdEntry( ) );
 

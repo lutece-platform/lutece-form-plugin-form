@@ -6,7 +6,7 @@ package fr.paris.lutece.plugins.form.business;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.test.LuteceTestCase;
 
 import java.sql.Timestamp;
@@ -47,7 +47,7 @@ public class FieldHomeTest extends LuteceTestCase
 
         Field field = new Field( );
 
-        IEntry entry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
+        Entry entry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
 
         field.setParentEntry( entry );
         field.setTitle( TYTLE_1 );
@@ -82,7 +82,7 @@ public class FieldHomeTest extends LuteceTestCase
 
         Field field = new Field( );
 
-        IEntry entry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
+        Entry entry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
 
         field.setIdField( fieldLoad.getIdField( ) );
         field.setParentEntry( entry );
@@ -130,7 +130,7 @@ public class FieldHomeTest extends LuteceTestCase
     {
         Field field = new Field( );
 
-        IEntry entry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
+        Entry entry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
 
         field.setParentEntry( entry );
         field.setTitle( TYTLE_1 );

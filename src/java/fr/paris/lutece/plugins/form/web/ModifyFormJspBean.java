@@ -52,7 +52,7 @@ import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
 import fr.paris.lutece.plugins.genericattributes.business.EntryTypeHome;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.style.Theme;
@@ -330,8 +330,8 @@ public abstract class ModifyFormJspBean extends FormJspBean
     public String getModifyForm( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
-        List<IEntry> listEntry = new ArrayList<IEntry>( );
-        List<IEntry> listEntryFirstLevel;
+        List<Entry> listEntry = new ArrayList<Entry>( );
+        List<Entry> listEntryFirstLevel;
         int nNumberQuestion;
         EntryFilter filter;
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
@@ -392,7 +392,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         _nItemsPerPageEntry = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                 _nItemsPerPageEntry, _nDefaultItemsPerPage );
 
-        LocalizedPaginator<IEntry> paginator = new LocalizedPaginator<IEntry>( listEntry, _nItemsPerPageEntry,
+        LocalizedPaginator<Entry> paginator = new LocalizedPaginator<Entry>( listEntry, _nItemsPerPageEntry,
                 AppPathService.getBaseUrl( request ) + JSP_MODIFY_FORM + "?id_form=" + nIdForm, PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexEntry, getLocale( ) );
 
@@ -408,7 +408,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setIdEntryType( _entryTypeService.getEntryType( EntryTypeGroup.BEAN_NAME ).getIdType( ) );
 
-        List<IEntry> listGroupEntry = EntryHome.getEntryList( filter );
+        List<Entry> listGroupEntry = EntryHome.getEntryList( filter );
 
         ReferenceList refListGroupEntry = ReferenceList.convert( listGroupEntry, "idEntry", "title", true );
 
@@ -757,7 +757,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         filter.setIdIsGroup( 0 );
         filter.setIdIsComment( 0 );
         filter.setResourceType( Form.RESOURCE_TYPE );
-        List<IEntry> listEntries = EntryHome.getEntryList( filter );
+        List<Entry> listEntries = EntryHome.getEntryList( filter );
 
         List<Integer> listAnonymizeEntry = FormService.getInstance( ).getAnonymizeEntryList( form.getIdForm( ) );
 
@@ -837,9 +837,9 @@ public abstract class ModifyFormJspBean extends FormJspBean
      *            level
      * @param orderFirstLevel the list to set
      */
-    protected void initOrderFirstLevel( List<IEntry> listEntryFirstLevel, List<Integer> orderFirstLevel )
+    protected void initOrderFirstLevel( List<Entry> listEntryFirstLevel, List<Integer> orderFirstLevel )
     {
-        for ( IEntry entry : listEntryFirstLevel )
+        for ( Entry entry : listEntryFirstLevel )
         {
             orderFirstLevel.add( entry.getPosition( ) );
         }
@@ -1167,12 +1167,12 @@ public abstract class ModifyFormJspBean extends FormJspBean
      * @param listEntry the list of all the entries
      * @param listEntryFirstLevel the list of all the entries of the first level
      */
-    private void fillEntryListWithEntryFirstLevel( Plugin plugin, List<IEntry> listEntry,
-            List<IEntry> listEntryFirstLevel )
+    private void fillEntryListWithEntryFirstLevel( Plugin plugin, List<Entry> listEntry,
+            List<Entry> listEntryFirstLevel )
     {
         EntryFilter filter;
 
-        for ( IEntry entry : listEntryFirstLevel )
+        for ( Entry entry : listEntryFirstLevel )
         {
             listEntry.add( entry );
 
@@ -1189,7 +1189,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
                     entry.getChildren( ).get( entry.getChildren( ).size( ) - 1 ).setLastInTheList( true );
                 }
 
-                for ( IEntry entryChild : entry.getChildren( ) )
+                for ( Entry entryChild : entry.getChildren( ) )
                 {
                     listEntry.add( entryChild );
                 }
@@ -1203,11 +1203,11 @@ public abstract class ModifyFormJspBean extends FormJspBean
      * @param listEntry The list of entries
      * @param mapIdParentOrdersChildren The map to add items in
      */
-    private void populateEntryMap( List<IEntry> listEntry, Map<String, List<Integer>> mapIdParentOrdersChildren )
+    private void populateEntryMap( List<Entry> listEntry, Map<String, List<Integer>> mapIdParentOrdersChildren )
     {
         List<Integer> listOrder;
 
-        for ( IEntry entry : listEntry )
+        for ( Entry entry : listEntry )
         {
             if ( entry.getParent( ) != null )
             {

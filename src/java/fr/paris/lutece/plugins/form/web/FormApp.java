@@ -57,7 +57,7 @@ import fr.paris.lutece.plugins.form.utils.JSONUtils;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
@@ -770,7 +770,7 @@ public class FormApp implements XPageApplication
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
-        List<IEntry> listEntryFirstLevel = EntryHome.getEntryList( filter );
+        List<Entry> listEntryFirstLevel = EntryHome.getEntryList( filter );
 
         List<Response> listResponse = new ArrayList<Response>( );
         formSubmit.setListResponse( listResponse );
@@ -781,7 +781,7 @@ public class FormApp implements XPageApplication
             FormUtils.restoreResponses( request.getSession( ), listSubmittedResponses );
         }
 
-        for ( IEntry entry : listEntryFirstLevel )
+        for ( Entry entry : listEntryFirstLevel )
         {
             listFormErrors.addAll( FormUtils.getResponseEntry( request, entry.getIdEntry( ), plugin, formSubmit, false,
                     locale ) );

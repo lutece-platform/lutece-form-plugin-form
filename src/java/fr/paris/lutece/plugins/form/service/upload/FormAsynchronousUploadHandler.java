@@ -38,7 +38,7 @@ import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.form.utils.JSONUtils;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.genericattributes.service.upload.IGAAsyncUploadHandler;
@@ -372,7 +372,7 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
         {
             String strIdEntry = strFieldName.substring( PREFIX_ENTRY_ID.length( ) );
             int nIdEntry = FormUtils.convertStringToInt( strIdEntry );
-            IEntry entry = EntryHome.findByPrimaryKey( nIdEntry );
+            Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
             if ( entry != null )
             {

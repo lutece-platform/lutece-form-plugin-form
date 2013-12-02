@@ -51,15 +51,16 @@ import fr.paris.lutece.plugins.form.service.export.IExportServiceFactory;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -77,7 +78,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -246,13 +246,14 @@ public final class FormService
             eFilter.setIdEntryType( entryTypeSession.getIdType( ) );
         }
 
-        List<IEntry> listEntries = EntryHome.getEntryList( eFilter );
+        List<Entry> listEntries = EntryHome.getEntryList( eFilter );
 
         HttpSession session = request.getSession( false );
 
-        for ( IEntry entry : listEntries )
+        for ( Entry entry : listEntries )
         {
-            if ( entry instanceof EntryTypeSession && entry.isMandatory( ) )
+            if ( entry.isMandatory( )
+                    && EntryTypeServiceManager.getEntryTypeService( entry ) instanceof EntryTypeSession )
             {
                 List<Field> listFields = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
 
@@ -301,7 +302,7 @@ public final class FormService
 
         if ( listSubmittedResponses != null )
         {
-            for ( Entry<Integer, List<Response>> param : listSubmittedResponses.entrySet( ) )
+            for ( java.util.Map.Entry<Integer, List<Response>> param : listSubmittedResponses.entrySet( ) )
             {
                 for ( Response response : param.getValue( ) )
                 {
@@ -331,11 +332,12 @@ public final class FormService
      * @param entry the id of the entry type numbering
      * @return the max number
      */
-    public int getMaxNumber( IEntry entry )
+    public int getMaxNumber( Entry entry )
     {
         int nMaxNumber = 1;
 
-        if ( entry instanceof EntryTypeNumbering && ( entry.getEntryType( ) != null ) && ( entry.getIdResource( ) > 0 ) )
+        if ( entry.getIdResource( ) > 0
+                && EntryTypeServiceManager.getEntryTypeService( entry ) instanceof EntryTypeNumbering )
         {
             nMaxNumber = ResponseHome.findMaxNumber( entry.getIdEntry( ), entry.getIdResource( ),
                     entry.getResourceType( ) );

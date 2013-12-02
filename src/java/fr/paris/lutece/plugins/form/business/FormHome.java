@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.form.business;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -86,7 +86,7 @@ public final class FormHome
     public static void copy( Form form, Plugin plugin )
     {
         Recap recap;
-        List<IEntry> listEntry;
+        List<Entry> listEntry;
         EntryFilter filter = new EntryFilter( );
         filter.setIdResource( form.getIdForm( ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
@@ -99,7 +99,7 @@ public final class FormHome
         form.setDateCreation( FormUtils.getCurrentTimestamp( ) );
         form.setIdForm( create( form, plugin ) );
 
-        for ( IEntry entry : listEntry )
+        for ( Entry entry : listEntry )
         {
             entry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
             entry.setIdResource( form.getIdForm( ) );
@@ -144,9 +144,9 @@ public final class FormHome
         entryFilter.setIdResource( form.getIdForm( ) );
         entryFilter.setResourceType( Form.RESOURCE_TYPE );
 
-        List<IEntry> listEntry = EntryHome.getEntryList( entryFilter );
+        List<Entry> listEntry = EntryHome.getEntryList( entryFilter );
 
-        for ( IEntry entry : listEntry )
+        for ( Entry entry : listEntry )
         {
             EntryHome.remove( entry.getIdEntry( ) );
         }

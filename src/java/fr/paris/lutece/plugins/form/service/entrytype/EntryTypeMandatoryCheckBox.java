@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.form.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
@@ -65,7 +65,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
+    public String getTemplateCreate( Entry entry, boolean bDisplayFront )
     {
         return TEMPLATE_CREATE;
     }
@@ -74,7 +74,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
+    public String getTemplateModify( Entry entry, boolean bDisplayFront )
     {
         return TEMPLATE_MODIFY;
     }
@@ -83,7 +83,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( IEntry entry, HttpServletRequest request, List<Response> listResponse,
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
             Locale locale )
     {
         String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );

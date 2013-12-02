@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
@@ -78,7 +78,7 @@ public class ResponseHomeTest extends LuteceTestCase
         EntryHomeTest entryHomeTest = new EntryHomeTest( );
         entryHomeTest.testCreate( );
 
-        IEntry entry = new Entry( );
+        Entry entry = new Entry( );
         entry.setIdEntry( ID_ENTRY_1 );
 
         FormSubmitHomeTest formSubmitTest = new FormSubmitHomeTest( );
@@ -117,7 +117,7 @@ public class ResponseHomeTest extends LuteceTestCase
         Field field = new Field( );
         field.setIdField( ID_FIELD_2 );
 
-        IEntry entry = new Entry( );
+        Entry entry = new Entry( );
         entry.setIdEntry( ID_ENTRY_2 );
 
         FormSubmit formResponse = new FormSubmit( );

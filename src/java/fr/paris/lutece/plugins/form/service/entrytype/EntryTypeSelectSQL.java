@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.service.entrytype;
 
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeSelectSQL;
 
 /**
@@ -51,7 +51,7 @@ public class EntryTypeSelectSQL extends AbstractEntryTypeSelectSQL
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode( IEntry entry, boolean bDisplayFront )
+    public String getHtmlCode( Entry entry, boolean bDisplayFront )
     {
         entry.setFields( getSqlQueryFields( entry ) );
 
@@ -62,7 +62,7 @@ public class EntryTypeSelectSQL extends AbstractEntryTypeSelectSQL
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateCreate( IEntry entry, boolean bDisplayFront )
+    public String getTemplateCreate( Entry entry, boolean bDisplayFront )
     {
         return TEMPLATE_CREATE;
     }
@@ -71,7 +71,7 @@ public class EntryTypeSelectSQL extends AbstractEntryTypeSelectSQL
      * {@inheritDoc}
      */
     @Override
-    public String getTemplateModify( IEntry entry, boolean bDisplayFront )
+    public String getTemplateModify( Entry entry, boolean bDisplayFront )
     {
         return TEMPLATE_MODIFY;
     }

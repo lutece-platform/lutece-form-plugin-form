@@ -37,7 +37,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
-import fr.paris.lutece.plugins.genericattributes.business.IEntry;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.test.LuteceTestCase;
@@ -88,7 +88,7 @@ public class EntryHomeTest extends LuteceTestCase
 
         EntryHome.create( entry );
 
-        IEntry storedEntry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
+        Entry storedEntry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
 
         assertEquals( storedEntry.getComment( ), entry.getComment( ) );
         assertEquals( storedEntry.getEntryType( ).getIdType( ), entry.getEntryType( ).getIdType( ) );
@@ -102,7 +102,7 @@ public class EntryHomeTest extends LuteceTestCase
 
     public void testGetEntryList( )
     {
-        List<IEntry> storedListEntry = null;
+        List<Entry> storedListEntry = null;
 
         EntryFilter entryFilter = new EntryFilter( );
 
@@ -127,7 +127,7 @@ public class EntryHomeTest extends LuteceTestCase
      */
     public void testUpdate( )
     {
-        IEntry loadEntry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
+        Entry loadEntry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
 
         Entry entry = new Entry( );
 
@@ -150,7 +150,7 @@ public class EntryHomeTest extends LuteceTestCase
 
         EntryHome.update( entry );
 
-        IEntry storedEntry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
+        Entry storedEntry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
 
         assertEquals( storedEntry.getComment( ), entry.getComment( ) );
         assertEquals( storedEntry.getEntryType( ).getIdType( ), entry.getEntryType( ).getIdType( ) );
@@ -187,11 +187,11 @@ public class EntryHomeTest extends LuteceTestCase
 
         int lastIdEntry = EntryHome.create( entry );
 
-        IEntry loadEntry = EntryHome.findByPrimaryKey( lastIdEntry );
+        Entry loadEntry = EntryHome.findByPrimaryKey( lastIdEntry );
 
         EntryHome.remove( loadEntry.getIdEntry( ) );
 
-        IEntry entryStored = EntryHome.findByPrimaryKey( loadEntry.getIdEntry( ) );
+        Entry entryStored = EntryHome.findByPrimaryKey( loadEntry.getIdEntry( ) );
         assertNull( entryStored );
     }
 }
