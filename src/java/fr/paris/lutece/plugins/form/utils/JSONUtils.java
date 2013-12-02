@@ -73,8 +73,6 @@ import org.apache.commons.lang.StringUtils;
  */
 public final class JSONUtils
 {
-    public static final String TAG_ID_BLOB = "id_blob";
-    public static final String MESSAGE_DATA_NOT_FOUND = "id_blob not found";
     public static final String JSON_KEY_ID_FORM = "id_form";
     public static final String JSON_KEY_RESPONSE = "response";
     public static final String JSON_KEY_ID_ENTRY = "id_entry";
@@ -91,7 +89,6 @@ public final class JSONUtils
     public static final String JSON_KEY_MIME_TYPE = "mime_type";
     public static final String JSON_KEY_UPLOADED_FILES = "uploadedFiles";
     public static final String JSON_KEY_FILE_COUNT = "fileCount";
-    public static final String JSON_KEY_FIELD = "field";
     public static final String JSON_KEY_SUCCESS = "success";
 
     // PROPERTIES
@@ -466,10 +463,6 @@ public final class JSONUtils
                         listBlobIds.addAll( getFileMetadataBlobIdsFromJson( jsonResponse ) );
                     }
                 }
-            }
-            else
-            {
-                // nothing to do - no response found
             }
         }
         catch ( JSONException jsonEx )

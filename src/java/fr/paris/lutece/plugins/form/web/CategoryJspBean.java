@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.form.web;
 import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.CategoryHome;
 import fr.paris.lutece.plugins.form.service.CategoryResourceIdService;
-import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -58,6 +57,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -129,7 +130,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
         Paginator<Category> paginator = new Paginator<Category>( listCategory, _nItemsPerPageCategory,
                 getJspManageCategory( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport );
         model.put( MARK_PAGINATOR, paginator );
-        model.put( MARK_NB_ITEMS_PER_PAGE, FormUtils.EMPTY_STRING + _nItemsPerPageCategory );
+        model.put( MARK_NB_ITEMS_PER_PAGE, Integer.toString( _nItemsPerPageCategory ) );
         model.put( MARK_CATEGORY_LIST, paginator.getPageItems( ) );
         setPageTitleProperty( PROPERTY_MANAGE_CATEGORY_TITLE );
 
@@ -201,8 +202,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
 
         int nIdCategory = -1;
 
-        if ( ( strIdCategory != null )
-                && !strIdCategory.equals( FormUtils.EMPTY_STRING )
+        if ( StringUtils.isNotEmpty( strIdCategory )
                 && RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
                         CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
@@ -243,8 +243,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         int nIdCategory = -1;
 
-        if ( ( strIdCategory != null )
-                && !strIdCategory.equals( FormUtils.EMPTY_STRING )
+        if ( StringUtils.isNotEmpty( strIdCategory )
                 && RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
                         CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
@@ -311,8 +310,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         int nIdCategory = -1;
 
-        if ( ( strIdCategory != null )
-                && !strIdCategory.equals( FormUtils.EMPTY_STRING )
+        if ( StringUtils.isNotEmpty( strIdCategory )
                 && RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
                         CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
@@ -354,20 +352,20 @@ public class CategoryJspBean extends PluginAdminPageJspBean
                 PARAMETER_TITLE ).trim( );
         String strColor = ( request.getParameter( PARAMETER_COLOR ) == null ) ? null : request.getParameter(
                 PARAMETER_COLOR ).trim( );
-        String strFieldError = FormUtils.EMPTY_STRING;
+        String strFieldError = StringUtils.EMPTY;
 
-        if ( ( strTitle == null ) || strTitle.equals( FormUtils.EMPTY_STRING ) )
+        if ( StringUtils.isEmpty( strTitle ) )
         {
             strFieldError = FIELD_TITLE;
         }
 
-        if ( ( strColor == null ) || strColor.equals( FormUtils.EMPTY_STRING ) )
+        if ( StringUtils.isEmpty( strColor ) )
         {
             strFieldError = FIELD_COLOR;
         }
 
         //Mandatory fields
-        if ( !strFieldError.equals( FormUtils.EMPTY_STRING ) )
+        if ( !strFieldError.equals( StringUtils.EMPTY ) )
         {
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale( ) ) };
 

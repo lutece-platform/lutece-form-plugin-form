@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 
@@ -129,7 +128,7 @@ public class Category implements RBACResource
      */
     public String getResourceId( )
     {
-        return FormUtils.EMPTY_STRING + _nIdCategory;
+        return Integer.toString( _nIdCategory );
     }
 
     /**

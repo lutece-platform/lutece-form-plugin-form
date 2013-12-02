@@ -203,7 +203,7 @@ public class ProcessorNotifySender extends OutputProcessor
                 request.getLocale( ) );
         String strSenderEmail = MailService.getNoReplyEmail( );
 
-        String strEmailSender = FormUtils.EMPTY_STRING;
+        String strEmailSender = StringUtils.EMPTY;
 
         //----------------------------------
         for ( Response response : formSubmit.getListResponse( ) )
@@ -231,7 +231,7 @@ public class ProcessorNotifySender extends OutputProcessor
                 }
                 else
                 {
-                    response.setToStringValueResponse( FormUtils.EMPTY_STRING );
+                    response.setToStringValueResponse( StringUtils.EMPTY );
                 }
             }
         }

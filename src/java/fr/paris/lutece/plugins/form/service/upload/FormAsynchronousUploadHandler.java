@@ -78,9 +78,9 @@ import org.apache.commons.lang.StringUtils;
  */
 public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 {
-    public static final String UPLOAD_SUBMIT_PREFIX = "_form_upload_submit_form_";
-    public static final String UPLOAD_DELETE_PREFIX = "_form_upload_delete_form_";
-    public static final String UPLOAD_CHECKBOX_PREFIX = "_form_upload_checkbox_form_";
+    private static final String UPLOAD_SUBMIT_PREFIX = "_form_upload_submit_form_";
+    private static final String UPLOAD_DELETE_PREFIX = "_form_upload_delete_form_";
+    private static final String UPLOAD_CHECKBOX_PREFIX = "_form_upload_checkbox_form_";
 
     private static final String PREFIX_ENTRY_ID = IEntryTypeService.PREFIX_ATTRIBUTE + "_";
     private static final String PARAMETER_PAGE = "page";

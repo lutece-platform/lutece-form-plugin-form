@@ -116,8 +116,6 @@ public final class FormUtils extends GenericAttributesUtils
     public static final String CONSTANT_GROUP_BY_DAY = "0";
     public static final String CONSTANT_GROUP_BY_WEEK = "1";
     public static final String CONSTANT_GROUP_BY_MONTH = "2";
-    public static final String EMPTY_STRING = "";
-    public static final String PARAMETER_DELETE_PREFIX = "delete_";
     public static final String BEAN_ENTRY_TYPE_SERVICE = "form.entryTypeService";
     public static final String BEAN_FORM_RESPONSE_SERVICE = "form.responseService";
     public static final String BEAN_EXPORT_DAEMON_TYPE_FACTORY = "form.exportTypeFactory";
@@ -526,7 +524,7 @@ public final class FormUtils extends GenericAttributesUtils
         Entry entry = null;
         EntryType entryType;
 
-        if ( ( strIdType != null ) && !strIdType.equals( EMPTY_STRING ) )
+        if ( ( strIdType != null ) && !strIdType.equals( StringUtils.EMPTY ) )
         {
             try
             {
@@ -938,7 +936,6 @@ public final class FormUtils extends GenericAttributesUtils
             Locale locale, Plugin plugin )
     {
         // this map stores field in order to not request db multiple time for same field
-        Map<String, Field> mapFields = new HashMap<String, Field>( );
         StringBuffer buffer = new StringBuffer( );
         XmlUtil.beginElement( buffer, TAG_FORM );
         XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle( ) );
@@ -961,7 +958,7 @@ public final class FormUtils extends GenericAttributesUtils
 
         for ( FormSubmit formSubmit : listFormSubmit )
         {
-            getXmlResponse( request, buffer, formSubmit, mapFields, locale, plugin );
+            getXmlResponse( request, buffer, formSubmit, locale, plugin );
         }
 
         XmlUtil.endElement( buffer, TAG_FORM_SUBMITS );
@@ -983,7 +980,6 @@ public final class FormUtils extends GenericAttributesUtils
             Plugin plugin )
     {
         // this map stores field in order to not request db multiple time for same field
-        Map<String, Field> mapFields = new HashMap<String, Field>( );
         StringBuffer buffer = new StringBuffer( );
         XmlUtil.beginElement( buffer, TAG_FORM );
         XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle( ) );
@@ -1004,7 +1000,7 @@ public final class FormUtils extends GenericAttributesUtils
         // Build Form submits list XML
         XmlUtil.beginElement( buffer, TAG_FORM_SUBMITS );
 
-        getXmlResponse( request, buffer, formSubmit, mapFields, locale, plugin );
+        getXmlResponse( request, buffer, formSubmit, locale, plugin );
 
         XmlUtil.endElement( buffer, TAG_FORM_SUBMITS );
         XmlUtil.endElement( buffer, TAG_FORM );
@@ -1017,13 +1013,11 @@ public final class FormUtils extends GenericAttributesUtils
      * @param request the HTTP request
      * @param buffer the buffer
      * @param formSubmit the form submit
-     * @param mapFields the map fields in order to not request database multiple
-     *            time for same field
      * @param locale the locale
      * @param plugin the plugin
      */
     private static void getXmlResponse( HttpServletRequest request, StringBuffer buffer, FormSubmit formSubmit,
-            Map<String, Field> mapFields, Locale locale, Plugin plugin )
+            Locale locale, Plugin plugin )
     {
         XmlUtil.beginElement( buffer, TAG_FORM_SUBMIT );
         XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_ID, formSubmit.getIdFormSubmit( ) );
@@ -1038,7 +1032,7 @@ public final class FormUtils extends GenericAttributesUtils
         }
         else
         {
-            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_IP, EMPTY_STRING );
+            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_IP, StringUtils.EMPTY );
         }
 
         Response responseStore = null;
@@ -1050,13 +1044,7 @@ public final class FormUtils extends GenericAttributesUtils
             {
                 if ( response.getField( ) != null )
                 {
-                    Field field = mapFields.get( response.getField( ).getIdField( ) );
-
-                    if ( field == null )
-                    {
-                        field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
-                    }
-
+                    Field field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
                     response.setField( field );
                 }
 
@@ -1148,7 +1136,7 @@ public final class FormUtils extends GenericAttributesUtils
             String strLableY, String strTimesUnit )
     {
         XYDataset xyDataset = createDataset( listStatistic, strTimesUnit );
-        JFreeChart jfreechart = ChartFactory.createTimeSeriesChart( EMPTY_STRING, strLabelX, strLableY, xyDataset,
+        JFreeChart jfreechart = ChartFactory.createTimeSeriesChart( StringUtils.EMPTY, strLabelX, strLableY, xyDataset,
                 false, false, false );
         jfreechart.setBackgroundPaint( Color.white );
 
@@ -1179,7 +1167,7 @@ public final class FormUtils extends GenericAttributesUtils
 
         if ( strTimesUnit.equals( CONSTANT_GROUP_BY_DAY ) )
         {
-            series = new TimeSeries( EMPTY_STRING, Day.class );
+            series = new TimeSeries( StringUtils.EMPTY, Day.class );
 
             for ( StatisticFormSubmit statistic : listStatistic )
             {
@@ -1188,7 +1176,7 @@ public final class FormUtils extends GenericAttributesUtils
         }
         else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_WEEK ) )
         {
-            series = new TimeSeries( EMPTY_STRING, Week.class );
+            series = new TimeSeries( StringUtils.EMPTY, Week.class );
 
             for ( StatisticFormSubmit statistic : listStatistic )
             {
@@ -1198,7 +1186,7 @@ public final class FormUtils extends GenericAttributesUtils
 
         else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_MONTH ) )
         {
-            series = new TimeSeries( EMPTY_STRING, Month.class );
+            series = new TimeSeries( StringUtils.EMPTY, Month.class );
 
             for ( StatisticFormSubmit statistic : listStatistic )
             {

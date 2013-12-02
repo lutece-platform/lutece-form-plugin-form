@@ -3,10 +3,10 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.test.LuteceTestCase;
 
 import java.sql.Timestamp;
@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
-
+ * FieldHomeTest
  */
 public class FieldHomeTest extends LuteceTestCase
 {
@@ -37,7 +37,7 @@ public class FieldHomeTest extends LuteceTestCase
 
     /**
      * Test method for
-     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#create(fr.paris.lutece.plugins.genericattributes.business.Field, fr.paris.lutece.portal.service.plugin.Plugin)}
+     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#create(fr.paris.lutece.plugins.genericattributes.business.Field)}
      * .
      */
     public void testCreate( )
@@ -73,7 +73,7 @@ public class FieldHomeTest extends LuteceTestCase
 
     /**
      * Test method for
-     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#update(fr.paris.lutece.plugins.genericattributes.business.Field, fr.paris.lutece.portal.service.plugin.Plugin)}
+     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#update(fr.paris.lutece.plugins.genericattributes.business.Field)}
      * .
      */
     public void testUpdate( )
@@ -109,7 +109,7 @@ public class FieldHomeTest extends LuteceTestCase
 
     /**
      * Test method for
-     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#getFieldListByIdEntry(int, fr.paris.lutece.portal.service.plugin.Plugin)}
+     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#getFieldListByIdEntry(int)}
      * .
      */
     public void testGetFieldListByIdEntry( )
@@ -123,7 +123,7 @@ public class FieldHomeTest extends LuteceTestCase
 
     /**
      * Test method for
-     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#remove(int, fr.paris.lutece.portal.service.plugin.Plugin)}
+     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#remove(int)}
      * .
      */
     public void testRemove( )

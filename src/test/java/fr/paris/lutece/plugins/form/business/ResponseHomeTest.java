@@ -35,12 +35,9 @@ package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.test.LuteceTestCase;
 
 import java.util.List;
@@ -60,7 +57,6 @@ public class ResponseHomeTest extends LuteceTestCase
     private final static int ID_FORM_RESPONSE_2 = 2;
     private final static String VALUE_RESPONSE_1 = "response value 1";
     private final static String VALUE_RESPONSE_2 = "response value 2";
-    private final Plugin _plugin = PluginService.getPlugin( "form" );
 
     /**
      * Test the creation of a response
