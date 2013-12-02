@@ -44,12 +44,13 @@ import java.util.Locale;
 
 
 /**
- *
+ * 
  * CaptchaFormError
- *
+ * 
  */
 public class CaptchaFormError extends GenericAttributeError
 {
+    private static final long serialVersionUID = 7958644866579946734L;
     private static final String MESSAGE_CAPTCHA_ERROR = "form.message.captchaError";
     private static final String ANCHOR_CAPTCHA = "captchaImage";
     private static final String PARAMETER_ID_FORM = "id_form";
@@ -70,7 +71,7 @@ public class CaptchaFormError extends GenericAttributeError
      * {@inheritDoc}
      */
     @Override
-    public boolean isMandatoryError(  )
+    public boolean isMandatoryError( )
     {
         return false;
     }
@@ -79,13 +80,13 @@ public class CaptchaFormError extends GenericAttributeError
      * {@inheritDoc}
      */
     @Override
-    public String getUrl(  )
+    public String getUrl( )
     {
-        UrlItem url = new UrlItem( AppPathService.getPortalUrl(  ) );
+        UrlItem url = new UrlItem( AppPathService.getPortalUrl( ) );
         url.addParameter( XPageAppService.PARAM_XPAGE_APP, FormPlugin.PLUGIN_NAME );
         url.addParameter( PARAMETER_ID_FORM, _nIdForm );
         url.setAnchor( ANCHOR_CAPTCHA );
 
-        return url.getUrl(  );
+        return url.getUrl( );
     }
 }

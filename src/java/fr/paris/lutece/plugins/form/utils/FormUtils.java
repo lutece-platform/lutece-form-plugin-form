@@ -479,7 +479,7 @@ public final class FormUtils extends GenericAttributesUtils
      * @param locale the locale
      * @return strDate The String date in the short locale format or the empty
      *         String if the date is null
-     * @deprecated
+     * @deprecated Deprecated
      */
     public static String getDateString( Timestamp date, Locale locale )
     {

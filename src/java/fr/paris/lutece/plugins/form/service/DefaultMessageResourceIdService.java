@@ -50,8 +50,6 @@ import java.util.Locale;
  */
 public class DefaultMessageResourceIdService extends ResourceIdService
 {
-    public static final String PLUGIN_NAME = "form";
-
     /** Permission for manage a export format*/
     public static final String PERMISSION_MANAGE = "MANAGE";
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "form.permission.label.resourceType.defaultMessage";
@@ -60,7 +58,7 @@ public class DefaultMessageResourceIdService extends ResourceIdService
     /** Creates a new instance of DocumentTypeResourceIdService */
     public DefaultMessageResourceIdService(  )
     {
-        setPluginName( PLUGIN_NAME );
+        setPluginName( FormPlugin.PLUGIN_NAME );
     }
 
     /**
@@ -70,7 +68,7 @@ public class DefaultMessageResourceIdService extends ResourceIdService
     {
         ResourceType rt = new ResourceType(  );
         rt.setResourceIdServiceClass( DefaultMessageResourceIdService.class.getName(  ) );
-        rt.setPluginName( PLUGIN_NAME );
+        rt.setPluginName( FormPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( DefaultMessage.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 

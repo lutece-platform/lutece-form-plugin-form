@@ -46,17 +46,18 @@ import javax.servlet.http.HttpServletRequest;
 public interface IValidator
 {
     /**
-    * Returns the validator interface
-    * @param request {@link HttpServletRequest}
-    * @param nIdForm the form id
-    * @return the validator interface
-    */
+     * Returns the validator interface
+     * @param request {@link HttpServletRequest}
+     * @param nIdForm the form id
+     * @return the validator interface
+     */
     String getUI( HttpServletRequest request, int nIdForm );
 
     /**
      * Checks if the validator is associated with the form
      * @param nIdForm the form id
-     * @return true if the validator is associated with the form, otherwise false
+     * @return true if the validator is associated with the form, otherwise
+     *         false
      */
     boolean isAssociatedWithForm( int nIdForm );
 
@@ -71,8 +72,7 @@ public interface IValidator
      * @param request {@link HttpServletRequest}
      * @param formSubmit the form submit
      * @param plugin the plugin
-     * @throws SiteMessageException
+     * @throws SiteMessageException If a message needs to be displayed
      */
-    void validateForm( HttpServletRequest request, FormSubmit formSubmit, Plugin plugin )
-        throws SiteMessageException;
+    void validateForm( HttpServletRequest request, FormSubmit formSubmit, Plugin plugin ) throws SiteMessageException;
 }

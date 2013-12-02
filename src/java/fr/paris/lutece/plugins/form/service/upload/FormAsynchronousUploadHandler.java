@@ -72,8 +72,8 @@ import org.apache.commons.lang.StringUtils;
 /**
  * 
  * FormAsynchronousUploadHandler.
- * @see #getFileItem(String, String)
- * @see #removeFileItem(String, String)
+ * @see #getFileItems(String, String)
+ * @see #removeFileItem(String, String, int)
  * 
  */
 public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
@@ -407,10 +407,14 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
         // create map if not exists
         if ( mapFileItemsSession == null )
         {
-            if ( _mapAsynchronousUpload.get( strSessionId ) == null )
+            synchronized ( strSessionId )
             {
-                mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>( );
-                _mapAsynchronousUpload.put( strSessionId, mapFileItemsSession );
+                mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
+                if ( mapFileItemsSession == null )
+                {
+                    mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>( );
+                    _mapAsynchronousUpload.put( strSessionId, mapFileItemsSession );
+                }
             }
         }
 

@@ -44,6 +44,9 @@ import fr.paris.lutece.portal.service.rbac.RBACResource;
  */
 public class Category implements RBACResource
 {
+    /**
+     * Form category resource type
+     */
     public static final String RESOURCE_TYPE = "FORM_CATEGORY_TYPE";
     private int _nIdCategory;
     private String _strTitle;

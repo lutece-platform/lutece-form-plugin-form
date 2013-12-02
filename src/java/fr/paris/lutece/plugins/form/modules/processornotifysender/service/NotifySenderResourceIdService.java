@@ -44,19 +44,25 @@ import java.util.Locale;
 
 
 /**
- *
+ * 
  * NotifySenderResourceIdService
- *
+ * 
  */
 public class NotifySenderResourceIdService extends ResourceIdService
 {
+    /**
+     * Form notify sender resource type
+     */
     public static final String RESOURCE_TYPE = "FORM_NOTIFY_SENDER_TYPE";
+    /**
+     * Permission to send attachments
+     */
     public static final String PERMISSION_SEND_ATTACHMENTS = "SEND_ATTACHMENTS";
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "module.form.processornotifysender.permission.label.resource_type";
     private static final String PROPERTY_LABEL_SEND_ATTACHMENTS = "module.form.processornotifysender.permission.label.send_attachments";
 
     /** Creates a new instance of NotifySenderResourceIdService */
-    public NotifySenderResourceIdService(  )
+    public NotifySenderResourceIdService( )
     {
         setPluginName( FormPlugin.PLUGIN_NAME );
     }
@@ -64,15 +70,15 @@ public class NotifySenderResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( NotifySenderResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( NotifySenderResourceIdService.class.getName( ) );
         rt.setPluginName( FormPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_SEND_ATTACHMENTS );
         p.setPermissionTitleKey( PROPERTY_LABEL_SEND_ATTACHMENTS );
         rt.registerPermission( p );

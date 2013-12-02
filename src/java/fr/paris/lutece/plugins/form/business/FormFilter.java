@@ -33,15 +33,20 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-
 /**
- *
+ * 
  * class FormFilter
- *
+ * 
  */
 public class FormFilter
 {
+    /**
+     * Value to ignore a String filter
+     */
     public static final String ALL_STRING = "all";
+    /**
+     * Value to ignore an integer filter
+     */
     public static final int ALL_INT = -1;
     private int _nIdState = ALL_INT;
     private int _nIdAutoPublicationState = ALL_INT;
@@ -51,20 +56,20 @@ public class FormFilter
     private int _nIdCategory = ALL_INT;
 
     /**
-     *
+     * 
      * @return 1 if the forms return must be enabled
-     *                    0 if the forms return must be disabled
+     *         0 if the forms return must be disabled
      */
-    public int getIdState(  )
+    public int getIdState( )
     {
         return _nIdState;
     }
 
     /**
      * Set 1 if the forms return must be enabled
+     * 0 if the forms return must be disabled
+     * @param idState 1 if the forms return must be enabled
      *            0 if the forms return must be disabled
-     * @param idState  1 if the forms return must be enabled
-     *                                      0 if the forms return must be disabled
      */
     public void setIdState( int idState )
     {
@@ -72,19 +77,19 @@ public class FormFilter
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain form state
      */
-    public boolean containsIdState(  )
+    public boolean containsIdState( )
     {
         return ( _nIdState != ALL_INT );
     }
 
     /**
-         *
-         * @return the workgroup of the search forms
-         */
-    public String getWorkgroup(  )
+     * 
+     * @return the workgroup of the search forms
+     */
+    public String getWorkgroup( )
     {
         return _strWorkgroup;
     }
@@ -99,10 +104,10 @@ public class FormFilter
     }
 
     /**
-     *
+     * 
      * @return true if the filter contaion workgroup criteria
      */
-    public boolean containsWorkgroupCriteria(  )
+    public boolean containsWorkgroupCriteria( )
     {
         return ( !_strWorkgroup.equals( ALL_STRING ) );
     }
@@ -121,7 +126,7 @@ public class FormFilter
      * 
      * @return true if the date end availability must be before current date
      */
-    public boolean containsDateEndDisponibilityBeforeCurrentDate(  )
+    public boolean containsDateEndDisponibilityBeforeCurrentDate( )
     {
         return _bDateEndDisponibilityBeforeCurrentDate;
     }
@@ -140,35 +145,36 @@ public class FormFilter
      * 
      * @return true if the date begin availability must be after current date
      */
-    public boolean isDateBeginDisponibilityAfterCurrentDate(  )
+    public boolean isDateBeginDisponibilityAfterCurrentDate( )
     {
         return _bDateBeginDisponibilityAfterCurrentDate;
     }
 
     /**
-    *
-    * @return true if the date begin disponibility must be after current date
-    */
-    public boolean containsDateBeginDisponibilityAfterCurrentDate(  )
+     * 
+     * @return true if the date begin disponibility must be after current date
+     */
+    public boolean containsDateBeginDisponibilityAfterCurrentDate( )
     {
         return _bDateBeginDisponibilityAfterCurrentDate;
     }
 
     /**
-    *
-    * @return 1 if the forms return must be in auto publication enabled
-    *                    0 if the forms return must be in auto publication disabled
-    */
-    public int getIdAutoPublicationState(  )
+     * 
+     * @return 1 if the forms return must be in auto publication enabled
+     *         0 if the forms return must be in auto publication disabled
+     */
+    public int getIdAutoPublicationState( )
     {
         return _nIdAutoPublicationState;
     }
 
     /**
      * Set 1 if the forms return must be in auto publication enabled
+     * 0 if the forms return must be in auto publication disabled
+     * @param idAutoPublicationState 1 if the forms return must be in auto
+     *            publication enabled
      *            0 if the forms return must be in auto publication disabled
-     * @param idAutoPublicationState  1 if the forms return must be in auto publication enabled
-     *                                      0 if the forms return must be in auto publication disabled
      */
     public void setIdAutoPublicationState( int idAutoPublicationState )
     {
@@ -176,25 +182,25 @@ public class FormFilter
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain form auto publication state
      */
-    public boolean containsIdAutoPublication(  )
+    public boolean containsIdAutoPublication( )
     {
         return ( _nIdAutoPublicationState != ALL_INT );
     }
 
     /**
-     *
-     * @return  the id of the category insert in the filter
+     * 
+     * @return the id of the category insert in the filter
      */
-    public int getIdCategory(  )
+    public int getIdCategory( )
     {
         return _nIdCategory;
     }
 
     /**
-     * set  the id of the category in the filter
+     * set the id of the category in the filter
      * @param idCategory the id of the category to insert in the filter
      */
     public void setIdCategory( int idCategory )
@@ -203,10 +209,10 @@ public class FormFilter
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain an id of category
      */
-    public boolean containsIdCategory(  )
+    public boolean containsIdCategory( )
     {
         return ( _nIdCategory != ALL_INT );
     }

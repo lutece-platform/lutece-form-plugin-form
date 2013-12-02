@@ -48,11 +48,11 @@ import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGroup;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
 import fr.paris.lutece.plugins.genericattributes.business.EntryTypeHome;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.style.Theme;
@@ -341,7 +341,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         if ( StringUtils.isNotEmpty( strIdForm ) && StringUtils.isNumeric( strIdForm ) )
         {
             nIdForm = Integer.parseInt( strIdForm );
-            _nIdForm = nIdForm;
+            setFormId( nIdForm );
         }
         else
         {
@@ -505,7 +505,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         if ( StringUtils.isNotEmpty( strIdForm ) && StringUtils.isNumeric( strIdForm ) )
         {
             nIdForm = Integer.parseInt( strIdForm );
-            _nIdForm = nIdForm;
+            setFormId( nIdForm );
         }
         else
         {
@@ -638,7 +638,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         if ( StringUtils.isNotEmpty( strIdForm ) && StringUtils.isNumeric( strIdForm ) )
         {
             nIdForm = Integer.parseInt( strIdForm );
-            _nIdForm = nIdForm;
+            setFormId( nIdForm );
         }
         else
         {
@@ -736,7 +736,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         if ( StringUtils.isNotEmpty( strIdForm ) && StringUtils.isNumeric( strIdForm ) )
         {
             nIdForm = Integer.parseInt( strIdForm );
-            _nIdForm = nIdForm;
+            setFormId( nIdForm );
         }
         else
         {
@@ -1167,8 +1167,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
      * @param listEntry the list of all the entries
      * @param listEntryFirstLevel the list of all the entries of the first level
      */
-    private void fillEntryListWithEntryFirstLevel( Plugin plugin, List<Entry> listEntry,
-            List<Entry> listEntryFirstLevel )
+    private void fillEntryListWithEntryFirstLevel( Plugin plugin, List<Entry> listEntry, List<Entry> listEntryFirstLevel )
     {
         EntryFilter filter;
 

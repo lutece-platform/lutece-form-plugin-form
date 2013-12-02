@@ -37,12 +37,15 @@ import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 
 /**
- *
- *class DefaultMessage
- *
+ * 
+ * class DefaultMessage
+ * 
  */
 public class DefaultMessage implements RBACResource
 {
+    /**
+     * Form default message resource type
+     */
     public static final String RESOURCE_TYPE = "FORM_DEFAULT_MESSAGE_TYPE";
     private String _strWelcomeMessage;
     private String _strUnavailabilityMessage;
@@ -53,10 +56,10 @@ public class DefaultMessage implements RBACResource
     private String _strBackUrl;
 
     /**
-     *
+     * 
      * @return default back Url
      */
-    public String getBackUrl(  )
+    public String getBackUrl( )
     {
         return _strBackUrl;
     }
@@ -71,10 +74,10 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     *
+     * 
      * @return the default value of validate button
      */
-    public String getLibelleValidateButton(  )
+    public String getLibelleValidateButton( )
     {
         return _strLibelleValidateButton;
     }
@@ -89,17 +92,18 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     *
+     * 
      * @return the default summary who see by the user after validate form
      */
-    public String getRecapMessage(  )
+    public String getRecapMessage( )
     {
         return _strRecapMessage;
     }
 
     /**
-     *
-     * @param recapMessage the default summary who see by the user after validate form
+     * 
+     * @param recapMessage the default summary who see by the user after
+     *            validate form
      */
     public void setRecapMessage( String recapMessage )
     {
@@ -107,17 +111,17 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     *
+     * 
      * @return the default requierement
      */
-    public String getRequirement(  )
+    public String getRequirement( )
     {
         return _strRequirement;
     }
 
     /**
-     * set  the default requierement
-     * @param requierementMessage  the default requierement
+     * set the default requierement
+     * @param requierementMessage the default requierement
      */
     public void setRequirement( String requierementMessage )
     {
@@ -125,16 +129,18 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     *
-     * @return the default Unavailability Message who see by the user when the form will be enable
+     * 
+     * @return the default Unavailability Message who see by the user when the
+     *         form will be enable
      */
-    public String getUnavailabilityMessage(  )
+    public String getUnavailabilityMessage( )
     {
         return _strUnavailabilityMessage;
     }
 
     /**
-     * set the Unavailability Message who see by the user when the form will be enable
+     * set the Unavailability Message who see by the user when the form will be
+     * enable
      * @param unavailabilityMessage the default Unavailability Message
      */
     public void setUnavailabilityMessage( String unavailabilityMessage )
@@ -143,10 +149,10 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     *
+     * 
      * @return the default welcome message
      */
-    public String getWelcomeMessage(  )
+    public String getWelcomeMessage( )
     {
         return _strWelcomeMessage;
     }
@@ -164,7 +170,7 @@ public class DefaultMessage implements RBACResource
      * RBAC resource implmentation
      * @return The resource type code
      */
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
@@ -173,7 +179,7 @@ public class DefaultMessage implements RBACResource
      * RBAC resource implmentation
      * @return The resourceId
      */
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return "";
     }
@@ -191,7 +197,7 @@ public class DefaultMessage implements RBACResource
      * The default label to display for the Reset button
      * @return the Reset button name
      */
-    public String getLibelleResetButton(  )
+    public String getLibelleResetButton( )
     {
         return _strLibelleResetButton;
     }

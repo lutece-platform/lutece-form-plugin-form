@@ -37,12 +37,15 @@ import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 
 /**
- *
- *  class ExportFormat
- *
+ * 
+ * class ExportFormat
+ * 
  */
 public class ExportFormat implements RBACResource
 {
+    /**
+     * Form export format resource type
+     */
     public static final String RESOURCE_TYPE = "FORM_EXPORT_FORMAT_TYPE";
     private int _nIdExport;
     private String _strTitle;
@@ -51,17 +54,17 @@ public class ExportFormat implements RBACResource
     private byte[] _xsl;
 
     /**
-     *
+     * 
      * @return the id of the export format
      */
-    public int getIdExport(  )
+    public int getIdExport( )
     {
         return _nIdExport;
     }
 
     /**
-     * set  the id of the export format
-     * @param idExport  the id of the export format
+     * set the id of the export format
+     * @param idExport the id of the export format
      */
     public void setIdExport( int idExport )
     {
@@ -69,10 +72,10 @@ public class ExportFormat implements RBACResource
     }
 
     /**
-     *
+     * 
      * @return the description of the export format
      */
-    public String getDescription(  )
+    public String getDescription( )
     {
         return _strDescription;
     }
@@ -87,10 +90,10 @@ public class ExportFormat implements RBACResource
     }
 
     /**
-     *
+     * 
      * @return the title of the export format
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
@@ -105,10 +108,10 @@ public class ExportFormat implements RBACResource
     }
 
     /**
-     *
+     * 
      * @return the xsl file of the export format
      */
-    public byte[] getXsl(  )
+    public byte[] getXsl( )
     {
         return _xsl;
     }
@@ -126,7 +129,7 @@ public class ExportFormat implements RBACResource
      * RBAC resource implmentation
      * @return The resource type code
      */
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
@@ -135,7 +138,7 @@ public class ExportFormat implements RBACResource
      * RBAC resource implmentation
      * @return The resourceId
      */
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return "" + _nIdExport;
     }
@@ -144,7 +147,7 @@ public class ExportFormat implements RBACResource
      * get the extension of the output file generate by the xsl
      * @return the extension of the out put file
      */
-    public String getExtension(  )
+    public String getExtension( )
     {
         return _strExtension;
     }

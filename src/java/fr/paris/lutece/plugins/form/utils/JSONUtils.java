@@ -356,7 +356,8 @@ public final class JSONUtils
 
     /**
      * Builds a json object for the file item list.
-     * Key is {@link #JSON_UPLOADED_FILES}, value is the array of uploaded file.
+     * Key is {@link #JSON_KEY_UPLOADED_FILES}, value is the array of uploaded
+     * file.
      * @param listFileItem the fileItem list
      * @return the json
      */
@@ -410,11 +411,26 @@ public final class JSONUtils
         }
     }
 
+    /**
+     * Get the list of blob id from a JSON string
+     * @param strJSON The JSON to get blob id from
+     * @return The list of blob id, or an empty list if no blob id was found
+     *         in the JSON string
+     */
     public static List<String> getBlobIds( String strJSON )
     {
         return getBlobIds( strJSON, FormUtils.CONSTANT_ID_NULL );
     }
 
+    /**
+     * Get the list of blob id from a JSON string
+     * @param strJSON The JSON to get blob id from
+     * @param nIdEntry The id of the entry to get blob id from, or
+     *            {@link FormUtils#CONSTANT_ID_NULL} to get blob id from any
+     *            entry
+     * @return The list of blob id, or an empty list if no blob id was found
+     *         in the JSON string
+     */
     public static List<String> getBlobIds( String strJSON, int nIdEntry )
     {
         List<String> listBlobIds = new ArrayList<String>( );
@@ -431,7 +447,8 @@ public final class JSONUtils
                     // array
                     for ( JSONObject jsonResponse : ( (Collection<JSONObject>) ( (JSONArray) jsonResponses ) ) )
                     {
-                        if ( ( ( nIdEntry == jsonResponse.getInt( JSON_KEY_ID_ENTRY ) ) || ( nIdEntry == FormUtils.CONSTANT_ID_NULL ) )
+                        if ( ( nIdEntry == FormUtils.CONSTANT_ID_NULL || nIdEntry == jsonResponse
+                                .getInt( JSON_KEY_ID_ENTRY ) )
                                 && jsonResponse.containsKey( BlobStoreFileItem.JSON_KEY_FILE_METADATA_BLOB_ID ) )
                         {
                             listBlobIds.addAll( getFileMetadataBlobIdsFromJson( jsonResponse ) );

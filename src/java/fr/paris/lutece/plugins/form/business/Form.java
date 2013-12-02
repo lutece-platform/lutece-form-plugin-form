@@ -50,8 +50,17 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Form implements AdminWorkgroupResource, RBACResource
 {
+    /**
+     * Form resource type
+     */
     public static final String RESOURCE_TYPE = "FORM_FORM_TYPE";
+    /**
+     * State of forms that are enabled
+     */
     public static final int STATE_ENABLE = 1;
+    /**
+     * State of forms that are disabled
+     */
     public static final int STATE_DISABLE = 0;
     private static FormWorkgroupRemovalListener _listenerWorkgroup = new FormWorkgroupRemovalListener( );
     private static FormRegularExpressionRemovalListener _listenerRegularExpression = new FormRegularExpressionRemovalListener( );

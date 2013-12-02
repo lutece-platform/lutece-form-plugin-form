@@ -72,13 +72,13 @@ import org.apache.commons.lang.StringUtils;
  */
 public class FormDashboardComponent extends DashboardComponent
 {
-    public static final String MARK_URL = "url";
-    public static final String MARK_ICON = "icon";
-    public static final String MARK_FORM_LIST = "form_list";
-    public static final String MARK_PERMISSION_CREATE_FORM = "permission_create_form";
-    public static final String MARK_RESPONSE_COUNT_MAP = "response_count_map";
-    public static final String MARK_AUTHORIZED_FORM_MODIFICATION_LIST = "authorized_form_modification_list";
-    public static final String MARK_PERMISSION_CREATE = "permission_create";
+    private static final String MARK_URL = "url";
+    private static final String MARK_ICON = "icon";
+    private static final String MARK_FORM_LIST = "form_list";
+    private static final String MARK_PERMISSION_CREATE_FORM = "permission_create_form";
+    private static final String MARK_RESPONSE_COUNT_MAP = "response_count_map";
+    private static final String MARK_AUTHORIZED_FORM_MODIFICATION_LIST = "authorized_form_modification_list";
+    private static final String MARK_PERMISSION_CREATE = "permission_create";
 
     private static final int ZONE_1 = 1;
     private static final String TEMPLATE_DASHBOARD_ZONE_1 = "/admin/plugins/form/form_dashboard_zone_1.html";
@@ -87,6 +87,7 @@ public class FormDashboardComponent extends DashboardComponent
     /**
      * The HTML code of the component
      * @param user The Admin User
+     * @param request The request
      * @return The dashboard component
      */
     public String getDashboardData( AdminUser user, HttpServletRequest request )

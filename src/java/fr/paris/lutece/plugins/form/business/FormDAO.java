@@ -35,8 +35,8 @@ package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.portal.business.style.Theme;
-import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.portal.ThemesService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -100,9 +100,6 @@ public final class FormDAO implements IFormDAO
     private static final String SQL_FILTER_STATE_END_DISPONIBILTY_BEFORE_CURRENT_DATE = " date_end_disponibility < ? ";
     private static final String SQL_ORDER_BY_DATE_CREATION = " ORDER BY date_creation DESC ";
 
-    //    private static final String SQL_QUERY_SELECT_CATEGORY_BY_ID_FORM = "SELECT cat.id_category,cat.title FROM form_form form,form_category cat " +
-    //        " WHERE form.id_category=cat.id_category AND form.id_form=?";
-
     /**
      * Generates a new primary key
      * 
@@ -129,12 +126,9 @@ public final class FormDAO implements IFormDAO
     }
 
     /**
-     * Insert a new record in the table.
-     * 
-     * @param form instance of the Form to insert
-     * @param plugin the plugin
-     * @return the new form create
+     * {@inheritDoc}
      */
+    @Override
     public synchronized int insert( Form form, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -193,12 +187,9 @@ public final class FormDAO implements IFormDAO
     }
 
     /**
-     * Load the data of the Form from the table
-     * 
-     * @param nId The identifier of the form
-     * @param plugin the plugin
-     * @return the instance of the Form
+     * {@inheritDoc}
      */
+    @Override
     public Form load( int nId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
@@ -262,11 +253,9 @@ public final class FormDAO implements IFormDAO
     }
 
     /**
-     * Delete a record from the table
-     * 
-     * @param nIdForm The identifier of the form
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void delete( int nIdForm, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -276,11 +265,9 @@ public final class FormDAO implements IFormDAO
     }
 
     /**
-     * Update the form in the table
-     * 
-     * @param form instance of the Form object to update
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void store( Form form, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -335,12 +322,9 @@ public final class FormDAO implements IFormDAO
     }
 
     /**
-     * Load the data of all the form who verify the filter and returns them in a
-     * list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return the list of form
+     * {@inheritDoc}
      */
+    @Override
     public List<Form> selectFormList( FormFilter filter, Plugin plugin )
     {
         List<Form> formList = new ArrayList<Form>( );
@@ -487,10 +471,9 @@ public final class FormDAO implements IFormDAO
     }
 
     /**
-     * Load the data of all enable form returns them in a reference list
-     * @param plugin the plugin
-     * @return a reference list of form
+     * {@inheritDoc}
      */
+    @Override
     public ReferenceList getEnableFormList( Plugin plugin )
     {
         ReferenceList listForm = new ReferenceList( );
@@ -515,6 +498,10 @@ public final class FormDAO implements IFormDAO
         return listForm;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Map<Integer, Theme> getXPageThemesMap( Plugin plugin )
     {
         Map<Integer, Theme> xPageThemesMap = new HashMap<Integer, Theme>( );
@@ -528,7 +515,7 @@ public final class FormDAO implements IFormDAO
             int nIndex = 1;
             int nIdForm = daoUtil.getInt( nIndex++ );
             String strCodeTheme = daoUtil.getString( nIndex++ );
-            Theme theme = ThemeHome.findByPrimaryKey( strCodeTheme );
+            Theme theme = ThemesService.getGlobalTheme( strCodeTheme );
             xPageThemesMap.put( nIdForm, theme );
         }
 

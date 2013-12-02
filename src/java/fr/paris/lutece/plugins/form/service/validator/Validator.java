@@ -39,4 +39,5 @@ package fr.paris.lutece.plugins.form.service.validator;
  */
 public abstract class Validator implements IValidator
 {
+    // No method to implement
 }

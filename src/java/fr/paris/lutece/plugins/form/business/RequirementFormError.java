@@ -50,6 +50,7 @@ import java.util.Locale;
  */
 public class RequirementFormError extends GenericAttributeError
 {
+    private static final long serialVersionUID = 2017647548630201278L;
     private static final String MESSAGE_ERROR_REQUIREMENT = "form.message.requirementError";
     private static final String ANCHOR_REQUIREMENT = "requirement";
     private static final String PARAMETER_ID_FORM = "id_form";

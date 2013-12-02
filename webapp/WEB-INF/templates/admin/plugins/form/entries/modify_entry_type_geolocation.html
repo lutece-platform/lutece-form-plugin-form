@@ -30,9 +30,9 @@
 					<div class="controls">
 						<label for="map_provider">#i18n{form.createEntry.mapProvider}</label>
 						<#if entry.mapProvider?has_content && entry.mapProvider.key?has_content>
-							<@combo name="map_provider" items=entry.mapProvidersRefList default_value="${entry.mapProvider.key}"/>
+							<@combo name="map_provider" items=entryTypeService.mapProvidersRefList default_value="${entry.mapProvider.key}"/>
 						<#else>
-							<@combo name="map_provider" items=entry.mapProvidersRefList default_value="-1"/>
+							<@combo name="map_provider" items=entryTypeService.mapProvidersRefList default_value="-1"/>
 						</#if>
 					</div>
 				</div>

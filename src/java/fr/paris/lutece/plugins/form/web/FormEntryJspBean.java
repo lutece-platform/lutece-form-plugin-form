@@ -128,6 +128,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
     private static final String MARK_OPTION_NO_DISPLAY_TITLE = "option_no_display_title";
     private static final String MARK_LIST_PARAM_DEFAULT_VALUES = "list_param_default_values";
     private static final String MARK_FORM = "form";
+    private static final String MARK_ENTRY_TYPE_SERVICE = "entryTypeService";
 
     // Jsp Definition
     private static final String JSP_DO_REMOVE_FIELD = "jsp/admin/plugins/form/DoRemoveField.jsp";
@@ -177,9 +178,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
         int nIdField = -1;
         entry = FormUtils.createEntryByType( request, plugin );
-
+        int nIdForm = getFormId( );
         if ( ( entry == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getManageForm( request );
@@ -202,10 +203,10 @@ public class FormEntryJspBean extends ModifyFormJspBean
                 return getJspManageForm( request );
             }
         }
-        entry.setIdResource( _nIdForm );
+        entry.setIdResource( nIdForm );
         entry.setResourceType( Form.RESOURCE_TYPE );
 
-        form = FormHome.findByPrimaryKey( _nIdForm, plugin );
+        form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
         // Default Values
         ReferenceList listParamDefaultValues = EntryParameterService.getService( ).findAll( );
@@ -216,6 +217,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
         model.put( MARK_LIST_PARAM_DEFAULT_VALUES, listParamDefaultValues );
+        model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 
         if ( entry.getEntryType( ).getComment( ) )
         {
@@ -244,6 +246,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         Field fieldDepend = null;
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
         int nIdField = -1;
+        int nIdForm = getFormId( );
 
         if ( ( strIdField != null ) && !strIdField.equals( EMPTY_STRING ) )
         {
@@ -260,7 +263,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( request.getParameter( PARAMETER_CANCEL ) == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             entry = FormUtils.createEntryByType( request, plugin );
@@ -279,7 +282,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
 
             entry.setFieldDepend( fieldDepend );
-            entry.setIdResource( _nIdForm );
+            entry.setIdResource( nIdForm );
             entry.setResourceType( Form.RESOURCE_TYPE );
             entry.setIdEntry( EntryHome.create( entry ) );
 
@@ -302,7 +305,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         {
             return getJspModifyField( request, fieldDepend.getIdField( ) );
         }
-        return getJspModifyForm( request, _nIdForm );
+        return getJspModifyForm( request, nIdForm );
     }
 
     /**
@@ -317,6 +320,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         ReferenceList refListRegularExpression;
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = -1;
+        int nIdForm = getFormId( );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -333,7 +337,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getManageForm( request );
@@ -362,8 +366,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
                 _nDefaultItemsPerPage );
 
         LocalizedPaginator<?> paginator = entryTypeService.getPaginator( entry, _nItemsPerPage,
-                AppPathService.getBaseUrl( request )
-                + JSP_MODIFY_ENTRY + "?id_entry=" + nIdEntry, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
+                AppPathService.getBaseUrl( request ) + JSP_MODIFY_ENTRY + "?id_entry=" + nIdEntry,
+                PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
         if ( paginator != null )
         {
@@ -382,6 +386,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
+        model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 
         if ( entry.getEntryType( ).getComment( ) )
         {
@@ -412,6 +417,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         Entry entry;
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = -1;
+        int nIdForm = getFormId( );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -426,7 +432,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getManageForm( request );
@@ -473,7 +479,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
             {
                 return getJspModifyField( request, entry.getFieldDepend( ).getIdField( ) );
             }
-            return getJspModifyForm( request, _nIdForm );
+            return getJspModifyForm( request, nIdForm );
         }
         return getJspModifyEntry( request, nIdEntry );
     }
@@ -489,6 +495,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         String strMessage;
         int nIdEntry = -1;
+        int nIdForm = getFormId( );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -505,7 +512,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getJspManageForm( request );
@@ -546,6 +553,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         Entry entry;
         int nIdEntry = -1;
+        int nIdForm = getFormId( );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -562,7 +570,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getJspManageForm( request );
@@ -605,7 +613,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         {
             return getJspModifyField( request, entry.getFieldDepend( ).getIdField( ) );
         }
-        return getJspModifyForm( request, _nIdForm );
+        return getJspModifyForm( request, nIdForm );
     }
 
     /**
@@ -618,6 +626,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         Entry entry;
         int nIdEntry = -1;
+        int nIdForm = getFormId( );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -634,7 +643,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getJspManageForm( request );
@@ -657,7 +666,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         {
             return getJspModifyField( request, entry.getFieldDepend( ).getIdField( ) );
         }
-        return getJspModifyForm( request, _nIdForm );
+        return getJspModifyForm( request, nIdForm );
     }
 
     /**
@@ -672,6 +681,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         EntryFilter filter;
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = -1;
+        int nIdForm = getFormId( );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -688,7 +698,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getManageForm( request );
@@ -726,6 +736,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         Entry entryGroup;
         String strIdEntryGroup = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntryGroup = -1;
+        int nIdForm = getFormId( );
 
         if ( ( strIdEntryGroup != null ) && !strIdEntryGroup.equals( EMPTY_STRING ) )
         {
@@ -746,7 +757,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
             return AdminMessageService.getMessageUrl( request, MESSAGE_SELECT_GROUP, AdminMessage.TYPE_STOP );
         }
 
-        if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+        if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
                 FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getJspManageForm( request );
@@ -771,7 +782,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         entryToMove.setParent( entryGroup );
         EntryHome.update( entryToMove );
 
-        return getJspModifyForm( request, _nIdForm );
+        return getJspModifyForm( request, nIdForm );
     }
 
     /**
@@ -801,7 +812,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getJspManageForm( request );
@@ -837,7 +848,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         if ( ( strIdExpression != null )
                 && ( strIdField != null )
-                && ( RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                && ( RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) ) )
         {
             try
@@ -873,7 +884,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         if ( ( strIdExpression != null )
                 && ( strIdField != null )
-                && ( RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                && ( RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) ) )
         {
             try
@@ -1240,6 +1251,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = -1;
+        int nIdForm = getFormId( );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -1256,7 +1268,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getJspManageForm( request );
@@ -1300,7 +1312,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         {
             return getJspModifyField( request, entry.getFieldDepend( ).getIdField( ) );
         }
-        return getJspModifyForm( request, _nIdForm );
+        return getJspModifyForm( request, nIdForm );
     }
 
     /**
@@ -1426,7 +1438,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         Entry entry = EntryHome.findByPrimaryKey( _nIdEntry );
 
         if ( ( entry == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getManageForm( request );
@@ -1490,7 +1502,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( field == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getManageForm( request );
@@ -1541,7 +1553,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
     public String doCreateField( HttpServletRequest request )
     {
         if ( ( request.getParameter( PARAMETER_CANCEL ) == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             Entry entry = new Entry( );
@@ -1587,7 +1599,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( ( nIdField != -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             field = FieldHome.findByPrimaryKey( nIdField );
@@ -1624,7 +1636,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
     public String getConfirmRemoveField( HttpServletRequest request )
     {
         if ( ( request.getParameter( PARAMETER_ID_FIELD ) == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getHomeUrl( request );
@@ -1649,7 +1661,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         int nIdField = -1;
 
         if ( ( strIdField == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getHomeUrl( request );
@@ -1690,7 +1702,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         int nIdField = -1;
 
         if ( ( request.getParameter( PARAMETER_ID_FIELD ) == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + _nIdForm,
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
                         FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             return getHomeUrl( request );

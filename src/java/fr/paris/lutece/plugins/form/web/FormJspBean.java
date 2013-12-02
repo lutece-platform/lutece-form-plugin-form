@@ -59,10 +59,10 @@ import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
 import fr.paris.lutece.plugins.form.service.validator.IValidator;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.business.rbac.RBAC;
@@ -277,16 +277,17 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
      */
     protected final int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
     /**
-     * Id of the current form
+     * The id of the current form
      */
-    protected int _nIdForm = -1;
-    protected int _nIdActive = -1;
-    protected String _strWorkGroup = AdminWorkgroupService.ALL_GROUPS;
-    protected List<FormSubmit> _listFormSubmitTest;
-    protected final IResponseService _responseService = SpringContextService
-            .getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+    private int _nIdForm = -1;
+
     private String _strCurrentPageIndexForm;
+    private int _nIdActive = -1;
     private int _nItemsPerPageForm;
+    private String _strWorkGroup = AdminWorkgroupService.ALL_GROUPS;
+    private List<FormSubmit> _listFormSubmitTest;
+    private final IResponseService _responseService = SpringContextService
+            .getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
 
     /*-------------------------------MANAGEMENT  FORM-----------------------------*/
 
@@ -390,8 +391,6 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_FORM, locale, model );
 
-        // ReferenceList refMailingList;
-        // refMailingList=AdminMailingListService.getMailingLists(adminUser);
         return getAdminPage( templateList.getHtml( ) );
     }
 
@@ -1279,8 +1278,8 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         for ( Entry entry : listEntryFirstLevel )
         {
-            List<GenericAttributeError> listFormError = FormUtils.getResponseEntry( request, entry.getIdEntry( ), plugin,
-                    formSubmit, false, locale );
+            List<GenericAttributeError> listFormError = FormUtils.getResponseEntry( request, entry.getIdEntry( ),
+                    plugin, formSubmit, false, locale );
 
             if ( ( listFormError != null ) && !listFormError.isEmpty( ) )
             {
@@ -2234,9 +2233,9 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * return url of the jsp manage form
+     * Return the URL of the JSP manage form
      * @param request The HTTP request
-     * @return url of the jsp manage form
+     * @return The URL of the JSP manage form
      */
     protected String getJspManageForm( HttpServletRequest request )
     {
@@ -2244,13 +2243,31 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * return url of the jsp test form
+     * Return the URL of the JSP test form
      * @param request The HTTP request
-     * @param nIdForm the key of form to modify
-     * @return return url of the jsp modify form
+     * @param nIdForm The key of form to modify
+     * @return The return URL of the JSP modify form
      */
     protected String getJspTestForm( HttpServletRequest request, int nIdForm )
     {
         return AppPathService.getBaseUrl( request ) + JSP_TEST_FORM + "?id_form=" + nIdForm + "&session=session";
+    }
+
+    /**
+     * Get the id of the current form
+     * @return The id of the form
+     */
+    protected int getFormId( )
+    {
+        return _nIdForm;
+    }
+
+    /**
+     * Set the id of the current form
+     * @param nFormId The id of the form
+     */
+    protected void setFormId( int nFormId )
+    {
+        this._nIdForm = nFormId;
     }
 }

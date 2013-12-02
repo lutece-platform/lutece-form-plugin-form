@@ -183,6 +183,8 @@ public class FormApp implements XPageApplication
      * @param plugin The Plugin
      * @return The page content.
      * @throws SiteMessageException the SiteMessageException
+     * @throws UserNotSignedException If the user has not signed and the form
+     *             has a entry of type MyLutece user.
      */
     @Override
     public XPage getPage( HttpServletRequest request, int nMode, Plugin plugin ) throws SiteMessageException,
@@ -313,8 +315,12 @@ public class FormApp implements XPageApplication
                 FormUtils.removeResponses( session );
                 FormUtils.removeFormErrors( session );
                 session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
-                FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles(
-                        request.getParameter( PARAMETER_SESSION ) );
+                String strSessionId = request.getParameter( PARAMETER_SESSION );
+                if ( strSessionId == null )
+                {
+                    strSessionId = request.getSession( ).getId( );
+                }
+                FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( strSessionId );
             }
 
             // try to restore draft
