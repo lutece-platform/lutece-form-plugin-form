@@ -74,7 +74,7 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     private static final String SQL_GROUP_BY_WEEK = " GROUP BY week_date_response,year_date_response ";
     private static final String SQL_GROUP_BY_MONTH = " GROUP BY month_date_response,year_date_response ";
     private static final String SQL_ORDER_BY_DATE_RESPONSE_ASC = " ORDER BY date_response ASC ";
-    private static final String SQL_QUERY_ANONYMIZE_RESPONSES = " UPDATE form_response fr SET response_value = ?, status = ? WHERE status < ? AND ( SELECT date_response FROM form_submit fs WHERE fs.id_form_submit = fr.id_form_submit) < ? AND id_entry IN ( ";
+    private static final String SQL_QUERY_ANONYMIZE_RESPONSES = " UPDATE genatt_response fr SET response_value = ?, status = ? WHERE status < ? AND ( SELECT date_response FROM form_submit fs WHERE fs.id_form_submit = fr.id_form_submit) < ? AND id_entry IN ( ";
 
     private static final String SQL_QUERY_FIND_FORM_SUBMIT_FROM_ID_RESPONSE = "SELECT fs.id_form_submit,fs.date_response,fs.ip,fs.id_form "
             + "FROM form_submit fs INNER JOIN form_response_submit frs ON fs.id_form_submit = frs.id_form_submit WHERE frs.id_response = ?";

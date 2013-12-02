@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS form_verify_by;
 DROP TABLE IF EXISTS form_submit;
 DROP TABLE IF EXISTS form_form;
 DROP TABLE IF EXISTS form_recap;
@@ -182,17 +181,6 @@ CREATE INDEX index_form_submit_form ON form_submit (id_form);
 
 ALTER TABLE form_submit ADD CONSTRAINT fk_form_submit_form FOREIGN KEY (id_form)
 	REFERENCES form_form (id_form);
-
---
--- Table structure for table form_verify_by
---
-CREATE TABLE form_verify_by (
-	id_field int default 0 NOT NULL,
-	id_expression int default 0 NOT NULL,
-	PRIMARY KEY (id_field,id_expression)
-);
-
-CREATE INDEX index_form_verify_by_field ON form_verify_by (id_field);
 
 --
 -- Table structure for table form_form_parameter

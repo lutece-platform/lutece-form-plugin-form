@@ -36,4 +36,8 @@ UPDATE form_entry_type SET class_name = 'form.entryTypeImage' WHERE class_name =
 UPDATE form_entry_type SET class_name = 'form.entryTypeNumbering' WHERE class_name = 'fr.paris.lutece.plugins.form.business.EntryTypeNumbering';
 UPDATE form_entry_type SET class_name = 'form.entryTypeSession' WHERE class_name = 'fr.paris.lutece.plugins.form.business.EntryTypeSession';
 
-
+ALTER TABLE form_entry_type RENAME TO genatt_entry_type;
+ALTER TABLE form_entry RENAME TO genatt_entry;
+ALTER TABLE form_response RENAME TO genatt_response;
+ALTER TABLE form_field RENAME TO genatt_field;
+ALTER TABLE form_verify_by RENAME TO genatt_verify_by;
