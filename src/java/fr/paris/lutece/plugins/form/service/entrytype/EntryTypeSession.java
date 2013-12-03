@@ -38,7 +38,7 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntry
 
 
 /**
- * 
+ *
  * class EntryTypeSession
  * This entry is used to fetch the value of a session's attribute.
  * One example is when coupling form with crm, the module-crm-form
@@ -46,7 +46,7 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntry
  * be able to fetch the ID demand and user GUID when validating the form.
  * Then, it is easier to export the value to directory with the
  * module-form-exportdirectory.
- * 
+ *
  */
 public class EntryTypeSession extends AbstractEntryTypeSession
 {
@@ -54,7 +54,6 @@ public class EntryTypeSession extends AbstractEntryTypeSession
      * Name of the bean of this service
      */
     public static final String BEAN_NAME = "form.entryTypeSession";
-
     private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_session.html";
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_session.html";
     private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_session.html";

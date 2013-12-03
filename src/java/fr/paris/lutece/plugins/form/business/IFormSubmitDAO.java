@@ -37,19 +37,20 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.sql.Timestamp;
+
 import java.util.List;
 
 
 /**
- * 
+ *
  * Interface IFormSubmitDAO
- * 
+ *
  */
 public interface IFormSubmitDAO
 {
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param formResponse instance of the formResponse object to insert
      * @param plugin the plugin
      * @return the key of the new formResponse
@@ -58,7 +59,7 @@ public interface IFormSubmitDAO
 
     /**
      * Load the data of the formResponse from the table
-     * 
+     *
      * @param nIdFormResponse The identifier of the formResponse
      * @param plugin the plugin
      * @return the instance of the formResponse
@@ -67,7 +68,7 @@ public interface IFormSubmitDAO
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nIdFormResponse The identifier of the formResponse
      * @param plugin the plugin
      */
@@ -82,7 +83,7 @@ public interface IFormSubmitDAO
 
     /**
      * Update the the formResponse in the table
-     * 
+     *
      * @param formResponse instance of the formResponse object to update
      * @param plugin the plugin
      */
@@ -148,7 +149,7 @@ public interface IFormSubmitDAO
      * @param plugin The plugin
      */
     void associateResponseWithFormSubmit( int nIdResponse, int nIdFormSubmit, Plugin plugin );
-    
+
     /**
      * Remove the association between a response and a form submit
      * @param nIdResponse The id of the response

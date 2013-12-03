@@ -36,6 +36,9 @@ package fr.paris.lutece.plugins.form.utils;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.string.StringUtil;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,9 +46,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 
 
 /**

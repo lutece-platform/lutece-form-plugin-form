@@ -187,7 +187,7 @@ public class FormResourceRss extends ResourceRss
         formFilter.setIdState( 1 );
 
         List<Form> listResultForm = FormHome.getFormList( formFilter, pluginForm );
-        List<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>( );
+        List<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>(  );
 
         //Description of  the new form
         for ( Form form : listResultForm )

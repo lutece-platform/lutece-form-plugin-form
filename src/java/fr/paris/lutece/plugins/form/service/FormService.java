@@ -71,7 +71,10 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.sql.Timestamp;
+
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -82,13 +85,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
-
 
 /**
- * 
+ *
  * FormService
- * 
+ *
  */
 public final class FormService
 {
@@ -107,40 +108,37 @@ public final class FormService
     private static final String MARK_FILE_EXPORT_DAEMON_TYPE_LIST = "file_export_daemon_type_list";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String MYLUTECE_PLUGIN = "mylutece";
-
     private static FormService _singleton;
     private final EntryTypeService _entryTypeService = SpringContextService.getBean( FormUtils.BEAN_ENTRY_TYPE_SERVICE );
-    private final IExportTypeFactory _exportDaemonTypeFactory = SpringContextService
-            .getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
-    private final IExportServiceFactory _fileExportDaemonTypeFactory = SpringContextService
-            .getBean( ExportServiceFactory.BEAN_FACTORY );
+    private final IExportTypeFactory _exportDaemonTypeFactory = SpringContextService.getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
+    private final IExportServiceFactory _fileExportDaemonTypeFactory = SpringContextService.getBean( ExportServiceFactory.BEAN_FACTORY );
 
     /**
      * Private constructor
      */
-    private FormService( )
+    private FormService(  )
     {
     }
 
     /**
      * Initialize the Form service
-     * 
+     *
      */
-    public void init( )
+    public void init(  )
     {
-        Form.init( );
+        Form.init(  );
     }
 
     /**
      * Returns the instance of the singleton
-     * 
+     *
      * @return The instance of the singleton
      */
-    public static FormService getInstance( )
+    public static FormService getInstance(  )
     {
         if ( _singleton == null )
         {
-            _singleton = new FormService( );
+            _singleton = new FormService(  );
         }
 
         return _singleton;
@@ -153,16 +151,16 @@ public final class FormService
      */
     public Map<String, Object> getManageAdvancedParameters( AdminUser user )
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 
         if ( RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, user ) )
+                    FormResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, user ) )
         {
-            ReferenceList listDirectoryParamDefaultValues = FormParameterService.getService( )
-                    .findDefaultValueParameters( );
-            ReferenceList listEntryParamDefaultValues = EntryParameterService.getService( ).findAll( );
-            ReferenceList listExportParam = FormParameterService.getService( ).findExportParameters( );
+            ReferenceList listDirectoryParamDefaultValues = FormParameterService.getService(  )
+                                                                                .findDefaultValueParameters(  );
+            ReferenceList listEntryParamDefaultValues = EntryParameterService.getService(  ).findAll(  );
+            ReferenceList listExportParam = FormParameterService.getService(  ).findExportParameters(  );
 
             model.put( MARK_LIST_FORM_PARAM_DEFAULT_VALUES, listDirectoryParamDefaultValues );
             model.put( MARK_LIST_ENTRY_PARAM_DEFAULT_VALUES, listEntryParamDefaultValues );
@@ -173,9 +171,9 @@ public final class FormService
         listExportFormat = (List<ExportFormat>) RBACService.getAuthorizedCollection( listExportFormat,
                 ExportFormatResourceIdService.PERMISSION_MANAGE, user );
 
-        if ( ( listExportFormat.size( ) != 0 )
-                || RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                        ExportFormatResourceIdService.PERMISSION_MANAGE, user ) )
+        if ( ( listExportFormat.size(  ) != 0 ) ||
+                RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    ExportFormatResourceIdService.PERMISSION_MANAGE, user ) )
         {
             model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, true );
         }
@@ -185,7 +183,7 @@ public final class FormService
         }
 
         if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                DefaultMessageResourceIdService.PERMISSION_MANAGE, user ) )
+                    DefaultMessageResourceIdService.PERMISSION_MANAGE, user ) )
         {
             model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, true );
         }
@@ -195,7 +193,7 @@ public final class FormService
         }
 
         if ( RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                CategoryResourceIdService.PERMISSION_MANAGE, user ) )
+                    CategoryResourceIdService.PERMISSION_MANAGE, user ) )
         {
             model.put( MARK_PERMISSION_MANAGE_CATEGORY, true );
         }
@@ -205,22 +203,22 @@ public final class FormService
         }
 
         // Style management
-        Collection<Theme> themes = ThemesService.getThemesList( );
-        ReferenceList themesRefList = new ReferenceList( );
+        Collection<Theme> themes = ThemesService.getThemesList(  );
+        ReferenceList themesRefList = new ReferenceList(  );
 
         for ( Theme theme : themes )
         {
-            themesRefList.addItem( theme.getCodeTheme( ), theme.getThemeDescription( ) );
+            themesRefList.addItem( theme.getCodeTheme(  ), theme.getThemeDescription(  ) );
         }
 
-        model.put( MARK_DEFAULT_THEME, ThemesService.getGlobalTheme( ) );
+        model.put( MARK_DEFAULT_THEME, ThemesService.getGlobalTheme(  ) );
         model.put( MARK_THEME_REF_LIST, themesRefList );
         model.put( MARK_IS_ACTIVE_CAPTCHA, PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) );
         model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
         model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( plugin ) );
-        model.put( MARK_EXPORT_DAEMON_TYPE_LIST, _exportDaemonTypeFactory.getExportTypesAsRefList( user.getLocale( ) ) );
+        model.put( MARK_EXPORT_DAEMON_TYPE_LIST, _exportDaemonTypeFactory.getExportTypesAsRefList( user.getLocale(  ) ) );
         model.put( MARK_FILE_EXPORT_DAEMON_TYPE_LIST,
-                _fileExportDaemonTypeFactory.getExportServicesAsRefList( user.getLocale( ) ) );
+            _fileExportDaemonTypeFactory.getExportServicesAsRefList( user.getLocale(  ) ) );
 
         return model;
     }
@@ -237,13 +235,13 @@ public final class FormService
     {
         EntryType entryTypeSession = _entryTypeService.getEntryType( EntryTypeSession.BEAN_NAME );
 
-        EntryFilter eFilter = new EntryFilter( );
-        eFilter.setIdResource( form.getIdForm( ) );
+        EntryFilter eFilter = new EntryFilter(  );
+        eFilter.setIdResource( form.getIdForm(  ) );
         eFilter.setResourceType( Form.RESOURCE_TYPE );
 
         if ( entryTypeSession != null )
         {
-            eFilter.setIdEntryType( entryTypeSession.getIdType( ) );
+            eFilter.setIdEntryType( entryTypeSession.getIdType(  ) );
         }
 
         List<Entry> listEntries = EntryHome.getEntryList( eFilter );
@@ -252,19 +250,19 @@ public final class FormService
 
         for ( Entry entry : listEntries )
         {
-            if ( entry.isMandatory( )
-                    && EntryTypeServiceManager.getEntryTypeService( entry ) instanceof EntryTypeSession )
+            if ( entry.isMandatory(  ) &&
+                    EntryTypeServiceManager.getEntryTypeService( entry ) instanceof EntryTypeSession )
             {
-                List<Field> listFields = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
+                List<Field> listFields = FieldHome.getFieldListByIdEntry( entry.getIdEntry(  ) );
 
                 if ( session == null )
                 {
                     return false;
                 }
-                else if ( ( listFields != null ) && !listFields.isEmpty( ) && ( listFields.get( 0 ) != null )
-                        && StringUtils.isNotBlank( listFields.get( 0 ).getValue( ) ) )
+                else if ( ( listFields != null ) && !listFields.isEmpty(  ) && ( listFields.get( 0 ) != null ) &&
+                        StringUtils.isNotBlank( listFields.get( 0 ).getValue(  ) ) )
                 {
-                    String strAttributeName = listFields.get( 0 ).getValue( );
+                    String strAttributeName = listFields.get( 0 ).getValue(  );
 
                     if ( StringUtils.isBlank( (String) session.getAttribute( strAttributeName ) ) )
                     {
@@ -285,9 +283,9 @@ public final class FormService
     public boolean hasRecap( Form form )
     {
         Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
-        Recap recap = RecapHome.findByPrimaryKey( form.getRecap( ).getIdRecap( ), plugin );
+        Recap recap = RecapHome.findByPrimaryKey( form.getRecap(  ).getIdRecap(  ), plugin );
 
-        return ( recap != null ) && recap.isRecapData( );
+        return ( recap != null ) && recap.isRecapData(  );
     }
 
     /**
@@ -302,11 +300,11 @@ public final class FormService
 
         if ( listSubmittedResponses != null )
         {
-            for ( java.util.Map.Entry<Integer, List<Response>> param : listSubmittedResponses.entrySet( ) )
+            for ( java.util.Map.Entry<Integer, List<Response>> param : listSubmittedResponses.entrySet(  ) )
             {
-                for ( Response response : param.getValue( ) )
+                for ( Response response : param.getValue(  ) )
                 {
-                    if ( ( response.getEntry( ) != null ) && ( response.getEntry( ).getError( ) != null ) )
+                    if ( ( response.getEntry(  ) != null ) && ( response.getEntry(  ).getError(  ) != null ) )
                     {
                         return true;
                     }
@@ -336,11 +334,11 @@ public final class FormService
     {
         int nMaxNumber = 1;
 
-        if ( entry.getIdResource( ) > 0
-                && EntryTypeServiceManager.getEntryTypeService( entry ) instanceof EntryTypeNumbering )
+        if ( ( entry.getIdResource(  ) > 0 ) &&
+                EntryTypeServiceManager.getEntryTypeService( entry ) instanceof EntryTypeNumbering )
         {
-            nMaxNumber = ResponseHome.findMaxNumber( entry.getIdEntry( ), entry.getIdResource( ),
-                    entry.getResourceType( ) );
+            nMaxNumber = ResponseHome.findMaxNumber( entry.getIdEntry(  ), entry.getIdResource(  ),
+                    entry.getResourceType(  ) );
         }
 
         return nMaxNumber;
@@ -348,20 +346,20 @@ public final class FormService
 
     /**
      * Gets the x page theme.
-     * 
+     *
      * @param nIdForm the n id form
      * @return the x page theme
      */
     public Theme getXPageTheme( int nIdForm )
     {
-        Form form = FormHome.findByPrimaryKey( nIdForm, FormUtils.getPlugin( ) );
+        Form form = FormHome.findByPrimaryKey( nIdForm, FormUtils.getPlugin(  ) );
 
         if ( form != null )
         {
-            return ThemesService.getGlobalTheme( form.getCodeTheme( ) );
+            return ThemesService.getGlobalTheme( form.getCodeTheme(  ) );
         }
 
-        return ThemesService.getGlobalThemeObject( );
+        return ThemesService.getGlobalThemeObject(  );
     }
 
     /**
@@ -373,7 +371,7 @@ public final class FormService
      */
     public List<Integer> getAnonymizeEntryList( int nIdForm )
     {
-        return FormHome.getAnonymizeEntryList( nIdForm, FormUtils.getPlugin( ) );
+        return FormHome.getAnonymizeEntryList( nIdForm, FormUtils.getPlugin(  ) );
     }
 
     /**
@@ -386,9 +384,10 @@ public final class FormService
     {
         if ( listEntryIds != null )
         {
-            Plugin plugin = FormUtils.getPlugin( );
+            Plugin plugin = FormUtils.getPlugin(  );
             FormHome.removeAnonymizeEntry( nIdForm, plugin );
-            if ( listEntryIds.size( ) > 0 )
+
+            if ( listEntryIds.size(  ) > 0 )
             {
                 for ( Integer nIdEntry : listEntryIds )
                 {
@@ -404,30 +403,32 @@ public final class FormService
      */
     public void cleanFormResponses( Form form )
     {
-        Plugin plugin = FormUtils.getPlugin( );
-        ResponseFilter responseFilter = new ResponseFilter( );
-        responseFilter.setIdResource( form.getIdForm( ) );
+        Plugin plugin = FormUtils.getPlugin(  );
+        ResponseFilter responseFilter = new ResponseFilter(  );
+        responseFilter.setIdResource( form.getIdForm(  ) );
 
-        Calendar calendar = new GregorianCalendar( );
-        calendar.add( Calendar.DAY_OF_WEEK, -1 * form.getNbDaysBeforeCleaning( ) );
+        Calendar calendar = new GregorianCalendar(  );
+        calendar.add( Calendar.DAY_OF_WEEK, -1 * form.getNbDaysBeforeCleaning(  ) );
 
-        Timestamp dateCleanTo = new Timestamp( calendar.getTimeInMillis( ) );
+        Timestamp dateCleanTo = new Timestamp( calendar.getTimeInMillis(  ) );
 
-        if ( form.getCleaningByRemoval( ) )
+        if ( form.getCleaningByRemoval(  ) )
         {
             List<FormSubmit> listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
+
             for ( FormSubmit formSubmit : listFormSubmit )
             {
-                if ( formSubmit.getDateResponse( ).getTime( ) < dateCleanTo.getTime( ) )
+                if ( formSubmit.getDateResponse(  ).getTime(  ) < dateCleanTo.getTime(  ) )
                 {
-                    FormSubmitHome.remove( formSubmit.getIdFormSubmit( ), plugin );
+                    FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
                 }
             }
         }
+
         // We anonymize answers of the form
         else
         {
-            List<Integer> listIdEntryToAnonymize = getAnonymizeEntryList( form.getIdForm( ) );
+            List<Integer> listIdEntryToAnonymize = getAnonymizeEntryList( form.getIdForm(  ) );
             IResponseService responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
 
             responseService.anonymizeEntries( listIdEntryToAnonymize, dateCleanTo );

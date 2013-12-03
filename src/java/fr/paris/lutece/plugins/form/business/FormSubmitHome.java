@@ -40,6 +40,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.sql.Timestamp;
+
 import java.util.List;
 
 
@@ -54,18 +55,18 @@ public final class FormSubmitHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private FormSubmitHome( )
+    private FormSubmitHome(  )
     {
     }
 
     /**
      * Creation of an instance of formSubmit
-     * 
+     *
      * @param formSubmit The instance of the formSubmit which contains the
      *            informations to store
      * @param plugin the Plugin
      * @return the id of the new form submit
-     * 
+     *
      */
     public static int create( FormSubmit formSubmit, Plugin plugin )
     {
@@ -74,11 +75,11 @@ public final class FormSubmitHome
 
     /**
      * Update of the formSubmit which is specified in parameter
-     * 
+     *
      * @param formSubmit The instance of the FormSubmit which contains the
      *            informations to update
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void update( FormSubmit formSubmit, Plugin plugin )
     {
@@ -87,7 +88,7 @@ public final class FormSubmitHome
 
     /**
      * Remove the formSubmit whose identifier is specified in parameter
-     * 
+     *
      * @param nIdFormSubmit The formSubmitId
      * @param plugin the Plugin
      */
@@ -114,7 +115,7 @@ public final class FormSubmitHome
     /**
      * Returns an instance of a FormSubmitwhose identifier is specified in
      * parameter
-     * 
+     *
      * @param nKey The formResponse primary key
      * @param plugin the Plugin
      * @return an instance of FormResponse

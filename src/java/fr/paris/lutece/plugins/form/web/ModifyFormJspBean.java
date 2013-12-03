@@ -78,6 +78,9 @@ import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -86,9 +89,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -100,6 +100,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
      * Serial version UID
      */
     private static final long serialVersionUID = 4481277438126226460L;
+
     // templates
     private static final String TEMPLATE_CREATE_FORM = "admin/plugins/form/create_form.html";
     private static final String TEMPLATE_MODIFY_QUESTION = "admin/plugins/form/modify_form/modify_questions.html";
@@ -205,48 +206,48 @@ public abstract class ModifyFormJspBean extends FormJspBean
      */
     public String getCreateForm( HttpServletRequest request )
     {
-        AdminUser adminUser = getUser( );
-        Locale locale = getLocale( );
+        AdminUser adminUser = getUser(  );
+        Locale locale = getLocale(  );
         ReferenceList refListWorkGroups;
         ReferenceList refMailingList;
         refListWorkGroups = AdminWorkgroupService.getUserWorkgroups( adminUser, locale );
-        refMailingList = new ReferenceList( );
+        refMailingList = new ReferenceList(  );
 
         String strNothing = I18nService.getLocalizedString( PROPERTY_NOTHING, locale );
         refMailingList.addItem( -1, strNothing );
         refMailingList.addAll( AdminMailingListService.getMailingLists( adminUser ) );
 
-        String defaultTheme = ThemesService.getGlobalTheme( );
+        String defaultTheme = ThemesService.getGlobalTheme(  );
 
-        DefaultMessage defaultMessage = DefaultMessageHome.find( getPlugin( ) );
+        DefaultMessage defaultMessage = DefaultMessageHome.find( getPlugin(  ) );
 
         if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                FormResourceIdService.PERMISSION_CREATE, adminUser ) )
+                    FormResourceIdService.PERMISSION_CREATE, adminUser ) )
         {
             return getManageForm( request );
         }
 
         // Style management
-        Collection<Theme> themes = ThemesService.getThemesList( );
-        ReferenceList themesRefList = new ReferenceList( );
+        Collection<Theme> themes = ThemesService.getThemesList(  );
+        ReferenceList themesRefList = new ReferenceList(  );
 
         for ( Theme theme : themes )
         {
-            themesRefList.addItem( theme.getCodeTheme( ), theme.getThemeDescription( ) );
+            themesRefList.addItem( theme.getCodeTheme(  ), theme.getThemeDescription(  ) );
         }
 
         // Default Values
-        ReferenceList listParamDefaultValues = FormParameterService.getService( ).findDefaultValueParameters( );
+        ReferenceList listParamDefaultValues = FormParameterService.getService(  ).findDefaultValueParameters(  );
 
-        HashMap<String, Object> model = new HashMap<String, Object>( );
+        HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_USER_WORKGROUP_REF_LIST, refListWorkGroups );
         model.put( MARK_MAILING_REF_LIST, refMailingList );
         model.put( MARK_THEME_REF_LIST, themesRefList );
-        model.put( MARK_CATEGORY_LIST, getCategoriesReferenceList( getPlugin( ) ) );
+        model.put( MARK_CATEGORY_LIST, getCategoriesReferenceList( getPlugin(  ) ) );
         model.put( MARK_DEFAULT_MESSAGE, defaultMessage );
         model.put( MARK_DEFAULT_THEME, defaultTheme );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
+        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
         model.put( MARK_IS_ACTIVE_CAPTCHA, PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) );
         model.put( MARK_IS_ACTIVE_MYLUTECE_AUTHENTIFICATION, PluginService.isPluginEnable( MYLUTECE_PLUGIN ) );
         model.put( MARK_LIST_PARAM_DEFAULT_VALUES, listParamDefaultValues );
@@ -255,7 +256,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_FORM, locale, model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -265,57 +266,65 @@ public abstract class ModifyFormJspBean extends FormJspBean
      */
     public String doCreateForm( HttpServletRequest request )
     {
-        if ( ( request.getParameter( PARAMETER_CANCEL ) == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                        FormResourceIdService.PERMISSION_CREATE, getUser( ) ) )
+        if ( ( request.getParameter( PARAMETER_CANCEL ) == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    FormResourceIdService.PERMISSION_CREATE, getUser(  ) ) )
         {
-            Plugin plugin = getPlugin( );
-            Form form = new Form( );
+            Plugin plugin = getPlugin(  );
+            Form form = new Form(  );
             String strError = getFormData( request, form );
+
             if ( strError != null )
             {
                 return strError;
             }
 
-            Recap recap = new Recap( );
+            Recap recap = new Recap(  );
             recap.setIdRecap( RecapHome.create( recap, plugin ) );
             form.setRecap( recap );
-            form.setDateCreation( FormUtils.getCurrentTimestamp( ) );
+            form.setDateCreation( FormUtils.getCurrentTimestamp(  ) );
 
             // Use default messages
             DefaultMessage defaultMessage = DefaultMessageHome.find( plugin );
-            form.setWelcomeMessage( defaultMessage.getWelcomeMessage( ) );
-            form.setUnavailabilityMessage( defaultMessage.getUnavailabilityMessage( ) );
-            form.setRequirement( defaultMessage.getRequirement( ) );
-            form.setLibelleValidateButton( defaultMessage.getLibelleValidateButton( ) );
-            form.setLibelleResetButton( defaultMessage.getLibelleResetButton( ) );
+            form.setWelcomeMessage( defaultMessage.getWelcomeMessage(  ) );
+            form.setUnavailabilityMessage( defaultMessage.getUnavailabilityMessage(  ) );
+            form.setRequirement( defaultMessage.getRequirement(  ) );
+            form.setLibelleValidateButton( defaultMessage.getLibelleValidateButton(  ) );
+            form.setLibelleResetButton( defaultMessage.getLibelleResetButton(  ) );
             form.setWorkgroup( StringUtils.EMPTY );
-            ReferenceItem defaultCodeTheme = FormParameterService.getService( ).findByKey( PARAMETER_THEME_XPAGE );
+
+            ReferenceItem defaultCodeTheme = FormParameterService.getService(  ).findByKey( PARAMETER_THEME_XPAGE );
+
             if ( defaultCodeTheme != null )
             {
-                form.setCodeTheme( defaultCodeTheme.getName( ) );
+                form.setCodeTheme( defaultCodeTheme.getName(  ) );
             }
             else
             {
                 form.setCodeTheme( StringUtils.EMPTY );
             }
+
             int nIdForm = FormHome.create( form, plugin );
 
             String[] arrayIdEntries = request.getParameterValues( PARAMETER_ANONYMIZE_ENTRIES );
+
             if ( arrayIdEntries != null )
             {
                 List<Integer> listIdEntries = new ArrayList<Integer>( arrayIdEntries.length );
+
                 for ( String strIdEntry : arrayIdEntries )
                 {
                     listIdEntries.add( Integer.parseInt( strIdEntry ) );
                 }
-                FormService.getInstance( ).updateAnonymizeEntryList( form.getIdForm( ), listIdEntries );
+
+                FormService.getInstance(  ).updateAnonymizeEntryList( form.getIdForm(  ), listIdEntries );
             }
 
-            if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) && form.isActiveMyLuteceAuthentification( ) )
+            if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) && form.isActiveMyLuteceAuthentification(  ) )
             {
-                FormUtils.activateMyLuteceAuthentification( form, plugin, getLocale( ), request );
+                FormUtils.activateMyLuteceAuthentification( form, plugin, getLocale(  ), request );
             }
+
             return getJspModifyForm( request, nIdForm );
         }
 
@@ -329,8 +338,8 @@ public abstract class ModifyFormJspBean extends FormJspBean
      */
     public String getModifyForm( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
-        List<Entry> listEntry = new ArrayList<Entry>( );
+        Plugin plugin = getPlugin(  );
+        List<Entry> listEntry = new ArrayList<Entry>(  );
         List<Entry> listEntryFirstLevel;
         int nNumberQuestion;
         EntryFilter filter;
@@ -350,14 +359,14 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
-        if ( ( form == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
-                        getUser( ) ) )
+        if ( ( form == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
+                    getUser(  ) ) )
         {
             return getManageForm( request );
         }
 
-        filter = new EntryFilter( );
+        filter = new EntryFilter(  );
         filter.setIdResource( nIdForm );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
@@ -369,18 +378,18 @@ public abstract class ModifyFormJspBean extends FormJspBean
         filter.setIdIsGroup( EntryFilter.FILTER_FALSE );
         nNumberQuestion = EntryHome.getNumberEntryByFilter( filter );
 
-        Map<String, List<Integer>> mapIdParentOrdersChildren = new HashMap<String, List<Integer>>( );
+        Map<String, List<Integer>> mapIdParentOrdersChildren = new HashMap<String, List<Integer>>(  );
 
         // List of entry first level order
-        List<Integer> listOrderEntryFirstLevel = new ArrayList<Integer>( );
+        List<Integer> listOrderEntryFirstLevel = new ArrayList<Integer>(  );
         initOrderFirstLevel( listEntryFirstLevel, listOrderEntryFirstLevel );
 
         mapIdParentOrdersChildren.put( "0", listOrderEntryFirstLevel );
 
-        if ( listEntryFirstLevel.size( ) != 0 )
+        if ( listEntryFirstLevel.size(  ) != 0 )
         {
             listEntryFirstLevel.get( 0 ).setFirstInTheList( true );
-            listEntryFirstLevel.get( listEntryFirstLevel.size( ) - 1 ).setLastInTheList( true );
+            listEntryFirstLevel.get( listEntryFirstLevel.size(  ) - 1 ).setLastInTheList( true );
         }
 
         fillEntryListWithEntryFirstLevel( plugin, listEntry, listEntryFirstLevel );
@@ -394,42 +403,42 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         LocalizedPaginator<Entry> paginator = new LocalizedPaginator<Entry>( listEntry, _nItemsPerPageEntry,
                 AppPathService.getBaseUrl( request ) + JSP_MODIFY_FORM + "?id_form=" + nIdForm, PARAMETER_PAGE_INDEX,
-                _strCurrentPageIndexEntry, getLocale( ) );
+                _strCurrentPageIndexEntry, getLocale(  ) );
 
-        Locale locale = getLocale( );
+        Locale locale = getLocale(  );
         ReferenceList refEntryType;
 
-        EntryType entryTypeGroup = new EntryType( );
+        EntryType entryTypeGroup = new EntryType(  );
         refEntryType = initRefListEntryType( locale, entryTypeGroup );
 
         //get only the group type entries
-        filter = new EntryFilter( );
+        filter = new EntryFilter(  );
         filter.setIdResource( nIdForm );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-        filter.setIdEntryType( _entryTypeService.getEntryType( EntryTypeGroup.BEAN_NAME ).getIdType( ) );
+        filter.setIdEntryType( _entryTypeService.getEntryType( EntryTypeGroup.BEAN_NAME ).getIdType(  ) );
 
         List<Entry> listGroupEntry = EntryHome.getEntryList( filter );
 
         ReferenceList refListGroupEntry = ReferenceList.convert( listGroupEntry, "idEntry", "title", true );
 
         //add the root choice to the reference list
-        ReferenceItem emptyItem = new ReferenceItem( );
+        ReferenceItem emptyItem = new ReferenceItem(  );
         emptyItem.setCode( StringUtils.EMPTY );
         emptyItem.setName( StringEscapeUtils.escapeHtml( I18nService.getLocalizedString( PROPERTY_NO_GROUP, locale ) ) );
         refListGroupEntry.add( 0, emptyItem );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, Integer.toString( _nItemsPerPageEntry ) );
         model.put( MARK_ENTRY_TYPE_REF_LIST, refEntryType );
         model.put( MARK_ENTRY_TYPE_GROUP, entryTypeGroup );
         model.put( MARK_FORM, form );
         model.put( MARK_CATEGORY_LIST, getCategoriesReferenceList( plugin ) );
-        model.put( MARK_ENTRY_LIST, paginator.getPageItems( ) );
+        model.put( MARK_ENTRY_LIST, paginator.getPageItems(  ) );
         model.put( MARK_GROUP_ENTRY_LIST, refListGroupEntry );
         model.put( MARK_NUMBER_QUESTION, nNumberQuestion );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
+        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
 
         setPageTitleProperty( PROPERTY_MODIFY_FORM_TITLE );
 
@@ -437,7 +446,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_QUESTION, locale, model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -449,7 +458,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
     {
         if ( request.getParameter( PARAMETER_CANCEL ) == null )
         {
-            Plugin plugin = getPlugin( );
+            Plugin plugin = getPlugin(  );
             String strIdForm = request.getParameter( PARAMETER_ID_FORM );
             int nIdForm = -1;
             Form updatedForm;
@@ -464,7 +473,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
                 updatedForm = FormHome.findByPrimaryKey( nIdForm, plugin );
 
                 if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
-                        getUser( ) ) )
+                            getUser(  ) ) )
                 {
                     return getJspManageForm( request );
                 }
@@ -477,7 +486,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
                 }
 
                 updatedForm.setIdForm( nIdForm );
-                FormHome.update( updatedForm, getPlugin( ) );
+                FormHome.update( updatedForm, getPlugin(  ) );
 
                 if ( request.getParameter( PARAMETER_APPLY ) != null )
                 {
@@ -496,11 +505,11 @@ public abstract class ModifyFormJspBean extends FormJspBean
      */
     public String getModifyFormAdvancedParameters( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         int nIdForm = -1;
         Form form;
-        AdminUser adminUser = getUser( );
+        AdminUser adminUser = getUser(  );
 
         if ( StringUtils.isNotEmpty( strIdForm ) && StringUtils.isNumeric( strIdForm ) )
         {
@@ -514,16 +523,18 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
-        if ( ( form == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
-                        adminUser ) )
+        if ( ( form == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
+                    adminUser ) )
         {
             return getManageForm( request );
         }
-        setPageTitleProperty( PROPERTY_MODIFY_FORM_TITLE );
-        Locale locale = getLocale( );
 
-        ReferenceList refMailingList = new ReferenceList( );
+        setPageTitleProperty( PROPERTY_MODIFY_FORM_TITLE );
+
+        Locale locale = getLocale(  );
+
+        ReferenceList refMailingList = new ReferenceList(  );
         String strNothing = I18nService.getLocalizedString( PROPERTY_NOTHING, locale );
         refMailingList.addItem( -1, strNothing );
         refMailingList.addAll( AdminMailingListService.getMailingLists( adminUser ) );
@@ -531,20 +542,20 @@ public abstract class ModifyFormJspBean extends FormJspBean
         ReferenceList refListWorkGroups = AdminWorkgroupService.getUserWorkgroups( adminUser, locale );
 
         // Style management
-        Collection<Theme> themes = ThemesService.getThemesList( );
-        ReferenceList themesRefList = new ReferenceList( );
+        Collection<Theme> themes = ThemesService.getThemesList(  );
+        ReferenceList themesRefList = new ReferenceList(  );
 
         for ( Theme theme : themes )
         {
-            themesRefList.addItem( theme.getCodeTheme( ), theme.getThemeDescription( ) );
+            themesRefList.addItem( theme.getCodeTheme(  ), theme.getThemeDescription(  ) );
         }
 
-        if ( form.getCodeTheme( ) == null )
+        if ( form.getCodeTheme(  ) == null )
         {
-            form.setCodeTheme( ThemesService.getGlobalTheme( ) );
+            form.setCodeTheme( ThemesService.getGlobalTheme(  ) );
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
 
         model.put( MARK_FORM, form );
         model.put( MARK_MAILING_REF_LIST, refMailingList );
@@ -556,7 +567,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_FORM_ADVANCED_SETTINGS, locale, model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -566,7 +577,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
      */
     public String doModifyFormAdvancedParameters( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         int nIdForm = -1;
         Form updatedForm;
@@ -581,35 +592,38 @@ public abstract class ModifyFormJspBean extends FormJspBean
             updatedForm = FormHome.findByPrimaryKey( nIdForm, plugin );
 
             if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
-                    getUser( ) ) )
+                        getUser(  ) ) )
             {
                 return getJspManageForm( request );
             }
 
             String strError = getFormData( request, updatedForm );
+
             if ( strError == null )
             {
                 getFormAdvancedParametersData( request, updatedForm );
             }
+
             if ( strError != null )
             {
                 return strError;
             }
+
             updatedForm.setIdForm( nIdForm );
 
             // We get the saved form before it is updated
             Form form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
             // We update the database with the modification made to the form
-            FormHome.update( updatedForm, getPlugin( ) );
+            FormHome.update( updatedForm, getPlugin(  ) );
 
-            if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) && updatedForm.isActiveMyLuteceAuthentification( )
-                    && !form.isActiveMyLuteceAuthentification( ) )
+            if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) && updatedForm.isActiveMyLuteceAuthentification(  ) &&
+                    !form.isActiveMyLuteceAuthentification(  ) )
             {
-                FormUtils.activateMyLuteceAuthentification( updatedForm, plugin, getLocale( ), request );
+                FormUtils.activateMyLuteceAuthentification( updatedForm, plugin, getLocale(  ), request );
             }
-            else if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN )
-                    && !updatedForm.isActiveMyLuteceAuthentification( ) && form.isActiveMyLuteceAuthentification( ) )
+            else if ( PluginService.isPluginEnable( MYLUTECE_PLUGIN ) &&
+                    !updatedForm.isActiveMyLuteceAuthentification(  ) && form.isActiveMyLuteceAuthentification(  ) )
             {
                 FormUtils.deactivateMyLuteceAuthentification( updatedForm, plugin );
             }
@@ -619,6 +633,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
                 return getJspModifyFormAdvancedParameters( request, nIdForm );
             }
         }
+
         return getJspManageForm( request );
     }
 
@@ -629,11 +644,11 @@ public abstract class ModifyFormJspBean extends FormJspBean
      */
     public String getModifyFormPublication( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         int nIdForm = -1;
         Form form;
-        AdminUser adminUser = getUser( );
+        AdminUser adminUser = getUser(  );
 
         if ( StringUtils.isNotEmpty( strIdForm ) && StringUtils.isNumeric( strIdForm ) )
         {
@@ -647,23 +662,25 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
-        if ( ( form == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
-                        adminUser ) )
+        if ( ( form == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
+                    adminUser ) )
         {
             return getManageForm( request );
         }
-        setPageTitleProperty( PROPERTY_MODIFY_FORM_TITLE );
-        Locale locale = getLocale( );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        setPageTitleProperty( PROPERTY_MODIFY_FORM_TITLE );
+
+        Locale locale = getLocale(  );
+
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_FORM, form );
         model.put( MARK_CATEGORY_LIST, getCategoriesReferenceList( plugin ) );
-        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
+        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_FORM_PUBLICATION, locale, model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -675,7 +692,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
     {
         if ( request.getParameter( PARAMETER_CANCEL ) == null )
         {
-            Plugin plugin = getPlugin( );
+            Plugin plugin = getPlugin(  );
             String strIdForm = request.getParameter( PARAMETER_ID_FORM );
             int nIdForm = -1;
             Form updatedForm;
@@ -690,12 +707,13 @@ public abstract class ModifyFormJspBean extends FormJspBean
                 updatedForm = FormHome.findByPrimaryKey( nIdForm, plugin );
 
                 if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
-                        getUser( ) ) )
+                            getUser(  ) ) )
                 {
                     return getJspManageForm( request );
                 }
 
                 String strError = getFormData( request, updatedForm );
+
                 if ( strError == null )
                 {
                     getFormPublicationData( request, updatedForm );
@@ -707,7 +725,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
                 }
 
                 updatedForm.setIdForm( nIdForm );
-                FormHome.update( updatedForm, getPlugin( ) );
+                FormHome.update( updatedForm, getPlugin(  ) );
 
                 if ( request.getParameter( PARAMETER_APPLY ) != null )
                 {
@@ -726,12 +744,12 @@ public abstract class ModifyFormJspBean extends FormJspBean
      */
     public String getModifyFormAnswersManagement( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
-        Locale locale = getLocale( );
+        Plugin plugin = getPlugin(  );
+        Locale locale = getLocale(  );
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         int nIdForm = -1;
         Form form;
-        AdminUser adminUser = getUser( );
+        AdminUser adminUser = getUser(  );
 
         if ( StringUtils.isNotEmpty( strIdForm ) && StringUtils.isNumeric( strIdForm ) )
         {
@@ -742,26 +760,29 @@ public abstract class ModifyFormJspBean extends FormJspBean
         {
             return getManageForm( request );
         }
+
         form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
-        if ( ( form == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
-                        adminUser ) )
+        if ( ( form == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
+                    adminUser ) )
         {
             return getManageForm( request );
         }
+
         setPageTitleProperty( PROPERTY_MODIFY_FORM_TITLE );
 
-        EntryFilter filter = new EntryFilter( );
+        EntryFilter filter = new EntryFilter(  );
         filter.setIdResource( nIdForm );
         filter.setIdIsGroup( 0 );
         filter.setIdIsComment( 0 );
         filter.setResourceType( Form.RESOURCE_TYPE );
+
         List<Entry> listEntries = EntryHome.getEntryList( filter );
 
-        List<Integer> listAnonymizeEntry = FormService.getInstance( ).getAnonymizeEntryList( form.getIdForm( ) );
+        List<Integer> listAnonymizeEntry = FormService.getInstance(  ).getAnonymizeEntryList( form.getIdForm(  ) );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_FORM, form );
         model.put( MARK_ENTRY_LIST, listEntries );
         model.put( MARK_ANONYMIZE_ENTRY_LIST, listAnonymizeEntry );
@@ -769,7 +790,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_FORM_ANSWER_MANAGEMENT, locale, model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -779,7 +800,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
      */
     public String doModifyFormAnswersManagement( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         int nIdForm = -1;
         Form form;
@@ -794,12 +815,13 @@ public abstract class ModifyFormJspBean extends FormJspBean
             form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
             if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
-                    getUser( ) ) )
+                        getUser(  ) ) )
             {
                 return getJspManageForm( request );
             }
 
             String strError = getFormData( request, form );
+
             if ( strError == null )
             {
                 strError = getAnswerManagementData( request, form );
@@ -809,15 +831,19 @@ public abstract class ModifyFormJspBean extends FormJspBean
             {
                 return strError;
             }
+
             String[] arrayIdEntries = request.getParameterValues( PARAMETER_ANONYMIZE_ENTRIES );
+
             if ( arrayIdEntries != null )
             {
                 List<Integer> listIdEntries = new ArrayList<Integer>( arrayIdEntries.length );
+
                 for ( String strIdEntry : arrayIdEntries )
                 {
                     listIdEntries.add( Integer.parseInt( strIdEntry ) );
                 }
-                FormService.getInstance( ).updateAnonymizeEntryList( nIdForm, listIdEntries );
+
+                FormService.getInstance(  ).updateAnonymizeEntryList( nIdForm, listIdEntries );
             }
 
             form.setIdForm( nIdForm );
@@ -828,6 +854,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
                 return getJspModifyFormAnswerManagement( request, nIdForm );
             }
         }
+
         return getJspManageForm( request );
     }
 
@@ -841,7 +868,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
     {
         for ( Entry entry : listEntryFirstLevel )
         {
-            orderFirstLevel.add( entry.getPosition( ) );
+            orderFirstLevel.add( entry.getPosition(  ) );
         }
     }
 
@@ -853,18 +880,18 @@ public abstract class ModifyFormJspBean extends FormJspBean
      */
     protected ReferenceList initRefListEntryType( Locale locale, EntryType entryTypeGroup )
     {
-        ReferenceList refListEntryType = new ReferenceList( );
+        ReferenceList refListEntryType = new ReferenceList(  );
         List<EntryType> listEntryType = EntryTypeHome.getList( FormPlugin.PLUGIN_NAME );
 
         for ( EntryType entryType : listEntryType )
         {
-            if ( !entryType.getGroup( ) && !entryType.getMyLuteceUser( ) )
+            if ( !entryType.getGroup(  ) && !entryType.getMyLuteceUser(  ) )
             {
-                refListEntryType.addItem( entryType.getIdType( ), entryType.getTitle( ) );
+                refListEntryType.addItem( entryType.getIdType(  ), entryType.getTitle(  ) );
             }
-            else if ( entryType.getGroup( ) && !entryType.getMyLuteceUser( ) )
+            else if ( entryType.getGroup(  ) && !entryType.getMyLuteceUser(  ) )
             {
-                entryTypeGroup.setIdType( entryType.getIdType( ) );
+                entryTypeGroup.setIdType( entryType.getIdType(  ) );
             }
         }
 
@@ -935,22 +962,23 @@ public abstract class ModifyFormJspBean extends FormJspBean
         {
             strFieldError = FIELD_TITLE;
         }
+
         if ( StringUtils.contains( strTitle, CONSTANT_DOUBLE_QUOTE ) )
         {
             strTitle = StringUtils.replace( strTitle, CONSTANT_DOUBLE_QUOTE, CONSTANT_TWO_SIMPLE_QUOTES );
         }
 
-        else if ( ( strDescription == null ) || strDescription.trim( ).equals( EMPTY_STRING ) )
+        else if ( ( strDescription == null ) || strDescription.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_DESCRIPTION;
         }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale( ) ) };
+            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale(  ) ) };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+                AdminMessage.TYPE_STOP );
         }
 
         form.setTitle( strTitle );
@@ -960,12 +988,12 @@ public abstract class ModifyFormJspBean extends FormJspBean
         {
             int nCategoryId = Integer.parseInt( strCategory );
 
-            Category category = CategoryHome.findByPrimaryKey( nCategoryId, getPlugin( ) );
+            Category category = CategoryHome.findByPrimaryKey( nCategoryId, getPlugin(  ) );
             form.setCategory( category );
         }
         catch ( NumberFormatException ne )
         {
-            AppLogService.error( ne.getMessage( ), ne );
+            AppLogService.error( ne.getMessage(  ), ne );
 
             return getHomeUrl( request );
         }
@@ -1007,7 +1035,8 @@ public abstract class ModifyFormJspBean extends FormJspBean
         }
         catch ( NumberFormatException ne )
         {
-            AppLogService.error( ne.getMessage( ), ne );
+            AppLogService.error( ne.getMessage(  ), ne );
+
             return getHomeUrl( request );
         }
 
@@ -1069,6 +1098,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         String strPublicationMode = request.getParameter( PARAMETER_PUBLICATION_MODE );
         String strDateBeginDisponibility = request.getParameter( PARAMETER_DATE_BEGIN_DISPONIBILITY );
         String strDateEndDisponibility = request.getParameter( PARAMETER_DATE_END_DISPONIBILITY );
+
         if ( ( strPublicationMode != null ) && strPublicationMode.equals( PUBLICATION_MODE_AUTO ) )
         {
             // Set date begin disponibility
@@ -1076,12 +1106,12 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
             if ( ( strDateBeginDisponibility != null ) && !strDateBeginDisponibility.equals( EMPTY_STRING ) )
             {
-                tDateBeginDisponibility = DateUtil.formatDate( strDateBeginDisponibility, getLocale( ) );
+                tDateBeginDisponibility = DateUtil.formatDate( strDateBeginDisponibility, getLocale(  ) );
 
                 if ( tDateBeginDisponibility == null )
                 {
                     return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_DATE_BEGIN_DISPONIBILITY,
-                            AdminMessage.TYPE_STOP );
+                        AdminMessage.TYPE_STOP );
                 }
 
                 // no need to check the date begin of validity
@@ -1094,25 +1124,26 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
             if ( ( strDateEndDisponibility != null ) && !strDateEndDisponibility.equals( EMPTY_STRING ) )
             {
-                tDateEndDisponibility = DateUtil.formatDate( strDateEndDisponibility, getLocale( ) );
+                tDateEndDisponibility = DateUtil.formatDate( strDateEndDisponibility, getLocale(  ) );
 
                 if ( tDateEndDisponibility == null )
                 {
                     return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_DATE_END_DISPONIBILITY,
-                            AdminMessage.TYPE_STOP );
+                        AdminMessage.TYPE_STOP );
                 }
-                if ( tDateEndDisponibility.before( FormUtils.getCurrentDate( ) ) )
+
+                if ( tDateEndDisponibility.before( FormUtils.getCurrentDate(  ) ) )
                 {
                     return AdminMessageService.getMessageUrl( request,
-                            MESSAGE_DATE_END_DISPONIBILITY_BEFORE_CURRENT_DATE, AdminMessage.TYPE_STOP );
+                        MESSAGE_DATE_END_DISPONIBILITY_BEFORE_CURRENT_DATE, AdminMessage.TYPE_STOP );
                 }
             }
 
-            if ( ( tDateBeginDisponibility != null ) && ( tDateEndDisponibility != null )
-                    && tDateBeginDisponibility.after( tDateEndDisponibility ) )
+            if ( ( tDateBeginDisponibility != null ) && ( tDateEndDisponibility != null ) &&
+                    tDateBeginDisponibility.after( tDateEndDisponibility ) )
             {
                 return AdminMessageService.getMessageUrl( request, MESSAGE_DATE_END_DISPONIBILITY_BEFORE_DATE_BEGIN,
-                        AdminMessage.TYPE_STOP );
+                    AdminMessage.TYPE_STOP );
             }
 
             form.setDateEndDisponibility( tDateEndDisponibility );
@@ -1125,6 +1156,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
             form.setDateEndDisponibility( null );
             form.setAutoPublicationActive( false );
         }
+
         return null; // No error
     }
 
@@ -1153,7 +1185,8 @@ public abstract class ModifyFormJspBean extends FormJspBean
         {
             form.setCleaningByRemoval( Boolean.parseBoolean( strCleaningRemove ) );
         }
-        if ( strNbDaysBeforeCleaning != null && StringUtils.isNumeric( strNbDaysBeforeCleaning ) )
+
+        if ( ( strNbDaysBeforeCleaning != null ) && StringUtils.isNumeric( strNbDaysBeforeCleaning ) )
         {
             form.setNbDaysBeforeCleaning( Integer.parseInt( strNbDaysBeforeCleaning ) );
         }
@@ -1175,20 +1208,20 @@ public abstract class ModifyFormJspBean extends FormJspBean
         {
             listEntry.add( entry );
 
-            if ( entry.getEntryType( ).getGroup( ) )
+            if ( entry.getEntryType(  ).getGroup(  ) )
             {
-                filter = new EntryFilter( );
-                filter.setIdEntryParent( entry.getIdEntry( ) );
+                filter = new EntryFilter(  );
+                filter.setIdEntryParent( entry.getIdEntry(  ) );
                 filter.setResourceType( Form.RESOURCE_TYPE );
                 entry.setChildren( EntryHome.getEntryList( filter ) );
 
-                if ( entry.getChildren( ).size( ) != 0 )
+                if ( entry.getChildren(  ).size(  ) != 0 )
                 {
-                    entry.getChildren( ).get( 0 ).setFirstInTheList( true );
-                    entry.getChildren( ).get( entry.getChildren( ).size( ) - 1 ).setLastInTheList( true );
+                    entry.getChildren(  ).get( 0 ).setFirstInTheList( true );
+                    entry.getChildren(  ).get( entry.getChildren(  ).size(  ) - 1 ).setLastInTheList( true );
                 }
 
-                for ( Entry entryChild : entry.getChildren( ) )
+                for ( Entry entryChild : entry.getChildren(  ) )
                 {
                     listEntry.add( entryChild );
                 }
@@ -1208,20 +1241,20 @@ public abstract class ModifyFormJspBean extends FormJspBean
 
         for ( Entry entry : listEntry )
         {
-            if ( entry.getParent( ) != null )
+            if ( entry.getParent(  ) != null )
             {
-                Integer key = Integer.valueOf( entry.getParent( ).getIdEntry( ) );
-                String strKey = key.toString( );
+                Integer key = Integer.valueOf( entry.getParent(  ).getIdEntry(  ) );
+                String strKey = key.toString(  );
 
                 if ( mapIdParentOrdersChildren.get( strKey ) != null )
                 {
-                    mapIdParentOrdersChildren.get( key.toString( ) ).add( entry.getPosition( ) );
+                    mapIdParentOrdersChildren.get( key.toString(  ) ).add( entry.getPosition(  ) );
                 }
                 else
                 {
-                    listOrder = new ArrayList<Integer>( );
-                    listOrder.add( entry.getPosition( ) );
-                    mapIdParentOrdersChildren.put( key.toString( ), listOrder );
+                    listOrder = new ArrayList<Integer>(  );
+                    listOrder.add( entry.getPosition(  ) );
+                    mapIdParentOrdersChildren.put( key.toString(  ), listOrder );
                 }
             }
         }
@@ -1235,7 +1268,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
     private ReferenceList getCategoriesReferenceList( Plugin plugin )
     {
         List<Category> listCategoriesView = CategoryHome.getList( plugin );
-        Category emptyCategory = new Category( );
+        Category emptyCategory = new Category(  );
         emptyCategory.setIdCategory( -2 );
         emptyCategory.setTitle( EMPTY_STRING );
         listCategoriesView.add( emptyCategory );

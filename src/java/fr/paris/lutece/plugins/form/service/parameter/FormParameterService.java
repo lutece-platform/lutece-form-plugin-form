@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.service.parameter;
 
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.form.business.exporttype.IExportType;
 import fr.paris.lutece.plugins.form.business.exporttype.IExportTypeFactory;
 import fr.paris.lutece.plugins.form.business.parameter.FormParameterFilter;
@@ -47,6 +45,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**

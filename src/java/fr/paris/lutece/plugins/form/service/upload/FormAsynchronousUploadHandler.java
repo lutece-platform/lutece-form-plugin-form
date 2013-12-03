@@ -50,6 +50,11 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.UploadUtil;
 
+import net.sf.json.JSONObject;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -63,25 +68,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.json.JSONObject;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
 
 /**
- * 
+ *
  * FormAsynchronousUploadHandler.
  * @see #getFileItems(String, String)
  * @see #removeFileItem(String, String, int)
- * 
+ *
  */
 public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 {
     private static final String UPLOAD_SUBMIT_PREFIX = "_form_upload_submit_form_";
     private static final String UPLOAD_DELETE_PREFIX = "_form_upload_delete_form_";
     private static final String UPLOAD_CHECKBOX_PREFIX = "_form_upload_checkbox_form_";
-
     private static final String PREFIX_ENTRY_ID = IEntryTypeService.PREFIX_ATTRIBUTE + "_";
     private static final String PARAMETER_PAGE = "page";
     private static final String PARAMETER_FIELD_NAME = "fieldname";
@@ -93,13 +92,13 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
     /** <sessionId,<fieldName,fileItems>> */
     /** contains uploaded file items */
-    private static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>( );
+    private static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>(  );
 
     /**
      * Get the handler
      * @return the handler
      */
-    public static FormAsynchronousUploadHandler getHandler( )
+    public static FormAsynchronousUploadHandler getHandler(  )
     {
         return SpringContextService.getBean( BEAN_FORM_ASYNCHRONOUS_UPLOAD_HANDLER );
     }
@@ -118,10 +117,10 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
      */
     @Override
     public void process( HttpServletRequest request, HttpServletResponse response, JSONObject mainObject,
-            List<FileItem> listFileItemsToUpload )
+        List<FileItem> listFileItemsToUpload )
     {
         // prevent 0 or multiple uploads for the same field
-        if ( ( listFileItemsToUpload == null ) || listFileItemsToUpload.isEmpty( ) )
+        if ( ( listFileItemsToUpload == null ) || listFileItemsToUpload.isEmpty(  ) )
         {
             throw new AppException( "No file uploaded" );
         }
@@ -145,7 +144,8 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
             List<FileItem> fileItemsSession = mapFileItemsSession.get( strFieldName );
 
-            if ( canUploadFiles( strFieldName, fileItemsSession, listFileItemsToUpload, mainObject, request.getLocale( ) ) )
+            if ( canUploadFiles( strFieldName, fileItemsSession, listFileItemsToUpload, mainObject,
+                        request.getLocale(  ) ) )
             {
                 fileItemsSession.addAll( listFileItemsToUpload );
 
@@ -157,10 +157,10 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
         }
         else
         {
-            AppLogService.error( FormAsynchronousUploadHandler.class.getName( ) + " : Session does not exists" );
+            AppLogService.error( FormAsynchronousUploadHandler.class.getName(  ) + " : Session does not exists" );
 
             String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_SESSION_LOST,
-                    request.getLocale( ) );
+                    request.getLocale(  ) );
             JSONUtils.buildJsonError( mainObject, strMessage );
         }
     }
@@ -193,11 +193,11 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
         // Remove the file (this will also delete the file physically)
         List<FileItem> uploadedFiles = getFileItems( strIdEntry, strSessionId );
 
-        if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty( ) && ( uploadedFiles.size( ) > nIndex ) )
+        if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty(  ) && ( uploadedFiles.size(  ) > nIndex ) )
         {
             // Remove the object from the Hashmap
             FileItem fileItem = uploadedFiles.remove( nIndex );
-            fileItem.delete( );
+            fileItem.delete(  );
         }
     }
 
@@ -213,17 +213,17 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
     /**
      * Checks the request parameters to see if an upload submit has been
      * called.
-     * 
+     *
      * @param request the HTTP request
      * @return the name of the upload action, if any. Null otherwise.
      */
     public String getUploadAction( HttpServletRequest request )
     {
-        Enumeration<String> enumParamNames = request.getParameterNames( );
+        Enumeration<String> enumParamNames = request.getParameterNames(  );
 
-        while ( enumParamNames.hasMoreElements( ) )
+        while ( enumParamNames.hasMoreElements(  ) )
         {
-            String paramName = enumParamNames.nextElement( );
+            String paramName = enumParamNames.nextElement(  );
 
             if ( paramName.startsWith( UPLOAD_SUBMIT_PREFIX ) || paramName.startsWith( UPLOAD_DELETE_PREFIX ) )
             {
@@ -236,16 +236,16 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
     /**
      * Performs an upload action.
-     * 
+     *
      * @param request the HTTP request
      * @param strUploadAction the name of the upload action
      */
     public void doUploadAction( HttpServletRequest request, String strUploadAction )
     {
         // Get the name of the upload field
-        String strIdEntry = ( strUploadAction.startsWith( UPLOAD_SUBMIT_PREFIX ) ? strUploadAction
-                .substring( UPLOAD_SUBMIT_PREFIX.length( ) ) : strUploadAction
-                .substring( UPLOAD_DELETE_PREFIX.length( ) ) );
+        String strIdEntry = ( strUploadAction.startsWith( UPLOAD_SUBMIT_PREFIX )
+            ? strUploadAction.substring( UPLOAD_SUBMIT_PREFIX.length(  ) )
+            : strUploadAction.substring( UPLOAD_DELETE_PREFIX.length(  ) ) );
 
         String strFieldName = buildFieldName( strIdEntry );
 
@@ -256,9 +256,9 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
             FileItem fileItem = multipartRequest.getFile( strFieldName );
 
-            if ( ( fileItem != null ) && ( fileItem.getSize( ) > 0 ) )
+            if ( ( fileItem != null ) && ( fileItem.getSize(  ) > 0 ) )
             {
-                addFileItemToUploadedFile( fileItem, strIdEntry, request.getSession( ) );
+                addFileItemToUploadedFile( fileItem, strIdEntry, request.getSession(  ) );
             }
         }
         else if ( strUploadAction.startsWith( UPLOAD_DELETE_PREFIX ) )
@@ -272,17 +272,17 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
                 String strPrefix = UPLOAD_CHECKBOX_PREFIX + strIdEntry;
 
                 // Look for the checkboxes in the request
-                Enumeration<String> enumParamNames = request.getParameterNames( );
-                List<Integer> listIndexes = new ArrayList<Integer>( );
+                Enumeration<String> enumParamNames = request.getParameterNames(  );
+                List<Integer> listIndexes = new ArrayList<Integer>(  );
 
-                while ( enumParamNames.hasMoreElements( ) )
+                while ( enumParamNames.hasMoreElements(  ) )
                 {
-                    String strParamName = enumParamNames.nextElement( );
+                    String strParamName = enumParamNames.nextElement(  );
 
                     if ( strParamName.startsWith( strPrefix ) )
                     {
                         // Get the index from the name of the checkbox
-                        listIndexes.add( Integer.parseInt( strParamName.substring( strPrefix.length( ) ) ) );
+                        listIndexes.add( Integer.parseInt( strParamName.substring( strPrefix.length(  ) ) ) );
                     }
                 }
 
@@ -291,7 +291,7 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
                 for ( int nIndex : listIndexes )
                 {
-                    removeFileItem( strIdEntry, session.getId( ), nIndex );
+                    removeFileItem( strIdEntry, session.getId(  ), nIndex );
                 }
             }
         }
@@ -310,25 +310,25 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
         String strFileName = UploadUtil.cleanFileName( FileUploadService.getFileNameOnly( fileItem ) );
 
         // Check if this file has not already been uploaded
-        List<FileItem> uploadedFiles = getFileItems( strIdEntry, session.getId( ) );
+        List<FileItem> uploadedFiles = getFileItems( strIdEntry, session.getId(  ) );
 
         if ( uploadedFiles != null )
         {
-            if ( !uploadedFiles.isEmpty( ) )
+            if ( !uploadedFiles.isEmpty(  ) )
             {
-                Iterator<FileItem> iterUploadedFiles = uploadedFiles.iterator( );
+                Iterator<FileItem> iterUploadedFiles = uploadedFiles.iterator(  );
                 boolean bNew = true;
 
-                while ( bNew && iterUploadedFiles.hasNext( ) )
+                while ( bNew && iterUploadedFiles.hasNext(  ) )
                 {
-                    FileItem uploadedFile = iterUploadedFiles.next( );
-                    String strUploadedFileName = UploadUtil.cleanFileName( FileUploadService
-                            .getFileNameOnly( uploadedFile ) );
+                    FileItem uploadedFile = iterUploadedFiles.next(  );
+                    String strUploadedFileName = UploadUtil.cleanFileName( FileUploadService.getFileNameOnly( 
+                                uploadedFile ) );
                     // If we find a file with the same name and the same
                     // length, we consider that the current file has
                     // already been uploaded
-                    bNew = !( strUploadedFileName.equals( strFileName ) && ( uploadedFile.getSize( ) == fileItem
-                            .getSize( ) ) );
+                    bNew = !( strUploadedFileName.equals( strFileName ) &&
+                        ( uploadedFile.getSize(  ) == fileItem.getSize(  ) ) );
                 }
 
                 //            if ( !bNew )
@@ -339,6 +339,7 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
                 // TODO : Raise an error
                 //            }
             }
+
             uploadedFiles.add( fileItem );
         }
     }
@@ -367,22 +368,23 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
      * @category CALLED_BY_JS (directoryupload.js)
      */
     private boolean canUploadFiles( String strFieldName, List<FileItem> listUploadedFileItems,
-            List<FileItem> listFileItemsToUpload, JSONObject mainObject, Locale locale )
+        List<FileItem> listFileItemsToUpload, JSONObject mainObject, Locale locale )
     {
         if ( StringUtils.isNotBlank( strFieldName ) )
         {
-            String strIdEntry = strFieldName.substring( PREFIX_ENTRY_ID.length( ) );
+            String strIdEntry = strFieldName.substring( PREFIX_ENTRY_ID.length(  ) );
             int nIdEntry = FormUtils.convertStringToInt( strIdEntry );
             Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
             if ( entry != null )
             {
-                GenericAttributeError error = EntryTypeServiceManager.getEntryTypeService( entry ).canUploadFiles(
-                        entry, listUploadedFileItems, listFileItemsToUpload, locale );
+                GenericAttributeError error = EntryTypeServiceManager.getEntryTypeService( entry )
+                                                                     .canUploadFiles( entry, listUploadedFileItems,
+                        listFileItemsToUpload, locale );
 
                 if ( error != null )
                 {
-                    JSONUtils.buildJsonError( mainObject, error.getErrorMessage( ) );
+                    JSONUtils.buildJsonError( mainObject, error.getErrorMessage(  ) );
 
                     return false;
                 }
@@ -410,9 +412,10 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
             synchronized ( strSessionId )
             {
                 mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
+
                 if ( mapFileItemsSession == null )
                 {
-                    mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>( );
+                    mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>(  );
                     _mapAsynchronousUpload.put( strSessionId, mapFileItemsSession );
                 }
             }
@@ -422,7 +425,7 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
 
         if ( listFileItems == null )
         {
-            listFileItems = new ArrayList<FileItem>( );
+            listFileItems = new ArrayList<FileItem>(  );
             mapFileItemsSession.put( strFieldName, listFileItems );
         }
     }

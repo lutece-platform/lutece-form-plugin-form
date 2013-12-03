@@ -42,12 +42,12 @@ import java.util.Locale;
 
 
 /**
- * 
+ *
  * This class represents the export responses type.
  * The method {@link #getResponseFilter(Form, Locale)} enable
  * the user to get the response filter to get the desired
  * list of responses.
- * 
+ *
  */
 public interface IExportType
 {
@@ -61,7 +61,7 @@ public interface IExportType
      * Get the key
      * @return the key
      */
-    String getKey( );
+    String getKey(  );
 
     /**
      * Set the title i18n key

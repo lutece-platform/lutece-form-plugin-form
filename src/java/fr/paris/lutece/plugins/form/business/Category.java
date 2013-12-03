@@ -37,9 +37,9 @@ import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 
 /**
- * 
+ *
  * class category
- * 
+ *
  */
 public class Category implements RBACResource
 {
@@ -52,10 +52,10 @@ public class Category implements RBACResource
     private String _strColor;
 
     /**
-     * 
+     *
      * @return the id of the category
      */
-    public int getIdCategory( )
+    public int getIdCategory(  )
     {
         return _nIdCategory;
     }
@@ -70,10 +70,10 @@ public class Category implements RBACResource
     }
 
     /**
-     * 
+     *
      * @return the title of the category
      */
-    public String getTitle( )
+    public String getTitle(  )
     {
         return _strTitle;
     }
@@ -90,11 +90,11 @@ public class Category implements RBACResource
     /**
      * @param obj the category to compare
      * @return true if category in parameter is the same category
-     * 
+     *
      */
     public boolean equals( Object obj )
     {
-        if ( obj instanceof Category && ( (Category) obj ).getIdCategory( ) == _nIdCategory )
+        if ( obj instanceof Category && ( ( (Category) obj ).getIdCategory(  ) == _nIdCategory ) )
         {
             return true;
         }
@@ -106,7 +106,7 @@ public class Category implements RBACResource
      * {@inheritDoc}
      */
     @Override
-    public int hashCode( )
+    public int hashCode(  )
     {
         // We just return the id of the category to be sure
         // that a.equals( b ) => a.hashCode( ) == b.hashCode( )
@@ -117,7 +117,7 @@ public class Category implements RBACResource
      * RBAC resource implementation
      * @return The resource type code
      */
-    public String getResourceTypeCode( )
+    public String getResourceTypeCode(  )
     {
         return RESOURCE_TYPE;
     }
@@ -126,7 +126,7 @@ public class Category implements RBACResource
      * RBAC resource implementation
      * @return The resourceId
      */
-    public String getResourceId( )
+    public String getResourceId(  )
     {
         return Integer.toString( _nIdCategory );
     }
@@ -142,7 +142,7 @@ public class Category implements RBACResource
     /**
      * @return the _strColor
      */
-    public String getColor( )
+    public String getColor(  )
     {
         return _strColor;
     }

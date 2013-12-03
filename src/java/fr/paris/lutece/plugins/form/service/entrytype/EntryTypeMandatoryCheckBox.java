@@ -33,13 +33,15 @@
  */
 package fr.paris.lutece.plugins.form.service.entrytype;
 
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.util.AppLogService;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,17 +49,14 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
-
 
 /**
- * 
+ *
  * class EntryTypeCheckBox
- * 
+ *
  */
 public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
 {
-
     private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_mandatory_check_box.html";
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_mandatory_check_box.html";
 
@@ -84,10 +83,10 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
      */
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+        Locale locale )
     {
-        String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
-        List<Field> listFieldInResponse = new ArrayList<Field>( );
+        String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
+        List<Field> listFieldInResponse = new ArrayList<Field>(  );
         int nIdField = -1;
         Field field = null;
         Response response;
@@ -105,7 +104,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
                     AppLogService.error( ne );
                 }
 
-                field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields( ) );
+                field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields(  ) );
 
                 if ( field != null )
                 {
@@ -114,9 +113,9 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
             }
         }
 
-        if ( listFieldInResponse.size( ) == 0 )
+        if ( listFieldInResponse.size(  ) == 0 )
         {
-            response = new Response( );
+            response = new Response(  );
             response.setEntry( entry );
             listResponse.add( response );
         }
@@ -124,9 +123,9 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
         {
             for ( Field fieldInResponse : listFieldInResponse )
             {
-                response = new Response( );
+                response = new Response(  );
                 response.setEntry( entry );
-                response.setResponseValue( fieldInResponse.getValue( ) );
+                response.setResponseValue( fieldInResponse.getValue(  ) );
                 response.setField( fieldInResponse );
                 listResponse.add( response );
             }
@@ -136,21 +135,23 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
 
         for ( Field fieldInResponse : listFieldInResponse )
         {
-            if ( StringUtils.isNotEmpty( fieldInResponse.getValue( ) ) )
+            if ( StringUtils.isNotEmpty( fieldInResponse.getValue(  ) ) )
             {
                 nSubmitedFields++;
             }
         }
 
-        if ( nSubmitedFields < entry.getFields( ).size( ) )
+        if ( nSubmitedFields < entry.getFields(  ).size(  ) )
         {
-            if ( StringUtils.isNotBlank( entry.getErrorMessage( ) ) )
+            if ( StringUtils.isNotBlank( entry.getErrorMessage(  ) ) )
             {
-                GenericAttributeError formError = new GenericAttributeError( );
+                GenericAttributeError formError = new GenericAttributeError(  );
                 formError.setMandatoryError( true );
-                formError.setErrorMessage( entry.getErrorMessage( ) );
+                formError.setErrorMessage( entry.getErrorMessage(  ) );
+
                 return formError;
             }
+
             return new MandatoryError( entry, locale );
         }
 

@@ -44,9 +44,9 @@ import java.util.Locale;
 
 
 /**
- * 
+ *
  * RequirementFormError
- * 
+ *
  */
 public class RequirementFormError extends GenericAttributeError
 {
@@ -71,7 +71,7 @@ public class RequirementFormError extends GenericAttributeError
      * {@inheritDoc}
      */
     @Override
-    public boolean isMandatoryError( )
+    public boolean isMandatoryError(  )
     {
         return false;
     }
@@ -80,13 +80,13 @@ public class RequirementFormError extends GenericAttributeError
      * {@inheritDoc}
      */
     @Override
-    public String getUrl( )
+    public String getUrl(  )
     {
-        UrlItem url = new UrlItem( AppPathService.getPortalUrl( ) );
+        UrlItem url = new UrlItem( AppPathService.getPortalUrl(  ) );
         url.addParameter( XPageAppService.PARAM_XPAGE_APP, FormPlugin.PLUGIN_NAME );
         url.addParameter( PARAMETER_ID_FORM, _nIdForm );
         url.setAnchor( ANCHOR_REQUIREMENT );
 
-        return url.getUrl( );
+        return url.getUrl(  );
     }
 }

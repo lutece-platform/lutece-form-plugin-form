@@ -44,6 +44,7 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import org.apache.commons.lang.StringUtils;
 
 import java.sql.Timestamp;
+
 import java.util.List;
 import java.util.Locale;
 

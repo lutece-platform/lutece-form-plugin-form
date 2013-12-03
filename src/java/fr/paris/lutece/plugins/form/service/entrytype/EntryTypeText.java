@@ -35,13 +35,15 @@ package fr.paris.lutece.plugins.form.service.entrytype;
 
 import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeText;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -49,13 +51,11 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
-
 
 /**
- * 
+ *
  * class EntryTypeText
- * 
+ *
  */
 public class EntryTypeText extends AbstractEntryTypeText
 {
@@ -95,7 +95,7 @@ public class EntryTypeText extends AbstractEntryTypeText
      */
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+        Locale locale )
     {
         GenericAttributeError formError = super.getResponseData( entry, request, listResponse, locale );
 
@@ -104,12 +104,12 @@ public class EntryTypeText extends AbstractEntryTypeText
             return formError;
         }
 
-        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
+        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) ).trim(  );
 
-        if ( entry.isUnique( ) )
+        if ( entry.isUnique(  ) )
         {
-            ResponseFilter filter = new ResponseFilter( );
-            filter.setIdEntry( entry.getIdEntry( ) );
+            ResponseFilter filter = new ResponseFilter(  );
+            filter.setIdEntry( entry.getIdEntry(  ) );
 
             IResponseService responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
             Collection<Response> listSubmittedResponses = responseService.getResponseList( filter, false );
@@ -118,14 +118,14 @@ public class EntryTypeText extends AbstractEntryTypeText
             {
                 String strSubmittedResponse = getResponseValueForRecap( entry, request, submittedResponse, locale );
 
-                if ( StringUtils.isNotBlank( strValueEntry ) && StringUtils.isNotBlank( strSubmittedResponse )
-                        && strValueEntry.equalsIgnoreCase( strSubmittedResponse ) )
+                if ( StringUtils.isNotBlank( strValueEntry ) && StringUtils.isNotBlank( strSubmittedResponse ) &&
+                        strValueEntry.equalsIgnoreCase( strSubmittedResponse ) )
                 {
-                    formError = new GenericAttributeError( );
+                    formError = new GenericAttributeError(  );
                     formError.setMandatoryError( false );
-                    formError.setTitleQuestion( entry.getTitle( ) );
+                    formError.setTitleQuestion( entry.getTitle(  ) );
                     formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_UNIQUE_FIELD,
-                            request.getLocale( ) ) );
+                            request.getLocale(  ) ) );
 
                     return formError;
                 }

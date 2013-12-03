@@ -33,35 +33,36 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
+import com.keypoint.PngEncoder;
+
 import fr.paris.lutece.plugins.form.business.GraphType;
 import fr.paris.lutece.plugins.form.business.GraphTypeHome;
 import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.StatisticEntrySubmit;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
+
 import java.awt.image.BufferedImage;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.entity.StandardEntityCollection;
-
-import com.keypoint.PngEncoder;
-
 
 /**
- * 
+ *
  * class DoDownloadGraph
- * 
+ *
  */
 public class DoDownloadGraph
 {
@@ -77,7 +78,7 @@ public class DoDownloadGraph
      * Write in the http response the statistic graph of a question
      * @param request the http request
      * @param response The http response
-     * 
+     *
      */
     public void doGenerateGraph( HttpServletRequest request, HttpServletResponse response )
     {
@@ -107,9 +108,9 @@ public class DoDownloadGraph
             nGraphLabelValue = true;
         }
 
-        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) && ( strIdGraphType != null )
-                && !strIdGraphType.equals( EMPTY_STRING ) && ( strPluginName != null )
-                && !strPluginName.equals( EMPTY_STRING ) )
+        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) && ( strIdGraphType != null ) &&
+                !strIdGraphType.equals( EMPTY_STRING ) && ( strPluginName != null ) &&
+                !strPluginName.equals( EMPTY_STRING ) )
         {
             plugin = PluginService.getPlugin( strPluginName );
 
@@ -130,22 +131,21 @@ public class DoDownloadGraph
 
             if ( graphType != null )
             {
-                chart = graphType
-                        .createChart( listStatistic, entry.getTitle( ), nGraphThreeDimension, nGraphLabelValue );
+                chart = graphType.createChart( listStatistic, entry.getTitle(  ), nGraphThreeDimension, nGraphLabelValue );
 
                 try
                 {
-                    ChartRenderingInfo info = new ChartRenderingInfo( new StandardEntityCollection( ) );
+                    ChartRenderingInfo info = new ChartRenderingInfo( new StandardEntityCollection(  ) );
                     BufferedImage chartImage = chart.createBufferedImage( 600, 200, info );
                     response.setContentType( "image/PNG" );
 
                     PngEncoder encoder = new PngEncoder( chartImage, false, 0, 9 );
-                    response.getOutputStream( ).write( encoder.pngEncode( ) );
-                    response.getOutputStream( ).close( );
+                    response.getOutputStream(  ).write( encoder.pngEncode(  ) );
+                    response.getOutputStream(  ).close(  );
                 }
                 catch ( Exception e )
                 {
-                    AppLogService.error( e.getMessage( ), e );
+                    AppLogService.error( e.getMessage(  ), e );
                 }
             }
         }

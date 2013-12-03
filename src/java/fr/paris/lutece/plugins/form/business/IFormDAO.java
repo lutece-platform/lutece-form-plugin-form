@@ -48,7 +48,7 @@ public interface IFormDAO
 {
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param form instance of the Form to insert
      * @param plugin the plugin
      * @return the id of the new form
@@ -57,7 +57,7 @@ public interface IFormDAO
 
     /**
      * Update the form in the table
-     * 
+     *
      * @param form instance of the Form object to update
      * @param plugin the plugin
      */
@@ -65,7 +65,7 @@ public interface IFormDAO
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nIdForm The identifier of the form
      * @param plugin the plugin
      */
@@ -76,7 +76,7 @@ public interface IFormDAO
 
     /**
      * Load the data of the Form from the table
-     * 
+     *
      * @param nKey The identifier of the form
      * @param plugin the plugin
      * @return the instance of the Form

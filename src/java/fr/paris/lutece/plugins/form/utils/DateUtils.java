@@ -37,8 +37,10 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.sql.Timestamp;
+
 import java.text.DateFormat;
 import java.text.ParseException;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;

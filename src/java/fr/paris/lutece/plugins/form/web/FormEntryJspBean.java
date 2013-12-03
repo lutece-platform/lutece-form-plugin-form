@@ -63,6 +63,8 @@ import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,8 +72,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -85,6 +85,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
      * Serial version UID
      */
     private static final long serialVersionUID = 5768139431154684693L;
+
     // templates
     private static final String TEMPLATE_CREATE_FIELD = "admin/plugins/form/create_field.html";
     private static final String TEMPLATE_MOVE_ENTRY = "admin/plugins/form/move_entry.html";
@@ -156,9 +157,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
     private static final String PARAMETER_COMMENT = "comment";
     private static final String PARAMETER_OPTION_NO_DISPLAY_TITLE = "option_no_display_title";
     private static final String PARAMETER_LIST = "list";
+
     // other constants
     private static final String EMPTY_STRING = "";
-
     private String _strCurrentPageIndexConditionalEntry;
     private int _nItemsPerPageConditionalEntry;
     private String _strCurrentPageIndex;
@@ -173,15 +174,17 @@ public class FormEntryJspBean extends ModifyFormJspBean
     public String getCreateEntry( HttpServletRequest request )
     {
         Form form;
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         Entry entry;
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
         int nIdField = -1;
         entry = FormUtils.createEntryByType( request, plugin );
-        int nIdForm = getFormId( );
-        if ( ( entry == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+
+        int nIdForm = getFormId(  );
+
+        if ( ( entry == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getManageForm( request );
         }
@@ -192,7 +195,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
             {
                 nIdField = Integer.parseInt( strIdField );
 
-                Field field = new Field( );
+                Field field = new Field(  );
                 field.setIdField( nIdField );
                 entry.setFieldDepend( field );
             }
@@ -203,23 +206,24 @@ public class FormEntryJspBean extends ModifyFormJspBean
                 return getJspManageForm( request );
             }
         }
+
         entry.setIdResource( nIdForm );
         entry.setResourceType( Form.RESOURCE_TYPE );
 
         form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
         // Default Values
-        ReferenceList listParamDefaultValues = EntryParameterService.getService( ).findAll( );
+        ReferenceList listParamDefaultValues = EntryParameterService.getService(  ).findAll(  );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_ENTRY, entry );
         model.put( MARK_FORM, form );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
+        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
         model.put( MARK_LIST_PARAM_DEFAULT_VALUES, listParamDefaultValues );
         model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 
-        if ( entry.getEntryType( ).getComment( ) )
+        if ( entry.getEntryType(  ).getComment(  ) )
         {
             setPageTitleProperty( PROPERTY_CREATE_COMMENT_TITLE );
         }
@@ -229,9 +233,10 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         HtmlTemplate template = AppTemplateService.getTemplate( EntryTypeServiceManager.getEntryTypeService( entry )
-                .getTemplateCreate( entry, false ), getLocale( ), model );
+                                                                                       .getTemplateCreate( entry, false ),
+                getLocale(  ), model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -241,19 +246,19 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     public String doCreateEntry( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         Entry entry;
         Field fieldDepend = null;
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
         int nIdField = -1;
-        int nIdForm = getFormId( );
+        int nIdForm = getFormId(  );
 
         if ( ( strIdField != null ) && !strIdField.equals( EMPTY_STRING ) )
         {
             try
             {
                 nIdField = Integer.parseInt( strIdField );
-                fieldDepend = new Field( );
+                fieldDepend = new Field(  );
                 fieldDepend.setIdField( nIdField );
             }
             catch ( NumberFormatException ne )
@@ -262,9 +267,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
         }
 
-        if ( ( request.getParameter( PARAMETER_CANCEL ) == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( request.getParameter( PARAMETER_CANCEL ) == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             entry = FormUtils.createEntryByType( request, plugin );
 
@@ -273,8 +278,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
                 return getJspManageForm( request );
             }
 
-            String strError = EntryTypeServiceManager.getEntryTypeService( entry ).getRequestData( entry, request,
-                    getLocale( ) );
+            String strError = EntryTypeServiceManager.getEntryTypeService( entry )
+                                                     .getRequestData( entry, request, getLocale(  ) );
 
             if ( strError != null )
             {
@@ -286,9 +291,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
             entry.setResourceType( Form.RESOURCE_TYPE );
             entry.setIdEntry( EntryHome.create( entry ) );
 
-            if ( entry.getFields( ) != null )
+            if ( entry.getFields(  ) != null )
             {
-                for ( Field field : entry.getFields( ) )
+                for ( Field field : entry.getFields(  ) )
                 {
                     field.setParentEntry( entry );
                     FieldHome.create( field );
@@ -297,14 +302,15 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
             if ( request.getParameter( PARAMETER_APPLY ) != null )
             {
-                return getJspModifyEntry( request, entry.getIdEntry( ) );
+                return getJspModifyEntry( request, entry.getIdEntry(  ) );
             }
         }
 
         if ( fieldDepend != null )
         {
-            return getJspModifyField( request, fieldDepend.getIdField( ) );
+            return getJspModifyField( request, fieldDepend.getIdField(  ) );
         }
+
         return getJspModifyForm( request, nIdForm );
     }
 
@@ -315,12 +321,12 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     public String getModifyEntry( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         Entry entry;
         ReferenceList refListRegularExpression;
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = -1;
-        int nIdForm = getFormId( );
+        int nIdForm = getFormId(  );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -336,9 +342,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
         }
 
-        if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( nIdEntry == -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getManageForm( request );
         }
@@ -346,19 +352,20 @@ public class FormEntryJspBean extends ModifyFormJspBean
         _nIdEntry = nIdEntry;
         entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        List<Field> listField = new ArrayList<Field>( entry.getFields( ).size( ) );
+        List<Field> listField = new ArrayList<Field>( entry.getFields(  ).size(  ) );
 
-        for ( Field field : entry.getFields( ) )
+        for ( Field field : entry.getFields(  ) )
         {
-            field = FieldHome.findByPrimaryKey( field.getIdField( ) );
+            field = FieldHome.findByPrimaryKey( field.getIdField(  ) );
             listField.add( field );
         }
 
         entry.setFields( listField );
-        Form form = FormHome.findByPrimaryKey( entry.getIdResource( ), plugin );
+
+        Form form = FormHome.findByPrimaryKey( entry.getIdResource(  ), plugin );
         IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_ENTRY, entry );
         model.put( MARK_FORM, form );
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
@@ -367,13 +374,13 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         LocalizedPaginator<?> paginator = entryTypeService.getPaginator( entry, _nItemsPerPage,
                 AppPathService.getBaseUrl( request ) + JSP_MODIFY_ENTRY + "?id_entry=" + nIdEntry,
-                PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
+                PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
 
         if ( paginator != null )
         {
             model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPage );
-            model.put( MARK_NUMBER_ITEMS, paginator.getItemsCount( ) );
-            model.put( MARK_LIST, paginator.getPageItems( ) );
+            model.put( MARK_NUMBER_ITEMS, paginator.getItemsCount(  ) );
+            model.put( MARK_LIST, paginator.getPageItems(  ) );
             model.put( MARK_PAGINATOR, paginator );
         }
 
@@ -385,14 +392,14 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
+        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
         model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 
-        if ( entry.getEntryType( ).getComment( ) )
+        if ( entry.getEntryType(  ).getComment(  ) )
         {
             setPageTitleProperty( PROPERTY_MODIFY_COMMENT_TITLE );
         }
-        else if ( entry.getEntryType( ).getGroup( ) )
+        else if ( entry.getEntryType(  ).getGroup(  ) )
         {
             setPageTitleProperty( PROPERTY_MODIFY_GROUP_TITLE );
         }
@@ -402,9 +409,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         HtmlTemplate template = AppTemplateService.getTemplate( entryTypeService.getTemplateModify( entry, false ),
-                getLocale( ), model );
+                getLocale(  ), model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -417,7 +424,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         Entry entry;
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = -1;
-        int nIdForm = getFormId( );
+        int nIdForm = getFormId(  );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -431,9 +438,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
         }
 
-        if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( nIdEntry == -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getManageForm( request );
         }
@@ -442,8 +449,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         if ( request.getParameter( PARAMETER_CANCEL ) == null )
         {
-            String strError = EntryTypeServiceManager.getEntryTypeService( entry ).getRequestData( entry, request,
-                    getLocale( ) );
+            String strError = EntryTypeServiceManager.getEntryTypeService( entry )
+                                                     .getRequestData( entry, request, getLocale(  ) );
 
             if ( strError != null )
             {
@@ -452,12 +459,12 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
             EntryHome.update( entry );
 
-            if ( entry.getFields( ) != null )
+            if ( entry.getFields(  ) != null )
             {
-                for ( Field field : entry.getFields( ) )
+                for ( Field field : entry.getFields(  ) )
                 {
                     // Check if the field already exists in the database
-                    Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField( ) );
+                    Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField(  ) );
 
                     if ( fieldStored != null )
                     {
@@ -475,12 +482,14 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         if ( request.getParameter( PARAMETER_APPLY ) == null )
         {
-            if ( entry.getFieldDepend( ) != null )
+            if ( entry.getFieldDepend(  ) != null )
             {
-                return getJspModifyField( request, entry.getFieldDepend( ).getIdField( ) );
+                return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
             }
+
             return getJspModifyForm( request, nIdForm );
         }
+
         return getJspModifyEntry( request, nIdEntry );
     }
 
@@ -495,7 +504,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         String strMessage;
         int nIdEntry = -1;
-        int nIdForm = getFormId( );
+        int nIdForm = getFormId(  );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -511,18 +520,18 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
         }
 
-        if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( nIdEntry == -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getJspManageForm( request );
         }
 
         entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        if ( entry.getEntryType( ).getGroup( ) )
+        if ( entry.getEntryType(  ).getGroup(  ) )
         {
-            if ( entry.getChildren( ).size( ) != 0 )
+            if ( entry.getChildren(  ).size(  ) != 0 )
             {
                 strMessage = MESSAGE_CONFIRM_REMOVE_GROUP_WITH_ENTRY;
             }
@@ -539,7 +548,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_ENTRY );
         url.addParameter( PARAMETER_ID_ENTRY, strIdEntry + "#list" );
 
-        return AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        return AdminMessageService.getMessageUrl( request, strMessage, url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
     }
 
     /**
@@ -549,11 +558,11 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     public String doRemoveEntry( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         Entry entry;
         int nIdEntry = -1;
-        int nIdForm = getFormId( );
+        int nIdForm = getFormId(  );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -569,20 +578,20 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
         }
 
-        if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( nIdEntry == -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getJspManageForm( request );
         }
 
         entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        ArrayList<String> listErrors = new ArrayList<String>( );
+        ArrayList<String> listErrors = new ArrayList<String>(  );
 
-        if ( !EntryRemovalListenerService.getService( ).checkForRemoval( strIdEntry, listErrors, getLocale( ) ) )
+        if ( !EntryRemovalListenerService.getService(  ).checkForRemoval( strIdEntry, listErrors, getLocale(  ) ) )
         {
-            String strCause = AdminMessageService.getFormattedList( listErrors, getLocale( ) );
+            String strCause = AdminMessageService.getFormattedList( listErrors, getLocale(  ) );
             Object[] args = { strCause };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_CANT_REMOVE_ENTRY, args, AdminMessage.TYPE_STOP );
@@ -590,29 +599,30 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         // Update order
         List<Entry> listEntry;
-        EntryFilter filter = new EntryFilter( );
-        filter.setIdResource( entry.getIdResource( ) );
+        EntryFilter filter = new EntryFilter(  );
+        filter.setIdResource( entry.getIdResource(  ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         listEntry = EntryHome.getEntryList( filter );
 
-        if ( entry.getFieldDepend( ) == null )
+        if ( entry.getFieldDepend(  ) == null )
         {
-            this.moveDownEntryOrder( plugin, listEntry.size( ), entry, entry.getIdResource( ) );
+            this.moveDownEntryOrder( plugin, listEntry.size(  ), entry, entry.getIdResource(  ) );
         }
         else
         {
             //conditional questions
-            EntryHome.decrementOrderByOne( entry.getPosition( ), entry.getFieldDepend( ).getIdField( ),
-                    entry.getIdResource( ), entry.getResourceType( ) );
+            EntryHome.decrementOrderByOne( entry.getPosition(  ), entry.getFieldDepend(  ).getIdField(  ),
+                entry.getIdResource(  ), entry.getResourceType(  ) );
         }
 
         // Remove entry
         EntryHome.remove( nIdEntry );
 
-        if ( entry.getFieldDepend( ) != null )
+        if ( entry.getFieldDepend(  ) != null )
         {
-            return getJspModifyField( request, entry.getFieldDepend( ).getIdField( ) );
+            return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
         }
+
         return getJspModifyForm( request, nIdForm );
     }
 
@@ -626,7 +636,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         Entry entry;
         int nIdEntry = -1;
-        int nIdForm = getFormId( );
+        int nIdForm = getFormId(  );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -642,18 +652,18 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
         }
 
-        if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( nIdEntry == -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getJspManageForm( request );
         }
 
         entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        Object[] tabEntryTileCopy = { entry.getTitle( ) };
+        Object[] tabEntryTileCopy = { entry.getTitle(  ) };
         String strTitleCopyEntry = I18nService.getLocalizedString( PROPERTY_COPY_ENTRY_TITLE, tabEntryTileCopy,
-                getLocale( ) );
+                getLocale(  ) );
 
         if ( strTitleCopyEntry != null )
         {
@@ -662,10 +672,11 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         EntryHome.copy( entry );
 
-        if ( entry.getFieldDepend( ) != null )
+        if ( entry.getFieldDepend(  ) != null )
         {
-            return getJspModifyField( request, entry.getFieldDepend( ).getIdField( ) );
+            return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
         }
+
         return getJspModifyForm( request, nIdForm );
     }
 
@@ -681,7 +692,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         EntryFilter filter;
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = -1;
-        int nIdForm = getFormId( );
+        int nIdForm = getFormId(  );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -697,9 +708,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
         }
 
-        if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( nIdEntry == -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getManageForm( request );
         }
@@ -708,20 +719,20 @@ public class FormEntryJspBean extends ModifyFormJspBean
         entry = EntryHome.findByPrimaryKey( nIdEntry );
 
         // recup group
-        filter = new EntryFilter( );
-        filter.setIdResource( entry.getIdResource( ) );
+        filter = new EntryFilter(  );
+        filter.setIdResource( entry.getIdResource(  ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setIdIsGroup( EntryFilter.FILTER_TRUE );
         listGroup = EntryHome.getEntryList( filter );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_ENTRY, entry );
         model.put( MARK_ENTRY_LIST, listGroup );
         setPageTitleProperty( EMPTY_STRING );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MOVE_ENTRY, getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MOVE_ENTRY, getLocale(  ), model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -731,12 +742,12 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     public String doMoveEntry( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         Entry entryToMove;
         Entry entryGroup;
         String strIdEntryGroup = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntryGroup = -1;
-        int nIdForm = getFormId( );
+        int nIdForm = getFormId(  );
 
         if ( ( strIdEntryGroup != null ) && !strIdEntryGroup.equals( EMPTY_STRING ) )
         {
@@ -758,7 +769,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         if ( !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
-                FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getJspManageForm( request );
         }
@@ -768,15 +779,15 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         Integer nPosition;
 
-        if ( entryToMove.getPosition( ) < entryGroup.getPosition( ) )
+        if ( entryToMove.getPosition(  ) < entryGroup.getPosition(  ) )
         {
-            nPosition = entryGroup.getPosition( );
-            this.moveDownEntryOrder( plugin, nPosition, entryToMove, entryToMove.getIdResource( ) );
+            nPosition = entryGroup.getPosition(  );
+            this.moveDownEntryOrder( plugin, nPosition, entryToMove, entryToMove.getIdResource(  ) );
         }
         else
         {
-            nPosition = entryGroup.getPosition( ) + entryGroup.getChildren( ).size( ) + 1;
-            this.moveUpEntryOrder( plugin, nPosition, entryToMove, entryToMove.getIdResource( ) );
+            nPosition = entryGroup.getPosition(  ) + entryGroup.getChildren(  ).size(  ) + 1;
+            this.moveUpEntryOrder( plugin, nPosition, entryToMove, entryToMove.getIdResource(  ) );
         }
 
         entryToMove.setParent( entryGroup );
@@ -792,7 +803,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     public String doMoveOutEntry( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         Entry entry;
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = -1;
@@ -811,9 +822,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
         }
 
-        if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( nIdEntry == -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId(  ),
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getJspManageForm( request );
         }
@@ -821,17 +832,17 @@ public class FormEntryJspBean extends ModifyFormJspBean
         entry = EntryHome.findByPrimaryKey( nIdEntry );
 
         List<Entry> listEntry;
-        EntryFilter filter = new EntryFilter( );
+        EntryFilter filter = new EntryFilter(  );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        filter.setIdResource( entry.getIdResource( ) );
+        filter.setIdResource( entry.getIdResource(  ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         listEntry = EntryHome.getEntryList( filter );
 
-        Integer nListEntrySize = listEntry.size( );
+        Integer nListEntrySize = listEntry.size(  );
 
-        this.doMoveOutEntry( plugin, entry.getIdResource( ), nListEntrySize, entry );
+        this.doMoveOutEntry( plugin, entry.getIdResource(  ), nListEntrySize, entry );
 
-        return this.getJspModifyForm( request, entry.getIdResource( ) );
+        return this.getJspModifyForm( request, entry.getIdResource(  ) );
     }
 
     /**
@@ -846,10 +857,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
         int nIdField = -1;
         int nIdExpression = -1;
 
-        if ( ( strIdExpression != null )
-                && ( strIdField != null )
-                && ( RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) ) )
+        if ( ( strIdExpression != null ) && ( strIdField != null ) &&
+                ( RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId(  ),
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) ) )
         {
             try
             {
@@ -882,10 +892,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
         int nIdField = -1;
         int nIdExpression = -1;
 
-        if ( ( strIdExpression != null )
-                && ( strIdField != null )
-                && ( RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) ) )
+        if ( ( strIdExpression != null ) && ( strIdField != null ) &&
+                ( RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId(  ),
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) ) )
         {
             try
             {
@@ -914,7 +923,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
     public String doChangeOrderEntry( HttpServletRequest request )
     {
         //gets the entry which needs to be changed (order)
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
 
         String strEntryId = StringUtils.EMPTY;
         String strOrderToSet = StringUtils.EMPTY;
@@ -939,18 +948,18 @@ public class FormEntryJspBean extends ModifyFormJspBean
             String[] entryToMoveList = request.getParameterValues( PARAMETER_ENTRY_ID );
 
             Entry entryParent = EntryHome.findByPrimaryKey( nIdNewParent );
-            List<Entry> listEntry = new ArrayList<Entry>( );
+            List<Entry> listEntry = new ArrayList<Entry>(  );
 
             if ( entryParent == null )
             {
-                EntryFilter filter = new EntryFilter( );
+                EntryFilter filter = new EntryFilter(  );
                 filter.setIdResource( nIdForm );
                 filter.setResourceType( Form.RESOURCE_TYPE );
                 filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
                 listEntry = EntryHome.getEntryList( filter );
             }
 
-            Integer nListEntrySize = listEntry.size( );
+            Integer nListEntrySize = listEntry.size(  );
 
             if ( entryToMoveList != null )
             {
@@ -962,20 +971,20 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
                     if ( ( entryToMove == null ) )
                     {
-                        return AdminMessageService
-                                .getMessageUrl( request, MESSAGE_SELECT_GROUP, AdminMessage.TYPE_STOP );
+                        return AdminMessageService.getMessageUrl( request, MESSAGE_SELECT_GROUP, AdminMessage.TYPE_STOP );
                     }
 
                     // if entryParent is null, move out selected entries
-                    if ( ( entryParent == null ) && ( entryToMove.getParent( ) != null ) )
+                    if ( ( entryParent == null ) && ( entryToMove.getParent(  ) != null ) )
                     {
                         doMoveOutEntry( plugin, nIdForm, nListEntrySize, entryToMove );
                     }
 
                     // Move entry into group if not already in
-                    else if ( ( entryParent != null )
-                            && ( ( entryToMove.getParent( ) == null ) || ( ( entryToMove.getParent( ) != null ) && ( entryToMove
-                                    .getParent( ).getIdEntry( ) != entryParent.getIdEntry( ) ) ) ) )
+                    else if ( ( entryParent != null ) &&
+                            ( ( entryToMove.getParent(  ) == null ) ||
+                            ( ( entryToMove.getParent(  ) != null ) &&
+                            ( entryToMove.getParent(  ).getIdEntry(  ) != entryParent.getIdEntry(  ) ) ) ) )
                     {
                         this.doMoveEntryIntoGroup( plugin, entryToMove, entryParent );
                     }
@@ -986,23 +995,23 @@ public class FormEntryJspBean extends ModifyFormJspBean
         // To change order of one entry
         else
         {
-            EntryFilter filter = new EntryFilter( );
+            EntryFilter filter = new EntryFilter(  );
             filter.setIdResource( nIdForm );
             filter.setResourceType( Form.RESOURCE_TYPE );
 
             List<Entry> entryList = EntryHome.getEntryList( filter );
 
-            for ( int i = 0; i < entryList.size( ); i++ )
+            for ( int i = 0; i < entryList.size(  ); i++ )
             {
                 entry = entryList.get( i );
-                nEntryId = entry.getIdEntry( );
-                strEntryId = request.getParameter( PARAMETER_MOVE_BUTTON + "_" + nEntryId.toString( ) );
+                nEntryId = entry.getIdEntry(  );
+                strEntryId = request.getParameter( PARAMETER_MOVE_BUTTON + "_" + nEntryId.toString(  ) );
 
                 if ( StringUtils.isNotBlank( strEntryId ) )
                 {
-                    strEntryId = nEntryId.toString( );
-                    strOrderToSet = request.getParameter( PARAMETER_ORDER_ID + "_" + nEntryId.toString( ) );
-                    i = entryList.size( );
+                    strEntryId = nEntryId.toString(  );
+                    strOrderToSet = request.getParameter( PARAMETER_ORDER_ID + "_" + nEntryId.toString(  ) );
+                    i = entryList.size(  );
                 }
             }
 
@@ -1017,21 +1026,21 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
 
             Entry entryToChangeOrder = EntryHome.findByPrimaryKey( nEntryId );
-            int nActualOrder = entryToChangeOrder.getPosition( );
+            int nActualOrder = entryToChangeOrder.getPosition(  );
 
             // does nothing if the order to set is equal to the actual order
             if ( nOrderToSet != nActualOrder )
             {
                 // entry goes up in the list 
-                if ( nOrderToSet < entryToChangeOrder.getPosition( ) )
+                if ( nOrderToSet < entryToChangeOrder.getPosition(  ) )
                 {
-                    moveUpEntryOrder( plugin, nOrderToSet, entryToChangeOrder, entryToChangeOrder.getIdResource( ) );
+                    moveUpEntryOrder( plugin, nOrderToSet, entryToChangeOrder, entryToChangeOrder.getIdResource(  ) );
                 }
 
                 // entry goes down in the list
                 else
                 {
-                    moveDownEntryOrder( plugin, nOrderToSet, entryToChangeOrder, entryToChangeOrder.getIdResource( ) );
+                    moveDownEntryOrder( plugin, nOrderToSet, entryToChangeOrder, entryToChangeOrder.getIdResource(  ) );
                 }
             }
         }
@@ -1040,7 +1049,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         url.addParameter( PARAMETER_ID_FORM, nIdForm );
         url.setAnchor( PARAMETER_LIST );
 
-        return url.getUrl( );
+        return url.getUrl(  );
     }
 
     /**
@@ -1052,43 +1061,43 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     private void moveDownEntryOrder( Plugin plugin, int nOrderToSet, Entry entryToChangeOrder, int nIdForm )
     {
-        if ( entryToChangeOrder.getParent( ) == null )
+        if ( entryToChangeOrder.getParent(  ) == null )
         {
             int nNbChild = 0;
             int nNewOrder = 0;
 
-            EntryFilter filter = new EntryFilter( );
+            EntryFilter filter = new EntryFilter(  );
             filter.setIdResource( nIdForm );
             filter.setResourceType( Form.RESOURCE_TYPE );
             filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
-            List<Entry> listEntryFirstLevel = EntryHome.findEntriesWithoutParent( entryToChangeOrder.getIdResource( ),
-                    entryToChangeOrder.getResourceType( ) );
+            List<Entry> listEntryFirstLevel = EntryHome.findEntriesWithoutParent( entryToChangeOrder.getIdResource(  ),
+                    entryToChangeOrder.getResourceType(  ) );
 
-            List<Integer> orderFirstLevel = new ArrayList<Integer>( );
+            List<Integer> orderFirstLevel = new ArrayList<Integer>(  );
             initOrderFirstLevel( listEntryFirstLevel, orderFirstLevel );
 
             Integer nbChildEntryToChangeOrder = 0;
 
-            if ( entryToChangeOrder.getChildren( ) != null )
+            if ( entryToChangeOrder.getChildren(  ) != null )
             {
-                nbChildEntryToChangeOrder = entryToChangeOrder.getChildren( ).size( );
+                nbChildEntryToChangeOrder = entryToChangeOrder.getChildren(  ).size(  );
             }
 
             for ( Entry entry : listEntryFirstLevel )
             {
-                for ( int i = 0; i < orderFirstLevel.size( ); i++ )
+                for ( int i = 0; i < orderFirstLevel.size(  ); i++ )
                 {
-                    if ( ( orderFirstLevel.get( i ) == entry.getPosition( ) )
-                            && ( entry.getPosition( ) > entryToChangeOrder.getPosition( ) )
-                            && ( entry.getPosition( ) <= nOrderToSet ) )
+                    if ( ( orderFirstLevel.get( i ) == entry.getPosition(  ) ) &&
+                            ( entry.getPosition(  ) > entryToChangeOrder.getPosition(  ) ) &&
+                            ( entry.getPosition(  ) <= nOrderToSet ) )
                     {
                         if ( nNbChild == 0 )
                         {
                             nNewOrder = orderFirstLevel.get( i - 1 );
 
-                            if ( orderFirstLevel.get( i - 1 ) != entryToChangeOrder.getPosition( ) )
+                            if ( orderFirstLevel.get( i - 1 ) != entryToChangeOrder.getPosition(  ) )
                             {
                                 nNewOrder -= nbChildEntryToChangeOrder;
                             }
@@ -1102,9 +1111,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
                         EntryHome.update( entry );
                         nNbChild = 0;
 
-                        if ( entry.getChildren( ) != null )
+                        if ( entry.getChildren(  ) != null )
                         {
-                            for ( Entry child : entry.getChildren( ) )
+                            for ( Entry child : entry.getChildren(  ) )
                             {
                                 nNbChild++;
                                 child.setPosition( nNewOrder + nNbChild );
@@ -1119,16 +1128,16 @@ public class FormEntryJspBean extends ModifyFormJspBean
             EntryHome.update( entryToChangeOrder );
             nNbChild = 0;
 
-            for ( Entry child : entryToChangeOrder.getChildren( ) )
+            for ( Entry child : entryToChangeOrder.getChildren(  ) )
             {
                 nNbChild++;
-                child.setPosition( entryToChangeOrder.getPosition( ) + nNbChild );
+                child.setPosition( entryToChangeOrder.getPosition(  ) + nNbChild );
                 EntryHome.update( child );
             }
         }
         else
         {
-            EntryFilter filter = new EntryFilter( );
+            EntryFilter filter = new EntryFilter(  );
             filter.setIdResource( nIdForm );
             filter.setResourceType( Form.RESOURCE_TYPE );
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
@@ -1137,10 +1146,10 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
             for ( Entry entry : listAllEntry )
             {
-                if ( ( entry.getPosition( ) > entryToChangeOrder.getPosition( ) )
-                        && ( entry.getPosition( ) <= nOrderToSet ) )
+                if ( ( entry.getPosition(  ) > entryToChangeOrder.getPosition(  ) ) &&
+                        ( entry.getPosition(  ) <= nOrderToSet ) )
                 {
-                    entry.setPosition( entry.getPosition( ) - 1 );
+                    entry.setPosition( entry.getPosition(  ) - 1 );
                     EntryHome.update( entry );
                 }
             }
@@ -1159,43 +1168,43 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     private void moveUpEntryOrder( Plugin plugin, int nOrderToSet, Entry entryToChangeOrder, int nIdForm )
     {
-        if ( entryToChangeOrder.getParent( ) == null )
+        if ( entryToChangeOrder.getParent(  ) == null )
         {
-            List<Integer> orderFirstLevel = new ArrayList<Integer>( );
+            List<Integer> orderFirstLevel = new ArrayList<Integer>(  );
 
             int nNbChild = 0;
             int nNewOrder = nOrderToSet;
-            int nEntryToMoveOrder = entryToChangeOrder.getPosition( );
+            int nEntryToMoveOrder = entryToChangeOrder.getPosition(  );
 
-            EntryFilter filter = new EntryFilter( );
+            EntryFilter filter = new EntryFilter(  );
             filter.setIdResource( nIdForm );
             filter.setResourceType( Form.RESOURCE_TYPE );
             filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
-            List<Entry> listEntryFirstLevel = EntryHome.findEntriesWithoutParent( entryToChangeOrder.getIdResource( ),
-                    entryToChangeOrder.getResourceType( ) );
+            List<Entry> listEntryFirstLevel = EntryHome.findEntriesWithoutParent( entryToChangeOrder.getIdResource(  ),
+                    entryToChangeOrder.getResourceType(  ) );
             //the list of all the orders in the first level
             initOrderFirstLevel( listEntryFirstLevel, orderFirstLevel );
 
             for ( Entry entry : listEntryFirstLevel )
             {
-                Integer entryInitialPosition = entry.getPosition( );
+                Integer entryInitialPosition = entry.getPosition(  );
 
-                for ( int i = 0; i < orderFirstLevel.size( ); i++ )
+                for ( int i = 0; i < orderFirstLevel.size(  ); i++ )
                 {
-                    if ( ( orderFirstLevel.get( i ) == entryInitialPosition )
-                            && ( entryInitialPosition < nEntryToMoveOrder ) && ( entryInitialPosition >= nOrderToSet ) )
+                    if ( ( orderFirstLevel.get( i ) == entryInitialPosition ) &&
+                            ( entryInitialPosition < nEntryToMoveOrder ) && ( entryInitialPosition >= nOrderToSet ) )
                     {
-                        if ( entryToChangeOrder.getPosition( ) == nEntryToMoveOrder )
+                        if ( entryToChangeOrder.getPosition(  ) == nEntryToMoveOrder )
                         {
                             entryToChangeOrder.setPosition( nNewOrder );
                             EntryHome.update( entryToChangeOrder );
 
-                            for ( Entry child : entryToChangeOrder.getChildren( ) )
+                            for ( Entry child : entryToChangeOrder.getChildren(  ) )
                             {
                                 nNbChild++;
-                                child.setPosition( entryToChangeOrder.getPosition( ) + nNbChild );
+                                child.setPosition( entryToChangeOrder.getPosition(  ) + nNbChild );
                                 EntryHome.update( child );
                             }
                         }
@@ -1205,7 +1214,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
                         EntryHome.update( entry );
                         nNbChild = 0;
 
-                        for ( Entry child : entry.getChildren( ) )
+                        for ( Entry child : entry.getChildren(  ) )
                         {
                             nNbChild++;
                             child.setPosition( nNewOrder + nNbChild );
@@ -1217,7 +1226,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
         else
         {
-            EntryFilter filter = new EntryFilter( );
+            EntryFilter filter = new EntryFilter(  );
             filter.setIdResource( nIdForm );
             filter.setResourceType( Form.RESOURCE_TYPE );
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
@@ -1226,10 +1235,10 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
             for ( Entry entry : listAllEntry )
             {
-                if ( ( entry.getPosition( ) < entryToChangeOrder.getPosition( ) )
-                        && ( entry.getPosition( ) >= nOrderToSet ) )
+                if ( ( entry.getPosition(  ) < entryToChangeOrder.getPosition(  ) ) &&
+                        ( entry.getPosition(  ) >= nOrderToSet ) )
                 {
-                    entry.setPosition( entry.getPosition( ) + 1 );
+                    entry.setPosition( entry.getPosition(  ) + 1 );
                     EntryHome.update( entry );
                 }
             }
@@ -1251,7 +1260,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = -1;
-        int nIdForm = getFormId( );
+        int nIdForm = getFormId(  );
 
         if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) )
         {
@@ -1267,51 +1276,52 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
         }
 
-        if ( ( nIdEntry == -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( nIdEntry == -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + nIdForm,
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getJspManageForm( request );
         }
 
         entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        EntryFilter filter = new EntryFilter( );
-        filter.setIdResource( entry.getIdResource( ) );
+        EntryFilter filter = new EntryFilter(  );
+        filter.setIdResource( entry.getIdResource(  ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
 
-        if ( entry.getParent( ) != null )
+        if ( entry.getParent(  ) != null )
         {
-            filter.setIdEntryParent( entry.getParent( ).getIdEntry( ) );
+            filter.setIdEntryParent( entry.getParent(  ).getIdEntry(  ) );
         }
         else
         {
             filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         }
 
-        if ( entry.getFieldDepend( ) != null )
+        if ( entry.getFieldDepend(  ) != null )
         {
-            filter.setIdFieldDepend( entry.getFieldDepend( ).getIdField( ) );
+            filter.setIdFieldDepend( entry.getFieldDepend(  ).getIdField(  ) );
         }
         else
         {
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         }
 
-        int nOrderToSet = bMoveUp ? entry.getPosition( ) - 1 : entry.getPosition( ) + 1;
-        Entry entryWithTheSelectedOrder = EntryHome.findByOrderAndIdFieldAndIdResource( nOrderToSet, entry
-                .getFieldDepend( ).getIdField( ), entry.getIdResource( ), Form.RESOURCE_TYPE );
+        int nOrderToSet = bMoveUp ? ( entry.getPosition(  ) - 1 ) : ( entry.getPosition(  ) + 1 );
+        Entry entryWithTheSelectedOrder = EntryHome.findByOrderAndIdFieldAndIdResource( nOrderToSet,
+                entry.getFieldDepend(  ).getIdField(  ), entry.getIdResource(  ), Form.RESOURCE_TYPE );
 
-        entryWithTheSelectedOrder.setPosition( entry.getPosition( ) );
+        entryWithTheSelectedOrder.setPosition( entry.getPosition(  ) );
         EntryHome.update( entryWithTheSelectedOrder );
 
         entry.setPosition( nOrderToSet );
         EntryHome.update( entry );
 
-        if ( entry.getFieldDepend( ) != null )
+        if ( entry.getFieldDepend(  ) != null )
         {
-            return getJspModifyField( request, entry.getFieldDepend( ).getIdField( ) );
+            return getJspModifyField( request, entry.getFieldDepend(  ).getIdField(  ) );
         }
+
         return getJspModifyForm( request, nIdForm );
     }
 
@@ -1325,15 +1335,15 @@ public class FormEntryJspBean extends ModifyFormJspBean
     {
         int nPosition;
 
-        if ( entryToMove.getPosition( ) < entryGroup.getPosition( ) )
+        if ( entryToMove.getPosition(  ) < entryGroup.getPosition(  ) )
         {
-            nPosition = entryGroup.getPosition( );
-            this.moveDownEntryOrder( plugin, nPosition, entryToMove, entryToMove.getIdResource( ) );
+            nPosition = entryGroup.getPosition(  );
+            this.moveDownEntryOrder( plugin, nPosition, entryToMove, entryToMove.getIdResource(  ) );
         }
         else
         {
-            nPosition = entryGroup.getPosition( ) + entryGroup.getChildren( ).size( ) + 1;
-            this.moveUpEntryOrder( plugin, nPosition, entryToMove, entryToMove.getIdResource( ) );
+            nPosition = entryGroup.getPosition(  ) + entryGroup.getChildren(  ).size(  ) + 1;
+            this.moveUpEntryOrder( plugin, nPosition, entryToMove, entryToMove.getIdResource(  ) );
         }
 
         entryToMove.setParent( entryGroup );
@@ -1361,7 +1371,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     public String updateEntryOrder( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         List<Entry> listEntryFirstLevel;
         EntryFilter filter;
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
@@ -1384,14 +1394,14 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
-        if ( ( form == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
-                        getUser( ) ) )
+        if ( ( form == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_MODIFY,
+                    getUser(  ) ) )
         {
             return getManageForm( request );
         }
 
-        filter = new EntryFilter( );
+        filter = new EntryFilter(  );
         filter.setIdResource( nIdForm );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
@@ -1406,8 +1416,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
             EntryHome.update( entry );
             nPosition++;
 
-            EntryFilter filterSecondLevel = new EntryFilter( );
-            filterSecondLevel.setIdEntryParent( entry.getIdEntry( ) );
+            EntryFilter filterSecondLevel = new EntryFilter(  );
+            filterSecondLevel.setIdEntryParent( entry.getIdEntry(  ) );
 
             List<Entry> listEntrySecondLevel = EntryHome.getEntryList( filterSecondLevel );
 
@@ -1434,20 +1444,20 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     public String getCreateField( HttpServletRequest request )
     {
-        Field field = new Field( );
+        Field field = new Field(  );
         Entry entry = EntryHome.findByPrimaryKey( _nIdEntry );
 
-        if ( ( entry == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( entry == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId(  ),
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getManageForm( request );
         }
 
         field.setParentEntry( entry );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
-        Locale locale = getLocale( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
+        Locale locale = getLocale(  );
 
         if ( request.getParameter( PARAMETER_OPTION_NO_DISPLAY_TITLE ) != null )
         {
@@ -1463,7 +1473,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_FIELD, locale, model );
         setPageTitleProperty( PROPERTY_CREATE_FIELD_TITLE );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -1501,19 +1511,19 @@ public class FormEntryJspBean extends ModifyFormJspBean
             field = FieldHome.findByPrimaryKey( nIdField );
         }
 
-        if ( ( field == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( field == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId(  ),
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getManageForm( request );
         }
 
-        entry = EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) );
+        entry = EntryHome.findByPrimaryKey( field.getParentEntry(  ).getIdEntry(  ) );
 
         field.setParentEntry( entry );
 
-        HashMap<String, Object> model = new HashMap<String, Object>( );
-        Locale locale = getLocale( );
+        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        Locale locale = getLocale(  );
         model.put( MARK_FIELD, field );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_FIELD, locale, model );
@@ -1521,28 +1531,28 @@ public class FormEntryJspBean extends ModifyFormJspBean
         if ( bWithConditionalQuestion )
         {
             ReferenceList refEntryType;
-            refEntryType = initRefListEntryType( locale, new EntryType( ) );
+            refEntryType = initRefListEntryType( locale, new EntryType(  ) );
             _strCurrentPageIndexConditionalEntry = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX,
                     _strCurrentPageIndexConditionalEntry );
             _nItemsPerPageConditionalEntry = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                     _nItemsPerPageConditionalEntry, _nDefaultItemsPerPage );
 
-            LocalizedPaginator<Entry> paginator = new LocalizedPaginator<Entry>( field.getConditionalQuestions( ),
-                    _nItemsPerPageConditionalEntry, AppPathService.getBaseUrl( request ) + JSP_MODIFY_FIELD
-                            + "?id_field=" + nIdField, PARAMETER_PAGE_INDEX, _strCurrentPageIndexConditionalEntry,
-                    getLocale( ) );
+            LocalizedPaginator<Entry> paginator = new LocalizedPaginator<Entry>( field.getConditionalQuestions(  ),
+                    _nItemsPerPageConditionalEntry,
+                    AppPathService.getBaseUrl( request ) + JSP_MODIFY_FIELD + "?id_field=" + nIdField,
+                    PARAMETER_PAGE_INDEX, _strCurrentPageIndexConditionalEntry, getLocale(  ) );
 
             model.put( MARK_ENTRY_TYPE_REF_LIST, refEntryType );
             model.put( MARK_PAGINATOR, paginator );
             model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageEntry );
-            model.put( MARK_ENTRY_LIST, paginator.getPageItems( ) );
-            model.put( MARK_NUMBER_ITEMS, paginator.getItemsCount( ) );
+            model.put( MARK_ENTRY_LIST, paginator.getPageItems(  ) );
+            model.put( MARK_NUMBER_ITEMS, paginator.getItemsCount(  ) );
             template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_FIELD_WITH_CONDITIONAL_QUESTION, locale, model );
         }
 
         setPageTitleProperty( PROPERTY_MODIFY_FIELD_TITLE );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -1552,14 +1562,14 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     public String doCreateField( HttpServletRequest request )
     {
-        if ( ( request.getParameter( PARAMETER_CANCEL ) == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( request.getParameter( PARAMETER_CANCEL ) == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId(  ),
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
-            Entry entry = new Entry( );
+            Entry entry = new Entry(  );
             entry.setIdEntry( _nIdEntry );
 
-            Field field = new Field( );
+            Field field = new Field(  );
             field.setParentEntry( entry );
 
             String strError = getFieldData( request, field );
@@ -1598,9 +1608,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
             }
         }
 
-        if ( ( nIdField != -1 )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( nIdField != -1 ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId(  ),
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             field = FieldHome.findByPrimaryKey( nIdField );
 
@@ -1623,8 +1633,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         if ( request.getParameter( PARAMETER_APPLY ) == null )
         {
-            return getJspModifyEntry( request, field.getParentEntry( ).getIdEntry( ) );
+            return getJspModifyEntry( request, field.getParentEntry(  ).getIdEntry(  ) );
         }
+
         return getJspModifyField( request, nIdField );
     }
 
@@ -1635,9 +1646,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
      */
     public String getConfirmRemoveField( HttpServletRequest request )
     {
-        if ( ( request.getParameter( PARAMETER_ID_FIELD ) == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( request.getParameter( PARAMETER_ID_FIELD ) == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId(  ),
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getHomeUrl( request );
         }
@@ -1646,8 +1657,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_FIELD );
         url.addParameter( PARAMETER_ID_FIELD, strIdField + "#list" );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_FIELD, url.getUrl( ),
-                AdminMessage.TYPE_CONFIRMATION );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_FIELD, url.getUrl(  ),
+            AdminMessage.TYPE_CONFIRMATION );
     }
 
     /**
@@ -1660,9 +1671,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
         int nIdField = -1;
 
-        if ( ( strIdField == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( strIdField == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId(  ),
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getHomeUrl( request );
         }
@@ -1701,9 +1712,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
         int nIdField = -1;
 
-        if ( ( request.getParameter( PARAMETER_ID_FIELD ) == null )
-                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId( ),
-                        FormResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+        if ( ( request.getParameter( PARAMETER_ID_FIELD ) == null ) ||
+                !RBACService.isAuthorized( Form.RESOURCE_TYPE, EMPTY_STRING + getFormId(  ),
+                    FormResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             return getHomeUrl( request );
         }
@@ -1721,17 +1732,17 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         field = FieldHome.findByPrimaryKey( nIdField );
 
-        listField = FieldHome.getFieldListByIdEntry( field.getParentEntry( ).getIdEntry( ) );
+        listField = FieldHome.getFieldListByIdEntry( field.getParentEntry(  ).getIdEntry(  ) );
 
         int nIndexField = FormUtils.getIndexFieldInTheFieldList( nIdField, listField );
 
-        if ( nIndexField != ( listField.size( ) - 1 ) )
+        if ( nIndexField != ( listField.size(  ) - 1 ) )
         {
             int nNewPosition;
             Field fieldToInversePosition;
-            fieldToInversePosition = listField.get( bMoveUp ? nIndexField - 1 : nIndexField + 1 );
-            nNewPosition = fieldToInversePosition.getPosition( );
-            fieldToInversePosition.setPosition( field.getPosition( ) );
+            fieldToInversePosition = listField.get( bMoveUp ? ( nIndexField - 1 ) : ( nIndexField + 1 ) );
+            nNewPosition = fieldToInversePosition.getPosition(  );
+            fieldToInversePosition.setPosition( field.getPosition(  ) );
             field.setPosition( nNewPosition );
             FieldHome.update( field );
             FieldHome.update( fieldToInversePosition );
@@ -1758,7 +1769,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         String strFieldError = EMPTY_STRING;
 
-        if ( ( strTitle == null ) || strTitle.trim( ).equals( EMPTY_STRING ) )
+        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_TITLE_FIELD;
         }
@@ -1773,10 +1784,10 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale( ) ) };
+            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale(  ) ) };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+                AdminMessage.TYPE_STOP );
         }
 
         field.setTitle( strTitle );
@@ -1825,5 +1836,4 @@ public class FormEntryJspBean extends ModifyFormJspBean
     {
         return AppPathService.getBaseUrl( request ) + JSP_MODIFY_FIELD + "?id_field=" + nIdField;
     }
-
 }

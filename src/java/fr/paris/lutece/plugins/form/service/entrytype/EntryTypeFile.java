@@ -34,8 +34,8 @@
 package fr.paris.lutece.plugins.form.service.entrytype;
 
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
-import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
@@ -49,19 +49,19 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
 
 /**
- * 
+ *
  * class EntryTypeFile
- * 
+ *
  */
 public class EntryTypeFile extends AbstractEntryTypeUpload
 {
@@ -102,7 +102,7 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
      */
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+        Locale locale )
     {
         List<FileItem> listFilesSource = null;
 
@@ -117,14 +117,14 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
 
             GenericAttributeError formError = null;
 
-            if ( ( listFilesSource != null ) && !listFilesSource.isEmpty( ) )
+            if ( ( listFilesSource != null ) && !listFilesSource.isEmpty(  ) )
             {
                 formError = this.checkResponseData( entry, listFilesSource, locale, request );
 
                 if ( formError != null )
                 {
                     // Add the response to the list in order to have the error message in the page
-                    Response response = new Response( );
+                    Response response = new Response(  );
                     response.setEntry( entry );
                     listResponse.add( response );
                 }
@@ -132,22 +132,22 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
                 for ( FileItem fileItem : listFilesSource )
                 {
                     String strFilename = ( fileItem != null ) ? FileUploadService.getFileNameOnly( fileItem )
-                            : StringUtils.EMPTY;
+                                                              : StringUtils.EMPTY;
 
                     // Add the file to the response list
-                    Response response = new Response( );
+                    Response response = new Response(  );
                     response.setEntry( entry );
 
-                    if ( ( fileItem != null ) && ( fileItem.get( ) != null )
-                            && ( fileItem.getSize( ) < Integer.MAX_VALUE ) )
+                    if ( ( fileItem != null ) && ( fileItem.get(  ) != null ) &&
+                            ( fileItem.getSize(  ) < Integer.MAX_VALUE ) )
                     {
-                        PhysicalFile physicalFile = new PhysicalFile( );
-                        physicalFile.setValue( fileItem.get( ) );
+                        PhysicalFile physicalFile = new PhysicalFile(  );
+                        physicalFile.setValue( fileItem.get(  ) );
 
-                        File file = new File( );
+                        File file = new File(  );
                         file.setPhysicalFile( physicalFile );
                         file.setTitle( strFilename );
-                        file.setSize( (int) fileItem.getSize( ) );
+                        file.setSize( (int) fileItem.getSize(  ) );
                         file.setMimeType( FileSystemUtil.getMIMEType( strFilename ) );
 
                         response.setFile( file );
@@ -156,32 +156,32 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
                     listResponse.add( response );
 
                     String strMimeType = StringUtils.isBlank( strFilename ) ? FileSystemUtil.getMIMEType( strFilename )
-                            : StringUtils.EMPTY;
-                    List<RegularExpression> listRegularExpression = entry.getFields( ).get( 0 )
-                            .getRegularExpressionList( );
+                                                                            : StringUtils.EMPTY;
+                    List<RegularExpression> listRegularExpression = entry.getFields(  ).get( 0 )
+                                                                         .getRegularExpressionList(  );
 
-                    if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null )
-                            && ( listRegularExpression.size( ) != 0 )
-                            && RegularExpressionService.getInstance( ).isAvailable( ) )
+                    if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null ) &&
+                            ( listRegularExpression.size(  ) != 0 ) &&
+                            RegularExpressionService.getInstance(  ).isAvailable(  ) )
                     {
                         for ( RegularExpression regularExpression : listRegularExpression )
                         {
-                            if ( !RegularExpressionService.getInstance( ).isMatches( strMimeType, regularExpression ) )
+                            if ( !RegularExpressionService.getInstance(  ).isMatches( strMimeType, regularExpression ) )
                             {
-                                formError = new GenericAttributeError( );
+                                formError = new GenericAttributeError(  );
                                 formError.setMandatoryError( false );
-                                formError.setTitleQuestion( entry.getTitle( ) );
-                                formError.setErrorMessage( regularExpression.getErrorMessage( ) );
+                                formError.setTitleQuestion( entry.getTitle(  ) );
+                                formError.setErrorMessage( regularExpression.getErrorMessage(  ) );
                             }
                         }
                     }
                 }
             }
-            else if ( entry.isMandatory( ) )
+            else if ( entry.isMandatory(  ) )
             {
                 formError = new MandatoryError( entry, locale );
 
-                Response response = new Response( );
+                Response response = new Response(  );
                 response.setEntry( entry );
                 listResponse.add( response );
             }
@@ -196,9 +196,9 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public IGAAsyncUploadHandler getAsynchronousUploadHandler( )
+    public IGAAsyncUploadHandler getAsynchronousUploadHandler(  )
     {
-        return FormAsynchronousUploadHandler.getHandler( );
+        return FormAsynchronousUploadHandler.getHandler(  );
     }
 
     /**
@@ -210,6 +210,6 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
         UrlItem url = new UrlItem( strBaseUrl + JSP_DOWNLOAD_FILE );
         url.addParameter( PARAMETER_ID_RESPONSE, nResponseId );
 
-        return url.getUrl( );
+        return url.getUrl(  );
     }
 }

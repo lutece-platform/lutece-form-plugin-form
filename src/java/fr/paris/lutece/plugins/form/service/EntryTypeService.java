@@ -41,9 +41,9 @@ import java.util.Map;
 
 
 /**
- * 
+ *
  * EntryTypeService
- * 
+ *
  */
 public final class EntryTypeService
 {
@@ -52,7 +52,7 @@ public final class EntryTypeService
     /**
      * Private constructor
      */
-    private EntryTypeService( )
+    private EntryTypeService(  )
     {
     }
 
@@ -60,11 +60,11 @@ public final class EntryTypeService
      * Get the map of entry types
      * @return the map of entry types
      */
-    public Map<String, EntryType> getMapEntryTypes( )
+    public Map<String, EntryType> getMapEntryTypes(  )
     {
         if ( _mapEntryTypes == null )
         {
-            initMapEntryTypes( );
+            initMapEntryTypes(  );
         }
 
         return _mapEntryTypes;
@@ -79,7 +79,7 @@ public final class EntryTypeService
     {
         if ( _mapEntryTypes == null )
         {
-            initMapEntryTypes( );
+            initMapEntryTypes(  );
         }
 
         return _mapEntryTypes.get( strBeanName );
@@ -88,13 +88,13 @@ public final class EntryTypeService
     /**
      * Init the map of entry types
      */
-    private void initMapEntryTypes( )
+    private void initMapEntryTypes(  )
     {
-        _mapEntryTypes = new HashMap<String, EntryType>( );
+        _mapEntryTypes = new HashMap<String, EntryType>(  );
 
         for ( EntryType entryType : EntryTypeHome.getList( FormPlugin.PLUGIN_NAME ) )
         {
-            _mapEntryTypes.put( entryType.getBeanName( ), entryType );
+            _mapEntryTypes.put( entryType.getBeanName(  ), entryType );
         }
     }
 }

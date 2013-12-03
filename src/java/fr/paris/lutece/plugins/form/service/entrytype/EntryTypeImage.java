@@ -34,8 +34,8 @@
 package fr.paris.lutece.plugins.form.service.entrytype;
 
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
-import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
@@ -51,23 +51,26 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
 import java.awt.image.BufferedImage;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
 import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * 
+ *
  * class EntryTypeImage
- * 
+ *
  */
 public class EntryTypeImage extends AbstractEntryTypeUpload
 {
@@ -75,7 +78,6 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
      * Name of the bean of this service
      */
     public static final String BEAN_NAME = "form.entryTypeImage";
-
     private static final String JSP_DOWNLOAD_FILE = "jsp/admin/plugins/form/DoDownloadFile.jsp";
     private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "form.message.notAnImage";
     private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_image.html";
@@ -114,7 +116,7 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
      */
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+        Locale locale )
     {
         List<FileItem> listFilesSource = null;
 
@@ -129,14 +131,14 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
 
             GenericAttributeError formError = null;
 
-            if ( ( listFilesSource != null ) && !listFilesSource.isEmpty( ) )
+            if ( ( listFilesSource != null ) && !listFilesSource.isEmpty(  ) )
             {
                 formError = checkResponseData( entry, listFilesSource, locale, request );
 
                 if ( formError != null )
                 {
                     // Add the response to the list in order to have the error message in the page
-                    Response response = new Response( );
+                    Response response = new Response(  );
                     response.setEntry( entry );
                     listResponse.add( response );
                 }
@@ -144,21 +146,21 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
                 for ( FileItem fileItem : listFilesSource )
                 {
                     String strFilename = ( fileItem != null ) ? FileUploadService.getFileNameOnly( fileItem )
-                            : StringUtils.EMPTY;
+                                                              : StringUtils.EMPTY;
 
                     //Add the image to the response list
-                    Response response = new Response( );
+                    Response response = new Response(  );
                     response.setEntry( entry );
 
-                    if ( ( fileItem != null ) && ( fileItem.getSize( ) < Integer.MAX_VALUE ) )
+                    if ( ( fileItem != null ) && ( fileItem.getSize(  ) < Integer.MAX_VALUE ) )
                     {
-                        PhysicalFile physicalFile = new PhysicalFile( );
-                        physicalFile.setValue( fileItem.get( ) );
+                        PhysicalFile physicalFile = new PhysicalFile(  );
+                        physicalFile.setValue( fileItem.get(  ) );
 
-                        File file = new File( );
+                        File file = new File(  );
                         file.setPhysicalFile( physicalFile );
                         file.setTitle( strFilename );
-                        file.setSize( (int) fileItem.getSize( ) );
+                        file.setSize( (int) fileItem.getSize(  ) );
                         file.setMimeType( FileSystemUtil.getMIMEType( strFilename ) );
 
                         response.setFile( file );
@@ -166,22 +168,22 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
 
                     listResponse.add( response );
 
-                    String strMimeType = ( fileItem != null ) ? fileItem.getContentType( ) : StringUtils.EMPTY;
-                    List<RegularExpression> listRegularExpression = entry.getFields( ).get( 0 )
-                            .getRegularExpressionList( );
+                    String strMimeType = ( fileItem != null ) ? fileItem.getContentType(  ) : StringUtils.EMPTY;
+                    List<RegularExpression> listRegularExpression = entry.getFields(  ).get( 0 )
+                                                                         .getRegularExpressionList(  );
 
-                    if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null )
-                            && ( listRegularExpression.size( ) != 0 )
-                            && RegularExpressionService.getInstance( ).isAvailable( ) )
+                    if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null ) &&
+                            ( listRegularExpression.size(  ) != 0 ) &&
+                            RegularExpressionService.getInstance(  ).isAvailable(  ) )
                     {
                         for ( RegularExpression regularExpression : listRegularExpression )
                         {
-                            if ( !RegularExpressionService.getInstance( ).isMatches( strMimeType, regularExpression ) )
+                            if ( !RegularExpressionService.getInstance(  ).isMatches( strMimeType, regularExpression ) )
                             {
-                                formError = new GenericAttributeError( );
+                                formError = new GenericAttributeError(  );
                                 formError.setMandatoryError( false );
-                                formError.setTitleQuestion( entry.getTitle( ) );
-                                formError.setErrorMessage( regularExpression.getErrorMessage( ) );
+                                formError.setTitleQuestion( entry.getTitle(  ) );
+                                formError.setErrorMessage( regularExpression.getErrorMessage(  ) );
 
                                 return formError;
                             }
@@ -192,9 +194,9 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
 
                     try
                     {
-                        if ( ( fileItem != null ) && ( fileItem.get( ) != null ) )
+                        if ( ( fileItem != null ) && ( fileItem.get(  ) != null ) )
                         {
-                            image = ImageIO.read( new ByteArrayInputStream( fileItem.get( ) ) );
+                            image = ImageIO.read( new ByteArrayInputStream( fileItem.get(  ) ) );
                         }
                     }
                     catch ( IOException e )
@@ -204,21 +206,21 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
 
                     if ( ( image == null ) && StringUtils.isNotBlank( strFilename ) )
                     {
-                        formError = new GenericAttributeError( );
+                        formError = new GenericAttributeError(  );
                         formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE,
-                                request.getLocale( ) ) );
-                        formError.setTitleQuestion( entry.getTitle( ) );
+                                request.getLocale(  ) ) );
+                        formError.setTitleQuestion( entry.getTitle(  ) );
                     }
                 }
 
                 return formError;
             }
 
-            if ( entry.isMandatory( ) && ( ( listFilesSource == null ) || listFilesSource.isEmpty( ) ) )
+            if ( entry.isMandatory(  ) && ( ( listFilesSource == null ) || listFilesSource.isEmpty(  ) ) )
             {
                 formError = new MandatoryError( entry, locale );
 
-                Response response = new Response( );
+                Response response = new Response(  );
                 response.setEntry( entry );
                 listResponse.add( response );
             }
@@ -233,9 +235,9 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public IGAAsyncUploadHandler getAsynchronousUploadHandler( )
+    public IGAAsyncUploadHandler getAsynchronousUploadHandler(  )
     {
-        return FormAsynchronousUploadHandler.getHandler( );
+        return FormAsynchronousUploadHandler.getHandler(  );
     }
 
     /**
@@ -247,6 +249,6 @@ public class EntryTypeImage extends AbstractEntryTypeUpload
         UrlItem url = new UrlItem( strBaseUrl + JSP_DOWNLOAD_FILE );
         url.addParameter( PARAMETER_ID_RESPONSE, nResponseId );
 
-        return url.getUrl( );
+        return url.getUrl(  );
     }
 }

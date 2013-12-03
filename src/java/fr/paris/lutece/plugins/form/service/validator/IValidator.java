@@ -74,5 +74,6 @@ public interface IValidator
      * @param plugin the plugin
      * @throws SiteMessageException If a message needs to be displayed
      */
-    void validateForm( HttpServletRequest request, FormSubmit formSubmit, Plugin plugin ) throws SiteMessageException;
+    void validateForm( HttpServletRequest request, FormSubmit formSubmit, Plugin plugin )
+        throws SiteMessageException;
 }

@@ -36,10 +36,10 @@ package fr.paris.lutece.plugins.form.service.export;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.List;
 import java.util.Locale;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**

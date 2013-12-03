@@ -45,8 +45,8 @@ import java.util.List;
 public final class NotifySenderConfigurationHome
 {
     // Static variable pointed at the DAO instance
-    private static INotifySenderConfigurationDAO _dao = SpringContextService
-            .getBean( "form.notifySenderConfigurationDAO" );
+    private static INotifySenderConfigurationDAO _dao = SpringContextService.getBean( 
+            "form.notifySenderConfigurationDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

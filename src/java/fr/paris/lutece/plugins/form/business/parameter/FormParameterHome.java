@@ -40,9 +40,9 @@ import fr.paris.lutece.util.ReferenceList;
 
 
 /**
- * 
+ *
  * FormParameterHome
- * 
+ *
  */
 public final class FormParameterHome
 {
@@ -52,7 +52,7 @@ public final class FormParameterHome
     /**
      * Private constructor
      */
-    private FormParameterHome( )
+    private FormParameterHome(  )
     {
         // Private constructor
     }

@@ -47,7 +47,7 @@ import java.util.List;
 
 /**
  * OutputProcessorService
- * 
+ *
  */
 public class OutputProcessorService
 {
@@ -56,7 +56,7 @@ public class OutputProcessorService
     private IOutputProcessorSet _outputProcessorSet;
 
     /** Creates a new instance of DirectorySearchService */
-    private OutputProcessorService( )
+    private OutputProcessorService(  )
     {
         _outputProcessorSet = SpringContextService.getBean( BEAN_MAP_OUTPUT_PROCESSOR );
     }
@@ -65,11 +65,11 @@ public class OutputProcessorService
      * Get the instance of this service
      * @return The instance of this service
      */
-    public static OutputProcessorService getInstance( )
+    public static OutputProcessorService getInstance(  )
     {
         if ( _singleton == null )
         {
-            _singleton = new OutputProcessorService( );
+            _singleton = new OutputProcessorService(  );
         }
 
         return _singleton;
@@ -79,9 +79,9 @@ public class OutputProcessorService
      * Get the list of all processors
      * @return The list of all processors
      */
-    public Collection<IOutputProcessor> getAllProcessors( )
+    public Collection<IOutputProcessor> getAllProcessors(  )
     {
-        return _outputProcessorSet.getAllOutputProcessor( );
+        return _outputProcessorSet.getAllOutputProcessor(  );
     }
 
     /**
@@ -91,7 +91,7 @@ public class OutputProcessorService
      */
     public List<IOutputProcessor> getProcessorsByIdForm( int nIdForm )
     {
-        List<IOutputProcessor> lisOutputProcessor = new ArrayList<IOutputProcessor>( );
+        List<IOutputProcessor> lisOutputProcessor = new ArrayList<IOutputProcessor>(  );
 
         List<FormProcessor> listFormProcessor = FormProcessorHome.getListByIdForm( nIdForm,
                 PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
@@ -99,7 +99,7 @@ public class OutputProcessorService
 
         for ( FormProcessor formProcessor : listFormProcessor )
         {
-            outputProcessor = _outputProcessorSet.getOutputProcessor( formProcessor.getKeyProcessor( ) );
+            outputProcessor = _outputProcessorSet.getOutputProcessor( formProcessor.getKeyProcessor(  ) );
 
             if ( outputProcessor != null )
             {
@@ -132,7 +132,7 @@ public class OutputProcessorService
      */
     public void removeProcessorAssociation( int nIdForm, String strKeyProcessor )
     {
-        FormProcessor formProcessor = new FormProcessor( );
+        FormProcessor formProcessor = new FormProcessor(  );
         formProcessor.setIdForm( nIdForm );
         formProcessor.setKeyProcessor( strKeyProcessor );
 
@@ -146,7 +146,7 @@ public class OutputProcessorService
      */
     public void addProcessorAssociation( int nIdForm, String strKeyProcessor )
     {
-        FormProcessor formProcessor = new FormProcessor( );
+        FormProcessor formProcessor = new FormProcessor(  );
         formProcessor.setIdForm( nIdForm );
         formProcessor.setKeyProcessor( strKeyProcessor );
 
@@ -166,7 +166,7 @@ public class OutputProcessorService
 
         for ( FormProcessor formProcessor : listFormProcessor )
         {
-            if ( formProcessor.getKeyProcessor( ).equals( strKeyProcessor ) )
+            if ( formProcessor.getKeyProcessor(  ).equals( strKeyProcessor ) )
             {
                 return true;
             }

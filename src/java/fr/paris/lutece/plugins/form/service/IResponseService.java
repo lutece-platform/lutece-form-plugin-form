@@ -39,15 +39,16 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.business.StatisticEntrySubmit;
 import fr.paris.lutece.plugins.genericattributes.service.file.FileService;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
+
+import java.util.List;
 
 
 /**
  * Response service
- * 
+ *
  */
 public interface IResponseService
 {
@@ -55,7 +56,7 @@ public interface IResponseService
      * Get the file service
      * @return the file service
      */
-    FileService getFileService( );
+    FileService getFileService(  );
 
     /**
      * Create a form submit

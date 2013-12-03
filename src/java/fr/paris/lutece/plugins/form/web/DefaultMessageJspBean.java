@@ -54,9 +54,9 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * 
+ *
  * class DefaultMessageJspBean
- * 
+ *
  */
 public class DefaultMessageJspBean extends PluginAdminPageJspBean
 {
@@ -64,7 +64,6 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
      * Right to manage forms
      */
     public static final String RIGHT_MANAGE_FORM = FormJspBean.RIGHT_MANAGE_FORM;
-
     private static final long serialVersionUID = -4993320302739981947L;
 
     //	templates
@@ -94,6 +93,7 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
     private static final String FIELD_REQUIREMENT_MESSAGE = "form.manageDefaultMessage.labelRequirementMessage";
     private static final String FIELD_RECAP_MESSAGE = "form.manageDefaultMessage.labelRecapMessage";
     private static final String FIELD_LIBELLE_VALIDATE_BUTTON = "form.manageDefaultMessage.labelLibelleValidateButton";
+
     //    private static final String FIELD_LIBELLE_RESET_BUTTON = "form.manageDefaultMessage.labelLibelleResetButton";
     private static final String FIELD_BACK_URL = "form.manageDefaultMessage.labelBackUrl";
 
@@ -107,18 +107,18 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
      */
     public String getManageDefaultMessage( HttpServletRequest request )
     {
-        Locale locale = getLocale( );
-        HashMap<String, Object> model = new HashMap<String, Object>( );
-        DefaultMessage defaultMessage = DefaultMessageHome.find( getPlugin( ) );
+        Locale locale = getLocale(  );
+        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        DefaultMessage defaultMessage = DefaultMessageHome.find( getPlugin(  ) );
 
         model.put( MARK_DEFAULT_MESSAGE, defaultMessage );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
+        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
         setPageTitleProperty( PROPERTY_MANAGE_DEFAULT_MESSAGE_TITLE );
 
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_FORM, locale, model );
 
-        return getAdminPage( templateList.getHtml( ) );
+        return getAdminPage( templateList.getHtml(  ) );
     }
 
     /**
@@ -129,9 +129,9 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
     public String doModifyDefaultMessage( HttpServletRequest request )
     {
         if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                DefaultMessageResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
+                    DefaultMessageResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
         {
-            DefaultMessage defaultMessage = new DefaultMessage( );
+            DefaultMessage defaultMessage = new DefaultMessage(  );
             String strError = getDefaultMessageData( request, defaultMessage );
 
             if ( strError != null )
@@ -139,7 +139,7 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
                 return strError;
             }
 
-            DefaultMessageHome.update( defaultMessage, getPlugin( ) );
+            DefaultMessageHome.update( defaultMessage, getPlugin(  ) );
         }
 
         return getHomeUrl( request );
@@ -164,37 +164,37 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
         String strBackUrl = request.getParameter( PARAMETER_BACK_URL );
         String strFieldError = EMPTY_STRING;
 
-        if ( ( strWelcomeMessage == null ) || strWelcomeMessage.trim( ).equals( EMPTY_STRING ) )
+        if ( ( strWelcomeMessage == null ) || strWelcomeMessage.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_WELCOME_MESSAGE;
         }
-        else if ( ( strUnavailabilityMessage == null ) || strUnavailabilityMessage.trim( ).equals( EMPTY_STRING ) )
+        else if ( ( strUnavailabilityMessage == null ) || strUnavailabilityMessage.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_UNAVAILABILITY_MESSAGE;
         }
-        else if ( ( strRequirementMessage == null ) || strRequirementMessage.trim( ).equals( EMPTY_STRING ) )
+        else if ( ( strRequirementMessage == null ) || strRequirementMessage.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_REQUIREMENT_MESSAGE;
         }
-        else if ( ( strRecapMessage == null ) || strRecapMessage.trim( ).equals( EMPTY_STRING ) )
+        else if ( ( strRecapMessage == null ) || strRecapMessage.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_RECAP_MESSAGE;
         }
-        else if ( ( strLibelleValidateButton == null ) || strLibelleValidateButton.trim( ).equals( EMPTY_STRING ) )
+        else if ( ( strLibelleValidateButton == null ) || strLibelleValidateButton.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_LIBELLE_VALIDATE_BUTTON;
         }
-        else if ( ( strBackUrl == null ) || strBackUrl.trim( ).equals( EMPTY_STRING ) )
+        else if ( ( strBackUrl == null ) || strBackUrl.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_BACK_URL;
         }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale( ) ) };
+            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale(  ) ) };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+                AdminMessage.TYPE_STOP );
         }
 
         defaultMessage.setWelcomeMessage( strWelcomeMessage );

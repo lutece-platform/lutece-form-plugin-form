@@ -11,6 +11,7 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.test.LuteceTestCase;
 
 import java.sql.Timestamp;
+
 import java.util.Date;
 import java.util.List;
 
@@ -43,16 +44,16 @@ public class FormHomeTest extends LuteceTestCase
     private final static String VALIDATE_BUTTON_2 = "Button Validate 2";
     private final static String RESET_BUTTON_1 = "Button Reset 1";
     private final static String RESET_BUTTON_2 = "Button Reset 2";
-    private final static Date DATE_BEGIN_DISPONIBILITY_1 = new Date( );
-    private final static Date DATE_BEGIN_DISPONIBILITY_2 = new Date( );
-    private final static Date DATE_END_DISPONIBILITY_1 = new Date( );
-    private final static Date DATE_END_DISPONIBILITY_2 = new Date( );
+    private final static Date DATE_BEGIN_DISPONIBILITY_1 = new Date(  );
+    private final static Date DATE_BEGIN_DISPONIBILITY_2 = new Date(  );
+    private final static Date DATE_END_DISPONIBILITY_1 = new Date(  );
+    private final static Date DATE_END_DISPONIBILITY_2 = new Date(  );
     private final static boolean AUTO_PUBLICATION_ACTIVE_1 = true;
     private final static boolean AUTO_PUBLICATION_ACTIVE_2 = false;
     private final static boolean ACTIVE_1 = true;
     private final static boolean ACTIVE_2 = false;
-    private final static Timestamp DATE_CREATION_1 = new Timestamp( new Date( ).getTime( ) );
-    private final static Timestamp DATE_CREATION_2 = new Timestamp( new Date( ).getTime( ) );
+    private final static Timestamp DATE_CREATION_1 = new Timestamp( new Date(  ).getTime(  ) );
+    private final static Timestamp DATE_CREATION_2 = new Timestamp( new Date(  ).getTime(  ) );
     private final static boolean LIMIT_NUMBER_RESPONSE_1 = true;
     private final static boolean LIMIT_NUMBER_RESPONSE_2 = false;
     private final Plugin _plugin = PluginService.getPlugin( "form" );
@@ -61,9 +62,9 @@ public class FormHomeTest extends LuteceTestCase
      * Test of create method, of class
      * fr.paris.lutece.plugins.form.business.FormHome.
      */
-    public void testCreate( )
+    public void testCreate(  )
     {
-        Form form = new Form( );
+        Form form = new Form(  );
         form.setTitle( TITLE_1 );
         form.setDescription( DESCRIPTION_1 );
         form.setWelcomeMessage( WELCOME_MESSAGE_1 );
@@ -82,79 +83,81 @@ public class FormHomeTest extends LuteceTestCase
         form.setDateCreation( DATE_CREATION_1 );
         form.setLimitNumberResponse( LIMIT_NUMBER_RESPONSE_1 );
 
-        Recap recap = new Recap( );
+        Recap recap = new Recap(  );
         recap.setIdRecap( RecapHome.create( recap, _plugin ) );
         form.setRecap( recap );
         FormHome.create( form, _plugin );
 
-        Form storedForm = FormHome.findByPrimaryKey( form.getIdForm( ), _plugin );
+        Form storedForm = FormHome.findByPrimaryKey( form.getIdForm(  ), _plugin );
 
-        assertEquals( storedForm.getIdForm( ), form.getIdForm( ) );
-        assertEquals( storedForm.getTitle( ), form.getTitle( ) );
-        assertEquals( storedForm.getDescription( ), form.getDescription( ) );
-        assertEquals( storedForm.getWelcomeMessage( ), form.getWelcomeMessage( ) );
-        assertEquals( storedForm.getUnavailabilityMessage( ), form.getUnavailabilityMessage( ) );
-        assertEquals( storedForm.getRequirement( ), form.getRequirement( ) );
-        assertEquals( storedForm.getWorkgroup( ), form.getWorkgroup( ) );
-        assertEquals( storedForm.getIdMailingList( ), form.getIdMailingList( ) );
-        assertEquals( storedForm.isActiveCaptcha( ), form.isActiveCaptcha( ) );
-        assertEquals( storedForm.isActiveStoreAdresse( ), form.isActiveStoreAdresse( ) );
-        assertEquals( storedForm.getLibelleValidateButton( ), form.getLibelleValidateButton( ) );
-        assertTrue( ( storedForm.getDateEndDisponibility( ).getTime( ) - form.getDateEndDisponibility( ).getTime( ) ) < 10 );
-        assertEquals( storedForm.isAutoPublicationActive( ), form.isAutoPublicationActive( ) );
-        assertEquals( storedForm.isActive( ), form.isActive( ) );
+        assertEquals( storedForm.getIdForm(  ), form.getIdForm(  ) );
+        assertEquals( storedForm.getTitle(  ), form.getTitle(  ) );
+        assertEquals( storedForm.getDescription(  ), form.getDescription(  ) );
+        assertEquals( storedForm.getWelcomeMessage(  ), form.getWelcomeMessage(  ) );
+        assertEquals( storedForm.getUnavailabilityMessage(  ), form.getUnavailabilityMessage(  ) );
+        assertEquals( storedForm.getRequirement(  ), form.getRequirement(  ) );
+        assertEquals( storedForm.getWorkgroup(  ), form.getWorkgroup(  ) );
+        assertEquals( storedForm.getIdMailingList(  ), form.getIdMailingList(  ) );
+        assertEquals( storedForm.isActiveCaptcha(  ), form.isActiveCaptcha(  ) );
+        assertEquals( storedForm.isActiveStoreAdresse(  ), form.isActiveStoreAdresse(  ) );
+        assertEquals( storedForm.getLibelleValidateButton(  ), form.getLibelleValidateButton(  ) );
+        assertTrue( ( storedForm.getDateEndDisponibility(  ).getTime(  ) -
+            form.getDateEndDisponibility(  ).getTime(  ) ) < 10 );
+        assertEquals( storedForm.isAutoPublicationActive(  ), form.isAutoPublicationActive(  ) );
+        assertEquals( storedForm.isActive(  ), form.isActive(  ) );
 
-        assertEquals( storedForm.isLimitNumberResponse( ), form.isLimitNumberResponse( ) );
+        assertEquals( storedForm.isLimitNumberResponse(  ), form.isLimitNumberResponse(  ) );
 
-        assertEquals( storedForm.getRecap( ).getIdRecap( ), form.getRecap( ).getIdRecap( ) );
+        assertEquals( storedForm.getRecap(  ).getIdRecap(  ), form.getRecap(  ).getIdRecap(  ) );
     }
 
     /**
      * Test of copy method, of class
      * fr.paris.lutece.plugins.form.business.FormHome.
      */
-    public void testCopy( )
+    public void testCopy(  )
     {
         Form loadForm = FormHome.findByPrimaryKey( ID_1, _plugin );
 
         FormHome.copy( loadForm, _plugin );
 
-        FormDAO formDAO = new FormDAO( );
+        FormDAO formDAO = new FormDAO(  );
         int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
         Form copyForm = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
-        assertEquals( copyForm.getTitle( ), loadForm.getTitle( ) );
-        assertEquals( copyForm.getDescription( ), loadForm.getDescription( ) );
-        assertEquals( copyForm.getWelcomeMessage( ), loadForm.getWelcomeMessage( ) );
-        assertEquals( copyForm.getUnavailabilityMessage( ), loadForm.getUnavailabilityMessage( ) );
-        assertEquals( copyForm.getRequirement( ), loadForm.getRequirement( ) );
-        assertEquals( copyForm.getWorkgroup( ), loadForm.getWorkgroup( ) );
-        assertEquals( copyForm.getIdMailingList( ), loadForm.getIdMailingList( ) );
-        assertEquals( copyForm.isActiveCaptcha( ), loadForm.isActiveCaptcha( ) );
-        assertEquals( copyForm.isActiveStoreAdresse( ), loadForm.isActiveStoreAdresse( ) );
-        assertEquals( copyForm.getLibelleValidateButton( ), loadForm.getLibelleValidateButton( ) );
-        assertEquals( copyForm.getLibelleResetButton( ), loadForm.getLibelleResetButton( ) );
-        assertTrue( ( copyForm.getDateBeginDisponibility( ).getTime( ) - loadForm.getDateBeginDisponibility( )
-                .getTime( ) ) < 10 );
-        assertTrue( ( copyForm.getDateEndDisponibility( ).getTime( ) - loadForm.getDateEndDisponibility( ).getTime( ) ) < 10 );
-        assertEquals( copyForm.isActive( ), loadForm.isActive( ) );
-        assertEquals( copyForm.isLimitNumberResponse( ), loadForm.isLimitNumberResponse( ) );
+        assertEquals( copyForm.getTitle(  ), loadForm.getTitle(  ) );
+        assertEquals( copyForm.getDescription(  ), loadForm.getDescription(  ) );
+        assertEquals( copyForm.getWelcomeMessage(  ), loadForm.getWelcomeMessage(  ) );
+        assertEquals( copyForm.getUnavailabilityMessage(  ), loadForm.getUnavailabilityMessage(  ) );
+        assertEquals( copyForm.getRequirement(  ), loadForm.getRequirement(  ) );
+        assertEquals( copyForm.getWorkgroup(  ), loadForm.getWorkgroup(  ) );
+        assertEquals( copyForm.getIdMailingList(  ), loadForm.getIdMailingList(  ) );
+        assertEquals( copyForm.isActiveCaptcha(  ), loadForm.isActiveCaptcha(  ) );
+        assertEquals( copyForm.isActiveStoreAdresse(  ), loadForm.isActiveStoreAdresse(  ) );
+        assertEquals( copyForm.getLibelleValidateButton(  ), loadForm.getLibelleValidateButton(  ) );
+        assertEquals( copyForm.getLibelleResetButton(  ), loadForm.getLibelleResetButton(  ) );
+        assertTrue( ( copyForm.getDateBeginDisponibility(  ).getTime(  ) -
+            loadForm.getDateBeginDisponibility(  ).getTime(  ) ) < 10 );
+        assertTrue( ( copyForm.getDateEndDisponibility(  ).getTime(  ) -
+            loadForm.getDateEndDisponibility(  ).getTime(  ) ) < 10 );
+        assertEquals( copyForm.isActive(  ), loadForm.isActive(  ) );
+        assertEquals( copyForm.isLimitNumberResponse(  ), loadForm.isLimitNumberResponse(  ) );
 
-        assertEquals( copyForm.getRecap( ).getIdRecap( ), loadForm.getRecap( ).getIdRecap( ) );
+        assertEquals( copyForm.getRecap(  ).getIdRecap(  ), loadForm.getRecap(  ).getIdRecap(  ) );
     }
 
     /**
      * Test of update method, of class
      * fr.paris.lutece.plugins.form.business.FormHome.
      */
-    public void testUpdate( )
+    public void testUpdate(  )
     {
-        FormDAO formDAO = new FormDAO( );
+        FormDAO formDAO = new FormDAO(  );
         int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
         Form loadForm = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
-        Form form = new Form( );
-        form.setIdForm( loadForm.getIdForm( ) );
+        Form form = new Form(  );
+        form.setIdForm( loadForm.getIdForm(  ) );
         form.setTitle( TITLE_2 );
         form.setDescription( DESCRIPTION_2 );
         form.setWelcomeMessage( WELCOME_MESSAGE_2 );
@@ -173,44 +176,46 @@ public class FormHomeTest extends LuteceTestCase
         form.setDateCreation( DATE_CREATION_2 );
         form.setLimitNumberResponse( LIMIT_NUMBER_RESPONSE_2 );
 
-        Recap recap = new Recap( );
-        recap.setIdRecap( loadForm.getRecap( ).getIdRecap( ) );
+        Recap recap = new Recap(  );
+        recap.setIdRecap( loadForm.getRecap(  ).getIdRecap(  ) );
         form.setRecap( recap );
 
         FormHome.update( form, _plugin );
 
-        Form storedForm = FormHome.findByPrimaryKey( form.getIdForm( ), _plugin );
+        Form storedForm = FormHome.findByPrimaryKey( form.getIdForm(  ), _plugin );
 
-        assertEquals( storedForm.getIdForm( ), form.getIdForm( ) );
-        assertEquals( storedForm.getTitle( ), form.getTitle( ) );
-        assertEquals( storedForm.getDescription( ), form.getDescription( ) );
-        assertEquals( storedForm.getWelcomeMessage( ), form.getWelcomeMessage( ) );
-        assertEquals( storedForm.getUnavailabilityMessage( ), form.getUnavailabilityMessage( ) );
-        assertEquals( storedForm.getRequirement( ), form.getRequirement( ) );
-        assertEquals( storedForm.getWorkgroup( ), form.getWorkgroup( ) );
-        assertEquals( storedForm.getIdMailingList( ), form.getIdMailingList( ) );
-        assertEquals( storedForm.isActiveCaptcha( ), form.isActiveCaptcha( ) );
-        assertEquals( storedForm.isActiveStoreAdresse( ), form.isActiveStoreAdresse( ) );
-        assertEquals( storedForm.getLibelleValidateButton( ), form.getLibelleValidateButton( ) );
-        assertTrue( ( storedForm.getDateBeginDisponibility( ).getTime( ) - form.getDateBeginDisponibility( ).getTime( ) ) < 10 );
-        assertTrue( ( storedForm.getDateEndDisponibility( ).getTime( ) - form.getDateEndDisponibility( ).getTime( ) ) < 10 );
-        assertEquals( storedForm.isAutoPublicationActive( ), form.isAutoPublicationActive( ) );
-        assertEquals( storedForm.isActive( ), form.isActive( ) );
+        assertEquals( storedForm.getIdForm(  ), form.getIdForm(  ) );
+        assertEquals( storedForm.getTitle(  ), form.getTitle(  ) );
+        assertEquals( storedForm.getDescription(  ), form.getDescription(  ) );
+        assertEquals( storedForm.getWelcomeMessage(  ), form.getWelcomeMessage(  ) );
+        assertEquals( storedForm.getUnavailabilityMessage(  ), form.getUnavailabilityMessage(  ) );
+        assertEquals( storedForm.getRequirement(  ), form.getRequirement(  ) );
+        assertEquals( storedForm.getWorkgroup(  ), form.getWorkgroup(  ) );
+        assertEquals( storedForm.getIdMailingList(  ), form.getIdMailingList(  ) );
+        assertEquals( storedForm.isActiveCaptcha(  ), form.isActiveCaptcha(  ) );
+        assertEquals( storedForm.isActiveStoreAdresse(  ), form.isActiveStoreAdresse(  ) );
+        assertEquals( storedForm.getLibelleValidateButton(  ), form.getLibelleValidateButton(  ) );
+        assertTrue( ( storedForm.getDateBeginDisponibility(  ).getTime(  ) -
+            form.getDateBeginDisponibility(  ).getTime(  ) ) < 10 );
+        assertTrue( ( storedForm.getDateEndDisponibility(  ).getTime(  ) -
+            form.getDateEndDisponibility(  ).getTime(  ) ) < 10 );
+        assertEquals( storedForm.isAutoPublicationActive(  ), form.isAutoPublicationActive(  ) );
+        assertEquals( storedForm.isActive(  ), form.isActive(  ) );
 
-        assertEquals( storedForm.isLimitNumberResponse( ), form.isLimitNumberResponse( ) );
+        assertEquals( storedForm.isLimitNumberResponse(  ), form.isLimitNumberResponse(  ) );
 
-        assertEquals( storedForm.getRecap( ).getIdRecap( ), form.getRecap( ).getIdRecap( ) );
+        assertEquals( storedForm.getRecap(  ).getIdRecap(  ), form.getRecap(  ).getIdRecap(  ) );
     }
 
     /**
      * Test of getFormList method, of class
      * fr.paris.lutece.plugins.form.business.FormHome.
      */
-    public void testGetFormList( )
+    public void testGetFormList(  )
     {
         List<Form> storedListForm = null;
 
-        FormFilter formFilter = new FormFilter( );
+        FormFilter formFilter = new FormFilter(  );
 
         storedListForm = FormHome.getFormList( formFilter, _plugin );
 
@@ -221,15 +226,15 @@ public class FormHomeTest extends LuteceTestCase
      * Test of remove method, of class
      * fr.paris.lutece.plugins.form.business.FormHome.
      */
-    public void testRemove( )
+    public void testRemove(  )
     {
-        FormDAO formDAO = new FormDAO( );
+        FormDAO formDAO = new FormDAO(  );
         int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
         Form loadForm = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
-        FormHome.remove( loadForm.getIdForm( ), _plugin );
+        FormHome.remove( loadForm.getIdForm(  ), _plugin );
 
-        Form formStored = FormHome.findByPrimaryKey( loadForm.getIdForm( ), _plugin );
+        Form formStored = FormHome.findByPrimaryKey( loadForm.getIdForm(  ), _plugin );
         assertNull( formStored );
     }
 }

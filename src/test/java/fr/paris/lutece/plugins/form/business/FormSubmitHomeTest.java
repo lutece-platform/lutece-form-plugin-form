@@ -52,77 +52,77 @@ public class FormSubmitHomeTest extends LuteceTestCase
     private final static String IP_2 = "Adresse ip 2";
     private final Plugin _plugin = PluginService.getPlugin( "form" );
 
-    public void testCreate( )
+    public void testCreate(  )
     {
-        FormSubmit formSubmit = new FormSubmit( );
+        FormSubmit formSubmit = new FormSubmit(  );
 
-        FormDAO formDAO = new FormDAO( );
+        FormDAO formDAO = new FormDAO(  );
         int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
         Form form = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
         formSubmit.setIdFormSubmit( ID_FORM_RESPONSE_1 );
         formSubmit.setIp( IP_1 );
         formSubmit.setForm( form );
-        formSubmit.setDateResponse( FormUtils.getCurrentTimestamp( ) );
+        formSubmit.setDateResponse( FormUtils.getCurrentTimestamp(  ) );
         FormSubmitHome.create( formSubmit, _plugin );
 
-        FormSubmit storedFormSubmit = FormSubmitHome.findByPrimaryKey( formSubmit.getIdFormSubmit( ), _plugin );
+        FormSubmit storedFormSubmit = FormSubmitHome.findByPrimaryKey( formSubmit.getIdFormSubmit(  ), _plugin );
 
-        assertEquals( storedFormSubmit.getIdFormSubmit( ), formSubmit.getIdFormSubmit( ) );
-        assertEquals( storedFormSubmit.getIp( ), formSubmit.getIp( ) );
-        assertEquals( storedFormSubmit.getForm( ).getIdForm( ), formSubmit.getForm( ).getIdForm( ) );
+        assertEquals( storedFormSubmit.getIdFormSubmit(  ), formSubmit.getIdFormSubmit(  ) );
+        assertEquals( storedFormSubmit.getIp(  ), formSubmit.getIp(  ) );
+        assertEquals( storedFormSubmit.getForm(  ).getIdForm(  ), formSubmit.getForm(  ).getIdForm(  ) );
     }
 
-    public void testUpdate( )
+    public void testUpdate(  )
     {
         FormSubmit loadformSubmit = FormSubmitHome.findByPrimaryKey( ID_FORM_RESPONSE_1, _plugin );
 
-        FormSubmit formSubmit = new FormSubmit( );
+        FormSubmit formSubmit = new FormSubmit(  );
 
-        FormDAO formDAO = new FormDAO( );
+        FormDAO formDAO = new FormDAO(  );
         int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
         Form form = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
-        formSubmit.setIdFormSubmit( loadformSubmit.getIdFormSubmit( ) );
+        formSubmit.setIdFormSubmit( loadformSubmit.getIdFormSubmit(  ) );
         formSubmit.setIp( IP_2 );
         formSubmit.setForm( form );
 
         FormSubmitHome.update( formSubmit, _plugin );
 
-        FormSubmit storedFormSubmit = FormSubmitHome.findByPrimaryKey( formSubmit.getIdFormSubmit( ), _plugin );
+        FormSubmit storedFormSubmit = FormSubmitHome.findByPrimaryKey( formSubmit.getIdFormSubmit(  ), _plugin );
 
-        assertEquals( storedFormSubmit.getIdFormSubmit( ), formSubmit.getIdFormSubmit( ) );
-        assertEquals( storedFormSubmit.getIp( ), formSubmit.getIp( ) );
-        assertEquals( storedFormSubmit.getForm( ).getIdForm( ), formSubmit.getForm( ).getIdForm( ) );
+        assertEquals( storedFormSubmit.getIdFormSubmit(  ), formSubmit.getIdFormSubmit(  ) );
+        assertEquals( storedFormSubmit.getIp(  ), formSubmit.getIp(  ) );
+        assertEquals( storedFormSubmit.getForm(  ).getIdForm(  ), formSubmit.getForm(  ).getIdForm(  ) );
     }
 
-    public void testGetFormSubmitList( )
+    public void testGetFormSubmitList(  )
     {
         List<FormSubmit> listFormSubmit = null;
 
-        ResponseFilter responseFilter = new ResponseFilter( );
+        ResponseFilter responseFilter = new ResponseFilter(  );
 
         listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, _plugin );
 
         assertNotNull( listFormSubmit );
     }
 
-    public void testGetCountFormSubmit( )
+    public void testGetCountFormSubmit(  )
     {
         int nbFormSubmit;
 
-        ResponseFilter responseFilter = new ResponseFilter( );
+        ResponseFilter responseFilter = new ResponseFilter(  );
 
         nbFormSubmit = FormSubmitHome.getCountFormSubmit( responseFilter, _plugin );
 
         assertNotNull( nbFormSubmit );
     }
 
-    public void testGetStatisticFormSubmit( )
+    public void testGetStatisticFormSubmit(  )
     {
         List<StatisticFormSubmit> statisticFormSubmit = null;
 
-        ResponseFilter responseFilter = new ResponseFilter( );
+        ResponseFilter responseFilter = new ResponseFilter(  );
         responseFilter.setGroupbyDay( true );
 
         statisticFormSubmit = FormSubmitHome.getStatisticFormSubmit( responseFilter, _plugin );
@@ -130,26 +130,26 @@ public class FormSubmitHomeTest extends LuteceTestCase
         assertNotNull( statisticFormSubmit );
     }
 
-    public void testRemove( )
+    public void testRemove(  )
     {
-        FormSubmit formSubmit = new FormSubmit( );
+        FormSubmit formSubmit = new FormSubmit(  );
 
-        FormDAO formDAO = new FormDAO( );
+        FormDAO formDAO = new FormDAO(  );
         int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
         Form form = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
         formSubmit.setIdFormSubmit( ID_FORM_RESPONSE_1 );
         formSubmit.setIp( IP_1 );
         formSubmit.setForm( form );
-        formSubmit.setDateResponse( FormUtils.getCurrentTimestamp( ) );
+        formSubmit.setDateResponse( FormUtils.getCurrentTimestamp(  ) );
 
         int LastIdFormSubmit = FormSubmitHome.create( formSubmit, _plugin );
 
         FormSubmit loadformSubmit = FormSubmitHome.findByPrimaryKey( LastIdFormSubmit, _plugin );
 
-        FormSubmitHome.remove( loadformSubmit.getIdFormSubmit( ), _plugin );
+        FormSubmitHome.remove( loadformSubmit.getIdFormSubmit(  ), _plugin );
 
-        FormSubmit formSubmitStored = FormSubmitHome.findByPrimaryKey( loadformSubmit.getIdFormSubmit( ), _plugin );
+        FormSubmit formSubmitStored = FormSubmitHome.findByPrimaryKey( loadformSubmit.getIdFormSubmit(  ), _plugin );
 
         assertNull( formSubmitStored );
     }

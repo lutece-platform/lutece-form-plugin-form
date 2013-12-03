@@ -34,9 +34,9 @@
 package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -59,13 +59,13 @@ public final class FormHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private FormHome( )
+    private FormHome(  )
     {
     }
 
     /**
      * Creation of an instance of Form
-     * 
+     *
      * @param form The instance of the Form which contains the informations to
      *            store
      * @param plugin the Plugin
@@ -78,31 +78,31 @@ public final class FormHome
 
     /**
      * Copy of an instance of Form
-     * 
+     *
      * @param form The instance of the Form who must copy
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void copy( Form form, Plugin plugin )
     {
         Recap recap;
         List<Entry> listEntry;
-        EntryFilter filter = new EntryFilter( );
-        filter.setIdResource( form.getIdForm( ) );
+        EntryFilter filter = new EntryFilter(  );
+        filter.setIdResource( form.getIdForm(  ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         listEntry = EntryHome.getEntryList( filter );
-        recap = RecapHome.findByPrimaryKey( form.getRecap( ).getIdRecap( ), plugin );
+        recap = RecapHome.findByPrimaryKey( form.getRecap(  ).getIdRecap(  ), plugin );
         recap.setIdRecap( RecapHome.copy( recap, plugin ) );
         form.setRecap( recap );
-        form.setDateCreation( FormUtils.getCurrentTimestamp( ) );
+        form.setDateCreation( FormUtils.getCurrentTimestamp(  ) );
         form.setIdForm( create( form, plugin ) );
 
         for ( Entry entry : listEntry )
         {
-            entry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
-            entry.setIdResource( form.getIdForm( ) );
+            entry = EntryHome.findByPrimaryKey( entry.getIdEntry(  ) );
+            entry.setIdResource( form.getIdForm(  ) );
             entry.setResourceType( Form.RESOURCE_TYPE );
             EntryHome.copy( entry );
         }
@@ -110,11 +110,11 @@ public final class FormHome
 
     /**
      * Update of the form which is specified in parameter
-     * 
+     *
      * @param form The instance of the Form which contains the informations to
      *            update
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void update( Form form, Plugin plugin )
     {
@@ -123,43 +123,43 @@ public final class FormHome
 
     /**
      * Remove the form whose identifier is specified in parameter
-     * 
+     *
      * @param nIdForm The form Id
      * @param plugin the Plugin
      */
     public static void remove( int nIdForm, Plugin plugin )
     {
-        ResponseFilter responseFilter = new ResponseFilter( );
+        ResponseFilter responseFilter = new ResponseFilter(  );
         responseFilter.setIdResource( nIdForm );
 
         List<FormSubmit> listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
 
         for ( FormSubmit formSubmit : listFormSubmit )
         {
-            FormSubmitHome.remove( formSubmit.getIdFormSubmit( ), plugin );
+            FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
         }
 
         Form form = findByPrimaryKey( nIdForm, plugin );
-        EntryFilter entryFilter = new EntryFilter( );
-        entryFilter.setIdResource( form.getIdForm( ) );
+        EntryFilter entryFilter = new EntryFilter(  );
+        entryFilter.setIdResource( form.getIdForm(  ) );
         entryFilter.setResourceType( Form.RESOURCE_TYPE );
 
         List<Entry> listEntry = EntryHome.getEntryList( entryFilter );
 
         for ( Entry entry : listEntry )
         {
-            EntryHome.remove( entry.getIdEntry( ) );
+            EntryHome.remove( entry.getIdEntry(  ) );
         }
 
         _dao.delete( nIdForm, plugin );
-        RecapHome.remove( form.getRecap( ).getIdRecap( ), plugin );
+        RecapHome.remove( form.getRecap(  ).getIdRecap(  ), plugin );
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders
     /**
      * Returns an instance of a Form whose identifier is specified in parameter
-     * 
+     *
      * @param nKey The entry primary key
      * @param plugin the Plugin
      * @return an instance of Form
@@ -209,7 +209,7 @@ public final class FormHome
      * Load the xpage themes for all forms
      * @param plugin The plugin
      * @return A map of themes associated with form ids
-     * 
+     *
      */
     public static Map<Integer, Theme> getXPageThemes( Plugin plugin )
     {

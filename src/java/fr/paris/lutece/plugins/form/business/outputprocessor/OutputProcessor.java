@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.business.outputprocessor;
 
+
 /**
  * Abstract OutputProcessor
  */
@@ -44,7 +45,7 @@ public abstract class OutputProcessor implements IOutputProcessor
      * {@inheritDoc}
      */
     @Override
-    public String getKey( )
+    public String getKey(  )
     {
         return _strKey;
     }

@@ -41,9 +41,9 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * 
+ *
  * DraftBackupService for {@link Form}
- * 
+ *
  */
 public interface DraftBackupService
 {
@@ -54,7 +54,8 @@ public interface DraftBackupService
      * @param form The Form
      * @throws SiteMessageException If a message must be displayed
      */
-    void saveDraft( HttpServletRequest request, Form form ) throws SiteMessageException;
+    void saveDraft( HttpServletRequest request, Form form )
+        throws SiteMessageException;
 
     /**
      * Validate a draft. Usefull when the user submitted his form.
@@ -62,7 +63,8 @@ public interface DraftBackupService
      * @param form The form
      * @throws SiteMessageException If a message must be displayed
      */
-    void validateDraft( HttpServletRequest request, Form form ) throws SiteMessageException;
+    void validateDraft( HttpServletRequest request, Form form )
+        throws SiteMessageException;
 
     /**
      * Pre Process Request
@@ -72,7 +74,8 @@ public interface DraftBackupService
      *         should be continued
      * @throws SiteMessageException if an error occurs
      */
-    boolean preProcessRequest( HttpServletRequest request, Form form ) throws SiteMessageException;
+    boolean preProcessRequest( HttpServletRequest request, Form form )
+        throws SiteMessageException;
 
     /**
      * Saves the draft for the formSubmit
@@ -80,5 +83,6 @@ public interface DraftBackupService
      * @param formSubmit the formsubmit
      * @throws SiteMessageException if an error occurs
      */
-    void saveDraft( HttpServletRequest request, FormSubmit formSubmit ) throws SiteMessageException;
+    void saveDraft( HttpServletRequest request, FormSubmit formSubmit )
+        throws SiteMessageException;
 }
