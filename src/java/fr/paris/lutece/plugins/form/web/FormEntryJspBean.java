@@ -346,7 +346,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         _nIdEntry = nIdEntry;
         entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        List<Field> listField = new ArrayList<Field>( );
+        List<Field> listField = new ArrayList<Field>( entry.getFields( ).size( ) );
 
         for ( Field field : entry.getFields( ) )
         {
