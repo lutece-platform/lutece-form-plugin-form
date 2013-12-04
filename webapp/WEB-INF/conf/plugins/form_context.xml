@@ -85,4 +85,6 @@
 	 <bean id="form.entryTypeSession" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSession" />
 	 <bean id="form.entryTypeText" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeText" />
 	 <bean id="form.entryTypeTextArea" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeTextArea" />
+	 <bean id="form.entryTypeMyLuteceUserattribute" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUserAttribute" />
+	 
  </beans>

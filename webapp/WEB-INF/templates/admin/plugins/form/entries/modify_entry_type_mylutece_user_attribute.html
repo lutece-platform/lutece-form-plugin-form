@@ -1,0 +1,72 @@
+ <#include "/admin/util/editor/editor.html" />
+<div class="row-fluid">
+	<div class="span12">
+		<fieldset>
+			<legend>#i18n{form.modifyEntry.titleQuestion} : '${form.title}'</legend>
+			<form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+				<input name="id_entry" value="${entry.idEntry}" type="hidden" />
+				<div class="control-group">
+					<label class="control-label" for="title">#i18n{form.createEntry.labelTitle} * : </label>
+					<div class="controls">
+						<input type="text" name="title" id="title" value="${entry.title}"  maxlength="255" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
+					<div class="controls">
+						<textarea  name="help_message" id="help_message" rows="2" class="span4">${entry.helpMessage}</textarea>
+						<span class="help-block">#i18n{form.createEntry.labelHelpMessageComment}</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="">#i18n{form.createEntry.labelType} :</label>
+					<div class="controls">
+						<span>${entry.entryType.title}</span>
+					</div>
+				</div>
+				<div class="control-group">
+				    <label class="control-label" for="mylutece_attribute_name">#i18n{form.createEntry.labelMyLuteceUserAttribute} :</label>  
+				    <#list entry.fields as field>
+				    	<#assign attributeValue=field.value>
+				    </#list>
+				    <#if !attributeValue??>
+				    	<#assign attributeValue="">
+				    </#if>
+				    <div class="controls">
+				    	<@combo items=entryTypeService.luteceUserAttributesRefList name="mylutece_attribute_name" default_value=attributeValue />
+				    </div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="display_front_office">#i18n{form.createEntry.labelDisplayFrontOffice} :</label>
+					<div class="controls">
+						<input name="display_front_office" id=display_front_office value="true" type="checkbox" <#if entry.confirmField>checked="checked" </#if>/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
+					<div class="controls">
+						<input name="mandatory" value="true" type="checkbox" <#if entry.mandatory>checked="checked" </#if> />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
+					<div class="controls">
+						<input type="text" name="css_class" value="${entry.CSSClass!}" maxlength="255" class="span3" />
+						<span class="help-block">#i18n{form.createEntry.labelCSSClassComment}</span>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button class="btn btn-primary btn-small" name="save" type="submit">
+						<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}
+					</button>
+					<button class="btn btn-primary btn-small" name="apply" type="submit">
+						<i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonApply}
+					</button>
+					<a class="btn btn-small" type="button" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form" >
+						<i class="icon-remove-circle"></i>&nbsp;#i18n{form.createEntry.buttonCancel}
+					</a>
+				</div>
+			</form>
+		</fieldset>
+	</div>
+</div>

@@ -64,6 +64,9 @@ import fr.paris.lutece.portal.service.mail.MailService;
 import fr.paris.lutece.portal.service.mailinglist.AdminMailingListService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.security.LuteceUser;
+import fr.paris.lutece.portal.service.security.SecurityService;
+import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -75,26 +78,9 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
 
-import org.apache.commons.lang.StringUtils;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-
-import org.jfree.data.time.Day;
-import org.jfree.data.time.Month;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.time.Week;
-import org.jfree.data.xy.XYDataset;
-
 import java.awt.Color;
-
 import java.sql.Timestamp;
-
 import java.text.DateFormat;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -109,11 +95,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.Month;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.time.Week;
+import org.jfree.data.xy.XYDataset;
+
 
 /**
- *
+ * 
  * class FormUtils
- *
+ * 
  */
 public final class FormUtils extends GenericAttributesUtils
 {
@@ -155,6 +153,8 @@ public final class FormUtils extends GenericAttributesUtils
     private static final String MARK_LIST_RESPONSES = "list_responses";
     private static final String MARK_VALIDATE_REQUIREMENT = "validate_requirement";
     private static final String MARK_DRAFT_SUPPORTED = "draft_supported";
+    private static final String MARK_USER = "user";
+
     private static final String PARAMETER_ID_ENTRY_TYPE = "id_type";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String CONSTANT_WHERE = " WHERE ";
@@ -198,9 +198,9 @@ public final class FormUtils extends GenericAttributesUtils
 
     /**
      * FormUtils
-     *
+     * 
      */
-    private FormUtils(  )
+    private FormUtils( )
     {
     }
 
@@ -216,27 +216,28 @@ public final class FormUtils extends GenericAttributesUtils
         {
             String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SUBJECT,
                     locale );
-            String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SENDER_NAME,
-                    locale );
-            String strSenderEmail = MailService.getNoReplyEmail(  );
+            String strSenderName = I18nService.getLocalizedString(
+                    PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SENDER_NAME, locale );
+            String strSenderEmail = MailService.getNoReplyEmail( );
 
-            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList(  ) );
-            Map<String, Object> model = new HashMap<String, Object>(  );
+            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList( ) );
+            Map<String, Object> model = new HashMap<String, Object>( );
             model.put( MARK_FORM, form );
 
-            HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_MAIL_END_DISPONIBILITY, locale, model );
+            HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_MAIL_END_DISPONIBILITY, locale,
+                    model );
 
             // Send Mail
             for ( Recipient recipient : listRecipients )
             {
                 // Build the mail message
-                MailService.sendMailHtml( recipient.getEmail(  ), strSenderName, strSenderEmail, strSubject,
-                    t.getHtml(  ) );
+                MailService
+                        .sendMailHtml( recipient.getEmail( ), strSenderName, strSenderEmail, strSubject, t.getHtml( ) );
             }
         }
         catch ( Exception e )
         {
-            AppLogService.error( "Error during Notify end disponibilty of form : " + e.getMessage(  ) );
+            AppLogService.error( "Error during Notify end disponibilty of form : " + e.getMessage( ) );
         }
     }
 
@@ -249,10 +250,10 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static void sendNotificationMailFormSubmit( FormSubmit formSubmit, Locale locale )
     {
-        Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( formSubmit.getForm(  )
-                                                                                                .getIdMailingList(  ) );
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( MARK_FORM, formSubmit.getForm(  ) );
+        Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( formSubmit.getForm( )
+                .getIdMailingList( ) );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        model.put( MARK_FORM, formSubmit.getForm( ) );
         model.put( MARK_FORM_SUBMIT, formSubmit );
         sendNotificationMailFormSubmit( model, listRecipients, locale );
     }
@@ -264,14 +265,14 @@ public final class FormUtils extends GenericAttributesUtils
      * @param locale {@link Locale}
      */
     private static void sendNotificationMailFormSubmit( Map<String, Object> model,
-        Collection<Recipient> listRecipients, Locale locale )
+            Collection<Recipient> listRecipients, Locale locale )
     {
         try
         {
             String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SUBJECT, locale );
             String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SENDER_NAME,
                     locale );
-            String strSenderEmail = MailService.getNoReplyEmail(  );
+            String strSenderEmail = MailService.getNoReplyEmail( );
 
             HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_MAIL_FORM_SUBMIT, locale, model );
 
@@ -279,13 +280,13 @@ public final class FormUtils extends GenericAttributesUtils
             for ( Recipient recipient : listRecipients )
             {
                 // Build the mail message
-                MailService.sendMailHtml( recipient.getEmail(  ), strSenderName, strSenderEmail, strSubject,
-                    t.getHtml(  ) );
+                MailService
+                        .sendMailHtml( recipient.getEmail( ), strSenderName, strSenderEmail, strSubject, t.getHtml( ) );
             }
         }
         catch ( Exception e )
         {
-            AppLogService.error( "Error during Notify a new form submit" + e.getMessage(  ) );
+            AppLogService.error( "Error during Notify a new form submit" + e.getMessage( ) );
         }
     }
 
@@ -304,14 +305,14 @@ public final class FormUtils extends GenericAttributesUtils
             return null;
         }
 
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.set( Calendar.MILLISECOND, 0 );
         caldate.set( Calendar.SECOND, 0 );
         caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMaximum( Calendar.HOUR_OF_DAY ) );
         caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp;
     }
@@ -331,14 +332,14 @@ public final class FormUtils extends GenericAttributesUtils
             return null;
         }
 
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.set( Calendar.MILLISECOND, 0 );
         caldate.set( Calendar.SECOND, 0 );
         caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMinimum( Calendar.HOUR_OF_DAY ) );
         caldate.set( Calendar.MINUTE, caldate.getActualMinimum( Calendar.MINUTE ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp;
     }
@@ -350,7 +351,7 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static int getDay( Timestamp timestamp )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( timestamp );
 
         return caldate.get( Calendar.DAY_OF_MONTH );
@@ -363,7 +364,7 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static int getWeek( Timestamp timestamp )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( timestamp );
 
         return caldate.get( Calendar.WEEK_OF_YEAR );
@@ -376,7 +377,7 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static int getMonth( Timestamp timestamp )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( timestamp );
 
         return caldate.get( Calendar.MONTH );
@@ -389,7 +390,7 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static int getYear( Timestamp timestamp )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( timestamp );
 
         return caldate.get( Calendar.YEAR );
@@ -420,7 +421,7 @@ public final class FormUtils extends GenericAttributesUtils
             nTimesUnit = Calendar.MONTH;
         }
 
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( timestamp );
         caldate.set( Calendar.MILLISECOND, 0 );
         caldate.set( Calendar.SECOND, 0 );
@@ -428,7 +429,7 @@ public final class FormUtils extends GenericAttributesUtils
         caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
         caldate.add( nTimesUnit, nDecal );
 
-        Timestamp timeStamp1 = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp1 = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp1;
     }
@@ -444,27 +445,27 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static boolean sameDate( Timestamp timestamp1, Timestamp timestamp2, String strTimesUnit )
     {
-        Calendar caldate1 = new GregorianCalendar(  );
+        Calendar caldate1 = new GregorianCalendar( );
         caldate1.setTime( timestamp1 );
 
-        Calendar caldate2 = new GregorianCalendar(  );
+        Calendar caldate2 = new GregorianCalendar( );
         caldate2.setTime( timestamp2 );
 
-        if ( strTimesUnit.equals( CONSTANT_GROUP_BY_DAY ) &&
-                ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) ) &&
-                ( caldate1.get( Calendar.DAY_OF_YEAR ) == caldate2.get( Calendar.DAY_OF_YEAR ) ) )
+        if ( strTimesUnit.equals( CONSTANT_GROUP_BY_DAY )
+                && ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) )
+                && ( caldate1.get( Calendar.DAY_OF_YEAR ) == caldate2.get( Calendar.DAY_OF_YEAR ) ) )
         {
             return true;
         }
-        else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_WEEK ) &&
-                ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) ) &&
-                ( caldate1.get( Calendar.WEEK_OF_YEAR ) == caldate2.get( Calendar.WEEK_OF_YEAR ) ) )
+        else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_WEEK )
+                && ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) )
+                && ( caldate1.get( Calendar.WEEK_OF_YEAR ) == caldate2.get( Calendar.WEEK_OF_YEAR ) ) )
         {
             return true;
         }
-        else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_MONTH ) &&
-                ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) ) &&
-                ( caldate1.get( Calendar.MONTH ) == caldate2.get( Calendar.MONTH ) ) )
+        else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_MONTH )
+                && ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) )
+                && ( caldate1.get( Calendar.MONTH ) == caldate2.get( Calendar.MONTH ) ) )
         {
             return true;
         }
@@ -492,25 +493,25 @@ public final class FormUtils extends GenericAttributesUtils
      * Return current Timestamp
      * @return return current Timestamp
      */
-    public static Timestamp getCurrentTimestamp(  )
+    public static Timestamp getCurrentTimestamp( )
     {
-        return new Timestamp( GregorianCalendar.getInstance(  ).getTimeInMillis(  ) );
+        return new Timestamp( GregorianCalendar.getInstance( ).getTimeInMillis( ) );
     }
 
     /**
      * Return current date without hours, minutes and milliseconds
      * @return return current date
      */
-    public static Date getCurrentDate(  )
+    public static Date getCurrentDate( )
     {
-        Calendar cal1 = Calendar.getInstance(  );
-        cal1.setTime( new Date(  ) );
+        Calendar cal1 = Calendar.getInstance( );
+        cal1.setTime( new Date( ) );
         cal1.set( Calendar.HOUR_OF_DAY, 0 );
         cal1.set( Calendar.MINUTE, 0 );
         cal1.set( Calendar.SECOND, 0 );
         cal1.set( Calendar.MILLISECOND, 0 );
 
-        return cal1.getTime(  );
+        return cal1.getTime( );
     }
 
     /**
@@ -547,7 +548,7 @@ public final class FormUtils extends GenericAttributesUtils
 
         entryType = EntryTypeHome.findByPrimaryKey( nIdType );
 
-        entry = new Entry(  );
+        entry = new Entry( );
         entry.setEntryType( entryType );
 
         return entry;
@@ -567,7 +568,7 @@ public final class FormUtils extends GenericAttributesUtils
 
         for ( Field field : listField )
         {
-            if ( field.getIdField(  ) == nIdField )
+            if ( field.getIdField( ) == nIdField )
             {
                 return nIndex;
             }
@@ -590,27 +591,27 @@ public final class FormUtils extends GenericAttributesUtils
      * @return the HTML code of the form
      */
     public static String getHtmlForm( Form form, String strUrlAction, Plugin plugin, Locale locale,
-        boolean bDisplayFront, HttpServletRequest request )
+            boolean bDisplayFront, HttpServletRequest request )
     {
         List<Entry> listEntryFirstLevel;
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         HtmlTemplate template;
         EntryFilter filter;
-        StringBuffer strBuffer = new StringBuffer(  );
-        filter = new EntryFilter(  );
-        filter.setIdResource( form.getIdForm(  ) );
+        StringBuffer strBuffer = new StringBuffer( );
+        filter = new EntryFilter( );
+        filter.setIdResource( form.getIdForm( ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         listEntryFirstLevel = EntryHome.getEntryList( filter );
 
-        ArrayList<Category> listCats = new ArrayList<Category>(  );
-        Category category = new Category(  );
+        ArrayList<Category> listCats = new ArrayList<Category>( );
+        Category category = new Category( );
 
         category.setIdCategory( -2 );
         category.setTitle( I18nService.getLocalizedString( PROPERTY_CHOOSE_CATEGORY, locale ) );
 
-        if ( form.getCategory(  ) != null )
+        if ( form.getCategory( ) != null )
         {
             listCats.add( category );
         }
@@ -619,27 +620,27 @@ public final class FormUtils extends GenericAttributesUtils
 
         for ( Entry entry : listEntryFirstLevel )
         {
-            FormUtils.getHtmlEntry( entry.getIdEntry(  ), plugin, strBuffer, locale, bDisplayFront, request );
+            FormUtils.getHtmlEntry( entry.getIdEntry( ), plugin, strBuffer, locale, bDisplayFront, request );
         }
 
-        if ( form.isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        if ( form.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
         {
-            CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
-            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode(  ) );
+            CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService( );
+            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode( ) );
         }
 
         model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_FORM, form );
         model.put( MARK_URL_ACTION, strUrlAction );
-        model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
+        model.put( MARK_STR_ENTRY, strBuffer.toString( ) );
         model.put( MARK_LOCALE, locale );
 
-        if ( ( request != null ) && ( request.getSession(  ) != null ) )
+        if ( ( request != null ) && ( request.getSession( ) != null ) )
         {
-            if ( request.getSession(  ).getAttribute( SESSION_VALIDATE_REQUIREMENT ) != null )
+            if ( request.getSession( ).getAttribute( SESSION_VALIDATE_REQUIREMENT ) != null )
             {
-                boolean bValidateRequirement = (Boolean) request.getSession(  )
-                                                                .getAttribute( SESSION_VALIDATE_REQUIREMENT );
+                boolean bValidateRequirement = (Boolean) request.getSession( ).getAttribute(
+                        SESSION_VALIDATE_REQUIREMENT );
                 model.put( MARK_VALIDATE_REQUIREMENT, bValidateRequirement );
             }
         }
@@ -649,10 +650,10 @@ public final class FormUtils extends GenericAttributesUtils
          * Theme theme = ThemeHome.findByPrimaryKey("red");
          * model.put( MARK_THEME_URL, theme.getPathCss( ) );
          */
-        model.put( MARK_DRAFT_SUPPORTED, FormDraftBackupService.isDraftSupported(  ) );
+        model.put( MARK_DRAFT_SUPPORTED, FormDraftBackupService.isDraftSupported( ) );
         template = AppTemplateService.getTemplate( TEMPLATE_HTML_CODE_FORM, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -662,11 +663,11 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static ReferenceList getRefListCategory( List<Category> listCategories )
     {
-        ReferenceList refListCategories = new ReferenceList(  );
+        ReferenceList refListCategories = new ReferenceList( );
 
         for ( Category category : listCategories )
         {
-            refListCategories.addItem( category.getIdCategory(  ), category.getTitle(  ) );
+            refListCategories.addItem( category.getIdCategory( ), category.getTitle( ) );
         }
 
         return refListCategories;
@@ -683,7 +684,7 @@ public final class FormUtils extends GenericAttributesUtils
      * @return the HTML code of the form
      */
     public static String getHtmlForm( Form form, String strUrlAction, Plugin plugin, Locale locale,
-        boolean bDisplayFront )
+            boolean bDisplayFront )
     {
         return getHtmlForm( form, strUrlAction, plugin, locale, bDisplayFront, null );
     }
@@ -700,72 +701,88 @@ public final class FormUtils extends GenericAttributesUtils
      * @param request HttpServletRequest
      */
     public static void getHtmlEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale,
-        boolean bDisplayFront, HttpServletRequest request )
+            boolean bDisplayFront, HttpServletRequest request )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         StringBuffer strConditionalQuestionStringBuffer = null;
         HtmlTemplate template;
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        if ( entry.getEntryType(  ).getGroup(  ) )
+        if ( entry.getEntryType( ).getGroup( ) )
         {
-            StringBuffer strGroupStringBuffer = new StringBuffer(  );
+            StringBuffer strGroupStringBuffer = new StringBuffer( );
 
-            for ( Entry entryChild : entry.getChildren(  ) )
+            for ( Entry entryChild : entry.getChildren( ) )
             {
-                getHtmlEntry( entryChild.getIdEntry(  ), plugin, strGroupStringBuffer, locale, bDisplayFront, request );
+                getHtmlEntry( entryChild.getIdEntry( ), plugin, strGroupStringBuffer, locale, bDisplayFront, request );
             }
 
-            model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString(  ) );
+            model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
         }
         else
         {
-            if ( entry.getNumberConditionalQuestion(  ) != 0 )
+            if ( entry.getNumberConditionalQuestion( ) != 0 )
             {
-                for ( Field field : entry.getFields(  ) )
+                for ( Field field : entry.getFields( ) )
                 {
-                    field.setConditionalQuestions( FieldHome.findByPrimaryKey( field.getIdField(  ) )
-                                                            .getConditionalQuestions(  ) );
+                    field.setConditionalQuestions( FieldHome.findByPrimaryKey( field.getIdField( ) )
+                            .getConditionalQuestions( ) );
                 }
             }
         }
 
-        if ( entry.getNumberConditionalQuestion(  ) != 0 )
+        if ( entry.getNumberConditionalQuestion( ) != 0 )
         {
-            strConditionalQuestionStringBuffer = new StringBuffer(  );
+            strConditionalQuestionStringBuffer = new StringBuffer( );
 
-            for ( Field field : entry.getFields(  ) )
+            for ( Field field : entry.getFields( ) )
             {
-                if ( field.getConditionalQuestions(  ).size(  ) != 0 )
+                if ( field.getConditionalQuestions( ).size( ) != 0 )
                 {
-                    StringBuffer strGroupStringBuffer = new StringBuffer(  );
+                    StringBuffer strGroupStringBuffer = new StringBuffer( );
 
-                    for ( Entry entryConditional : field.getConditionalQuestions(  ) )
+                    for ( Entry entryConditional : field.getConditionalQuestions( ) )
                     {
-                        getHtmlEntry( entryConditional.getIdEntry(  ), plugin, strGroupStringBuffer, locale,
-                            bDisplayFront, request );
+                        getHtmlEntry( entryConditional.getIdEntry( ), plugin, strGroupStringBuffer, locale,
+                                bDisplayFront, request );
                     }
 
-                    model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString(  ) );
+                    model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
                     model.put( MARK_FIELD, field );
                     template = AppTemplateService.getTemplate( TEMPLATE_DIV_CONDITIONAL_ENTRY, locale, model );
-                    strConditionalQuestionStringBuffer.append( template.getHtml(  ) );
+                    strConditionalQuestionStringBuffer.append( template.getHtml( ) );
                 }
             }
 
-            model.put( MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString(  ) );
+            model.put( MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString( ) );
         }
 
         model.put( MARK_ENTRY, entry );
         model.put( MARK_LOCALE, locale );
 
-        if ( ( request != null ) && ( request.getSession(  ) != null ) )
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+
+        if ( user == null && SecurityService.isAuthenticationEnable( )
+                && SecurityService.getInstance( ).isExternalAuthentication( ) )
         {
-            Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession(  ) );
+            try
+            {
+                user = SecurityService.getInstance( ).getRemoteUser( request );
+            }
+            catch ( UserNotSignedException e )
+            {
+                // Nothing to do : lutece user is not mandatory
+            }
+        }
+        model.put( MARK_USER, user );
+
+        if ( ( request != null ) && ( request.getSession( ) != null ) )
+        {
+            Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession( ) );
 
             if ( listSubmittedResponses != null )
             {
-                List<Response> listResponses = listSubmittedResponses.get( entry.getIdEntry(  ) );
+                List<Response> listResponses = listSubmittedResponses.get( entry.getIdEntry( ) );
 
                 if ( listResponses != null )
                 {
@@ -774,10 +791,10 @@ public final class FormUtils extends GenericAttributesUtils
             }
         }
 
-        template = AppTemplateService.getTemplate( EntryTypeServiceManager.getEntryTypeService( entry )
-                                                                          .getHtmlCode( entry, bDisplayFront ), locale,
-                model );
-        stringBuffer.append( template.getHtml(  ) );
+        template = AppTemplateService
+                .getTemplate( EntryTypeServiceManager.getEntryTypeService( entry ).getHtmlCode( entry, bDisplayFront ),
+                        locale, model );
+        stringBuffer.append( template.getHtml( ) );
     }
 
     /**
@@ -795,38 +812,38 @@ public final class FormUtils extends GenericAttributesUtils
      *         Object
      */
     public static List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry,
-        Plugin plugin, FormSubmit formSubmit, boolean bResponseNull, Locale locale )
+            Plugin plugin, FormSubmit formSubmit, boolean bResponseNull, Locale locale )
     {
-        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>(  );
-        List<Response> listResponse = new ArrayList<Response>(  );
+        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
+        List<Response> listResponse = new ArrayList<Response>( );
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        List<Field> listField = new ArrayList<Field>(  );
+        List<Field> listField = new ArrayList<Field>( );
 
-        for ( Field field : entry.getFields(  ) )
+        for ( Field field : entry.getFields( ) )
         {
-            field = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+            field = FieldHome.findByPrimaryKey( field.getIdField( ) );
             listField.add( field );
         }
 
         entry.setFields( listField );
 
-        if ( entry.getEntryType(  ).getGroup(  ) )
+        if ( entry.getEntryType( ).getGroup( ) )
         {
-            for ( Entry entryChild : entry.getChildren(  ) )
+            for ( Entry entryChild : entry.getChildren( ) )
             {
-                listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry(  ), plugin, formSubmit, false,
+                listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry( ), plugin, formSubmit, false,
                         locale ) );
             }
         }
-        else if ( !entry.getEntryType(  ).getComment(  ) )
+        else if ( !entry.getEntryType( ).getComment( ) )
         {
             GenericAttributeError formError = null;
 
             if ( !bResponseNull )
             {
-                formError = EntryTypeServiceManager.getEntryTypeService( entry )
-                                                   .getResponseData( entry, request, listResponse, locale );
+                formError = EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request,
+                        listResponse, locale );
 
                 if ( formError != null )
                 {
@@ -835,7 +852,7 @@ public final class FormUtils extends GenericAttributesUtils
             }
             else
             {
-                Response response = new Response(  );
+                Response response = new Response( );
                 response.setEntry( entry );
                 listResponse.add( response );
             }
@@ -846,36 +863,36 @@ public final class FormUtils extends GenericAttributesUtils
                 listFormErrors.add( formError );
             }
 
-            if ( request.getSession(  ) != null )
+            if ( request.getSession( ) != null )
             {
-                Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession(  ) );
+                Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession( ) );
 
                 if ( listSubmittedResponses != null )
                 {
-                    listSubmittedResponses.put( entry.getIdEntry(  ), listResponse );
-                    restoreResponses( request.getSession(  ), listSubmittedResponses );
+                    listSubmittedResponses.put( entry.getIdEntry( ), listResponse );
+                    restoreResponses( request.getSession( ), listSubmittedResponses );
                 }
             }
 
-            formSubmit.getListResponse(  ).addAll( listResponse );
+            formSubmit.getListResponse( ).addAll( listResponse );
 
-            if ( entry.getNumberConditionalQuestion(  ) != 0 )
+            if ( entry.getNumberConditionalQuestion( ) != 0 )
             {
-                for ( Field field : entry.getFields(  ) )
+                for ( Field field : entry.getFields( ) )
                 {
-                    if ( isFieldInTheResponseList( field.getIdField(  ), listResponse ) )
+                    if ( isFieldInTheResponseList( field.getIdField( ), listResponse ) )
                     {
-                        for ( Entry conditionalEntry : field.getConditionalQuestions(  ) )
+                        for ( Entry conditionalEntry : field.getConditionalQuestions( ) )
                         {
-                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry(  ), plugin,
+                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry( ), plugin,
                                     formSubmit, false, locale ) );
                         }
                     }
                     else
                     {
-                        for ( Entry conditionalEntry : field.getConditionalQuestions(  ) )
+                        for ( Entry conditionalEntry : field.getConditionalQuestions( ) )
                         {
-                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry(  ), plugin,
+                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry( ), plugin,
                                     formSubmit, true, locale ) );
                         }
                     }
@@ -893,16 +910,16 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static String getEntryUrl( Entry entry )
     {
-        UrlItem url = new UrlItem( AppPathService.getPortalUrl(  ) );
+        UrlItem url = new UrlItem( AppPathService.getPortalUrl( ) );
         url.addParameter( XPageAppService.PARAM_XPAGE_APP, FormPlugin.PLUGIN_NAME );
 
-        if ( ( entry != null ) && ( entry.getIdResource(  ) > 0 ) )
+        if ( ( entry != null ) && ( entry.getIdResource( ) > 0 ) )
         {
-            url.addParameter( PARAMETER_ID_FORM, entry.getIdResource(  ) );
-            url.setAnchor( PREFIX_FORM + entry.getIdEntry(  ) );
+            url.addParameter( PARAMETER_ID_FORM, entry.getIdResource( ) );
+            url.setAnchor( PREFIX_FORM + entry.getIdEntry( ) );
         }
 
-        return url.getUrl(  );
+        return url.getUrl( );
     }
 
     /**
@@ -917,7 +934,7 @@ public final class FormUtils extends GenericAttributesUtils
     {
         for ( Response response : listResponse )
         {
-            if ( ( response.getField(  ) != null ) && ( response.getField(  ).getIdField(  ) == nIdField ) )
+            if ( ( response.getField( ) != null ) && ( response.getField( ).getIdField( ) == nIdField ) )
             {
                 return true;
             }
@@ -936,21 +953,21 @@ public final class FormUtils extends GenericAttributesUtils
      * @return the XML of the response of a form
      */
     public static String getXmlResponses( HttpServletRequest request, Form form, List<FormSubmit> listFormSubmit,
-        Locale locale, Plugin plugin )
+            Locale locale, Plugin plugin )
     {
         // this map stores field in order to not request db multiple time for same field
-        StringBuffer buffer = new StringBuffer(  );
+        StringBuffer buffer = new StringBuffer( );
         XmlUtil.beginElement( buffer, TAG_FORM );
-        XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle(  ) );
+        XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle( ) );
 
         // Build entries list XML
         XmlUtil.beginElement( buffer, TAG_FORM_ENTRIES );
 
-        for ( Entry entry : getAllQuestionList( form.getIdForm(  ), plugin ) )
+        for ( Entry entry : getAllQuestionList( form.getIdForm( ), plugin ) )
         {
             XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
-            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry(  ) );
-            XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle(  ) );
+            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry( ) );
+            XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle( ) );
             XmlUtil.endElement( buffer, TAG_FORM_ENTRY );
         }
 
@@ -967,7 +984,7 @@ public final class FormUtils extends GenericAttributesUtils
         XmlUtil.endElement( buffer, TAG_FORM_SUBMITS );
         XmlUtil.endElement( buffer, TAG_FORM );
 
-        return buffer.toString(  );
+        return buffer.toString( );
     }
 
     /**
@@ -980,21 +997,21 @@ public final class FormUtils extends GenericAttributesUtils
      * @return the XML
      */
     public static String getXmlResponses( HttpServletRequest request, Form form, FormSubmit formSubmit, Locale locale,
-        Plugin plugin )
+            Plugin plugin )
     {
         // this map stores field in order to not request db multiple time for same field
-        StringBuffer buffer = new StringBuffer(  );
+        StringBuffer buffer = new StringBuffer( );
         XmlUtil.beginElement( buffer, TAG_FORM );
-        XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle(  ) );
+        XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle( ) );
 
         // Build entries list XML
         XmlUtil.beginElement( buffer, TAG_FORM_ENTRIES );
 
-        for ( Entry entry : getAllQuestionList( form.getIdForm(  ), plugin ) )
+        for ( Entry entry : getAllQuestionList( form.getIdForm( ), plugin ) )
         {
             XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
-            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry(  ) );
-            XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle(  ) );
+            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry( ) );
+            XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle( ) );
             XmlUtil.endElement( buffer, TAG_FORM_ENTRY );
         }
 
@@ -1008,7 +1025,7 @@ public final class FormUtils extends GenericAttributesUtils
         XmlUtil.endElement( buffer, TAG_FORM_SUBMITS );
         XmlUtil.endElement( buffer, TAG_FORM );
 
-        return buffer.toString(  );
+        return buffer.toString( );
     }
 
     /**
@@ -1020,17 +1037,18 @@ public final class FormUtils extends GenericAttributesUtils
      * @param plugin the plugin
      */
     private static void getXmlResponse( HttpServletRequest request, StringBuffer buffer, FormSubmit formSubmit,
-        Locale locale, Plugin plugin )
+            Locale locale, Plugin plugin )
     {
         XmlUtil.beginElement( buffer, TAG_FORM_SUBMIT );
-        XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_ID, formSubmit.getIdFormSubmit(  ) );
+        XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_ID, formSubmit.getIdFormSubmit( ) );
 
-        String strDate = ( locale != null ) ? getDateString( formSubmit.getDateResponse(  ), locale ) : StringUtils.EMPTY;
+        String strDate = ( locale != null ) ? getDateString( formSubmit.getDateResponse( ), locale )
+                : StringUtils.EMPTY;
         XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_DATE, strDate );
 
-        if ( formSubmit.getIp(  ) != null )
+        if ( formSubmit.getIp( ) != null )
         {
-            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_IP, formSubmit.getIp(  ) );
+            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_IP, formSubmit.getIp( ) );
         }
         else
         {
@@ -1040,38 +1058,37 @@ public final class FormUtils extends GenericAttributesUtils
         Response responseStore = null;
         XmlUtil.beginElement( buffer, TAG_QUESTIONS );
 
-        if ( ( formSubmit.getListResponse(  ) != null ) && !formSubmit.getListResponse(  ).isEmpty(  ) )
+        if ( ( formSubmit.getListResponse( ) != null ) && !formSubmit.getListResponse( ).isEmpty( ) )
         {
-            for ( Response response : formSubmit.getListResponse(  ) )
+            for ( Response response : formSubmit.getListResponse( ) )
             {
-                if ( response.getField(  ) != null )
+                if ( response.getField( ) != null )
                 {
-                    Field field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ) );
+                    Field field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
                     response.setField( field );
                 }
 
-                if ( ( responseStore != null ) &&
-                        ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) )
+                if ( ( responseStore != null )
+                        && ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) ) )
                 {
                     XmlUtil.endElement( buffer, TAG_RESPONSES );
                     XmlUtil.endElement( buffer, TAG_QUESTION );
                 }
 
-                if ( ( responseStore == null ) ||
-                        ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) )
+                if ( ( responseStore == null )
+                        || ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) ) )
                 {
                     XmlUtil.beginElement( buffer, TAG_QUESTION );
-                    XmlUtil.addElementHtml( buffer, TAG_QUESTION_TITLE, response.getEntry(  ).getTitle(  ) );
-                    XmlUtil.addElement( buffer, TAG_QUESTION_ID, response.getEntry(  ).getIdEntry(  ) );
+                    XmlUtil.addElementHtml( buffer, TAG_QUESTION_TITLE, response.getEntry( ).getTitle( ) );
+                    XmlUtil.addElement( buffer, TAG_QUESTION_ID, response.getEntry( ).getIdEntry( ) );
                     XmlUtil.beginElement( buffer, TAG_RESPONSES );
                 }
 
-                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || ( response.getFile(  ) != null ) )
+                if ( StringUtils.isNotBlank( response.getResponseValue( ) ) || ( response.getFile( ) != null ) )
                 {
                     XmlUtil.addElementHtml( buffer, TAG_RESPONSE,
-                        EntryTypeServiceManager.getEntryTypeService( response.getEntry(  ) )
-                                               .getResponseValueForExport( response.getEntry(  ), request, response,
-                            locale ) );
+                            EntryTypeServiceManager.getEntryTypeService( response.getEntry( ) )
+                                    .getResponseValueForExport( response.getEntry( ), request, response, locale ) );
                 }
                 else
                 {
@@ -1097,18 +1114,18 @@ public final class FormUtils extends GenericAttributesUtils
      * @param strFileExtension the file extension
      */
     public static void addHeaderResponse( HttpServletRequest request, HttpServletResponse response, String strFileName,
-        String strFileExtension )
+            String strFileExtension )
     {
         response.setHeader( "Content-Disposition", "attachment ;filename=\"" + strFileName + "\"" );
 
         if ( strFileExtension.equals( "csv" ) )
         {
-            response.setCharacterEncoding( FormParameterService.getService(  ).getExportCSVEncoding(  ) );
+            response.setCharacterEncoding( FormParameterService.getService( ).getExportCSVEncoding( ) );
             response.setContentType( "application/csv" );
         }
         else
         {
-            response.setCharacterEncoding( FormParameterService.getService(  ).getExportXMLEncoding(  ) );
+            response.setCharacterEncoding( FormParameterService.getService( ).getExportXMLEncoding( ) );
 
             String strMimeType = FileSystemUtil.getMIMEType( strFileName );
 
@@ -1136,21 +1153,21 @@ public final class FormUtils extends GenericAttributesUtils
      * @return a JFreeChart Graph function of the statistic form submit
      */
     public static JFreeChart createXYGraph( List<StatisticFormSubmit> listStatistic, String strLabelX,
-        String strLableY, String strTimesUnit )
+            String strLableY, String strTimesUnit )
     {
         XYDataset xyDataset = createDataset( listStatistic, strTimesUnit );
         JFreeChart jfreechart = ChartFactory.createTimeSeriesChart( StringUtils.EMPTY, strLabelX, strLableY, xyDataset,
                 false, false, false );
         jfreechart.setBackgroundPaint( Color.white );
 
-        XYPlot xyplot = jfreechart.getXYPlot(  );
+        XYPlot xyplot = jfreechart.getXYPlot( );
 
         xyplot.setBackgroundPaint( Color.white );
         xyplot.setBackgroundPaint( Color.lightGray );
         xyplot.setDomainGridlinePaint( Color.white );
         xyplot.setRangeGridlinePaint( Color.white );
 
-        XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) xyplot.getRenderer(  );
+        XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) xyplot.getRenderer( );
         renderer.setBaseShapesVisible( true );
         renderer.setSeriesFillPaint( 0, Color.RED );
         renderer.setUseFillPaint( true );
@@ -1174,7 +1191,7 @@ public final class FormUtils extends GenericAttributesUtils
 
             for ( StatisticFormSubmit statistic : listStatistic )
             {
-                series.add( new Day( statistic.getStatisticDate(  ) ), statistic.getNumberResponse(  ) );
+                series.add( new Day( statistic.getStatisticDate( ) ), statistic.getNumberResponse( ) );
             }
         }
         else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_WEEK ) )
@@ -1183,7 +1200,7 @@ public final class FormUtils extends GenericAttributesUtils
 
             for ( StatisticFormSubmit statistic : listStatistic )
             {
-                series.add( new Week( statistic.getStatisticDate(  ) ), statistic.getNumberResponse(  ) );
+                series.add( new Week( statistic.getStatisticDate( ) ), statistic.getNumberResponse( ) );
             }
         }
 
@@ -1193,11 +1210,11 @@ public final class FormUtils extends GenericAttributesUtils
 
             for ( StatisticFormSubmit statistic : listStatistic )
             {
-                series.add( new Month( statistic.getStatisticDate(  ) ), statistic.getNumberResponse(  ) );
+                series.add( new Month( statistic.getStatisticDate( ) ), statistic.getNumberResponse( ) );
             }
         }
 
-        TimeSeriesCollection dataset = new TimeSeriesCollection(  );
+        TimeSeriesCollection dataset = new TimeSeriesCollection( );
         dataset.addSeries( series );
 
         return dataset;
@@ -1212,14 +1229,14 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static ReferenceList getFormList( Plugin plugin, AdminUser user )
     {
-        List<Form> listForms = FormHome.getFormList( new FormFilter(  ), plugin );
+        List<Form> listForms = FormHome.getFormList( new FormFilter( ), plugin );
         listForms = (List<Form>) AdminWorkgroupService.getAuthorizedCollection( listForms, user );
 
-        ReferenceList refListForms = new ReferenceList(  );
+        ReferenceList refListForms = new ReferenceList( );
 
         for ( Form form : listForms )
         {
-            refListForms.addItem( form.getIdForm(  ), form.getTitle(  ) );
+            refListForms.addItem( form.getIdForm( ), form.getTitle( ) );
         }
 
         return refListForms;
@@ -1233,17 +1250,17 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static ReferenceList getRefListAllQuestions( int nIdForm, Plugin plugin )
     {
-        ReferenceList refListQuestions = new ReferenceList(  );
+        ReferenceList refListQuestions = new ReferenceList( );
 
         for ( Entry entry : getAllQuestionList( nIdForm, plugin ) )
         {
-            if ( entry.getTitle(  ) != null )
+            if ( entry.getTitle( ) != null )
             {
-                refListQuestions.addItem( entry.getIdEntry(  ), entry.getTitle(  ) );
+                refListQuestions.addItem( entry.getIdEntry( ), entry.getTitle( ) );
             }
             else
             {
-                refListQuestions.addItem( entry.getIdEntry(  ), entry.getComment(  ) );
+                refListQuestions.addItem( entry.getIdEntry( ), entry.getComment( ) );
             }
         }
 
@@ -1258,8 +1275,8 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static List<Entry> getAllQuestionList( int nIdForm, Plugin plugin )
     {
-        List<Entry> listEntry = new ArrayList<Entry>(  );
-        EntryFilter filter = new EntryFilter(  );
+        List<Entry> listEntry = new ArrayList<Entry>( );
+        EntryFilter filter = new EntryFilter( );
         filter.setIdResource( nIdForm );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setIdIsComment( EntryFilter.FILTER_FALSE );
@@ -1268,11 +1285,11 @@ public final class FormUtils extends GenericAttributesUtils
 
         for ( Entry entryFirstLevel : EntryHome.getEntryList( filter ) )
         {
-            if ( entryFirstLevel.getEntryType(  ).getGroup(  ) )
+            if ( entryFirstLevel.getEntryType( ).getGroup( ) )
             {
-                filter = new EntryFilter(  );
+                filter = new EntryFilter( );
                 filter.setIdResource( nIdForm );
-                filter.setIdEntryParent( entryFirstLevel.getIdEntry(  ) );
+                filter.setIdEntryParent( entryFirstLevel.getIdEntry( ) );
                 filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
                 for ( Entry entryChild : EntryHome.getEntryList( filter ) )
@@ -1299,15 +1316,15 @@ public final class FormUtils extends GenericAttributesUtils
      */
     private static void addConditionnalsEntry( Entry entryParent, List<Entry> listEntry, Plugin plugin )
     {
-        Entry parent = EntryHome.findByPrimaryKey( entryParent.getIdEntry(  ) );
+        Entry parent = EntryHome.findByPrimaryKey( entryParent.getIdEntry( ) );
 
-        for ( Field field : parent.getFields(  ) )
+        for ( Field field : parent.getFields( ) )
         {
-            field = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+            field = FieldHome.findByPrimaryKey( field.getIdField( ) );
 
-            if ( field.getConditionalQuestions(  ) != null )
+            if ( field.getConditionalQuestions( ) != null )
             {
-                for ( Entry entryConditionnal : field.getConditionalQuestions(  ) )
+                for ( Entry entryConditionnal : field.getConditionalQuestions( ) )
                 {
                     listEntry.add( entryConditionnal );
                     addConditionnalsEntry( entryConditionnal, listEntry, plugin );
@@ -1324,8 +1341,8 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static List<Entry> getEntriesList( int nIdForm, Plugin plugin )
     {
-        List<Entry> listEntry = new ArrayList<Entry>(  );
-        EntryFilter filter = new EntryFilter(  );
+        List<Entry> listEntry = new ArrayList<Entry>( );
+        EntryFilter filter = new EntryFilter( );
         filter.setIdResource( nIdForm );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
@@ -1333,13 +1350,13 @@ public final class FormUtils extends GenericAttributesUtils
 
         for ( Entry entryFirstLevel : EntryHome.getEntryList( filter ) )
         {
-            if ( entryFirstLevel.getEntryType(  ).getGroup(  ) )
+            if ( entryFirstLevel.getEntryType( ).getGroup( ) )
             {
-                filter = new EntryFilter(  );
+                filter = new EntryFilter( );
                 filter.setIdResource( nIdForm );
-                filter.setIdEntryParent( entryFirstLevel.getIdEntry(  ) );
+                filter.setIdEntryParent( entryFirstLevel.getIdEntry( ) );
 
-                List<Entry> listEntryChild = new ArrayList<Entry>(  );
+                List<Entry> listEntryChild = new ArrayList<Entry>( );
 
                 for ( Entry entryChild : EntryHome.getEntryList( filter ) )
                 {
@@ -1369,9 +1386,9 @@ public final class FormUtils extends GenericAttributesUtils
      * @return a query
      */
     public static String buildRequestWithFilter( String strSelect, List<String> listStrFilter,
-        List<String> listStrGroupBy, String strOrder )
+            List<String> listStrGroupBy, String strOrder )
     {
-        StringBuffer strBuffer = new StringBuffer(  );
+        StringBuffer strBuffer = new StringBuffer( );
         strBuffer.append( strSelect );
 
         int nCount = 0;
@@ -1385,7 +1402,7 @@ public final class FormUtils extends GenericAttributesUtils
 
             strBuffer.append( strFilter );
 
-            if ( nCount != listStrFilter.size(  ) )
+            if ( nCount != listStrFilter.size( ) )
             {
                 strBuffer.append( CONSTANT_AND );
             }
@@ -1404,7 +1421,7 @@ public final class FormUtils extends GenericAttributesUtils
             strBuffer.append( strOrder );
         }
 
-        return strBuffer.toString(  );
+        return strBuffer.toString( );
     }
 
     /**
@@ -1416,7 +1433,7 @@ public final class FormUtils extends GenericAttributesUtils
     {
         for ( EntryType entryType : EntryTypeHome.getList( FormPlugin.PLUGIN_NAME ) )
         {
-            if ( StringUtils.equals( entryType.getBeanName(  ), EntryTypeMyLuteceUser.BEAN_NAME ) )
+            if ( StringUtils.equals( entryType.getBeanName( ), EntryTypeMyLuteceUser.BEAN_NAME ) )
             {
                 return entryType;
             }
@@ -1433,22 +1450,22 @@ public final class FormUtils extends GenericAttributesUtils
      * @param request HttpServletRequest
      */
     public static void activateMyLuteceAuthentification( Form form, Plugin plugin, Locale locale,
-        HttpServletRequest request )
+            HttpServletRequest request )
     {
         EntryType entryType = FormUtils.getEntryTypeMyLuteceUser( plugin );
         Entry entry = null;
 
-        entry = new Entry(  );
+        entry = new Entry( );
         entry.setEntryType( entryType );
 
         EntryTypeServiceManager.getEntryTypeService( entry ).getRequestData( entry, request, locale );
-        entry.setIdResource( form.getIdForm(  ) );
+        entry.setIdResource( form.getIdForm( ) );
         entry.setResourceType( Form.RESOURCE_TYPE );
         entry.setIdEntry( EntryHome.create( entry ) );
 
-        if ( entry.getFields(  ) != null )
+        if ( entry.getFields( ) != null )
         {
-            for ( Field field : entry.getFields(  ) )
+            for ( Field field : entry.getFields( ) )
             {
                 field.setParentEntry( entry );
                 FieldHome.create( field );
@@ -1463,8 +1480,8 @@ public final class FormUtils extends GenericAttributesUtils
      */
     public static void deactivateMyLuteceAuthentification( Form form, Plugin plugin )
     {
-        EntryFilter entryFilter = new EntryFilter(  );
-        entryFilter.setIdResource( form.getIdForm(  ) );
+        EntryFilter entryFilter = new EntryFilter( );
+        entryFilter.setIdResource( form.getIdForm( ) );
         entryFilter.setResourceType( Form.RESOURCE_TYPE );
 
         List<Entry> listEntries = EntryHome.getEntryList( entryFilter );
@@ -1475,7 +1492,7 @@ public final class FormUtils extends GenericAttributesUtils
 
             if ( entryTypeService instanceof fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUser )
             {
-                EntryHome.remove( entry.getIdEntry(  ) );
+                EntryHome.remove( entry.getIdEntry( ) );
 
                 break;
             }
@@ -1546,7 +1563,7 @@ public final class FormUtils extends GenericAttributesUtils
      * Gets the form plugin
      * @return the plugin
      */
-    public static Plugin getPlugin(  )
+    public static Plugin getPlugin( )
     {
         return PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
     }
@@ -1562,7 +1579,7 @@ public final class FormUtils extends GenericAttributesUtils
     {
         if ( strParameter != null )
         {
-            return strParameter.trim(  );
+            return strParameter.trim( );
         }
 
         return strParameter;

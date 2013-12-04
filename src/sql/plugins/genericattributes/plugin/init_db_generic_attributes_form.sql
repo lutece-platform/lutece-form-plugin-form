@@ -33,6 +33,9 @@ INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_use
 (15,'Numérotation',0,0,0,'form.entryTypeNumbering','form');
 INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
 (16,'Cases à cocher obligatoires',0,0,0,'form.entryTypeMandatoryCheckBox','form');
+INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
+(17,'Attribut de l''utilisateur MyLutece',0,0,0,'form.entryTypeMyLuteceUserattribute','form');
+
 
 
 -- register entries for the exemple form
