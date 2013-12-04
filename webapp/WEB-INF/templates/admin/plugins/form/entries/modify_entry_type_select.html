@@ -62,10 +62,9 @@
 		<fieldset>
 			<legend>#i18n{form.createEntry.manageField.title}
 			<form class="form-inline pull-right" method="post" action="jsp/admin/plugins/form/CreateField.jsp">
-					<button class="btn btn-primary btn-small" type="submit"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.manageField.buttonInsert}</button>
+				<button class="btn btn-primary btn-small" type="submit"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.manageField.buttonInsert}</button>
 			</form>
 			</legend>
-			<@paginationAdmin paginator=paginator combo=1/>
 			<a name="list" id="list"></a>
 			<table class="table table-striped">
 				<tr> 
@@ -85,12 +84,12 @@
 							<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyField.jsp?id_field=${field.idField}"  title="#i18n{portal.util.labelModify}" >
 								<i class="icon-edit icon-white"></i>
 							</a>
-						<#if cpt!=1 || 1 < paginator.pageCurrent>
+						<#if cpt!=1>
 							<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/DoMoveUpField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveUp}" >
 								<i class="icon-chevron-up icon-white"></i>
 							</a>
 						</#if> 
-						<#if field_has_next || paginator.pageCurrent < paginator.pagesCount >
+						<#if field_has_next >
 							<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/DoMoveDownField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveDown}" >
 								<i class="icon-chevron-down icon-white"></i>
 							</a>
@@ -102,7 +101,6 @@
 					</tr>
 				</#list> 
 			</table>
-			<@paginationAdmin paginator=paginator/>
 		</div>
 	</fieldset>	
 </div>

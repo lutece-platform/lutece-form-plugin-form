@@ -57,7 +57,6 @@
 				</fieldset>
 			</form>
 		</div>
-	    <@paginationAdmin paginator=paginator combo=1/>
 		<a name="list" id="list"></a>
         <table class="table table-striped">
 			<thead>
@@ -69,35 +68,34 @@
 	        	</tr>
 			</thead>
 	        <tbody>
-	        <#assign cpt=0>
-			<#list entry_list as entry>
-		        <#assign cpt=cpt+1>
-		        <tr>
-			        <td>${entry.title!}</td>
-			        <td>${entry.entryType.title}</td>
-					<td><#if entry.numberConditionalQuestion!=0>${entry.numberConditionalQuestion}</#if></td>
-			        <td>
-					<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}"  title="null" >
-							<i class="icon-edit icon-white"></i>
-						</a>
-			        <#if cpt!=1>
-						<a class="btn btn-small" href="jsp/admin/plugins/form/DoMoveUpEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" >
-							<i class="icon-chevron-up"></i>
-						</a>
-					</#if>	
-			        <#if entry_has_next>
-						<a class="btn btn-small" href="jsp/admin/plugins/form/DoMoveDownEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" >
-							<i class="icon-chevron-down"></i>
-						</a>
-					</#if>	
-						<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleDelete}" >
-							<i class="icon-trash icon-white"></i>
-						</a>
-					</td>
-			    </tr>
-			</#list>
+		        <#assign cpt=0>
+				<#list entry_list as entry>
+			        <#assign cpt=cpt+1>
+			        <tr>
+				        <td>${entry.title!}</td>
+				        <td>${entry.entryType.title}</td>
+						<td><#if entry.numberConditionalQuestion!=0>${entry.numberConditionalQuestion}</#if></td>
+				        <td>
+						<a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}"  title="null" >
+								<i class="icon-edit icon-white"></i>
+							</a>
+				        <#if cpt!=1>
+							<a class="btn btn-small" href="jsp/admin/plugins/form/DoMoveUpEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveUp}" >
+								<i class="icon-chevron-up"></i>
+							</a>
+						</#if>	
+				        <#if entry_has_next>
+							<a class="btn btn-small" href="jsp/admin/plugins/form/DoMoveDownEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleMoveDown}" >
+								<i class="icon-chevron-down"></i>
+							</a>
+						</#if>	
+							<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}"  title="#i18n{form.modifyForm.manageEnter.titleDelete}" >
+								<i class="icon-trash icon-white"></i>
+							</a>
+						</td>
+				    </tr>
+				</#list>
 			</tbody>			
         </table>
-        <@paginationAdmin paginator=paginator/>
 	</div>
 </div>

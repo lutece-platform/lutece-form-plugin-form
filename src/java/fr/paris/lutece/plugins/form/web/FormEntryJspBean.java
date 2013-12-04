@@ -56,10 +56,8 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
-import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -160,10 +158,6 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
     // other constants
     private static final String EMPTY_STRING = "";
-    private String _strCurrentPageIndexConditionalEntry;
-    private int _nItemsPerPageConditionalEntry;
-    private String _strCurrentPageIndex;
-    private int _nItemsPerPage;
     private int _nIdEntry = -1;
 
     /**
@@ -368,21 +362,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_ENTRY, entry );
         model.put( MARK_FORM, form );
-        _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
-                _nDefaultItemsPerPage );
 
-        LocalizedPaginator<?> paginator = entryTypeService.getPaginator( entry, _nItemsPerPage,
-                AppPathService.getBaseUrl( request ) + JSP_MODIFY_ENTRY + "?id_entry=" + nIdEntry,
-                PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
-
-        if ( paginator != null )
-        {
-            model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPage );
-            model.put( MARK_NUMBER_ITEMS, paginator.getItemsCount(  ) );
-            model.put( MARK_LIST, paginator.getPageItems(  ) );
-            model.put( MARK_PAGINATOR, paginator );
-        }
+        model.put( MARK_LIST, entry.getFields(  ) );
 
         refListRegularExpression = entryTypeService.getReferenceListRegularExpression( entry, plugin );
 
@@ -1532,21 +1513,9 @@ public class FormEntryJspBean extends ModifyFormJspBean
         {
             ReferenceList refEntryType;
             refEntryType = initRefListEntryType( locale, new EntryType(  ) );
-            _strCurrentPageIndexConditionalEntry = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX,
-                    _strCurrentPageIndexConditionalEntry );
-            _nItemsPerPageConditionalEntry = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
-                    _nItemsPerPageConditionalEntry, _nDefaultItemsPerPage );
-
-            LocalizedPaginator<Entry> paginator = new LocalizedPaginator<Entry>( field.getConditionalQuestions(  ),
-                    _nItemsPerPageConditionalEntry,
-                    AppPathService.getBaseUrl( request ) + JSP_MODIFY_FIELD + "?id_field=" + nIdField,
-                    PARAMETER_PAGE_INDEX, _strCurrentPageIndexConditionalEntry, getLocale(  ) );
 
             model.put( MARK_ENTRY_TYPE_REF_LIST, refEntryType );
-            model.put( MARK_PAGINATOR, paginator );
-            model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageEntry );
-            model.put( MARK_ENTRY_LIST, paginator.getPageItems(  ) );
-            model.put( MARK_NUMBER_ITEMS, paginator.getItemsCount(  ) );
+            model.put( MARK_ENTRY_LIST, field.getConditionalQuestions(  ) );
             template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_FIELD_WITH_CONDITIONAL_QUESTION, locale, model );
         }
 
@@ -1754,10 +1723,10 @@ public class FormEntryJspBean extends ModifyFormJspBean
     /**
      * Get the request data and if there is no error insert the data in the
      * field specified in parameter. return null if there is no error or else
-     * return the error page url
+     * return the error page URL
      * @param request the request
      * @param field field
-     * @return null if there is no error or else return the error page url
+     * @return null if there is no error or else return the error page URL
      */
     private String getFieldData( HttpServletRequest request, Field field )
     {
@@ -1793,33 +1762,17 @@ public class FormEntryJspBean extends ModifyFormJspBean
         field.setTitle( strTitle );
         field.setValue( strValue );
         field.setComment( strComment );
-
-        if ( strDefaultValue == null )
-        {
-            field.setDefaultValue( false );
-        }
-        else
-        {
-            field.setDefaultValue( true );
-        }
-
-        if ( strNoDisplayTitle == null )
-        {
-            field.setNoDisplayTitle( false );
-        }
-        else
-        {
-            field.setNoDisplayTitle( true );
-        }
+        field.setDefaultValue( strDefaultValue != null );
+        field.setNoDisplayTitle( strNoDisplayTitle != null );
 
         return null; // No error
     }
 
     /**
-     * return url of the jsp modify entry
+     * Return the URL of the JSP modify entry
      * @param request The HTTP request
      * @param nIdEntry the key of the entry to modify
-     * @return return url of the jsp modify entry
+     * @return return URL of the JSP modify entry
      */
     private String getJspModifyEntry( HttpServletRequest request, int nIdEntry )
     {
@@ -1827,10 +1780,10 @@ public class FormEntryJspBean extends ModifyFormJspBean
     }
 
     /**
-     * return url of the jsp modify field
+     * Return the URL of the JSP modify field
      * @param request The HTTP request
      * @param nIdField the key of the field to modify
-     * @return return url of the jsp modify field
+     * @return return URL of the JSP modify field
      */
     private String getJspModifyField( HttpServletRequest request, int nIdField )
     {

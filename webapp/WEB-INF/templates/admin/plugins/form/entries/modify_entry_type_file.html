@@ -85,45 +85,46 @@
 			<fieldset>
 			<legend>#i18n{form.createEntry.manageRegularExpression.title}</legend>
 				<div class="well">
-				<form class="form-horizontal"  method="post"  action="jsp/admin/plugins/form/DoInsertVerification.jsp#list">
-				<input name="id_field" value="${id_field}" type="hidden" />
-				<div class="control-group">
-					<label class="control-label" for="id_expression">#i18n{form.createEntry.manageRegularExpression.labelInsert} :</label>
-					<div class="controls">
-						<@combo name="id_expression"  items=regular_expression_list default_value=-1 />&nbsp;
-						<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.manageRegularExpression.buttonInsert}</button>
-						<p class="help-block">#i18n{form.createEntry.manageRegularExpression.labelInsertComment}</p>
-					</div>
+					<form class="form-horizontal"  method="post"  action="jsp/admin/plugins/form/DoInsertVerification.jsp#list">
+						<input name="id_field" value="${id_field}" type="hidden" />
+						<div class="control-group">
+							<label class="control-label" for="id_expression">#i18n{form.createEntry.manageRegularExpression.labelInsert} :</label>
+							<div class="controls">
+								<@combo name="id_expression"  items=regular_expression_list default_value=-1 />&nbsp;
+								<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createEntry.manageRegularExpression.buttonInsert}</button>
+								<p class="help-block">#i18n{form.createEntry.manageRegularExpression.labelInsertComment}</p>
+							</div>
+						</div>
+					</form>
 				</div>
-			</form>
 			</fieldset>
-			<@paginationAdmin paginator=paginator combo=1/>
 			<a name="list" id="list"></a>
 			<table class="table table-striped">
-			  <tr> 
-				<th > #i18n{form.createEntry.manageRegularExpression.rowTitle}
-				</th>
-				<th > #i18n{form.createEntry.manageRegularExpression.rowInformationMessage}
-				</th>
-				<th> #i18n{form.createEntry.manageRegularExpression.rowValidExemple}
-				</th>
-				<th> #i18n{form.createEntry.manageField.rowActions}
-				</th>
-			  </tr>
-			   <#list list as expression>
-				<tr>
-					<td>${expression.title}</td>
-					<td>${expression.informationMessage}</td>
-					<td>${expression.validExemple}</td>
-					<td>
-						<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
-						<i class="icon-trash icon-white"></i>
-						</a>
-					</td>
+				  <tr> 
+					<th > #i18n{form.createEntry.manageRegularExpression.rowTitle}
+					</th>
+					<th > #i18n{form.createEntry.manageRegularExpression.rowInformationMessage}
+					</th>
+					<th> #i18n{form.createEntry.manageRegularExpression.rowValidExemple}
+					</th>
+					<th> #i18n{form.createEntry.manageField.rowActions}
+					</th>
 				  </tr>
-				</#list> 
+				  <#list entry.fields as field>
+					   <#list field.regularExpressionList as expression>
+							<tr>
+								<td>${expression.title}</td>
+								<td>${expression.informationMessage}</td>
+								<td>${expression.validExemple}</td>
+								<td>
+									<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
+									<i class="icon-trash icon-white"></i>
+									</a>
+								</td>
+							  </tr>
+						</#list> 
+				</#list>
 			</table>
-			<@paginationAdmin paginator=paginator/>
 		</div>
 	</#if>
 	</div>
