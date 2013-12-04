@@ -115,15 +115,12 @@ public class FormEntryJspBean extends ModifyFormJspBean
     // Markers
     private static final String MARK_WEBAPP_URL = "webapp_url";
     private static final String MARK_LOCALE = "locale";
-    private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_ENTRY_TYPE_REF_LIST = "entry_type_list";
     private static final String MARK_REGULAR_EXPRESSION_LIST_REF_LIST = "regular_expression_list";
     private static final String MARK_ENTRY = "entry";
     private static final String MARK_FIELD = "field";
-    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_ENTRY_LIST = "entry_list";
     private static final String MARK_LIST = "list";
-    private static final String MARK_NUMBER_ITEMS = "number_items";
     private static final String MARK_OPTION_NO_DISPLAY_TITLE = "option_no_display_title";
     private static final String MARK_LIST_PARAM_DEFAULT_VALUES = "list_param_default_values";
     private static final String MARK_FORM = "form";
@@ -139,7 +136,6 @@ public class FormEntryJspBean extends ModifyFormJspBean
     // parameters form
     private static final String PARAMETER_ID_FORM = "id_form";
     private static final String PARAMETER_TITLE = "title";
-    private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_ID_ENTRY = "id_entry";
     private static final String PARAMETER_ENTRY_ID = "entry_id";
     private static final String PARAMETER_MOVE_BUTTON = "move";
