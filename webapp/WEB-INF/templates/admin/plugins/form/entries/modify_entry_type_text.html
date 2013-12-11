@@ -135,24 +135,26 @@
 				<@paginationAdmin paginator=paginator combo=1/>
 				<a name="list" id="list"></a>
 				<table class="table table-striped">
-				<tr> 
-					<th>#i18n{form.createEntry.manageRegularExpression.rowTitle}</th>
-					<th>#i18n{form.createEntry.manageRegularExpression.rowInformationMessage}</th>
-					<th>#i18n{form.createEntry.manageRegularExpression.rowValidExemple}</th>
-					<th>#i18n{form.createEntry.manageField.rowActions}</th>
-				</tr>
-				<#list list as expression>
-				<tr>
-					<td>${expression.title}</td>
-					<td>${expression.informationMessage}</td>
-					<td>${expression.validExemple}</td>
-					<td>
-						<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
-							<i class="icon-trash icon-white"></i>
-						</a>
-					</td>
-				</tr>
-				</#list> 
+					<tr> 
+						<th>#i18n{form.createEntry.manageRegularExpression.rowTitle}</th>
+						<th>#i18n{form.createEntry.manageRegularExpression.rowInformationMessage}</th>
+						<th>#i18n{form.createEntry.manageRegularExpression.rowValidExemple}</th>
+						<th>#i18n{form.createEntry.manageField.rowActions}</th>
+					</tr>
+					<#list list as fields>
+						<#list field.regularExpressionList as expression>
+							<tr>
+								<td>${expression.title}</td>
+								<td>${expression.informationMessage}</td>
+								<td>${expression.validExemple}</td>
+								<td>
+									<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
+										<i class="icon-trash icon-white"></i>
+									</a>
+								</td>
+							</tr>
+						</#list>
+					</#list> 
 				</table>
 				<@paginationAdmin paginator=paginator/>
 			</div>
