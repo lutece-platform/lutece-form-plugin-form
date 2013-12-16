@@ -790,11 +790,8 @@ public class FormApp implements XPageApplication
         List<Response> listResponse = new ArrayList<Response>(  );
         formSubmit.setListResponse( listResponse );
 
-        if ( request.getSession(  ) != null )
-        {
-            Map<Integer, List<Response>> listSubmittedResponses = new HashMap<Integer, List<Response>>(  );
-            FormUtils.restoreResponses( request.getSession(  ), listSubmittedResponses );
-        }
+        Map<Integer, List<Response>> listSubmittedResponses = new HashMap<Integer, List<Response>>(  );
+        FormUtils.restoreResponses( request.getSession(  ), listSubmittedResponses );
 
         for ( Entry entry : listEntryFirstLevel )
         {

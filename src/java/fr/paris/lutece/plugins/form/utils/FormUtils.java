@@ -114,9 +114,7 @@ import javax.servlet.http.HttpSession;
 
 
 /**
- *
- * class FormUtils
- *
+ * Utility class for plugin Form
  */
 public final class FormUtils extends GenericAttributesUtils
 {
@@ -142,7 +140,7 @@ public final class FormUtils extends GenericAttributesUtils
     public static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_OK = "form.cleanFormAnswers.returnCode.ok";
     public static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_KO = "form.cleanFormAnswers.returnCode.ko";
     private static final String PARAMETER_ID_FORM = "id_form";
-    private static final String PREFIX_FORM = "form";
+    private static final String PREFIX_ATTRIBUTE = "attribute";
 
     // marks
     private static final String MARK_LOCALE = "locale";
@@ -776,7 +774,7 @@ public final class FormUtils extends GenericAttributesUtils
 
         model.put( MARK_USER, user );
 
-        if ( ( request != null ) && ( request.getSession(  ) != null ) )
+        if ( request != null )
         {
             Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession(  ) );
 
@@ -880,21 +878,12 @@ public final class FormUtils extends GenericAttributesUtils
             {
                 for ( Field field : entry.getFields(  ) )
                 {
-                    if ( isFieldInTheResponseList( field.getIdField(  ), listResponse ) )
+                    boolean bIsFieldInResponseList = isFieldInTheResponseList( field.getIdField(  ), listResponse );
+
+                    for ( Entry conditionalEntry : field.getConditionalQuestions(  ) )
                     {
-                        for ( Entry conditionalEntry : field.getConditionalQuestions(  ) )
-                        {
-                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry(  ), plugin,
-                                    formSubmit, false, locale ) );
-                        }
-                    }
-                    else
-                    {
-                        for ( Entry conditionalEntry : field.getConditionalQuestions(  ) )
-                        {
-                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry(  ), plugin,
-                                    formSubmit, true, locale ) );
-                        }
+                        listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry(  ), plugin,
+                                formSubmit, !bIsFieldInResponseList, locale ) );
                     }
                 }
             }
@@ -916,7 +905,7 @@ public final class FormUtils extends GenericAttributesUtils
         if ( ( entry != null ) && ( entry.getIdResource(  ) > 0 ) )
         {
             url.addParameter( PARAMETER_ID_FORM, entry.getIdResource(  ) );
-            url.setAnchor( PREFIX_FORM + entry.getIdEntry(  ) );
+            url.setAnchor( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
         }
 
         return url.getUrl(  );
