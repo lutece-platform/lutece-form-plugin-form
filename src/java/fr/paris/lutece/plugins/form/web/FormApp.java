@@ -541,8 +541,7 @@ public class FormApp implements XPageApplication
             }
 
             model.put( MARK_FORM_HTML,
-                FormUtils.getHtmlForm( form, strUrlAction + form.getIdForm(  ), plugin, request.getLocale(  ), true,
-                    request ) );
+                FormUtils.getHtmlForm( form, strUrlAction + form.getIdForm(  ), request.getLocale(  ), true, request ) );
             model.put( MARK_FORM, form );
         }
 

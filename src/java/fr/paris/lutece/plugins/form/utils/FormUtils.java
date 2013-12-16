@@ -586,15 +586,14 @@ public final class FormUtils extends GenericAttributesUtils
      * Return the HTML code of the form
      * @param form the form which HTML code must be return
      * @param strUrlAction the URL who must be call after the form submit
-     * @param plugin the plugin
      * @param locale the locale
      * @param bDisplayFront True if the entry will be displayed in Front Office,
      *            false if it will be displayed in Back Office.
      * @param request HttpServletRequest
      * @return the HTML code of the form
      */
-    public static String getHtmlForm( Form form, String strUrlAction, Plugin plugin, Locale locale,
-        boolean bDisplayFront, HttpServletRequest request )
+    public static String getHtmlForm( Form form, String strUrlAction, Locale locale, boolean bDisplayFront,
+        HttpServletRequest request )
     {
         List<Entry> listEntryFirstLevel;
         Map<String, Object> model = new HashMap<String, Object>(  );
@@ -623,7 +622,7 @@ public final class FormUtils extends GenericAttributesUtils
 
         for ( Entry entry : listEntryFirstLevel )
         {
-            FormUtils.getHtmlEntry( entry.getIdEntry(  ), plugin, strBuffer, locale, bDisplayFront, request );
+            FormUtils.getHtmlEntry( entry.getIdEntry(  ), strBuffer, locale, bDisplayFront, request );
         }
 
         if ( form.isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
@@ -680,31 +679,28 @@ public final class FormUtils extends GenericAttributesUtils
      * Return the HTML code of the form
      * @param form the form which HTML code must be return
      * @param strUrlAction the URL who must be call after the form submit
-     * @param plugin the plugin
      * @param locale the locale
      * @param bDisplayFront True if the entry will be displayed in Front Office,
      *            false if it will be displayed in Back Office.
      * @return the HTML code of the form
      */
-    public static String getHtmlForm( Form form, String strUrlAction, Plugin plugin, Locale locale,
-        boolean bDisplayFront )
+    public static String getHtmlForm( Form form, String strUrlAction, Locale locale, boolean bDisplayFront )
     {
-        return getHtmlForm( form, strUrlAction, plugin, locale, bDisplayFront, null );
+        return getHtmlForm( form, strUrlAction, locale, bDisplayFront, null );
     }
 
     /**
      * Insert in the string buffer the content of the HTML code of the entry
      * @param nIdEntry the key of the entry which HTML code must be insert in
      *            the stringBuffer
-     * @param plugin the plugin
      * @param stringBuffer the buffer which contains the HTML code
      * @param locale the locale
      * @param bDisplayFront True if the entry will be displayed in Front Office,
      *            false if it will be displayed in Back Office.
      * @param request HttpServletRequest
      */
-    public static void getHtmlEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale,
-        boolean bDisplayFront, HttpServletRequest request )
+    public static void getHtmlEntry( int nIdEntry, StringBuffer stringBuffer, Locale locale, boolean bDisplayFront,
+        HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<String, Object>(  );
         StringBuffer strConditionalQuestionStringBuffer = null;
@@ -717,7 +713,7 @@ public final class FormUtils extends GenericAttributesUtils
 
             for ( Entry entryChild : entry.getChildren(  ) )
             {
-                getHtmlEntry( entryChild.getIdEntry(  ), plugin, strGroupStringBuffer, locale, bDisplayFront, request );
+                getHtmlEntry( entryChild.getIdEntry(  ), strGroupStringBuffer, locale, bDisplayFront, request );
             }
 
             model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString(  ) );
@@ -746,8 +742,8 @@ public final class FormUtils extends GenericAttributesUtils
 
                     for ( Entry entryConditional : field.getConditionalQuestions(  ) )
                     {
-                        getHtmlEntry( entryConditional.getIdEntry(  ), plugin, strGroupStringBuffer, locale,
-                            bDisplayFront, request );
+                        getHtmlEntry( entryConditional.getIdEntry(  ), strGroupStringBuffer, locale, bDisplayFront,
+                            request );
                     }
 
                     model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString(  ) );
