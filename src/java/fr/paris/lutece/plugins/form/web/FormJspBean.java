@@ -1287,7 +1287,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
         for ( Entry entry : listEntryFirstLevel )
         {
             List<GenericAttributeError> listFormError = FormUtils.getResponseEntry( request, entry.getIdEntry(  ),
-                    plugin, formSubmit, false, locale );
+                    plugin, formSubmit, false, true, locale );
 
             if ( ( listFormError != null ) && !listFormError.isEmpty(  ) )
             {
