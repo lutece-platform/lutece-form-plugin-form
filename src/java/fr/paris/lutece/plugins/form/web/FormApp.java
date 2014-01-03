@@ -149,6 +149,7 @@ public class FormApp implements XPageApplication
     private static final String PARAMETER_VALIDATE_RECAP = "validate_recap";
     private static final String PARAMETER_VOTED = "voted";
     private static final String PARAMETER_SAVE = "save";
+    private static final String PARAMETER_RESET = "reset";
     private static final String PARAMETER_SESSION = "session";
     private static final String PARAMETER_SAVE_DRAFT = "save_draft";
     private static final String PARAMETER_FIELD_INDEX = "field_index";
@@ -228,7 +229,7 @@ public class FormApp implements XPageApplication
             // parse request & save draft
             doInsertResponseInFormSubmit( request, formSubmit, false, plugin );
             FormDraftBackupService.saveDraft( request, form );
-
+            FormUtils.removeFormErrors( session );
             return getForm( request, session, nMode, plugin );
         }
 
@@ -277,6 +278,15 @@ public class FormApp implements XPageApplication
             doInsertResponseInFormSubmit( request, formSubmit, true, plugin );
             FormDraftBackupService.saveDraft( request, form );
             page = getForm( request, session, nMode, plugin );
+        }
+        else if ( request.getParameter( PARAMETER_RESET ) != null )
+        {
+            FormUtils.removeResponses( session );
+            FormUtils.removeFormErrors( session );
+
+            String strSessionId = request.getSession( ).getId( );
+            FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( strSessionId );
+            return getForm( request, session, nMode, plugin );
         }
         else if ( ( request.getParameter( PARAMETER_SAVE ) != null )
                 && ( request.getParameter( PARAMETER_ID_FORM ) != null ) )
