@@ -10,7 +10,7 @@
 				<div class="control-group">
 					<label class="control-label"><#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>${response.entry.title}<#assign entrySave=response.entry></#if></label>
 					<div class="controls">
-						<input type="text" value="${response.toStringValueResponse}" class="input-xxlarge" disabled>
+						<input type="text" value="${response.toStringValueResponse}" class="input-xxlarge" disabled title="${response.toStringValueResponse}">
 					</div>
 				</div>
 				</#if>
