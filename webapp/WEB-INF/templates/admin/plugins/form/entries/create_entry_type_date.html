@@ -3,7 +3,7 @@
 	<div class="span12">
 		<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
 			<fieldset>
-				<legend>#i18n{form.createEntry.titleQuestion} : '.title}'</legend>
+				<legend>#i18n{form.createEntry.titleQuestion} : '${form.title}'</legend>
 				<input name="id_type" value="${entry.entryType.idType}" type="hidden" />
 				<#if entry.fieldDepend?exists>
 					<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden" />
