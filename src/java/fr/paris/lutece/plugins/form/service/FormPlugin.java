@@ -78,13 +78,4 @@ public class FormPlugin extends PluginDefaultImplementation implements Serializa
 
         return null;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updatePoolName( String strPoolName )
-    {
-        super.updatePoolName( strPoolName );
-    }
 }

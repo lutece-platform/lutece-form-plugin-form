@@ -61,8 +61,6 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +68,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -97,10 +97,10 @@ public class FormEntryJspBean extends ModifyFormJspBean
     private static final String MESSAGE_CONFIRM_REMOVE_GROUP_WITH_ANY_ENTRY = "form.message.confirmRemoveGroupWithAnyEntry";
     private static final String MESSAGE_CONFIRM_REMOVE_GROUP_WITH_ENTRY = "form.message.confirmRemoveGroupWhithEntry";
     private static final String MESSAGE_MANDATORY_FIELD = "form.message.mandatory.field";
-    private static final String MESSAGE_FIELD_VALUE_FIELD = "directory.message.field_value_field";
+    private static final String MESSAGE_FIELD_VALUE_FIELD = "form.message.field_value_field";
     private static final String MESSAGE_SELECT_GROUP = "form.message.selectGroup";
     private static final String FIELD_TITLE_FIELD = "form.createField.labelTitle";
-    private static final String FIELD_VALUE_FIELD = "directory.create_field.label_value";
+    private static final String FIELD_VALUE_FIELD = "form.createField.labelValue";
 
     // properties
     private static final String PROPERTY_COPY_ENTRY_TITLE = "form.copyEntry.title";
