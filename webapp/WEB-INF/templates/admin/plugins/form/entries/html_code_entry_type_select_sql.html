@@ -32,22 +32,22 @@
 				</option>
 			</#list>
 		</select>
-   <#if entry.helpMessage?exists&&entry.helpMessage!=''>
-		<p class="help-block">${entry.helpMessage}</p>
-	</#if>
+	   <#if entry.helpMessage?exists&&entry.helpMessage!=''>
+			<span class="help-block">${entry.helpMessage}</span>
+		</#if>
 	</div>
 </div>
 <#if list_responses??>
-<#list list_responses as response>
-	<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
-		<div class="alert alert-error">
-		<#assign error = response.entry.error>
-		<#if error.mandatoryError>
-			#i18n{form.message.mandatory.entry}
-		<#else>
-			${error.errorMessage}
+	<#list list_responses as response>
+		<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
+			<div class="alert alert-error">
+				<#assign error = response.entry.error>
+				<#if error.mandatoryError>
+					#i18n{form.message.mandatory.entry}
+				<#else>
+					${error.errorMessage}
+				</#if>
+			</div>	
 		</#if>
-		</div>	
-	</#if>
-</#list>
+	</#list>
 </#if>

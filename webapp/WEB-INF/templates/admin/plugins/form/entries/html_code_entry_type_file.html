@@ -1,7 +1,7 @@
 <#include "/admin/plugins/form/commons.html" />
 <div class="control-group ${entry.CSSClass!}">
 	<label class="control-label" for="attribute_${entry.idEntry}" id="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
-		<div class="controls">
+	<div class="controls">
  
 		<#list entry.fields as field>
 			<#if !field.title??>

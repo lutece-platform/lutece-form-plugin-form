@@ -1,33 +1,33 @@
 <div class="control-group">
 	<label class="control-label" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
-	<#list entry.fields as field>
 	<div class="controls">
-		<input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}" 
-			<#if list_responses??>
-				<#list list_responses as response>
-				<#if response.entry.idEntry == entry.idEntry>
-					<#if response.toStringValueResponse??>
-						value="${response.toStringValueResponse}"
+		<#list entry.fields as field>
+			<input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}" 
+				<#if list_responses??>
+					<#list list_responses as response>
+					<#if response.entry.idEntry == entry.idEntry>
+						<#if response.toStringValueResponse??>
+							value="${response.toStringValueResponse}"
+						</#if>
+						<#if response.entry.error??>
+							class="error"
+						</#if>
+						</#if>
+					</#list>
+				<#else>
+					<#if field.value?exists>
+						value="${field.value}" 
+				 	<#else>
+						 value="" 
 					</#if>
-					<#if response.entry.error??>
-						class="error"
-					</#if>
-					</#if>
-				</#list>
-			<#else>
-				<#if field.value?exists>
-					value="${field.value}" 
-			 	<#else>
-					 value="" 
 				</#if>
-			</#if>
-			<#if field.maxSizeEnter!=-1>
-				maxlength="${field.maxSizeEnter}"
-			</#if>
+				<#if field.maxSizeEnter!=-1>
+					maxlength="${field.maxSizeEnter}"
+				</#if>
 			class="${entry.CSSClass!} "	/>
 		</#list>
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-			<p class="help-block">${entry.helpMessage}</p>
+			<span class="help-block">${entry.helpMessage}</span>
 		</#if>
 	</div>
 </div>
@@ -40,13 +40,13 @@
 	</#list>
 </#if>
 <#if entry.confirmField>
-<div class="control-group">
-	<label class="control-label" for="attribute${entry.idEntry}_confirm_field">${entry.confirmFieldTitle}<#if entry.mandatory> *</#if></label>
-	<#list entry.fields as field>
-	<div class="controls">
-		<input type="text" name="attribute${entry.idEntry}_confirm_field" id="attribute${entry.idEntry}_confirm_field" size="${field.width}" value="" 
-		<#if field.maxSizeEnter!=-1>maxlength="${field.maxSizeEnter}"</#if>/>
+	<div class="control-group">
+		<label class="control-label" for="attribute${entry.idEntry}_confirm_field">${entry.confirmFieldTitle}<#if entry.mandatory> *</#if></label>
+		<#list entry.fields as field>
+			<div class="controls">
+				<input type="text" name="attribute${entry.idEntry}_confirm_field" id="attribute${entry.idEntry}_confirm_field" size="${field.width}" value="" 
+				<#if field.maxSizeEnter!=-1>maxlength="${field.maxSizeEnter}"</#if>/>
+			</div>
+		</#list>
 	</div>
-	</#list>
-</div>
 </#if>

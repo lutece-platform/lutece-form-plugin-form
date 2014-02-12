@@ -24,11 +24,11 @@ ${entry.CSSClass!}
 			</#if>
 			</label>
 			<#if !entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
-				<p class="help-block">${entry.helpMessage}</p>
+				<span class="help-block">${entry.helpMessage}</span>
 			</#if>	
 		</#list>
 		<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
-			<p class="help-block">${entry.helpMessage}</p>
+			<span class="help-block">${entry.helpMessage}</span>
 		</#if>	
 		<#if list_responses??>
 			<#list list_responses as response>

@@ -18,19 +18,19 @@
 		</#list>
 		<input type="hidden" name="_form_upload_maxLength_form_${entry.idEntry}" id="_form_upload_maxLength_form_${entry.idEntry}" value="${getFileMaxSize( entry )}" />
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-			<p class="help-block">${entry.helpMessage}</p>
+			<span class="help-block">${entry.helpMessage}</span>
 		</#if>
 		<#if list_responses?? && list_responses?has_content>
 			<#assign response_error = list_responses[0]>
 			<#if response_error.entry.idEntry == entry.idEntry && response_error.entry.error??>
-			<div class="alert alert-error">
+				<div class="alert alert-error">
 					<#assign error = response_error.entry.error>
 					<#if error.mandatoryError>
 						#i18n{form.message.mandatory.entry}
 					<#else>
 						${error.errorMessage}
-			</div>	
 					</#if>
+				</div>
 			</#if>
 		</#if>
 		<button class="btn btn-primary btn-small" type="submit"  id="_form_upload_submit_form_${entry.idEntry}" name="_form_upload_submit_form_${entry.idEntry}" >#i18n{form.action.send.name}</button>
