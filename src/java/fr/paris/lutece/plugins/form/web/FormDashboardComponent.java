@@ -84,11 +84,9 @@ public class FormDashboardComponent extends DashboardComponent
     private static final String TEMPLATE_DASHBOARD_OTHER_ZONE = "/admin/plugins/form/form_dashboard_other_zone.html";
 
     /**
-     * The HTML code of the component
-     * @param user The Admin User
-     * @param request The request
-     * @return The dashboard component
+     * {@inheritDoc}
      */
+    @Override
     public String getDashboardData( AdminUser user, HttpServletRequest request )
     {
         Plugin plugin = getPlugin(  );

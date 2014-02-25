@@ -68,6 +68,7 @@ public class CategoryResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
+    @Override
     public void register(  )
     {
         ResourceType rt = new ResourceType(  );
@@ -88,17 +89,16 @@ public class CategoryResourceIdService extends ResourceIdService
      * @param locale The current locale
      * @return A list of resource ids
      */
+    @Override
     public ReferenceList getResourceIdList( Locale locale )
     {
         return FormUtils.getRefListCategory( CategoryHome.getList( PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) ) );
     }
 
     /**
-     * Returns the Title of a given resource
-     * @param strId The Id of the resource
-     * @param locale The current locale
-     * @return The Title of a given resource
+     * {@inheritDoc}
      */
+    @Override
     public String getTitle( String strId, Locale locale )
     {
         int nIdCategory = -1;

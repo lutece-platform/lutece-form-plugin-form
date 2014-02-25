@@ -45,8 +45,9 @@ import fr.paris.lutece.portal.service.daemon.Daemon;
 public class DaemonPublication extends Daemon
 {
     /**
-     * lance le service de publication
+     * Lauch the publication daemon
      */
+    @Override
     public void run(  )
     {
         PublicationService.publication(  );

@@ -81,6 +81,7 @@ public class FormPortletJspBean extends PortletJspBean
      * @param request The HTTP request
      * @return The HTML form
      */
+    @Override
     public String getCreate( HttpServletRequest request )
     {
         HashMap<String, Object> model = new HashMap<String, Object>(  );
@@ -103,6 +104,7 @@ public class FormPortletJspBean extends PortletJspBean
      * @param request The Http request
      * @return The HTML form
      */
+    @Override
     public String getModify( HttpServletRequest request )
     {
         Form form;
@@ -138,6 +140,7 @@ public class FormPortletJspBean extends PortletJspBean
      * @param request The Http request
      * @return The Jsp management URL of the process result
      */
+    @Override
     public String doCreate( HttpServletRequest request )
     {
         FormPortlet portlet = new FormPortlet(  );
@@ -186,6 +189,7 @@ public class FormPortletJspBean extends PortletJspBean
      * @param request The http request
      * @return Management's Url
      */
+    @Override
     public String doModify( HttpServletRequest request )
     {
         // recovers portlet attributes
