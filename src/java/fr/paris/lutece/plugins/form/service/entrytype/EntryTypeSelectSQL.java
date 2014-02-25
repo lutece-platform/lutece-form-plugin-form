@@ -52,7 +52,7 @@ public class EntryTypeSelectSQL extends AbstractEntryTypeSelectSQL
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode( Entry entry, boolean bDisplayFront )
+    public String getTemplateHtmlForm( Entry entry, boolean bDisplayFront )
     {
         entry.setFields( getSqlQueryFields( entry ) );
 

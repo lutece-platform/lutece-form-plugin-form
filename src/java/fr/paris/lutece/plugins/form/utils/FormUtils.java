@@ -786,7 +786,7 @@ public final class FormUtils extends GenericAttributesUtils
         }
 
         template = AppTemplateService
-                .getTemplate( EntryTypeServiceManager.getEntryTypeService( entry ).getHtmlCode( entry, bDisplayFront ),
+                .getTemplate( EntryTypeServiceManager.getEntryTypeService( entry ).getTemplateHtmlForm( entry, bDisplayFront ),
                         locale, model );
         stringBuffer.append( template.getHtml( ) );
     }

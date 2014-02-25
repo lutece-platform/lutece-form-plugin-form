@@ -57,7 +57,7 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
      * {@inheritDoc}
      */
     @Override
-    public String getHtmlCode( Entry entry, boolean bDisplayFront )
+    public String getTemplateHtmlForm( Entry entry, boolean bDisplayFront )
     {
         return TEMPLATE_HTML_CODE;
     }
