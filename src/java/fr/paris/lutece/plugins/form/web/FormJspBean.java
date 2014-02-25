@@ -1588,9 +1588,13 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
             for ( FormSubmit formSubmit : listFormSubmit )
             {
                 filter = new ResponseFilter(  );
-                filter.setIdResource( formSubmit.getIdFormSubmit(  ) );
                 filter.setOrderBy( SQL_FILTER_ENTRY_POS );
                 filter.setOrderByAsc( true );
+
+                List<Integer> responseId = FormSubmitHome.getResponseListFromIdFormSubmit( formSubmit.getIdFormSubmit(  ),
+                        plugin );
+                filter.setListId( responseId );
+
                 formSubmit.setListResponse( _responseService.getResponseList( filter, false ) );
             }
 
