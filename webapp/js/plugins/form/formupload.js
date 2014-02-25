@@ -258,7 +258,7 @@ function removeFile( action ) {
 	var indexes = new Array();
 	
 	var indexesCount = 0;
-	var checkboxPrefix = '_form_upload_checkbox_form_' + fieldName;
+	var checkboxPrefix = '_form_upload_checkbox_attribute_' + fieldName;
 	$('[name^="' + checkboxPrefix + '"]:checked' ).each( function() {
 		if (this.checked)
 		{

@@ -16,7 +16,7 @@
 				/>
 			</#if>
 		</#list>
-		<input type="hidden" name="_form_upload_maxLength_form_${entry.idEntry}" id="_form_upload_maxLength_form_${entry.idEntry}" value="${getFileMaxSize( entry )}" />
+		<input type="hidden" name="_form_upload_maxLength_attribute_${entry.idEntry}" id="_form_upload_maxLength_attribute_${entry.idEntry}" value="${getFileMaxSize( entry )}" />
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 			<span class="help-block">${entry.helpMessage}</span>
 		</#if>
@@ -33,7 +33,7 @@
 				</div>
 			</#if>
 		</#if>
-		<button class="btn btn-primary btn-small" type="submit"  id="_form_upload_submit_form_${entry.idEntry}" name="_form_upload_submit_form_${entry.idEntry}" >#i18n{form.action.send.name}</button>
+		<button class="btn btn-primary btn-small" type="submit"  id="_form_upload_submit_attribute_${entry.idEntry}" name="_form_upload_submit_attribute_${entry.idEntry}" >#i18n{form.action.send.name}</button>
 	</div>
 </div>
 
@@ -45,19 +45,19 @@
 		<#assign has_files = true>
 	</#if>
 </#if>
-<div class="control-group"  <#if !has_files>style="display:none;"</#if> id="_file_deletion_label_form_${entry.idEntry}">
+<div class="control-group"  <#if !has_files>style="display:none;"</#if> id="_file_deletion_attribute_${entry.idEntry}">
 	<label class="control-label" for="delete_${entry.idEntry}">#i18n{form.file.uploadedFile}</label>
 	<div class="controls">
 	<#assign file_index = 0>
 	<#if has_files>
 		<#list list_responses as response>
 			<#if response.file?? && response.file.title?? && response.file.title != ''>
-				<label class="checkbox" for="_form_upload_checkbox_form_${entry.idEntry}${file_index}">
-				<input type="checkbox" name="_form_upload_checkbox_form_${entry.idEntry}${file_index}" value="1" />${response.file.title}</label>
+				<label class="checkbox" for="_form_upload_checkbox_attribute_${entry.idEntry}${file_index}">
+				<input type="checkbox" name="_form_upload_checkbox_attribute_${entry.idEntry}${file_index}" value="1" />${response.file.title}</label>
 				<#assign file_index = file_index + 1>
 			</#if>
 		</#list>
 	</#if>
-	<button class="btn btn-primary btn-small" name="_form_upload_delete_form_${entry.idEntry}" type="submit" >#i18n{form.action.delete.name}</button>
+	<button class="btn btn-primary btn-small" name="_form_upload_delete_attribute_${entry.idEntry}" type="submit" >#i18n{form.action.delete.name}</button>
 	</div>
 </div>
