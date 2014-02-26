@@ -41,6 +41,7 @@ import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.blobstore.BlobStoreFileItem;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -416,7 +417,7 @@ public final class JSONUtils
      */
     public static List<String> getBlobIds( String strJSON )
     {
-        return getBlobIds( strJSON, FormUtils.CONSTANT_ID_NULL );
+        return getBlobIds( strJSON, GenericAttributesUtils.CONSTANT_ID_NULL );
     }
 
     /**
@@ -444,7 +445,7 @@ public final class JSONUtils
                     // array
                     for ( JSONObject jsonResponse : ( (Collection<JSONObject>) ( (JSONArray) jsonResponses ) ) )
                     {
-                        if ( ( ( nIdEntry == FormUtils.CONSTANT_ID_NULL ) ||
+                        if ( ( ( nIdEntry == GenericAttributesUtils.CONSTANT_ID_NULL ) ||
                                 ( nIdEntry == jsonResponse.getInt( JSON_KEY_ID_ENTRY ) ) ) &&
                                 jsonResponse.containsKey( BlobStoreFileItem.JSON_KEY_FILE_METADATA_BLOB_ID ) )
                         {
@@ -458,7 +459,7 @@ public final class JSONUtils
                     JSONObject jsonResponse = (JSONObject) jsonResponses;
 
                     if ( ( ( nIdEntry == jsonResponse.getInt( JSON_KEY_ID_ENTRY ) ) ||
-                            ( nIdEntry == FormUtils.CONSTANT_ID_NULL ) ) &&
+                            ( nIdEntry == GenericAttributesUtils.CONSTANT_ID_NULL ) ) &&
                             jsonResponse.containsKey( BlobStoreFileItem.JSON_KEY_FILE_METADATA_BLOB_ID ) )
                     {
                         listBlobIds.addAll( getFileMetadataBlobIdsFromJson( jsonResponse ) );

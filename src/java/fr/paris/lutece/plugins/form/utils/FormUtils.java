@@ -54,7 +54,6 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
-import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
@@ -116,7 +115,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Utility class for plugin Form
  */
-public final class FormUtils extends GenericAttributesUtils
+public final class FormUtils
 {
     // other constants
     public static final String CONSTANT_GROUP_BY_DAY = "0";

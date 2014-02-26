@@ -41,6 +41,7 @@ import fr.paris.lutece.plugins.form.service.export.ExportServiceFactory;
 import fr.paris.lutece.plugins.form.service.export.IExportService;
 import fr.paris.lutece.plugins.form.service.export.IExportServiceFactory;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
@@ -185,7 +186,7 @@ public final class FormParameterService
             return 1;
         }
 
-        return FormUtils.convertStringToInt( param.getName(  ) );
+        return GenericAttributesUtils.convertStringToInt( param.getName(  ) );
     }
 
     /**

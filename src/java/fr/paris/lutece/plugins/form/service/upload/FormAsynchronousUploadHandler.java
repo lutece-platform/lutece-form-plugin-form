@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.form.service.upload;
 
 import fr.paris.lutece.plugins.form.service.FormPlugin;
-import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.form.utils.JSONUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -42,6 +41,7 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.genericattributes.service.upload.IGAAsyncUploadHandler;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -373,7 +373,7 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
         if ( StringUtils.isNotBlank( strFieldName ) )
         {
             String strIdEntry = strFieldName.substring( PREFIX_ENTRY_ID.length(  ) );
-            int nIdEntry = FormUtils.convertStringToInt( strIdEntry );
+            int nIdEntry = GenericAttributesUtils.convertStringToInt( strIdEntry );
             Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
             if ( entry != null )

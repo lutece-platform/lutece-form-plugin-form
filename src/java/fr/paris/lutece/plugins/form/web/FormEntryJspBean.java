@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -907,7 +908,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         Integer nEntryId = 0;
         Integer nOrderToSet = 1;
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
-        int nIdForm = FormUtils.convertStringToInt( strIdForm );
+        int nIdForm = GenericAttributesUtils.convertStringToInt( strIdForm );
         Entry entry;
 
         // To execute mass action "Move into"
@@ -918,7 +919,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
             if ( StringUtils.isNotBlank( strIdNewParent ) )
             {
-                nIdNewParent = FormUtils.convertStringToInt( strIdNewParent );
+                nIdNewParent = GenericAttributesUtils.convertStringToInt( strIdNewParent );
             }
 
             // gets the entries which needs to be changed
@@ -943,7 +944,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
                 // for each entry, move it into selected group
                 for ( String strIdEntryToMove : entryToMoveList )
                 {
-                    Entry entryToMove = EntryHome.findByPrimaryKey( FormUtils.convertStringToInt( strIdEntryToMove ) );
+                    Entry entryToMove = EntryHome.findByPrimaryKey( GenericAttributesUtils.convertStringToInt( 
+                                strIdEntryToMove ) );
                     entryParent = EntryHome.findByPrimaryKey( nIdNewParent );
 
                     if ( ( entryToMove == null ) )
@@ -994,12 +996,12 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
             if ( StringUtils.isNotBlank( strEntryId ) )
             {
-                nEntryId = FormUtils.convertStringToInt( strEntryId );
+                nEntryId = GenericAttributesUtils.convertStringToInt( strEntryId );
             }
 
             if ( StringUtils.isNotBlank( strOrderToSet ) )
             {
-                nOrderToSet = FormUtils.convertStringToInt( strOrderToSet );
+                nOrderToSet = GenericAttributesUtils.convertStringToInt( strOrderToSet );
             }
 
             Entry entryToChangeOrder = EntryHome.findByPrimaryKey( nEntryId );
