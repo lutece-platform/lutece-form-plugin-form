@@ -197,7 +197,7 @@ $('input[type=file]').each(function(index) {
 });
 
 // prevent user from quitting the page before his upload ended.
-$('input[type=submit]').each(function() {
+$('button').each(function() {
 	$(this).click(function(event) {
 			if ( uploading != 0 )
 			{
@@ -252,7 +252,7 @@ function getInputValue( inputId ) {
  * @param action the action button name
  */
 function removeFile( action ) {
-	var fieldName = action.match("_form_upload_delete_form_(.*)")[1];
+	var fieldName = action.match("_form_upload_delete_attribute_(.*)")[1];
 	
 	// build indexes to remove
 	var indexes = new Array();
