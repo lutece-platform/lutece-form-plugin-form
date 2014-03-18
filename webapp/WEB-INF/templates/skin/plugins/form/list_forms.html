@@ -1,25 +1,43 @@
 <div class="row">
-	<div class="span12">
-    	<a name="top"></a>
-        <h2>#i18n{form.xpage.listForms.pagetitle}</h2>
-		<#if forms_list?has_content >	
-			<ul>
-				<#list forms_list as form>
-					<li><a href="jsp/site/Portal.jsp?page=form&id_form=${form.idForm}"> <#if form.frontOfficeTitle?? && form.frontOfficeTitle!=""> ${form.frontOfficeTitle} <#else> ${form.title} </#if> (${form.description!})</a></li>
-					<#if (form.infoComplementary1?? && form.infoComplementary1!="") || (form.infoComplementary2?? && form.infoComplementary2!="") || (form.infoComplementary3?? && form.infoComplementary3!="")|| (form.infoComplementary4?? && form.infoComplementary4!="") || (form.infoComplementary5??  && form.infoComplementary5!="")>
-						<ul>
-						<#if form.infoComplementary1?? && form.infoComplementary1!=""><li>${form.infoComplementary1}</li></#if>
-						<#if form.infoComplementary2?? && form.infoComplementary2!=""><li>${form.infoComplementary2}</li></#if>
-						<#if form.infoComplementary3?? && form.infoComplementary3!=""><li>${form.infoComplementary3}</li></#if>
-						<#if form.infoComplementary4?? && form.infoComplementary4!=""><li>${form.infoComplementary4}</li></#if>
-						<#if form.infoComplementary5?? && form.infoComplementary5!=""><li>${form.infoComplementary5}</li></#if>
-						</ul>
-					 </#if>
-				</#list>
-			</ul>
-		<#else>
-			<div class="alert alert-error">#i18n{form.xpage.listForms.emptyList}</div>
-		</#if>
-	</div>
+    <div class="span12">
+        <a name="top"></a>
+         <div class="btn-group pull-right">
+              <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                #i18n{form.xpage.listForms.sortby}
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <#if order == "date" && asc == "desc">
+                <li><a href="jsp/site/Portal.jsp?page=form&order=date&asc=asc">#i18n{form.xpage.listForms.date}</a></li>
+                <#else>
+                <li><a href="jsp/site/Portal.jsp?page=form&order=date&asc=desc">#i18n{form.xpage.listForms.date}</a></li>
+                </#if>
+                <#if order == "title" && asc == "desc">
+                <li><a href="jsp/site/Portal.jsp?page=form&order=title&asc=asc">#i18n{form.xpage.listForms.title}</a></li>
+                <#else>
+                <li><a href="jsp/site/Portal.jsp?page=form&order=title&asc=desc">#i18n{form.xpage.listForms.title}</a></li>
+                </#if>
+              </ul>
+         </div>
+        <h2>#i18n{form.xpage.listForms.pagetitle}</h2> 
+            <#if forms_list?has_content >   
+                <ul>
+                    <#list forms_list as form>
+                        <li><a href="jsp/site/Portal.jsp?page=form&id_form=${form.idForm}"> <#if form.frontOfficeTitle?? && form.frontOfficeTitle!=""> ${form.frontOfficeTitle} <#else> ${form.title} </#if> (${form.description!})</a></li>
+                        <#if (form.infoComplementary1?? && form.infoComplementary1!="") || (form.infoComplementary2?? && form.infoComplementary2!="") || (form.infoComplementary3?? && form.infoComplementary3!="")|| (form.infoComplementary4?? && form.infoComplementary4!="") || (form.infoComplementary5??  && form.infoComplementary5!="")>
+                            <ul>
+                            <#if form.infoComplementary1?? && form.infoComplementary1!=""><li>${form.infoComplementary1}</li></#if>
+                            <#if form.infoComplementary2?? && form.infoComplementary2!=""><li>${form.infoComplementary2}</li></#if>
+                            <#if form.infoComplementary3?? && form.infoComplementary3!=""><li>${form.infoComplementary3}</li></#if>
+                            <#if form.infoComplementary4?? && form.infoComplementary4!=""><li>${form.infoComplementary4}</li></#if>
+                            <#if form.infoComplementary5?? && form.infoComplementary5!=""><li>${form.infoComplementary5}</li></#if>
+                            </ul>
+                         </#if>
+                    </#list>
+                </ul>
+            <#else>
+                <div class="alert alert-error">#i18n{form.xpage.listForms.emptyList}</div>
+            </#if>
+    </div>
 </div>
 

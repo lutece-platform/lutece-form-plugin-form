@@ -41,11 +41,12 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.sql.Date;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -55,36 +56,36 @@ public final class FormDAO implements IFormDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_form ) FROM form_form";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message," +
-        "unavailability_message, requirement_message,workgroup," +
-        "id_mailing_list,active_captcha,active_store_adresse," +
-        "libelle_validate_button,libelle_reset_button,date_begin_disponibility,date_end_disponibility," +
-        " active,auto_publication,date_creation,limit_number_response,id_recap,active_requirement,information_1," +
-        " information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification," +
-        " id_category, automatic_cleaning, cleaning_by_removal, nb_days_before_cleaning" +
-        " FROM form_form WHERE id_form = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO form_form ( id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message," +
-        "unavailability_message,requirement_message,workgroup," +
-        "id_mailing_list,active_captcha,active_store_adresse," +
-        "libelle_validate_button,libelle_reset_button,date_begin_disponibility," +
-        " date_end_disponibility,active,auto_publication,date_creation,limit_number_response," +
-        " id_recap,active_requirement,information_1,information_2,information_3,information_4,information_5, " +
-        " supports_https, code_theme, active_mylutece_authentification, id_category, automatic_cleaning, cleaning_by_removal, nb_days_before_cleaning ) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message,"
+            + "unavailability_message, requirement_message,workgroup,"
+            + "id_mailing_list,active_captcha,active_store_adresse,"
+            + "libelle_validate_button,libelle_reset_button,date_begin_disponibility,date_end_disponibility,"
+            + " active,auto_publication,date_creation,limit_number_response,id_recap,active_requirement,information_1,"
+            + " information_2,information_3,information_4,information_5, supports_https, code_theme, active_mylutece_authentification,"
+            + " id_category, automatic_cleaning, cleaning_by_removal, nb_days_before_cleaning"
+            + " FROM form_form WHERE id_form = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO form_form ( id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message,"
+            + "unavailability_message,requirement_message,workgroup,"
+            + "id_mailing_list,active_captcha,active_store_adresse,"
+            + "libelle_validate_button,libelle_reset_button,date_begin_disponibility,"
+            + " date_end_disponibility,active,auto_publication,date_creation,limit_number_response,"
+            + " id_recap,active_requirement,information_1,information_2,information_3,information_4,information_5, "
+            + " supports_https, code_theme, active_mylutece_authentification, id_category, automatic_cleaning, cleaning_by_removal, nb_days_before_cleaning ) "
+            + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_form WHERE id_form = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE form_form SET id_form=?,title=?,front_office_title=?,is_shown_front_office_title=?,description=?, welcome_message=?," +
-        "unavailability_message=?, requirement_message=?,workgroup=?," +
-        "id_mailing_list=?,active_captcha=?,active_store_adresse=?," +
-        "libelle_validate_button=?,libelle_reset_button=?,date_begin_disponibility=?,date_end_disponibility=?,active=?,auto_publication=?,limit_number_response=? ,active_requirement=?," +
-        "information_1=? ,information_2=? ,information_3=? ,information_4=? ,information_5=?, supports_https = ?, code_theme = ?, " +
-        "active_mylutece_authentification=? ,id_category=?, automatic_cleaning = ?, cleaning_by_removal = ?, nb_days_before_cleaning = ? WHERE id_form=?";
-    private static final String SQL_QUERY_SELECT_FORM_BY_FILTER = "SELECT id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message," +
-        "unavailability_message, requirement_message,workgroup," +
-        "id_mailing_list,active_captcha,active_store_adresse," +
-        "libelle_validate_button,libelle_reset_button,date_begin_disponibility,date_end_disponibility,active," +
-        " auto_publication,date_creation,limit_number_response,id_recap,active_requirement,information_1," +
-        " information_2,information_3,information_4,information_5,supports_https, code_theme, active_mylutece_authentification, id_category, automatic_cleaning, cleaning_by_removal, nb_days_before_cleaning " +
-        " FROM form_form ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE form_form SET id_form=?,title=?,front_office_title=?,is_shown_front_office_title=?,description=?, welcome_message=?,"
+            + "unavailability_message=?, requirement_message=?,workgroup=?,"
+            + "id_mailing_list=?,active_captcha=?,active_store_adresse=?,"
+            + "libelle_validate_button=?,libelle_reset_button=?,date_begin_disponibility=?,date_end_disponibility=?,active=?,auto_publication=?,limit_number_response=? ,active_requirement=?,"
+            + "information_1=? ,information_2=? ,information_3=? ,information_4=? ,information_5=?, supports_https = ?, code_theme = ?, "
+            + "active_mylutece_authentification=? ,id_category=?, automatic_cleaning = ?, cleaning_by_removal = ?, nb_days_before_cleaning = ? WHERE id_form=?";
+    private static final String SQL_QUERY_SELECT_FORM_BY_FILTER = "SELECT id_form,title,front_office_title,is_shown_front_office_title,description, welcome_message,"
+            + "unavailability_message, requirement_message,workgroup,"
+            + "id_mailing_list,active_captcha,active_store_adresse,"
+            + "libelle_validate_button,libelle_reset_button,date_begin_disponibility,date_end_disponibility,active,"
+            + " auto_publication,date_creation,limit_number_response,id_recap,active_requirement,information_1,"
+            + " information_2,information_3,information_4,information_5,supports_https, code_theme, active_mylutece_authentification, id_category, automatic_cleaning, cleaning_by_removal, nb_days_before_cleaning "
+            + " FROM form_form ";
     private static final String SQL_QUERY_SELECT_ALL_THEMES = "SELECT id_form, code_theme FROM form_form";
     private static final String SQL_QUERY_FIND_ANONYMIZE_ENTRIES = " SELECT id_entry FROM form_anonymize_fields WHERE id_form = ? ";
     private static final String SQL_QUERY_REMOVE_ANONYMIZE_ENTRIES = " DELETE FROM form_anonymize_fields WHERE id_form = ? ";
@@ -99,29 +100,34 @@ public final class FormDAO implements IFormDAO
     private static final String SQL_FILTER_ID_CATEGORY = " id_category = ? ";
     private static final String SQL_FILTER_STATE_BEGIN_DISPONIBILTY_AFTER_CURRENT_DATE = " date_begin_disponibility > ? ";
     private static final String SQL_FILTER_STATE_END_DISPONIBILTY_BEFORE_CURRENT_DATE = " date_end_disponibility < ? ";
-    private static final String SQL_ORDER_BY_DATE_CREATION = " ORDER BY date_creation DESC ";
+    private static final String SQL_ORDER_BY_DATE_CREATION = " ORDER BY date_creation ";
+    private static final String SQL_ORDER_BY_TITLE = " ORDER BY title ";
+    private static final String SQL_ASC = "ASC";
+    private static final String SQL_DESC = "DESC";
+    private static final String FILTER_TITLE = "title";
+    private static final String FILTER_ASC = "asc";
 
     /**
      * Generates a new primary key
-     *
+     * 
      * @param plugin the plugin
      * @return The new primary key
      */
     public int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey;
 
-        if ( !daoUtil.next(  ) )
+        if ( !daoUtil.next( ) )
         {
             // if the table is empty
             nKey = 1;
         }
 
         nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -136,57 +142,56 @@ public final class FormDAO implements IFormDAO
         form.setIdForm( newPrimaryKey( plugin ) );
 
         int nIndex = 1;
-        daoUtil.setInt( nIndex++, form.getIdForm(  ) );
-        daoUtil.setString( nIndex++, form.getTitle(  ) );
-        daoUtil.setString( nIndex++, form.getFrontOfficeTitle(  ) );
-        daoUtil.setBoolean( nIndex++, form.isShownFrontOfficeTitle(  ) );
-        daoUtil.setString( nIndex++, form.getDescription(  ) );
-        daoUtil.setString( nIndex++, form.getWelcomeMessage(  ) );
-        daoUtil.setString( nIndex++, form.getUnavailabilityMessage(  ) );
-        daoUtil.setString( nIndex++, form.getRequirement(  ) );
-        daoUtil.setString( nIndex++, form.getWorkgroup(  ) );
-        daoUtil.setInt( nIndex++, form.getIdMailingList(  ) );
-        daoUtil.setBoolean( nIndex++, form.isActiveCaptcha(  ) );
-        daoUtil.setBoolean( nIndex++, form.isActiveStoreAdresse(  ) );
-        daoUtil.setString( nIndex++, form.getLibelleValidateButton(  ) );
-        daoUtil.setString( nIndex++, form.getLibelleResetButton(  ) );
-        daoUtil.setDate( nIndex++,
-            ( form.getDateBeginDisponibility(  ) != null ) ? new Date( form.getDateBeginDisponibility(  ).getTime(  ) )
-                                                           : null );
-        daoUtil.setDate( nIndex++,
-            ( form.getDateEndDisponibility(  ) != null ) ? new Date( form.getDateEndDisponibility(  ).getTime(  ) ) : null );
-        daoUtil.setBoolean( nIndex++, form.isActive(  ) );
-        daoUtil.setBoolean( nIndex++, form.isAutoPublicationActive(  ) );
-        daoUtil.setTimestamp( nIndex++, form.getDateCreation(  ) );
-        daoUtil.setBoolean( nIndex++, form.isLimitNumberResponse(  ) );
-        daoUtil.setInt( nIndex++, form.getRecap(  ).getIdRecap(  ) );
-        daoUtil.setBoolean( nIndex++, form.isActiveRequirement(  ) );
-        daoUtil.setString( nIndex++, form.getInfoComplementary1(  ) );
-        daoUtil.setString( nIndex++, form.getInfoComplementary2(  ) );
-        daoUtil.setString( nIndex++, form.getInfoComplementary3(  ) );
-        daoUtil.setString( nIndex++, form.getInfoComplementary4(  ) );
-        daoUtil.setString( nIndex++, form.getInfoComplementary5(  ) );
-        daoUtil.setBoolean( nIndex++, form.isSupportHTTPS(  ) );
-        daoUtil.setString( nIndex++, form.getCodeTheme(  ) );
-        daoUtil.setBoolean( nIndex++, form.isActiveMyLuteceAuthentification(  ) );
+        daoUtil.setInt( nIndex++, form.getIdForm( ) );
+        daoUtil.setString( nIndex++, form.getTitle( ) );
+        daoUtil.setString( nIndex++, form.getFrontOfficeTitle( ) );
+        daoUtil.setBoolean( nIndex++, form.isShownFrontOfficeTitle( ) );
+        daoUtil.setString( nIndex++, form.getDescription( ) );
+        daoUtil.setString( nIndex++, form.getWelcomeMessage( ) );
+        daoUtil.setString( nIndex++, form.getUnavailabilityMessage( ) );
+        daoUtil.setString( nIndex++, form.getRequirement( ) );
+        daoUtil.setString( nIndex++, form.getWorkgroup( ) );
+        daoUtil.setInt( nIndex++, form.getIdMailingList( ) );
+        daoUtil.setBoolean( nIndex++, form.isActiveCaptcha( ) );
+        daoUtil.setBoolean( nIndex++, form.isActiveStoreAdresse( ) );
+        daoUtil.setString( nIndex++, form.getLibelleValidateButton( ) );
+        daoUtil.setString( nIndex++, form.getLibelleResetButton( ) );
+        daoUtil.setDate( nIndex++, ( form.getDateBeginDisponibility( ) != null ) ? new Date( form
+                .getDateBeginDisponibility( ).getTime( ) ) : null );
+        daoUtil.setDate( nIndex++, ( form.getDateEndDisponibility( ) != null ) ? new Date( form
+                .getDateEndDisponibility( ).getTime( ) ) : null );
+        daoUtil.setBoolean( nIndex++, form.isActive( ) );
+        daoUtil.setBoolean( nIndex++, form.isAutoPublicationActive( ) );
+        daoUtil.setTimestamp( nIndex++, form.getDateCreation( ) );
+        daoUtil.setBoolean( nIndex++, form.isLimitNumberResponse( ) );
+        daoUtil.setInt( nIndex++, form.getRecap( ).getIdRecap( ) );
+        daoUtil.setBoolean( nIndex++, form.isActiveRequirement( ) );
+        daoUtil.setString( nIndex++, form.getInfoComplementary1( ) );
+        daoUtil.setString( nIndex++, form.getInfoComplementary2( ) );
+        daoUtil.setString( nIndex++, form.getInfoComplementary3( ) );
+        daoUtil.setString( nIndex++, form.getInfoComplementary4( ) );
+        daoUtil.setString( nIndex++, form.getInfoComplementary5( ) );
+        daoUtil.setBoolean( nIndex++, form.isSupportHTTPS( ) );
+        daoUtil.setString( nIndex++, form.getCodeTheme( ) );
+        daoUtil.setBoolean( nIndex++, form.isActiveMyLuteceAuthentification( ) );
 
-        if ( form.getCategory(  ) != null )
+        if ( form.getCategory( ) != null )
         {
-            daoUtil.setInt( nIndex++, form.getCategory(  ).getIdCategory(  ) );
+            daoUtil.setInt( nIndex++, form.getCategory( ).getIdCategory( ) );
         }
         else
         {
             daoUtil.setIntNull( nIndex++ );
         }
 
-        daoUtil.setBoolean( nIndex++, form.getAutomaticCleaning(  ) );
-        daoUtil.setBoolean( nIndex++, form.getCleaningByRemoval(  ) );
-        daoUtil.setInt( nIndex++, form.getNbDaysBeforeCleaning(  ) );
+        daoUtil.setBoolean( nIndex++, form.getAutomaticCleaning( ) );
+        daoUtil.setBoolean( nIndex++, form.getCleaningByRemoval( ) );
+        daoUtil.setInt( nIndex++, form.getNbDaysBeforeCleaning( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
 
-        return form.getIdForm(  );
+        return form.getIdForm( );
     }
 
     /**
@@ -197,15 +202,15 @@ public final class FormDAO implements IFormDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nIndex = 1;
         Recap recap = null;
         Form form = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            form = new Form(  );
+            form = new Form( );
             form.setIdForm( daoUtil.getInt( nIndex++ ) );
             form.setTitle( daoUtil.getString( nIndex++ ) );
             form.setFrontOfficeTitle( daoUtil.getString( nIndex++ ) );
@@ -226,7 +231,7 @@ public final class FormDAO implements IFormDAO
             form.setAutoPublicationActive( daoUtil.getBoolean( nIndex++ ) );
             form.setDateCreation( daoUtil.getTimestamp( nIndex++ ) );
             form.setLimitNumberResponse( daoUtil.getBoolean( nIndex++ ) );
-            recap = new Recap(  );
+            recap = new Recap( );
             recap.setIdRecap( daoUtil.getInt( nIndex++ ) );
             form.setRecap( recap );
             form.setActiveRequirement( daoUtil.getBoolean( nIndex++ ) );
@@ -251,7 +256,7 @@ public final class FormDAO implements IFormDAO
             form.setNbDaysBeforeCleaning( daoUtil.getInt( nIndex++ ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return form;
     }
@@ -264,8 +269,8 @@ public final class FormDAO implements IFormDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nIdForm );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -276,55 +281,54 @@ public final class FormDAO implements IFormDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         int nIndex = 1;
-        daoUtil.setInt( nIndex++, form.getIdForm(  ) );
-        daoUtil.setString( nIndex++, form.getTitle(  ) );
-        daoUtil.setString( nIndex++, form.getFrontOfficeTitle(  ) );
-        daoUtil.setBoolean( nIndex++, form.isShownFrontOfficeTitle(  ) );
-        daoUtil.setString( nIndex++, form.getDescription(  ) );
-        daoUtil.setString( nIndex++, form.getWelcomeMessage(  ) );
-        daoUtil.setString( nIndex++, form.getUnavailabilityMessage(  ) );
-        daoUtil.setString( nIndex++, form.getRequirement(  ) );
-        daoUtil.setString( nIndex++, form.getWorkgroup(  ) );
-        daoUtil.setInt( nIndex++, form.getIdMailingList(  ) );
-        daoUtil.setBoolean( nIndex++, form.isActiveCaptcha(  ) );
-        daoUtil.setBoolean( nIndex++, form.isActiveStoreAdresse(  ) );
-        daoUtil.setString( nIndex++, form.getLibelleValidateButton(  ) );
-        daoUtil.setString( nIndex++, form.getLibelleResetButton(  ) );
-        daoUtil.setDate( nIndex++,
-            ( form.getDateBeginDisponibility(  ) != null ) ? new Date( form.getDateBeginDisponibility(  ).getTime(  ) )
-                                                           : null );
-        daoUtil.setDate( nIndex++,
-            ( form.getDateEndDisponibility(  ) != null ) ? new Date( form.getDateEndDisponibility(  ).getTime(  ) ) : null );
-        daoUtil.setBoolean( nIndex++, form.isActive(  ) );
-        daoUtil.setBoolean( nIndex++, form.isAutoPublicationActive(  ) );
-        daoUtil.setBoolean( nIndex++, form.isLimitNumberResponse(  ) );
-        daoUtil.setBoolean( nIndex++, form.isActiveRequirement(  ) );
-        daoUtil.setString( nIndex++, form.getInfoComplementary1(  ) );
-        daoUtil.setString( nIndex++, form.getInfoComplementary2(  ) );
-        daoUtil.setString( nIndex++, form.getInfoComplementary3(  ) );
-        daoUtil.setString( nIndex++, form.getInfoComplementary4(  ) );
-        daoUtil.setString( nIndex++, form.getInfoComplementary5(  ) );
-        daoUtil.setBoolean( nIndex++, form.isSupportHTTPS(  ) );
-        daoUtil.setString( nIndex++, form.getCodeTheme(  ) );
-        daoUtil.setBoolean( nIndex++, form.isActiveMyLuteceAuthentification(  ) );
+        daoUtil.setInt( nIndex++, form.getIdForm( ) );
+        daoUtil.setString( nIndex++, form.getTitle( ) );
+        daoUtil.setString( nIndex++, form.getFrontOfficeTitle( ) );
+        daoUtil.setBoolean( nIndex++, form.isShownFrontOfficeTitle( ) );
+        daoUtil.setString( nIndex++, form.getDescription( ) );
+        daoUtil.setString( nIndex++, form.getWelcomeMessage( ) );
+        daoUtil.setString( nIndex++, form.getUnavailabilityMessage( ) );
+        daoUtil.setString( nIndex++, form.getRequirement( ) );
+        daoUtil.setString( nIndex++, form.getWorkgroup( ) );
+        daoUtil.setInt( nIndex++, form.getIdMailingList( ) );
+        daoUtil.setBoolean( nIndex++, form.isActiveCaptcha( ) );
+        daoUtil.setBoolean( nIndex++, form.isActiveStoreAdresse( ) );
+        daoUtil.setString( nIndex++, form.getLibelleValidateButton( ) );
+        daoUtil.setString( nIndex++, form.getLibelleResetButton( ) );
+        daoUtil.setDate( nIndex++, ( form.getDateBeginDisponibility( ) != null ) ? new Date( form
+                .getDateBeginDisponibility( ).getTime( ) ) : null );
+        daoUtil.setDate( nIndex++, ( form.getDateEndDisponibility( ) != null ) ? new Date( form
+                .getDateEndDisponibility( ).getTime( ) ) : null );
+        daoUtil.setBoolean( nIndex++, form.isActive( ) );
+        daoUtil.setBoolean( nIndex++, form.isAutoPublicationActive( ) );
+        daoUtil.setBoolean( nIndex++, form.isLimitNumberResponse( ) );
+        daoUtil.setBoolean( nIndex++, form.isActiveRequirement( ) );
+        daoUtil.setString( nIndex++, form.getInfoComplementary1( ) );
+        daoUtil.setString( nIndex++, form.getInfoComplementary2( ) );
+        daoUtil.setString( nIndex++, form.getInfoComplementary3( ) );
+        daoUtil.setString( nIndex++, form.getInfoComplementary4( ) );
+        daoUtil.setString( nIndex++, form.getInfoComplementary5( ) );
+        daoUtil.setBoolean( nIndex++, form.isSupportHTTPS( ) );
+        daoUtil.setString( nIndex++, form.getCodeTheme( ) );
+        daoUtil.setBoolean( nIndex++, form.isActiveMyLuteceAuthentification( ) );
 
-        if ( form.getCategory(  ) != null )
+        if ( form.getCategory( ) != null )
         {
-            daoUtil.setInt( nIndex++, form.getCategory(  ).getIdCategory(  ) );
+            daoUtil.setInt( nIndex++, form.getCategory( ).getIdCategory( ) );
         }
         else
         {
             daoUtil.setIntNull( nIndex++ );
         }
 
-        daoUtil.setBoolean( nIndex++, form.getAutomaticCleaning(  ) );
-        daoUtil.setBoolean( nIndex++, form.getCleaningByRemoval(  ) );
-        daoUtil.setInt( nIndex++, form.getNbDaysBeforeCleaning(  ) );
+        daoUtil.setBoolean( nIndex++, form.getAutomaticCleaning( ) );
+        daoUtil.setBoolean( nIndex++, form.getCleaningByRemoval( ) );
+        daoUtil.setInt( nIndex++, form.getNbDaysBeforeCleaning( ) );
 
-        daoUtil.setInt( nIndex++, form.getIdForm(  ) );
+        daoUtil.setInt( nIndex++, form.getIdForm( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -333,97 +337,119 @@ public final class FormDAO implements IFormDAO
     @Override
     public List<Form> selectFormList( FormFilter filter, Plugin plugin )
     {
-        List<Form> formList = new ArrayList<Form>(  );
+        List<Form> formList = new ArrayList<Form>( );
         Form form = null;
         Recap recap = null;
-        List<String> listStrFilter = new ArrayList<String>(  );
+        List<String> listStrFilter = new ArrayList<String>( );
 
-        if ( filter.containsWorkgroupCriteria(  ) )
+        if ( filter.containsWorkgroupCriteria( ) )
         {
             listStrFilter.add( SQL_FILTER_WORKGROUP );
         }
 
-        if ( filter.containsIdState(  ) )
+        if ( filter.containsIdState( ) )
         {
             listStrFilter.add( SQL_FILTER_STATE );
         }
 
-        if ( filter.containsIdAutoPublication(  ) )
+        if ( filter.containsIdAutoPublication( ) )
         {
             listStrFilter.add( SQL_FILTER_STATE_DAEMON );
         }
 
-        if ( filter.containsDateBeginDisponibilityAfterCurrentDate(  ) &&
-                filter.containsDateEndDisponibilityBeforeCurrentDate(  ) )
+        if ( filter.containsDateBeginDisponibilityAfterCurrentDate( )
+                && filter.containsDateEndDisponibilityBeforeCurrentDate( ) )
         {
-            listStrFilter.add( SQL_FILTER_OPEN_PARENTHESIS + SQL_FILTER_STATE_BEGIN_DISPONIBILTY_AFTER_CURRENT_DATE +
-                SQL_FILTER_OR + SQL_FILTER_STATE_END_DISPONIBILTY_BEFORE_CURRENT_DATE + SQL_FILTER_CLOSE_PARENTHESIS );
+            listStrFilter.add( SQL_FILTER_OPEN_PARENTHESIS + SQL_FILTER_STATE_BEGIN_DISPONIBILTY_AFTER_CURRENT_DATE
+                    + SQL_FILTER_OR + SQL_FILTER_STATE_END_DISPONIBILTY_BEFORE_CURRENT_DATE
+                    + SQL_FILTER_CLOSE_PARENTHESIS );
         }
         else
         {
-            if ( filter.containsDateBeginDisponibilityAfterCurrentDate(  ) )
+            if ( filter.containsDateBeginDisponibilityAfterCurrentDate( ) )
             {
                 listStrFilter.add( SQL_FILTER_STATE_BEGIN_DISPONIBILTY_AFTER_CURRENT_DATE );
             }
 
-            if ( filter.containsDateEndDisponibilityBeforeCurrentDate(  ) )
+            if ( filter.containsDateEndDisponibilityBeforeCurrentDate( ) )
             {
                 listStrFilter.add( SQL_FILTER_STATE_END_DISPONIBILTY_BEFORE_CURRENT_DATE );
             }
         }
 
-        if ( filter.containsIdCategory(  ) )
+        if ( filter.containsIdCategory( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_CATEGORY );
         }
 
+        // By default, order by date
+        String strOrder = SQL_ORDER_BY_DATE_CREATION;
+
+        if ( StringUtils.isNotBlank( filter.getOrder( ) ) )
+        {
+            if ( FILTER_TITLE.equals( filter.getOrder( ) ) )
+            {
+                strOrder = SQL_ORDER_BY_TITLE;
+            }
+        }
+
+        String strAsc = SQL_DESC;
+
+        if ( StringUtils.isNotBlank( filter.getAsc( ) ) )
+        {
+            if ( FILTER_ASC.equals( filter.getAsc( ) ) )
+            {
+                strAsc = SQL_ASC;
+            }
+        }
+
         String strSQL = FormUtils.buildRequestWithFilter( SQL_QUERY_SELECT_FORM_BY_FILTER, listStrFilter, null,
-                SQL_ORDER_BY_DATE_CREATION );
+                strOrder + strAsc );
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         int nIndex = 1;
 
-        if ( filter.containsWorkgroupCriteria(  ) )
+        if ( filter.containsWorkgroupCriteria( ) )
         {
-            daoUtil.setString( nIndex, filter.getWorkgroup(  ) );
+            daoUtil.setString( nIndex, filter.getWorkgroup( ) );
             nIndex++;
         }
 
-        if ( filter.containsIdState(  ) )
+        if ( filter.containsIdState( ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdState(  ) );
+            daoUtil.setInt( nIndex, filter.getIdState( ) );
             nIndex++;
         }
 
-        if ( filter.containsIdAutoPublication(  ) )
+        if ( filter.containsIdAutoPublication( ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdAutoPublicationState(  ) );
+            daoUtil.setInt( nIndex, filter.getIdAutoPublicationState( ) );
             nIndex++;
         }
 
-        if ( filter.containsDateBeginDisponibilityAfterCurrentDate(  ) )
+        if ( filter.containsDateBeginDisponibilityAfterCurrentDate( ) )
         {
-            daoUtil.setDate( nIndex, new Date( new java.util.Date(  ).getTime(  ) ) );
+            daoUtil.setDate( nIndex, new Date( new java.util.Date( ).getTime( ) ) );
             nIndex++;
         }
 
-        if ( filter.containsDateEndDisponibilityBeforeCurrentDate(  ) )
+        if ( filter.containsDateEndDisponibilityBeforeCurrentDate( ) )
         {
-            daoUtil.setDate( nIndex, new Date( new java.util.Date(  ).getTime(  ) ) );
+            daoUtil.setDate( nIndex, new Date( new java.util.Date( ).getTime( ) ) );
             nIndex++;
         }
 
-        if ( filter.containsIdCategory(  ) )
+        if ( filter.containsIdCategory( ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdCategory(  ) );
+            daoUtil.setInt( nIndex, filter.getIdCategory( ) );
             nIndex++;
         }
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             nIndex = 1;
-            form = new Form(  );
+            form = new Form( );
             form.setIdForm( daoUtil.getInt( nIndex++ ) );
             form.setTitle( daoUtil.getString( nIndex++ ) );
             form.setFrontOfficeTitle( daoUtil.getString( nIndex++ ) );
@@ -444,7 +470,7 @@ public final class FormDAO implements IFormDAO
             form.setAutoPublicationActive( daoUtil.getBoolean( nIndex++ ) );
             form.setDateCreation( daoUtil.getTimestamp( nIndex++ ) );
             form.setLimitNumberResponse( daoUtil.getBoolean( nIndex++ ) );
-            recap = new Recap(  );
+            recap = new Recap( );
             recap.setIdRecap( daoUtil.getInt( nIndex++ ) );
             form.setRecap( recap );
             form.setActiveRequirement( daoUtil.getBoolean( nIndex++ ) );
@@ -471,7 +497,7 @@ public final class FormDAO implements IFormDAO
             formList.add( form );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return formList;
     }
@@ -482,24 +508,24 @@ public final class FormDAO implements IFormDAO
     @Override
     public ReferenceList getEnableFormList( Plugin plugin )
     {
-        ReferenceList listForm = new ReferenceList(  );
+        ReferenceList listForm = new ReferenceList( );
         String strSQL = SQL_QUERY_SELECT_FORM_BY_FILTER + SQL_ORDER_BY_DATE_CREATION;
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         Form form;
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            form = new Form(  );
+            form = new Form( );
 
             int nIndex = 1;
             form.setIdForm( daoUtil.getInt( nIndex++ ) );
             form.setTitle( daoUtil.getString( nIndex++ ) );
-            listForm.addItem( form.getIdForm(  ), form.getTitle(  ) );
+            listForm.addItem( form.getIdForm( ), form.getTitle( ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listForm;
     }
@@ -510,13 +536,13 @@ public final class FormDAO implements IFormDAO
     @Override
     public Map<Integer, Theme> getXPageThemesMap( Plugin plugin )
     {
-        Map<Integer, Theme> xPageThemesMap = new HashMap<Integer, Theme>(  );
+        Map<Integer, Theme> xPageThemesMap = new HashMap<Integer, Theme>( );
 
         String strSQL = SQL_QUERY_SELECT_ALL_THEMES;
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             int nIndex = 1;
             int nIdForm = daoUtil.getInt( nIndex++ );
@@ -525,7 +551,7 @@ public final class FormDAO implements IFormDAO
             xPageThemesMap.put( nIdForm, theme );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return xPageThemesMap;
     }
@@ -536,17 +562,17 @@ public final class FormDAO implements IFormDAO
     @Override
     public List<Integer> getAnonymizeEntryList( int nIdForm, Plugin plugin )
     {
-        List<Integer> listAnonymizeEntries = new ArrayList<Integer>(  );
+        List<Integer> listAnonymizeEntries = new ArrayList<Integer>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ANONYMIZE_ENTRIES, plugin );
         daoUtil.setInt( 1, nIdForm );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             listAnonymizeEntries.add( daoUtil.getInt( 1 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listAnonymizeEntries;
     }
@@ -560,8 +586,8 @@ public final class FormDAO implements IFormDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ANONYMIZE_ENTRIES, plugin );
         daoUtil.setInt( 1, nIdForm );
         daoUtil.setInt( 2, nIdEntry );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -572,8 +598,8 @@ public final class FormDAO implements IFormDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_REMOVE_ANONYMIZE_ENTRIES, plugin );
         daoUtil.setInt( 1, nIdForm );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -582,15 +608,15 @@ public final class FormDAO implements IFormDAO
     @Override
     public List<Form> getFormListForAutomaticCleaning( Plugin plugin )
     {
-        List<Form> listForms = new ArrayList<Form>(  );
+        List<Form> listForms = new ArrayList<Form>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_AUTOMATIC_CLEANING );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nIndex = 1;
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            Form form = new Form(  );
+            Form form = new Form( );
             form.setIdForm( daoUtil.getInt( nIndex++ ) );
             form.setAutomaticCleaning( daoUtil.getBoolean( nIndex++ ) );
             form.setCleaningByRemoval( daoUtil.getBoolean( nIndex++ ) );
@@ -598,8 +624,13 @@ public final class FormDAO implements IFormDAO
             listForms.add( form );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listForms;
+    }
+
+    private String getOrderBy( FormFilter filter )
+    {
+        return "";
     }
 }
