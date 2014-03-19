@@ -31,7 +31,9 @@
         <@paginationAdmin paginator=paginator combo=1/>
         <table class="table table-striped table-condensed">
             <tr>
-                <th>#i18n{form.manageForm.rowTitle}</th>
+                <th>#i18n{form.manageForm.rowTitle}
+                    <@sort jsp_url="jsp/admin/plugins/form/ManageForm.jsp" attribute="title"/>
+                </th>
                 <th>#i18n{form.manageForm.rowPeriodDisponibility}</th>
                 <th>#i18n{form.manageForm.rowActions}</th>
             </tr>
