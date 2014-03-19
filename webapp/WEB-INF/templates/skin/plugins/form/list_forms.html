@@ -7,15 +7,15 @@
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <#if order == "date" && asc == "desc">
-                <li><a href="jsp/site/Portal.jsp?page=form&order=date&asc=asc">#i18n{form.xpage.listForms.date}</a></li>
-                <#else>
+                <#if order == "date" && asc == "asc">
                 <li><a href="jsp/site/Portal.jsp?page=form&order=date&asc=desc">#i18n{form.xpage.listForms.date}</a></li>
-                </#if>
-                <#if order == "title" && asc == "desc">
-                <li><a href="jsp/site/Portal.jsp?page=form&order=title&asc=asc">#i18n{form.xpage.listForms.title}</a></li>
                 <#else>
+                <li><a href="jsp/site/Portal.jsp?page=form&order=date&asc=asc">#i18n{form.xpage.listForms.date}</a></li>
+                </#if>
+                <#if order == "title" && asc == "asc">
                 <li><a href="jsp/site/Portal.jsp?page=form&order=title&asc=desc">#i18n{form.xpage.listForms.title}</a></li>
+                <#else>
+                <li><a href="jsp/site/Portal.jsp?page=form&order=title&asc=asc">#i18n{form.xpage.listForms.title}</a></li>
                 </#if>
               </ul>
          </div>
