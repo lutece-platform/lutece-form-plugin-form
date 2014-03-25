@@ -33,10 +33,11 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
+
 /**
- * 
+ *
  * class FormFilter
- * 
+ *
  */
 public class FormFilter
 {
@@ -59,11 +60,11 @@ public class FormFilter
     private String _strAsc;
 
     /**
-     * 
+     *
      * @return 1 if the forms return must be enabled
      *         0 if the forms return must be disabled
      */
-    public int getIdState( )
+    public int getIdState(  )
     {
         return _nIdState;
     }
@@ -80,19 +81,19 @@ public class FormFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain form state
      */
-    public boolean containsIdState( )
+    public boolean containsIdState(  )
     {
         return ( _nIdState != ALL_INT );
     }
 
     /**
-     * 
+     *
      * @return the workgroup of the search forms
      */
-    public String getWorkgroup( )
+    public String getWorkgroup(  )
     {
         return _strWorkgroup;
     }
@@ -107,10 +108,10 @@ public class FormFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contaion workgroup criteria
      */
-    public boolean containsWorkgroupCriteria( )
+    public boolean containsWorkgroupCriteria(  )
     {
         return ( !_strWorkgroup.equals( ALL_STRING ) );
     }
@@ -126,10 +127,10 @@ public class FormFilter
     }
 
     /**
-     * 
+     *
      * @return true if the date end availability must be before current date
      */
-    public boolean containsDateEndDisponibilityBeforeCurrentDate( )
+    public boolean containsDateEndDisponibilityBeforeCurrentDate(  )
     {
         return _bDateEndDisponibilityBeforeCurrentDate;
     }
@@ -145,29 +146,29 @@ public class FormFilter
     }
 
     /**
-     * 
+     *
      * @return true if the date begin availability must be after current date
      */
-    public boolean isDateBeginDisponibilityAfterCurrentDate( )
+    public boolean isDateBeginDisponibilityAfterCurrentDate(  )
     {
         return _bDateBeginDisponibilityAfterCurrentDate;
     }
 
     /**
-     * 
+     *
      * @return true if the date begin disponibility must be after current date
      */
-    public boolean containsDateBeginDisponibilityAfterCurrentDate( )
+    public boolean containsDateBeginDisponibilityAfterCurrentDate(  )
     {
         return _bDateBeginDisponibilityAfterCurrentDate;
     }
 
     /**
-     * 
+     *
      * @return 1 if the forms return must be in auto publication enabled
      *         0 if the forms return must be in auto publication disabled
      */
-    public int getIdAutoPublicationState( )
+    public int getIdAutoPublicationState(  )
     {
         return _nIdAutoPublicationState;
     }
@@ -185,19 +186,19 @@ public class FormFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain form auto publication state
      */
-    public boolean containsIdAutoPublication( )
+    public boolean containsIdAutoPublication(  )
     {
         return ( _nIdAutoPublicationState != ALL_INT );
     }
 
     /**
-     * 
+     *
      * @return the id of the category insert in the filter
      */
-    public int getIdCategory( )
+    public int getIdCategory(  )
     {
         return _nIdCategory;
     }
@@ -212,10 +213,10 @@ public class FormFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain an id of category
      */
-    public boolean containsIdCategory( )
+    public boolean containsIdCategory(  )
     {
         return ( _nIdCategory != ALL_INT );
     }
@@ -223,7 +224,7 @@ public class FormFilter
     /**
      * @return the _strOrder
      */
-    public String getOrder( )
+    public String getOrder(  )
     {
         return this._strOrder;
     }
@@ -239,7 +240,7 @@ public class FormFilter
     /**
      * @return the _strAsc
      */
-    public String getAsc( )
+    public String getAsc(  )
     {
         return this._strAsc;
     }
@@ -251,5 +252,4 @@ public class FormFilter
     {
         this._strAsc = strAsc;
     }
-
 }

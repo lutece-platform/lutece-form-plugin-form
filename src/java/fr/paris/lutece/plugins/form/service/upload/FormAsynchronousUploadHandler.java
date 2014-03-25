@@ -125,7 +125,6 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
             throw new AppException( "No file uploaded" );
         }
 
-        String strSessionId = request.getParameter( PARAMETER_JSESSION_ID );
         String strIdSession = request.getParameter( PARAMETER_JSESSION_ID );
 
         if ( StringUtils.isNotBlank( strIdSession ) )
@@ -137,10 +136,10 @@ public class FormAsynchronousUploadHandler implements IGAAsyncUploadHandler
                 throw new AppException( "id entry is not provided for the current file upload" );
             }
 
-            initMap( strSessionId, strFieldName );
+            initMap( strIdSession, strFieldName );
 
             // find session-related files in the map
-            Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
+            Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( strIdSession );
 
             List<FileItem> fileItemsSession = mapFileItemsSession.get( strFieldName );
 
