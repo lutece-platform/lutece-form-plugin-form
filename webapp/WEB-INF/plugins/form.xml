@@ -23,7 +23,6 @@
     <!-- Specific plugin CSS stylesheet -->
     <css-stylesheets>
         <css-stylesheets-scope>portal</css-stylesheets-scope>
-        <css-stylesheet>jscalendar/calendar-lutece.css</css-stylesheet>
         <css-stylesheet>form/form.css</css-stylesheet>
     </css-stylesheets>
     
