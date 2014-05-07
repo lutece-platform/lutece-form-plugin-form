@@ -110,14 +110,14 @@ import javax.servlet.http.HttpSession;
 public class FormApp implements XPageApplication
 {
     /**
-     * Serial version UID
-     */
-    private static final long serialVersionUID = -1385222847493418480L;
-
-    /**
      * Parameter 'id_form'
      */
     public static final String PARAMETER_ID_FORM = "id_form";
+
+    /**
+     * Serial version UID
+     */
+    private static final long serialVersionUID = -1385222847493418480L;
 
     // markers
     private static final String MARK_RECAP = "recap";
@@ -180,8 +180,8 @@ public class FormApp implements XPageApplication
 
     // Misc
     private static final String REGEX_ID = "^[\\d]+$";
-    private IResponseService _responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
-    private EntryTypeService _entryTypeService = SpringContextService.getBean( FormUtils.BEAN_ENTRY_TYPE_SERVICE );
+    private transient IResponseService _responseService;
+    private transient EntryTypeService _entryTypeService;
 
     /**
      * Returns the Form XPage result content depending on the request parameters
@@ -405,7 +405,8 @@ public class FormApp implements XPageApplication
                         ResponseFilter filter = new ResponseFilter(  );
                         filter.setIdEntry( response.getEntry(  ).getIdEntry(  ) );
 
-                        Collection<Response> listSubmittedResponses = _responseService.getResponseList( filter, false );
+                        Collection<Response> listSubmittedResponses = getResponseService(  )
+                                                                          .getResponseList( filter, false );
 
                         for ( Response submittedResponse : listSubmittedResponses )
                         {
@@ -440,8 +441,8 @@ public class FormApp implements XPageApplication
 
         model.put( MARK_RECAP, recap );
         model.put( MARK_FORM_SUBMIT, formSubmit );
-        model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.BEAN_NAME ) );
-        model.put( MARK_ENTRY_TYPE_NUMBERING, _entryTypeService.getEntryType( EntryTypeNumbering.BEAN_NAME ) );
+        model.put( MARK_ENTRY_TYPE_SESSION, getEntryTypeService(  ).getEntryType( EntryTypeSession.BEAN_NAME ) );
+        model.put( MARK_ENTRY_TYPE_NUMBERING, getEntryTypeService(  ).getEntryType( EntryTypeNumbering.BEAN_NAME ) );
 
         //String strPageId = request.getParameter( PARAMETER_PAGE_ID );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_RECAP_FORM_SUBMIT, locale, model );
@@ -872,7 +873,7 @@ public class FormApp implements XPageApplication
 
         try
         {
-            _responseService.create( formSubmit );
+            getResponseService(  ).create( formSubmit );
         }
         catch ( Exception ex )
         {
@@ -1040,5 +1041,33 @@ public class FormApp implements XPageApplication
 
             return AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_KO );
         }
+    }
+
+    /**
+     * Get the response service
+     * @return
+     */
+    private IResponseService getResponseService(  )
+    {
+        if ( _responseService == null )
+        {
+            _responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
+        }
+
+        return _responseService;
+    }
+
+    /**
+     * Get the entry type service
+     * @return The entry type service
+     */
+    private EntryTypeService getEntryTypeService(  )
+    {
+        if ( _entryTypeService == null )
+        {
+            _entryTypeService = SpringContextService.getBean( FormUtils.BEAN_ENTRY_TYPE_SERVICE );
+        }
+
+        return _entryTypeService;
     }
 }
