@@ -54,10 +54,9 @@ public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
     private static final String SQL_QUERY_FIND_ALL = "SELECT id_rss " + "FROM form_rss_cf";
 
     /**
-     * Insert a new record in the table.
-     * @param config The Instance of the object config
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public synchronized void insert( FormResourceRssConfig config, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -71,11 +70,9 @@ public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
     }
 
     /**
-     * Update the record in the table
-     *
-     * @param  config instance of config object to update
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void store( FormResourceRssConfig config, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -90,12 +87,9 @@ public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
     }
 
     /**
-     * load the data of FormResourceRssConfig from the table
-     * @param nIdRss the Rss id
-     * @param plugin the plugin
-     * @return The Instance of the object FormResourceRssConfig
-     *
+     * {@inheritDoc}
      */
+    @Override
     public FormResourceRssConfig load( int nIdRss, Plugin plugin )
     {
         FormResourceRssConfig config = null;
@@ -119,10 +113,9 @@ public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
     }
 
     /**
-     * Delete a record from the table
-     * @param nIdRss The id of object FormResourceRssConfig
-     * @param plugin le plugin
+     * {@inheritDoc}
      */
+    @Override
     public void delete( int nIdRss, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -133,10 +126,9 @@ public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
     }
 
     /**
-     * Return all record
-     * @param plugin le plugin
-     * @return List of FormResourceRssConfig
+     * {@inheritDoc}
      */
+    @Override
     public List<FormResourceRssConfig> loadAll( Plugin plugin )
     {
         List<FormResourceRssConfig> configList = new ArrayList<FormResourceRssConfig>(  );

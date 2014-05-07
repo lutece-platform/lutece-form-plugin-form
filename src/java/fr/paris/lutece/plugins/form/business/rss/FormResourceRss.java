@@ -88,9 +88,9 @@ public class FormResourceRss extends ResourceRss
     private static final String MARK_ITEM_LIST = "itemList";
 
     /**
-     * verified that the resource contains the resource to be exploited
-     * @return true if resourceRss content resource
+     * {@inheritDoc}
      */
+    @Override
     public boolean contentResourceRss(  )
     {
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
@@ -106,10 +106,9 @@ public class FormResourceRss extends ResourceRss
     }
 
     /**
-     * Save the ResourceRss configuration
-     * @param request request
-     * @param locale locale
+     * {@inheritDoc}
      */
+    @Override
     public void doSaveConfig( HttpServletRequest request, Locale locale )
     {
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
@@ -121,10 +120,9 @@ public class FormResourceRss extends ResourceRss
     }
 
     /**
-     * Update the ResourceRss configuration
-     * @param request request
-     * @param locale locale
+     * {@inheritDoc}
      */
+    @Override
     public void doUpdateConfig( HttpServletRequest request, Locale locale )
     {
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
@@ -136,12 +134,9 @@ public class FormResourceRss extends ResourceRss
     }
 
     /**
-     * validates the user input associated to the resource rss
-     * @param request request
-     * @param locale locale
-     * @return null if there is no error in the resourceRss form
-     *                    else return the error message url
+     * {@inheritDoc}
      */
+    @Override
     public String doValidateConfigForm( HttpServletRequest request, Locale locale )
     {
         this.setDescription( I18nService.getLocalizedString( PROPERTY_DESCRIPTION_WIRE, locale ) );
@@ -150,31 +145,27 @@ public class FormResourceRss extends ResourceRss
     }
 
     /**
-     * returns the informations which must be displayed in the creation resourceRss configuration
-     * @param request request
-     * @param locale locale
-     * @return the information which must  be displayed in the creation resourceRss configuration
+     * {@inheritDoc}
      */
+    @Override
     public String getDisplayCreateConfigForm( HttpServletRequest request, Locale locale )
     {
         return "";
     }
 
     /**
-     * returns the informations which must  be displayed in the modification resourceRss configuration
-     * @param request request
-     * @param locale locale
-     * @return the information which must  be displayed in the modification resourceRss configuration
+     * {@inheritDoc}
      */
+    @Override
     public String getDisplayModifyConfigForm( HttpServletRequest request, Locale locale )
     {
         return "";
     }
 
     /**
-     * create Html Rss
-     * @return Html rss
+     * {@inheritDoc}
      */
+    @Override
     public String createHtmlRss(  )
     {
         HashMap<String, Object> model = new HashMap<String, Object>(  );
@@ -210,9 +201,9 @@ public class FormResourceRss extends ResourceRss
     }
 
     /**
-     * Gets the feed with items
-     * @return the {@link IFeedResource}
+     * {@inheritDoc}
      */
+    @Override
     public IFeedResource getFeed(  )
     {
         String strRssFileLanguage = AppPropertiesService.getProperty( PROPERTY_SITE_LANGUAGE );
@@ -266,9 +257,9 @@ public class FormResourceRss extends ResourceRss
     }
 
     /**
-     * Update the ResourceRss configuration
-     * @param idResourceRss id of resourceRss
+     * {@inheritDoc}
      */
+    @Override
     public void deleteResourceRssConfig( int idResourceRss )
     {
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
@@ -276,10 +267,9 @@ public class FormResourceRss extends ResourceRss
     }
 
     /**
-     * Return the list of parameter to keep when action apply
-     * @param request request
-     * @return the map of parameter
+     * {@inheritDoc}
      */
+    @Override
     public Map<String, String> getParameterToApply( HttpServletRequest request )
     {
         Map<String, String> map = new HashMap<String, String>(  );
@@ -290,9 +280,9 @@ public class FormResourceRss extends ResourceRss
     }
 
     /**
-     * verify that the resource exist
-     * @return true if resource exist
+     * {@inheritDoc}
      */
+    @Override
     public boolean checkResource(  )
     {
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );

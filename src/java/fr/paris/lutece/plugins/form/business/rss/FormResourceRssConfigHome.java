@@ -47,7 +47,7 @@ import java.util.List;
 public final class FormResourceRssConfigHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormResourceRssConfigDAO _dao = SpringContextService.getBean( "resourceRssFormConfigDAO" );
+    private static IFormResourceRssConfigDAO _dao = SpringContextService.getBean( "form.resourceRssFormConfigDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

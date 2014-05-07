@@ -17,10 +17,10 @@
  	 <bean id="form.formParameterDAO" class="fr.paris.lutece.plugins.form.business.parameter.FormParameterDAO" />
  	 <bean id="form.formRemovalService" class="fr.paris.lutece.portal.service.util.RemovalListenerService" />
  	 <bean id="form.entryRemovalService" class="fr.paris.lutece.portal.service.util.RemovalListenerService" />
-	 <bean id="resourceRssFormConfigDAO"  class="fr.paris.lutece.plugins.form.business.rss.FormResourceRssConfigDAO" />
+	 <bean id="form.resourceRssFormConfigDAO"  class="fr.paris.lutece.plugins.form.business.rss.FormResourceRssConfigDAO" />
 	 
 	<!-- RSS -->
-    <bean id="ResourceRssTypeForm" class="fr.paris.lutece.portal.business.rss.ResourceRssType" >
+    <bean id="form.resourceRssTypeForm" class="fr.paris.lutece.portal.business.rss.ResourceRssType" >
     	<property name="key" value="ResourceRssTypeForm" />
 		<property name="titleI18nKey" value="form.resource_rss_type.label" />
 		<property name="className" value="fr.paris.lutece.plugins.form.business.rss.FormResourceRss"/>
