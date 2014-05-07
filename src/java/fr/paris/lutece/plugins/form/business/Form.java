@@ -368,9 +368,9 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     * Get the work group associate to the form
-     * @return the work group associate to the form
+     * {@inheritDoc}
      */
+    @Override
     public String getWorkgroup(  )
     {
         return _strWorkgroup;
@@ -476,18 +476,18 @@ public class Form implements AdminWorkgroupResource, RBACResource
     }
 
     /**
-     * RBAC resource implementation
-     * @return The resource type code
+     * {@inheritDoc}
      */
+    @Override
     public String getResourceTypeCode(  )
     {
         return RESOURCE_TYPE;
     }
 
     /**
-     * RBAC resource implementation
-     * @return The resourceId
+     * {@inheritDoc}
      */
+    @Override
     public String getResourceId(  )
     {
         return StringUtils.EMPTY + _nIdForm;

@@ -630,9 +630,4 @@ public final class FormDAO implements IFormDAO
 
         return listForms;
     }
-
-    private String getOrderBy( FormFilter filter )
-    {
-        return "";
-    }
 }

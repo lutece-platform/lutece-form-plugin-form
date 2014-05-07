@@ -457,7 +457,7 @@ public class FormApp implements XPageApplication
      * @param nMode The mode
      * @param plugin The {@link Plugin}
      * @return The HTML code for forms list xpage
-     * @throws SiteMessageException
+     * @throws SiteMessageException If a site message needs to be display
      */
     private String getFormList( HttpServletRequest request, HttpSession session, int nMode, Plugin plugin )
         throws SiteMessageException

@@ -477,8 +477,7 @@ public final class JSONUtils
 
     /**
      * Gets blobs id for files metadata
-     * @param strJSONFields the strJSONFields
-     * @param field the field
+     * @param json the JSON fields
      * @return blob ids found, empty list otherwise.
      */
     private static Collection<String> getFileMetadataBlobIdsFromJson( JSONObject json )
