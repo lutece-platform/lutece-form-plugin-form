@@ -10,7 +10,11 @@
 				<div class="control-group">
 					<label class="control-label"><#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>${response.entry.title}<#assign entrySave=response.entry></#if></label>
 					<div class="controls">
+						<#if response.toStringValueResponse?has_content && response.toStringValueResponse?contains("href")>
+						${response.toStringValueResponse}
+						<#else>
 						<input type="text" value="${response.toStringValueResponse}" class="input-xxlarge" disabled title="${response.toStringValueResponse}">
+						</#if>
 					</div>
 				</div>
 				</#if>
