@@ -264,7 +264,7 @@ public class FormApp implements XPageApplication
             //the "recap" (summary) is valide
             page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale( ) ) );
             page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale( ) ) );
-            page.setContent( getResult( request, session, nMode, plugin ) );
+            page.setContent( getResult( request, session, nMode, plugin, true ) );
 
             // remove existing draft
             FormDraftBackupService.validateDraft( request, form );
@@ -316,7 +316,7 @@ public class FormApp implements XPageApplication
                 // we can get FormSubmit here
                 FormSubmit formSubmit = (FormSubmit) session.getAttribute( PARAMETER_FORM_SUBMIT );
 
-                getResult( request, session, nMode, plugin );
+                getResult( request, session, nMode, plugin, false );
 
                 if ( formSubmit == null )
                 {
@@ -373,11 +373,12 @@ public class FormApp implements XPageApplication
      * @param session The HTTP session
      * @param nMode The current mode.
      * @param plugin The Plugin
+     * @param bDoPerformSubmit true if commit form submit, false otherwise
      * @return the form recap
      * @throws SiteMessageException SiteMessageException
      */
-    private String getResult( HttpServletRequest request, HttpSession session, int nMode, Plugin plugin )
-            throws SiteMessageException
+    private String getResult( HttpServletRequest request, HttpSession session, int nMode, Plugin plugin,
+            boolean bDoPerformSubmit ) throws SiteMessageException
     {
         if ( ( session == null ) || ( session.getAttribute( PARAMETER_FORM_SUBMIT ) == null ) )
         {
@@ -428,7 +429,10 @@ public class FormApp implements XPageApplication
             }
         }
 
-        doPerformFormSubmit( request, session, formSubmit, plugin );
+        if ( bDoPerformSubmit )
+        {
+            doPerformFormSubmit( request, session, formSubmit, plugin );
+        }
 
         Recap recap = RecapHome.findByPrimaryKey( form.getRecap( ).getIdRecap( ), plugin );
 
@@ -727,6 +731,8 @@ public class FormApp implements XPageApplication
 
         model.put( MARK_RECAP, recap );
         model.put( MARK_FORM_SUBMIT, formSubmit );
+        model.put( MARK_ENTRY_TYPE_SESSION, getEntryTypeService( ).getEntryType( EntryTypeSession.BEAN_NAME ) );
+        model.put( MARK_ENTRY_TYPE_NUMBERING, getEntryTypeService( ).getEntryType( EntryTypeNumbering.BEAN_NAME ) );
 
         String strActionUrl;
 
