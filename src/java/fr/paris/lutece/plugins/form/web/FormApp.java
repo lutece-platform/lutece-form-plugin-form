@@ -315,7 +315,6 @@ public class FormApp implements XPageApplication
                 // save draft
                 // we can get FormSubmit here
                 FormSubmit formSubmit = (FormSubmit) session.getAttribute( PARAMETER_FORM_SUBMIT );
-                getResult( request, session, nMode, plugin, false );
 
                 if ( formSubmit == null )
                 {
@@ -323,6 +322,7 @@ public class FormApp implements XPageApplication
                 }
                 else
                 {
+                    getResult( request, session, nMode, plugin, false );
                     FormDraftBackupService.saveDraft( request, formSubmit );
                 }
             }
