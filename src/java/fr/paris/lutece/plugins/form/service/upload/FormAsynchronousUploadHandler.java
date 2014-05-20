@@ -76,7 +76,7 @@ public class FormAsynchronousUploadHandler extends AbstractAsynchronousUploadHan
      * {@inheritDoc}
      */
     @Override
-    public String getUploadSubmitPrefix( )
+    public String getUploadSubmitPrefix(  )
     {
         return UPLOAD_SUBMIT_PREFIX;
     }
@@ -85,7 +85,7 @@ public class FormAsynchronousUploadHandler extends AbstractAsynchronousUploadHan
      * {@inheritDoc}
      */
     @Override
-    public String getUploadDeletePrefix( )
+    public String getUploadDeletePrefix(  )
     {
         return UPLOAD_DELETE_PREFIX;
     }
@@ -94,7 +94,7 @@ public class FormAsynchronousUploadHandler extends AbstractAsynchronousUploadHan
      * {@inheritDoc}
      */
     @Override
-    public String getUploadCheckboxPrefix( )
+    public String getUploadCheckboxPrefix(  )
     {
         return UPLOAD_CHECKBOX_PREFIX;
     }

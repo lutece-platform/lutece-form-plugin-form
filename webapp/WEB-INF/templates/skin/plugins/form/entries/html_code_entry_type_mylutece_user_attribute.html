@@ -1,0 +1,15 @@
+<#if entry.confirmField>
+	<div class="control-group">
+		<label class="control-label" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+		<div class="controls">
+			<#if user??>
+				<#list entry.fields as field>
+					<span class="${entry.CSSClass!} " >${user.getUserInfo(field.value )}</span>
+				</#list>
+			</#if>
+			<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+				<span class="help-block">${entry.helpMessage}</span>
+			</#if>
+		</div>
+	</div>
+</#if>

@@ -56,7 +56,8 @@ public class EntryTypeSession extends AbstractEntryTypeSession
     public static final String BEAN_NAME = "form.entryTypeSession";
     private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_session.html";
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_session.html";
-    private static final String TEMPLATE_HTML_CODE = "admin/plugins/form/entries/html_code_entry_type_session.html";
+    private static final String TEMPLATE_HTML_CODE = "skin/plugins/form/entries/html_code_entry_type_session.html";
+    private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/form/entries/html_code_entry_type_session.html";
 
     /**
      * {@inheritDoc}
@@ -64,7 +65,7 @@ public class EntryTypeSession extends AbstractEntryTypeSession
     @Override
     public String getTemplateHtmlForm( Entry entry, boolean bDisplayFront )
     {
-        return TEMPLATE_HTML_CODE;
+        return bDisplayFront ? TEMPLATE_HTML_CODE : TEMPLATE_HTML_CODE_ADMIN;
     }
 
     /**
