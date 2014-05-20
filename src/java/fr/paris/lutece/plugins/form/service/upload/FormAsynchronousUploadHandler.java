@@ -48,9 +48,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class FormAsynchronousUploadHandler extends AbstractAsynchronousUploadHandler
 {
-    private static final String UPLOAD_SUBMIT_PREFIX = "_form_upload_submit_form_";
-    private static final String UPLOAD_DELETE_PREFIX = "_form_upload_delete_form_";
-    private static final String UPLOAD_CHECKBOX_PREFIX = "_form_upload_checkbox_form_";
+    private static final String UPLOAD_SUBMIT_PREFIX = "_form_upload_submit_attribute";
+    private static final String UPLOAD_DELETE_PREFIX = "_form_upload_delete_attribute";
+    private static final String UPLOAD_CHECKBOX_PREFIX = "_form_upload_checkbox_attribute";
     private static final String PARAMETER_PAGE = "page";
     private static final String BEAN_FORM_ASYNCHRONOUS_UPLOAD_HANDLER = "form.asynchronousUploadHandler";
 

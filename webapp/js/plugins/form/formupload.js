@@ -252,13 +252,13 @@ function getInputValue( inputId ) {
  * @param action the action button name
  */
 function removeFile( action ) {
-	var fieldName = action.match("_form_upload_delete_attribute_(.*)")[1];
+	var fieldName = action.match("_form_upload_delete_attribute(.*)")[1];
 	
 	// build indexes to remove
 	var indexes = new Array();
 	
 	var indexesCount = 0;
-	var checkboxPrefix = '_form_upload_checkbox_attribute_' + fieldName;
+	var checkboxPrefix = '_form_upload_checkbox_attribute' + fieldName;
 	$('[name^="' + checkboxPrefix + '"]:checked' ).each( function() {
 		if (this.checked)
 		{
