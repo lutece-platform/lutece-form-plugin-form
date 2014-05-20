@@ -47,7 +47,6 @@ public class EntryTypeRadioButton extends AbstractEntryTypeRadioButton
     private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_radio_button.html";
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_radio_button.html";
     private static final String TEMPLATE_HTML_CODE = "skin/plugins/form/entries/html_code_entry_type_radio_button.html";
-    private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/form/entries/html_code_entry_type_radio_button.html";
 
     /**
      * {@inheritDoc}
@@ -55,7 +54,7 @@ public class EntryTypeRadioButton extends AbstractEntryTypeRadioButton
     @Override
     public String getTemplateHtmlForm( Entry entry, boolean bDisplayFront )
     {
-        return bDisplayFront ? TEMPLATE_HTML_CODE : TEMPLATE_HTML_CODE_ADMIN;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**

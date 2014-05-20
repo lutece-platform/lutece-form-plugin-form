@@ -51,7 +51,6 @@ public class EntryTypeNumbering extends AbstractEntryTypeNumbering
     private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_numbering.html";
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_numbering.html";
     private static final String TEMPLATE_HTML_CODE = "skin/plugins/form/entries/html_code_entry_type_numbering.html";
-    private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/form/entries/html_code_entry_type_numbering.html";
 
     /**
      * {@inheritDoc}
@@ -59,7 +58,7 @@ public class EntryTypeNumbering extends AbstractEntryTypeNumbering
     @Override
     public String getTemplateHtmlForm( Entry entry, boolean bDisplayFront )
     {
-        return bDisplayFront ? TEMPLATE_HTML_CODE : TEMPLATE_HTML_CODE_ADMIN;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
