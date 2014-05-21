@@ -83,9 +83,9 @@ public class EntryTypeFile extends AbstractEntryTypeFile
      * {@inheritDoc}
      */
     @Override
-    public AbstractAsynchronousUploadHandler getAsynchronousUploadHandler( )
+    public AbstractAsynchronousUploadHandler getAsynchronousUploadHandler(  )
     {
-        return FormAsynchronousUploadHandler.getHandler( );
+        return FormAsynchronousUploadHandler.getHandler(  );
     }
 
     /**
@@ -97,14 +97,14 @@ public class EntryTypeFile extends AbstractEntryTypeFile
         UrlItem url = new UrlItem( strBaseUrl + JSP_DOWNLOAD_FILE );
         url.addParameter( PARAMETER_ID_RESPONSE, nResponseId );
 
-        return url.getUrl( );
+        return url.getUrl(  );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected boolean checkForImages( )
+    protected boolean checkForImages(  )
     {
         return false;
     }

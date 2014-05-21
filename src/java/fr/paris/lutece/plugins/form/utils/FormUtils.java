@@ -181,8 +181,8 @@ public final class FormUtils
     private static final String TAG_FORM_ENTRY_TITLE = "form-entry-title";
 
     //TEMPLATE
-    private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "admin/plugins/form/html_code_div_conditional_entry.html";
-    private static final String TEMPLATE_HTML_CODE_FORM = "admin/plugins/form/html_code_form.html";
+    private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "skin/plugins/form/html_code_div_conditional_entry.html";
+    private static final String TEMPLATE_HTML_CODE_FORM = "skin/plugins/form/html_code_form.html";
     private static final String TEMPLATE_NOTIFICATION_MAIL_END_DISPONIBILITY = "admin/plugins/form/notification_mail_end_disponibility.html";
     private static final String TEMPLATE_NOTIFICATION_MAIL_FORM_SUBMIT = "admin/plugins/form/notification_mail_form_submit.html";
 
