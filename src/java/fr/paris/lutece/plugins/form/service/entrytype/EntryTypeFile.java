@@ -35,27 +35,9 @@ package fr.paris.lutece.plugins.form.service.entrytype;
 
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
-import fr.paris.lutece.plugins.genericattributes.service.upload.IGAAsyncUploadHandler;
-import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
-import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
-import fr.paris.lutece.portal.service.fileupload.FileUploadService;
-import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
-import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
-import fr.paris.lutece.util.filesystem.FileSystemUtil;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeFile;
+import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractAsynchronousUploadHandler;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -63,7 +45,7 @@ import javax.servlet.http.HttpServletRequest;
  * class EntryTypeFile
  *
  */
-public class EntryTypeFile extends AbstractEntryTypeUpload
+public class EntryTypeFile extends AbstractEntryTypeFile
 {
     private static final String JSP_DOWNLOAD_FILE = "jsp/admin/plugins/form/DoDownloadFile.jsp";
     private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_file.html";
@@ -101,104 +83,9 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public AbstractAsynchronousUploadHandler getAsynchronousUploadHandler( )
     {
-        List<FileItem> listFilesSource = null;
-
-        if ( request instanceof MultipartHttpServletRequest )
-        {
-            List<FileItem> asynchronousFileItems = getFileSources( entry, request );
-
-            if ( asynchronousFileItems != null )
-            {
-                listFilesSource = asynchronousFileItems;
-            }
-
-            GenericAttributeError formError = null;
-
-            if ( ( listFilesSource != null ) && !listFilesSource.isEmpty(  ) )
-            {
-                formError = this.checkResponseData( entry, listFilesSource, locale, request );
-
-                if ( formError != null )
-                {
-                    // Add the response to the list in order to have the error message in the page
-                    Response response = new Response(  );
-                    response.setEntry( entry );
-                    listResponse.add( response );
-                }
-
-                for ( FileItem fileItem : listFilesSource )
-                {
-                    String strFilename = ( fileItem != null ) ? FileUploadService.getFileNameOnly( fileItem )
-                                                              : StringUtils.EMPTY;
-
-                    // Add the file to the response list
-                    Response response = new Response(  );
-                    response.setEntry( entry );
-
-                    if ( ( fileItem != null ) && ( fileItem.get(  ) != null ) &&
-                            ( fileItem.getSize(  ) < Integer.MAX_VALUE ) )
-                    {
-                        PhysicalFile physicalFile = new PhysicalFile(  );
-                        physicalFile.setValue( fileItem.get(  ) );
-
-                        File file = new File(  );
-                        file.setPhysicalFile( physicalFile );
-                        file.setTitle( strFilename );
-                        file.setSize( (int) fileItem.getSize(  ) );
-                        file.setMimeType( FileSystemUtil.getMIMEType( strFilename ) );
-
-                        response.setFile( file );
-                    }
-
-                    listResponse.add( response );
-
-                    String strMimeType = StringUtils.isBlank( strFilename ) ? FileSystemUtil.getMIMEType( strFilename )
-                                                                            : StringUtils.EMPTY;
-                    List<RegularExpression> listRegularExpression = entry.getFields(  ).get( 0 )
-                                                                         .getRegularExpressionList(  );
-
-                    if ( StringUtils.isNotBlank( strMimeType ) && ( listRegularExpression != null ) &&
-                            ( listRegularExpression.size(  ) != 0 ) &&
-                            RegularExpressionService.getInstance(  ).isAvailable(  ) )
-                    {
-                        for ( RegularExpression regularExpression : listRegularExpression )
-                        {
-                            if ( !RegularExpressionService.getInstance(  ).isMatches( strMimeType, regularExpression ) )
-                            {
-                                formError = new GenericAttributeError(  );
-                                formError.setMandatoryError( false );
-                                formError.setTitleQuestion( entry.getTitle(  ) );
-                                formError.setErrorMessage( regularExpression.getErrorMessage(  ) );
-                            }
-                        }
-                    }
-                }
-            }
-            else if ( entry.isMandatory(  ) )
-            {
-                formError = new MandatoryError( entry, locale );
-
-                Response response = new Response(  );
-                response.setEntry( entry );
-                listResponse.add( response );
-            }
-
-            return formError;
-        }
-
-        return new MandatoryError( entry, locale );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public IGAAsyncUploadHandler getAsynchronousUploadHandler(  )
-    {
-        return FormAsynchronousUploadHandler.getHandler(  );
+        return FormAsynchronousUploadHandler.getHandler( );
     }
 
     /**
@@ -210,6 +97,15 @@ public class EntryTypeFile extends AbstractEntryTypeUpload
         UrlItem url = new UrlItem( strBaseUrl + JSP_DOWNLOAD_FILE );
         url.addParameter( PARAMETER_ID_RESPONSE, nResponseId );
 
-        return url.getUrl(  );
+        return url.getUrl( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean checkForImages( )
+    {
+        return false;
     }
 }

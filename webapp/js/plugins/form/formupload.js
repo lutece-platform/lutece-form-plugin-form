@@ -6,60 +6,63 @@ function addAsynchronousUploadField(fieldId) {
 	/* Flash Player 9.0.24 or greater  - simple mode otherwise */
 	if ( swfobject.hasFlashPlayerVersion( "9.0.24" ) )
 	{
-	    $('#' + fieldId).uploadify({
-			/*
-			'swf'      : 'js/plugins/form/uploadify/swf/uploadify.swf',
-			'uploader' : baseUrl + '/jsp/site/upload',
-			*/
-	        'uploader' : 'js/plugins/form/uploadify/swf/uploadify.swf',
-	        'script' : baseUrl + '/jsp/site/upload',
-	        'cancelImg' : 'js/plugins/form/uploadify/cancel.png',
-			'auto' : true,
-			'buttonText' : 'Parcourir',
-			'displayData' : 'percentage',
-			'multi' : true,
-			// Max Files Numbers 
-			'uploadLimit' : getMaxFiles( fieldId ),
-			
-			// file types & size limit
-			'sizeLimit' : getMaxLengthValue( fieldId ),
-			
-			// additional parameters
-			'scriptData' : {'jsessionid' : document.cookie.match(/JSESSIONID=([^;]+)/)[1], 'page': 'form', 'fieldname':fieldId},
-			
-			// event handlers
-			'onComplete' : function(event,ID,fileObj,data) {
-				formOnUploadComplete(event,ID,fileObj,data);
-				$('#' + fieldId).uploadifySettings('hideButton',false);
-			},
-			'onError' : function(event,ID,fileObj,data) {
-				handleError( event,ID,fileObj,data,fieldId );
-				$('#' + fieldId).uploadifySettings('hideButton',false);
-			},
-			'onCancel' : function(event,ID,fileObj,data) {
-				uploading--;
-				$('#' + fieldId).uploadifySettings('hideButton',false);
-			},
-			'onSelect' : function(event,ID) {
-				if ( !formStartUpload( event, ID, fieldId ) )
-				{
-					return false;
+		var cookie = document.cookie;
+		if ( cookie != null && cookie != '' && document.cookie.match(/JSESSIONID=([^;]+)/) != null )
+		{
+		    $('#' + fieldId).uploadify({
+				/*
+				'swf'      : 'js/plugins/form/uploadify/swf/uploadify.swf',
+				'uploader' : baseUrl + '/jsp/site/upload',
+				*/
+		        'uploader' : 'js/plugins/form/uploadify/swf/uploadify.swf',
+		        'script' : baseUrl + '/jsp/site/upload',
+		        'cancelImg' : 'js/plugins/form/uploadify/cancel.png',
+				'auto' : true,
+				'buttonText' : 'Parcourir',
+				'displayData' : 'percentage',
+				'multi' : true,
+				// Max Files Numbers 
+				'uploadLimit' : getMaxFiles( fieldId ),
+				
+				// file types & size limit
+				'sizeLimit' : getMaxLengthValue( fieldId ),
+				
+				// additional parameters
+				'scriptData' : {'jsessionid' : document.cookie.match(/JSESSIONID=([^;]+)/)[1], 'page': 'form', 'fieldname':fieldId},
+				
+				// event handlers
+				'onComplete' : function(event,ID,fileObj,data) {
+					formOnUploadComplete(event,ID,fileObj,data);
+					$('#' + fieldId).uploadifySettings('hideButton',false);
+				},
+				'onError' : function(event,ID,fileObj,data) {
+					handleError( event,ID,fileObj,data,fieldId );
+					$('#' + fieldId).uploadifySettings('hideButton',false);
+				},
+				'onCancel' : function(event,ID,fileObj,data) {
+					uploading--;
+					$('#' + fieldId).uploadifySettings('hideButton',false);
+				},
+				'onSelect' : function(event,ID) {
+					if ( !formStartUpload( event, ID, fieldId ) )
+					{
+						return false;
+					}
+					else
+					{
+						$('#' + fieldId).uploadifySettings('hideButton',true);
+					}
 				}
-				else
-				{
-					$('#' + fieldId).uploadifySettings('hideButton',true);
-				}
-			}
-	    });
-	    
-	    /* move form help so the question mark is besides the input instead of below */
-	    var formHelp = $( '#' + fieldId ).parent(  ).parent(  ).find( '.form-help' );
-		var formQueue = $( '#' + fieldId + 'Queue' );
-		formQueue.appendTo( formHelp );
-		
-		$( '#_form_upload_submit_' + fieldId ).hide();
-		$( '#_file_deletion_button_' + fieldId ).hide();
-		
+		    });
+		    
+		    /* move form help so the question mark is besides the input instead of below */
+		    var formHelp = $( '#' + fieldId ).parent(  ).parent(  ).find( '.form-help' );
+			var formQueue = $( '#' + fieldId + 'Queue' );
+			formQueue.appendTo( formHelp );
+			
+			$( '#_form_upload_submit_' + fieldId ).hide();
+			$( '#_file_deletion_button_' + fieldId ).hide();
+		}
 	}
 }
 

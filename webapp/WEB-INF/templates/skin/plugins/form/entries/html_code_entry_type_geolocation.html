@@ -41,7 +41,7 @@
 	<#if list_responses??>
 	<#assign show_error = 0>
 		<#list list_responses as response>
-			<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && show_error == 0>
+			<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && show_error && response.entry.error.isDisplayableError == 0>
 			<#assign show_error = 1>
 				<div class="alert alert-error">
 					<#assign error = response.entry.error>

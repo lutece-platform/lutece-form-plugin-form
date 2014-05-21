@@ -9,12 +9,35 @@ Theses Java objects can be used in this template :
 		<#if is_draft_saved>
 			<div class="alert alert-error">#i18n{form.xpage.form.draftSaved}</div>
 		</#if>
+		test
 		<#if form_errors?? && form_errors?has_content>
-			<div class="alert alert-error">
-				<#list form_errors as form_error>
-					<p><#if form_error.url?? && form_error.url != ''><a href="${form_error.url!}"></#if>${form_error.errorMessage!}<#if form_error.url?? && form_error.url != ''></a></#if></p>
-				</#list>
-			</div>
+			test1
+			<#assign hasDisplayableError = false>
+			<#list form_errors as form_error>
+				test2
+				<#if form_error.isDisplayableError>
+					test3
+					<#assign hasDisplayableError = true>
+					<#break >
+				</#if>
+			</#list>
+			<#if hasDisplayableError>
+				<div class="alert alert-error">
+					<#list form_errors as form_error>
+						<#if form_error.isDisplayableError>
+							<p>
+								<#if form_error.url?? && form_error.url != ''>
+									<a href="${form_error.url!}">
+								</#if>
+								${form_error.errorMessage!}
+								<#if form_error.url?? && form_error.url != ''>
+									</a>
+								</#if>
+							</p>
+						</#if>
+					</#list>
+				</div>
+			</#if>
 		</#if>
 		<#if !form_inactive?has_content>
 			${form_html!}
