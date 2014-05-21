@@ -1,18 +1,20 @@
 <#include "/admin/plugins/form/commons.html" />
 <div class="form-group ${entry.CSSClass!}">
-	<label class="control-label" for="attribute${entry.idEntry}" id="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
+	<label class="control-label" for="attribute${entry.idEntry}" id="label${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
 	<div class="">
- 
 		<#list entry.fields as field>
 			<#if !field.title??>
 				<input type="file" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}"
+					class="
 					<#if list_responses??>
 						<#list list_responses as response>
 							<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
-								class="error"
+								error
+								<#break>
 							</#if>
 						</#list>
 					</#if>
+					${entry.CSSClass!}"
 				/>
 			</#if>
 		</#list>
@@ -54,7 +56,7 @@
 	<div class="">
 		<span class="form-field-column" id="_filename_attribute${entry.idEntry}">&nbsp;</span>
 		<#assign file_index = 0>
-		<div <#if !has_files>class="hide"</#if> id="_file_deletion_attribute${entry.idEntry}">
+		<div id="_file_deletion_attribute${entry.idEntry}">
 		<#if has_files>
 			<#list list_responses as response>
 				<#if response.file?? && response.file.title?? && response.file.title != ''>
@@ -68,7 +70,7 @@
 			</#list>
 		</#if>
 		</div>
-		<button class="btn btn-primary btn-sm <#if !has_files>hide</#if>" type="submit" id="_file_deletion_button_attribute${entry.idEntry}" name="_form_upload_delete_attribute${entry.idEntry}">
+		<button class="btn btn-primary btn-sm type="submit" id="_file_deletion_button_attribute${entry.idEntry}" name="_form_upload_delete_attribute${entry.idEntry}">
 				<i class="glyphicon glyphicon-trash"></i>&nbsp;#i18n{form.action.delete.name}
 		</button>
 	</div>

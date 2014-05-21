@@ -115,7 +115,14 @@ public class ResponseService implements IResponseService
     @Override
     public Response findByPrimaryKey( int nKey, boolean bGetFileData )
     {
-        return ResponseHome.findByPrimaryKey( nKey );
+        Response response = ResponseHome.findByPrimaryKey( nKey );
+
+        if ( bGetFileData && ( response.getFile(  ) != null ) )
+        {
+            response.setFile( getFileService(  ).findByPrimaryKey( response.getFile(  ).getIdFile(  ), true ) );
+        }
+
+        return response;
     }
 
     /**
@@ -132,8 +139,7 @@ public class ResponseService implements IResponseService
             {
                 if ( response.getFile(  ) != null )
                 {
-                    response.setFile( getFileService(  )
-                                          .findByPrimaryKey( response.getFile(  ).getIdFile(  ), bGetFileData ) );
+                    response.setFile( getFileService(  ).findByPrimaryKey( response.getFile(  ).getIdFile(  ), true ) );
                 }
             }
         }

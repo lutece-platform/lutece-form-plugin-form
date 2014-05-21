@@ -39,19 +39,6 @@
         <javascript-files-scope>portal</javascript-files-scope>
         <javascript-file>form/form.js</javascript-file>
     </javascript-files>
-    <javascript-files>
-        <javascript-files-scope>portal</javascript-files-scope>
-        <javascript-file>form/uploadify/jquery.uploadify.v2.1.4.min.js</javascript-file>
-    </javascript-files>
-    
-    <javascript-files>
-        <javascript-files-scope>portal</javascript-files-scope>
-        <javascript-file>form/uploadify/swfobject.js</javascript-file>
-    </javascript-files>
-    <javascript-files>
-        <javascript-files-scope>portal</javascript-files-scope>
-        <javascript-file>form/formupload.js</javascript-file>
-    </javascript-files>
     
 
     <!--Administration interface parameters -->

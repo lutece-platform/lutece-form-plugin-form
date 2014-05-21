@@ -56,10 +56,10 @@ function addAsynchronousUploadField(fieldId) {
 		    });
 		    
 		    /* move form help so the question mark is besides the input instead of below */
-		    var formHelp = $( '#' + fieldId ).parent(  ).parent(  ).find( '.form-help' );
-			var formQueue = $( '#' + fieldId + 'Queue' );
-			formQueue.appendTo( formHelp );
-			
+//		    var formHelp = $( '#' + fieldId ).parent(  ).parent(  ).find( '.form-help' );
+//			var formQueue = $( '#' + fieldId + 'Queue' );
+//			formQueue.appendTo( formHelp );
+
 			$( '#_form_upload_submit_' + fieldId ).hide();
 			$( '#_file_deletion_button_' + fieldId ).hide();
 		}
@@ -187,8 +187,8 @@ function formDisplayUploadedFiles( jsonData )
 
 			$("#_file_deletion_" + fieldName ).html( strContent );
 			// show the hidden div (if not already)
-			$("#_file_deletion_" + fieldName ).show(  );
 			$("#_file_deletion_label_" + fieldName ).show(  );
+			$("#_file_deletion_" + fieldName ).show(  );
 			$("#_file_deletion_button_" + fieldName ).show(  );
 		}
 	}

@@ -1,4 +1,4 @@
-<%@ page errorPage="../../ErrorPage.jsp" %>
+<%@ page errorPage="../../ErrorPage.jsp" trimDirectiveWhitespaces="true" %>
 
 <jsp:useBean id="formForm" scope="session" class="fr.paris.lutece.plugins.form.web.FormEntryJspBean" />
 <% 
