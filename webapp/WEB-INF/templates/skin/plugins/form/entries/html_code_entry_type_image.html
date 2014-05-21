@@ -1,7 +1,7 @@
 <#include "/admin/plugins/form/commons.html" />
-<div class="control-group">
+<div class="form-group">
 <label class="control-label" for="attribute${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
-	<div class="controls">
+	<div class="">
 		<#list entry.fields as field>
 			<#if !field.title??>
 				<input type="file" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}"
@@ -16,7 +16,7 @@
 				/>
 			</#if>
 		</#list>
-		<button class="btn btn-primary btn-small" type="submit" id="_form_upload_submit_attribute${entry.idEntry}" name="_form_upload_submit_attribute${entry.idEntry}" value="_form_upload_submit_attribute${entry.idEntry}">
+		<button class="btn btn-primary btn-sm" type="submit" id="_form_upload_submit_attribute${entry.idEntry}" name="_form_upload_submit_attribute${entry.idEntry}" value="_form_upload_submit_attribute${entry.idEntry}">
 			#i18n{form.action.send.name}
 		</button>
 		<input type="hidden" name="_form_upload_maxLength_attribute${entry.idEntry}" id="_form_upload_maxLength_attribute${entry.idEntry}" value="${getFileMaxSize( entry )}" />
@@ -26,7 +26,7 @@
 		<#if list_responses?? && list_responses?has_content>
 			<#assign response_error = list_responses[0]>
 			<#if response_error.entry.idEntry == entry.idEntry && response_error.entry.error?? && response_error.entry.error.isDisplayableError>
-				<div class="alert alert-error">
+				<div class="alert alert-danger">
 					<#assign error = response_error.entry.error>
 					<#if error.mandatoryError>
 						#i18n{form.message.mandatory.entry}
@@ -48,9 +48,9 @@
 	</#if>
 </#if>
 
-<div class="control-group well" <#if !has_files>style="display:none;"</#if> id="_file_deletion_label_attribute${entry.idEntry}">
+<div class="form-group well" <#if !has_files>style="display:none;"</#if> id="_file_deletion_label_attribute${entry.idEntry}">
 	<label class="control-label" for="delete_${entry.idEntry}">#i18n{form.file.uploadedFile} :</label>
-	<div class="controls">
+	<div class="">
 		<span class="form-field-column" id="_filename_attribute${entry.idEntry}">&nbsp;</span>
 		<#assign file_index = 0>
 		<div <#if !has_files>class="hide"</#if> id="_file_deletion_attribute${entry.idEntry}">
@@ -67,8 +67,8 @@
 			</#list>
 		</#if>
 		</div>
-		<button class="btn btn-primary btn-small <#if !has_files>hide</#if>" type="submit" id="_file_deletion_button_attribute${entry.idEntry}" name="_form_upload_delete_attribute${entry.idEntry}">
-				<i class="icon-trash icon-white"></i>&nbsp;#i18n{form.action.delete.name}
+		<button class="btn btn-primary btn-sm <#if !has_files>hide</#if>" type="submit" id="_file_deletion_button_attribute${entry.idEntry}" name="_form_upload_delete_attribute${entry.idEntry}">
+				<i class="glyphicon glyphicon-trash"></i>&nbsp;#i18n{form.action.delete.name}
 		</button>
 	</div>
 </div>

@@ -1,5 +1,5 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-sm-12 col-md-12">
 		<p class="lead">
 		<#if form.frontOfficeTitle?? && form.frontOfficeTitle!="" && form.shownFrontOfficeTitle! >
 			${form.frontOfficeTitle} 
@@ -15,33 +15,33 @@
 				<legend>${form.welcomeMessage}</legend>
 				${str_entry}   
 				<#if form.activeRequirement>
-					<div class="control-group">
+					<div class="form-group">
 						<label class="control-label" for="" >&nbsp;</label>
-						<div class="controls">
+						<div class="">
 						<label class="checkbox"  for="requirement">
 							<input type="checkbox" name="requirement" id="requirement" value="" <#if validate_requirement?? && validate_requirement>checked="checked"</#if>> <a href="jsp/site/RunStandaloneApp.jsp?page=form&view_requirement=view_requirement&id_form=${form.idForm}" onclick="javascript:openFrontRequirement(this.href); return false;" target="_blank"> #i18n{form.htmlCodeForm.requirement}</a>
 						</label>
 						<#if validate_requirement?? && !validate_requirement>
-								<div class="alert alert-error">#i18n{form.message.requirementError}</div>
+								<div class="alert alert-danger">#i18n{form.message.requirementError}</div>
 						</#if>
 						</div>
 					</div>
 				</#if>	
 				<#if jcaptcha?exists>
-					<div class="span12">${jcaptcha}</div>
+					<div class="col-sm-12 col-md-12">${jcaptcha}</div>
 				</#if>
 				<div class="form-actions form-steps">
-					<button class="btn btn-primary btn-small" type="submit" name="save" >
-						<i class="icon-ok icon-white"></i>&nbsp;${form.libelleValidateButton}
+					<button class="btn btn-primary btn-sm" type="submit" name="save" >
+						<i class="glyphicon glyphicon-ok"></i>&nbsp;${form.libelleValidateButton}
 					</button>
 					<#if draft_supported>
-						<button class="btn btn-primary btn-small" name="save_draft"  type="submit" >
-							<i class="icon-briefcase icon-white"></i>&nbsp;#i18n{form.button.saveDraft}
+						<button class="btn btn-primary btn-sm" name="save_draft"  type="submit" >
+							<i class="glyphicon glyphicon-briefcase"></i>&nbsp;#i18n{form.button.saveDraft}
 						</button>
 					</#if>
 					<#if form.libelleResetButton?has_content>
-						<button type="submit" name="reset" class="btn btn-primary btn-small">
-							<i class="icon-refresh icon-white"></i>&nbsp;${form.libelleResetButton}
+						<button type="submit" name="reset" class="btn btn-primary btn-sm">
+							<i class="glyphicon glyphicon-refresh"></i>&nbsp;${form.libelleResetButton}
 						</button>
 					</#if>
 				</div>

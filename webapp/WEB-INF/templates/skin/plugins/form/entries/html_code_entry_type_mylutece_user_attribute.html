@@ -1,7 +1,7 @@
 <#if entry.confirmField>
-	<div class="control-group">
+	<div class="form-group">
 		<label class="control-label" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
-		<div class="controls">
+		<div class="">
 			<#if user??>
 				<#list entry.fields as field>
 					<span class="${entry.CSSClass!} " >${user.getUserInfo(field.value )}</span>
