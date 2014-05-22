@@ -1,47 +1,48 @@
 <#include "/admin/plugins/form/commons.html" />
-<div class="form-group ${entry.CSSClass!}">
-	<label class="control-label" for="attribute${entry.idEntry}" id="label${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
-	<div class="">
-		<#list entry.fields as field>
-			<#if !field.title??>
-				<input type="file" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}"
-					class="
-					<#if list_responses??>
-						<#list list_responses as response>
-							<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
-								error
-								<#break>
-							</#if>
-						</#list>
-					</#if>
-					${entry.CSSClass!}"
-				/>
-			</#if>
-		</#list>
-		<input type="hidden" name="_form_upload_maxFiles_attribute${entry.idEntry}" id="_form_upload_maxFiles_attribute${entry.idEntry}" value="${getMaxFiles(entry)}">
-		<input type="hidden" name="_form_upload_maxLength_attribute${entry.idEntry}" id="_form_upload_maxLength_attribute${entry.idEntry}" value="${getFileMaxSize( entry )}" />
-		<button class="btn btn-primary btn-sm" type="submit" id="_form_upload_submit_attribute${entry.idEntry}" name="_form_upload_submit_attribute${entry.idEntry}" value="_form_upload_submit_attribute${entry.idEntry}">
-			#i18n{form.action.send.name}
-		</button>
-	<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-		<span class="help-block">${entry.helpMessage}</span>
-	</#if>
-	<#if list_responses?? && list_responses?has_content>
-		<#assign response_error = list_responses[0]>
-		<#if response_error.entry.idEntry == entry.idEntry && response_error.entry.error?? && response_error.entry.error.isDisplayableError>
-			<div class="alert alert-danger">
-				<#assign error = response_error.entry.error>
-				<#if error.mandatoryError>
-					#i18n{form.message.mandatory.entry}
-				<#else>
-					${error.errorMessage}
+<form class="form-horizontal" role="form">
+	<div class="form-group ${entry.CSSClass!}">
+		<label class="col-sm-2 col-md-2 control-label" for="attribute${entry.idEntry}" id="label${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
+		<div class="col-sm-10 col-md-10">
+			<#list entry.fields as field>
+				<#if !field.title??>
+					<input type="file" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}"
+						class="
+						<#if list_responses??>
+							<#list list_responses as response>
+								<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
+									error
+									<#break>
+								</#if>
+							</#list>
+						</#if>
+						${entry.CSSClass!}"
+					/>
 				</#if>
-			</div>
+			</#list>
+			<input type="hidden" name="_form_upload_maxFiles_attribute${entry.idEntry}" id="_form_upload_maxFiles_attribute${entry.idEntry}" value="${getMaxFiles(entry)}">
+			<input type="hidden" name="_form_upload_maxLength_attribute${entry.idEntry}" id="_form_upload_maxLength_attribute${entry.idEntry}" value="${getFileMaxSize( entry )}" />
+			<button class="btn btn-primary btn-sm" type="submit" id="_form_upload_submit_attribute${entry.idEntry}" name="_form_upload_submit_attribute${entry.idEntry}" value="_form_upload_submit_attribute${entry.idEntry}">
+				#i18n{form.action.send.name}
+			</button>
+		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+			<span class="help-block">${entry.helpMessage}</span>
 		</#if>
-	</#if>
+		<#if list_responses?? && list_responses?has_content>
+			<#assign response_error = list_responses[0]>
+			<#if response_error.entry.idEntry == entry.idEntry && response_error.entry.error?? && response_error.entry.error.isDisplayableError>
+				<div class="alert alert-danger">
+					<#assign error = response_error.entry.error>
+					<#if error.mandatoryError>
+						#i18n{form.message.mandatory.entry}
+					<#else>
+						${error.errorMessage}
+					</#if>
+				</div>
+			</#if>
+		</#if>
+		</div>		
 	</div>		
-</div>		
-
+</form>
 <#-- file removing -->
 <#assign has_files = false>
 <#if list_responses?? && list_responses?has_content>

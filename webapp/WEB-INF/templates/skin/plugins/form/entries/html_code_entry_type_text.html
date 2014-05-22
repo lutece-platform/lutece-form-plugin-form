@@ -1,36 +1,39 @@
-<div class="form-group">
-	<label class="control-label" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
-	<div class="">
-		<#list entry.fields as field>
-			<input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" style="width:${field.width}px;" 
-				<#if list_responses??>
-					<#list list_responses as response>
-					<#if response.entry.idEntry == entry.idEntry>
-						<#if response.toStringValueResponse??>
-							value="${response.toStringValueResponse}"
+<form class="form-horizontal" role="form">
+	<div class="form-group">
+		<label class="col-sm-2 col-md-2 control-label" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+		<div class="col-sm-10 col-md-10">
+			<#list entry.fields as field>
+				<input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" style="width:${field.width}px;" 
+					<#if list_responses??>
+						<#list list_responses as response>
+						<#if response.entry.idEntry == entry.idEntry>
+							<#if response.toStringValueResponse??>
+								value="${response.toStringValueResponse}"
+							</#if>
+							<#if response.entry.error??>
+								class="error"
+							</#if>
+							</#if>
+						</#list>
+					<#else>
+						<#if field.value?exists>
+							value="${field.value}" 
+						<#else>
+							 value="" 
 						</#if>
-						<#if response.entry.error??>
-							class="error"
-						</#if>
-						</#if>
-					</#list>
-				<#else>
-					<#if field.value?exists>
-						value="${field.value}" 
-				 	<#else>
-						 value="" 
 					</#if>
-				</#if>
-				<#if field.maxSizeEnter!=-1>
-					maxlength="${field.maxSizeEnter}"
-				</#if>
-			class="${entry.CSSClass!} "	/>
-		</#list>
-		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-			<span class="help-block">${entry.helpMessage}</span>
-		</#if>
+					<#if field.maxSizeEnter!=-1>
+						maxlength="${field.maxSizeEnter}"
+					</#if>
+				class="${entry.CSSClass!} "	/>
+			</#list>
+			<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+				<span class="help-block">${entry.helpMessage}</span>
+			</#if>
+		</div>
 	</div>
-</div>
+</form>
+
 <#if list_responses??>
 	<#list list_responses as response>
 		<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>

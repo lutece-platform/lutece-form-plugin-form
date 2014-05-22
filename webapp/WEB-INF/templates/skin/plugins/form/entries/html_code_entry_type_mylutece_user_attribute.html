@@ -1,15 +1,17 @@
 <#if entry.confirmField>
-	<div class="form-group">
-		<label class="control-label" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
-		<div class="">
-			<#if user??>
-				<#list entry.fields as field>
-					<span class="${entry.CSSClass!} " >${user.getUserInfo(field.value )}</span>
-				</#list>
-			</#if>
-			<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-				<span class="help-block">${entry.helpMessage}</span>
-			</#if>
+	<form class="form-horizontal" role="form">
+		<div class="form-group">
+			<label class="col-sm-2 col-md-2 control-label" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+			<div class="col-sm-10 col-md-10">
+				<#if user??>
+					<#list entry.fields as field>
+						<span class="${entry.CSSClass!} " >${user.getUserInfo(field.value )}</span>
+					</#list>
+				</#if>
+				<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+					<span class="help-block">${entry.helpMessage}</span>
+				</#if>
+			</div>
 		</div>
-	</div>
+	</form>
 </#if>
