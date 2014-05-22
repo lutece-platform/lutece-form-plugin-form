@@ -1,7 +1,6 @@
  <#assign cpt=0>
 ${entry.CSSClass!}
 
-<form class="form-horizontal" role="form">
 	<div class="form-group">
 		<label class="col-sm-2 col-md-2 control-label" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
 			<div class="col-md-10 col-sm-10">
@@ -47,7 +46,7 @@ ${entry.CSSClass!}
 			<#if str_list_entry_children?exists>${str_list_entry_children}</#if>
 			</div>
 	</div>
-</form>
+
 	<#if list_responses??>
 		<script type="text/javascript">
 		<#list list_responses as response>
