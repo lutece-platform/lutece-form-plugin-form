@@ -4,9 +4,10 @@ ${entry.CSSClass!}
 <form class="form-horizontal" role="form">
 	<div class="form-group">
 		<label class="col-sm-2 col-md-2 control-label" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
-			<div class="col-sm-10 col-md-10">
+			<div class="col-md-10 col-sm-10">
 			<#list entry.fields as field>
-				<label class="checkbox<#if entry.fieldInLine>-inline</#if>" for="attribute${entry.idEntry}_${field.idField}" <#if field.comment?? && field.comment != ''>title="${field.comment}"</#if> >
+			<#if entry.fieldInLine != true><div class="checkbox"></#if>
+				<label class="<#if entry.fieldInLine>checkbox-inline</#if>" for="attribute${entry.idEntry}_${field.idField}" <#if field.comment?? && field.comment != ''>title="${field.comment}"</#if> >
 				<input type="checkbox" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}_${field.idField}" value="${field.idField}"
 					<#if list_responses??>
 						<#list list_responses as response>
@@ -27,7 +28,8 @@ ${entry.CSSClass!}
 				</label>
 				<#if !entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
 					<span class="help-block">${entry.helpMessage}</span>
-				</#if>	
+				</#if>
+				<#if entry.fieldInLine != true></div></#if>				
 			</#list>
 			<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
 				<span class="help-block">${entry.helpMessage}</span>
