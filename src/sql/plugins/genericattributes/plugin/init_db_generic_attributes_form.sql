@@ -35,6 +35,8 @@ INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_use
 (16,'Cases à cocher obligatoires',0,0,0,'form.entryTypeMandatoryCheckBox','form');
 INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
 (17,'Attribut de l''utilisateur MyLutece',0,0,0,'form.entryTypeMyLuteceUserattribute','form');
+INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
+(18,'Tableau',0,0,0,'form.entryTypeArray','form');
 
 
 

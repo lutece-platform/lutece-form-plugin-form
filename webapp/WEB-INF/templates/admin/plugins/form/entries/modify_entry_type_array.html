@@ -1,0 +1,76 @@
+ <#include "/admin/util/editor/editor.html" />
+<div class="row-fluid append-bottom">
+	<fieldset>
+	<legend>#i18n{form.modifyEntry.titleQuestion} : '${form.title}'</legend>
+		<form class="form" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+		<div class="span4">
+		<input name="id_entry" value="${entry.idEntry}" type="hidden" />
+			<label for="title">#i18n{form.createEntry.labelTitle}* : </label>
+			<input type="text" name="title" id="title" class="input-xlarge" value="${entry.title}"  maxlength="255" />
+			<span class="help-block">#i18n{form.createEntry.labelTitleComment}</span>
+			    <div class="control-group">
+					<label class="control-label" for="num_row">#i18n{form.createEntry.labelNumberRows} * :</label>
+					<div class="controls">
+						<input type="text" name="num_row" id="num_row" value="${entry.numberRow}" maxlength="255" />
+					</div>
+				</div>
+			    <div class="control-group">
+					<label class="control-label" for="num_column">#i18n{form.createEntry.labelNumberColumns} * :</label>
+					<div class="controls">
+						<input type="text" name="num_column" id="num_column" value="${entry.numberColumn}" maxlength="255" />
+					</div>
+				</div>
+			<label class="control-label" for="comment">#i18n{form.createEntry.labelArrayTitle} :</label>
+			<div class="controls">
+				<input type="text" name="comment" id="comment" value="${entry.comment}" maxlength="255" />
+	   			<span class="help-block">#i18n{form.createEntry.labelArrayTitleHelp}</span>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary btn-small" name="save" type="submit" >
+					<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}
+				</button>
+				<button class="btn btn-primary btn-small" name="apply" type="submit" >
+					<i class="icon-ok-sign icon-white"></i>&nbsp;#i18n{form.modifyEntry.buttonApply}
+				</button>
+				<a class="btn btn-small" type="button" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form" >
+					<i class="icon-remove-circle"></i>&nbsp;#i18n{form.createEntry.buttonCancel}
+				</a>
+			</div>
+	</div>
+	<div class="span8">
+		<div class="table-responsive">
+		<table class="table table-striped">
+			<#assign x=entry.numberRow>
+			<#list 1..x+1 as i>
+			  <tr>
+				<#assign y=entry.numberColumn>
+				<#list 1..y+1 as j>
+			  	<td>
+					<#assign title="">
+					<#list entry.fields as field>
+						<#assign value=i+"_"+j>
+						<#if field.value == value>
+							<#assign title=field.title!>
+						</#if>
+					</#list>
+			  		<#if j==1 && i!=1>
+					    <input type="text" id="field_${i}_${j}" name="field_${i}_${j}" class="form-control" value="${title!}"> 
+				  	<#elseif i == 1 && j != 1>
+					    <input type="text" id="field_${i}_${j}" name="field_${i}_${j}" class="form-control" value="${title!}">
+				  	<#elseif i == 1 && j == 1>
+				  		<b>${entry.comment}</b>
+				  	<#else>
+				  		&nbsp;
+				  	</#if>
+			  	</td>
+			  	</#list>
+			  </tr>
+			</#list>  
+		</table>
+		</div>
+		
+		</div>
+		</form>
+	</fieldset>
+</div>
+ <@initEditor />
