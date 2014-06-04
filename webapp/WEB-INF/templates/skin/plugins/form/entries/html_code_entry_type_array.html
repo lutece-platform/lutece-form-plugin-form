@@ -1,6 +1,6 @@
 <div class="control-group">
-	<label class="control-label" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
-		<div class="span12">
+	<label class="control-label" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+		<div class="col-xs-12 col-sm-6 col-md-4">
 			<div class="table-responsive">
 				<table class="table table-striped">
 			<#assign x=entry.numberRow>
@@ -23,7 +23,7 @@
 				  	<#elseif i == 1 && j == 1>
 				  		<b>${entry.comment}</b>
 				  	<#else>
-				  		<input id="response_${i}_${j}" name="response_${i}_${j}" type="text" class="col-sm-10" />
+				  		<input id="response_${i}_${j}" name="response_${i}_${j}" type="text" class="col-xs-12 col-sm-12 col-md-12" />
 				  	</#if>
 			  	</td>
 			  	</#list>

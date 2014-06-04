@@ -6,37 +6,38 @@
 </#list>
 ${entry.CSSClass!}
 
-<div class="control-group">
-	<label class="control-label" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
-	<div class="controls">
-    	<#list entry.fields as field>
-			<label class="radio <#if entry.fieldInLine>inline</#if>" for="attribute${entry.idEntry}_${field.idField}" <#if field.comment?? && field.comment != ''>title="${field.comment}"</#if> > 
-			<input type="radio" class="" id="attribute${entry.idEntry}_${field.idField}" name="attribute${entry.idEntry}" value="${field.idField}"
-			<#if list_responses??>
-				<#list list_responses as response>
-					<#if response.entry.idEntry == entry.idEntry && response.field??>
-						<#if response.field.idField == field.idField>checked="checked"<#break></#if>
-					</#if>
-				</#list>
-			<#else>
-				<#if field.defaultValue>checked="checked"</#if>
-			</#if>
-				onclick="${hide} <#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0>doDisplay(${field.idField});</#if>
-			 "/>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-2 col-md-2" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+		<div class="col-xs-12 col-sm-6 col-md-4">
+		<#list entry.fields as field>
+			<#if entry.fieldInLine != true><div class="radio"></#if>
+				<label <#if entry.fieldInLine>class="radio-inline"</#if> for="attribute${entry.idEntry}_${field.idField}" <#if field.comment?? && field.comment != ''>title="${field.comment}"</#if> > 
+					<input type="radio" id="attribute${entry.idEntry}_${field.idField}" name="attribute${entry.idEntry}" value="${field.idField}"
+					<#if list_responses??>
+						<#list list_responses as response>
+							<#if response.entry.idEntry == entry.idEntry && response.field??>
+								<#if response.field.idField == field.idField>checked="checked"<#break></#if>
+							</#if>
+						</#list>
+					<#else>
+						<#if field.defaultValue>checked="checked"</#if>
+					</#if> onclick="${hide} <#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0>doDisplay(${field.idField});</#if>"/>
 			 <#if !field.noDisplayTitle>
 			 	${field.title}
 			 </#if>
-			</label>
-		</#list>
-		<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
+				</label>
+				<#if entry.fieldInLine != true></div></#if>
+			</#list>
+			<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
 			<span class="help-block">${entry.helpMessage}</span>
-		</#if>
+			</#if>
+		</div>
 	</div>
- </div>	
+ 
 <#if list_responses??>
 	<#list list_responses as response>
 		<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>
-			<div class="alert alert-error">
+			<div class="alert alert-danger">
 			<#assign error = response.entry.error>
 				<#if error.mandatoryError>#i18n{form.message.mandatory.entry}<#else>${error.errorMessage}</#if>
 			</div>
