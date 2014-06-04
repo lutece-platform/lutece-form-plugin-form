@@ -5,18 +5,24 @@ Theses Java objects can be used in this template :
  - form_inactive : the message when the form is not active
 -->
 <div class="row">
-	<div class="col-sm-12 col-md-12">
+	<div class="span12">
 		<#if is_draft_saved>
-			<div class="alert alert-danger">#i18n{form.xpage.form.draftSaved}</div>
+			<div class="alert alert-error">#i18n{form.xpage.form.draftSaved}</div>
 		</#if>
-		
-		<#if form_errors?? && form_errors?has_content>			<#assign hasDisplayableError = false>
-			<#list form_errors as form_error>				<#if form_error.isDisplayableError>					<#assign hasDisplayableError = true>
+		test
+		<#if form_errors?? && form_errors?has_content>
+			test1
+			<#assign hasDisplayableError = false>
+			<#list form_errors as form_error>
+				test2
+				<#if form_error.isDisplayableError>
+					test3
+					<#assign hasDisplayableError = true>
 					<#break >
 				</#if>
 			</#list>
 			<#if hasDisplayableError>
-				<div class="alert alert-danger">
+				<div class="alert alert-error">
 					<#list form_errors as form_error>
 						<#if form_error.isDisplayableError>
 							<p>
@@ -38,10 +44,9 @@ Theses Java objects can be used in this template :
 		<#else>
 			${form_inactive}
 		</#if>
-		
-		<script type="text/javascript" src="js/plugins/form/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
-	    <script type="text/javascript" src="js/plugins/form/uploadify/swfobject.js"></script>
-	    <script type="text/javascript" src="js/plugins/form/formupload.js"></script>
+                <script type="text/javascript" src="js/plugins/form/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
+	        <script type="text/javascript" src="js/plugins/form/uploadify/swfobject.js"></script>
+                <script type="text/javascript" src="js/plugins/form/formupload.js"></script>
 	</div>
 </div>
 
