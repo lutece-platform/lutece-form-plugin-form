@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
-import com.keypoint.PngEncoder;
-
 import fr.paris.lutece.plugins.form.business.GraphType;
 import fr.paris.lutece.plugins.form.business.GraphTypeHome;
 import fr.paris.lutece.plugins.form.service.IResponseService;
@@ -46,23 +44,30 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPathService;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.StandardEntityCollection;
 
-import java.awt.image.BufferedImage;
-
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.keypoint.PngEncoder;
 
 
 /**
- *
+ * 
  * class DoDownloadGraph
- *
+ * 
  */
 public class DoDownloadGraph
 {
@@ -78,7 +83,7 @@ public class DoDownloadGraph
      * Write in the http response the statistic graph of a question
      * @param request the http request
      * @param response The http response
-     *
+     * 
      */
     public void doGenerateGraph( HttpServletRequest request, HttpServletResponse response )
     {
@@ -108,9 +113,9 @@ public class DoDownloadGraph
             nGraphLabelValue = true;
         }
 
-        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) && ( strIdGraphType != null ) &&
-                !strIdGraphType.equals( EMPTY_STRING ) && ( strPluginName != null ) &&
-                !strPluginName.equals( EMPTY_STRING ) )
+        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) && ( strIdGraphType != null )
+                && !strIdGraphType.equals( EMPTY_STRING ) && ( strPluginName != null )
+                && !strPluginName.equals( EMPTY_STRING ) )
         {
             plugin = PluginService.getPlugin( strPluginName );
 
@@ -131,23 +136,59 @@ public class DoDownloadGraph
 
             if ( graphType != null )
             {
-                chart = graphType.createChart( listStatistic, entry.getTitle(  ), nGraphThreeDimension, nGraphLabelValue );
-
                 try
                 {
-                    ChartRenderingInfo info = new ChartRenderingInfo( new StandardEntityCollection(  ) );
-                    BufferedImage chartImage = chart.createBufferedImage( 600, 200, info );
-                    response.setContentType( "image/PNG" );
+                    if ( isListStatisticValid( listStatistic ) )
+                    {
+                        chart = graphType.createChart( listStatistic, entry.getTitle( ), nGraphThreeDimension,
+                                nGraphLabelValue );
+                        ChartRenderingInfo info = new ChartRenderingInfo( new StandardEntityCollection( ) );
+                        BufferedImage chartImage = chart.createBufferedImage( 600, 200, info );
+                        response.setContentType( "image/PNG" );
 
-                    PngEncoder encoder = new PngEncoder( chartImage, false, 0, 9 );
-                    response.getOutputStream(  ).write( encoder.pngEncode(  ) );
-                    response.getOutputStream(  ).close(  );
+                        PngEncoder encoder = new PngEncoder( chartImage, false, 0, 9 );
+                        response.getOutputStream( ).write( encoder.pngEncode( ) );
+                        response.getOutputStream( ).close( );
+                    }
+                    else
+                    {
+                        BufferedImage image = ImageIO.read( new File( AppPathService.getWebAppPath( )
+                                + "/images/none.jpg" ) );
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream( );
+                        ImageIO.write( image, "png", baos );
+
+                        response.getOutputStream( ).write( baos.toByteArray( ) );
+                        response.getOutputStream( ).close( );
+                    }
                 }
                 catch ( Exception e )
                 {
-                    AppLogService.error( e.getMessage(  ), e );
+                    AppLogService.error( e.getMessage( ), e );
                 }
             }
         }
+    }
+
+    /**
+     * Check if list statistic is valid for display
+     * @param listStatistic list of entry stats
+     * @return true if list is valid, false otherwise
+     */
+    private boolean isListStatisticValid( List<StatisticEntrySubmit> listStatistic )
+    {
+        if ( CollectionUtils.isEmpty( listStatistic ) )
+        {
+            return false;
+        }
+
+        for ( StatisticEntrySubmit stat : listStatistic )
+        {
+            if ( StringUtils.isBlank( stat.getFieldLibelle( ) ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
