@@ -33,11 +33,8 @@
  */
 package fr.paris.lutece.plugins.form.service.upload;
 
-import fr.paris.lutece.plugins.form.service.FormPlugin;
-import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -46,13 +43,13 @@ import javax.servlet.http.HttpServletRequest;
  * @see #removeFileItem(String, String, int)
  *
  */
-public class FormAsynchronousUploadHandler extends AbstractAsynchronousUploadHandler
+public class FormAsynchronousUploadHandler extends AbstractGenAttUploadHandler
 {
-    private static final String UPLOAD_SUBMIT_PREFIX = "_form_upload_submit_attribute";
-    private static final String UPLOAD_DELETE_PREFIX = "_form_upload_delete_attribute";
-    private static final String UPLOAD_CHECKBOX_PREFIX = "_form_upload_checkbox_attribute";
-    private static final String PARAMETER_PAGE = "page";
+    private static final String UPLOAD_SUBMIT_PREFIX = "_form_upload_submit_";
+    private static final String UPLOAD_DELETE_PREFIX = "_form_upload_delete_";
+    private static final String UPLOAD_CHECKBOX_PREFIX = "_form_upload_checkbox_";
     private static final String BEAN_FORM_ASYNCHRONOUS_UPLOAD_HANDLER = "form.asynchronousUploadHandler";
+    private static final String HANDLER_NAME = "formAsynchronousUploadHandler";
 
     /**
      * Get the handler
@@ -61,15 +58,6 @@ public class FormAsynchronousUploadHandler extends AbstractAsynchronousUploadHan
     public static FormAsynchronousUploadHandler getHandler(  )
     {
         return SpringContextService.getBean( BEAN_FORM_ASYNCHRONOUS_UPLOAD_HANDLER );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isInvoked( HttpServletRequest request )
-    {
-        return FormPlugin.PLUGIN_NAME.equals( request.getParameter( PARAMETER_PAGE ) );
     }
 
     /**
@@ -97,5 +85,14 @@ public class FormAsynchronousUploadHandler extends AbstractAsynchronousUploadHan
     public String getUploadCheckboxPrefix(  )
     {
         return UPLOAD_CHECKBOX_PREFIX;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getHandlerName(  )
+    {
+        return HANDLER_NAME;
     }
 }

@@ -38,9 +38,9 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntry
 
 
 /**
- * 
+ *
  * class EntryTypeCheckBox
- * 
+ *
  */
 public class EntryTypeArray extends AbstractEntryTypeArray
 {

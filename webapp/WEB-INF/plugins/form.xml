@@ -27,13 +27,6 @@
     </css-stylesheets>
     
     
-    <css-stylesheets>
-        <css-stylesheets-scope>portal</css-stylesheets-scope>
-        <css-stylesheet>form/uploadify/uploadify.css</css-stylesheet>
-    </css-stylesheets>
-    
-    
-
     <!-- Specific plugin JAVASCRIPT -->
     <javascript-files>
         <javascript-files-scope>portal</javascript-files-scope>

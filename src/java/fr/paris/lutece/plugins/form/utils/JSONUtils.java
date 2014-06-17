@@ -42,9 +42,9 @@ import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import net.sf.json.JSON;
@@ -64,7 +64,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 
@@ -290,8 +289,8 @@ public final class JSONUtils
                 jsonResponse.element( JSON_KEY_MIME_TYPE, response.getFile(  ).getMimeType(  ) );
 
                 List<FileItem> listFileItems = FormAsynchronousUploadHandler.getHandler(  )
-                                                                            .getFileItems( Integer.toString( 
-                            response.getEntry(  ).getIdEntry(  ) ), strSessionId );
+                                                                            .getFileItems( IEntryTypeService.PREFIX_ATTRIBUTE +
+                        Integer.toString( response.getEntry(  ).getIdEntry(  ) ), strSessionId );
 
                 if ( ( listFileItems != null ) && !listFileItems.isEmpty(  ) )
                 {
@@ -350,50 +349,6 @@ public final class JSONUtils
         formError.setTitleQuestion( jsonObject.getString( JSON_KEY_TITLE_QUESTION ) );
 
         return formError;
-    }
-
-    /**
-     * Builds a json object for the file item list.
-     * Key is {@link #JSON_KEY_UPLOADED_FILES}, value is the array of uploaded
-     * file.
-     * @param listFileItem the fileItem list
-     * @return the json
-     */
-    public static JSONObject getUploadedFileJSON( List<FileItem> listFileItem )
-    {
-        JSONObject json = new JSONObject(  );
-
-        if ( listFileItem != null )
-        {
-            for ( FileItem fileItem : listFileItem )
-            {
-                json.accumulate( JSON_KEY_UPLOADED_FILES, fileItem.getName(  ) );
-            }
-
-            json.element( JSON_KEY_FILE_COUNT, listFileItem.size(  ) );
-        }
-        else
-        {
-            // no file
-            json.element( JSON_KEY_FILE_COUNT, 0 );
-        }
-
-        return json;
-    }
-
-    /**
-     * Builds a json object with the error message.
-     * @param request the request
-     * @return the json object.
-     */
-    public static JSONObject buildJsonErrorRemovingFile( HttpServletRequest request )
-    {
-        JSONObject json = new JSONObject(  );
-
-        json.element( JSONUtils.JSON_KEY_FORM_ERROR,
-            I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_REMOVING_FILE, request.getLocale(  ) ) );
-
-        return json;
     }
 
     /**

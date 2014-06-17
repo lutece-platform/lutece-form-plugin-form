@@ -1,76 +1,50 @@
 <#include "/admin/plugins/form/commons.html" />
-	<div class="form-group">
-		<label class="control-label col-xs-12 col-sm-2 col-md-2" for="attribute${entry.idEntry}" id="label${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
-		<div class="col-xs-12 col-sm-6 col-md-4">
-			<#list entry.fields as field>
-				<#if !field.title??>
-					<input type="file" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}"
-						class="
-						<#if list_responses??>
-							<#list list_responses as response>
-								<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
-									error
-									<#break>
-								</#if>
-							</#list>
-						</#if>
-						${entry.CSSClass!}"
-					/>
-				</#if>
-			</#list>
-			<input type="hidden" name="_form_upload_maxLength_attribute${entry.idEntry}" id="_form_upload_maxLength_attribute${entry.idEntry}" value="${getFileMaxSize( entry )}" />
-			<button class="btn btn-primary btn-sm" type="submit" id="_form_upload_submit_attribute${entry.idEntry}" name="_form_upload_submit_attribute${entry.idEntry}" value="_form_upload_submit_attribute${entry.idEntry}">
-				#i18n{form.action.send.name}
-			</button>
-			<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-				<span class="help-block">${entry.helpMessage}</span>
-			</#if>
-			<#if list_responses?? && list_responses?has_content>
-				<#assign response_error = list_responses[0]>
-				<#if response_error.entry.idEntry == entry.idEntry && response_error.entry.error?? && response_error.entry.error.isDisplayableError>
-					<div class="alert alert-danger">
-						<#assign error = response_error.entry.error>
-						<#if error.mandatoryError>
-							#i18n{form.message.mandatory.entry}
-						<#else>
-							${error.errorMessage}
-						</#if>
-					</div>
-				</#if>
-			</#if>
-		</div>
-	</div>
-
-<#-- file removing -->
-<#assign has_files = false>
-<#if list_responses?? && list_responses?has_content>
-	<#assign response_error = list_responses[0]>
-	<#if response_error.entry.idEntry == entry.idEntry>
-		<#assign has_files = true>
-	</#if>
-</#if>
-
-<div class="form-group well" <#if !has_files>style="display:none;"</#if> id="_file_deletion_label_attribute${entry.idEntry}">
-	<label class="control-label" for="delete_${entry.idEntry}">#i18n{form.file.uploadedFile} :</label>
-	<div class="">
-		<span class="form-field-column" id="_filename_attribute${entry.idEntry}">&nbsp;</span>
-		<#assign file_index = 0>
-		<div id="_file_deletion_attribute${entry.idEntry}">
-		<#if has_files>
+<#include "/skin/plugins/asynchronousupload/upload_commons.html" />
+<div class="form-group">
+	<label class="control-label col-xs-12 col-sm-2 col-md-2" for="attribute${entry.idEntry}" id="label${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
+	<div class="col-xs-12 col-sm-6 col-md-4">
+		<#assign fieldName='attribute'+entry.idEntry >
+		<#assign cssClass=entry.CSSClass!'' >
+		<#if list_responses??>
 			<#list list_responses as response>
-				<#if response.file?? && response.file.title?? && response.file.title != ''>
-					<label class="checkbox" id="_file_deletion_${entry.idEntry}">&nbsp;</label>
-					<span id="_filename_attribute${entry.idEntry}">
-						<input type="checkbox" name="_form_upload_checkbox_attribute${entry.idEntry}${file_index}" value="1" />
-						${response.file.title}
-					</span>
-					<#assign file_index = file_index + 1>
+				<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>
+					<#assign cssClass='error' >
+					<#break>
 				</#if>
 			</#list>
 		</#if>
-		</div>
-		<button class="btn btn-primary btn-sm" type="submit" id="_file_deletion_button_attribute${entry.idEntry}" name="_form_upload_delete_attribute${entry.idEntry}">
-				<i class="glyphicon glyphicon-trash"></i>&nbsp;#i18n{form.action.delete.name}
-		</button>
+		<@addFileInput fieldName=fieldName handlerName='formAsynchronousUploadHandler' submitPrefix='_form_upload_submit_' cssClass=cssClass multiple=true />
+		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+			<span class="help-block">${entry.helpMessage}</span>
+		</#if>
+		<#if list_responses?? && list_responses?has_content>
+			<#assign response_error = list_responses[0]>
+			<#if response_error.entry.idEntry == entry.idEntry && response_error.entry.error?? && response_error.entry.error.isDisplayableError>
+				<div class="alert alert-danger">
+					<#assign error = response_error.entry.error>
+					<#if error.mandatoryError>
+						#i18n{form.message.mandatory.entry}
+					<#else>
+						${error.errorMessage}
+					</#if>
+				</div>
+			</#if>
+		</#if>
 	</div>
 </div>
+
+<#if list_responses?? && list_responses?has_content>
+	<#list list_responses as response>
+		<#if response.file?? && response.file.title?? && response.file.title != ''>
+			<#if listFiles??>
+				<#assign listFiles = listFiles + [response.file] >
+			<#else>
+				<#assign listFiles = [response.file] >
+			</#if>
+		</#if>
+	</#list>
+<#else>
+	<#assign listFiles = ''>
+</#if>
+
+<@addUploadedFilesBox fieldName=fieldName checkBoxPrefix='_form_upload_checkbox_' deletePrefix='_form_upload_delete_' listFiles=listFiles />

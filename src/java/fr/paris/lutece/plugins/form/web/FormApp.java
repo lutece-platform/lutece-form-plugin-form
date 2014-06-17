@@ -53,7 +53,6 @@ import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSession;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.plugins.form.utils.JSONUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -83,16 +82,9 @@ import fr.paris.lutece.portal.web.xpages.XPageApplication;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.http.SecurityUtil;
 
-import net.sf.json.JSON;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
-
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -160,7 +152,6 @@ public class FormApp implements XPageApplication
     private static final String PARAMETER_RESET = "reset";
     private static final String PARAMETER_SESSION = "session";
     private static final String PARAMETER_SAVE_DRAFT = "save_draft";
-    private static final String PARAMETER_FIELD_INDEX = "field_index";
 
     // session
     private static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
@@ -227,21 +218,6 @@ public class FormApp implements XPageApplication
         // button associated with an upload might have been pressed :
         String strUploadAction = FormAsynchronousUploadHandler.getHandler(  ).getUploadAction( request );
 
-        if ( strUploadAction != null )
-        {
-            // the formsubmit may no be reused
-            FormSubmit formSubmit = new FormSubmit(  );
-            formSubmit.setForm( form );
-            // Upload the file
-            FormAsynchronousUploadHandler.getHandler(  ).doUploadAction( request, strUploadAction );
-            // parse request & save draft
-            doInsertResponseInFormSubmit( request, formSubmit, false, plugin );
-            FormDraftBackupService.saveDraft( request, form );
-            FormUtils.removeFormErrors( session );
-
-            return getForm( request, session, nMode, plugin );
-        }
-
         if ( ( form == null ) && ( session.getAttribute( PARAMETER_FORM_SUBMIT ) != null ) )
         {
             // find form stored in session
@@ -298,7 +274,7 @@ public class FormApp implements XPageApplication
 
             return getForm( request, session, nMode, plugin );
         }
-        else if ( ( request.getParameter( PARAMETER_SAVE ) != null ) &&
+        else if ( ( ( request.getParameter( PARAMETER_SAVE ) != null ) || ( strUploadAction != null ) ) &&
                 ( request.getParameter( PARAMETER_ID_FORM ) != null ) )
         {
             page = getRecap( request, session, nMode, plugin );
@@ -951,67 +927,6 @@ public class FormApp implements XPageApplication
                 }
             }
         }
-    }
-
-    /**
-     * Removes the uploaded fileItem
-     * @param request the request
-     * @return The JSON result
-     * @category CALLED_BY_JS (formupload.js)
-     */
-    public String doRemoveAsynchronousUploadedFile( HttpServletRequest request )
-    {
-        String strIdEntry = request.getParameter( FormUtils.PARAMETER_ID_ENTRY );
-        String strFieldIndex = request.getParameter( PARAMETER_FIELD_INDEX );
-
-        if ( StringUtils.isBlank( strIdEntry ) || StringUtils.isBlank( strFieldIndex ) )
-        {
-            return JSONUtils.buildJsonErrorRemovingFile( request ).toString(  );
-        }
-
-        // parse json
-        JSON jsonFieldIndexes = JSONSerializer.toJSON( strFieldIndex );
-
-        if ( !jsonFieldIndexes.isArray(  ) )
-        {
-            return JSONUtils.buildJsonErrorRemovingFile( request ).toString(  );
-        }
-
-        JSONArray jsonArrayFieldIndexers = (JSONArray) jsonFieldIndexes;
-        int[] tabFieldIndex = new int[jsonArrayFieldIndexers.size(  )];
-
-        for ( int nIndex = 0; nIndex < jsonArrayFieldIndexers.size(  ); nIndex++ )
-        {
-            try
-            {
-                tabFieldIndex[nIndex] = Integer.parseInt( jsonArrayFieldIndexers.getString( nIndex ) );
-            }
-            catch ( NumberFormatException nfe )
-            {
-                return JSONUtils.buildJsonErrorRemovingFile( request ).toString(  );
-            }
-        }
-
-        // inverse order (removing using index - remove greater first to keep order)
-        Arrays.sort( tabFieldIndex );
-        ArrayUtils.reverse( tabFieldIndex );
-
-        FormAsynchronousUploadHandler handler = FormAsynchronousUploadHandler.getHandler(  );
-
-        for ( int nFieldIndex : tabFieldIndex )
-        {
-            handler.removeFileItem( strIdEntry, request.getSession(  ).getId(  ), nFieldIndex );
-        }
-
-        JSONObject json = new JSONObject(  );
-        // operation successful
-        json.element( JSONUtils.JSON_KEY_SUCCESS, JSONUtils.JSON_KEY_SUCCESS );
-        json.accumulateAll( JSONUtils.getUploadedFileJSON( handler.getFileItems( strIdEntry,
-                    request.getSession(  ).getId(  ) ) ) );
-        json.element( JSONUtils.JSON_KEY_FIELD_NAME,
-            FormAsynchronousUploadHandler.getHandler(  ).buildFieldName( strIdEntry ) );
-
-        return json.toString(  );
     }
 
     /**

@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.form.service.entrytype;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeFile;
-import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
 import fr.paris.lutece.util.url.UrlItem;
 
 
@@ -87,7 +87,7 @@ public class EntryTypeImage extends AbstractEntryTypeFile
      * {@inheritDoc}
      */
     @Override
-    public AbstractAsynchronousUploadHandler getAsynchronousUploadHandler(  )
+    public AbstractGenAttUploadHandler getAsynchronousUploadHandler(  )
     {
         return FormAsynchronousUploadHandler.getHandler(  );
     }
