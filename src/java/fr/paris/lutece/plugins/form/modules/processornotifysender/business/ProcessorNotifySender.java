@@ -121,6 +121,7 @@ public class ProcessorNotifySender extends OutputProcessor
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getOutputConfigForm( HttpServletRequest request, Form form, Locale locale, Plugin plugin )
     {
         NotifySenderConfiguration configuration = NotifySenderConfigurationHome.findByPrimaryKey( form.getIdForm(  ),
@@ -147,9 +148,9 @@ public class ProcessorNotifySender extends OutputProcessor
     /**
      * {@inheritDoc}
      */
+    @Override
     public String doOutputConfigForm( HttpServletRequest request, Locale locale, Plugin plugin )
     {
-        // TODO Auto-generated method stub
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         int nIdForm = -1;
 
@@ -187,6 +188,7 @@ public class ProcessorNotifySender extends OutputProcessor
     /**
      * {@inheritDoc}
      */
+    @Override
     public String process( FormSubmit formSubmit, HttpServletRequest request, Plugin plugin )
     {
         NotifySenderConfiguration config = NotifySenderConfigurationHome.findByPrimaryKey( formSubmit.getForm(  )

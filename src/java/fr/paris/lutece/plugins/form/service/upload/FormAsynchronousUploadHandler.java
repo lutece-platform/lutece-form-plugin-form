@@ -39,9 +39,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
  * FormAsynchronousUploadHandler.
- * @see #getFileItems(String, String)
- * @see #removeFileItem(String, String, int)
- *
  */
 public class FormAsynchronousUploadHandler extends AbstractGenAttUploadHandler
 {

@@ -88,6 +88,7 @@ public class FormPortletHome extends PortletHome
      *
      * @return the portlet type identifier
      */
+    @Override
     public String getPortletTypeId(  )
     {
         String strCurrentClassName = this.getClass(  ).getName(  );
@@ -101,6 +102,7 @@ public class FormPortletHome extends PortletHome
      *
      * @return the instance of the DAO singleton
      */
+    @Override
     public IPortletInterfaceDAO getDAO(  )
     {
         return _dao;

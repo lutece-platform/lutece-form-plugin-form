@@ -52,12 +52,9 @@ public class GraphTypeDAO implements IGraphTypeDAO
     private static final String SQL_QUERY_SELECT = "SELECT id_graph_type,title FROM form_graph_type ";
 
     /**
-     * Load the data of the graph type from the table
-     *
-     * @param idKey The identifier of the graph type
-     * @param plugin the plugin
-     * @return the instance of the GraphType
+     * {@inheritDoc}
      */
+    @Override
     public GraphType load( int idKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
@@ -104,10 +101,9 @@ public class GraphTypeDAO implements IGraphTypeDAO
     }
 
     /**
-     * Load the data of all  graph type returns them in a  list
-     * @param plugin the plugin
-     * @return  the list of graph type
+     * {@inheritDoc}
      */
+    @Override
     public List<GraphType> select( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );

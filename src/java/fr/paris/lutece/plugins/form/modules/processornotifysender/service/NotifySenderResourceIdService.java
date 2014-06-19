@@ -69,8 +69,9 @@ public class NotifySenderResourceIdService extends ResourceIdService
     }
 
     /**
-     * Initializes the service
+     * {@inheritDoc}
      */
+    @Override
     public void register(  )
     {
         ResourceType rt = new ResourceType(  );
@@ -88,21 +89,18 @@ public class NotifySenderResourceIdService extends ResourceIdService
     }
 
     /**
-     * Returns a list of actionresource ids
-     * @param locale The current locale
-     * @return A list of resource ids
+     * {@inheritDoc}
      */
+    @Override
     public ReferenceList getResourceIdList( Locale locale )
     {
         return null;
     }
 
     /**
-     * Returns the Title of a given resource
-     * @param strId The Id of the resource
-     * @param locale The current locale
-     * @return The Title of a given resource
+     * {@inheritDoc}
      */
+    @Override
     public String getTitle( String strId, Locale locale )
     {
         return null;

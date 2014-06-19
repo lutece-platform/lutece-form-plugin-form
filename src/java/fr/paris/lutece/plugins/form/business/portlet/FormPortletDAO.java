@@ -57,6 +57,7 @@ public final class FormPortletDAO implements IFormPortletDAO
      *
      * @param portlet the instance of the Portlet object to insert
      */
+    @Override
     public void insert( Portlet portlet )
     {
         FormPortlet p = (FormPortlet) portlet;
@@ -75,6 +76,7 @@ public final class FormPortletDAO implements IFormPortletDAO
      *
      * @param nPortletId the portlet identifier
      */
+    @Override
     public void delete( int nPortletId )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE );
@@ -90,6 +92,7 @@ public final class FormPortletDAO implements IFormPortletDAO
      * @param nPortletId The Portlet identifier
      * @return theDocumentListPortlet object
      */
+    @Override
     public Portlet load( int nPortletId )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
@@ -114,6 +117,7 @@ public final class FormPortletDAO implements IFormPortletDAO
      * @param nIdForm the id of the form
      * @return number of form portlet who are associate to the id form
      */
+    @Override
     public int selectCountPortletByIdForm( int nIdForm )
     {
         int nCountPortlet = 0;
@@ -137,6 +141,7 @@ public final class FormPortletDAO implements IFormPortletDAO
      *
      * @param portlet A portlet
      */
+    @Override
     public void store( Portlet portlet )
     {
         FormPortlet p = (FormPortlet) portlet;

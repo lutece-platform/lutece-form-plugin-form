@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.form.business.portlet;
 
 import fr.paris.lutece.portal.business.portlet.IPortletInterfaceDAO;
-import fr.paris.lutece.portal.business.portlet.Portlet;
 
 
 /**
@@ -43,42 +42,9 @@ import fr.paris.lutece.portal.business.portlet.Portlet;
 public interface IFormPortletDAO extends IPortletInterfaceDAO
 {
     /**
-     * Deletes records for a portlet identifier in the table form_portlet
-     *
-     *
-     * @param nPortletId the portlet identifier
-     */
-    void delete( int nPortletId );
-
-    /**
-      * Insert a new record in the table form_portlet
-      *
-      *
-      * @param portlet the instance of the Portlet object to insert
-      */
-    void insert( Portlet portlet );
-
-    /**
-     * Loads the data of Form Portlet whose identifier is specified in parameter
-     *
-     *
-     * @param nPortletId The Portlet identifier
-     * @return theDocumentListPortlet object
-     */
-    Portlet load( int nPortletId );
-
-    /**
      * return number of form portlet who are associate to the id form
      * @param nIdForm the id of the form
      * @return number of form portlet who are associate to the id form
      */
     int selectCountPortletByIdForm( int nIdForm );
-
-    /**
-     * Update the record in the table
-     *
-     *
-     * @param portlet A portlet
-     */
-    void store( Portlet portlet );
 }

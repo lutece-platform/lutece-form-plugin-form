@@ -111,12 +111,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     }
 
     /**
-     * Insert a new record in the table.
-     *
-     * @param formSubmit instance of the formResponse object to insert
-     * @param plugin the plugin
-     * @return the id of the new form Submit
+     * {@inheritDoc}
      */
+    @Override
     public synchronized int insert( FormSubmit formSubmit, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -136,12 +133,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     }
 
     /**
-     * Load the data of the formResponse from the table
-     *
-     * @param nIdFormSubmit The identifier of the formResponse
-     * @param plugin the plugin
-     * @return the instance of the formSubmit
+     * {@inheritDoc}
      */
+    @Override
     public FormSubmit load( int nIdFormSubmit, Plugin plugin )
     {
         FormSubmit formSubmit = null;
@@ -167,12 +161,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     }
 
     /**
-     * Delete all response associate to the form submit whose identifier is
-     * specified in parameter
-     *
-     * @param nIdFormSubmit The identifier of the formResponse
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void delete( int nIdFormSubmit, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -182,11 +173,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     }
 
     /**
-     * Update the the formSubmit in the table
-     *
-     * @param formSubmit instance of the formSubmit object to update
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void store( FormSubmit formSubmit, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -200,12 +189,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     }
 
     /**
-     * Load the data of all the formSubmit who verify the filter and returns
-     * them in a list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return the list of formResponse
+     * {@inheritDoc}
      */
+    @Override
     public List<FormSubmit> selectListByFilter( ResponseFilter filter, Plugin plugin )
     {
         List<FormSubmit> formResponseList = new ArrayList<FormSubmit>(  );
@@ -271,12 +257,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     }
 
     /**
-     * Load the data of all the formSubmit who verify the filter and returns
-     * them in a list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return the list of formResponse
+     * {@inheritDoc}
      */
+    @Override
     public int selectCountByFilter( ResponseFilter filter, Plugin plugin )
     {
         int nIdCount = 0;
@@ -332,12 +315,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     }
 
     /**
-     * Load the number of formSubmit group by day who verify the filter and
-     * returns them in a list of statistic
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return the list of statistic
+     * {@inheritDoc}
      */
+    @Override
     public List<StatisticFormSubmit> selectStatisticFormSubmit( ResponseFilter filter, Plugin plugin )
     {
         List<StatisticFormSubmit> statList = new ArrayList<StatisticFormSubmit>(  );

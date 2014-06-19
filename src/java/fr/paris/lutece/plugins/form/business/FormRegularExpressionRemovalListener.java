@@ -49,10 +49,9 @@ public class FormRegularExpressionRemovalListener implements RemovalListener
     private static final String PROPERTY_REGULAR_EXPRESSION_CANNOT_BE_REMOVED = "form.message.regularExpressionCanNotBeRemoved";
 
     /**
-     * Check if the object can be safely removed
-     * @param strId The object id
-     * @return true if the object can be removed otherwise false
+     * {@inheritDoc}
      */
+    @Override
     public boolean canBeRemoved( String strId )
     {
         int nIdRegularExpression = -1;
@@ -75,11 +74,9 @@ public class FormRegularExpressionRemovalListener implements RemovalListener
     }
 
     /**
-     * Gives a message explaining why the object can't be removed
-     * @param strId The object id
-     * @param locale The current locale
-     * @return The message
+     * {@inheritDoc}
      */
+    @Override
     public String getRemovalRefusedMessage( String strId, Locale locale )
     {
         // Build a message 

@@ -52,6 +52,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
@@ -156,8 +157,15 @@ public final class FormUtils
     private static final String MARK_VALIDATE_REQUIREMENT = "validate_requirement";
     private static final String MARK_DRAFT_SUPPORTED = "draft_supported";
     private static final String MARK_USER = "user";
+    private static final String MARK_UPLOAD_HANDLER = "uploadHandler";
+
+    // Parameters
     private static final String PARAMETER_ID_ENTRY_TYPE = "id_type";
+
+    // Name of the JCaptcha plugin
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
+
+    // Constants
     private static final String CONSTANT_WHERE = " WHERE ";
     private static final String CONSTANT_AND = " AND ";
 
@@ -788,8 +796,15 @@ public final class FormUtils
             }
         }
 
-        template = AppTemplateService.getTemplate( EntryTypeServiceManager.getEntryTypeService( entry )
-                                                                          .getTemplateHtmlForm( entry, bDisplayFront ),
+        IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
+
+        if ( entryTypeService instanceof AbstractEntryTypeUpload )
+        {
+            model.put( MARK_UPLOAD_HANDLER,
+                ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler(  ) );
+        }
+
+        template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ),
                 locale, model );
         stringBuffer.append( template.getHtml(  ) );
     }

@@ -54,13 +54,9 @@ import java.util.List;
 public class GraphTypePieChart extends GraphType
 {
     /**
-    * return the JFreeChart graph associate to the graph type
-    * @param listStatistic listStatistic
-    * @param strGraphTitle graph title
-    * @param nGraphThreeDimension true if the graph must be in three dimension
-    * @param nGraphLabelValue true if the labels must appear in the graph
-    * @return the JFreeChart graph associate to the graph type
-    */
+     * {@inheritDoc}
+     */
+    @Override
     public JFreeChart createChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle,
         boolean nGraphThreeDimension, boolean nGraphLabelValue )
     {

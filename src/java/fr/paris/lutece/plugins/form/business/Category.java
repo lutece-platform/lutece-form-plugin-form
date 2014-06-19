@@ -90,8 +90,8 @@ public class Category implements RBACResource
     /**
      * @param obj the category to compare
      * @return true if category in parameter is the same category
-     *
      */
+    @Override
     public boolean equals( Object obj )
     {
         if ( obj instanceof Category && ( ( (Category) obj ).getIdCategory(  ) == _nIdCategory ) )
@@ -114,18 +114,18 @@ public class Category implements RBACResource
     }
 
     /**
-     * RBAC resource implementation
-     * @return The resource type code
+     * {@inheritDoc}
      */
+    @Override
     public String getResourceTypeCode(  )
     {
         return RESOURCE_TYPE;
     }
 
     /**
-     * RBAC resource implementation
-     * @return The resourceId
+     * {@inheritDoc}
      */
+    @Override
     public String getResourceId(  )
     {
         return Integer.toString( _nIdCategory );

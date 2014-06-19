@@ -64,13 +64,9 @@ import java.util.List;
 public class GraphTypeBarChart extends GraphType
 {
     /**
-    * return the JFreeChart graph associate to the graph type
-    * @param listStatistic listStatistic
-    * @param strGraphTitle graph title
-    * @param nGraphThreeDimension true if the graph must be in three dimension
-    * @param nGraphLabelValue true if the labels must appear in the graph
-    * @return the JFreeChart graph associate to the graph type
-    */
+     * {@inheritDoc}
+     */
+    @Override
     public JFreeChart createChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle,
         boolean nGraphThreeDimension, boolean nGraphLabelValue )
     {
@@ -78,15 +74,13 @@ public class GraphTypeBarChart extends GraphType
     }
 
     /**
-        * return the JFreeChart BarChart graph
-        * @param listStatistic listStatistic
-        * @param strGraphTitle graph title
-        * @param nGraphThreeDimension true if the graph must be in three dimension
-        * @param nGraphLabelValue true if the labels must appear in the graph
-        * @return the JFreeChart graph associate to the graph type
-        */
-
-    //Création de l'histogramme
+     * Return the JFreeChart BarChart graph
+     * @param listStatistic listStatistic
+     * @param strGraphTitle graph title
+     * @param nGraphThreeDimension true if the graph must be in three dimension
+     * @param nGraphLabelValue true if the labels must appear in the graph
+     * @return the JFreeChart graph associate to the graph type
+     */
     public static JFreeChart createBarChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle,
         boolean nGraphThreeDimension, boolean nGraphLabelValue )
     {
@@ -130,9 +124,10 @@ public class GraphTypeBarChart extends GraphType
     }
 
     /**
-     * create barChatDataset function of the list of statistic
-     * @param listStatistic  create barChatDataset function of the list of statistic
-     * @return  barCharDataset
+     * Create barChatDataset function of the list of statistic
+     * @param listStatistic create barChatDataset function of the list of
+     *            statistic
+     * @return barCharDataset
      */
     private static CategoryDataset createBarChartDataset( List<StatisticEntrySubmit> listStatistic )
     {

@@ -178,9 +178,9 @@ public class FormAction implements RBACAction, Localizable
     }
 
     /**
-     * Returns the permission associated to the action
-     * @return The permission
+     * {@inheritDoc}
      */
+    @Override
     public String getPermission(  )
     {
         return _strPermission;
@@ -197,9 +197,9 @@ public class FormAction implements RBACAction, Localizable
     }
 
     /**
-     * Implements Localizable
-     * @param locale The current locale
+     * {@inheritDoc}
      */
+    @Override
     public void setLocale( Locale locale )
     {
         _locale = locale;

@@ -132,6 +132,7 @@ public class FormParameterDAO implements IFormParameterDAO
     /**
      * {@inheritDoc}
      */
+    @Override
     public ReferenceList selectByFilter( FormParameterFilter filter, Plugin plugin )
     {
         // Build SQL query

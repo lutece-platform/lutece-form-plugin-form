@@ -55,6 +55,7 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
     /**
      * {@inheritDoc}
      */
+    @Override
     public void insert( NotifySenderConfiguration notifySenderConfiguration, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -71,6 +72,7 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
     /**
      * {@inheritDoc}
      */
+    @Override
     public NotifySenderConfiguration load( int nIdForm, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
@@ -97,6 +99,7 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete( int nIdForm, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -108,6 +111,7 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
     /**
      * {@inheritDoc}
      */
+    @Override
     public void store( NotifySenderConfiguration notifySenderConfiguration, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -126,6 +130,7 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<NotifySenderConfiguration> selectNotifySenderConfigurationsList( Plugin plugin )
     {
         List<NotifySenderConfiguration> notifySenderConfigurationList = new ArrayList<NotifySenderConfiguration>(  );

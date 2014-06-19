@@ -88,6 +88,7 @@ public final class ExportFormatDAO implements IExportFormatDAO
      * @param exportFormat instance of the ExportFormat object to insert
      * @param plugin the plugin
      */
+    @Override
     public synchronized void insert( ExportFormat exportFormat, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -108,6 +109,7 @@ public final class ExportFormatDAO implements IExportFormatDAO
      * @param plugin the plugin
      * @return the instance of the ExportFormat
      */
+    @Override
     public ExportFormat load( int nId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
@@ -137,6 +139,7 @@ public final class ExportFormatDAO implements IExportFormatDAO
      * @param nIdExport The identifier of the ExportFormat
      * @param plugin the plugin
      */
+    @Override
     public void delete( int nIdExport, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -151,6 +154,7 @@ public final class ExportFormatDAO implements IExportFormatDAO
      * @param exportFormat instance of the ExportFormat object to update
      * @param plugin the plugin
      */
+    @Override
     public void store( ExportFormat exportFormat, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -170,6 +174,7 @@ public final class ExportFormatDAO implements IExportFormatDAO
      * @param plugin the plugin
      * @return The List which contains the data of all the ExportFormat
      */
+    @Override
     public List<ExportFormat> selectListExport( Plugin plugin )
     {
         List<ExportFormat> exportFormatList = new ArrayList<ExportFormat>(  );
@@ -197,6 +202,7 @@ public final class ExportFormatDAO implements IExportFormatDAO
      * @param plugin the plugin
      * @return  a  reference list of export format
      */
+    @Override
     public ReferenceList getListExport( Plugin plugin )
     {
         ReferenceList listExport = new ReferenceList(  );

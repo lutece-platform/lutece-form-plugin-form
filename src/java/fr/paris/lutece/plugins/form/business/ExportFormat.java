@@ -126,21 +126,21 @@ public class ExportFormat implements RBACResource
     }
 
     /**
-     * RBAC resource implmentation
-     * @return The resource type code
+     * {@inheritDoc}
      */
+    @Override
     public String getResourceTypeCode(  )
     {
         return RESOURCE_TYPE;
     }
 
     /**
-     * RBAC resource implmentation
-     * @return The resourceId
+     * {@inheritDoc}
      */
+    @Override
     public String getResourceId(  )
     {
-        return "" + _nIdExport;
+        return Integer.toString( _nIdExport );
     }
 
     /**

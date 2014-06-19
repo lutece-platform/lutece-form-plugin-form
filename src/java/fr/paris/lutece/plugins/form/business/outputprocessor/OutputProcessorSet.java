@@ -48,6 +48,7 @@ public class OutputProcessorSet implements IOutputProcessorSet
      *
      * {@inheritDoc}
      */
+    @Override
     public IOutputProcessor getOutputProcessor( String strKey )
     {
         if ( strKey == null )

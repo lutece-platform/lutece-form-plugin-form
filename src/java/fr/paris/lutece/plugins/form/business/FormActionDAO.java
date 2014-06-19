@@ -49,11 +49,9 @@ public class FormActionDAO implements IFormActionDAO
         " FROM form_action a  where a.form_state=? ";
 
     /**
-     * Load the list of actions for a all form by form state
-     * @param nState the state of the form
-     * @param plugin the plugin
-     * @return The Collection of actions
+     * {@inheritDoc}
      */
+    @Override
     public List<FormAction> selectActionsByFormState( int nState, Plugin plugin )
     {
         List<FormAction> listActions = new ArrayList<FormAction>(  );

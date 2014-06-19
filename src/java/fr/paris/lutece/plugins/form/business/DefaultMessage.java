@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  *
@@ -167,21 +169,21 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     * RBAC resource implmentation
-     * @return The resource type code
+     * {@inheritDoc}
      */
+    @Override
     public String getResourceTypeCode(  )
     {
         return RESOURCE_TYPE;
     }
 
     /**
-     * RBAC resource implmentation
-     * @return The resourceId
+     * {@inheritDoc}
      */
+    @Override
     public String getResourceId(  )
     {
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**

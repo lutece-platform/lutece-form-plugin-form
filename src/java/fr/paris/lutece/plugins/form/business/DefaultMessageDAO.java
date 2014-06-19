@@ -56,6 +56,7 @@ public class DefaultMessageDAO implements IDefaultMessageDAO
      * @param defaultMessage the defaultMessage
      * @param plugin the Plugin
      */
+    @Override
     public void store( DefaultMessage defaultMessage, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -75,9 +76,10 @@ public class DefaultMessageDAO implements IDefaultMessageDAO
     /**
      * load the only record from the table
      *
-     *@param plugin the Plugin
-     *@return the default message object
+     * @param plugin the Plugin
+     * @return the default message object
      */
+    @Override
     public DefaultMessage load( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );

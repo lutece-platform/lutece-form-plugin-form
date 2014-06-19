@@ -80,6 +80,7 @@ public class FormPortlet extends Portlet
      * @param request The HTTP Servlet request
      * @return the Xml code of the form portlet content
      */
+    @Override
     public String getXml( HttpServletRequest request )
     {
         Plugin plugin = PluginService.getPlugin( this.getPluginName(  ) );
@@ -106,7 +107,7 @@ public class FormPortlet extends Portlet
             if ( form.isSupportHTTPS(  ) && AppHTTPSService.isHTTPSSupportEnabled(  ) )
             {
                 // put real base url in session
-                HttpSession session = ( request != null ) ? request.getSession(  ) : null;
+                HttpSession session = request.getSession(  );
 
                 if ( session != null )
                 {
@@ -137,6 +138,7 @@ public class FormPortlet extends Portlet
      * @param request The HTTP Servlet Request
      * @return the Xml code of the Articles List portlet
      */
+    @Override
     public String getXmlDocument( HttpServletRequest request )
     {
         return XmlUtil.getXmlHeader(  ) + getXml( request );
@@ -153,6 +155,7 @@ public class FormPortlet extends Portlet
     /**
      * Removes the current instance of the the form portlet object
      */
+    @Override
     public void remove(  )
     {
         FormPortletHome.getInstance(  ).remove( this );
@@ -203,6 +206,7 @@ public class FormPortlet extends Portlet
      *
      * @return The Status
      */
+    @Override
     public int getStatus(  )
     {
         return _nStatus;
@@ -213,6 +217,7 @@ public class FormPortlet extends Portlet
      *
      * @param nStatus The Status
      */
+    @Override
     public void setStatus( int nStatus )
     {
         _nStatus = nStatus;

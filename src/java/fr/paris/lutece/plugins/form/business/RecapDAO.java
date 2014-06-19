@@ -80,12 +80,9 @@ public final class RecapDAO implements IRecapDAO
     }
 
     /**
-     * Insert a new record in the table.
-     *
-     * @param recap instance of the Recap object to insert
-     * @param plugin the plugin
-     * @return the id of the new recap
+     * {@inheritDoc}
      */
+    @Override
     public synchronized int insert( Recap recap, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -116,12 +113,9 @@ public final class RecapDAO implements IRecapDAO
     }
 
     /**
-     * Load the data of the recap from the table
-     *
-     * @param nId The identifier of the recap
-     * @param plugin the plugin
-     * @return the instance of the Recap
+     * {@inheritDoc}
      */
+    @Override
     public Recap load( int nId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
@@ -160,11 +154,9 @@ public final class RecapDAO implements IRecapDAO
     }
 
     /**
-     * Delete a record from the table
-     *
-     * @param nIdRecap The identifier of the recap
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void delete( int nIdRecap, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -174,11 +166,9 @@ public final class RecapDAO implements IRecapDAO
     }
 
     /**
-     * Update the recap in the table
-     *
-     * @param recap instance of the Recap object to update
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void store( Recap recap, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
