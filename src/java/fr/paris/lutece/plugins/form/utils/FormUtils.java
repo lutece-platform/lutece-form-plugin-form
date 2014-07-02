@@ -767,7 +767,7 @@ public final class FormUtils
         LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
 
         if ( ( user == null ) && SecurityService.isAuthenticationEnable(  ) &&
-                SecurityService.getInstance(  ).isExternalAuthentication(  ) )
+                SecurityService.getInstance(  ).isExternalAuthentication(  ) && ( request != null ) )
         {
             try
             {
