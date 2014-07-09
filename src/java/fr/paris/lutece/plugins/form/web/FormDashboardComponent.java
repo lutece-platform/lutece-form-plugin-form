@@ -79,9 +79,7 @@ public class FormDashboardComponent extends DashboardComponent
     private static final String MARK_RESPONSE_COUNT_MAP = "response_count_map";
     private static final String MARK_AUTHORIZED_FORM_MODIFICATION_LIST = "authorized_form_modification_list";
     private static final String MARK_PERMISSION_CREATE = "permission_create";
-    private static final int ZONE_1 = 1;
-    private static final String TEMPLATE_DASHBOARD_ZONE_1 = "/admin/plugins/form/form_dashboard_zone_1.html";
-    private static final String TEMPLATE_DASHBOARD_OTHER_ZONE = "/admin/plugins/form/form_dashboard_other_zone.html";
+    private static final String TEMPLATE_DASHBOARD = "/admin/plugins/form/form_dashboard.html";
 
     /**
      * {@inheritDoc}
@@ -164,22 +162,8 @@ public class FormDashboardComponent extends DashboardComponent
             RBACService.isAuthorized( Form.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 FormResourceIdService.PERMISSION_CREATE, user ) );
 
-        HtmlTemplate t = AppTemplateService.getTemplate( getTemplateDashboard(  ), user.getLocale(  ), model );
+        HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_DASHBOARD, user.getLocale(  ), model );
 
         return t.getHtml(  );
-    }
-
-    /**
-     * Get the template
-     * @return the template
-     */
-    private String getTemplateDashboard(  )
-    {
-        if ( getZone(  ) == ZONE_1 )
-        {
-            return TEMPLATE_DASHBOARD_ZONE_1;
-        }
-
-        return TEMPLATE_DASHBOARD_OTHER_ZONE;
     }
 }
