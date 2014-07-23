@@ -116,8 +116,9 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     @Override
     public synchronized int insert( FormSubmit formSubmit, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         formSubmit.setIdFormSubmit( newPrimaryKey( plugin ) );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         daoUtil.setInt( 1, formSubmit.getIdFormSubmit(  ) );
         daoUtil.setTimestamp( 2, formSubmit.getDateResponse(  ) );
         daoUtil.setInt( 3, FormUtils.getDay( formSubmit.getDateResponse(  ) ) );

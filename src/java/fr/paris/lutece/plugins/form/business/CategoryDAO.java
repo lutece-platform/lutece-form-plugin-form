@@ -87,8 +87,9 @@ public class CategoryDAO implements ICategoryDAO
     @Override
     public void insert( Category category, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         category.setIdCategory( newPrimaryKey( plugin ) );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         daoUtil.setInt( 1, category.getIdCategory(  ) );
         daoUtil.setString( 2, category.getTitle(  ) );
         daoUtil.setString( 3, category.getColor(  ) );

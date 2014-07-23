@@ -139,8 +139,9 @@ public final class FormDAO implements IFormDAO
     @Override
     public synchronized int insert( Form form, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         form.setIdForm( newPrimaryKey( plugin ) );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
         int nIndex = 1;
         daoUtil.setInt( nIndex++, form.getIdForm(  ) );

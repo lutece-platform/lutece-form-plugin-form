@@ -91,8 +91,9 @@ public final class ExportFormatDAO implements IExportFormatDAO
     @Override
     public synchronized void insert( ExportFormat exportFormat, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         exportFormat.setIdExport( newPrimaryKey( plugin ) );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         daoUtil.setInt( 1, exportFormat.getIdExport(  ) );
         daoUtil.setString( 2, exportFormat.getTitle(  ) );
         daoUtil.setString( 3, exportFormat.getDescription(  ) );

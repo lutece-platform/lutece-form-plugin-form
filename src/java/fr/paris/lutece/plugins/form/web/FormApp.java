@@ -81,6 +81,7 @@ import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.portal.web.xpages.XPageApplication;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.http.SecurityUtil;
+import fr.paris.lutece.util.sql.TransactionManager;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -855,36 +856,40 @@ public class FormApp implements XPageApplication
         // Validates the form submit using validators
         ValidatorService.getInstance(  ).validateForm( request, formSubmit, plugin );
 
-        formSubmit.setIdFormSubmit( FormSubmitHome.create( formSubmit, plugin ) );
+        TransactionManager.beginTransaction( plugin );
 
         try
         {
+            formSubmit.setIdFormSubmit( FormSubmitHome.create( formSubmit, plugin ) );
             getResponseService(  ).create( formSubmit );
+
+            //Process all outputProcess
+            for ( IOutputProcessor outputProcessor : OutputProcessorService.getInstance(  )
+                                                                           .getProcessorsByIdForm( formSubmit.getForm(  )
+                                                                                                             .getIdForm(  ) ) )
+            {
+                outputProcessor.process( formSubmit, request, plugin );
+            }
+
+            TransactionManager.commitTransaction( plugin );
         }
         catch ( Exception ex )
         {
             // something very wrong happened... a database check might be needed
             AppLogService.error( ex.getMessage(  ) + " for FormSubmit " + formSubmit.getIdFormSubmit(  ), ex );
+            TransactionManager.rollBack( plugin );
             // revert
-            // we clear the DB form the given formsubmit (FormSubmitHome also removes the reponses)
-            FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
+            // We do not remove the for submit since we rolled back the transaction
+            //            FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
             // throw a message to the user
             SiteMessageService.setMessage( request, MESSAGE_SUBMIT_SAVE_ERROR, SiteMessage.TYPE_ERROR );
         }
 
-        //Notify new form submit
+        // Notify new form submit
         FormUtils.sendNotificationMailFormSubmit( formSubmit, locale );
 
         // We can safely remove session files : they are validated
         FormAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( session.getId(  ) );
-
-        //Process all outputProcess
-        for ( IOutputProcessor outputProcessor : OutputProcessorService.getInstance(  )
-                                                                       .getProcessorsByIdForm( formSubmit.getForm(  )
-                                                                                                         .getIdForm(  ) ) )
-        {
-            outputProcessor.process( formSubmit, request, plugin );
-        }
     }
 
     /**

@@ -41,7 +41,9 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.ReferenceList;
+import fr.paris.lutece.util.sql.TransactionManager;
 
 import java.util.List;
 import java.util.Map;
@@ -94,17 +96,30 @@ public final class FormHome
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         listEntry = EntryHome.getEntryList( filter );
         recap = RecapHome.findByPrimaryKey( form.getRecap(  ).getIdRecap(  ), plugin );
-        recap.setIdRecap( RecapHome.copy( recap, plugin ) );
-        form.setRecap( recap );
-        form.setDateCreation( FormUtils.getCurrentTimestamp(  ) );
-        form.setIdForm( create( form, plugin ) );
 
-        for ( Entry entry : listEntry )
+        TransactionManager.beginTransaction( plugin );
+
+        try
         {
-            entry = EntryHome.findByPrimaryKey( entry.getIdEntry(  ) );
-            entry.setIdResource( form.getIdForm(  ) );
-            entry.setResourceType( Form.RESOURCE_TYPE );
-            EntryHome.copy( entry );
+            recap.setIdRecap( RecapHome.copy( recap, plugin ) );
+            form.setRecap( recap );
+            form.setDateCreation( FormUtils.getCurrentTimestamp(  ) );
+            form.setIdForm( create( form, plugin ) );
+
+            for ( Entry entry : listEntry )
+            {
+                entry = EntryHome.findByPrimaryKey( entry.getIdEntry(  ) );
+                entry.setIdResource( form.getIdForm(  ) );
+                entry.setResourceType( Form.RESOURCE_TYPE );
+                EntryHome.copy( entry );
+            }
+
+            TransactionManager.commitTransaction( plugin );
+        }
+        catch ( Exception e )
+        {
+            TransactionManager.rollBack( plugin );
+            throw new AppException( e.getMessage(  ), e );
         }
     }
 
@@ -133,12 +148,6 @@ public final class FormHome
         responseFilter.setIdResource( nIdForm );
 
         List<FormSubmit> listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
-
-        for ( FormSubmit formSubmit : listFormSubmit )
-        {
-            FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
-        }
-
         Form form = findByPrimaryKey( nIdForm, plugin );
         EntryFilter entryFilter = new EntryFilter(  );
         entryFilter.setIdResource( form.getIdForm(  ) );
@@ -146,13 +155,29 @@ public final class FormHome
 
         List<Entry> listEntry = EntryHome.getEntryList( entryFilter );
 
-        for ( Entry entry : listEntry )
-        {
-            EntryHome.remove( entry.getIdEntry(  ) );
-        }
+        TransactionManager.beginTransaction( plugin );
 
-        _dao.delete( nIdForm, plugin );
-        RecapHome.remove( form.getRecap(  ).getIdRecap(  ), plugin );
+        try
+        {
+            for ( FormSubmit formSubmit : listFormSubmit )
+            {
+                FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
+            }
+
+            for ( Entry entry : listEntry )
+            {
+                EntryHome.remove( entry.getIdEntry(  ) );
+            }
+
+            _dao.delete( nIdForm, plugin );
+            RecapHome.remove( form.getRecap(  ).getIdRecap(  ), plugin );
+            TransactionManager.commitTransaction( plugin );
+        }
+        catch ( Exception e )
+        {
+            TransactionManager.rollBack( plugin );
+            throw new AppException( e.getMessage(  ), e );
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////

@@ -85,8 +85,9 @@ public final class RecapDAO implements IRecapDAO
     @Override
     public synchronized int insert( Recap recap, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         recap.setIdRecap( newPrimaryKey( plugin ) );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         daoUtil.setInt( 1, recap.getIdRecap(  ) );
         daoUtil.setString( 2, recap.getBackUrl(  ) );
 

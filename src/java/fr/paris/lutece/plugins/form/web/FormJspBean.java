@@ -81,6 +81,7 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppHTTPSService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -95,6 +96,7 @@ import fr.paris.lutece.util.UniqueIDGenerator;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
+import fr.paris.lutece.util.sql.TransactionManager;
 import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
 
@@ -616,11 +618,22 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
                     AdminMessage.TYPE_STOP );
             }
 
-            FormHome.remove( nIdForm, plugin );
-            OutputProcessorService.getInstance(  ).removeProcessorAssociationsByIdForm( nIdForm );
+            TransactionManager.beginTransaction( getPlugin(  ) );
 
-            // Removes the associations between all validators and the form
-            ValidatorService.getInstance(  ).removeAssociationsWithForm( nIdForm );
+            try
+            {
+                FormHome.remove( nIdForm, plugin );
+                OutputProcessorService.getInstance(  ).removeProcessorAssociationsByIdForm( nIdForm );
+
+                // Removes the associations between all validators and the form
+                ValidatorService.getInstance(  ).removeAssociationsWithForm( nIdForm );
+                TransactionManager.commitTransaction( getPlugin(  ) );
+            }
+            catch ( Exception e )
+            {
+                TransactionManager.rollBack( getPlugin(  ) );
+                throw new AppException( e.getMessage(  ), e );
+            }
         }
 
         return getJspManageForm( request );
