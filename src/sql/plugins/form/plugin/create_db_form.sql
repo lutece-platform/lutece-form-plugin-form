@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS form_response_submit;
 DROP TABLE IF EXISTS form_submit;
 DROP TABLE IF EXISTS form_form;
 DROP TABLE IF EXISTS form_recap;
@@ -221,10 +222,4 @@ CREATE TABLE form_response_submit (
 	id_response int default 0 NOT NULL,
 	id_form_submit int default 0 NOT NULL,
 	PRIMARY KEY (id_response,id_form_submit)
-);
-
-CREATE TABLE form_response_file (
-	id_response int default 0 NOT NULL,
-	id_file int default 0 NOT NULL,
-	PRIMARY KEY (id_response,id_file)
 );
