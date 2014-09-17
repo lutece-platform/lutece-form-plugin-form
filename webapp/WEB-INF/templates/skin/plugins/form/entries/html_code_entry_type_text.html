@@ -2,7 +2,7 @@
 		<label class="control-label col-xs-12 col-sm-2 col-md-2" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
 		<div class="col-xs-12 col-sm-6 col-md-4">
 			<#list entry.fields as field>
-				<input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" style="width:${field.width}px;" 
+				<input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" <#if field.width &gt; 0>style="width:${field.width}px;"</#if>
 					<#if list_responses??>
 						<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry>
