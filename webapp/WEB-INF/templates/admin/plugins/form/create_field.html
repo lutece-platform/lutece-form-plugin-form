@@ -1,48 +1,55 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<fieldset>
 	<legend>#i18n{form.createField.title} : '${field.parentEntry.title}'</legend>
-	<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateField.jsp#list" method="post" name="" id=""  >
-	<div class="control-group">
-		<label class="control-label" for="title">#i18n{form.createField.labelTitle} * :</label>
-    	<div class="controls">
-			<input type="text" name="title" id="title" class="input-xlarge" value=""  maxlength="255" />
+	<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateField.jsp#list" method="post" name="" id="">
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title">#i18n{form.createField.labelTitle} * :</label>
+    	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+			<input type="text" name="title" id="title" value="" maxlength="255" class="form-control input-sm">
 		</div>
 	</div>
-    <div class="control-group">
-		<label class="control-label" for="value">#i18n{form.createField.labelValue} * :</label>
-    	<div class="controls">
-			<input type="text" name="value" id="value" class="input-xlarge" value="" />
+    <div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="value">#i18n{form.createField.labelValue} * :</label>
+    	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+			<input type="text" name="value" id="value" value="" class="form-control input-sm">
 		</div>
 	</div>
-	<div class="control-group">
-		<label class="control-label" for="value">#i18n{form.createField.labelComment} : </label>
-    	<div class="controls">
-			<textarea name="comment" id="comment" ></textarea>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="value">#i18n{form.createField.labelComment} : </label>
+    	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+			<textarea name="comment" id="comment"></textarea>
 		</div>
 	</div>
-    <div class="control-group">
-		<label class="control-label" for="">#i18n{form.createField.labelDefaultValue} :</label>
-    	<div class="controls">
-			<input name="default_value" value="1" type="checkbox" >
+    <div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">#i18n{form.createField.labelDefaultValue} :</label>
+    	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+			<div class="checkbox">
+				<label>
+					<input name="default_value" value="1" type="checkbox">
+				</label>
+			</div>
 		</div>
 	</div>
   	<#if option_no_display_title>
-	<div class="control-group">
-		<label class="control-label" for="">#i18n{form.createField.labelNoDisplayTitle} :</label>
-		<div class="controls">
-			<input name="no_display_title" value="1" type="checkbox"  <#if field.noDisplayTitle>checked="checked"</#if>>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">#i18n{form.createField.labelNoDisplayTitle} :</label>
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+			<div class="checkbox">
+				<label>
+					<input name="no_display_title" value="1" type="checkbox"  <#if field.noDisplayTitle>checked="checked"</#if>>&#160;
+				</label>
+			</div>
 		</div>
 	</div>
   	</#if>
-  	<div class="form-actions">
-  		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
-  		<button class="btn btn-primary btn-small" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
+  	<div class="form-group">
+		<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
+			<button class="btn btn-primary btn-sm" type="submit" ><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
+			<button class="btn btn-primary btn-sm" type="button" onclick="javascript:window.history.back();" ><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
+		</div>
 	</div>
 	</form>
 	</fieldset>
 	</div>
 </div>
-
-
- 

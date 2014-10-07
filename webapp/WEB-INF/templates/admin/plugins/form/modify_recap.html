@@ -1,70 +1,89 @@
  <#include "/admin/util/editor/editor.html" />
- <div class="row-fluid">
-	<div class="span12">
+ <div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyRecap.jsp" method="post" name="" id=""  >
 			<fieldset>
         		<legend> #i18n{form.modifyRecap.title} : '${recap.form.title}'</legend>
 				<input name="id_recap" value="${recap.idRecap}" type="hidden" />
-				<div class="control-group">
-					<label class="control-label" for="back_url">#i18n{form.modifyRecap.labelBackUrl} * :</label>
-					<div class="controls">
-						<input type="text" name="back_url" id="back_url" size="80" value="${recap.backUrl}" />
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="back_url">#i18n{form.modifyRecap.labelBackUrl} * :</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<input type="text" name="back_url" id="back_url" size="80" value="${recap.backUrl}" class="form-control input-sm">
 					</div>
 				</div>
-		        <div class="control-group">
-					<label class="control-label" for="recap_message"> #i18n{form.modifyRecap.labelRecapMessage} * :</label>
-		           	<div class="controls">
-						<textarea class="richtext" name="recap_message" id="recap_message" rows="20" class="span5">${recap.recapMessage}</textarea>
+		        <div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="recap_message"> #i18n{form.modifyRecap.labelRecapMessage} * :</label>
+		           	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<textarea class="richtext" name="recap_message" id="recap_message" rows="20">${recap.recapMessage}</textarea>
 					</div>
 			     </div>
-		        <div class="control-group">
-					<label class="control-label" for="recap_data">#i18n{form.modifyRecap.labelRecapData} :</label>
-					<div class="controls">
-						<input name="recap_data" value="1" type="checkbox"  <#if recap.recapData>checked="checked"</#if>>
+		        <div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="recap_data">#i18n{form.modifyRecap.labelRecapData} :</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="checkbox">
+							<label>
+								<input name="recap_data" value="1" type="checkbox"  <#if recap.recapData>checked="checked"</#if>>&#160;
+							</label>
+						</div>
 						<span class="help-block">#i18n{form.modifyRecap.labelRecapDataComment}</span>
 					</div>
 				</div>
-		        <div class="control-group">
-		            <label class="control-label" for="graph">#i18n{form.modifyRecap.labelGraph} :</label>
-					<div class="controls">
-						<input name="graph" id="graph" value="1" type="checkbox" onclick="doDisplayGraph(this.checked)" <#if recap.graph>checked="checked"</#if>>
+		        <div class="form-group">
+		            <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="graph">#i18n{form.modifyRecap.labelGraph} :</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="checkbox">
+							<label>
+								<input name="graph" id="graph" value="1" type="checkbox" onclick="doDisplayGraph(this.checked)" <#if recap.graph>checked="checked"</#if>>&#160;
+							</label>
+						</div>
 						<span class="help-block">#i18n{form.modifyRecap.labelGraphComment}</span>
 					</div>
 				</div>
-		        <div class="control-group">
-					<label class="control-label" for="id_graph_type">#i18n{form.modifyRecap.labelGraphType}</label>
+		        <div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_graph_type">#i18n{form.modifyRecap.labelGraphType}</label>
 					<#if recap.graphType?exists>
-			           	<div class="controls">
-							<@combo name="id_graph_type" items=graph_type_list default_value=recap.graphType.idGraphType />
+			           	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+							<@comboWithParams name="id_graph_type" items=graph_type_list default_value=recap.graphType.idGraphType additionalParameters="class='form-control input-sm'" />
 						</div>
 					<#else>
-						<div class="controls">
-							<@combo name="id_graph_type" items=graph_type_list default_value=-1 />
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+							<@comboWithParams name="id_graph_type" items=graph_type_list default_value="-1" additionalParameters="class='form-control input-sm'" />
 						</div>
 					</#if>
 				</div>
-		        <div class="control-group">
-					<label class="control-label" for="">#i18n{form.modifyRecap.labelGraphStyle}</label>
-			        <div class="controls">
-						<label class="radio">
-							<input type="radio" name="graph_three_dimension" value="0" checked="checked">#i18n{form.modifyRecap.selectGraphStyle2d}
-						</label>
+		        <div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">#i18n{form.modifyRecap.labelGraphStyle}</label>
+			        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="radio">
+							<label>
+								<input type="radio" name="graph_three_dimension" value="0" checked="checked">#i18n{form.modifyRecap.selectGraphStyle2d}
+							</label>
+						</div>
 					</div>
-			        <div class="controls">
-						<label class="radio">#i18n{form.modifyRecap.selectGraphStyle3d}
-							<input type="radio" name="graph_three_dimension" value="1"  <#if recap.graphThreeDimension >checked="checked"</#if> >
-						</label>
+			        <div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
+						<div class="radio">
+							<label>
+								<input type="radio" name="graph_three_dimension" value="1"  <#if recap.graphThreeDimension >checked="checked"</#if> >
+								#i18n{form.modifyRecap.selectGraphStyle3d}
+							</label>
+						</div>
 					</div>
 				</div> 
-		        <div class="control-group">
-					<label class="control-label" for="graph_label_value">#i18n{form.modifyRecap.labelGraphLabel}</label>
-			        <div class="controls">
-						<input name="graph_label_value" value="1" type="checkbox" <#if recap.graphLabelValue>checked="checked"</#if> >
+		        <div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="graph_label_value">#i18n{form.modifyRecap.labelGraphLabel}</label>
+			        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="checkbox">
+							<label>
+								<input name="graph_label_value" value="1" type="checkbox" <#if recap.graphLabelValue>checked="checked"</#if> >&#160;
+							</label>
+						</div>
 					</div>
 				</div>
-		        <div class="form-actions">
-				 	<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>#i18n{form.modifyRecap.buttonSave}</button>
-					<button class="btn btn-primary btn-small" type="button" onclick="javascript:window.history.back();"><i class="icon-remove-circle icon-white"></i>#i18n{form.modifyRecap.buttonCancel}</button>
+		        <div class="form-group">
+					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
+						<button class="btn btn-primary btn-sm" type="submit" ><i class="glyphicon glyphicon-ok"></i>  #i18n{form.modifyRecap.buttonSave}</button>
+						<button class="btn btn-primary btn-sm" type="button" onclick="javascript:window.history.back();"><i class="glyphicon glyphicon-remove-circle"></i> #i18n{form.modifyRecap.buttonCancel}</button>
+					</div>
 				</div>
     		</fieldset>
 		</form>

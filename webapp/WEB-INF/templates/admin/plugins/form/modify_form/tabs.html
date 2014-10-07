@@ -29,35 +29,35 @@
 	<fieldset>
 		<legend>#i18n{form.modifyForm.title}</legend>
 		<input type="hidden" name="id_form" value="${form.idForm}" />		
-		<div class="control-group">
+		<div class="form-group">
 			<label for="title">#i18n{form.createForm.labelTitle} * :</label>
-			<input type="text" name="title" value="${form.title}" class="input-xlarge"  maxlength="255" />
+			<input type="text" name="title" value="${form.title}" class="form-control input-sm" maxlength="255" />
 			<span class="help-block">#i18n{form.createForm.labelTitleComment}&nbsp;</span>
 		</div>
-		<div class="control-group">
+		<div class="form-group">
 			<label for="description">#i18n{form.createForm.labelDescription} * :</label>
-			<textarea class="span8" name="description" rows="4">${form.description}</textarea>
+			<textarea class="form-control input-sm" name="description" rows="4">${form.description}</textarea>
 			<span class="help-block">#i18n{form.createForm.labelDescriptionComment}</span>
 		</div>
-		<div class="control-group">
+		<div class="form-group">
 			<label for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
 			<#if !form.category?exists>
 				<#assign category_default_value="-2" />
 			<#else>
 				<#assign category_default_value="${form.category.idCategory!}" />
 			</#if>
-			<@combo name="id_category" items=category_list default_value=category_default_value />
+			<@comboWithParams name="id_category" items=category_list additionalParameters="class='form-control input-sm'" default_value=category_default_value />
 			<span class="help-block">#i18n{form.createForm.labelCategoryComment}</span>
 		</div>
-		<div class="form-actions">
-			<button type="submit" class="btn btn-primary btn-small" name="save">
-				<i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary btn-sm" name="save">
+				<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{form.createForm.buttonSave}
 			</button>
-			<button type="submit" class="btn btn-primary btn-small" name="apply">
-				<i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{form.modifyForm.buttonApply}
+			<button type="submit" class="btn btn-primary btn-sm" name="apply">
+				<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;#i18n{form.modifyForm.buttonApply}
 			</button>
-			<button type="submit" class="btn btn-small" name="cancel" onclick="javascript:window.history.back();">
-				<i class="icon-remove-circle"></i>&nbsp;#i18n{form.createForm.buttonCancel}
+			<button type="submit" class="btn btn-default btn-sm" name="cancel" onclick="javascript:window.history.back();">
+				<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{form.createForm.buttonCancel}
 			</button>
 		</div>
 	</fieldset>

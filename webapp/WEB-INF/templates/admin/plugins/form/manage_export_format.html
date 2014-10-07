@@ -1,10 +1,10 @@
-<div class="row-fluid">
-    <div class="span12">
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <legend>#i18n{form.manageExportFormat.title}
             <div class="btn-group pull-right">
                 <form class="form-inline" method="post" action="jsp/admin/plugins/form/CreateExportFormat.jsp" >
                     <button class="btn btn-primary pull-right" type="submit" >
-                        <i class="icon-plus icon-white" ></i>
+                        <i class="glyphicon glyphicon-plus" ></i>
                         <span class="hidden-phone" >#i18n{form.manageExportFormat.buttonCreate}</span>
                     </button>
                 </form>
@@ -27,11 +27,11 @@
                     <td>${export.description}</td>
                     <td>${export.extension}</td>
                     <td>
-                        <a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyExportFormat.jsp?id_export=${export.idExport}"  title="null" >
-                            <i class="icon-edit icon-white"></i>
+                        <a class="btn btn-primary btn-sm" href="jsp/admin/plugins/form/ModifyExportFormat.jsp?id_export=${export.idExport}"  title="null" >
+                            <i class="glyphicon glyphicon-edit"></i>
                         </a>
-                        <a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/ConfirmRemoveExportFormat.jsp?id_export=${export.idExport}"  title="#i18n{form.manageForm.altDelete}" >
-                            <i class="icon-trash icon-white"></i>
+                        <a class="btn btn-danger btn-sm" href="jsp/admin/plugins/form/ConfirmRemoveExportFormat.jsp?id_export=${export.idExport}"  title="#i18n{form.manageForm.altDelete}" >
+                            <i class="glyphicon glyphicon-trash"></i>
                         </a>
                     </td>
                 </tr>

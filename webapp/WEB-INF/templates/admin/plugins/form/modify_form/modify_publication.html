@@ -1,15 +1,15 @@
 <#include "/admin/plugins/form/modify_form/tabs.html" />
-<div class="row-fluid">
+<div class="row">
     <form action="jsp/admin/plugins/form/modifyForm/DoModifyFormPublication.jsp" method="post">
-        <div class="span4">
+        <div class="col-xs-12 col-sm-12 col-md-3">
             <@modifyFormLeftColumn form=form category_list=category_list />
         </div>
-        <div id="avanced" class="span8">
+        <div id="avanced" class="col-xs-12 col-sm-12 col-md-9">
             <fieldset class="form-horizontal">
                 <@tabs tab="publication" />
-                <div class="control-group">
-                    <label class="control-label" for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
-                    <div class="controls">
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
+                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
                         <input type="radio" name="publication_mode" id="publication_mode_user" value="0" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
                         <#if !form.dateBeginDisponibility?? && !form.dateEndDisponibility??>checked="checked"</#if> /> #i18n{form.createForm.labelPublicationModeUser}
                             <input type="radio" name="publication_mode" id="publication_mode_auto" value="1" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
@@ -17,23 +17,23 @@
                         <span class="help-block">#i18n{form.createForm.labelPublicationModeComment}</span>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
-                    <div class="controls">
-                        <div class="input-prepend">
-                            <span class="add-on"><i class="icon-calendar"></i></span>
-                            <input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="${form.dateBeginDisponibility?if_exists}" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
+                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="${form.dateBeginDisponibility?if_exists}" class="form-control input-sm"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
                         </div>
                         <input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="${form.dateBeginDisponibility?if_exists}" />
                         <span class="help-block">#i18n{form.createForm.labelDateBeginDisponibilityComment}</span>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
-                    <div class="controls">
-                        <div class="input-prepend">
-                            <span class="add-on"><i class="icon-calendar"></i></span>
-                            <input type="text" name="date_end_disponibility" id="date_end_disponibility" value="${form.dateEndDisponibility?if_exists}" class="input-small"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
+                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <input type="text" name="date_end_disponibility" id="date_end_disponibility" value="${form.dateEndDisponibility?if_exists}" class="form-control input-sm"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
                         </div>
                         <input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="${form.dateEndDisponibility?if_exists}" />
                         <span class="help-block">#i18n{form.createForm.labelDateEndDisponibilityComment}</span>

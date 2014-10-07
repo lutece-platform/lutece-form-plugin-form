@@ -1,6 +1,6 @@
 <script type="text/javascript" src="js/plugins/form/form.js"></script>
-<div class="row-fluid">
-  <div class="span12">
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <fieldset>
     <legend> #i18n{form.testForm.title}</legend>
     <div class="well">
@@ -9,8 +9,8 @@
     <form class="form-inline" action="jsp/admin/plugins/form/DoExportResponseTestForm.jsp" method="post" name="" id=""  >
     <input name="id_form" value="${form.idForm}" type="hidden" />
     <label for="">#i18n{form.testForm.labelExportResponse} : </label>	
-    <@combo name="id_export_format"  items=export_format_list default_value=-1 />
-    <button class="btn btn-primary btn-small" type="submit" ><i class="icon-download icon-white"></i>&nbsp;#i18n{form.testForm.buttonExportResponse}</button>
+    <@comboWithParams name="id_export_format" items=export_format_list default_value="-1" additionalParameters="class='form-control input-sm'" />
+    <button class="btn btn-primary btn-xs" type="submit"><i class="glyphicon glyphicon-download"></i>&nbsp;#i18n{form.testForm.buttonExportResponse}</button>
     </form>
     </fieldset>
     </div>	 

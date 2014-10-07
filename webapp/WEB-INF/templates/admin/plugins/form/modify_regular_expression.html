@@ -1,46 +1,48 @@
 <#include "/admin/util/editor/editor.html" />
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoModifyRegularExpression.jsp" >
 			<fieldset>
 	    		<legend> #i18n{form.modifyRegularExpression.title}</legend>
 				<input name="id_expression" value="${expression.idExpression}" type="hidden" />
-			    <div class="control-group">
-					<label class="control-label" for="title" >#i18n{form.createRegularExpression.labelTitle} * :</label>
-			            <div class="controls">
+			    <div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title" >#i18n{form.createRegularExpression.labelTitle} * :</label>
+			            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 							<input type="text" size="20" id="title" name="title" maxlength="20" value="${expression.title}"/>
 					</div>
 				</div>
-			    <div class="control-group">
-					<label class="control-label" for="value" >#i18n{form.createRegularExpression.labelValue} * :</label>
-			            <div class="controls">
+			    <div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="value" >#i18n{form.createRegularExpression.labelValue} * :</label>
+			            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 							<input type="text" size="80" id="value" name="value"  value="${expression.value}"/>
 					</div>
 				</div>
-			    <div class="control-group">
-					<label class="control-label" for="valid_exemple">#i18n{form.createRegularExpression.labelValidExemple} * :</label>
-			     	<div class="controls">
-						<input type="text" name="valid_exemple" value="${expression.validExemple}" class="input-xlarge" />
+			    <div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="valid_exemple">#i18n{form.createRegularExpression.labelValidExemple} * :</label>
+			     	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<input type="text" name="valid_exemple" value="${expression.validExemple}" class="input-sm" />
 						<span class="help-block">#i18n{form.createRegularExpression.labelValidExempleComment}</span>
 			   		</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="information_message">	#i18n{form.createRegularExpression.labelInformationMessage} * :</label>
-					<div class="controls">
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_message">	#i18n{form.createRegularExpression.labelInformationMessage} * :</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 						<textarea class="richtext" name="information_message" id="information_message" rows="20" cols="90">${expression.informationMessage}</textarea>
 						<span class="help-block">#i18n{form.createRegularExpression.labelInformationMessageComment}</span>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="error_message">#i18n{form.createRegularExpression.labelErrorMessage} * :</label>
-					<div class="controls">
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="error_message">#i18n{form.createRegularExpression.labelErrorMessage} * :</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 						<textarea class="richtext" name="error_message" id="error_message" cols="80" rows="2">${expression.errorMessage}</textarea>
 						<span class="help-block">#i18n{form.createRegularExpression.labelErrorMessageComment}</span>
 					</div>
 				</div>
-				<div  class="form-actions">
-					<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>#i18n{form.createRegularExpression.buttonSave}</button>
-					<button class="btn btn-primary btn-small" type="button" onclick="javascript:window.history.back();" ><i class="icon-remove-cicrle icon-white"></i>#i18n{form.createRegularExpression.buttonCancel}</button>
+				<div  class="form-group">
+					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
+						<button class="btn btn-primary btn-sm" type="submit" ><i class="glyphicon glyphicon-ok"></i>#i18n{form.createRegularExpression.buttonSave}</button>
+						<button class="btn btn-primary btn-sm" type="button" onclick="javascript:window.history.back();" ><i class="glyphicon glyphicon-remove-cicrle"></i>#i18n{form.createRegularExpression.buttonCancel}</button>
+					</div>
 				</div>
 			</fieldset>
 		</form>

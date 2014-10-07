@@ -1,36 +1,41 @@
 <#include "/admin/plugins/form/modify_form/tabs.html" />
-<div class="row-fluid">
+<div class="row">
 	<form action="jsp/admin/plugins/form/modifyForm/DoModifyFormAnswersManagement.jsp" method="post">
-		<div class="span4">
+		<div class="col-xs-12 col-sm-12 col-md-3">
 			<@modifyFormLeftColumn form=form category_list=category_list />
 		</div>
-		<div id="avanced" class="span8">
+		<div id="avanced" class="col-xs-12 col-sm-12 col-md-9">
 			<fieldset class="form-horizontal">
 				<@tabs tab="answers" />
-				<div class="control-group">
-					<label class="control-label" for="automaticCleaning">#i18n{form.createForm.labelAutomaticCleaning}</label>
-					<div class="controls">
-						<input type="checkbox" name="automaticCleaning" value="true" <#if form.automaticCleaning>checked="checked"</#if>>
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="automaticCleaning">#i18n{form.createForm.labelAutomaticCleaning}</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="automaticCleaning" value="true" <#if form.automaticCleaning>checked="checked"</#if>>&#160;
+							</label>
+						</div>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="cleaningByRemoval">#i18n{form.createForm.labelCleaningMethod} :</label>
-					<div class="controls">
-						<label for="cleaningByRemoval"><input type="radio" name="cleaningByRemoval" value="true" <#if form.cleaningByRemoval>checked="checked"</#if> >&nbsp;#i18n{form.createForm.labelRemove}</label>
-						<label for="cleaningByRemoval"><input type="radio" name="cleaningByRemoval" value="false" <#if !form.cleaningByRemoval>checked="checked"</#if> >&nbsp;#i18n{form.createForm.labelAnonymize}</label>
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="cleaningByRemoval">#i18n{form.createForm.labelCleaningMethod} :</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<label for="cleaningByRemoval" class="radio-inline"><input type="radio" name="cleaningByRemoval" value="true" <#if form.cleaningByRemoval>checked="checked"</#if> >#i18n{form.createForm.labelRemove}</label>
+						<label for="cleaningByRemoval" class="radio-inline"><input type="radio" name="cleaningByRemoval" value="false" <#if !form.cleaningByRemoval>checked="checked"</#if> >#i18n{form.createForm.labelAnonymize}</label>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="nb_days_before_cleaning">#i18n{form.createForm.labelNbDaysBeforeCleaning} :</label>
-					<div class="controls">
-						<input type="text" id="nb_days_before_cleaning" name="nb_days_before_cleaning" value="${form.nbDaysBeforeCleaning!}">
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="nb_days_before_cleaning">#i18n{form.createForm.labelNbDaysBeforeCleaning} :</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<input type="text" class="form-control input-sm" id="nb_days_before_cleaning" name="nb_days_before_cleaning" value="${form.nbDaysBeforeCleaning!}">
 					</div>
 				</div>
 				<#if 0 < entry_list?size>
-					<div class="control-group">
-						<label class="control-label" for="anonymizeEntries">#i18n{form.createForm.labelAnonymizeEntries} :</label>
-						<div class="controls">
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="anonymizeEntries">#i18n{form.createForm.labelAnonymizeEntries} :</label>
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 							<#list entry_list as entry>
+							<div class="checkbox">
 								<#if !entry.entryType.group>
 									<label for="anonymizeEntries"><input type="checkbox" name="anonymizeEntries" value="${entry.idEntry}" <#if anonymize_entry_list?seq_contains(entry.idEntry)>checked="checked"</#if>>&nbsp;${entry.title}<br /></label>
 									<#if (entry.fields)?? && 0 < entry.fields?size>
@@ -45,6 +50,7 @@
 										</#list>
 									</#if>
 								</#if>
+							</div>
 							</#list>
 						</div>
 					</div>

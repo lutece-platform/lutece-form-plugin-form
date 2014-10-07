@@ -1,31 +1,31 @@
-<div class="row-fluid">
-    <div class="span12">
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<fieldset>
         <legend>#i18n{form.manageForm.title}
             <#if permission_manage_advanced_parameters>
             <form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/form/ManageAdvancedParameters.jsp">
-                <button class="btn btn-primary btn-small" type="submit" >
-                    <i class="icon-cog icon-white" ></i>
+                <button class="btn btn-primary btn-sm" type="submit" >
+                    <i class="glyphicon glyphicon-cog" ></i>
                     <span class="hidden-phone" >#i18n{form.manageForm.button_manage_advanced_parameters}</span>
                 </button>
             </form>
             </#if>
             <#if permission_create_form>
             <form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/form/CreateForm.jsp">
-                <button class="btn btn-primary btn-small" type="submit" >
-                    <i class="icon-plus icon-white" ></i>
+                <button class="btn btn-primary btn-sm" type="submit" >
+                    <i class="glyphicon glyphicon-plus" ></i>
                     <span class="hidden-phone" >#i18n{form.manageForm.buttonCreate}</span>
                 </button>
             </form>
             </#if>
         </legend>
-        <div class="well well-small">
+        <div class="well well-sm">
             <form class="form-search" action="" method="" name="" id="">
                 <label for="">#i18n{form.manageForm.labelActive}</label>
                 <@combo name="active"  items=active_list default_value=active_selected />
                 <label for="">#i18n{form.manageForm.labelWorkGroup}</label>
                 <@combo name="workgroup"  items=user_workgroup_list default_value=user_workgroup_selected />
-                <button class="btn btn-primary btn-small" type="submit" ><i class="icon-search icon-white"></i>&nbsp;#i18n{form.manageForm.buttonSearch}</button>
+                <button class="btn btn-primary btn-sm" type="submit" ><i class="glyphicon glyphicon-search"></i>&nbsp;#i18n{form.manageForm.buttonSearch}</button>
             </form>
         </div>
         <@paginationAdmin paginator=paginator combo=1/>
@@ -42,22 +42,22 @@
                 <td>
 					<#if form.active>
 						<#if form.autoPublished>
-							<i class="icon-time" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
+							<i class="glyphicon glyphicon-time" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
 						<#else>
-						<span class="label label-success"><i class="icon-ok-sign icon-white"></i></span>			
+						<span class="label label-success"><i class="glyphicon glyphicon-ok-sign"></i></span>			
 						</#if>
                     <#else>
 						<#if form.autoPublished>
 							<#if form.autoPublicationActive>
-								<span class="label label-success"><i class="icon-time icon-white"></i></span>
+								<span class="label label-success"><i class="glyphicon glyphicon-time"></i></span>
 							<#else>
-								<span class="label label-important"><i class="icon-time icon-white"></i></span>
+								<span class="label label-danger"><i class="glyphicon glyphicon-time"></i></span>
 							</#if>
 						<#else>
-							<span class="label label-important"><i class="icon-remove-sign icon-white"></i></span>	
+							<span class="label label-danger"><i class="glyphicon glyphicon-remove-sign"></i></span>	
 						</#if>
                     </#if>	
-                    ${form.title}&nbsp;<a href="jsp/site/Portal.jsp?page=form&id_form=${form.idForm}" title="Voir ${form.title}" target="_blank"><i class="icon-globe"></i></a>
+                    ${form.title}&nbsp;<a href="jsp/site/Portal.jsp?page=form&id_form=${form.idForm}" title="Voir ${form.title}" target="_blank"><i class="glyphicon glyphicon-globe"></i></a>
                 </td>
                 <td>
                     <#setting locale=locale.language>
@@ -79,8 +79,8 @@
 						<#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
 							<#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && 
 							!((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
-							<a class="btn btn-small <#if action.permission=='DELETE'>btn-danger<#elseif action.nameKey=='form.action.disable.name'>btn-danger<#elseif action.nameKey=='form.action.enable.name'>btn-success<#else>btn-primary</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
-								<i class="${action.iconUrl} icon-white"></i>
+							<a class="btn btn-xs <#if action.permission=='DELETE'>btn-danger<#elseif action.nameKey=='form.action.disable.name'>btn-danger<#elseif action.nameKey=='form.action.enable.name'>btn-success<#else>btn-primary</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
+								<i class="${action.iconUrl}"></i>
 							</a>
 							</#if>
 						</#list>

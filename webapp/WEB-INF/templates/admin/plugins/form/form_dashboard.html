@@ -5,13 +5,13 @@
 	    <a href="${url}" title="#i18n{form.dashboard.formList}"> #i18n{form.dashboard.formList} </a>
 		<div class="pull-right">
 			<#if permission_create>
-                    <div class="btn btn-small btn-primary">
+                    <div class="btn btn-xs btn-primary">
                         <a href="jsp/admin/plugins/form/CreateForm.jsp" title="#i18n{form.dashboard.addForm}">
-                            <i class="icon-plus icon-white" ></i>
+                            <i class="glyphicon glyphicon-plus" ></i>
                         </a>
                     </div>
                     </#if>
-			<a href="jsp/admin/AdminMenu.jsp#top" title="#i18n{document.dashboard.top}"><i class="icon-arrow-up"></i></a>
+			<a href="jsp/admin/AdminMenu.jsp#top" title="#i18n{document.dashboard.top}"><i class="glyphicon glyphicon-arrow-up"></i></a>
 		</div>
     </legend>
      <table class="table table-striped table-condensed">
@@ -31,35 +31,35 @@
 	                <#if form.active>
 							<#if form.autoPublished>
 							<span class="label label-success">
-								<i class="icon-time icon-white" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
+								<i class="glyphicon glyphicon-time" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
 							</span>			
 							<#else>
 							<span class="label label-success">
-								<i class="icon-ok-sign icon-white"></i>
+								<i class="glyphicon glyphicon-ok-sign"></i>
 							</span>			
 							</#if>
 	                    <#else>
 							<#if form.autoPublished>
 								<#if form.autoPublicationActive>
 									<span class="label label-success">
-										<i class="icon-time icon-white"></i>
+										<i class="glyphicon glyphicon-time"></i>
 									</span>
 								<#else>
-									<span class="label label-important">
-										<i class="icon-time icon-white"></i>
+									<span class="label label-danger">
+										<i class="glyphicon glyphicon-time"></i>
 									</span>
 								</#if>
 							<#else>
-								<span class="label label-important" >
-									<i class="icon-remove-sign icon-white"></i>
+								<span class="label label-danger">
+									<i class="glyphicon glyphicon-remove-sign"></i>
 								</span>	
 							</#if>
 	                    </#if>		     
 	            </td>
 	            <td>
 	                <#if authorized_form_modification_list?seq_contains(form.idForm)>
-	                <a class="btn btn-small btn-primary" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form"  title="${form.title}" >
-	                    <i class="icon-edit icon-white"></i>
+	                <a class="btn btn-xs btn-primary" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form"  title="${form.title}" >
+	                    <i class="glyphicon glyphicon-edit"></i>
 	                </a>
 	                </#if>
 	                <#if form.actions?exists>
@@ -67,8 +67,8 @@
 	                <#if (action.permission=='CHANGE_STATE') || (action.permission=='CHANGE_STATE_AUTO_PUBLICATION') || (action.permission=='VIEW_RESULT') || (action.permission=='DELETE') >
 	                <#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
 	                <#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && !((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
-	                <a class="btn btn-small btn-primary" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
-	                    <i class="${action.iconUrl} icon-white"></i>
+	                <a class="btn btn-xs btn-primary" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
+	                    <i class="${action.iconUrl}"></i>
 	                </a>
 	                </#if>
 	                </#if>

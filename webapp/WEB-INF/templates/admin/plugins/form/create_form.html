@@ -1,34 +1,36 @@
 <#include "/admin/plugins/form/commons.html" />
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateForm.jsp?plugin_name=form" method="post">
 			<fieldset>
 				<legend>#i18n{form.createForm.title}</legend>
-				<div class="control-group">
-					<label class="control-label" for="title">#i18n{form.createForm.labelTitle} * :</label>
-					<div class="controls">
-						<input type="text" name="title" value="" class="input-xlarge" maxlength="255" />
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title">#i18n{form.createForm.labelTitle} * :</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<input type="text" name="title" value="" maxlength="255" class="form-control input-sm">
 						<span class="help-block">#i18n{form.createForm.labelTitleComment}&nbsp;</span>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="description">#i18n{form.createForm.labelDescription} * :</label>
-					<div class="controls">
-						<textarea class="span3" name="description" rows="2"></textarea>
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="description">#i18n{form.createForm.labelDescription} * :</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<textarea name="description" rows="2"></textarea>
 						<span class="help-block">#i18n{form.createForm.labelDescriptionComment}</span>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
-					<div class="controls">
-						<@combo name="id_category" items=category_list default_value=-2 />
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="category">#i18n{form.createForm.labelCategoryTitle} :</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<@comboWithParams name="id_category" items=category_list default_value="-2" additionalParameters="class='form-control input-sm'" />
 						<span class="help-block">#i18n{form.createForm.labelCategoryComment}</span>
 					</div>
 				</div>
 			</fieldset>
-			<div class="form-actions">
-				<button type="submit" class="btn btn-primary btn-small" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
-				<button type="submit" class="btn btn-small" name="cancel" onclick="javascript:window.history.back();"><i class="icon-remove-circle"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
+			<div class="form-group">
+				<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
+					<button type="submit" class="btn btn-primary btn-sm" name="save"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
+					<button type="submit" class="btn btn-default btn-sm" name="cancel" onclick="javascript:window.history.back();"><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
+				</div>
 			</div>
 		</form>
 	</div>

@@ -1,4 +1,4 @@
-<div class="row-fluid">
+<div class="row">
         <legend>#i18n{form.manageRegularExpression.title}</legend>
         
         
@@ -16,7 +16,7 @@
             	</#if>
             </#list>
         </select>
-        <button class="btn btn-primary btn-small" type="submit" >#i18n{form.manageRegularExpression.buttonItemsPerPage}</button>
+        <button class="btn btn-primary btn-sm" type="submit" >#i18n{form.manageRegularExpression.buttonItemsPerPage}</button>
 	
     </fieldset>
 </form>
@@ -36,8 +36,8 @@
              <#list expression_list as expression>	
 	            <tr>
 	              <td width="20%" >
-	                <a class="btn btn-primary btn-small" href="jsp/admin/plugins/form/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}"  title="null" >
-	<i class="icon-question-sign icon-white"></i>
+	                <a class="btn btn-primary btn-sm" href="jsp/admin/plugins/form/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}"  title="null" >
+	<i class="glyphicon glyphicon-question-sign"></i>
 	</a>
 
 	              </td>
@@ -45,8 +45,8 @@
 	               ${expression.value}
 	                </td>
 	                <td width="40%">
-	               	<a class="btn btn-danger btn-small" href="jsp/admin/plugins/form/ConfirmRemoveRegularExpression.jsp?id_expression=${expression.idExpression}"  title="#i18n{form.manageForm.altDelete}" >
-	<i class="icon-trash icon-white"></i>
+	               	<a class="btn btn-danger btn-sm" href="jsp/admin/plugins/form/ConfirmRemoveRegularExpression.jsp?id_expression=${expression.idExpression}"  title="#i18n{form.manageForm.altDelete}" >
+	<i class="glyphicon glyphicon-trash"></i>
 	</a>
 
 	                </td>
@@ -57,7 +57,7 @@
           <form class="form-horizontal" method="post"  action="jsp/admin/plugins/form/CreateRegularExpression.jsp" >
 	<fieldset>
             
-              <button class="btn btn-primary btn-small" type="submit" >#i18n{form.manageRegularExpression.buttonCreate}</button>
+              <button class="btn btn-primary btn-sm" type="submit" >#i18n{form.manageRegularExpression.buttonCreate}</button>
 	
             
           </fieldset>

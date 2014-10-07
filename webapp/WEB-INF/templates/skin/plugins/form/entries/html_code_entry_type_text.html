@@ -1,8 +1,8 @@
 	<div class="form-group">
-		<label class="control-label col-xs-12 col-sm-2 col-md-2" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
-		<div class="col-xs-12 col-sm-6 col-md-4">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xs-12 col-sm-12 col-md-3" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+		<div class="col-xs-12 col-sm-12 col-md-6">
 			<#list entry.fields as field>
-				<input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" <#if field.width &gt; 0>style="width:${field.width}px;"</#if>
+				<input type="text" class="form-control input-sm" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" <#if field.width &gt; 0>style="width:${field.width}px;"</#if>
 					<#if list_responses??>
 						<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry>
@@ -42,10 +42,10 @@
 </#if>
 <#if entry.confirmField>
 	<div class="form-group">
-		<label class="control-label" for="attribute${entry.idEntry}_confirm_field">${entry.confirmFieldTitle}<#if entry.mandatory> *</#if></label>
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xs-12 col-sm-12 col-md-3" for="attribute${entry.idEntry}_confirm_field">${entry.confirmFieldTitle}<#if entry.mandatory> *</#if></label>
 		<#list entry.fields as field>
-			<div class="">
-				<input type="text" name="attribute${entry.idEntry}_confirm_field" id="attribute${entry.idEntry}_confirm_field" size="${field.width}" value="" 
+			<div class="col-xs-12 col-sm-12 col-md-6">
+				<input type="text" class="form-control input-sm" name="attribute${entry.idEntry}_confirm_field" id="attribute${entry.idEntry}_confirm_field" size="${field.width}" value="" 
 				<#if field.maxSizeEnter!=-1>maxlength="${field.maxSizeEnter}"</#if>/>
 			</div>
 		</#list>
