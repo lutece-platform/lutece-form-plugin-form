@@ -16,7 +16,7 @@
             	</#if>
             </#list>
         </select>
-        <button class="btn btn-primary btn-sm" type="submit" >#i18n{form.manageRegularExpression.buttonItemsPerPage}</button>
+        <button class="btn btn-primary btn-sm btn-flat" type="submit" >#i18n{form.manageRegularExpression.buttonItemsPerPage}</button>
 	
     </fieldset>
 </form>
@@ -36,7 +36,7 @@
              <#list expression_list as expression>	
 	            <tr>
 	              <td width="20%" >
-	                <a class="btn btn-primary btn-sm" href="jsp/admin/plugins/form/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}"  title="null" >
+	                <a class="btn btn-primary btn-sm btn-flat" href="jsp/admin/plugins/form/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}"  title="null" >
 	<i class="glyphicon glyphicon-question-sign"></i>
 	</a>
 
@@ -57,7 +57,7 @@
           <form class="form-horizontal" method="post"  action="jsp/admin/plugins/form/CreateRegularExpression.jsp" >
 	<fieldset>
             
-              <button class="btn btn-primary btn-sm" type="submit" >#i18n{form.manageRegularExpression.buttonCreate}</button>
+              <button class="btn btn-primary btn-sm btn-flat" type="submit" >#i18n{form.manageRegularExpression.buttonCreate}</button>
 	
             
           </fieldset>

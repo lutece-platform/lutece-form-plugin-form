@@ -26,11 +26,11 @@ $(document).ready(function() {
 			<@tabs tab="questions" />
 			<fieldset class="form-inline pull-left spaced">
 				<input type="text" name="title" value="" placeholder="#i18n{form.modifyForm.manageEnter.labelInsertGroup}"/>
-				<button type="submit" class="btn btn-primary btn-xs" title="#i18n{form.modifyForm.manageEnter.buttonInsertGroup}"><i class="glyphicon glyphicon-plus"></i></button>
+				<button type="submit" class="btn btn-primary btn-xs btn-flat" title="#i18n{form.modifyForm.manageEnter.buttonInsertGroup}"><i class="glyphicon glyphicon-plus"></i></button>
 			</fieldset>
 		</form>
 		<form method="post" class="form-inline pull-left" action="jsp/admin/plugins/form/CreateEntry.jsp">
-			<@combo name="id_type" items=entry_type_list default_value=-1 /><button type="submit" class="btn btn-primary btn-xs" title="#i18n{form.modifyForm.manageEnter.buttonInsertEntry}"><i class="glyphicon glyphicon-plus"></i></button>
+			<@combo name="id_type" items=entry_type_list default_value=-1 /><button type="submit" class="btn btn-primary btn-xs btn-flat" title="#i18n{form.modifyForm.manageEnter.buttonInsertEntry}"><i class="glyphicon glyphicon-plus"></i></button>
 		</form>
 	
 		<@paginationAdmin paginator=paginator combo=1/>
@@ -104,31 +104,31 @@ $(document).ready(function() {
 							<#if entry.parent?exists>
 								<td>
 									<@comboOrders name="order_id_${entry.idEntry!}" default_value=entry.position idParent=entry.parent.idEntry />
-									<button class="btn btn-primary btn-xs" type="submit"	name="move_${entry.idEntry!}" title="#i18n{form.modifyForm.move}" value="#i18n{form.modifyForm.move}"><i class="glyphicon glyphicon-resize-vertical"></i></button>
+									<button class="btn btn-primary btn-xs btn-flat" type="submit"	name="move_${entry.idEntry!}" title="#i18n{form.modifyForm.move}" value="#i18n{form.modifyForm.move}"><i class="glyphicon glyphicon-resize-vertical"></i></button>
 								</td>
 							<#else>
 								<td>
 									<@comboOrders name="order_id_${entry.idEntry!}"	default_value=entry.position idParent=0 />
-									<button class="btn btn-primary btn-xs" type="submit" name="move_${entry.idEntry!}" title="#i18n{form.modifyForm.move}" value="#i18n{form.modifyForm.move}">
+									<button class="btn btn-primary btn-xs btn-flat" type="submit" name="move_${entry.idEntry!}" title="#i18n{form.modifyForm.move}" value="#i18n{form.modifyForm.move}">
 										<i class="glyphicon glyphicon-ok"></i>
 									</button>
 								</td>
 							</#if>
 							<td>
-								<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-primary btn-xs">
+								<a href="jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-primary btn-xs btn-flat">
 									<i class="glyphicon glyphicon-edit"></i>
 								</a>
 								<#if entry.parent?exists>
-									<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleGoOut}" class="btn btn-primary btn-xs">
+									<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleGoOut}" class="btn btn-primary btn-xs btn-flat">
 										<i class="glyphicon glyphicon-chevron-right"></i>
 									</a>
 								<#elseif !entry.entryType.group && !entry.entryType.myLuteceUser>
-									<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMove}" class="btn btn-primary btn-xs">
+									<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMove}" class="btn btn-primary btn-xs btn-flat">
 										<i class="glyphicon glyphicon-user"></i>
 									</a>
 								</#if>
 								<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
-									<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleCopy}" class="btn btn-primary btn-xs">
+									<a href="jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleCopy}" class="btn btn-primary btn-xs btn-flat">
 										<i class="glyphicon glyphicon-plus-sign"></i>
 									</a>
 								</#if>

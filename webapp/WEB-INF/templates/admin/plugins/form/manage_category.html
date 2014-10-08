@@ -21,7 +21,7 @@
                             <span class="badge" style="background-color:${category.color};">${category.color}</span>
                         </td>
                         <td>
-                            <a class="btn btn-primary btn-sm" href="jsp/admin/plugins/form/ModifyCategory.jsp?id_category=${category.idCategory}"  title="" >
+                            <a class="btn btn-primary btn-sm btn-flat" href="jsp/admin/plugins/form/ModifyCategory.jsp?id_category=${category.idCategory}"  title="" >
                                 <i class="glyphicon glyphicon-edit"></i>
                             </a>
                             <a class="btn btn-danger btn-sm" href="jsp/admin/plugins/form/ConfirmRemoveCategory.jsp?id_category=${category.idCategory}"  title="#i18n{form.manageCategory.altDelete}" >
@@ -35,7 +35,7 @@
 
             <form class="form-inline" method="post"  action="jsp/admin/plugins/form/CreateCategory.jsp" >
                 <div class="form-group">
-                    <button class="btn btn-primary btn-sm" type="submit" ><i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{form.manageCategory.buttonCreate}</button>
+                    <button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{form.manageCategory.buttonCreate}</button>
                 </div>
             </form>
     </div> 
