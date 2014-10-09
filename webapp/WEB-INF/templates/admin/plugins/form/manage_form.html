@@ -4,7 +4,7 @@
         <legend>#i18n{form.manageForm.title}
             <#if permission_manage_advanced_parameters>
             <form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/form/ManageAdvancedParameters.jsp">
-                <button class="btn btn-primary btn-sm btn-flat" type="submit" >
+                <button class="btn btn-primary btn-sm btn-flat" type="submit">
                     <i class="glyphicon glyphicon-cog" ></i>
                     <span class="hidden-phone" >#i18n{form.manageForm.button_manage_advanced_parameters}</span>
                 </button>
@@ -12,7 +12,7 @@
             </#if>
             <#if permission_create_form>
             <form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/form/CreateForm.jsp">
-                <button class="btn btn-primary btn-sm btn-flat" type="submit" >
+                <button class="btn btn-primary btn-sm btn-flat" type="submit">
                     <i class="glyphicon glyphicon-plus" ></i>
                     <span class="hidden-phone" >#i18n{form.manageForm.buttonCreate}</span>
                 </button>
@@ -20,12 +20,16 @@
             </#if>
         </legend>
         <div class="well well-sm">
-            <form class="form-search" action="" method="" name="" id="">
+            <form class="form-inline" action="" method="" name="" id="">
                 <label for="">#i18n{form.manageForm.labelActive}</label>
-                <@combo name="active"  items=active_list default_value=active_selected />
-                <label for="">#i18n{form.manageForm.labelWorkGroup}</label>
-                <@combo name="workgroup"  items=user_workgroup_list default_value=user_workgroup_selected />
-                <button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-search"></i>&nbsp;#i18n{form.manageForm.buttonSearch}</button>
+                <@comboWithParams name="active"  items=active_list default_value="active_selected" additionalParameters="class='form-control input-xs'" />
+                <label for="">&#160; #i18n{form.manageForm.labelWorkGroup}</label>
+				<div class="input-group">
+                <@comboWithParams name="workgroup"  items=user_workgroup_list default_value=user_workgroup_selected additionalParameters="class='form-control input-xs'"/>
+				<span class="input-group-btn">
+                <button class="btn btn-default btn-xs btn-flat" type="submit" ><i class="glyphicon glyphicon-search"></i>&nbsp;#i18n{form.manageForm.buttonSearch}</button>
+				</span>
+				</div>
             </form>
         </div>
         <@paginationAdmin paginator=paginator combo=1/>

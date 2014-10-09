@@ -116,15 +116,23 @@ $(document).ready(function() {
 							<!--  Change the order of the attribute -->
 							<#if entry.parent?exists>
 								<td>
+									<div class="input-group">
 									<@comboOrders name="order_id_${entry.idEntry!}" default_value=entry.position idParent=entry.parent.idEntry />
-									<button class="btn btn-primary btn-xs btn-flat" type="submit"	name="move_${entry.idEntry!}" title="#i18n{form.modifyForm.move}" value="#i18n{form.modifyForm.move}"><i class="glyphicon glyphicon-resize-vertical"></i></button>
+									<span class="input-group-btn">
+									<button class="btn btn-default btn-xs btn-flat" type="submit" name="move_${entry.idEntry!}" title="#i18n{form.modifyForm.move}" value="#i18n{form.modifyForm.move}"><i class="glyphicon glyphicon-resize-vertical"></i></button>
+									</span>
+									</div>
 								</td>
 							<#else>
 								<td>
+									<div class="input-group">
 									<@comboOrders name="order_id_${entry.idEntry!}"	default_value=entry.position idParent=0 />
-									<button class="btn btn-primary btn-xs btn-flat" type="submit" name="move_${entry.idEntry!}" title="#i18n{form.modifyForm.move}" value="#i18n{form.modifyForm.move}">
+									<span class="input-group-btn">
+									<button class="btn btn-default btn-xs btn-flat" type="submit" name="move_${entry.idEntry!}" title="#i18n{form.modifyForm.move}" value="#i18n{form.modifyForm.move}">
 										<i class="glyphicon glyphicon-ok"></i>
 									</button>
+									</span>
+									</div>
 								</td>
 							</#if>
 							<td>
@@ -167,7 +175,7 @@ $(document).ready(function() {
 
 <#macro comboOrders name default_value idParent >
 	<#if mapChild?exists>
-	<select id="${name}" name="${name}" class="input-xs"> 
+	<select id="${name}" name="${name}" class="input-xs form-control"> 
 		<#list mapChild[idParent!?string] as i> <#if default_value == i>
 			<option selected="selected" value="${i}">${i}</option> <#else>
 			<option value="${i}">${i}</option> </#if>
