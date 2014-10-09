@@ -15,14 +15,14 @@
 				<div class="form-group">
 					<label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-12" for="help_message">#i18n{form.createEntry.labelHelpMessage}</label>
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<textarea name="help_message" id="help_message" rows="2">${entry.helpMessage}</textarea>
+						<textarea name="help_message" id="help_message" rows="2" class="form-control input-sm">${entry.helpMessage}</textarea>
 						<span class="help-block">#i18n{form.createEntry.labelHelpMessageComment}</span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-12" for="comment"> #i18n{form.createEntry.labelComment} </label>
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<textarea name="comment" rows="2">${entry.comment}</textarea>
+						<textarea name="comment" rows="2" class="form-control input-sm">${entry.comment}</textarea>
 						<span class="help-block"></span>
 					</div>
 				</div>
@@ -129,7 +129,7 @@
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									</#if>
-									<a class="btn btn-danger btn-xs" href="jsp/admin/plugins/form/ConfirmRemoveField.jsp?id_field=${field.idField}#list" title="#i18n{form.createEntry.manageField.titleDelete}">
+									<a class="btn btn-danger btn-xs btn-flat" href="jsp/admin/plugins/form/ConfirmRemoveField.jsp?id_field=${field.idField}#list" title="#i18n{form.createEntry.manageField.titleDelete}">
 										<i class="glyphicon glyphicon-trash"></i>
 									</a>
 								</td>

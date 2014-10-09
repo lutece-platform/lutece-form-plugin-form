@@ -15,14 +15,14 @@
 			<div class="form-group">
 				<label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-12" for="help_message">#i18n{form.createEntry.labelHelpMessage} :</label>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<textarea name="help_message" id="help_message" rows="2" class="input-sm">${entry.helpMessage}</textarea>
+					<textarea name="help_message" id="help_message" rows="2" class="form-control input-sm">${entry.helpMessage}</textarea>
 					<span class="help-block">#i18n{form.createEntry.labelHelpMessageComment}</span>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-12" for="comment"> #i18n{form.createEntry.labelComment} :</label>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<textarea name="comment" class="input-sm" rows="2">${entry.comment}</textarea>
+					<textarea name="comment" rows="2" class="form-control input-sm">${entry.comment}</textarea>
 				</div>
 			</div>
 		 	<div class="form-group">
@@ -56,7 +56,7 @@
 			<div class="form-group">
 				<label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-12" for="errorMessage">#i18n{form.createEntry.labelMandatoryErrorMessage} :</label>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<textarea name="errorMessage" rows="2">${entry.errorMessage!}</textarea>
+					<textarea name="errorMessage" rows="2" class="form-control input-sm">${entry.errorMessage!}</textarea>
 					<span class="help-block">#i18n{form.createEntry.labelMandatoryErrorMessageHelp}</span>
 				</div>
 			</div>

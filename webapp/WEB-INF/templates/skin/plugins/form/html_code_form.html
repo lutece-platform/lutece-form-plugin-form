@@ -35,16 +35,16 @@
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
 						<br />
-						<button class="btn btn-primary btn-sm btn-flat" type="submit" name="save" >
+						<button class="btn btn-primary btn-sm" type="submit" name="save" >
 							<i class="glyphicon glyphicon-ok"></i>&nbsp;${form.libelleValidateButton}
 						</button>
 						<#if draft_supported>
-							<button class="btn btn-primary btn-sm btn-flat" name="save_draft"  type="submit" >
+							<button class="btn btn-primary btn-sm" name="save_draft"  type="submit" >
 								<i class="glyphicon glyphicon-briefcase"></i>&nbsp;#i18n{form.button.saveDraft}
 							</button>
 						</#if>
 						<#if form.libelleResetButton?has_content>
-							<button type="submit" name="reset" class="btn btn-primary btn-sm btn-flat">
+							<button type="submit" name="reset" class="btn btn-default btn-sm">
 								<i class="glyphicon glyphicon-refresh"></i>&nbsp;${form.libelleResetButton}
 							</button>
 						</#if>

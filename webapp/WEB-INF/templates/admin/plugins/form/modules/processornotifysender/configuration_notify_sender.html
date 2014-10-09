@@ -1,17 +1,24 @@
 <p class="lead">#i18n{module.form.processornotifysender.configuration_notify_sender.title}</p>
-<label for="id_entry_email_sender">#i18n{module.form.processornotifysender.configuration_notify_sender.email_sender} : </label>
+
+<label for="id_entry_email_sender">#i18n{module.form.processornotifysender.configuration_notify_sender.email_sender} :</label>
+
 <#if configuration?exists>
-    <@combo name="id_entry_email_sender"  items=entry_list default_value="${configuration.idEntryEmailSender}" />
+    <@comboWithParams name="id_entry_email_sender"  items=entry_list default_value="${configuration.idEntryEmailSender}" additionalParameters="class='form-control input-sm'" />
 <#else>
-   <@combo name="id_entry_email_sender"  items=entry_list default_value="-1" />
+   <@comboWithParams name="id_entry_email_sender"  items=entry_list default_value="-1" additionalParameters="class='form-control input-sm'" />
 </#if>
+
 <p class="help-block">#i18n{module.form.processornotifysender.configuration_notify_sender.email_sender_comment}</p>
+
 <#if permission_send_attachments>
- <p class="help-block" >#i18n{module.form.processornotifysender.configuration_notify_sender.send_attachments}</p>
-<label class="checkbox" for="send_attachments">	#i18n{module.form.processornotifysender.configuration_notify_sender.send_attachments_comment}
-<input type="checkbox" value="1" name="send_attachments" <#if configuration?exists && configuration.sendAttachments> checked="checked"</#if>/>
-</label>
+<p class="help-block" >#i18n{module.form.processornotifysender.configuration_notify_sender.send_attachments}</p>
+<div class="checkbox">
+	<label for="send_attachments">
+	<input type="checkbox" value="1" name="send_attachments" <#if configuration?exists && configuration.sendAttachments> checked="checked"</#if>/>#i18n{module.form.processornotifysender.configuration_notify_sender.send_attachments_comment}
+	</label>
+</div>
 </#if>
-<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="mail_message">#i18n{module.form.processornotifysender.configuration_notify_sender.mail_message}</label>
-<textarea class="col-xs-12 col-sm-10 col-md-10 col-lg-10" name="mail_message" id="message" rows="10" ><#if configuration?exists>${configuration.message}</#if></textarea>
+
+<label for="mail_message">#i18n{module.form.processornotifysender.configuration_notify_sender.mail_message}</label>
+<textarea class="form-control input-sm" name="mail_message" id="message" rows="10" ><#if configuration?exists>${configuration.message}</#if></textarea>
 <p class="help-block">${messageRecap}</p>

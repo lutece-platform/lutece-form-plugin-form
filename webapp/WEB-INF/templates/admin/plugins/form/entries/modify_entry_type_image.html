@@ -16,14 +16,14 @@
 			<div class="form-group">
 				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="help_message">#i18n{form.createEntry.labelHelpMessage} </label>
 				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-					<textarea name="help_message" id="help_message" rows="10">${entry.helpMessage}</textarea>
+					<textarea name="help_message" id="help_message" rows="10" class="form-control input-sm">${entry.helpMessage}</textarea>
 					<span class="help-block">#i18n{form.createEntry.labelHelpMessageComment}</span>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="comment"> #i18n{form.createEntry.labelComment} : </label>
 				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-					<textarea name="comment" rows="2">${entry.comment}</textarea>
+					<textarea name="comment" rows="2" class="form-control input-sm">${entry.comment}</textarea>
 				</div>
 			 </div>
 			<div class="form-group">
@@ -74,8 +74,8 @@
 							<input name="export_binary" value="1" type="checkbox" <#if exportBinary( entry )>checked="checked"</#if> />
 							&nbsp;#i18n{form.createEntry.labelExportBinaryComment}
 						</label>
-						<p class="label label-warning">#i18n{form.createEntry.labelExportBinaryWarning}</p>
 					</div>
+					<p class="label label-warning">#i18n{form.createEntry.labelExportBinaryWarning}</p>
 				</div>
 			</div>
 			<div class="form-group">
@@ -123,7 +123,7 @@
 							<td>${expression.informationMessage}</td>
 							<td>${expression.validExemple}</td>
 							<td>
-								<a class="btn btn-danger btn-xs" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
+								<a class="btn btn-danger btn-xs btn-flat" href="jsp/admin/plugins/form/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_field=${id_field}#list"  title="#i18n{form.createEntry.manageField.titleDelete}" >
 									<i class="glyphicon glyphicon-trash"></i>
 								</a>
 							</td>
