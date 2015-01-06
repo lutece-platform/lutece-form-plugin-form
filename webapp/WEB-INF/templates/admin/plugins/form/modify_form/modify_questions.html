@@ -1,18 +1,4 @@
 <#include "/admin/plugins/form/modify_form/tabs.html" />
-<script>
-$(document).ready(function() {
-	
-	$("#selectAll").change( function() {
-    if ( $(this).attr("checked") ){
-		// check all
-        $("input[name='entry_id']").prop( "checked", "checked");
-		} else {
-        // uncheck all
-        $("input[name='entry_id']").prop( "checked", "");
-		}
-    });
-});
-</script>
 <#include "/admin/plugins/form/commons.html" />
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
@@ -22,17 +8,15 @@ $(document).ready(function() {
 	</div>
 	<div id="questions" class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<a name="list" id="list"></a>
-		<form method="post" action="jsp/admin/plugins/form/DoCreateEntry.jsp?id_type=${entry_type_group.idType}#list">
-			<@tabs tab="questions" />
-			<@paginationAdmin paginator=paginator combo=1/>
-			<fieldset class="form-inline pull-left spaced">
+		<@tabs tab="questions" />
+		<@paginationAdmin paginator=paginator combo=1/>
+		<form class="form-inline pull-left" method="post" action="jsp/admin/plugins/form/DoCreateEntry.jsp?id_type=${entry_type_group.idType}#list">
 				<div class="input-group">
 					<input type="text" name="title" value="" placeholder="#i18n{form.modifyForm.manageEnter.labelInsertGroup}" class="form-control input-sm">
 					<span class="input-group-btn">
 						<button type="submit" class="btn btn-default btn-sm btn-flat" title="#i18n{form.modifyForm.manageEnter.buttonInsertGroup}"><i class="glyphicon glyphicon-plus"></i></button>
 					</span>
 				</div>
-			</fieldset>
 		</form>
 		<form method="post" class="form-inline pull-left" action="jsp/admin/plugins/form/CreateEntry.jsp">
 		<fieldset class="form-inline pull-left spaced">
@@ -44,7 +28,7 @@ $(document).ready(function() {
 			</div>
 		</fieldset>
 		</form>
-		<form method="post"	action="jsp/admin/plugins/form/DoChangeOrderEntry.jsp" 	class="form-inline">
+		<form method="post"	action="jsp/admin/plugins/form/DoChangeOrderEntry.jsp" class="form-inline">
 			<#if entry_group_list?has_content>
 			<div class="input-group">
 				<input type="hidden" name="id_form" value="${form.idForm}">
@@ -52,7 +36,7 @@ $(document).ready(function() {
 				<@comboWithParams name="id_entry_group" default_value="" additionalParameters="class='form-control input-sm'" items=entry_group_list />
 				<span class="input-group-btn">
 					<button type="submit" class="btn btn-default btn-sm btn-flat" title="#i18n{form.modifyForm.moveAll}" name="move.x" value="#i18n{form.modifyForm.moveAll}">
-						<i class="glyphicon glyphicon-resize-vertical"></i>
+						<i class="fa fa-sign-in"></i>
 					</button>
 				</span>
 			</div>
@@ -90,11 +74,16 @@ $(document).ready(function() {
 								<#if entry.entryType.group>
 									${entry.title}
 								<#elseif entry.parent?exists>
+									<blockquote>
 									<#if entry.entryType.comment>
 										${entry.comment}
 									<#else>
 										${entry.title}
 									</#if>
+									<#if !entry.entryType.group>
+										<span class="badge">${entry.entryType.title}</span>
+									</#if>
+									</blockquote>
 								<#elseif entry.entryType.myLuteceUser>
 										${entry.title}
 								<#else>
@@ -104,7 +93,7 @@ $(document).ready(function() {
 										${entry.title}
 									</#if>
 								</#if>
-								<#if !entry.entryType.group>
+								<#if !entry.entryType.group && !entry.parent?exists>
 									<span class="badge">${entry.entryType.title}</span>
 								</#if>
 							</td>
@@ -119,7 +108,9 @@ $(document).ready(function() {
 									<div class="input-group">
 									<@comboOrders name="order_id_${entry.idEntry!}" default_value=entry.position idParent=entry.parent.idEntry />
 									<span class="input-group-btn">
-									<button class="btn btn-default btn-xs btn-flat" type="submit" name="move_${entry.idEntry!}" title="#i18n{form.modifyForm.move}" value="#i18n{form.modifyForm.move}"><i class="glyphicon glyphicon-resize-vertical"></i></button>
+									<button class="btn btn-default btn-xs btn-flat" type="submit" name="move_${entry.idEntry!}" title="#i18n{form.modifyForm.move}" value="#i18n{form.modifyForm.move}">
+										<i class="fa fa-sort"></i>
+									</button>
 									</span>
 									</div>
 								</td>
@@ -141,11 +132,11 @@ $(document).ready(function() {
 								</a>
 								<#if entry.parent?exists>
 									<a href="jsp/admin/plugins/form/DoMoveOutEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleGoOut}" class="btn btn-primary btn-xs btn-flat">
-										<i class="glyphicon glyphicon-chevron-right"></i>
+										<i class="fa fa-sign-out"></i>
 									</a>
 								<#elseif !entry.entryType.group && !entry.entryType.myLuteceUser>
 									<a href="jsp/admin/plugins/form/MoveEntry.jsp?id_entry=${entry.idEntry}#list" title="#i18n{form.modifyForm.manageEnter.titleMove}" class="btn btn-primary btn-xs btn-flat">
-										<i class="glyphicon glyphicon-user"></i>
+										<i class="fa fa-sign-in"></i>
 									</a>
 								</#if>
 								<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
@@ -183,4 +174,16 @@ $(document).ready(function() {
 	</select>
 	</#if>
 </#macro>
-
+<script>
+$(document).ready(function() {
+	$("#selectAll").change( function() {
+    if ( $(this).attr("checked") ){
+		// check all
+        $("input[name='entry_id']").prop( "checked", "checked");
+		} else {
+        // uncheck all
+        $("input[name='entry_id']").prop( "checked", "");
+		}
+    });
+});
+</script>
