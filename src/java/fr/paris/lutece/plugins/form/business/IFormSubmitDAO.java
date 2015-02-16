@@ -74,12 +74,6 @@ public interface IFormSubmitDAO
      */
     void delete( int nIdFormResponse, Plugin plugin );
 
-    /**
-     * Delete responses and files associated with a form submit
-     * @param nIdFormSubmit The if of the form submit to remove
-     * @param plugin The plugin
-     */
-    void deleteResponses( int nIdFormSubmit, Plugin plugin );
 
     /**
      * Update the the formResponse in the table

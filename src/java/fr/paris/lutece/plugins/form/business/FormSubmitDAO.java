@@ -58,8 +58,6 @@ public final class FormSubmitDAO implements IFormSubmitDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO form_submit ( " +
         "id_form_submit,date_response,day_date_response,week_date_response,month_date_response,year_date_response,ip,id_form) VALUES(?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_submit WHERE id_form_submit = ? ";
-    private static final String SQL_QUERY_DELETE_RESPONSES = "DELETE FROM form_reponse WHERE id_response IN (SELECT id_response FROM form_response_submit WHERE id_form_submit = ?)";
-    private static final String SQL_QUERY_DELETE_FORM_SUBMIT_RESPONSES = "DELETE FROM form_response_submit WHERE id_form_submit = ?";
     private static final String SQL_QUERY_UPDATE = "UPDATE  form_submit SET " +
         "id_form_submit=?,date_response=?,ip=?,id_form=? WHERE id_form_submit=?";
     private static final String SQL_QUERY_SELECT_FORM_RESPONSE_BY_FILTER = "SELECT id_form_submit,date_response,ip,id_form " +
@@ -433,21 +431,7 @@ public final class FormSubmitDAO implements IFormSubmitDAO
         daoUtil.free(  );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void deleteResponses( int nIdFormSubmit, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_RESPONSES, plugin );
-        daoUtil.setInt( 1, nIdFormSubmit );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
-        daoUtil = new DAOUtil( SQL_QUERY_DELETE_FORM_SUBMIT_RESPONSES );
-        daoUtil.setInt( 1, nIdFormSubmit );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
-    }
+  
 
     /**
      * {@inheritDoc}

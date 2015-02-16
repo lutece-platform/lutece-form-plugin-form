@@ -99,15 +99,7 @@ public final class FormSubmitHome
         _dao.delete( nIdFormSubmit, plugin );
     }
 
-    /**
-     * Remove the association between form responses and form submit
-     * @param nIdFormSubmit The id of the form submit
-     * @param plugin The plugin
-     */
-    public static void removeFormSubmitResponse( int nIdFormSubmit, Plugin plugin )
-    {
-        _dao.deleteResponses( nIdFormSubmit, plugin );
-    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders
