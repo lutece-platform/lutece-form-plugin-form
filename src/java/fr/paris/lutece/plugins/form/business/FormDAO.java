@@ -612,7 +612,7 @@ public final class FormDAO implements IFormDAO
     public List<Form> getFormListForAutomaticCleaning( Plugin plugin )
     {
         List<Form> listForms = new ArrayList<Form>(  );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_AUTOMATIC_CLEANING );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_AUTOMATIC_CLEANING, plugin );
         daoUtil.executeQuery(  );
 
         int nIndex = 1;
