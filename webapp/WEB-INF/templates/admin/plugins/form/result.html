@@ -1,102 +1,93 @@
 <div class="row">
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<fieldset>
-	<legend> #i18n{form.result.title} : '${form.title}'</legend>
-	<form class="form-inline" action="jsp/admin/plugins/form/Result.jsp" method="post" name="" id=""  >
-	<input name="id_form" value="${form.idForm}" type="hidden" />
-	<div class="well">
-		<label for="fist_response_date_filter" >#i18n{form.result.labelValidationDate}</label><br>
-		<div class="input-group">
-			<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-			<input type="text" name="fist_response_date_filter" id="fist_response_date_filter" class="form-control input-sm" value="<#if fist_response_date_filter?has_content>${fist_response_date_filter?date}</#if>" />
-		</div>
-			<span class="help-block">#i18n{form.result.labelAnd}</span>
-		<div class="input-group">
-			<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-			<input type="text" name="last_response_date_filter" id="last_response_date_filter" class="form-control input-sm" value="<#if last_response_date_filter?has_content>${last_response_date_filter?if_exists?date}</#if>" />
-		</div><br><br>
-		<div class="form-group">
-		<button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-filter"></i> #i18n{form.result.buttonSearch}</button>
-		</div>
-	</div>
-	<fieldset>
-	<legend>#i18n{form.result.titleStatistic}</legend>
-	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 well">
-		
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<label for="">#i18n{form.result.labelNumberResponse} : </label>
-		<span>${number_response}</span>
-		</div>
-		
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<label for="">#i18n{form.result.labelFistResponseDate} : </label>
-		<#if fist_response_date?exists>
-	    	<span>${fist_response_date?date}</span> 
-	   	 <#else>
-	   	 	<span>-</span> 
-	   	 </#if>
-		</div>
-		
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<label for="">#i18n{form.result.labelLastResponseDate} : </label>
-	    <#if last_response_date?exists>
-	        <span >${last_response_date?date}</span>
-	    <#else>
-			<span>-</span>
-	    </#if>
-		</div>
-		
-	    <div class="form-group">
-			<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12" class="text-label">#i18n{form.result.labelGraph}</label>
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<input type="radio" name="times_unit" value="0" <#if times_unit=="0">checked</#if>> #i18n{form.result.radioButtonDay}
-			</div>
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<input type="radio" name="times_unit" value="1" <#if times_unit=="1">checked</#if>> #i18n{form.result.radioButtonWeek}
-			</div>
-		   	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<input type="radio" name="times_unit" value="2" <#if times_unit=="2">checked</#if>> #i18n{form.result.radioButtonMonth}
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<div class="box box-primary">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{form.result.title} : '${form.title}'</h3>
+            </div>
+			<div class="box-body">
+				<form class="form-inline" action="jsp/admin/plugins/form/Result.jsp" method="post" name="" id=""  >
+					<input name="id_form" value="${form.idForm}" type="hidden" />
+					<label for="fist_response_date_filter" >#i18n{form.result.labelValidationDate}</label>
+						<div class="input-daterange inline">
+							<div class="input-group">
+							<input type="text" name="fist_response_date_filter" id="fist_response_date_filter" class="form-control input-sm" value="<#if fist_response_date_filter?has_content>${fist_response_date_filter?date}</#if>" />
+							<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+							</div>
+							<span class="add-on">#i18n{form.result.labelAnd}</span>
+							<div class="input-group">
+								<input type="text" name="last_response_date_filter" id="last_response_date_filter" class="form-control input-sm" value="<#if last_response_date_filter?has_content>${last_response_date_filter?if_exists?date}</#if>" />
+							<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+							</div>
+						</div>
+						<span class="help-text">#i18n{form.result.labelGraph}</span>
+						<label class="radio-inline">
+							<input type="radio" name="times_unit" value="0" <#if times_unit=="0">checked</#if>> #i18n{form.result.radioButtonDay}
+						</label>	
+						<label class="radio-inline">
+							<input type="radio" name="times_unit" value="1" <#if times_unit=="1">checked</#if>> #i18n{form.result.radioButtonWeek}
+						</label>	
+						<label class="radio-inline">
+							<input type="radio" name="times_unit" value="2" <#if times_unit=="2">checked</#if>> #i18n{form.result.radioButtonMonth}
+						</label>	
+						<button class="btn btn-primary btn-xs btn-flat" type="submit" ><i class="glyphicon glyphicon-filter"></i> #i18n{form.result.buttonSearch}</button>
+				</form>
 			</div>
 		</div>
-	 </div>
-	<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-	<#if fist_response_date_filter?exists&&last_response_date_filter?exists>
-	 	<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}&amp;fist_response_date_filter=${fist_response_date_filter?date?if_exists}&amp;last_response_date_filter=${last_response_date_filter?date?if_exists}"/>
-    <#elseif  fist_response_date_filter?exists > 
-			<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}&amp;fist_response_date_filter=${fist_response_date_filter?date?if_exists}"/>
-		<#elseif last_response_date_filter?exists>
-			<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}&amp;last_response_date_filter=${last_response_date_filter?date?if_exists}"/>
-		<#else>
-			<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}"/>
-		</#if>
-	</div>
-	</fieldset>
-	</form>
-	
-	<br>
-	
-	<form class="form-inline" action="jsp/admin/plugins/form/DoExportResult.jsp" method="post" name="" id=""  >
-   		<legend>#i18n{form.result.titleDataSave}</legend>
-	   	 <input name="id_form" value="${form.idForm}" type="hidden">
-		<#if fist_response_date_filter?exists>
-			<input name="fist_response_date_filter" value="${fist_response_date_filter?date?if_exists}" type="hidden" />	
-		</#if>	
-		<#if last_response_date_filter?exists>
-			<input name="last_response_date_filter" value="${last_response_date_filter?date?if_exists}" type="hidden" />	
-		</#if>	
-		<label for="">#i18n{form.result.labelExportResult} : </label>	
-		<div class="input-group">
- 		<@comboWithParams name="id_export_format"  items=export_format_list default_value="-1" additionalParameters="class='form-control input-xs'" />
-		<span class="input-group-btn">
-		<button class="btn btn-default btn-xs btn-flat" type="submit" ><i class="glyphicon glyphicon-download"></i> #i18n{form.result.buttonExportResult}</button>
-		</span>
+		<div class="box box-primary">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{form.result.titleStatistic}</h3>
+				<div class="box-tools pull-right">
+					<form class="form-inline" action="jsp/admin/plugins/form/DoExportResult.jsp" method="post" name="" id=""  >
+						<!-- label>#i18n{form.result.titleDataSave}</label -->
+						<input name="id_form" value="${form.idForm}" type="hidden">
+						<#if fist_response_date_filter?exists>
+							<input name="fist_response_date_filter" value="${fist_response_date_filter?date?if_exists}" type="hidden">	
+						</#if>	
+						<#if last_response_date_filter?exists>
+							<input name="last_response_date_filter" value="${last_response_date_filter?date?if_exists}" type="hidden">	
+						</#if>	
+						<label for="">#i18n{form.result.labelExportResult} </label>	
+						<div class="input-group">
+							<@comboWithParams name="id_export_format"  items=export_format_list default_value="-1" additionalParameters="class=\"form-control input-xs\"" />
+							<span class="input-group-btn">
+								<button class="btn btn-primary btn-xs btn-flat" type="submit" >
+									<i class="fa fa-download fa-fw"></i><span class="hidden-xs"> #i18n{form.result.buttonExportResult}</span>
+								</button>
+							</span>
+						</div>
+					</form>
+                </div>
+			 </div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-md-4">
+						<div class="callout callout-info">
+                            <h4><i class="fa fa-pie-chart"></i> #i18n{form.result.labelNumberResponse} <span class="text-muted pull-right">${number_response}<span></h4>
+                          
+						</div>
+						<div class="callout callout-info">
+                            <h4><i class="fa fa-calendar-o"></i> #i18n{form.result.labelFistResponseDate} <span class="text-muted pull-right"><#if fist_response_date?exists>${fist_response_date?date} <#else>-</#if></span></h4>
+						</div>
+						<div class="callout callout-info">
+							<h4><i class="fa fa-calendar-o"></i> #i18n{form.result.labelLastResponseDate} <span class="text-muted pull-right"><#if last_response_date?exists>${last_response_date?date}<#else>-</#if></span></h4>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-md-4">
+						<#if fist_response_date_filter?exists&&last_response_date_filter?exists>
+							<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}&amp;fist_response_date_filter=${fist_response_date_filter?date?if_exists}&amp;last_response_date_filter=${last_response_date_filter?date?if_exists}">
+						<#elseif  fist_response_date_filter?exists > 
+							<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}&amp;fist_response_date_filter=${fist_response_date_filter?date?if_exists}">
+						<#elseif last_response_date_filter?exists>
+							<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}&amp;last_response_date_filter=${last_response_date_filter?date?if_exists}">
+						<#else>
+							<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}">
+						</#if>
+					</div>
+				</div>
+			</div>
 		</div>
-		</div>
-		</form>
-	</fieldset>
 	</div>
 </div>
-<script src="js/jquery/plugins/ui/jquery-ui-1.9.2.custom.min.js"></script>
-<script src="js/jquery/plugins/ui/ui.datepicker-fr.js"></script>    
-<@getDatePickerRange idFieldFrom="fist_response_date_filter" idFieldTo="last_response_date_filter" language=locale />
+
+<@getDatePickerRangeBootstrap language=locale />
 	 

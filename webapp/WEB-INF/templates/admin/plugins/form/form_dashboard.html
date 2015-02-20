@@ -1,6 +1,6 @@
 <div class="box box-solid box-success">
 	<div class="box-header" >
-		<h3 class="box-title">#i18n{form.dashboard.formList}</h3>
+		<h3 class="box-title"><a href="jsp/admin/plugins/form/ManageForm.jsp?plugin_name=form" class="dashboard-title" title="#i18n{form.dashboard.formList}">#i18n{form.dashboard.formList}</a></h3>
 		<div class="box-tools pull-right">
 			<#if permission_create>
 				<a class="btn btn-xs btn-flat btn-primary" href="jsp/admin/plugins/form/CreateForm.jsp" title="#i18n{form.dashboard.addForm}">
@@ -24,27 +24,27 @@
 				<#if form.active>
 					<#if form.autoPublished>
 						<span class="label label-success">
-							<i class="glyphicon glyphicon-time" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
+							<i class="fa fa-time" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
 						</span>			
 					<#else>
 						<span class="label label-success" title="#i18n{portal.util.labelEnabled}">
-							<i class="glyphicon glyphicon-ok-sign"></i>
+							<i class="fa fa-check"></i>
 						</span>			
 					</#if>
 	            <#else>
 					<#if form.autoPublished>
 						<#if form.autoPublicationActive>
 							<span class="label label-success" title="#i18n{portal.util.labelEnabled}">
-								<i class="glyphicon glyphicon-time"></i>
+								<i class="fa fa-time"></i>
 							</span>
 						<#else>
-							<span class="label label-important"  title="#i18n{portal.util.labelDisabled}">
-								<i class="glyphicon glyphicon-time"></i>
+							<span class="label label-danger"  title="#i18n{portal.util.labelDisabled}">
+								<i class="fa fa-time"></i>
 							</span>
 						</#if>
 					<#else>
-						<span class="label label-important"  title="#i18n{portal.util.labelDisabled}">
-							<i class="glyphicon glyphicon-remove-sign"></i>
+						<span class="label label-danger"  title="#i18n{portal.util.labelDisabled}">
+							<i class="fa fa-remove"></i>
 						</span>	
 					</#if>
 	                </#if>&nbsp;<strong> ${form.title}</strong> <br> #i18n{form.dashboard.nb_answers} ${response_count_map[form.idForm?string]}
@@ -52,7 +52,7 @@
 	            <td>
 	                <#if authorized_form_modification_list?seq_contains(form.idForm)>
 						<a class="btn btn-xs btn-flat btn-primary" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form"  title="${form.title}" >
-							<i class="glyphicon glyphicon-edit"></i>
+							<i class="fa fa-edit fa-fw"></i>
 						</a>
 	                </#if>
 	                <#if form.actions?exists>
@@ -74,7 +74,7 @@
 	</table>
 	</div><!-- /.box-body -->
     <div class="box-footer text-center">
-		<a href="${url}" title="#i18n{form.dashboard.formList}">
+		<a href="jsp/admin/plugins/form/ManageForm.jsp?plugin_name=form" title="#i18n{form.dashboard.formList}">
 			#i18n{form.dashboard.formList} <i class="fa fa-arrow-circle-right"></i>
 		</a>	
 	</div><!-- /.box-footer-->

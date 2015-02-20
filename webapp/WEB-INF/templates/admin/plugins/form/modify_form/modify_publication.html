@@ -1,49 +1,62 @@
 <#include "/admin/plugins/form/modify_form/tabs.html" />
+<form class="form-horizontal" action="jsp/admin/plugins/form/modifyForm/DoModifyFormPublication.jsp" method="post">
 <div class="row">
-    <form action="jsp/admin/plugins/form/modifyForm/DoModifyFormPublication.jsp" method="post">
-        <div class="col-xs-12 col-sm-12 col-md-3">
-            <@modifyFormLeftColumn form=form category_list=category_list />
-        </div>
-        <div id="avanced" class="col-xs-12 col-sm-12 col-md-9">
-            <fieldset class="form-horizontal">
-                <@tabs tab="publication" />
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="publication_mode">#i18n{form.createForm.labelPublicationMode} :</label>
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                        <input type="radio" name="publication_mode" id="publication_mode_user" value="0" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
-                        <#if !form.dateBeginDisponibility?? && !form.dateEndDisponibility??>checked="checked"</#if> /> #i18n{form.createForm.labelPublicationModeUser}
-                            <input type="radio" name="publication_mode" id="publication_mode_auto" value="1" onclick="javascript:doChangePublicationMode(this.form.publication_mode);"
-                        <#if form.dateBeginDisponibility?? || form.dateEndDisponibility??>checked="checked"</#if> /> #i18n{form.createForm.labelPublicationModeAuto}
-                        <span class="help-block">#i18n{form.createForm.labelPublicationModeComment}</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility} :</label>
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                            <input type="text" name="date_begin_disponibility" id="date_begin_disponibility" value="${form.dateBeginDisponibility?if_exists}" class="form-control input-sm"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
-                        </div>
-                        <input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="${form.dateBeginDisponibility?if_exists}" />
-                        <span class="help-block">#i18n{form.createForm.labelDateBeginDisponibilityComment}</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="date_end_disponibility">#i18n{form.createForm.labelDateEndDisponibility} :</label>
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                            <input type="text" name="date_end_disponibility" id="date_end_disponibility" value="${form.dateEndDisponibility?if_exists}" class="form-control input-sm"  onchange="javascript:doChangeDate(this.form.publication_mode);" />
-                        </div>
-                        <input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="${form.dateEndDisponibility?if_exists}" />
-                        <span class="help-block">#i18n{form.createForm.labelDateEndDisponibilityComment}</span>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-    </form>
+	<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+		<@modifyFormLeftColumn form=form category_list=category_list />
+	</div>
+	<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+		<div class="box box-primary">
+			<div class="box-header">
+				<div class="box-tools pull-right">
+					<button type="submit" class="btn btn-primary btn-xs btn-flat" name="save">
+						<i class="fa fa-save"></i>&nbsp;#i18n{form.createForm.buttonSave}
+					</button>
+					<button type="submit" class="btn btn-primary btn-xs btn-flat" name="apply">
+						<i class="fa fa-check"></i>&nbsp;#i18n{form.modifyForm.buttonApply}
+					</button>
+				</div>
+			</div>
+			<div class="box-body">
+				<@tabs tab="publication" />
+				<input type="hidden" name="date_end_disponibility_save" id="date_end_disponibility_save" value="${form.dateEndDisponibility?if_exists}">
+				<input type="hidden" name="date_begin_disponibility_save" id="date_begin_disponibility_save" value="${form.dateBeginDisponibility?if_exists}">
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3" for="publication_mode">#i18n{form.createForm.labelPublicationMode}</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="radio">
+							<label class="radio-inline">
+								<input type="radio" name="publication_mode" id="publication_mode_user" value="0" onclick="javascript:doChangePublicationMode(this.form.publication_mode);" <#if !form.dateBeginDisponibility?? && !form.dateEndDisponibility??>checked="checked"</#if> /> #i18n{form.createForm.labelPublicationModeUser}
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="publication_mode" id="publication_mode_auto" value="1" onclick="javascript:doChangePublicationMode(this.form.publication_mode);" <#if form.dateBeginDisponibility?? || form.dateEndDisponibility??>checked="checked"</#if> /> #i18n{form.createForm.labelPublicationModeAuto}
+							</label>
+						</div>
+						<span class="help-block">#i18n{form.createForm.labelPublicationModeComment}</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3" for="date_begin_disponibility">#i18n{form.createForm.labelDateBeginDisponibility}</label>
+					<div class="col-xs-12 col-sm-12 col-md-9">
+						<div class="input-daterange form-inline">
+							<div class="input-group">
+								<input type="text" name="date_begin_disponibility" id="date_begin_disponibility" class="form-control input-sm " value="${form.dateBeginDisponibility?if_exists}" onchange="javascript:doChangeDate(this.form.publication_mode);">
+								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+							</div>
+							<span class="add-on">#i18n{form.result.labelAnd}</span>
+							<div class="input-group">
+								<input type="text" name="date_end_disponibility" id="date_end_disponibility" class="form-control input-sm " value="${form.dateEndDisponibility?if_exists}" onchange="javascript:doChangeDate(this.form.publication_mode);">
+								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+							</div>
+							<label for="date_end_disponibility" class="inline">#i18n{form.createForm.labelDateEndDisponibility}</label>
+							<span class="help-block">#i18n{form.createForm.labelDateEndDisponibilityComment}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-
+</form>
 <script type="text/javascript">
 function doChangePublicationMode(radio){
         for (var i=0; i<radio.length; i++){
@@ -76,6 +89,4 @@ function doChangePublicationMode(radio){
         }
     }
 </script>
-<script src="js/jquery/plugins/ui/jquery-ui-1.9.2.custom.min.js"></script>
-<script src="js/jquery/plugins/ui/ui.datepicker-fr.js"></script>
-<@getDatePickerRange idFieldFrom="date_begin_disponibility" idFieldTo="date_end_disponibility" language=locale />
+<@getDatePickerRangeBootstrap language=locale />

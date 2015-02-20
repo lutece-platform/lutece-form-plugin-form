@@ -1,18 +1,20 @@
-
-#i18n{form.notificationMailFormSubmit.content}'${form.title}'
-<#if formSubmit??>
-	<#list formSubmit.listResponse as response>
-		<#if response.toStringValueResponse?has_content>
-			
-				<b>
-					<#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>
-						${response.entry.title}:
-						<#assign entrySave=response.entry>
-					</#if>
-					&nbsp;
-				</b>
-				${response.toStringValueResponse}
-			
-		</#if>
-	</#list>
-</#if>
+<html>
+    <head>
+       	<title>${form.title}</title>
+    </head>
+    <body>
+	<h1 id="#top" style="display:none;">&nbsp;</h1>
+	<h2>#i18n{form.notificationMailFormSubmit.content} <small>'${form.title}'</small></h2>
+	<hr/>
+	<#if formSubmit??>
+		<#list formSubmit.listResponse as response>
+			<#if response.toStringValueResponse?has_content>
+				<p>
+					<b><#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>${response.entry.title}:<#assign entrySave=response.entry></#if>&nbsp;</b>
+					${response.toStringValueResponse}
+				</p>
+			</#if>
+		</#list>
+	</#if>
+ </body>
+</html>
