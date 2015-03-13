@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<p class="lead">
 		<#if form.frontOfficeTitle?? && form.frontOfficeTitle!="" && form.shownFrontOfficeTitle! >
 			${form.frontOfficeTitle} 
@@ -8,15 +8,15 @@
 		</#if>
 		</p>
 		<form class="form-horizontal" id="form-validate" action="${url_action}" method="post" enctype="multipart/form-data">
-			<input name="page" value="form" type="hidden" />
-			<input name="id_form" value="${form.idForm}" type="hidden" />
-			<input name="session" value="session" type="hidden" />
+			<input name="page" value="form" type="hidden">
+			<input name="id_form" value="${form.idForm}" type="hidden">
+			<input name="session" value="session" type="hidden">
 			<fieldset>
 				<legend>${form.welcomeMessage}</legend>
 				${str_entry}   
 				<#if form.activeRequirement>
 					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="" >&nbsp;</label>
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">&nbsp;</label>
 						<div class="">
 							<div class="checkbox">
 								<label for="requirement">
@@ -30,7 +30,7 @@
 					</div>
 				</#if>	
 				<#if jcaptcha?exists>
-					<div class="col-xs-12 col-sm-12 col-md-12">${jcaptcha}</div>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">${jcaptcha}</div>
 				</#if>
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
