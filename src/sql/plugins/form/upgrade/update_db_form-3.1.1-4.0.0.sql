@@ -4,7 +4,7 @@ CREATE TABLE form_response_submit (
 	PRIMARY KEY (id_response,id_form_submit)
 );
 
-ALTER TABLE form_entry DROP CONSTRAINT fk_form_entry_form;
+ALTER TABLE form_entry  DROP FOREIGN KEY fk_form_entry_form;
 
 INSERT INTO form_response_submit (id_response, id_form_submit) SELECT id_response, id_form_submit FROM form_response;
 
