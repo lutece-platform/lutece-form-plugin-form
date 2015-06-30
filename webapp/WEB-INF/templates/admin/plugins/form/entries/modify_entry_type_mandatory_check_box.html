@@ -120,12 +120,12 @@
 						<a class="btn btn-primary btn-sm btn-flat" href="jsp/admin/plugins/form/ModifyFieldWithConditionalQuestion.jsp?id_field=${field.idField}"  title="#i18n{portal.util.labelModify}" >
 							<i class="glyphicon glyphicon-edit"></i>
 						</a>
-						<#if cpt!=1 || 1 < paginator.pageCurrent>
+						<#if cpt!=1 >
 						<a class="btn  btn-primary btn-sm" href="jsp/admin/plugins/form/DoMoveUpField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveUp}" >
 							<i class="glyphicon glyphicon-chevron-up"></i>
 						</a>
 						</#if> 
-						<#if field_has_next || paginator.pageCurrent < paginator.pagesCount>
+						<#if field_has_next >
 						<a class="btn btn-primary btn-sm btn-flat" href="jsp/admin/plugins/form/DoMoveDownField.jsp?id_field=${field.idField}#list"  title="#i18n{form.createEntry.manageField.titleMoveDown}" >
 							<i class="glyphicon glyphicon-chevron-down"></i>
 						</a>
