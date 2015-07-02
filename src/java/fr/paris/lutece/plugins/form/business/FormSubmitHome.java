@@ -99,8 +99,6 @@ public final class FormSubmitHome
         _dao.delete( nIdFormSubmit, plugin );
     }
 
-
-
     ///////////////////////////////////////////////////////////////////////////
     // Finders
 

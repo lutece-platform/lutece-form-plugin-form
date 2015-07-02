@@ -74,7 +74,6 @@ public interface IFormSubmitDAO
      */
     void delete( int nIdFormResponse, Plugin plugin );
 
-
     /**
      * Update the the formResponse in the table
      *
