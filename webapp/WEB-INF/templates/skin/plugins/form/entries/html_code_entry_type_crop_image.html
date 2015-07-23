@@ -1,0 +1,17 @@
+<#include "/skin/plugins/uploadimage/uploadimage.html" />
+<#assign fieldName='attribute'+entry.idEntry >
+<#if list_responses?? && list_responses?has_content>
+			<#assign response_error = list_responses[0]>
+			<#if response_error.entry.idEntry == entry.idEntry && response_error.entry.error?? && response_error.entry.error.isDisplayableError>
+				<div class="alert alert-danger">
+					<#assign error = response_error.entry.error>
+					<#if error.mandatoryError>
+						#i18n{form.message.mandatory.entry}
+					<#else>
+						${error.errorMessage}
+					</#if>
+				</div>
+			</#if>
+		</#if>
+
+<@cropimage  fieldName= fieldName  file="images/admin/skin/plugins/uploadimage/picture.jpg"  cssClass=""  synchronous= "false"/>

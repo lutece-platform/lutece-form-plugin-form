@@ -87,4 +87,6 @@
 	 <bean id="form.entryTypeTextArea" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeTextArea" />
 	 <bean id="form.entryTypeMyLuteceUserattribute" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUserAttribute" />
 	 <bean id="form.entryTypeArray" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeArray" />
+	 <bean id="form.entryTypeCropImage" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeCropImage" />
+	 
  </beans>

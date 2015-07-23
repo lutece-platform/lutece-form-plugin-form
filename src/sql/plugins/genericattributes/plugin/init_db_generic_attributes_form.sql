@@ -37,7 +37,8 @@ INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_use
 (17,'Attribut de l''utilisateur MyLutece',0,0,0,'form.entryTypeMyLuteceUserattribute','form');
 INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
 (18,'Tableau',0,0,0,'form.entryTypeArray','form');
-
+INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
+(19,'Image crp',0,0,0,'form.entryTypeCropImage','form');
 
 
 -- register entries for the exemple form
