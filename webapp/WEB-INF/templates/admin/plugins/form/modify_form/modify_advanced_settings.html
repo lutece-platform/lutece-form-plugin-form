@@ -22,15 +22,15 @@
 					<div class="tab-content">
 						<br>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="front_office_title">#i18n{form.createForm.frontOfficeTitle}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="front_office_title">#i18n{form.createForm.frontOfficeTitle}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<input type="text" name="front_office_title" value="${form.frontOfficeTitle!}" class="form-control" maxlength="255">
 									<span class="help-block">#i18n{form.createForm.frontOfficeTitleComment}</span>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="is_shown_front_office_title">#i18n{form.createForm.frontOfficeTitleIsShown}</label> 
-								<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="is_shown_front_office_title">#i18n{form.createForm.frontOfficeTitleIsShown}</label> 
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" name="is_shown_front_office_title" value="1" <#if form?exists && form.shownFrontOfficeTitle?? && form.shownFrontOfficeTitle> checked="checked"</#if> />&#160;
@@ -40,23 +40,23 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="workgroup">#i18n{form.createForm.labelWorkgroup}</label>
-								<div class="col-xs-12 col-sm-12 col-md-4">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="workgroup">#i18n{form.createForm.labelWorkgroup}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<@comboWithParams name="workgroup" additionalParameters="class=\"form-control\"" items=user_workgroup_list default_value=form.workgroup! />
 									<span class="help-block">#i18n{form.createForm.labelWorkgroupComment}</span>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_mailing_list">#i18n{form.createForm.labelNotify}</label>
-								<div class="col-xs-12 col-sm-12 col-md-4">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_mailing_list">#i18n{form.createForm.labelNotify}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<@comboWithParams name="id_mailing_list" additionalParameters="class=\"form-control\"" items=mailing_list default_value="${form.idMailingList}" />
 									<span class="help-block">#i18n{form.createForm.labelNotifyComment}</span>
 								</div>
 							</div>
 							<#if is_active_captcha>
 								<div class="form-group">
-									<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="active_captcha">#i18n{form.createForm.labelActiveCaptcha}</label>
-									<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+									<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="active_captcha">#i18n{form.createForm.labelActiveCaptcha}</label>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 										<div class="checkbox">
 											<label>
 												<input type="checkbox" name="active_captcha" value="1" <#if form?exists && form.activeCaptcha> checked="checked"</#if> />&#160;
@@ -67,14 +67,14 @@
 								</div>
 							</#if>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_theme_list">#i18n{form.createForm.labelThemeXpage}</label>
-								<div class="col-xs-12 col-sm-12 col-md-4">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_theme_list">#i18n{form.createForm.labelThemeXpage}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<@comboWithParams name="id_theme_list" additionalParameters="class=\"form-control\"" items=theme_list default_value=form.codeTheme />
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" class="checkbox" for="limit_number_response">#i18n{form.createForm.labelLimitNumberResponse}</label>
-								<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="checkbox" for="limit_number_response">#i18n{form.createForm.labelLimitNumberResponse}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" name="limit_number_response" value="1" <#if form?exists && form.limitNumberResponse>checked="checked"</#if> />&#160;
@@ -84,8 +84,8 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" class="checkbox" for="active_store_adresse">#i18n{form.createForm.labelStoreAdresse}</label>
-								<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="checkbox" for="active_store_adresse">#i18n{form.createForm.labelStoreAdresse}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" name="active_store_adresse" value="1" <#if form?exists && form.activeStoreAdresse>checked="checked"</#if> />&#160;
@@ -96,8 +96,8 @@
 							</div>
 							<#if is_active_mylutece_authentification>
 								<div class="form-group">
-									<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="active_mylutece_authentification">#i18n{form.createForm.labelActiveMyLuteceAuthentification}</label>
-									<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+									<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="active_mylutece_authentification">#i18n{form.createForm.labelActiveMyLuteceAuthentification}</label>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 										<div class="checkbox">
 											<label>
 												<input type="checkbox" name="active_mylutece_authentification" value="1" <#if form?exists && form.activeMyLuteceAuthentification>checked="checked"</#if> />&#160;
@@ -108,8 +108,8 @@
 								</div>
 							</#if>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" class="checkbox" for="active_requirement">#i18n{form.createForm.labelActiveRequirement}</label>
-								<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" class="checkbox" for="active_requirement">#i18n{form.createForm.labelActiveRequirement}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" name="active_requirement" value="1" <#if form?exists && form.activeRequirement>checked="checked"</#if> />&#160;
@@ -119,39 +119,39 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_1">#i18n{form.createForm.labelInformationComplementary_1}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_1">#i18n{form.createForm.labelInformationComplementary_1}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<input type="text" name="information_complementary_1" value="${form.infoComplementary1?if_exists}" class="form-control" maxlength="255">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_2">#i18n{form.createForm.labelInformationComplementary_2}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_2">#i18n{form.createForm.labelInformationComplementary_2}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<input type="text" name="information_complementary_2" value="${form.infoComplementary2?if_exists}" class="form-control" maxlength="255">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_3">#i18n{form.createForm.labelInformationComplementary_3}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_3">#i18n{form.createForm.labelInformationComplementary_3}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<input type="text" name="information_complementary_3" value="${form.infoComplementary3?if_exists}" class="form-control" maxlength="255">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_4">#i18n{form.createForm.labelInformationComplementary_4}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_4">#i18n{form.createForm.labelInformationComplementary_4}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<input type="text" name="information_complementary_4" value="${form.infoComplementary4?if_exists}" class="form-control" maxlength="255">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_5">#i18n{form.createForm.labelInformationComplementary_5}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_5">#i18n{form.createForm.labelInformationComplementary_5}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<input type="text" name="information_complementary_5" value="${form.infoComplementary5?if_exists}" class="form-control" maxlength="255">
 									<span class="help-block">#i18n{form.createForm.labelInformationComplementary_comment}</span>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="support_https">#i18n{form.createForm.supportHTTPS}</label>
-								<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+								<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3" for="support_https">#i18n{form.createForm.supportHTTPS}</label>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" name="support_https" value="1" <#if form.supportHTTPS?has_content && form.supportHTTPS>checked="checked"</#if> />&#160;

@@ -31,22 +31,22 @@
 	<div class="box-body">
 		<input type="hidden" name="id_form" value="${form.idForm}">		
 		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-4" for="title">#i18n{form.createForm.labelTitle} *</label>
-			<div class="col-xs-12 col-sm-12 col-md-8">
+			<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12" for="title">#i18n{form.createForm.labelTitle} *</label>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<input type="text" name="title" value="${form.title}" class="form-control input-sm" maxlength="255">
 				<span class="help-block">#i18n{form.createForm.labelTitleComment}&nbsp;</span>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-4" for="description">#i18n{form.createForm.labelDescription} * </label>
-			<div class="col-xs-12 col-sm-12 col-md-8">
+			<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12" for="description">#i18n{form.createForm.labelDescription} * </label>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<textarea class="form-control input-sm" name="description" rows="4">${form.description}</textarea>
 				<span class="help-block">#i18n{form.createForm.labelDescriptionComment}</span>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-4" for="category">#i18n{form.createForm.labelCategoryTitle} </label>
-			<div class="col-xs-12 col-sm-12 col-md-8">
+			<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12" for="category">#i18n{form.createForm.labelCategoryTitle} </label>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<#if !form.category?exists>
 					<#assign category_default_value="-2" />
 				<#else>
@@ -57,7 +57,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 col-md-offset-1 col-md-11">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<button type="submit" class="btn btn-primary btn-sm btn-flat" name="save">
 					<i class="fa fa-save"></i>&nbsp;#i18n{form.createForm.buttonSave}
 				</button>
