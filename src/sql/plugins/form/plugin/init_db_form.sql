@@ -76,7 +76,7 @@ INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('manda
 INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('width', '50');
 INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('height', '50');
 INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('max_size_enter', '250');
-INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('width_text', '50');
+INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('width_text', '0');
 INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('width_text_area', '45');
 INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('height_text_area', '5');
 INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('file_max_size', '2097152');
