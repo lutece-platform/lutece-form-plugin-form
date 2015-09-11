@@ -1,9 +1,9 @@
 <#macro getTextAreaContent responseContent has_error entry field>
 	<!#-- 	fieldInLine means use rich text -->
 	<#if has_error>
-		<textarea name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="alert alert-danger<#if entry.fieldInLine> richtext</#if>">${responseContent}</textarea>
+		<textarea name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="alert alert-danger<#if entry.fieldInLine> richtext</#if> form-control">${responseContent}</textarea>
 	<#else>
-		<textarea name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="${entry.CSSClass!}<#if entry.fieldInLine> richtext</#if> form-control" >${responseContent}</textarea>
+		<textarea name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="${entry.CSSClass!}<#if entry.fieldInLine> richtext</#if> form-control">${responseContent}</textarea>
 	</#if>
 </#macro>
 
@@ -32,21 +32,21 @@
 			<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 				<span class="help-block">${entry.helpMessage}</span>
 			</#if>
-			<#if list_responses??>
-				<#list list_responses as response>
-					<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>
-						<div class="alert alert-danger">
-							<#assign error = response.entry.error>
-							<#if error.mandatoryError>#i18n{form.message.mandatory.entry}<#else>${error.errorMessage}</#if>
-						</div>
-					</#if>
-				</#list>
-			</#if>
 		</div>
 	</div>
+	
+	<#if list_responses??>
+	<#list list_responses as response>
+	<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>
+	<div class="alert alert-danger">
+		<#assign error = response.entry.error>
+		<#if error.mandatoryError>#i18n{form.message.mandatory.entry}<#else>${error.errorMessage}</#if>
+	</div>
+	</#if>
+	</#list>
+	</#if>
 
 <#if entry.fieldInLine>
 	<#include "/util/editor/editor.html" />
 	<@initEditor />
-</#if>
-		
+</#if>		
