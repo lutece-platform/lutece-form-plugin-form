@@ -65,7 +65,7 @@ public class EntryTypeSession extends AbstractEntryTypeSession
     @Override
     public String getTemplateHtmlForm( Entry entry, boolean bDisplayFront )
     {
-        return bDisplayFront ? TEMPLATE_HTML_CODE : TEMPLATE_HTML_CODE_ADMIN;
+        return TEMPLATE_HTML_CODE;
     }
 
     /**
