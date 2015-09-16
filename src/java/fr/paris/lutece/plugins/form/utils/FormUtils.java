@@ -652,6 +652,23 @@ public final class FormUtils
             }
         }
 
+		LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+
+        if ( ( user == null ) && SecurityService.isAuthenticationEnable(  ) &&
+                SecurityService.getInstance(  ).isExternalAuthentication(  ) && ( request != null ) )
+        {
+            try
+            {
+                user = SecurityService.getInstance(  ).getRemoteUser( request );
+            }
+            catch ( UserNotSignedException e )
+            {
+                // Nothing to do : lutece user is not mandatory
+            }
+        }
+
+        model.put( MARK_USER, user );
+		
         //Theme management
         /*
          * Theme theme = ThemeHome.findByPrimaryKey("red");
