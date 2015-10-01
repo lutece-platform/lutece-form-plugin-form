@@ -1,81 +1,89 @@
 <div class="box box-solid box-success">
-	<div class="box-header" >
+	<div class="box-header box-widget" >
 		<h3 class="box-title"><a href="jsp/admin/plugins/form/ManageForm.jsp?plugin_name=form" class="dashboard-title" title="#i18n{form.dashboard.formList}">#i18n{form.dashboard.formList}</a></h3>
-		<div class="box-tools pull-right">
-			<#if permission_create>
-				<a class="btn btn-xs btn-flat btn-primary" href="jsp/admin/plugins/form/CreateForm.jsp" title="#i18n{form.dashboard.addForm}">
-					<i class="icon-plus icon-white" ></i>
-                </a>
-			</#if>
+		<div class="box-tools">
+
+			<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
 		</div>
     </div>
-   <div class="box-body table-responsive no-padding">
+   <div class="box-body box-of table-responsive no-padding" >
 		<table class="table table-hover table-condensed">
 	    <thead>
 	        <tr>
-	            <th>#i18n{form.dashboard.columnTitleLabel}</th>   		
-	            <th>#i18n{form.dashboard.columnTitleActions}</th>  
+	            <th></th>
+	            <th>#i18n{form.dashboard.columnTitleLabel}</th>
+	            <th class="text-center">#i18n{form.dashboard.nb_answers}</th>
+	            <th>#i18n{form.dashboard.columnTitleActions}</th>
 	        </tr>
 	    </thead>
 	    <tbody>
-	        <#list form_list as form>
-	        <tr>
-	            <td>
-				<#if form.active>
-					<#if form.autoPublished>
-						<span class="label label-success">
-							<i class="fa fa-time" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
-						</span>			
-					<#else>
-						<span class="label label-success" title="#i18n{portal.util.labelEnabled}">
-							<i class="fa fa-check"></i>
-						</span>			
-					</#if>
-	            <#else>
-					<#if form.autoPublished>
-						<#if form.autoPublicationActive>
-							<span class="label label-success" title="#i18n{portal.util.labelEnabled}">
-								<i class="fa fa-time"></i>
-							</span>
-						<#else>
-							<span class="label label-danger"  title="#i18n{portal.util.labelDisabled}">
-								<i class="fa fa-time"></i>
-							</span>
-						</#if>
-					<#else>
-						<span class="label label-danger"  title="#i18n{portal.util.labelDisabled}">
-							<i class="fa fa-remove"></i>
-						</span>	
-					</#if>
-	                </#if>&nbsp;<strong> ${form.title}</strong> <br> #i18n{form.dashboard.nb_answers} ${response_count_map[form.idForm?string]}
-					</td>
-	            <td>
-	                <#if authorized_form_modification_list?seq_contains(form.idForm)>
-						<a class="btn btn-xs btn-flat btn-primary" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form"  title="${form.title}" >
-							<i class="fa fa-edit fa-fw"></i>
-						</a>
-	                </#if>
-	                <#if form.actions?exists>
-						<#list form.actions as action>
-							<#if (action.permission=='CHANGE_STATE') || (action.permission=='CHANGE_STATE_AUTO_PUBLICATION') || (action.permission=='VIEW_RESULT') || (action.permission=='DELETE') >
-								<#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
-								<#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && !((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
-									<a class="btn btn-xs btn-flat <#if action.permission='DELETE' || action.permission='DELETE_ALL_RECORD' || action.nameKey=='form.action.disable.name' >btn-danger<#elseif action.nameKey=='form.action.enable.name' || action.permission='VIEW_RESULT'>btn-success<#else>btn-primary</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
-										<i class="${action.iconUrl}"></i>
-									</a>
-								</#if>
+	    <#list form_list as form>
+	    	<tr>
+	        <td>
+						<#if form.active>
+							<#if form.autoPublished>
+								<span class="label label-success" style="min-height:60px;">
+									<i class="fa fa-time" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
+								</span>
+							<#else>
+								<span class="label label-success" title="#i18n{portal.util.labelEnabled}">
+									<i class="fa fa-check"></i>
+								</span>
 							</#if>
-						</#list>
-	                </#if>					
-	            </td>        
-	        </tr>
-	        </#list>
+	          <#else>
+							<#if form.autoPublished>
+								<#if form.autoPublicationActive>
+									<span class="label label-success" title="#i18n{portal.util.labelEnabled}">
+										<i class="fa fa-time"></i>
+									</span>
+								<#else>
+									<span class="label label-danger"  title="#i18n{portal.util.labelDisabled}">
+										<i class="fa fa-time"></i>
+									</span>
+								</#if>
+							<#else>
+								<span class="label label-danger"  title="#i18n{portal.util.labelDisabled}">
+									<i class="fa fa-remove"></i>
+								</span>
+							</#if>
+	        	</#if>
+					</td>
+					<td style="width:40%">
+						<strong> ${form.title}</strong>
+					</td>
+					<td class="text-center">
+						 ${response_count_map[form.idForm?string]}
+					</td>
+	        <td>
+	          <#if authorized_form_modification_list?seq_contains(form.idForm)>
+							<a class="btn btn-xs btn-flat btn-primary" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form"  title="${form.title}" >
+								<i class="fa fa-pencil"></i>
+							</a>
+	          </#if>
+	          <#if form.actions?exists>
+							<#list form.actions as action>
+								<#if (action.permission=='CHANGE_STATE') || (action.permission=='CHANGE_STATE_AUTO_PUBLICATION') || (action.permission=='VIEW_RESULT') || (action.permission=='DELETE') >
+									<#assign autoPublicationMode = (form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
+									<#if !((action.permission=='CHANGE_STATE') && autoPublicationMode) && !((action.permission=='CHANGE_STATE_AUTO_PUBLICATION') && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
+										<a class="btn btn-xs btn-flat <#if action.permission='DELETE' || action.permission='DELETE_ALL_RECORD' || action.nameKey=='form.action.disable.name' >btn-danger<#elseif action.nameKey=='form.action.enable.name' || action.permission='VIEW_RESULT'>btn-success<#else>btn-primary</#if>" href="${action.url}?id_form=${form.idForm}&plugin_name=form"  title="${action.description}" >
+											<i class="${action.iconUrl}"></i>
+										</a>
+									</#if>
+								</#if>
+							</#list>
+	          </#if>
+	        </td>
+	      </tr>
+	    </#list>
 	    </tbody>
 	</table>
 	</div><!-- /.box-body -->
     <div class="box-footer text-center">
-		<a href="jsp/admin/plugins/form/ManageForm.jsp?plugin_name=form" title="#i18n{form.dashboard.formList}">
-			#i18n{form.dashboard.formList} <i class="fa fa-arrow-circle-right"></i>
-		</a>	
+		<#if permission_create>
+			<a class="btn btn-box-" href="jsp/admin/plugins/form/CreateForm.jsp" title="#i18n{form.dashboard.addForm}">
+				<i class="fa fa-plus" ></i> #i18n{form.dashboard.addForm}
+			</a>
+		</#if>
 	</div><!-- /.box-footer-->
 </div>

@@ -1,53 +1,44 @@
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="box box-danger">
-            <div class="box-header">
-                <h3 class="box-title">#i18n{form.createCategory.title}</h3>
-			</div> 
-			<div class="box-body">
-				<form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoCreateCategory.jsp" >
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title" >#i18n{form.createCategory.labelTitle} * </label>
-						<div class="col-xs-12 col-sm-6 col-md-6">
-							<input type="text" class="form-control" id="title" name="title" maxlength="50" >
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="color" >#i18n{form.createCategory.labelColor} *</label>
-						<div class="col-xs-12 col-sm-3 col-md-1">
-							<div class="input-group">
-								<div class="input-group-addon" id="colored"></div>
-								<input type="text" class="form-control" id="color" name="color" maxlength="7" value="">
-							</div>	
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-xs-12 col-sm-12 col-md-9 col-md-offset-3">
-							<button class="btn btn-primary btn-sm btn-flat" type="submit" >
-								<i class="fa fa-check"></i> #i18n{form.createCategory.buttonSave}
-							</button>
-							<button class="btn btn-default btn-sm btn-flat" onclick="javascript:history.back();return false;" >
-								<i class="fa fa-remove"></i> #i18n{form.createCategory.buttonCancel}
-							</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+  <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">#i18n{form.createCategory.title}</h3>
+      </div>
+      <div class="box-body">
+        <form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoCreateCategory.jsp">
+          <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title">#i18n{form.createCategory.labelTitle} * </label>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <input type="text" class="form-control" id="title" name="title" maxlength="50">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="color">#i18n{form.createCategory.labelColor} *</label>
+            <div class="col-xs-12 col-sm-3 col-md-2">
+              <div class="input-group" id="color">
+                <input type="text" class="form-control" name="color" maxlength="7" value="">
+                <div class="input-group-addon" ><i></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-xs-12 col-sm-12 col-md-9 col-md-offset-3">
+              <button class="btn btn-primary btn-sm btn-flat" type="submit">
+                <i class="fa fa-check"></i> #i18n{form.createCategory.buttonSave}
+              </button>
+              <button class="btn btn-default btn-sm btn-flat" onclick="javascript:history.back();return false;">
+                <i class="fa fa-remove"></i> #i18n{form.createCategory.buttonCancel}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
-<script src="js/admin/bootstrap-colorpicker.js" ></script>
+<script src="js/bootstrap-colorpicker.js"></script>
 <script>
-function colored(){
-	$('#colored').css('background-color', $('#color').val()); 
-}
-
-$(document).ready( 
-	function(){ 
-		$("#color").colorpicker({format: 'hex'}); 
-		$( "#color" ).on("keyup change blur", function(){
-			colored();
-		});
-		colored();
-});
+$(function(){
+      $("#color").colorpicker();
+    });
 </script>
