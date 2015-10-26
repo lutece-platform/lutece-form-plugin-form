@@ -3,7 +3,7 @@
     <!-- Plugin Informations -->
     <name>form</name>
     <class>fr.paris.lutece.plugins.form.service.FormPlugin</class>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>4.1.2</version>
     <description>form.plugin.description</description>
     <documentation/>
     <installation/>
