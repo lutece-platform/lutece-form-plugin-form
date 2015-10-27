@@ -48,12 +48,14 @@ import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.business.role.RoleHome;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.rbac.RBACService;
+import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -126,6 +128,8 @@ public class FormEntryJspBean extends ModifyFormJspBean
     private static final String MARK_LIST_PARAM_DEFAULT_VALUES = "list_param_default_values";
     private static final String MARK_FORM = "form";
     private static final String MARK_ENTRY_TYPE_SERVICE = "entryTypeService";
+    private static final String MARK_ROLE_REF_LIST = "role_list";
+    private static final String MARK_IS_AUTHENTIFICATION_ENABLED = "is_authentification_enabled";
 
     // Jsp Definition
     private static final String JSP_DO_REMOVE_FIELD = "jsp/admin/plugins/form/DoRemoveField.jsp";
@@ -150,6 +154,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
     private static final String PARAMETER_DEFAULT_VALUE = "default_value";
     private static final String PARAMETER_NO_DISPLAY_TITLE = "no_display_title";
     private static final String PARAMETER_COMMENT = "comment";
+    private static final String PARAMETER_ROLE_KEY = "role_key";
     private static final String PARAMETER_OPTION_NO_DISPLAY_TITLE = "option_no_display_title";
     private static final String PARAMETER_LIST = "list";
 
@@ -213,6 +218,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
         model.put( MARK_LIST_PARAM_DEFAULT_VALUES, listParamDefaultValues );
         model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
+        model.put( MARK_IS_AUTHENTIFICATION_ENABLED, SecurityService.isAuthenticationEnable(  ) );
 
         if ( entry.getEntryType(  ).getComment(  ) )
         {
@@ -372,6 +378,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
         model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
+        model.put( MARK_IS_AUTHENTIFICATION_ENABLED, SecurityService.isAuthenticationEnable(  ) );
 
         if ( entry.getEntryType(  ).getComment(  ) )
         {
@@ -1448,7 +1455,13 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         model.put( MARK_FIELD, field );
-
+        
+        if ( SecurityService.isAuthenticationEnable(  ) )
+        {
+            model.put( MARK_ROLE_REF_LIST, RoleHome.getRolesList(  ) );
+        }
+        
+        
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_FIELD, locale, model );
         setPageTitleProperty( PROPERTY_CREATE_FIELD_TITLE );
 
@@ -1504,6 +1517,11 @@ public class FormEntryJspBean extends ModifyFormJspBean
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         Locale locale = getLocale(  );
         model.put( MARK_FIELD, field );
+        
+        if ( SecurityService.isAuthenticationEnable(  ) )
+        {
+            model.put( MARK_ROLE_REF_LIST, RoleHome.getRolesList(  ) );
+        }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_FIELD, locale, model );
 
@@ -1733,6 +1751,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         String strDefaultValue = request.getParameter( PARAMETER_DEFAULT_VALUE );
         String strNoDisplayTitle = request.getParameter( PARAMETER_NO_DISPLAY_TITLE );
         String strComment = request.getParameter( PARAMETER_COMMENT );
+        String strRoleKey = request.getParameter( PARAMETER_ROLE_KEY );
 
         String strFieldError = EMPTY_STRING;
 
@@ -1762,6 +1781,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         field.setComment( strComment );
         field.setDefaultValue( strDefaultValue != null );
         field.setNoDisplayTitle( strNoDisplayTitle != null );
+        field.setRoleKey(strRoleKey);
 
         return null; // No error
     }

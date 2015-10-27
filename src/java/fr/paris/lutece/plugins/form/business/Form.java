@@ -51,6 +51,9 @@ import java.util.List;
  */
 public class Form implements AdminWorkgroupResource, RBACResource
 {
+    
+    public static final String ROLE_NONE = "none";
+    
     /**
      * Form resource type
      */

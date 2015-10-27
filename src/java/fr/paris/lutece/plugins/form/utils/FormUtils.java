@@ -728,6 +728,10 @@ public final class FormUtils
         StringBuffer strConditionalQuestionStringBuffer = null;
         HtmlTemplate template;
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
+        
+        if (entry.isRoleAssociated()) {
+            entry.setFields( FormUtils.getAuthorizedFieldsByRole( request, entry.getFields(  ) ) );
+        }
 
         if ( entry.getEntryType(  ).getGroup(  ) )
         {
@@ -1641,5 +1645,32 @@ public final class FormUtils
         }
 
         return strBaseUrl;
+    }
+    
+    
+    /**
+     * Filter a list of field for a given user
+     *
+     * @param listField a list of field
+     * @param request The http request
+     * @return a field list
+     */
+    
+    public static List<Field> getAuthorizedFieldsByRole( HttpServletRequest request, List<Field> listField )
+    {
+        List<Field> listFieldAuthorized = new ArrayList<Field>(  );
+
+        for ( Field field : listField )
+        {
+            // filter by workgroup
+            if ( ( !SecurityService.isAuthenticationEnable(  ) ) || ( field.getRoleKey(  ) == null ) ||
+                    field.getRoleKey(  ).equals( Form.ROLE_NONE ) ||
+                    SecurityService.getInstance(  ).isUserInRole( request, field.getRoleKey(  ) ) )
+            {
+                listFieldAuthorized.add( field );
+            }
+        }
+
+        return listFieldAuthorized;
     }
 }

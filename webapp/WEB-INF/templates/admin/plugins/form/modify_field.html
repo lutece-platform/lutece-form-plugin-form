@@ -18,32 +18,44 @@
             <div class="form-group">
                 <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="default_value">#i18n{form.createField.labelDefaultValue}</label>
                 <#if field.defaultValue>
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<div class="checkbox">
-							<label>
-								<input name="default_value" value="1" type="checkbox" checked="checked">&#160;
-							</label>
-						</div>
+                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                    <div class="checkbox">
+                        <label>
+                            <input name="default_value" value="1" type="checkbox" checked="checked">&#160;
+                        </label>
                     </div>
+                </div>
                 <#else>
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<div class="checkbox">
-							<label>
-								<input name="default_value" value="1" type="checkbox">&#160;
-							</label>
-						</div>
+                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                    <div class="checkbox">
+                        <label>
+                            <input name="default_value" value="1" type="checkbox">&#160;
+                        </label>
                     </div>
+                </div>
                 </#if>
             </div>
+            <#if field.parentEntry.roleAssociated && role_list?exists >
             <div class="form-group">
-				<div class="col-xs-12 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">	
-					<button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
-					<button class="btn btn-default btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
-				</div>
+                <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="role">#i18n{form.createField.labelRole} : </label>
+                <div class="col-xs-12 col-sm-9">
+                    <#if field.roleKey?exists>
+                        <@combo name="role_key" default_value=field.roleKey items=role_list />
+                    <#else>
+                        <@combo name="role_key" default_value="none" items=role_list />
+                    </#if>
+                    <span class="help-text">&nbsp;#i18n{form.createFiled.labelRoleComment}</span>
+                </div>
+            </div>
+            </#if>
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">	
+                    <button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
+                    <button class="btn btn-default btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
+                </div>
             </div>
         </fieldset>
     </form>
 </div>
 
 
- 
