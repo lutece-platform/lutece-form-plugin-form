@@ -36,7 +36,7 @@
 							</#if>
 						</#list>
 					</#if>
-					<#if editModeValue == "" || editModeValue == "suggestPOI" >
+					<#if editModeValue == "" || editModeValue == "SuggestPOI" >
 						<input type="text" class="form-control input-sm" name="${entry.idEntry}_address" id="${entry.idEntry}_address" <#if response.entry.error??>class="error"<#else>class="${entry.CSSClass!}"</#if> value="${response.toStringValueResponse!}">
 					<#else>
 						<input type="hidden" class="form-control input-sm" name="${entry.idEntry}_address" id="${entry.idEntry}_address" value="${response.toStringValueResponse!}">
@@ -54,7 +54,7 @@
 				</#if>
 			</#list>
 		</#if>
-		<#if editModeValue == "" || editModeValue == "suggestPOI" >
+		<#if editModeValue == "" || editModeValue == "SuggestPOI" >
 			<input type="text" class="form-control input-sm" value="" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50">
 		<#else>
 			<input type="hidden" class="form-control input-sm" value="" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50">
