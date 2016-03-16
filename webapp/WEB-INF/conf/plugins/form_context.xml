@@ -74,7 +74,6 @@
 	 <bean id="form.entryTypeDate" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeDate" />
 	 <bean id="form.entryTypeFile" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeFile" />
 	 <bean id="form.entryTypeGeolocation" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGeolocation" />
-	 <bean id="form.entryTypeGeospatial" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGeospatial" />
 	 <bean id="form.entryTypeGroup" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGroup" />
 	 <bean id="form.entryTypeImage" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeImage" />
 	 <bean id="form.entryTypeMandatoryCheckBox" class="fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMandatoryCheckBox" />

@@ -39,8 +39,6 @@ INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_use
 (18,'Tableau',0,0,0,'form.entryTypeArray','form');
 INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
 (19,'Image crp',0,0,0,'form.entryTypeCropImage','form');
-INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES
-(20,'Géospatial',0,0,0,'form.entryTypeGeospatial','form');
 
 -- register entries for the exemple form
 INSERT INTO genatt_entry (id_entry, id_resource, resource_type, id_type, id_parent, title, help_message, comment, mandatory, fields_in_line, pos, id_field_depend, confirm_field, confirm_field_title, field_unique) VALUES (1,1,'FORM_FORM_TYPE',1,2,'Quelle licence préférez vous ?','','',0,0,2,NULL,NULL,NULL,NULL);

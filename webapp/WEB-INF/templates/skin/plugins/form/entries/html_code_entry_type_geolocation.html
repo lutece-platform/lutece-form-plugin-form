@@ -1,10 +1,8 @@
 <#if entry.fields?has_content>
 	<#list entry.fields as field>
 		<#if field.title?has_content>
-			<#if field.title == "X">
-				<#assign xField = field />
-			<#elseif field.title == "Y">
-				<#assign yField = field />
+			<#if field.title == "GEO">
+				<#assign geoField = field />
 			<#elseif field.title == "address">
 				<#assign addressField = field />
 			</#if>
@@ -12,51 +10,91 @@
 	</#list>
 </#if>
 
-	<div class="form-group">
-		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="form${entry.idEntry}_address" id="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
-		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-		<#if list_responses??>
-			<#list list_responses as response>
-				<#if response.entry.idEntry == entry.idEntry && response.toStringValueResponse??>
-					<#if response.field.title == "X">
-						<input type="hidden" name="${entry.idEntry}_x" id="${entry.idEntry}_x" value="${response.toStringValueResponse!}">
-					<#elseif response.field.title == "Y">
-						<input type="hidden" name="${entry.idEntry}_y" id="${entry.idEntry}_y" value="${response.toStringValueResponse!}">
-					<#elseif response.field.title == "idAddress">
-						<input type="hidden" name="${entry.idEntry}_idAddress" id="${entry.idEntry}_idAddress" value="${response.toStringValueResponse!}">
-					<#else>
+<div class="form-group">
+	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="form${entry.idEntry}_address" id="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+	<#if list_responses??>
+		<#list list_responses as response>
+			<#if response.entry.idEntry == entry.idEntry && response.toStringValueResponse??>
+				<#if response.field.title == "idAddress">
+					<input type="hidden" name="${entry.idEntry}_idAddress" id="${entry.idEntry}_idAddress" value="${response.toStringValueResponse!}">
+				<#elseif response.field.title == "X">
+					<input type="hidden" name="${entry.idEntry}_x" id="${entry.idEntry}_x" value="${response.toStringValueResponse!}">
+				<#elseif response.field.title == "Y">
+					<input type="hidden" name="${entry.idEntry}_y" id="${entry.idEntry}_y" value="${response.toStringValueResponse!}">
+				<#elseif response.field.title == "geometry">
+					<input type="hidden" name="${entry.idEntry}_geometry" id="${entry.idEntry}_geometry" value="${response.toStringValueResponse!}">
+				<#elseif response.field.title == "additionalAddress">
+					<input type="hidden" name="${entry.idEntry}_additional_address" id="${entry.idEntry}_additional_address" value="${response.toStringValueResponse!}">
+				<#elseif response.field.title == "address">
+					<#assign editModeValue = "">
+				 	<#if entry.fields?? && entry.fields?has_content>
+						<#list entry.fields as field>
+							<#if field?? && field.title = "editMode">
+								<#assign editModeValue = field.value >
+								<#break>
+							</#if>
+						</#list>
+					</#if>
+					<#if editModeValue == "" || editModeValue == "suggestPOI" >
 						<input type="text" class="form-control input-sm" name="${entry.idEntry}_address" id="${entry.idEntry}_address" <#if response.entry.error??>class="error"<#else>class="${entry.CSSClass!}"</#if> value="${response.toStringValueResponse!}">
+					<#else>
+						<input type="hidden" class="form-control input-sm" name="${entry.idEntry}_address" id="${entry.idEntry}_address" value="${response.toStringValueResponse!}">
 					</#if>
 				</#if>
-			</#list>
-		<#else>
-			<input type="text" class="form-control input-sm" value="" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50">
-			<input type="hidden" name="${entry.idEntry}_x" id="${entry.idEntry}_x" value="">
-			<input type="hidden" name="${entry.idEntry}_y" id="${entry.idEntry}_y" value="">
-			<input type="hidden" name="${entry.idEntry}_idAddress" id="${entry.idEntry}_idAddress" value="">
-		</#if>
-		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-			<span class="help-block">${entry.helpMessage}</span>
-		</#if>
-		
-		<#if list_responses??>
-		<#assign show_error = 0>
-			<#list list_responses as response>
-				<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && show_error == 0 && response.entry.error.isDisplayableError>
-				<#assign show_error = 1>
-					<div class="alert alert-danger">
-						<#assign error = response.entry.error>
-						<#if error.mandatoryError>
-							#i18n{form.message.mandatory.entry}
-						<#else>
-							${error.errorMessage}
-						</#if>
-					</div>
+			</#if>
+		</#list>
+	<#else>
+		<#assign editModeValue = "">
+	 	<#if entry.fields?? && entry.fields?has_content>
+			<#list entry.fields as field>
+				<#if field?? && field.title = "editMode">
+					<#assign editModeValue = field.value >
+					<#break>
 				</#if>
 			</#list>
 		</#if>
-		<#if entry.mapProvider?has_content>
-			<#include entry.mapProvider.htmlCode />
+		<#if editModeValue == "" || editModeValue == "suggestPOI" >
+			<input type="text" class="form-control input-sm" value="" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50">
+		<#else>
+			<input type="hidden" class="form-control input-sm" value="" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50">
 		</#if>
-		</div>
+		<input type="hidden" name="${entry.idEntry}_idAddress" id="${entry.idEntry}_idAddress" value="">
+		<input type="hidden" name="${entry.idEntry}_x" id="${entry.idEntry}_x" value="">
+		<input type="hidden" name="${entry.idEntry}_y" id="${entry.idEntry}_y" value="">
+		<input type="hidden" name="${entry.idEntry}_geometry" id="${entry.idEntry}_geometry" value="">
+		<input type="hidden" name="${entry.idEntry}_additional_address" id="${entry.idEntry}_additional_address" value="">
+	</#if>
+	<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+		<span class="help-block">${entry.helpMessage}</span>
+	</#if>
+	
+	<#if list_responses??>
+	<#assign show_error = 0>
+		<#list list_responses as response>
+			<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && show_error == 0 && response.entry.error.isDisplayableError>
+			<#assign show_error = 1>
+				<div class="alert alert-danger">
+					<#assign error = response.entry.error>
+					<#if error.mandatoryError>
+						#i18n{form.message.mandatory.entry}
+					<#else>
+						${error.errorMessage}
+					</#if>
+				</div>
+			</#if>
+		</#list>
+	</#if>
+	<#if entry.mapProvider?has_content>
+		<#if entry.mapProvider.parameter?? && entry.mapProvider.parameter.mapParameter??>
+			<#assign map_parameter = entry.mapProvider.parameter.mapParameter >
+		</#if>
+		
+		<#if entry.mapProvider.parameter?? && entry.mapProvider.parameter.addressParam?? >
+			<#assign add_parameter = entry.mapProvider.parameter.addressParam >
+		</#if>
+		
+		<#include entry.mapProvider.htmlCode />
+	</#if>
 	</div>
+</div>
