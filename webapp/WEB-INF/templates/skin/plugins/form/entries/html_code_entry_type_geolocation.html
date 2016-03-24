@@ -9,7 +9,15 @@
 		</#if>
 	</#list>
 </#if>
-
+<#assign viewNumberValue = "">
+<#if entry.fields?? && entry.fields?has_content>
+	<#list entry.fields as field>
+		<#if field?? && field.title = "viewNumber">
+			<#assign viewNumberValue = field.value >
+			<#break>
+		</#if>
+	</#list>
+</#if>
 <div class="form-group">
 	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="form${entry.idEntry}_address" id="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -36,7 +44,7 @@
 							</#if>
 						</#list>
 					</#if>
-					<#if editModeValue == "" || editModeValue == "SuggestPOI" >
+					<#if editModeValue == "" || editModeValue == "Address" || editModeValue == "Adresse" >
 						<input type="text" class="form-control input-sm" name="${entry.idEntry}_address" id="${entry.idEntry}_address" <#if response.entry.error??>class="error"<#else>class="${entry.CSSClass!}"</#if> value="${response.toStringValueResponse!}">
 					<#else>
 						<input type="hidden" class="form-control input-sm" name="${entry.idEntry}_address" id="${entry.idEntry}_address" value="${response.toStringValueResponse!}">
@@ -54,7 +62,7 @@
 				</#if>
 			</#list>
 		</#if>
-		<#if editModeValue == "" || editModeValue == "SuggestPOI" >
+		<#if editModeValue == "" || editModeValue == "Address" || editModeValue == "Adresse">
 			<input type="text" class="form-control input-sm" value="" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50">
 		<#else>
 			<input type="hidden" class="form-control input-sm" value="" name="${entry.idEntry}_address" id="${entry.idEntry}_address" size="50">
@@ -86,12 +94,12 @@
 		</#list>
 	</#if>
 	<#if entry.mapProvider?has_content>
-		<#if entry.mapProvider.parameter?? && entry.mapProvider.parameter.mapParameter??>
-			<#assign map_parameter = entry.mapProvider.parameter.mapParameter >
+		<#if entry.mapProvider.getParameter(viewNumberValue?number)?? && entry.mapProvider.getParameter(viewNumberValue?number).mapParameter??>
+			<#assign map_parameter = entry.mapProvider.getParameter(viewNumberValue?number).mapParameter >
 		</#if>
 		
-		<#if entry.mapProvider.parameter?? && entry.mapProvider.parameter.addressParam?? >
-			<#assign add_parameter = entry.mapProvider.parameter.addressParam >
+		<#if entry.mapProvider.getParameter(viewNumberValue?number)?? && entry.mapProvider.getParameter(viewNumberValue?number).addressParam?? >
+			<#assign add_parameter = entry.mapProvider.getParameter(viewNumberValue?number).addressParam >
 		</#if>
 		
 		<#include entry.mapProvider.htmlCode />
