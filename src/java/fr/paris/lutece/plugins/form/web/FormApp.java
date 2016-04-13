@@ -169,6 +169,7 @@ public class FormApp implements XPageApplication
     // Urls
     private static final String JSP_DO_SUBMIT_FORM = "jsp/site/Portal.jsp?page=form&id_form=";
     private static final String JSP_PAGE_FORM = "jsp/site/Portal.jsp?page=form";
+    private static final String MARK_WEBAPP_URL = "webapp_url";
 
     // Misc
     private static final String REGEX_ID = "^[\\d]+$";

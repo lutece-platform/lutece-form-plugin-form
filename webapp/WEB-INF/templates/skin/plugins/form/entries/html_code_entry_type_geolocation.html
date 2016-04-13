@@ -101,7 +101,7 @@
 		<#if entry.mapProvider.getParameter(viewNumberValue?number)?? && entry.mapProvider.getParameter(viewNumberValue?number).addressParam?? >
 			<#assign add_parameter = entry.mapProvider.getParameter(viewNumberValue?number).addressParam >
 		</#if>
-		
+		<input type="hidden" id="webapp_url" name="webapp_url" value="${webapp_url}"/>
 		<#include entry.mapProvider.htmlCode />
 	</#if>
 	</div>

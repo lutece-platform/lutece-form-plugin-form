@@ -79,12 +79,10 @@ import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Month;
 import org.jfree.data.time.TimeSeries;
@@ -93,11 +91,8 @@ import org.jfree.data.time.Week;
 import org.jfree.data.xy.XYDataset;
 
 import java.awt.Color;
-
 import java.sql.Timestamp;
-
 import java.text.DateFormat;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -158,6 +153,7 @@ public final class FormUtils
     private static final String MARK_DRAFT_SUPPORTED = "draft_supported";
     private static final String MARK_USER = "user";
     private static final String MARK_UPLOAD_HANDLER = "uploadHandler";
+    private static final String MARK_WEBAPP_URL = "webapp_url";
 
     // Parameters
     private static final String PARAMETER_ID_ENTRY_TYPE = "id_type";
@@ -641,7 +637,7 @@ public final class FormUtils
         model.put( MARK_URL_ACTION, strUrlAction );
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
         model.put( MARK_LOCALE, locale );
-
+        
         if ( ( request != null ) && ( request.getSession(  ) != null ) )
         {
             if ( request.getSession(  ).getAttribute( SESSION_VALIDATE_REQUIREMENT ) != null )
@@ -824,7 +820,9 @@ public final class FormUtils
             model.put( MARK_UPLOAD_HANDLER,
                 ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler(  ) );
         }
-
+        
+        model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
+        
         template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ),
                 locale, model );
         stringBuffer.append( template.getHtml(  ) );
