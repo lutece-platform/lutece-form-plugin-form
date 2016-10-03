@@ -150,3 +150,8 @@ a.info:hover span {
 	background-color: #FFFFFF;
 	color: #CC2200;
 }
+
+.camera {
+	border: 3px black dashed; 
+	border-radius: 10px;
+}

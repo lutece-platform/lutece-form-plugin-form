@@ -79,10 +79,12 @@ import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Month;
 import org.jfree.data.time.TimeSeries;
@@ -91,8 +93,11 @@ import org.jfree.data.time.Week;
 import org.jfree.data.xy.XYDataset;
 
 import java.awt.Color;
+
 import java.sql.Timestamp;
+
 import java.text.DateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -637,7 +642,7 @@ public final class FormUtils
         model.put( MARK_URL_ACTION, strUrlAction );
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
         model.put( MARK_LOCALE, locale );
-        
+
         if ( ( request != null ) && ( request.getSession(  ) != null ) )
         {
             if ( request.getSession(  ).getAttribute( SESSION_VALIDATE_REQUIREMENT ) != null )
@@ -648,7 +653,7 @@ public final class FormUtils
             }
         }
 
-		LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+        LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
 
         if ( ( user == null ) && SecurityService.isAuthenticationEnable(  ) &&
                 SecurityService.getInstance(  ).isExternalAuthentication(  ) && ( request != null ) )
@@ -664,7 +669,7 @@ public final class FormUtils
         }
 
         model.put( MARK_USER, user );
-		
+
         //Theme management
         /*
          * Theme theme = ThemeHome.findByPrimaryKey("red");
@@ -724,8 +729,9 @@ public final class FormUtils
         StringBuffer strConditionalQuestionStringBuffer = null;
         HtmlTemplate template;
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
-        
-        if (entry.isRoleAssociated()) {
+
+        if ( entry.isRoleAssociated(  ) )
+        {
             entry.setFields( FormUtils.getAuthorizedFieldsByRole( request, entry.getFields(  ) ) );
         }
 
@@ -820,9 +826,9 @@ public final class FormUtils
             model.put( MARK_UPLOAD_HANDLER,
                 ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler(  ) );
         }
-        
+
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        
+
         template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ),
                 locale, model );
         stringBuffer.append( template.getHtml(  ) );
@@ -1644,8 +1650,7 @@ public final class FormUtils
 
         return strBaseUrl;
     }
-    
-    
+
     /**
      * Filter a list of field for a given user
      *
@@ -1653,7 +1658,6 @@ public final class FormUtils
      * @param request The http request
      * @return a field list
      */
-    
     public static List<Field> getAuthorizedFieldsByRole( HttpServletRequest request, List<Field> listField )
     {
         List<Field> listFieldAuthorized = new ArrayList<Field>(  );

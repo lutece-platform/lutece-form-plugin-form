@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2016, Mairie de Paris
+ * Copyright (c) 2002-2014, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,23 +33,23 @@
  */
 package fr.paris.lutece.plugins.form.service.entrytype;
 
-import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeImage;
-import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeCamera;
 import fr.paris.lutece.util.url.UrlItem;
 
 
-public class EntryTypeCropImage extends AbstractEntryTypeImage
+/**
+ *
+ * class EntryTypeCamera
+ *
+ */
+public class EntryTypeCamera extends AbstractEntryTypeCamera
 {
-    /**
-    * Name of the bean of this service
-    */
-    public static final String BEAN_NAME = "form.entryTypeCropImage";
     private static final String JSP_DOWNLOAD_FILE = "jsp/admin/plugins/form/DoDownloadFile.jsp";
-    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_crop_image.html";
-    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_crop_image.html";
-    private static final String TEMPLATE_HTML_CODE = "skin/plugins/form/entries/html_code_entry_type_crop_image.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_camera.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_camera.html";
+    private static final String TEMPLATE_HTML_CODE = "skin/plugins/form/entries/html_code_entry_type_camera.html";
 
     /**
      * {@inheritDoc}
@@ -81,11 +81,6 @@ public class EntryTypeCropImage extends AbstractEntryTypeImage
     /**
      * {@inheritDoc}
      */
-    @Override
-    public AbstractGenAttUploadHandler getAsynchronousUploadHandler(  )
-    {
-        return FormAsynchronousUploadHandler.getHandler(  );
-    }
 
     /**
      * {@inheritDoc}
@@ -99,12 +94,15 @@ public class EntryTypeCropImage extends AbstractEntryTypeImage
         return url.getUrl(  );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected boolean checkForImages(  )
     {
         return true;
+    }
+
+    @Override
+    public IAsyncUploadHandler getAsynchronousUploadHandler(  )
+    {
+        return null;
     }
 }

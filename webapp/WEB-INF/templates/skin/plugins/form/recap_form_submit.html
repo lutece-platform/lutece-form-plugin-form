@@ -13,7 +13,11 @@
 						<#if response.toStringValueResponse?has_content && response.toStringValueResponse?contains("href")>
 						${response.toStringValueResponse}
 						<#else>
-						<input type="text" value="${response.toStringValueResponse}" class="input-sm form-control" disabled title="${response.toStringValueResponse}">
+							<#if response.isImage>
+								<img src="${response.toStringValueResponse}" >
+							<#else>
+								<input type="text" value="${response.toStringValueResponse}" class="input-sm form-control" disabled title="${response.toStringValueResponse}">
+							</#if>
 						</#if>
 					</div>
 				</div>

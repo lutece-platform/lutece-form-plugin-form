@@ -1455,13 +1455,12 @@ public class FormEntryJspBean extends ModifyFormJspBean
         }
 
         model.put( MARK_FIELD, field );
-        
+
         if ( SecurityService.isAuthenticationEnable(  ) )
         {
             model.put( MARK_ROLE_REF_LIST, RoleHome.getRolesList(  ) );
         }
-        
-        
+
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_FIELD, locale, model );
         setPageTitleProperty( PROPERTY_CREATE_FIELD_TITLE );
 
@@ -1517,7 +1516,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         Locale locale = getLocale(  );
         model.put( MARK_FIELD, field );
-        
+
         if ( SecurityService.isAuthenticationEnable(  ) )
         {
             model.put( MARK_ROLE_REF_LIST, RoleHome.getRolesList(  ) );
@@ -1781,7 +1780,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         field.setComment( strComment );
         field.setDefaultValue( strDefaultValue != null );
         field.setNoDisplayTitle( strNoDisplayTitle != null );
-        field.setRoleKey(strRoleKey);
+        field.setRoleKey( strRoleKey );
 
         return null; // No error
     }
