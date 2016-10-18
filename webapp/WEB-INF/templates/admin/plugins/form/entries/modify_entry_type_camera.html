@@ -39,6 +39,22 @@
 					</div>
 				</#list>
 			</div>
+			  <div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="maxImageSize">#i18n{form.createEntry.labelImageType} : </label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<#list entry.fields as field>
+						<select name="image_type">
+						  <#if field.imageType?? && field.imageType="jpeg" >
+							  <option value="png" > png </option> 
+							  <option value="jpeg" selected> jpeg </option>
+						  <#else>
+							  <option value="png" selected> png </option> 
+							  <option value="jpeg" > jpeg </option>
+						  </#if>
+						</select>
+					</#list>
+					</div>
+				</div>
 			<div class="form-group">
 				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">#i18n{form.createEntry.labelMandatory} :</label>
 				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
