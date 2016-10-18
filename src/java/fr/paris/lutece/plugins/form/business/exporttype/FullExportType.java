@@ -40,11 +40,9 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
- * This class represents the export type to export every
- * responses.
+ * This class represents the export type to export every responses.
  *
  */
 public class FullExportType extends AbstractExportType
@@ -55,8 +53,8 @@ public class FullExportType extends AbstractExportType
     @Override
     public ResponseFilter getResponseFilter( Form form, Locale locale )
     {
-        ResponseFilter filter = new ResponseFilter(  );
-        filter.setIdResource( form.getIdForm(  ) );
+        ResponseFilter filter = new ResponseFilter( );
+        filter.setIdResource( form.getIdForm( ) );
 
         return filter;
     }

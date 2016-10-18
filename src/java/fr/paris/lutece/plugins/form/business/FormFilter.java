@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-
 /**
  *
  * class FormFilter
@@ -61,19 +60,18 @@ public class FormFilter
 
     /**
      *
-     * @return 1 if the forms return must be enabled
-     *         0 if the forms return must be disabled
+     * @return 1 if the forms return must be enabled 0 if the forms return must be disabled
      */
-    public int getIdState(  )
+    public int getIdState( )
     {
         return _nIdState;
     }
 
     /**
-     * Set 1 if the forms return must be enabled
-     * 0 if the forms return must be disabled
-     * @param idState 1 if the forms return must be enabled
-     *            0 if the forms return must be disabled
+     * Set 1 if the forms return must be enabled 0 if the forms return must be disabled
+     * 
+     * @param idState
+     *            1 if the forms return must be enabled 0 if the forms return must be disabled
      */
     public void setIdState( int idState )
     {
@@ -84,7 +82,7 @@ public class FormFilter
      *
      * @return true if the filter contain form state
      */
-    public boolean containsIdState(  )
+    public boolean containsIdState( )
     {
         return ( _nIdState != ALL_INT );
     }
@@ -93,14 +91,16 @@ public class FormFilter
      *
      * @return the workgroup of the search forms
      */
-    public String getWorkgroup(  )
+    public String getWorkgroup( )
     {
         return _strWorkgroup;
     }
 
     /**
      * set the workgroup of the search forms
-     * @param workgroup the workgroup of the search forms
+     * 
+     * @param workgroup
+     *            the workgroup of the search forms
      */
     public void setWorkGroup( String workgroup )
     {
@@ -111,15 +111,16 @@ public class FormFilter
      *
      * @return true if the filter contaion workgroup criteria
      */
-    public boolean containsWorkgroupCriteria(  )
+    public boolean containsWorkgroupCriteria( )
     {
         return ( !_strWorkgroup.equals( ALL_STRING ) );
     }
 
     /**
      * set true if the date end availability must be before current date
-     * @param bCurrentDate true if the date end availability must be before
-     *            current date
+     * 
+     * @param bCurrentDate
+     *            true if the date end availability must be before current date
      */
     public void setDateEndDisponibilityBeforeCurrentDate( boolean bCurrentDate )
     {
@@ -130,15 +131,16 @@ public class FormFilter
      *
      * @return true if the date end availability must be before current date
      */
-    public boolean containsDateEndDisponibilityBeforeCurrentDate(  )
+    public boolean containsDateEndDisponibilityBeforeCurrentDate( )
     {
         return _bDateEndDisponibilityBeforeCurrentDate;
     }
 
     /**
      * Set true if the date begin availability must be after current date
-     * @param bDateBeginDisponibilityAfterCurrentDate true if the date begin
-     *            availability must be after current date, false otherwise
+     * 
+     * @param bDateBeginDisponibilityAfterCurrentDate
+     *            true if the date begin availability must be after current date, false otherwise
      */
     public void setDateBeginDisponibilityAfterCurrentDate( boolean bDateBeginDisponibilityAfterCurrentDate )
     {
@@ -149,7 +151,7 @@ public class FormFilter
      *
      * @return true if the date begin availability must be after current date
      */
-    public boolean isDateBeginDisponibilityAfterCurrentDate(  )
+    public boolean isDateBeginDisponibilityAfterCurrentDate( )
     {
         return _bDateBeginDisponibilityAfterCurrentDate;
     }
@@ -158,27 +160,25 @@ public class FormFilter
      *
      * @return true if the date begin disponibility must be after current date
      */
-    public boolean containsDateBeginDisponibilityAfterCurrentDate(  )
+    public boolean containsDateBeginDisponibilityAfterCurrentDate( )
     {
         return _bDateBeginDisponibilityAfterCurrentDate;
     }
 
     /**
      *
-     * @return 1 if the forms return must be in auto publication enabled
-     *         0 if the forms return must be in auto publication disabled
+     * @return 1 if the forms return must be in auto publication enabled 0 if the forms return must be in auto publication disabled
      */
-    public int getIdAutoPublicationState(  )
+    public int getIdAutoPublicationState( )
     {
         return _nIdAutoPublicationState;
     }
 
     /**
-     * Set 1 if the forms return must be in auto publication enabled
-     * 0 if the forms return must be in auto publication disabled
-     * @param idAutoPublicationState 1 if the forms return must be in auto
-     *            publication enabled
-     *            0 if the forms return must be in auto publication disabled
+     * Set 1 if the forms return must be in auto publication enabled 0 if the forms return must be in auto publication disabled
+     * 
+     * @param idAutoPublicationState
+     *            1 if the forms return must be in auto publication enabled 0 if the forms return must be in auto publication disabled
      */
     public void setIdAutoPublicationState( int idAutoPublicationState )
     {
@@ -189,7 +189,7 @@ public class FormFilter
      *
      * @return true if the filter contain form auto publication state
      */
-    public boolean containsIdAutoPublication(  )
+    public boolean containsIdAutoPublication( )
     {
         return ( _nIdAutoPublicationState != ALL_INT );
     }
@@ -198,14 +198,16 @@ public class FormFilter
      *
      * @return the id of the category insert in the filter
      */
-    public int getIdCategory(  )
+    public int getIdCategory( )
     {
         return _nIdCategory;
     }
 
     /**
      * set the id of the category in the filter
-     * @param idCategory the id of the category to insert in the filter
+     * 
+     * @param idCategory
+     *            the id of the category to insert in the filter
      */
     public void setIdCategory( int idCategory )
     {
@@ -216,7 +218,7 @@ public class FormFilter
      *
      * @return true if the filter contain an id of category
      */
-    public boolean containsIdCategory(  )
+    public boolean containsIdCategory( )
     {
         return ( _nIdCategory != ALL_INT );
     }
@@ -224,13 +226,14 @@ public class FormFilter
     /**
      * @return the _strOrder
      */
-    public String getOrder(  )
+    public String getOrder( )
     {
         return this._strOrder;
     }
 
     /**
-     * @param strOrder the _strOrder to set
+     * @param strOrder
+     *            the _strOrder to set
      */
     public void setOrder( String strOrder )
     {
@@ -240,13 +243,14 @@ public class FormFilter
     /**
      * @return the _strAsc
      */
-    public String getAsc(  )
+    public String getAsc( )
     {
         return this._strAsc;
     }
 
     /**
-     * @param strAsc the _strAsc to set
+     * @param strAsc
+     *            the _strAsc to set
      */
     public void setAsc( String strAsc )
     {

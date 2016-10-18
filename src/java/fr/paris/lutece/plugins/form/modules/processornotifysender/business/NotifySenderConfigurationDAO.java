@@ -39,7 +39,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides Data Access methods for NotifySenderConfiguration objects
  */
@@ -60,13 +59,13 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
-        daoUtil.setInt( 1, notifySenderConfiguration.getIdForm(  ) );
-        daoUtil.setInt( 2, notifySenderConfiguration.getIdEntryEmailSender(  ) );
-        daoUtil.setString( 3, notifySenderConfiguration.getMessage(  ) );
-        daoUtil.setBoolean( 4, notifySenderConfiguration.isSendAttachments(  ) );
+        daoUtil.setInt( 1, notifySenderConfiguration.getIdForm( ) );
+        daoUtil.setInt( 2, notifySenderConfiguration.getIdEntryEmailSender( ) );
+        daoUtil.setString( 3, notifySenderConfiguration.getMessage( ) );
+        daoUtil.setBoolean( 4, notifySenderConfiguration.isSendAttachments( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -77,13 +76,13 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nIdForm );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         NotifySenderConfiguration notifySenderConfiguration = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            notifySenderConfiguration = new NotifySenderConfiguration(  );
+            notifySenderConfiguration = new NotifySenderConfiguration( );
 
             notifySenderConfiguration.setIdForm( daoUtil.getInt( 1 ) );
             notifySenderConfiguration.setIdEntryEmailSender( daoUtil.getInt( 2 ) );
@@ -91,7 +90,7 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
             notifySenderConfiguration.setSendAttachments( daoUtil.getBoolean( 4 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return notifySenderConfiguration;
     }
@@ -104,8 +103,8 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nIdForm );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -116,15 +115,15 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setInt( 1, notifySenderConfiguration.getIdForm(  ) );
-        daoUtil.setInt( 2, notifySenderConfiguration.getIdEntryEmailSender(  ) );
-        daoUtil.setString( 3, notifySenderConfiguration.getMessage(  ) );
-        daoUtil.setBoolean( 4, notifySenderConfiguration.isSendAttachments(  ) );
+        daoUtil.setInt( 1, notifySenderConfiguration.getIdForm( ) );
+        daoUtil.setInt( 2, notifySenderConfiguration.getIdEntryEmailSender( ) );
+        daoUtil.setString( 3, notifySenderConfiguration.getMessage( ) );
+        daoUtil.setBoolean( 4, notifySenderConfiguration.isSendAttachments( ) );
 
-        daoUtil.setInt( 5, notifySenderConfiguration.getIdForm(  ) );
+        daoUtil.setInt( 5, notifySenderConfiguration.getIdForm( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -133,14 +132,14 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
     @Override
     public List<NotifySenderConfiguration> selectNotifySenderConfigurationsList( Plugin plugin )
     {
-        List<NotifySenderConfiguration> notifySenderConfigurationList = new ArrayList<NotifySenderConfiguration>(  );
+        List<NotifySenderConfiguration> notifySenderConfigurationList = new ArrayList<NotifySenderConfiguration>( );
         NotifySenderConfiguration notifySenderConfiguration;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            notifySenderConfiguration = new NotifySenderConfiguration(  );
+            notifySenderConfiguration = new NotifySenderConfiguration( );
 
             notifySenderConfiguration.setIdForm( daoUtil.getInt( 1 ) );
             notifySenderConfiguration.setIdEntryEmailSender( daoUtil.getInt( 2 ) );
@@ -150,7 +149,7 @@ public final class NotifySenderConfigurationDAO implements INotifySenderConfigur
             notifySenderConfigurationList.add( notifySenderConfiguration );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return notifySenderConfigurationList;
     }

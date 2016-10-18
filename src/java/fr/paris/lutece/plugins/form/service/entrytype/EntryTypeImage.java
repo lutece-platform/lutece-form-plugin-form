@@ -39,7 +39,6 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntry
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
 import fr.paris.lutece.util.url.UrlItem;
 
-
 /**
  *
  * class EntryTypeImage
@@ -87,9 +86,9 @@ public class EntryTypeImage extends AbstractEntryTypeFile
      * {@inheritDoc}
      */
     @Override
-    public AbstractGenAttUploadHandler getAsynchronousUploadHandler(  )
+    public AbstractGenAttUploadHandler getAsynchronousUploadHandler( )
     {
-        return FormAsynchronousUploadHandler.getHandler(  );
+        return FormAsynchronousUploadHandler.getHandler( );
     }
 
     /**
@@ -101,14 +100,14 @@ public class EntryTypeImage extends AbstractEntryTypeFile
         UrlItem url = new UrlItem( strBaseUrl + JSP_DOWNLOAD_FILE );
         url.addParameter( PARAMETER_ID_RESPONSE, nResponseId );
 
-        return url.getUrl(  );
+        return url.getUrl( );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected boolean checkForImages(  )
+    protected boolean checkForImages( )
     {
         return true;
     }

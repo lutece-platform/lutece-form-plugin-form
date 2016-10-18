@@ -40,7 +40,6 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * IFormDAO Interface
  */
@@ -49,8 +48,10 @@ public interface IFormDAO
     /**
      * Insert a new record in the table.
      *
-     * @param form instance of the Form to insert
-     * @param plugin the plugin
+     * @param form
+     *            instance of the Form to insert
+     * @param plugin
+     *            the plugin
      * @return the id of the new form
      */
     int insert( Form form, Plugin plugin );
@@ -58,87 +59,105 @@ public interface IFormDAO
     /**
      * Update the form in the table
      *
-     * @param form instance of the Form object to update
-     * @param plugin the plugin
+     * @param form
+     *            instance of the Form object to update
+     * @param plugin
+     *            the plugin
      */
     void store( Form form, Plugin plugin );
 
     /**
      * Delete a record from the table
      *
-     * @param nIdForm The identifier of the form
-     * @param plugin the plugin
+     * @param nIdForm
+     *            The identifier of the form
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdForm, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Load the data of the Form from the table
      *
-     * @param nKey The identifier of the form
-     * @param plugin the plugin
+     * @param nKey
+     *            The identifier of the form
+     * @param plugin
+     *            the plugin
      * @return the instance of the Form
      */
     Form load( int nKey, Plugin plugin );
 
     /**
-     * Load the data of all the form who verify the filter and returns them in a
-     * list
-     * @param filter the filter
-     * @param plugin the plugin
+     * Load the data of all the form who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return the list of form
      */
     List<Form> selectFormList( FormFilter filter, Plugin plugin );
 
     /**
      * Load the data of all enable form returns them in a reference list
-     * @param plugin the plugin
+     * 
+     * @param plugin
+     *            the plugin
      * @return a reference list of form
      */
     ReferenceList getEnableFormList( Plugin plugin );
 
     /**
      * Load all the themes for form xpages
-     * @param plugin the plugin
+     * 
+     * @param plugin
+     *            the plugin
      * @return a map containing the themes by form id
      */
     Map<Integer, Theme> getXPageThemesMap( Plugin plugin );
 
     /**
      * Get the list of entries of a form to anonymize
-     * @param nIdForm The id of the form
-     * @param plugin The plugin
-     * @return The list of ids of entries to anonymize, or an empty list if the
-     *         form was not fount or if no entries of this form should be
-     *         anonymized
+     * 
+     * @param nIdForm
+     *            The id of the form
+     * @param plugin
+     *            The plugin
+     * @return The list of ids of entries to anonymize, or an empty list if the form was not fount or if no entries of this form should be anonymized
      */
     List<Integer> getAnonymizeEntryList( int nIdForm, Plugin plugin );
 
     /**
      * Insert an entry in the anonymize entries table
-     * @param nIdForm The id of the form the entry is associated with
-     * @param nIdEntry The id of the entry to anonymize
-     * @param plugin The plugin
+     * 
+     * @param nIdForm
+     *            The id of the form the entry is associated with
+     * @param nIdEntry
+     *            The id of the entry to anonymize
+     * @param plugin
+     *            The plugin
      */
     void insertAnonymizeEntry( int nIdForm, int nIdEntry, Plugin plugin );
 
     /**
      * Remove entries in the anonymize entries table
-     * @param nIdForm The id of the form
-     * @param plugin The plugin
+     * 
+     * @param nIdForm
+     *            The id of the form
+     * @param plugin
+     *            The plugin
      */
     void removeAnonymizeEntry( int nIdForm, Plugin plugin );
 
     /**
-     * Get the list of forms that must be cleaned automatically. Only id,
-     * automatic cleaning and cleaning by removal attributes or form are
-     * fetched.
-     * @param plugin The plugin
-     * @return the list of form, or an empty list if no form was found. Only id,
-     *         automatic cleaning and cleaning by removal attributes or form are
-     *         fetched.
+     * Get the list of forms that must be cleaned automatically. Only id, automatic cleaning and cleaning by removal attributes or form are fetched.
+     * 
+     * @param plugin
+     *            The plugin
+     * @return the list of form, or an empty list if no form was found. Only id, automatic cleaning and cleaning by removal attributes or form are fetched.
      */
     List<Form> getFormListForAutomaticCleaning( Plugin plugin );
 }

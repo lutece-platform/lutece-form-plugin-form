@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.form.business;
 
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
-
 /**
  *
  * class ExportFormat
@@ -51,20 +50,22 @@ public class ExportFormat implements RBACResource
     private String _strTitle;
     private String _strDescription;
     private String _strExtension;
-    private byte[] _xsl;
+    private byte [ ] _xsl;
 
     /**
      *
      * @return the id of the export format
      */
-    public int getIdExport(  )
+    public int getIdExport( )
     {
         return _nIdExport;
     }
 
     /**
      * set the id of the export format
-     * @param idExport the id of the export format
+     * 
+     * @param idExport
+     *            the id of the export format
      */
     public void setIdExport( int idExport )
     {
@@ -75,14 +76,16 @@ public class ExportFormat implements RBACResource
      *
      * @return the description of the export format
      */
-    public String getDescription(  )
+    public String getDescription( )
     {
         return _strDescription;
     }
 
     /**
      * set the description of the export format
-     * @param description the description of the export format
+     * 
+     * @param description
+     *            the description of the export format
      */
     public void setDescription( String description )
     {
@@ -93,14 +96,16 @@ public class ExportFormat implements RBACResource
      *
      * @return the title of the export format
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
      * set the title of the export format
-     * @param title the title of the export format
+     * 
+     * @param title
+     *            the title of the export format
      */
     public void setTitle( String title )
     {
@@ -111,16 +116,18 @@ public class ExportFormat implements RBACResource
      *
      * @return the xsl file of the export format
      */
-    public byte[] getXsl(  )
+    public byte [ ] getXsl( )
     {
         return _xsl;
     }
 
     /**
      * set the xsl file of the export format
-     * @param donnees the xsl file of the export format
+     * 
+     * @param donnees
+     *            the xsl file of the export format
      */
-    public void setXsl( byte[] donnees )
+    public void setXsl( byte [ ] donnees )
     {
         _xsl = donnees;
     }
@@ -129,7 +136,7 @@ public class ExportFormat implements RBACResource
      * {@inheritDoc}
      */
     @Override
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
@@ -138,23 +145,26 @@ public class ExportFormat implements RBACResource
      * {@inheritDoc}
      */
     @Override
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return Integer.toString( _nIdExport );
     }
 
     /**
      * get the extension of the output file generate by the xsl
+     * 
      * @return the extension of the out put file
      */
-    public String getExtension(  )
+    public String getExtension( )
     {
         return _strExtension;
     }
 
     /**
      * set the extension of the output file generate by the xsl
-     * @param extension the extension of the out put file
+     * 
+     * @param extension
+     *            the extension of the out put file
      */
     public void setExtension( String extension )
     {

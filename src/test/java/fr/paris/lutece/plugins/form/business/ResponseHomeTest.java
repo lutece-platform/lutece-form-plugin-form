@@ -42,7 +42,6 @@ import fr.paris.lutece.test.LuteceTestCase;
 
 import java.util.List;
 
-
 /**
  * Test class for responses
  */
@@ -61,86 +60,86 @@ public class ResponseHomeTest extends LuteceTestCase
     /**
      * Test the creation of a response
      */
-    public void testCreate(  )
+    public void testCreate( )
     {
-        Response response = new Response(  );
+        Response response = new Response( );
 
-        FieldHomeTest fieldHomeTest = new FieldHomeTest(  );
-        fieldHomeTest.testCreate(  );
+        FieldHomeTest fieldHomeTest = new FieldHomeTest( );
+        fieldHomeTest.testCreate( );
 
-        Field field = new Field(  );
+        Field field = new Field( );
         field.setIdField( ID_FIELD_1 );
 
-        EntryHomeTest entryHomeTest = new EntryHomeTest(  );
-        entryHomeTest.testCreate(  );
+        EntryHomeTest entryHomeTest = new EntryHomeTest( );
+        entryHomeTest.testCreate( );
 
-        Entry entry = new Entry(  );
+        Entry entry = new Entry( );
         entry.setIdEntry( ID_ENTRY_1 );
 
-        FormSubmitHomeTest formSubmitTest = new FormSubmitHomeTest(  );
-        formSubmitTest.testCreate(  );
+        FormSubmitHomeTest formSubmitTest = new FormSubmitHomeTest( );
+        formSubmitTest.testCreate( );
 
-        FormSubmit formResponse = new FormSubmit(  );
+        FormSubmit formResponse = new FormSubmit( );
         formResponse.setIdFormSubmit( ID_FORM_RESPONSE_1 );
 
         response.setField( field );
         response.setEntry( entry );
-        //        response.setFormSubmit( formResponse );
+        // response.setFormSubmit( formResponse );
         response.setResponseValue( VALUE_RESPONSE_1 );
 
         ResponseHome.create( response );
 
-        Response responseStored = ResponseHome.findByPrimaryKey( response.getIdResponse(  ) );
+        Response responseStored = ResponseHome.findByPrimaryKey( response.getIdResponse( ) );
 
-        //assertEquals( responseStored.getValueResponse(  ), response.getValueResponse(  ) );
-        assertEquals( responseStored.getField(  ).getIdField(  ), response.getField(  ).getIdField(  ) );
-        assertEquals( responseStored.getEntry(  ).getIdEntry(  ), response.getEntry(  ).getIdEntry(  ) );
+        // assertEquals( responseStored.getValueResponse( ), response.getValueResponse( ) );
+        assertEquals( responseStored.getField( ).getIdField( ), response.getField( ).getIdField( ) );
+        assertEquals( responseStored.getEntry( ).getIdEntry( ), response.getEntry( ).getIdEntry( ) );
 
-        //        assertEquals( responseStored.getFormSubmit(  ).getIdFormSubmit(  ),
-        //            response.getFormSubmit(  ).getIdFormSubmit(  ) );
+        // assertEquals( responseStored.getFormSubmit( ).getIdFormSubmit( ),
+        // response.getFormSubmit( ).getIdFormSubmit( ) );
     }
 
     /**
      * Test the update of a response
      */
-    public void testUpdate(  )
+    public void testUpdate( )
     {
         Response responseLoad = ResponseHome.findByPrimaryKey( ID_RESPONSE_1 );
 
-        Response response = new Response(  );
+        Response response = new Response( );
 
-        response.setIdResponse( responseLoad.getIdResponse(  ) );
+        response.setIdResponse( responseLoad.getIdResponse( ) );
 
-        Field field = new Field(  );
+        Field field = new Field( );
         field.setIdField( ID_FIELD_2 );
 
-        Entry entry = new Entry(  );
+        Entry entry = new Entry( );
         entry.setIdEntry( ID_ENTRY_2 );
 
-        FormSubmit formResponse = new FormSubmit(  );
+        FormSubmit formResponse = new FormSubmit( );
         formResponse.setIdFormSubmit( ID_FORM_RESPONSE_2 );
 
         response.setField( field );
         response.setEntry( entry );
-        //        response.setFormSubmit( formResponse );
+        // response.setFormSubmit( formResponse );
         response.setResponseValue( VALUE_RESPONSE_2 );
 
         ResponseHome.update( response );
 
-        Response responseStored = ResponseHome.findByPrimaryKey( response.getIdResponse(  ) );
+        Response responseStored = ResponseHome.findByPrimaryKey( response.getIdResponse( ) );
 
-        //assertEquals( responseStored.getValueResponse(  ), response.getValueResponse(  ) );
-        assertEquals( responseStored.getField(  ).getIdField(  ), response.getField(  ).getIdField(  ) );
-        assertEquals( responseStored.getEntry(  ).getIdEntry(  ), response.getEntry(  ).getIdEntry(  ) );
+        // assertEquals( responseStored.getValueResponse( ), response.getValueResponse( ) );
+        assertEquals( responseStored.getField( ).getIdField( ), response.getField( ).getIdField( ) );
+        assertEquals( responseStored.getEntry( ).getIdEntry( ), response.getEntry( ).getIdEntry( ) );
 
-        //        assertEquals( responseStored.getFormSubmit( ).getIdFormSubmit( ), response.getFormSubmit( ).getIdFormSubmit( ) );
+        // assertEquals( responseStored.getFormSubmit( ).getIdFormSubmit( ), response.getFormSubmit( ).getIdFormSubmit( ) );
     }
 
-    public void testGetResponseList(  )
+    public void testGetResponseList( )
     {
         List<Response> listResponse = null;
 
-        ResponseFilter responseFilter = new ResponseFilter(  );
+        ResponseFilter responseFilter = new ResponseFilter( );
         responseFilter.setGroupbyMonth( true );
 
         listResponse = ResponseHome.getResponseList( responseFilter );
@@ -151,13 +150,13 @@ public class ResponseHomeTest extends LuteceTestCase
     /**
      * Test the removal of a response
      */
-    public void testRemove(  )
+    public void testRemove( )
     {
         Response responseLoad = ResponseHome.findByPrimaryKey( ID_RESPONSE_1 );
 
-        ResponseHome.remove( responseLoad.getIdResponse(  ) );
+        ResponseHome.remove( responseLoad.getIdResponse( ) );
 
-        Response responseStored = ResponseHome.findByPrimaryKey( responseLoad.getIdResponse(  ) );
+        Response responseStored = ResponseHome.findByPrimaryKey( responseLoad.getIdResponse( ) );
 
         assertNull( responseStored );
     }

@@ -40,7 +40,6 @@ import fr.paris.lutece.portal.service.util.RemovalListener;
 
 import java.util.Locale;
 
-
 /**
  * class DiggWorkgroupRemovalListener
  */
@@ -60,7 +59,7 @@ public class FormRegularExpressionRemovalListener implements RemovalListener
         {
             nIdRegularExpression = Integer.parseInt( strId );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
@@ -79,7 +78,7 @@ public class FormRegularExpressionRemovalListener implements RemovalListener
     @Override
     public String getRemovalRefusedMessage( String strId, Locale locale )
     {
-        // Build a message 
+        // Build a message
         return I18nService.getLocalizedString( PROPERTY_REGULAR_EXPRESSION_CANNOT_BE_REMOVED, locale );
     }
 }

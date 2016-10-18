@@ -33,10 +33,9 @@
  */
 package fr.paris.lutece.plugins.form.business.outputprocessor;
 
-
 /**
  *
- *  class to involve a form to a processor
+ * class to involve a form to a processor
  *
  */
 public class FormProcessor
@@ -48,14 +47,16 @@ public class FormProcessor
      *
      * @return the id of form
      */
-    public int getIdForm(  )
+    public int getIdForm( )
     {
         return _nIdForm;
     }
 
     /**
      * set the id of form
-     * @param idForm The id of the form
+     * 
+     * @param idForm
+     *            The id of the form
      */
     public void setIdForm( int idForm )
     {
@@ -66,14 +67,16 @@ public class FormProcessor
      *
      * @return processor key
      */
-    public String getKeyProcessor(  )
+    public String getKeyProcessor( )
     {
         return _strKeyProcessor;
     }
 
     /**
      * set processor key
-     * @param keyProcessor processor key
+     * 
+     * @param keyProcessor
+     *            processor key
      */
     public void setKeyProcessor( String keyProcessor )
     {

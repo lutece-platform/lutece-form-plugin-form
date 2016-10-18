@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.message.SiteMessageException;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * DraftBackupService for {@link Form}
@@ -48,41 +47,51 @@ import javax.servlet.http.HttpServletRequest;
 public interface DraftBackupService
 {
     /**
-     * Save the draft. Useful when the user save his form but does not submit
-     * it.
-     * @param request The HTTP request
-     * @param form The Form
-     * @throws SiteMessageException If a message must be displayed
+     * Save the draft. Useful when the user save his form but does not submit it.
+     * 
+     * @param request
+     *            The HTTP request
+     * @param form
+     *            The Form
+     * @throws SiteMessageException
+     *             If a message must be displayed
      */
-    void saveDraft( HttpServletRequest request, Form form )
-        throws SiteMessageException;
+    void saveDraft( HttpServletRequest request, Form form ) throws SiteMessageException;
 
     /**
      * Validate a draft. Usefull when the user submitted his form.
-     * @param request The HTTP request
-     * @param form The form
-     * @throws SiteMessageException If a message must be displayed
+     * 
+     * @param request
+     *            The HTTP request
+     * @param form
+     *            The form
+     * @throws SiteMessageException
+     *             If a message must be displayed
      */
-    void validateDraft( HttpServletRequest request, Form form )
-        throws SiteMessageException;
+    void validateDraft( HttpServletRequest request, Form form ) throws SiteMessageException;
 
     /**
      * Pre Process Request
-     * @param request The HTTP request
-     * @param form The form
-     * @return true if the request is processed, false if the process
-     *         should be continued
-     * @throws SiteMessageException if an error occurs
+     * 
+     * @param request
+     *            The HTTP request
+     * @param form
+     *            The form
+     * @return true if the request is processed, false if the process should be continued
+     * @throws SiteMessageException
+     *             if an error occurs
      */
-    boolean preProcessRequest( HttpServletRequest request, Form form )
-        throws SiteMessageException;
+    boolean preProcessRequest( HttpServletRequest request, Form form ) throws SiteMessageException;
 
     /**
      * Saves the draft for the formSubmit
-     * @param request the request
-     * @param formSubmit the formsubmit
-     * @throws SiteMessageException if an error occurs
+     * 
+     * @param request
+     *            the request
+     * @param formSubmit
+     *            the formsubmit
+     * @throws SiteMessageException
+     *             if an error occurs
      */
-    void saveDraft( HttpServletRequest request, FormSubmit formSubmit )
-        throws SiteMessageException;
+    void saveDraft( HttpServletRequest request, FormSubmit formSubmit ) throws SiteMessageException;
 }

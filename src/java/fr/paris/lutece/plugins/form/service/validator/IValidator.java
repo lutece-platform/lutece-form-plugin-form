@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * IValidator
  */
@@ -47,33 +46,43 @@ public interface IValidator
 {
     /**
      * Returns the validator interface
-     * @param request {@link HttpServletRequest}
-     * @param nIdForm the form id
+     * 
+     * @param request
+     *            {@link HttpServletRequest}
+     * @param nIdForm
+     *            the form id
      * @return the validator interface
      */
     String getUI( HttpServletRequest request, int nIdForm );
 
     /**
      * Checks if the validator is associated with the form
-     * @param nIdForm the form id
-     * @return true if the validator is associated with the form, otherwise
-     *         false
+     * 
+     * @param nIdForm
+     *            the form id
+     * @return true if the validator is associated with the form, otherwise false
      */
     boolean isAssociatedWithForm( int nIdForm );
 
     /**
      * Removes the associations with the form
-     * @param nIdForm the form id
+     * 
+     * @param nIdForm
+     *            the form id
      */
     void removeAssociationsWithForm( int nIdForm );
 
     /**
      * Validates the form
-     * @param request {@link HttpServletRequest}
-     * @param formSubmit the form submit
-     * @param plugin the plugin
-     * @throws SiteMessageException If a message needs to be displayed
+     * 
+     * @param request
+     *            {@link HttpServletRequest}
+     * @param formSubmit
+     *            the form submit
+     * @param plugin
+     *            the plugin
+     * @throws SiteMessageException
+     *             If a message needs to be displayed
      */
-    void validateForm( HttpServletRequest request, FormSubmit formSubmit, Plugin plugin )
-        throws SiteMessageException;
+    void validateForm( HttpServletRequest request, FormSubmit formSubmit, Plugin plugin ) throws SiteMessageException;
 }

@@ -38,10 +38,9 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  *
- *class GraphTypeHome
+ * class GraphTypeHome
  *
  */
 public final class GraphTypeHome
@@ -52,15 +51,17 @@ public final class GraphTypeHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private GraphTypeHome(  )
+    private GraphTypeHome( )
     {
     }
 
     /**
-     * Returns an instance of a  GraphType whose identifier is specified in parameter
+     * Returns an instance of a GraphType whose identifier is specified in parameter
      *
-     * @param idKey The entry type primary key
-     * @param plugin the Plugin
+     * @param idKey
+     *            The entry type primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of GraphType
      */
     public static GraphType findByPrimaryKey( int idKey, Plugin plugin )
@@ -69,11 +70,12 @@ public final class GraphTypeHome
     }
 
     /**
-         * Returns a list of all GraphType
-         *
-         * @param plugin the plugin
-         * @return  the list of graphType
-         */
+     * Returns a list of all GraphType
+     *
+     * @param plugin
+     *            the plugin
+     * @return the list of graphType
+     */
     public static List<GraphType> getList( Plugin plugin )
     {
         return _dao.select( plugin );

@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.form.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  * This class provides Data Access methods for ReportingFiche objects
  */
@@ -44,37 +43,36 @@ public final class RecapDAO implements IRecapDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_recap ) FROM form_recap";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_recap,back_url,id_graph_type,recap_message,recap_data," +
-        "graph,graph_three_dimension,graph_legende,graph_value_legende,graph_label" +
-        " FROM form_recap  WHERE id_recap = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO form_recap(id_recap,back_url,id_graph_type,recap_message,recap_data," +
-        "graph,graph_three_dimension,graph_legende,graph_value_legende,graph_label)" + " VALUES(?,?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_recap,back_url,id_graph_type,recap_message,recap_data,"
+            + "graph,graph_three_dimension,graph_legende,graph_value_legende,graph_label" + " FROM form_recap  WHERE id_recap = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO form_recap(id_recap,back_url,id_graph_type,recap_message,recap_data,"
+            + "graph,graph_three_dimension,graph_legende,graph_value_legende,graph_label)" + " VALUES(?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_recap WHERE id_recap = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE  form_recap SET " +
-        "id_recap=?,back_url=?,id_graph_type=?,recap_message=?,recap_data=?," +
-        "graph=?,graph_three_dimension=?,graph_legende=?,graph_value_legende=?,graph_label=? WHERE id_recap= ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE  form_recap SET " + "id_recap=?,back_url=?,id_graph_type=?,recap_message=?,recap_data=?,"
+            + "graph=?,graph_three_dimension=?,graph_legende=?,graph_value_legende=?,graph_label=? WHERE id_recap= ?";
 
     /**
      * Generates a new primary key
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return The new primary key
      */
     public int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey;
 
-        if ( !daoUtil.next(  ) )
+        if ( !daoUtil.next( ) )
         {
             // if the table is empty
             nKey = 1;
         }
 
         nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -88,29 +86,29 @@ public final class RecapDAO implements IRecapDAO
         recap.setIdRecap( newPrimaryKey( plugin ) );
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        daoUtil.setInt( 1, recap.getIdRecap(  ) );
-        daoUtil.setString( 2, recap.getBackUrl(  ) );
+        daoUtil.setInt( 1, recap.getIdRecap( ) );
+        daoUtil.setString( 2, recap.getBackUrl( ) );
 
-        if ( recap.getGraphType(  ) == null )
+        if ( recap.getGraphType( ) == null )
         {
             daoUtil.setIntNull( 3 );
         }
         else
         {
-            daoUtil.setInt( 3, recap.getGraphType(  ).getIdGraphType(  ) );
+            daoUtil.setInt( 3, recap.getGraphType( ).getIdGraphType( ) );
         }
 
-        daoUtil.setString( 4, recap.getRecapMessage(  ) );
-        daoUtil.setBoolean( 5, recap.isRecapData(  ) );
-        daoUtil.setBoolean( 6, recap.isGraph(  ) );
-        daoUtil.setBoolean( 7, recap.isGraphThreeDimension(  ) );
-        daoUtil.setBoolean( 8, recap.isGraphLegende(  ) );
-        daoUtil.setString( 9, recap.getGraphValueLegende(  ) );
-        daoUtil.setBoolean( 10, recap.isGraphLabelValue(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setString( 4, recap.getRecapMessage( ) );
+        daoUtil.setBoolean( 5, recap.isRecapData( ) );
+        daoUtil.setBoolean( 6, recap.isGraph( ) );
+        daoUtil.setBoolean( 7, recap.isGraphThreeDimension( ) );
+        daoUtil.setBoolean( 8, recap.isGraphLegende( ) );
+        daoUtil.setString( 9, recap.getGraphValueLegende( ) );
+        daoUtil.setBoolean( 10, recap.isGraphLabelValue( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
 
-        return recap.getIdRecap(  );
+        return recap.getIdRecap( );
     }
 
     /**
@@ -121,20 +119,20 @@ public final class RecapDAO implements IRecapDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         Recap recap = null;
         GraphType graphType = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            recap = new Recap(  );
+            recap = new Recap( );
             recap.setIdRecap( daoUtil.getInt( 1 ) );
             recap.setBackUrl( daoUtil.getString( 2 ) );
 
             if ( daoUtil.getObject( 3 ) != null )
             {
-                graphType = new GraphType(  );
+                graphType = new GraphType( );
                 graphType.setIdGraphType( daoUtil.getInt( 3 ) );
                 recap.setGraphType( graphType );
             }
@@ -149,7 +147,7 @@ public final class RecapDAO implements IRecapDAO
             recap.setGraphLabelValue( daoUtil.getBoolean( 10 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return recap;
     }
@@ -162,8 +160,8 @@ public final class RecapDAO implements IRecapDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nIdRecap );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -173,27 +171,27 @@ public final class RecapDAO implements IRecapDAO
     public void store( Recap recap, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        daoUtil.setInt( 1, recap.getIdRecap(  ) );
-        daoUtil.setString( 2, recap.getBackUrl(  ) );
+        daoUtil.setInt( 1, recap.getIdRecap( ) );
+        daoUtil.setString( 2, recap.getBackUrl( ) );
 
-        if ( recap.getGraphType(  ) == null )
+        if ( recap.getGraphType( ) == null )
         {
             daoUtil.setIntNull( 3 );
         }
         else
         {
-            daoUtil.setInt( 3, recap.getGraphType(  ).getIdGraphType(  ) );
+            daoUtil.setInt( 3, recap.getGraphType( ).getIdGraphType( ) );
         }
 
-        daoUtil.setString( 4, recap.getRecapMessage(  ) );
-        daoUtil.setBoolean( 5, recap.isRecapData(  ) );
-        daoUtil.setBoolean( 6, recap.isGraph(  ) );
-        daoUtil.setBoolean( 7, recap.isGraphThreeDimension(  ) );
-        daoUtil.setBoolean( 8, recap.isGraphLegende(  ) );
-        daoUtil.setString( 9, recap.getGraphValueLegende(  ) );
-        daoUtil.setBoolean( 10, recap.isGraphLabelValue(  ) );
-        daoUtil.setInt( 11, recap.getIdRecap(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setString( 4, recap.getRecapMessage( ) );
+        daoUtil.setBoolean( 5, recap.isRecapData( ) );
+        daoUtil.setBoolean( 6, recap.isGraph( ) );
+        daoUtil.setBoolean( 7, recap.isGraphThreeDimension( ) );
+        daoUtil.setBoolean( 8, recap.isGraphLegende( ) );
+        daoUtil.setString( 9, recap.getGraphValueLegende( ) );
+        daoUtil.setBoolean( 10, recap.isGraphLabelValue( ) );
+        daoUtil.setInt( 11, recap.getIdRecap( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 }

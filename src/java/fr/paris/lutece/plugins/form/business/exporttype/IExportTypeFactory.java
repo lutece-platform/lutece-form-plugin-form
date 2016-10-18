@@ -38,7 +38,6 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
  * IExportTypeFactory
@@ -48,20 +47,25 @@ public interface IExportTypeFactory
 {
     /**
      * Get the list of export types
+     * 
      * @return a list of {@link IExportType}
      */
-    List<IExportType> getExportTypes(  );
+    List<IExportType> getExportTypes( );
 
     /**
      * Get the export type
-     * @param strKey the key
+     * 
+     * @param strKey
+     *            the key
      * @return a {@link IExportType}
      */
     IExportType getExportType( String strKey );
 
     /**
      * Get the list of export types as {@link ReferenceList}
-     * @param locale the locale
+     * 
+     * @param locale
+     *            the locale
      * @return a {@link ReferenceList}
      */
     ReferenceList getExportTypesAsRefList( Locale locale );

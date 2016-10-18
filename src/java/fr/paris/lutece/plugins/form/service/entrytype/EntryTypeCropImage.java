@@ -39,12 +39,11 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntry
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
 import fr.paris.lutece.util.url.UrlItem;
 
-
 public class EntryTypeCropImage extends AbstractEntryTypeImage
 {
     /**
-    * Name of the bean of this service
-    */
+     * Name of the bean of this service
+     */
     public static final String BEAN_NAME = "form.entryTypeCropImage";
     private static final String JSP_DOWNLOAD_FILE = "jsp/admin/plugins/form/DoDownloadFile.jsp";
     private static final String TEMPLATE_CREATE = "admin/plugins/form/entries/create_entry_type_crop_image.html";
@@ -82,9 +81,9 @@ public class EntryTypeCropImage extends AbstractEntryTypeImage
      * {@inheritDoc}
      */
     @Override
-    public AbstractGenAttUploadHandler getAsynchronousUploadHandler(  )
+    public AbstractGenAttUploadHandler getAsynchronousUploadHandler( )
     {
-        return FormAsynchronousUploadHandler.getHandler(  );
+        return FormAsynchronousUploadHandler.getHandler( );
     }
 
     /**
@@ -96,14 +95,14 @@ public class EntryTypeCropImage extends AbstractEntryTypeImage
         UrlItem url = new UrlItem( strBaseUrl + JSP_DOWNLOAD_FILE );
         url.addParameter( PARAMETER_ID_RESPONSE, nResponseId );
 
-        return url.getUrl(  );
+        return url.getUrl( );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected boolean checkForImages(  )
+    protected boolean checkForImages( )
     {
         return true;
     }

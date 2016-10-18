@@ -47,18 +47,17 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
 /**
  * This class represents business objects ArticlesList Portlet
  */
 public class FormPortlet extends Portlet
 {
-    /////////////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////////
     // Xml Tags
     private static final String TAG_FORM_PORTLET = "form-portlet";
     private static final String TAG_FORM_PORTLET_CONTENT = "form-portlet-content";
 
-    /////////////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////////
     private static final String JSP_DO_SUBMIT_FORM = "jsp/site/Portal.jsp?page=form";
 
     // Constants
@@ -67,47 +66,47 @@ public class FormPortlet extends Portlet
     private int _nStatus;
 
     /**
-     * Sets the identifier of the portlet type to the value specified in the
-     * ArticlesListPortletHome class
+     * Sets the identifier of the portlet type to the value specified in the ArticlesListPortletHome class
      */
-    public FormPortlet(  )
+    public FormPortlet( )
     {
     }
 
     /**
      * Returns the Xml code of the form portlet without XML heading
      *
-     * @param request The HTTP Servlet request
+     * @param request
+     *            The HTTP Servlet request
      * @return the Xml code of the form portlet content
      */
     @Override
     public String getXml( HttpServletRequest request )
     {
-        Plugin plugin = PluginService.getPlugin( this.getPluginName(  ) );
+        Plugin plugin = PluginService.getPlugin( this.getPluginName( ) );
         Locale locale;
 
         if ( request != null )
         {
-            locale = request.getLocale(  );
+            locale = request.getLocale( );
         }
         else
         {
-            locale = Locale.getDefault(  );
+            locale = Locale.getDefault( );
         }
 
-        StringBuffer strXml = new StringBuffer(  );
+        StringBuffer strXml = new StringBuffer( );
         XmlUtil.beginElement( strXml, TAG_FORM_PORTLET );
 
-        Form form = FormPortletHome.getFormByPortletId( getId(  ), plugin );
+        Form form = FormPortletHome.getFormByPortletId( getId( ), plugin );
 
-        if ( form.isActive(  ) && ( request != null ) )
+        if ( form.isActive( ) && ( request != null ) )
         {
             String strUrlAction = JSP_DO_SUBMIT_FORM;
 
-            if ( form.isSupportHTTPS(  ) && AppHTTPSService.isHTTPSSupportEnabled(  ) )
+            if ( form.isSupportHTTPS( ) && AppHTTPSService.isHTTPSSupportEnabled( ) )
             {
                 // put real base url in session
-                HttpSession session = request.getSession(  );
+                HttpSession session = request.getSession( );
 
                 if ( session != null )
                 {
@@ -117,12 +116,11 @@ public class FormPortlet extends Portlet
                 strUrlAction = AppHTTPSService.getHTTPSUrl( request ) + strUrlAction;
             }
 
-            XmlUtil.addElementHtml( strXml, TAG_FORM_PORTLET_CONTENT,
-                FormUtils.getHtmlForm( form, strUrlAction, locale, true ) );
+            XmlUtil.addElementHtml( strXml, TAG_FORM_PORTLET_CONTENT, FormUtils.getHtmlForm( form, strUrlAction, locale, true ) );
         }
         else
         {
-            XmlUtil.addElementHtml( strXml, TAG_FORM_PORTLET_CONTENT, form.getUnavailabilityMessage(  ) );
+            XmlUtil.addElementHtml( strXml, TAG_FORM_PORTLET_CONTENT, form.getUnavailabilityMessage( ) );
         }
 
         XmlUtil.endElement( strXml, TAG_FORM_PORTLET );
@@ -135,30 +133,31 @@ public class FormPortlet extends Portlet
     /**
      * Returns the Xml code of the form portlet with XML heading
      *
-     * @param request The HTTP Servlet Request
+     * @param request
+     *            The HTTP Servlet Request
      * @return the Xml code of the Articles List portlet
      */
     @Override
     public String getXmlDocument( HttpServletRequest request )
     {
-        return XmlUtil.getXmlHeader(  ) + getXml( request );
+        return XmlUtil.getXmlHeader( ) + getXml( request );
     }
 
     /**
      * Updates the current instance of the form portlet object
      */
-    public void update(  )
+    public void update( )
     {
-        FormPortletHome.getInstance(  ).update( this );
+        FormPortletHome.getInstance( ).update( this );
     }
 
     /**
      * Removes the current instance of the the form portlet object
      */
     @Override
-    public void remove(  )
+    public void remove( )
     {
-        FormPortletHome.getInstance(  ).remove( this );
+        FormPortletHome.getInstance( ).remove( this );
     }
 
     /**
@@ -166,7 +165,7 @@ public class FormPortlet extends Portlet
      *
      * @return The nPortletId
      */
-    public int getPortletId(  )
+    public int getPortletId( )
     {
         return _nPortletId;
     }
@@ -174,7 +173,8 @@ public class FormPortlet extends Portlet
     /**
      * Sets the IdPortlet
      *
-     * @param nPortletId The nPortletId
+     * @param nPortletId
+     *            The nPortletId
      */
     public void setPortletId( int nPortletId )
     {
@@ -186,7 +186,7 @@ public class FormPortlet extends Portlet
      *
      * @return The FormId
      */
-    public int getFormId(  )
+    public int getFormId( )
     {
         return _nFormId;
     }
@@ -194,7 +194,8 @@ public class FormPortlet extends Portlet
     /**
      * Sets the FormId
      *
-     * @param nFormId The nFormId
+     * @param nFormId
+     *            The nFormId
      */
     public void setFormId( int nFormId )
     {
@@ -207,7 +208,7 @@ public class FormPortlet extends Portlet
      * @return The Status
      */
     @Override
-    public int getStatus(  )
+    public int getStatus( )
     {
         return _nStatus;
     }
@@ -215,7 +216,8 @@ public class FormPortlet extends Portlet
     /**
      * Sets the Status
      *
-     * @param nStatus The Status
+     * @param nStatus
+     *            The Status
      */
     @Override
     public void setStatus( int nStatus )

@@ -38,10 +38,9 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  *
- *class category Home
+ * class category Home
  *
  */
 public final class CategoryHome
@@ -52,16 +51,18 @@ public final class CategoryHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private CategoryHome(  )
+    private CategoryHome( )
     {
     }
 
     /**
-     * Creation of an instance of  category
+     * Creation of an instance of category
      *
-     * @param category The instance of the Category which contains the informations to store
-     * @param plugin the Plugin
-      */
+     * @param category
+     *            The instance of the Category which contains the informations to store
+     * @param plugin
+     *            the Plugin
+     */
     public static void create( Category category, Plugin plugin )
     {
         _dao.insert( category, plugin );
@@ -70,8 +71,10 @@ public final class CategoryHome
     /**
      * Update of the category which is specified in parameter
      *
-     * @param category The instance of the Category which contains the informations to update
-     * @param plugin the Plugin
+     * @param category
+     *            The instance of the Category which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void update( Category category, Plugin plugin )
@@ -82,8 +85,10 @@ public final class CategoryHome
     /**
      * Remove the category whose identifier is specified in parameter
      *
-     * @param nIdCategory The category Id
-     * @param plugin the Plugin
+     * @param nIdCategory
+     *            The category Id
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdCategory, Plugin plugin )
     {
@@ -93,8 +98,10 @@ public final class CategoryHome
     /**
      * Returns an instance of a category whose identifier is specified in parameter
      *
-     * @param idKey The category primary key
-     * @param plugin the Plugin
+     * @param idKey
+     *            The category primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of category
      */
     public static Category findByPrimaryKey( int idKey, Plugin plugin )
@@ -103,20 +110,24 @@ public final class CategoryHome
     }
 
     /**
-        * Returns a list of all category
-        *
-        * @param plugin the plugin
-        * @return  the list of category
-        */
+     * Returns a list of all category
+     *
+     * @param plugin
+     *            the plugin
+     * @return the list of category
+     */
     public static List<Category> getList( Plugin plugin )
     {
         return _dao.select( plugin );
     }
 
     /**
-     * true if there is a  form associate to the category
-     * @param nIdCategory the key of the category
-     * @param plugin the plugin
+     * true if there is a form associate to the category
+     * 
+     * @param nIdCategory
+     *            the key of the category
+     * @param plugin
+     *            the plugin
      * @return true if there is a form associate to the category
      */
     public static boolean isAssociateToForm( int nIdCategory, Plugin plugin )

@@ -112,7 +112,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
 /**
  * Utility class for plugin Form
  */
@@ -170,7 +169,7 @@ public final class FormUtils
     private static final String CONSTANT_WHERE = " WHERE ";
     private static final String CONSTANT_AND = " AND ";
 
-    //	 Xml Tags
+    // Xml Tags
     private static final String TAG_FORM = "form";
     private static final String TAG_FORM_TITLE = "form-title";
     private static final String TAG_FORM_SUBMIT = "submit";
@@ -189,13 +188,13 @@ public final class FormUtils
     private static final String TAG_FORM_ENTRY_ID = "form-entry-id";
     private static final String TAG_FORM_ENTRY_TITLE = "form-entry-title";
 
-    //TEMPLATE
+    // TEMPLATE
     private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "skin/plugins/form/html_code_div_conditional_entry.html";
     private static final String TEMPLATE_HTML_CODE_FORM = "skin/plugins/form/html_code_form.html";
     private static final String TEMPLATE_NOTIFICATION_MAIL_END_DISPONIBILITY = "admin/plugins/form/notification_mail_end_disponibility.html";
     private static final String TEMPLATE_NOTIFICATION_MAIL_FORM_SUBMIT = "admin/plugins/form/notification_mail_form_submit.html";
 
-    //property
+    // property
     private static final String PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SUBJECT = "form.notificationMailEndDisponibility.subject";
     private static final String PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SENDER_NAME = "form.notificationMailEndDisponibility.senderName";
     private static final String PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SUBJECT = "form.notificationMailFormSubmit.subject";
@@ -210,28 +209,28 @@ public final class FormUtils
      * FormUtils
      *
      */
-    private FormUtils(  )
+    private FormUtils( )
     {
     }
 
     /**
-     * Send a mail of end of availability to the mailing list associate with
-     * the form
-     * @param form the form
-     * @param locale the locale
+     * Send a mail of end of availability to the mailing list associate with the form
+     * 
+     * @param form
+     *            the form
+     * @param locale
+     *            the locale
      */
     public static void sendNotificationMailEndDisponibility( Form form, Locale locale )
     {
         try
         {
-            String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SUBJECT,
-                    locale );
-            String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SENDER_NAME,
-                    locale );
-            String strSenderEmail = MailService.getNoReplyEmail(  );
+            String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SUBJECT, locale );
+            String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SENDER_NAME, locale );
+            String strSenderEmail = MailService.getNoReplyEmail( );
 
-            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList(  ) );
-            Map<String, Object> model = new HashMap<String, Object>(  );
+            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList( ) );
+            Map<String, Object> model = new HashMap<String, Object>( );
             model.put( MARK_FORM, form );
 
             HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_MAIL_END_DISPONIBILITY, locale, model );
@@ -240,48 +239,49 @@ public final class FormUtils
             for ( Recipient recipient : listRecipients )
             {
                 // Build the mail message
-                MailService.sendMailHtml( recipient.getEmail(  ), strSenderName, strSenderEmail, strSubject,
-                    t.getHtml(  ) );
+                MailService.sendMailHtml( recipient.getEmail( ), strSenderName, strSenderEmail, strSubject, t.getHtml( ) );
             }
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
-            AppLogService.error( "Error during Notify end disponibilty of form : " + e.getMessage(  ) );
+            AppLogService.error( "Error during Notify end disponibilty of form : " + e.getMessage( ) );
         }
     }
 
     /**
-     * SendMail to the mailing list associate to the form a mail of new form
-     * submit.
-     * It will also display the answers submitted by the user.
-     * @param formSubmit the submit form
-     * @param locale {@link Locale}
+     * SendMail to the mailing list associate to the form a mail of new form submit. It will also display the answers submitted by the user.
+     * 
+     * @param formSubmit
+     *            the submit form
+     * @param locale
+     *            {@link Locale}
      */
     public static void sendNotificationMailFormSubmit( FormSubmit formSubmit, Locale locale )
     {
-        Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( formSubmit.getForm(  )
-                                                                                                .getIdMailingList(  ) );
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( MARK_FORM, formSubmit.getForm(  ) );
+        Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( formSubmit.getForm( ).getIdMailingList( ) );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        model.put( MARK_FORM, formSubmit.getForm( ) );
         model.put( MARK_FORM_SUBMIT, formSubmit );
         sendNotificationMailFormSubmit( model, listRecipients, locale );
     }
 
     /**
      * Send the mail
-     * @param model the model of the template
-     * @param listRecipients the list of recipients
-     * @param locale {@link Locale}
+     * 
+     * @param model
+     *            the model of the template
+     * @param listRecipients
+     *            the list of recipients
+     * @param locale
+     *            {@link Locale}
      */
-    private static void sendNotificationMailFormSubmit( Map<String, Object> model,
-        Collection<Recipient> listRecipients, Locale locale )
+    private static void sendNotificationMailFormSubmit( Map<String, Object> model, Collection<Recipient> listRecipients, Locale locale )
     {
         try
         {
             String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SUBJECT, locale );
-            String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SENDER_NAME,
-                    locale );
-            String strSenderEmail = MailService.getNoReplyEmail(  );
+            String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SENDER_NAME, locale );
+            String strSenderEmail = MailService.getNoReplyEmail( );
 
             HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_MAIL_FORM_SUBMIT, locale, model );
 
@@ -289,23 +289,23 @@ public final class FormUtils
             for ( Recipient recipient : listRecipients )
             {
                 // Build the mail message
-                MailService.sendMailHtml( recipient.getEmail(  ), strSenderName, strSenderEmail, strSubject,
-                    t.getHtml(  ) );
+                MailService.sendMailHtml( recipient.getEmail( ), strSenderName, strSenderEmail, strSubject, t.getHtml( ) );
             }
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
-            AppLogService.error( "Error during Notify a new form submit" + e.getMessage(  ) );
+            AppLogService.error( "Error during Notify a new form submit" + e.getMessage( ) );
         }
     }
 
     /**
-     * Return a timestamp Object which correspond with the string specified in
-     * parameter.
-     * @param date the date who must convert
-     * @param locale the locale
-     * @return a timestamp Object which correspond with the string specified in
-     *         parameter.
+     * Return a timestamp Object which correspond with the string specified in parameter.
+     * 
+     * @param date
+     *            the date who must convert
+     * @param locale
+     *            the locale
+     * @return a timestamp Object which correspond with the string specified in parameter.
      */
     public static Timestamp getDateLastMinute( Date date, Locale locale )
     {
@@ -314,25 +314,26 @@ public final class FormUtils
             return null;
         }
 
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.set( Calendar.MILLISECOND, 0 );
         caldate.set( Calendar.SECOND, 0 );
         caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMaximum( Calendar.HOUR_OF_DAY ) );
         caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp;
     }
 
     /**
-     * Return a timestamp Object which correspond with the string specified in
-     * parameter.
-     * @param date the date who must convert
-     * @param locale the locale
-     * @return a timestamp Object which correspond with the string specified in
-     *         parameter.
+     * Return a timestamp Object which correspond with the string specified in parameter.
+     * 
+     * @param date
+     *            the date who must convert
+     * @param locale
+     *            the locale
+     * @return a timestamp Object which correspond with the string specified in parameter.
      */
     public static Timestamp getDateFirstMinute( Date date, Locale locale )
     {
@@ -341,26 +342,28 @@ public final class FormUtils
             return null;
         }
 
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.set( Calendar.MILLISECOND, 0 );
         caldate.set( Calendar.SECOND, 0 );
         caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMinimum( Calendar.HOUR_OF_DAY ) );
         caldate.set( Calendar.MINUTE, caldate.getActualMinimum( Calendar.MINUTE ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp;
     }
 
     /**
      * Return the day of the timestamp in parameter
-     * @param timestamp date
+     * 
+     * @param timestamp
+     *            date
      * @return the day of the timestamp in parameter
      */
     public static int getDay( Timestamp timestamp )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( timestamp );
 
         return caldate.get( Calendar.DAY_OF_MONTH );
@@ -368,12 +371,14 @@ public final class FormUtils
 
     /**
      * Return the week of the timestamp in parameter
-     * @param timestamp date
+     * 
+     * @param timestamp
+     *            date
      * @return the week of the timestamp in parameter
      */
     public static int getWeek( Timestamp timestamp )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( timestamp );
 
         return caldate.get( Calendar.WEEK_OF_YEAR );
@@ -381,12 +386,14 @@ public final class FormUtils
 
     /**
      * Return the month of the timestamp in parameter
-     * @param timestamp date
+     * 
+     * @param timestamp
+     *            date
      * @return the month of the timestamp in parameter
      */
     public static int getMonth( Timestamp timestamp )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( timestamp );
 
         return caldate.get( Calendar.MONTH );
@@ -394,27 +401,29 @@ public final class FormUtils
 
     /**
      * Return the year of the timestamp in parameter
-     * @param timestamp date
+     * 
+     * @param timestamp
+     *            date
      * @return the year of the timestamp in parameter
      */
     public static int getYear( Timestamp timestamp )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( timestamp );
 
         return caldate.get( Calendar.YEAR );
     }
 
     /**
-     * Return a timestamp Object which correspond to the timestamp
-     * in parameter add with a number of times unit (day,week,month)specify in
-     * strTimesUnit .
-     * @param timestamp date
-     * @param strTimesUnit (day,week,month)
-     * @param nDecal the number of timesUnit
-     * @return a timestamp Object which correspond with the string specified in
-     *         parameter
-     *         add with a number of times unit (day,week,month)specify in
+     * Return a timestamp Object which correspond to the timestamp in parameter add with a number of times unit (day,week,month)specify in strTimesUnit .
+     * 
+     * @param timestamp
+     *            date
+     * @param strTimesUnit
+     *            (day,week,month)
+     * @param nDecal
+     *            the number of timesUnit
+     * @return a timestamp Object which correspond with the string specified in parameter add with a number of times unit (day,week,month)specify in
      *         strTimesUnit.
      */
     public static Timestamp addStatisticInterval( Timestamp timestamp, String strTimesUnit, int nDecal )
@@ -425,12 +434,13 @@ public final class FormUtils
         {
             nTimesUnit = Calendar.WEEK_OF_MONTH;
         }
-        else if ( strTimesUnit.equals( FormUtils.CONSTANT_GROUP_BY_MONTH ) )
-        {
-            nTimesUnit = Calendar.MONTH;
-        }
+        else
+            if ( strTimesUnit.equals( FormUtils.CONSTANT_GROUP_BY_MONTH ) )
+            {
+                nTimesUnit = Calendar.MONTH;
+            }
 
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( timestamp );
         caldate.set( Calendar.MILLISECOND, 0 );
         caldate.set( Calendar.SECOND, 0 );
@@ -438,57 +448,59 @@ public final class FormUtils
         caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
         caldate.add( nTimesUnit, nDecal );
 
-        Timestamp timeStamp1 = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp1 = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp1;
     }
 
     /**
-     * Compare two timestamps and return true if they have the same times
-     * unit(Day,week,month)
-     * @param timestamp1 timestamp1
-     * @param timestamp2 timestamp2
-     * @param strTimesUnit (day,week,month)
-     * @return Compare two timestamp and return true if they have the same times
-     *         unit(Day,week,month)
+     * Compare two timestamps and return true if they have the same times unit(Day,week,month)
+     * 
+     * @param timestamp1
+     *            timestamp1
+     * @param timestamp2
+     *            timestamp2
+     * @param strTimesUnit
+     *            (day,week,month)
+     * @return Compare two timestamp and return true if they have the same times unit(Day,week,month)
      */
     public static boolean sameDate( Timestamp timestamp1, Timestamp timestamp2, String strTimesUnit )
     {
-        Calendar caldate1 = new GregorianCalendar(  );
+        Calendar caldate1 = new GregorianCalendar( );
         caldate1.setTime( timestamp1 );
 
-        Calendar caldate2 = new GregorianCalendar(  );
+        Calendar caldate2 = new GregorianCalendar( );
         caldate2.setTime( timestamp2 );
 
-        if ( strTimesUnit.equals( CONSTANT_GROUP_BY_DAY ) &&
-                ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) ) &&
-                ( caldate1.get( Calendar.DAY_OF_YEAR ) == caldate2.get( Calendar.DAY_OF_YEAR ) ) )
+        if ( strTimesUnit.equals( CONSTANT_GROUP_BY_DAY ) && ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) )
+                && ( caldate1.get( Calendar.DAY_OF_YEAR ) == caldate2.get( Calendar.DAY_OF_YEAR ) ) )
         {
             return true;
         }
-        else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_WEEK ) &&
-                ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) ) &&
-                ( caldate1.get( Calendar.WEEK_OF_YEAR ) == caldate2.get( Calendar.WEEK_OF_YEAR ) ) )
-        {
-            return true;
-        }
-        else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_MONTH ) &&
-                ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) ) &&
-                ( caldate1.get( Calendar.MONTH ) == caldate2.get( Calendar.MONTH ) ) )
-        {
-            return true;
-        }
+        else
+            if ( strTimesUnit.equals( CONSTANT_GROUP_BY_WEEK ) && ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) )
+                    && ( caldate1.get( Calendar.WEEK_OF_YEAR ) == caldate2.get( Calendar.WEEK_OF_YEAR ) ) )
+            {
+                return true;
+            }
+            else
+                if ( strTimesUnit.equals( CONSTANT_GROUP_BY_MONTH ) && ( caldate1.get( Calendar.YEAR ) == caldate2.get( Calendar.YEAR ) )
+                        && ( caldate1.get( Calendar.MONTH ) == caldate2.get( Calendar.MONTH ) ) )
+                {
+                    return true;
+                }
 
         return false;
     }
 
     /**
-     * Converts a java.sql.Timestamp date in a String date in a "jj/mm/aaaa"
-     * format
-     * @param date java.sql.Timestamp date to convert
-     * @param locale the locale
-     * @return strDate The String date in the short locale format or the empty
-     *         String if the date is null
+     * Converts a java.sql.Timestamp date in a String date in a "jj/mm/aaaa" format
+     * 
+     * @param date
+     *            java.sql.Timestamp date to convert
+     * @param locale
+     *            the locale
+     * @return strDate The String date in the short locale format or the empty String if the date is null
      * @deprecated Deprecated
      */
     public static String getDateString( Timestamp date, Locale locale )
@@ -500,33 +512,38 @@ public final class FormUtils
 
     /**
      * Return current Timestamp
+     * 
      * @return return current Timestamp
      */
-    public static Timestamp getCurrentTimestamp(  )
+    public static Timestamp getCurrentTimestamp( )
     {
-        return new Timestamp( GregorianCalendar.getInstance(  ).getTimeInMillis(  ) );
+        return new Timestamp( GregorianCalendar.getInstance( ).getTimeInMillis( ) );
     }
 
     /**
      * Return current date without hours, minutes and milliseconds
+     * 
      * @return return current date
      */
-    public static Date getCurrentDate(  )
+    public static Date getCurrentDate( )
     {
-        Calendar cal1 = Calendar.getInstance(  );
-        cal1.setTime( new Date(  ) );
+        Calendar cal1 = Calendar.getInstance( );
+        cal1.setTime( new Date( ) );
         cal1.set( Calendar.HOUR_OF_DAY, 0 );
         cal1.set( Calendar.MINUTE, 0 );
         cal1.set( Calendar.SECOND, 0 );
         cal1.set( Calendar.MILLISECOND, 0 );
 
-        return cal1.getTime(  );
+        return cal1.getTime( );
     }
 
     /**
      * Return an instance of IEntry function of type entry
-     * @param request the request
-     * @param plugin the plugin
+     * 
+     * @param request
+     *            the request
+     * @param plugin
+     *            the plugin
      * @return an instance of IEntry function of type entry
      */
     public static Entry createEntryByType( HttpServletRequest request, Plugin plugin )
@@ -542,7 +559,7 @@ public final class FormUtils
             {
                 nIdType = Integer.parseInt( strIdType );
             }
-            catch ( NumberFormatException ne )
+            catch( NumberFormatException ne )
             {
                 AppLogService.error( ne );
 
@@ -557,19 +574,20 @@ public final class FormUtils
 
         entryType = EntryTypeHome.findByPrimaryKey( nIdType );
 
-        entry = new Entry(  );
+        entry = new Entry( );
         entry.setEntryType( entryType );
 
         return entry;
     }
 
     /**
-     * Return the index in the list of the field whose key is specified in
-     * parameter
-     * @param nIdField the key of the field
-     * @param listField the list of field
-     * @return the index in the list of the field whose key is specified in
-     *         parameter
+     * Return the index in the list of the field whose key is specified in parameter
+     * 
+     * @param nIdField
+     *            the key of the field
+     * @param listField
+     *            the list of field
+     * @return the index in the list of the field whose key is specified in parameter
      */
     public static int getIndexFieldInTheFieldList( int nIdField, List<Field> listField )
     {
@@ -577,7 +595,7 @@ public final class FormUtils
 
         for ( Field field : listField )
         {
-            if ( field.getIdField(  ) == nIdField )
+            if ( field.getIdField( ) == nIdField )
             {
                 return nIndex;
             }
@@ -590,36 +608,40 @@ public final class FormUtils
 
     /**
      * Return the HTML code of the form
-     * @param form the form which HTML code must be return
-     * @param strUrlAction the URL who must be call after the form submit
-     * @param locale the locale
-     * @param bDisplayFront True if the entry will be displayed in Front Office,
-     *            false if it will be displayed in Back Office.
-     * @param request HttpServletRequest
+     * 
+     * @param form
+     *            the form which HTML code must be return
+     * @param strUrlAction
+     *            the URL who must be call after the form submit
+     * @param locale
+     *            the locale
+     * @param bDisplayFront
+     *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office.
+     * @param request
+     *            HttpServletRequest
      * @return the HTML code of the form
      */
-    public static String getHtmlForm( Form form, String strUrlAction, Locale locale, boolean bDisplayFront,
-        HttpServletRequest request )
+    public static String getHtmlForm( Form form, String strUrlAction, Locale locale, boolean bDisplayFront, HttpServletRequest request )
     {
         List<Entry> listEntryFirstLevel;
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         HtmlTemplate template;
         EntryFilter filter;
-        StringBuffer strBuffer = new StringBuffer(  );
-        filter = new EntryFilter(  );
-        filter.setIdResource( form.getIdForm(  ) );
+        StringBuffer strBuffer = new StringBuffer( );
+        filter = new EntryFilter( );
+        filter.setIdResource( form.getIdForm( ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         listEntryFirstLevel = EntryHome.getEntryList( filter );
 
-        ArrayList<Category> listCats = new ArrayList<Category>(  );
-        Category category = new Category(  );
+        ArrayList<Category> listCats = new ArrayList<Category>( );
+        Category category = new Category( );
 
         category.setIdCategory( -2 );
         category.setTitle( I18nService.getLocalizedString( PROPERTY_CHOOSE_CATEGORY, locale ) );
 
-        if ( form.getCategory(  ) != null )
+        if ( form.getCategory( ) != null )
         {
             listCats.add( category );
         }
@@ -628,41 +650,39 @@ public final class FormUtils
 
         for ( Entry entry : listEntryFirstLevel )
         {
-            FormUtils.getHtmlEntry( entry.getIdEntry(  ), strBuffer, locale, bDisplayFront, request );
+            FormUtils.getHtmlEntry( entry.getIdEntry( ), strBuffer, locale, bDisplayFront, request );
         }
 
-        if ( form.isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        if ( form.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
         {
-            CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
-            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode(  ) );
+            CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService( );
+            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode( ) );
         }
 
         model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_FORM, form );
         model.put( MARK_URL_ACTION, strUrlAction );
-        model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
+        model.put( MARK_STR_ENTRY, strBuffer.toString( ) );
         model.put( MARK_LOCALE, locale );
 
-        if ( ( request != null ) && ( request.getSession(  ) != null ) )
+        if ( ( request != null ) && ( request.getSession( ) != null ) )
         {
-            if ( request.getSession(  ).getAttribute( SESSION_VALIDATE_REQUIREMENT ) != null )
+            if ( request.getSession( ).getAttribute( SESSION_VALIDATE_REQUIREMENT ) != null )
             {
-                boolean bValidateRequirement = (Boolean) request.getSession(  )
-                                                                .getAttribute( SESSION_VALIDATE_REQUIREMENT );
+                boolean bValidateRequirement = (Boolean) request.getSession( ).getAttribute( SESSION_VALIDATE_REQUIREMENT );
                 model.put( MARK_VALIDATE_REQUIREMENT, bValidateRequirement );
             }
         }
 
-        LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        if ( ( user == null ) && SecurityService.isAuthenticationEnable(  ) &&
-                SecurityService.getInstance(  ).isExternalAuthentication(  ) && ( request != null ) )
+        if ( ( user == null ) && SecurityService.isAuthenticationEnable( ) && SecurityService.getInstance( ).isExternalAuthentication( ) && ( request != null ) )
         {
             try
             {
-                user = SecurityService.getInstance(  ).getRemoteUser( request );
+                user = SecurityService.getInstance( ).getRemoteUser( request );
             }
-            catch ( UserNotSignedException e )
+            catch( UserNotSignedException e )
             {
                 // Nothing to do : lutece user is not mandatory
             }
@@ -670,29 +690,30 @@ public final class FormUtils
 
         model.put( MARK_USER, user );
 
-        //Theme management
+        // Theme management
         /*
-         * Theme theme = ThemeHome.findByPrimaryKey("red");
-         * model.put( MARK_THEME_URL, theme.getPathCss( ) );
+         * Theme theme = ThemeHome.findByPrimaryKey("red"); model.put( MARK_THEME_URL, theme.getPathCss( ) );
          */
-        model.put( MARK_DRAFT_SUPPORTED, FormDraftBackupService.isDraftSupported(  ) );
+        model.put( MARK_DRAFT_SUPPORTED, FormDraftBackupService.isDraftSupported( ) );
         template = AppTemplateService.getTemplate( TEMPLATE_HTML_CODE_FORM, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * Initialize a reference list with the different categories
-     * @param listCategories the list of categories
+     * 
+     * @param listCategories
+     *            the list of categories
      * @return reference list of category
      */
     public static ReferenceList getRefListCategory( List<Category> listCategories )
     {
-        ReferenceList refListCategories = new ReferenceList(  );
+        ReferenceList refListCategories = new ReferenceList( );
 
         for ( Category category : listCategories )
         {
-            refListCategories.addItem( category.getIdCategory(  ), category.getTitle(  ) );
+            refListCategories.addItem( category.getIdCategory( ), category.getTitle( ) );
         }
 
         return refListCategories;
@@ -700,11 +721,15 @@ public final class FormUtils
 
     /**
      * Return the HTML code of the form
-     * @param form the form which HTML code must be return
-     * @param strUrlAction the URL who must be call after the form submit
-     * @param locale the locale
-     * @param bDisplayFront True if the entry will be displayed in Front Office,
-     *            false if it will be displayed in Back Office.
+     * 
+     * @param form
+     *            the form which HTML code must be return
+     * @param strUrlAction
+     *            the URL who must be call after the form submit
+     * @param locale
+     *            the locale
+     * @param bDisplayFront
+     *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office.
      * @return the HTML code of the form
      */
     public static String getHtmlForm( Form form, String strUrlAction, Locale locale, boolean bDisplayFront )
@@ -714,89 +739,89 @@ public final class FormUtils
 
     /**
      * Insert in the string buffer the content of the HTML code of the entry
-     * @param nIdEntry the key of the entry which HTML code must be insert in
-     *            the stringBuffer
-     * @param stringBuffer the buffer which contains the HTML code
-     * @param locale the locale
-     * @param bDisplayFront True if the entry will be displayed in Front Office,
-     *            false if it will be displayed in Back Office.
-     * @param request HttpServletRequest
+     * 
+     * @param nIdEntry
+     *            the key of the entry which HTML code must be insert in the stringBuffer
+     * @param stringBuffer
+     *            the buffer which contains the HTML code
+     * @param locale
+     *            the locale
+     * @param bDisplayFront
+     *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office.
+     * @param request
+     *            HttpServletRequest
      */
-    public static void getHtmlEntry( int nIdEntry, StringBuffer stringBuffer, Locale locale, boolean bDisplayFront,
-        HttpServletRequest request )
+    public static void getHtmlEntry( int nIdEntry, StringBuffer stringBuffer, Locale locale, boolean bDisplayFront, HttpServletRequest request )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         StringBuffer strConditionalQuestionStringBuffer = null;
         HtmlTemplate template;
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        if ( entry.isRoleAssociated(  ) )
+        if ( entry.isRoleAssociated( ) )
         {
-            entry.setFields( FormUtils.getAuthorizedFieldsByRole( request, entry.getFields(  ) ) );
+            entry.setFields( FormUtils.getAuthorizedFieldsByRole( request, entry.getFields( ) ) );
         }
 
-        if ( entry.getEntryType(  ).getGroup(  ) )
+        if ( entry.getEntryType( ).getGroup( ) )
         {
-            StringBuffer strGroupStringBuffer = new StringBuffer(  );
+            StringBuffer strGroupStringBuffer = new StringBuffer( );
 
-            for ( Entry entryChild : entry.getChildren(  ) )
+            for ( Entry entryChild : entry.getChildren( ) )
             {
-                getHtmlEntry( entryChild.getIdEntry(  ), strGroupStringBuffer, locale, bDisplayFront, request );
+                getHtmlEntry( entryChild.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request );
             }
 
-            model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString(  ) );
+            model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
         }
         else
         {
-            if ( entry.getNumberConditionalQuestion(  ) != 0 )
+            if ( entry.getNumberConditionalQuestion( ) != 0 )
             {
-                for ( Field field : entry.getFields(  ) )
+                for ( Field field : entry.getFields( ) )
                 {
-                    field.setConditionalQuestions( FieldHome.findByPrimaryKey( field.getIdField(  ) )
-                                                            .getConditionalQuestions(  ) );
+                    field.setConditionalQuestions( FieldHome.findByPrimaryKey( field.getIdField( ) ).getConditionalQuestions( ) );
                 }
             }
         }
 
-        if ( entry.getNumberConditionalQuestion(  ) != 0 )
+        if ( entry.getNumberConditionalQuestion( ) != 0 )
         {
-            strConditionalQuestionStringBuffer = new StringBuffer(  );
+            strConditionalQuestionStringBuffer = new StringBuffer( );
 
-            for ( Field field : entry.getFields(  ) )
+            for ( Field field : entry.getFields( ) )
             {
-                if ( field.getConditionalQuestions(  ).size(  ) != 0 )
+                if ( field.getConditionalQuestions( ).size( ) != 0 )
                 {
-                    StringBuffer strGroupStringBuffer = new StringBuffer(  );
+                    StringBuffer strGroupStringBuffer = new StringBuffer( );
 
-                    for ( Entry entryConditional : field.getConditionalQuestions(  ) )
+                    for ( Entry entryConditional : field.getConditionalQuestions( ) )
                     {
-                        getHtmlEntry( entryConditional.getIdEntry(  ), strGroupStringBuffer, locale, bDisplayFront,
-                            request );
+                        getHtmlEntry( entryConditional.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request );
                     }
 
-                    model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString(  ) );
+                    model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
                     model.put( MARK_FIELD, field );
                     template = AppTemplateService.getTemplate( TEMPLATE_DIV_CONDITIONAL_ENTRY, locale, model );
-                    strConditionalQuestionStringBuffer.append( template.getHtml(  ) );
+                    strConditionalQuestionStringBuffer.append( template.getHtml( ) );
                 }
             }
 
-            model.put( MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString(  ) );
+            model.put( MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString( ) );
         }
 
         model.put( MARK_ENTRY, entry );
         model.put( MARK_LOCALE, locale );
 
-        LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        if ( ( user == null ) && SecurityService.isAuthenticationEnable(  ) &&
-                SecurityService.getInstance(  ).isExternalAuthentication(  ) && ( request != null ) )
+        if ( ( user == null ) && SecurityService.isAuthenticationEnable( ) && SecurityService.getInstance( ).isExternalAuthentication( ) && ( request != null ) )
         {
             try
             {
-                user = SecurityService.getInstance(  ).getRemoteUser( request );
+                user = SecurityService.getInstance( ).getRemoteUser( request );
             }
-            catch ( UserNotSignedException e )
+            catch( UserNotSignedException e )
             {
                 // Nothing to do : lutece user is not mandatory
             }
@@ -806,11 +831,11 @@ public final class FormUtils
 
         if ( request != null )
         {
-            Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession(  ) );
+            Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession( ) );
 
             if ( listSubmittedResponses != null )
             {
-                List<Response> listResponses = listSubmittedResponses.get( entry.getIdEntry(  ) );
+                List<Response> listResponses = listSubmittedResponses.get( entry.getIdEntry( ) );
 
                 if ( listResponses != null )
                 {
@@ -823,147 +848,152 @@ public final class FormUtils
 
         if ( entryTypeService instanceof AbstractEntryTypeUpload )
         {
-            model.put( MARK_UPLOAD_HANDLER,
-                ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler(  ) );
+            model.put( MARK_UPLOAD_HANDLER, ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler( ) );
         }
 
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
 
-        template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ),
-                locale, model );
-        stringBuffer.append( template.getHtml(  ) );
+        template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ), locale, model );
+        stringBuffer.append( template.getHtml( ) );
     }
 
     /**
-     * Perform in the object formSubmit the responses associates with a entry
-     * specify in parameter.<br />
-     * Return null if there is no error in the response else return a FormError
-     * Object
-     * @param request the request
-     * @param nIdEntry the key of the entry
-     * @param plugin the plugin
-     * @param formSubmit Form Submit Object
-     * @param bResponseNull true if the response create must be null
-     * @param bReturnErrors true if errors must be returned
-     * @param locale the locale
-     * @return null if there is no error in the response else return a FormError
-     *         Object
+     * Perform in the object formSubmit the responses associates with a entry specify in parameter.<br />
+     * Return null if there is no error in the response else return a FormError Object
+     * 
+     * @param request
+     *            the request
+     * @param nIdEntry
+     *            the key of the entry
+     * @param plugin
+     *            the plugin
+     * @param formSubmit
+     *            Form Submit Object
+     * @param bResponseNull
+     *            true if the response create must be null
+     * @param bReturnErrors
+     *            true if errors must be returned
+     * @param locale
+     *            the locale
+     * @return null if there is no error in the response else return a FormError Object
      */
-    public static List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry,
-        Plugin plugin, FormSubmit formSubmit, boolean bResponseNull, boolean bReturnErrors, Locale locale )
+    public static List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin, FormSubmit formSubmit,
+            boolean bResponseNull, boolean bReturnErrors, Locale locale )
     {
-        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>(  );
-        List<Response> listResponse = new ArrayList<Response>(  );
+        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
+        List<Response> listResponse = new ArrayList<Response>( );
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        List<Field> listField = new ArrayList<Field>(  );
+        List<Field> listField = new ArrayList<Field>( );
 
-        for ( Field field : entry.getFields(  ) )
+        for ( Field field : entry.getFields( ) )
         {
-            field = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+            field = FieldHome.findByPrimaryKey( field.getIdField( ) );
             listField.add( field );
         }
 
         entry.setFields( listField );
 
-        if ( entry.getEntryType(  ).getGroup(  ) )
+        if ( entry.getEntryType( ).getGroup( ) )
         {
-            for ( Entry entryChild : entry.getChildren(  ) )
+            for ( Entry entryChild : entry.getChildren( ) )
             {
-                listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry(  ), plugin, formSubmit, false,
-                        bReturnErrors, locale ) );
+                listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry( ), plugin, formSubmit, false, bReturnErrors, locale ) );
             }
         }
-        else if ( !entry.getEntryType(  ).getComment(  ) )
-        {
-            GenericAttributeError formError = null;
-
-            if ( !bResponseNull )
+        else
+            if ( !entry.getEntryType( ).getComment( ) )
             {
-                formError = EntryTypeServiceManager.getEntryTypeService( entry )
-                                                   .getResponseData( entry, request, listResponse, locale );
+                GenericAttributeError formError = null;
 
-                if ( formError != null )
+                if ( !bResponseNull )
                 {
-                    formError.setUrl( getEntryUrl( entry ) );
-                }
-            }
-            else
-            {
-                Response response = new Response(  );
-                response.setEntry( entry );
-                listResponse.add( response );
-            }
+                    formError = EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponse, locale );
 
-            if ( bReturnErrors && ( formError != null ) )
-            {
-                entry.setError( formError );
-                listFormErrors.add( formError );
-            }
-
-            if ( request.getSession(  ) != null )
-            {
-                Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession(  ) );
-
-                if ( listSubmittedResponses != null )
-                {
-                    listSubmittedResponses.put( entry.getIdEntry(  ), listResponse );
-                    restoreResponses( request.getSession(  ), listSubmittedResponses );
-                }
-            }
-
-            formSubmit.getListResponse(  ).addAll( listResponse );
-
-            if ( entry.getNumberConditionalQuestion(  ) != 0 )
-            {
-                for ( Field field : entry.getFields(  ) )
-                {
-                    boolean bIsFieldInResponseList = isFieldInTheResponseList( field.getIdField(  ), listResponse );
-
-                    for ( Entry conditionalEntry : field.getConditionalQuestions(  ) )
+                    if ( formError != null )
                     {
-                        listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry(  ), plugin,
-                                formSubmit, !bIsFieldInResponseList, bReturnErrors, locale ) );
+                        formError.setUrl( getEntryUrl( entry ) );
+                    }
+                }
+                else
+                {
+                    Response response = new Response( );
+                    response.setEntry( entry );
+                    listResponse.add( response );
+                }
+
+                if ( bReturnErrors && ( formError != null ) )
+                {
+                    entry.setError( formError );
+                    listFormErrors.add( formError );
+                }
+
+                if ( request.getSession( ) != null )
+                {
+                    Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession( ) );
+
+                    if ( listSubmittedResponses != null )
+                    {
+                        listSubmittedResponses.put( entry.getIdEntry( ), listResponse );
+                        restoreResponses( request.getSession( ), listSubmittedResponses );
+                    }
+                }
+
+                formSubmit.getListResponse( ).addAll( listResponse );
+
+                if ( entry.getNumberConditionalQuestion( ) != 0 )
+                {
+                    for ( Field field : entry.getFields( ) )
+                    {
+                        boolean bIsFieldInResponseList = isFieldInTheResponseList( field.getIdField( ), listResponse );
+
+                        for ( Entry conditionalEntry : field.getConditionalQuestions( ) )
+                        {
+                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry( ), plugin, formSubmit, !bIsFieldInResponseList,
+                                    bReturnErrors, locale ) );
+                        }
                     }
                 }
             }
-        }
 
         return listFormErrors;
     }
 
     /**
      * Get the url to modify an entry of the form in front office
-     * @param entry the entry
+     * 
+     * @param entry
+     *            the entry
      * @return The url to modify the entry in front office
      */
     public static String getEntryUrl( Entry entry )
     {
-        UrlItem url = new UrlItem( AppPathService.getPortalUrl(  ) );
+        UrlItem url = new UrlItem( AppPathService.getPortalUrl( ) );
         url.addParameter( XPageAppService.PARAM_XPAGE_APP, FormPlugin.PLUGIN_NAME );
 
-        if ( ( entry != null ) && ( entry.getIdResource(  ) > 0 ) )
+        if ( ( entry != null ) && ( entry.getIdResource( ) > 0 ) )
         {
-            url.addParameter( PARAMETER_ID_FORM, entry.getIdResource(  ) );
-            url.setAnchor( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
+            url.addParameter( PARAMETER_ID_FORM, entry.getIdResource( ) );
+            url.setAnchor( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         }
 
-        return url.getUrl(  );
+        return url.getUrl( );
     }
 
     /**
-     * Return true if the field which key is specified in parameter is in the
-     * response list
-     * @param nIdField the id of the field who is search
-     * @param listResponse the list of object Response
-     * @return true if the field which key is specified in parameter is in the
-     *         response list
+     * Return true if the field which key is specified in parameter is in the response list
+     * 
+     * @param nIdField
+     *            the id of the field who is search
+     * @param listResponse
+     *            the list of object Response
+     * @return true if the field which key is specified in parameter is in the response list
      */
     public static Boolean isFieldInTheResponseList( int nIdField, List<Response> listResponse )
     {
         for ( Response response : listResponse )
         {
-            if ( ( response.getField(  ) != null ) && ( response.getField(  ).getIdField(  ) == nIdField ) )
+            if ( ( response.getField( ) != null ) && ( response.getField( ).getIdField( ) == nIdField ) )
             {
                 return true;
             }
@@ -974,29 +1004,34 @@ public final class FormUtils
 
     /**
      * Return the XML of form's response
-     * @param request the request
-     * @param form the form
-     * @param listFormSubmit the form submit list
-     * @param locale the locale
-     * @param plugin the plugin
+     * 
+     * @param request
+     *            the request
+     * @param form
+     *            the form
+     * @param listFormSubmit
+     *            the form submit list
+     * @param locale
+     *            the locale
+     * @param plugin
+     *            the plugin
      * @return the XML of the response of a form
      */
-    public static String getXmlResponses( HttpServletRequest request, Form form, List<FormSubmit> listFormSubmit,
-        Locale locale, Plugin plugin )
+    public static String getXmlResponses( HttpServletRequest request, Form form, List<FormSubmit> listFormSubmit, Locale locale, Plugin plugin )
     {
         // this map stores field in order to not request db multiple time for same field
-        StringBuffer buffer = new StringBuffer(  );
+        StringBuffer buffer = new StringBuffer( );
         XmlUtil.beginElement( buffer, TAG_FORM );
-        XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle(  ) );
+        XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle( ) );
 
         // Build entries list XML
         XmlUtil.beginElement( buffer, TAG_FORM_ENTRIES );
 
-        for ( Entry entry : getAllQuestionList( form.getIdForm(  ), plugin ) )
+        for ( Entry entry : getAllQuestionList( form.getIdForm( ), plugin ) )
         {
             XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
-            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry(  ) );
-            XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle(  ) );
+            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry( ) );
+            XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle( ) );
             XmlUtil.endElement( buffer, TAG_FORM_ENTRY );
         }
 
@@ -1013,34 +1048,39 @@ public final class FormUtils
         XmlUtil.endElement( buffer, TAG_FORM_SUBMITS );
         XmlUtil.endElement( buffer, TAG_FORM );
 
-        return buffer.toString(  );
+        return buffer.toString( );
     }
 
     /**
      * Get the XML responses for a single form submit
-     * @param request the HTTP request
-     * @param form the form
-     * @param formSubmit the form submit
-     * @param locale the locale
-     * @param plugin the plugin
+     * 
+     * @param request
+     *            the HTTP request
+     * @param form
+     *            the form
+     * @param formSubmit
+     *            the form submit
+     * @param locale
+     *            the locale
+     * @param plugin
+     *            the plugin
      * @return the XML
      */
-    public static String getXmlResponses( HttpServletRequest request, Form form, FormSubmit formSubmit, Locale locale,
-        Plugin plugin )
+    public static String getXmlResponses( HttpServletRequest request, Form form, FormSubmit formSubmit, Locale locale, Plugin plugin )
     {
         // this map stores field in order to not request db multiple time for same field
-        StringBuffer buffer = new StringBuffer(  );
+        StringBuffer buffer = new StringBuffer( );
         XmlUtil.beginElement( buffer, TAG_FORM );
-        XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle(  ) );
+        XmlUtil.addElementHtml( buffer, TAG_FORM_TITLE, form.getTitle( ) );
 
         // Build entries list XML
         XmlUtil.beginElement( buffer, TAG_FORM_ENTRIES );
 
-        for ( Entry entry : getAllQuestionList( form.getIdForm(  ), plugin ) )
+        for ( Entry entry : getAllQuestionList( form.getIdForm( ), plugin ) )
         {
             XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
-            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry(  ) );
-            XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle(  ) );
+            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry( ) );
+            XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle( ) );
             XmlUtil.endElement( buffer, TAG_FORM_ENTRY );
         }
 
@@ -1054,29 +1094,34 @@ public final class FormUtils
         XmlUtil.endElement( buffer, TAG_FORM_SUBMITS );
         XmlUtil.endElement( buffer, TAG_FORM );
 
-        return buffer.toString(  );
+        return buffer.toString( );
     }
 
     /**
      * Get the XML responses for the given form submit
-     * @param request the HTTP request
-     * @param buffer the buffer
-     * @param formSubmit the form submit
-     * @param locale the locale
-     * @param plugin the plugin
+     * 
+     * @param request
+     *            the HTTP request
+     * @param buffer
+     *            the buffer
+     * @param formSubmit
+     *            the form submit
+     * @param locale
+     *            the locale
+     * @param plugin
+     *            the plugin
      */
-    private static void getXmlResponse( HttpServletRequest request, StringBuffer buffer, FormSubmit formSubmit,
-        Locale locale, Plugin plugin )
+    private static void getXmlResponse( HttpServletRequest request, StringBuffer buffer, FormSubmit formSubmit, Locale locale, Plugin plugin )
     {
         XmlUtil.beginElement( buffer, TAG_FORM_SUBMIT );
-        XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_ID, formSubmit.getIdFormSubmit(  ) );
+        XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_ID, formSubmit.getIdFormSubmit( ) );
 
-        String strDate = ( locale != null ) ? getDateString( formSubmit.getDateResponse(  ), locale ) : StringUtils.EMPTY;
+        String strDate = ( locale != null ) ? getDateString( formSubmit.getDateResponse( ), locale ) : StringUtils.EMPTY;
         XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_DATE, strDate );
 
-        if ( formSubmit.getIp(  ) != null )
+        if ( formSubmit.getIp( ) != null )
         {
-            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_IP, formSubmit.getIp(  ) );
+            XmlUtil.addElement( buffer, TAG_FORM_SUBMIT_IP, formSubmit.getIp( ) );
         }
         else
         {
@@ -1086,38 +1131,34 @@ public final class FormUtils
         Response responseStore = null;
         XmlUtil.beginElement( buffer, TAG_QUESTIONS );
 
-        if ( ( formSubmit.getListResponse(  ) != null ) && !formSubmit.getListResponse(  ).isEmpty(  ) )
+        if ( ( formSubmit.getListResponse( ) != null ) && !formSubmit.getListResponse( ).isEmpty( ) )
         {
-            for ( Response response : formSubmit.getListResponse(  ) )
+            for ( Response response : formSubmit.getListResponse( ) )
             {
-                if ( response.getField(  ) != null )
+                if ( response.getField( ) != null )
                 {
-                    Field field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ) );
+                    Field field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
                     response.setField( field );
                 }
 
-                if ( ( responseStore != null ) &&
-                        ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) )
+                if ( ( responseStore != null ) && ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) ) )
                 {
                     XmlUtil.endElement( buffer, TAG_RESPONSES );
                     XmlUtil.endElement( buffer, TAG_QUESTION );
                 }
 
-                if ( ( responseStore == null ) ||
-                        ( response.getEntry(  ).getIdEntry(  ) != responseStore.getEntry(  ).getIdEntry(  ) ) )
+                if ( ( responseStore == null ) || ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) ) )
                 {
                     XmlUtil.beginElement( buffer, TAG_QUESTION );
-                    XmlUtil.addElementHtml( buffer, TAG_QUESTION_TITLE, response.getEntry(  ).getTitle(  ) );
-                    XmlUtil.addElement( buffer, TAG_QUESTION_ID, response.getEntry(  ).getIdEntry(  ) );
+                    XmlUtil.addElementHtml( buffer, TAG_QUESTION_TITLE, response.getEntry( ).getTitle( ) );
+                    XmlUtil.addElement( buffer, TAG_QUESTION_ID, response.getEntry( ).getIdEntry( ) );
                     XmlUtil.beginElement( buffer, TAG_RESPONSES );
                 }
 
-                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || ( response.getFile(  ) != null ) )
+                if ( StringUtils.isNotBlank( response.getResponseValue( ) ) || ( response.getFile( ) != null ) )
                 {
-                    XmlUtil.addElementHtml( buffer, TAG_RESPONSE,
-                        EntryTypeServiceManager.getEntryTypeService( response.getEntry(  ) )
-                                               .getResponseValueForExport( response.getEntry(  ), request, response,
-                            locale ) );
+                    XmlUtil.addElementHtml( buffer, TAG_RESPONSE, EntryTypeServiceManager.getEntryTypeService( response.getEntry( ) )
+                            .getResponseValueForExport( response.getEntry( ), request, response, locale ) );
                 }
                 else
                 {
@@ -1137,24 +1178,28 @@ public final class FormUtils
 
     /**
      * Write the HTTP header in the response
-     * @param request the httpServletRequest
-     * @param response the HTTP response
-     * @param strFileName the name of the file who must insert in the response
-     * @param strFileExtension the file extension
+     * 
+     * @param request
+     *            the httpServletRequest
+     * @param response
+     *            the HTTP response
+     * @param strFileName
+     *            the name of the file who must insert in the response
+     * @param strFileExtension
+     *            the file extension
      */
-    public static void addHeaderResponse( HttpServletRequest request, HttpServletResponse response, String strFileName,
-        String strFileExtension )
+    public static void addHeaderResponse( HttpServletRequest request, HttpServletResponse response, String strFileName, String strFileExtension )
     {
         response.setHeader( "Content-Disposition", "attachment ;filename=\"" + strFileName + "\"" );
 
         if ( strFileExtension.equals( "csv" ) )
         {
-            response.setCharacterEncoding( FormParameterService.getService(  ).getExportCSVEncoding(  ) );
+            response.setCharacterEncoding( FormParameterService.getService( ).getExportCSVEncoding( ) );
             response.setContentType( "application/csv" );
         }
         else
         {
-            response.setCharacterEncoding( FormParameterService.getService(  ).getExportXMLEncoding(  ) );
+            response.setCharacterEncoding( FormParameterService.getService( ).getExportXMLEncoding( ) );
 
             String strMimeType = FileSystemUtil.getMIMEType( strFileName );
 
@@ -1175,28 +1220,31 @@ public final class FormUtils
 
     /**
      * Create a JFreeChart Graph function of the statistic form submit
-     * @param listStatistic the list of statistic of form submit
-     * @param strLabelX the label of axis x
-     * @param strLableY the label of axis x
-     * @param strTimesUnit the times unit of axis x(Day,Week,Month)
+     * 
+     * @param listStatistic
+     *            the list of statistic of form submit
+     * @param strLabelX
+     *            the label of axis x
+     * @param strLableY
+     *            the label of axis x
+     * @param strTimesUnit
+     *            the times unit of axis x(Day,Week,Month)
      * @return a JFreeChart Graph function of the statistic form submit
      */
-    public static JFreeChart createXYGraph( List<StatisticFormSubmit> listStatistic, String strLabelX,
-        String strLableY, String strTimesUnit )
+    public static JFreeChart createXYGraph( List<StatisticFormSubmit> listStatistic, String strLabelX, String strLableY, String strTimesUnit )
     {
         XYDataset xyDataset = createDataset( listStatistic, strTimesUnit );
-        JFreeChart jfreechart = ChartFactory.createTimeSeriesChart( StringUtils.EMPTY, strLabelX, strLableY, xyDataset,
-                false, false, false );
+        JFreeChart jfreechart = ChartFactory.createTimeSeriesChart( StringUtils.EMPTY, strLabelX, strLableY, xyDataset, false, false, false );
         jfreechart.setBackgroundPaint( Color.white );
 
-        XYPlot xyplot = jfreechart.getXYPlot(  );
+        XYPlot xyplot = jfreechart.getXYPlot( );
 
         xyplot.setBackgroundPaint( Color.white );
         xyplot.setBackgroundPaint( Color.lightGray );
         xyplot.setDomainGridlinePaint( Color.white );
         xyplot.setRangeGridlinePaint( Color.white );
 
-        XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) xyplot.getRenderer(  );
+        XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) xyplot.getRenderer( );
         renderer.setBaseShapesVisible( true );
         renderer.setSeriesFillPaint( 0, Color.RED );
         renderer.setUseFillPaint( true );
@@ -1206,8 +1254,11 @@ public final class FormUtils
 
     /**
      * Create graph dataset function of the statistic form submit
-     * @param listStatistic the list of statistic of form submit
-     * @param strTimesUnit the times unit of axis x(Day,Week,Month)
+     * 
+     * @param listStatistic
+     *            the list of statistic of form submit
+     * @param strTimesUnit
+     *            the times unit of axis x(Day,Week,Month)
      * @return create graph dataset function of the statistic form submit
      */
     private static XYDataset createDataset( List<StatisticFormSubmit> listStatistic, String strTimesUnit )
@@ -1220,52 +1271,56 @@ public final class FormUtils
 
             for ( StatisticFormSubmit statistic : listStatistic )
             {
-                series.add( new Day( statistic.getStatisticDate(  ) ), statistic.getNumberResponse(  ) );
+                series.add( new Day( statistic.getStatisticDate( ) ), statistic.getNumberResponse( ) );
             }
         }
-        else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_WEEK ) )
-        {
-            series = new TimeSeries( StringUtils.EMPTY, Week.class );
-
-            for ( StatisticFormSubmit statistic : listStatistic )
+        else
+            if ( strTimesUnit.equals( CONSTANT_GROUP_BY_WEEK ) )
             {
-                series.add( new Week( statistic.getStatisticDate(  ) ), statistic.getNumberResponse(  ) );
+                series = new TimeSeries( StringUtils.EMPTY, Week.class );
+
+                for ( StatisticFormSubmit statistic : listStatistic )
+                {
+                    series.add( new Week( statistic.getStatisticDate( ) ), statistic.getNumberResponse( ) );
+                }
             }
-        }
 
-        else if ( strTimesUnit.equals( CONSTANT_GROUP_BY_MONTH ) )
-        {
-            series = new TimeSeries( StringUtils.EMPTY, Month.class );
+            else
+                if ( strTimesUnit.equals( CONSTANT_GROUP_BY_MONTH ) )
+                {
+                    series = new TimeSeries( StringUtils.EMPTY, Month.class );
 
-            for ( StatisticFormSubmit statistic : listStatistic )
-            {
-                series.add( new Month( statistic.getStatisticDate(  ) ), statistic.getNumberResponse(  ) );
-            }
-        }
+                    for ( StatisticFormSubmit statistic : listStatistic )
+                    {
+                        series.add( new Month( statistic.getStatisticDate( ) ), statistic.getNumberResponse( ) );
+                    }
+                }
 
-        TimeSeriesCollection dataset = new TimeSeriesCollection(  );
+        TimeSeriesCollection dataset = new TimeSeriesCollection( );
         dataset.addSeries( series );
 
         return dataset;
     }
 
     /**
-     * Load the data of all form that the user is authorized to see depends
-     * workgroups user
-     * @param plugin the plugin
-     * @param user the current user
+     * Load the data of all form that the user is authorized to see depends workgroups user
+     * 
+     * @param plugin
+     *            the plugin
+     * @param user
+     *            the current user
      * @return a reference list of form
      */
     public static ReferenceList getFormList( Plugin plugin, AdminUser user )
     {
-        List<Form> listForms = FormHome.getFormList( new FormFilter(  ), plugin );
+        List<Form> listForms = FormHome.getFormList( new FormFilter( ), plugin );
         listForms = (List<Form>) AdminWorkgroupService.getAuthorizedCollection( listForms, user );
 
-        ReferenceList refListForms = new ReferenceList(  );
+        ReferenceList refListForms = new ReferenceList( );
 
         for ( Form form : listForms )
         {
-            refListForms.addItem( form.getIdForm(  ), form.getTitle(  ) );
+            refListForms.addItem( form.getIdForm( ), form.getTitle( ) );
         }
 
         return refListForms;
@@ -1273,23 +1328,26 @@ public final class FormUtils
 
     /**
      * Get the ReferenceList associated to all questions
-     * @param nIdForm the id form
-     * @param plugin the {@link Plugin}
+     * 
+     * @param nIdForm
+     *            the id form
+     * @param plugin
+     *            the {@link Plugin}
      * @return a {@link ReferenceList}
      */
     public static ReferenceList getRefListAllQuestions( int nIdForm, Plugin plugin )
     {
-        ReferenceList refListQuestions = new ReferenceList(  );
+        ReferenceList refListQuestions = new ReferenceList( );
 
         for ( Entry entry : getAllQuestionList( nIdForm, plugin ) )
         {
-            if ( entry.getTitle(  ) != null )
+            if ( entry.getTitle( ) != null )
             {
-                refListQuestions.addItem( entry.getIdEntry(  ), entry.getTitle(  ) );
+                refListQuestions.addItem( entry.getIdEntry( ), entry.getTitle( ) );
             }
             else
             {
-                refListQuestions.addItem( entry.getIdEntry(  ), entry.getComment(  ) );
+                refListQuestions.addItem( entry.getIdEntry( ), entry.getComment( ) );
             }
         }
 
@@ -1298,14 +1356,17 @@ public final class FormUtils
 
     /**
      * Return the questions list
-     * @param nIdForm the form id
-     * @param plugin the plugin
+     * 
+     * @param nIdForm
+     *            the form id
+     * @param plugin
+     *            the plugin
      * @return the questions list
      */
     public static List<Entry> getAllQuestionList( int nIdForm, Plugin plugin )
     {
-        List<Entry> listEntry = new ArrayList<Entry>(  );
-        EntryFilter filter = new EntryFilter(  );
+        List<Entry> listEntry = new ArrayList<Entry>( );
+        EntryFilter filter = new EntryFilter( );
         filter.setIdResource( nIdForm );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setIdIsComment( EntryFilter.FILTER_FALSE );
@@ -1314,11 +1375,11 @@ public final class FormUtils
 
         for ( Entry entryFirstLevel : EntryHome.getEntryList( filter ) )
         {
-            if ( entryFirstLevel.getEntryType(  ).getGroup(  ) )
+            if ( entryFirstLevel.getEntryType( ).getGroup( ) )
             {
-                filter = new EntryFilter(  );
+                filter = new EntryFilter( );
                 filter.setIdResource( nIdForm );
-                filter.setIdEntryParent( entryFirstLevel.getIdEntry(  ) );
+                filter.setIdEntryParent( entryFirstLevel.getIdEntry( ) );
                 filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
                 for ( Entry entryChild : EntryHome.getEntryList( filter ) )
@@ -1339,21 +1400,25 @@ public final class FormUtils
 
     /**
      * Add children question of the root entryParent node
-     * @param entryParent the parent entry
-     * @param listEntry the entry list
-     * @param plugin the plugin
+     * 
+     * @param entryParent
+     *            the parent entry
+     * @param listEntry
+     *            the entry list
+     * @param plugin
+     *            the plugin
      */
     private static void addConditionnalsEntry( Entry entryParent, List<Entry> listEntry, Plugin plugin )
     {
-        Entry parent = EntryHome.findByPrimaryKey( entryParent.getIdEntry(  ) );
+        Entry parent = EntryHome.findByPrimaryKey( entryParent.getIdEntry( ) );
 
-        for ( Field field : parent.getFields(  ) )
+        for ( Field field : parent.getFields( ) )
         {
-            field = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+            field = FieldHome.findByPrimaryKey( field.getIdField( ) );
 
-            if ( field.getConditionalQuestions(  ) != null )
+            if ( field.getConditionalQuestions( ) != null )
             {
-                for ( Entry entryConditionnal : field.getConditionalQuestions(  ) )
+                for ( Entry entryConditionnal : field.getConditionalQuestions( ) )
                 {
                     listEntry.add( entryConditionnal );
                     addConditionnalsEntry( entryConditionnal, listEntry, plugin );
@@ -1364,14 +1429,17 @@ public final class FormUtils
 
     /**
      * Return all entries of form
-     * @param nIdForm the form id
-     * @param plugin the plugin
+     * 
+     * @param nIdForm
+     *            the form id
+     * @param plugin
+     *            the plugin
      * @return the all entries of form
      */
     public static List<Entry> getEntriesList( int nIdForm, Plugin plugin )
     {
-        List<Entry> listEntry = new ArrayList<Entry>(  );
-        EntryFilter filter = new EntryFilter(  );
+        List<Entry> listEntry = new ArrayList<Entry>( );
+        EntryFilter filter = new EntryFilter( );
         filter.setIdResource( nIdForm );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
@@ -1379,13 +1447,13 @@ public final class FormUtils
 
         for ( Entry entryFirstLevel : EntryHome.getEntryList( filter ) )
         {
-            if ( entryFirstLevel.getEntryType(  ).getGroup(  ) )
+            if ( entryFirstLevel.getEntryType( ).getGroup( ) )
             {
-                filter = new EntryFilter(  );
+                filter = new EntryFilter( );
                 filter.setIdResource( nIdForm );
-                filter.setIdEntryParent( entryFirstLevel.getIdEntry(  ) );
+                filter.setIdEntryParent( entryFirstLevel.getIdEntry( ) );
 
-                List<Entry> listEntryChild = new ArrayList<Entry>(  );
+                List<Entry> listEntryChild = new ArrayList<Entry>( );
 
                 for ( Entry entryChild : EntryHome.getEntryList( filter ) )
                 {
@@ -1408,16 +1476,20 @@ public final class FormUtils
 
     /**
      * Builds a query with filters placed in parameters
-     * @param strSelect the select of the query
-     * @param listStrFilter the list of filter to add in the query
-     * @param listStrGroupBy the list of group by to add in the query
-     * @param strOrder the order by of the query
+     * 
+     * @param strSelect
+     *            the select of the query
+     * @param listStrFilter
+     *            the list of filter to add in the query
+     * @param listStrGroupBy
+     *            the list of group by to add in the query
+     * @param strOrder
+     *            the order by of the query
      * @return a query
      */
-    public static String buildRequestWithFilter( String strSelect, List<String> listStrFilter,
-        List<String> listStrGroupBy, String strOrder )
+    public static String buildRequestWithFilter( String strSelect, List<String> listStrFilter, List<String> listStrGroupBy, String strOrder )
     {
-        StringBuffer strBuffer = new StringBuffer(  );
+        StringBuffer strBuffer = new StringBuffer( );
         strBuffer.append( strSelect );
 
         int nCount = 0;
@@ -1431,7 +1503,7 @@ public final class FormUtils
 
             strBuffer.append( strFilter );
 
-            if ( nCount != listStrFilter.size(  ) )
+            if ( nCount != listStrFilter.size( ) )
             {
                 strBuffer.append( CONSTANT_AND );
             }
@@ -1450,19 +1522,21 @@ public final class FormUtils
             strBuffer.append( strOrder );
         }
 
-        return strBuffer.toString(  );
+        return strBuffer.toString( );
     }
 
     /**
      * Get entry type mylutece user
-     * @param plugin Plugin
+     * 
+     * @param plugin
+     *            Plugin
      * @return entry type
      */
     public static EntryType getEntryTypeMyLuteceUser( Plugin plugin )
     {
         for ( EntryType entryType : EntryTypeHome.getList( FormPlugin.PLUGIN_NAME ) )
         {
-            if ( StringUtils.equals( entryType.getBeanName(  ), EntryTypeMyLuteceUser.BEAN_NAME ) )
+            if ( StringUtils.equals( entryType.getBeanName( ), EntryTypeMyLuteceUser.BEAN_NAME ) )
             {
                 return entryType;
             }
@@ -1473,28 +1547,32 @@ public final class FormUtils
 
     /**
      * Activate MyLutece authentication for the form
-     * @param form form
-     * @param plugin Plugin
-     * @param locale Locale
-     * @param request HttpServletRequest
+     * 
+     * @param form
+     *            form
+     * @param plugin
+     *            Plugin
+     * @param locale
+     *            Locale
+     * @param request
+     *            HttpServletRequest
      */
-    public static void activateMyLuteceAuthentification( Form form, Plugin plugin, Locale locale,
-        HttpServletRequest request )
+    public static void activateMyLuteceAuthentification( Form form, Plugin plugin, Locale locale, HttpServletRequest request )
     {
         EntryType entryType = FormUtils.getEntryTypeMyLuteceUser( plugin );
         Entry entry = null;
 
-        entry = new Entry(  );
+        entry = new Entry( );
         entry.setEntryType( entryType );
 
         EntryTypeServiceManager.getEntryTypeService( entry ).getRequestData( entry, request, locale );
-        entry.setIdResource( form.getIdForm(  ) );
+        entry.setIdResource( form.getIdForm( ) );
         entry.setResourceType( Form.RESOURCE_TYPE );
         entry.setIdEntry( EntryHome.create( entry ) );
 
-        if ( entry.getFields(  ) != null )
+        if ( entry.getFields( ) != null )
         {
-            for ( Field field : entry.getFields(  ) )
+            for ( Field field : entry.getFields( ) )
             {
                 field.setParentEntry( entry );
                 FieldHome.create( field );
@@ -1504,13 +1582,16 @@ public final class FormUtils
 
     /**
      * Deactivate MyLutece authentication for the form
-     * @param form Form
-     * @param plugin Plugin
+     * 
+     * @param form
+     *            Form
+     * @param plugin
+     *            Plugin
      */
     public static void deactivateMyLuteceAuthentification( Form form, Plugin plugin )
     {
-        EntryFilter entryFilter = new EntryFilter(  );
-        entryFilter.setIdResource( form.getIdForm(  ) );
+        EntryFilter entryFilter = new EntryFilter( );
+        entryFilter.setIdResource( form.getIdForm( ) );
         entryFilter.setResourceType( Form.RESOURCE_TYPE );
 
         List<Entry> listEntries = EntryHome.getEntryList( entryFilter );
@@ -1521,7 +1602,7 @@ public final class FormUtils
 
             if ( entryTypeService instanceof fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUser )
             {
-                EntryHome.remove( entry.getIdEntry(  ) );
+                EntryHome.remove( entry.getIdEntry( ) );
 
                 break;
             }
@@ -1530,8 +1611,11 @@ public final class FormUtils
 
     /**
      * Restores submitted responses
-     * @param session the session
-     * @param mapResponses response list, key is entry id
+     * 
+     * @param session
+     *            the session
+     * @param mapResponses
+     *            response list, key is entry id
      */
     public static void restoreResponses( HttpSession session, Map<Integer, List<Response>> mapResponses )
     {
@@ -1540,7 +1624,9 @@ public final class FormUtils
 
     /**
      * Removes submitted responses
-     * @param session the session
+     * 
+     * @param session
+     *            the session
      */
     public static void removeResponses( HttpSession session )
     {
@@ -1549,7 +1635,9 @@ public final class FormUtils
 
     /**
      * Gets the responses bound to the session
-     * @param session the session
+     * 
+     * @param session
+     *            the session
      * @return the responses if any, <code>null</code> otherwise.
      */
     public static Map<Integer, List<Response>> getResponses( HttpSession session )
@@ -1559,8 +1647,11 @@ public final class FormUtils
 
     /**
      * Restores form errors
-     * @param session the session
-     * @param listFormErrors the form errosr
+     * 
+     * @param session
+     *            the session
+     * @param listFormErrors
+     *            the form errosr
      */
     public static void restoreFormErrors( HttpSession session, List<GenericAttributeError> listFormErrors )
     {
@@ -1569,7 +1660,9 @@ public final class FormUtils
 
     /**
      * Removes submitted responses
-     * @param session the session
+     * 
+     * @param session
+     *            the session
      */
     public static void removeFormErrors( HttpSession session )
     {
@@ -1578,7 +1671,9 @@ public final class FormUtils
 
     /**
      * Gets the form errors bound to the session
-     * @param session the session
+     * 
+     * @param session
+     *            the session
      * @return the form errors
      */
     public static List<GenericAttributeError> getFormErrors( HttpSession session )
@@ -1588,25 +1683,26 @@ public final class FormUtils
 
     /**
      * Gets the form plugin
+     * 
      * @return the plugin
      */
-    public static Plugin getPlugin(  )
+    public static Plugin getPlugin( )
     {
         return PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
     }
 
     /**
-     * Returns a copy of the string , with leading and trailing whitespace
-     * omitted.
-     * @param strParameter the string parameter to convert
-     * @return null if the strParameter is null other return with leading and
-     *         trailing whitespace omitted.
+     * Returns a copy of the string , with leading and trailing whitespace omitted.
+     * 
+     * @param strParameter
+     *            the string parameter to convert
+     * @return null if the strParameter is null other return with leading and trailing whitespace omitted.
      */
     public static String trim( String strParameter )
     {
         if ( strParameter != null )
         {
-            return strParameter.trim(  );
+            return strParameter.trim( );
         }
 
         return strParameter;
@@ -1614,7 +1710,9 @@ public final class FormUtils
 
     /**
      * Get the base URL
-     * @param request the HTTP request
+     * 
+     * @param request
+     *            the HTTP request
      * @return the base URL
      */
     public static String getAdminBaseUrl( HttpServletRequest request )
@@ -1654,20 +1752,21 @@ public final class FormUtils
     /**
      * Filter a list of field for a given user
      *
-     * @param listField a list of field
-     * @param request The http request
+     * @param listField
+     *            a list of field
+     * @param request
+     *            The http request
      * @return a field list
      */
     public static List<Field> getAuthorizedFieldsByRole( HttpServletRequest request, List<Field> listField )
     {
-        List<Field> listFieldAuthorized = new ArrayList<Field>(  );
+        List<Field> listFieldAuthorized = new ArrayList<Field>( );
 
         for ( Field field : listField )
         {
             // filter by workgroup
-            if ( ( !SecurityService.isAuthenticationEnable(  ) ) || ( field.getRoleKey(  ) == null ) ||
-                    field.getRoleKey(  ).equals( Form.ROLE_NONE ) ||
-                    SecurityService.getInstance(  ).isUserInRole( request, field.getRoleKey(  ) ) )
+            if ( ( !SecurityService.isAuthenticationEnable( ) ) || ( field.getRoleKey( ) == null ) || field.getRoleKey( ).equals( Form.ROLE_NONE )
+                    || SecurityService.getInstance( ).isUserInRole( request, field.getRoleKey( ) ) )
             {
                 listFieldAuthorized.add( field );
             }

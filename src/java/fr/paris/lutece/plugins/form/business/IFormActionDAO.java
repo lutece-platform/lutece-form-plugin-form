@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  *
  * Form action Dao
@@ -45,10 +44,13 @@ import java.util.List;
 public interface IFormActionDAO
 {
     /**
-    * Load the list of actions for a all form by form state
-    * @param nState the state of the form
-    * @param plugin the plugin
-    * @return The Collection of actions
-    */
+     * Load the list of actions for a all form by form state
+     * 
+     * @param nState
+     *            the state of the form
+     * @param plugin
+     *            the plugin
+     * @return The Collection of actions
+     */
     List<FormAction> selectActionsByFormState( int nState, Plugin plugin );
 }

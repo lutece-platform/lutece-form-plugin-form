@@ -38,7 +38,6 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeCamera;
 import fr.paris.lutece.util.url.UrlItem;
 
-
 /**
  *
  * class EntryTypeCamera
@@ -91,17 +90,17 @@ public class EntryTypeCamera extends AbstractEntryTypeCamera
         UrlItem url = new UrlItem( strBaseUrl + JSP_DOWNLOAD_FILE );
         url.addParameter( PARAMETER_ID_RESPONSE, nResponseId );
 
-        return url.getUrl(  );
+        return url.getUrl( );
     }
 
     @Override
-    protected boolean checkForImages(  )
+    protected boolean checkForImages( )
     {
         return true;
     }
 
     @Override
-    public IAsyncUploadHandler getAsynchronousUploadHandler(  )
+    public IAsyncUploadHandler getAsynchronousUploadHandler( )
     {
         return null;
     }

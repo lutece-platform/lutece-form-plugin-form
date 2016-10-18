@@ -49,7 +49,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * class EntryTypeCheckBox
@@ -82,11 +81,10 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
-        List<Field> listFieldInResponse = new ArrayList<Field>(  );
+        String [ ] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+        List<Field> listFieldInResponse = new ArrayList<Field>( );
         int nIdField = -1;
         Field field = null;
         Response response;
@@ -97,14 +95,14 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
             {
                 try
                 {
-                    nIdField = Integer.parseInt( strTabIdField[cpt] );
+                    nIdField = Integer.parseInt( strTabIdField [cpt] );
                 }
-                catch ( NumberFormatException ne )
+                catch( NumberFormatException ne )
                 {
                     AppLogService.error( ne );
                 }
 
-                field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields(  ) );
+                field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields( ) );
 
                 if ( field != null )
                 {
@@ -113,9 +111,9 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
             }
         }
 
-        if ( listFieldInResponse.size(  ) == 0 )
+        if ( listFieldInResponse.size( ) == 0 )
         {
-            response = new Response(  );
+            response = new Response( );
             response.setEntry( entry );
             listResponse.add( response );
         }
@@ -123,9 +121,9 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
         {
             for ( Field fieldInResponse : listFieldInResponse )
             {
-                response = new Response(  );
+                response = new Response( );
                 response.setEntry( entry );
-                response.setResponseValue( fieldInResponse.getValue(  ) );
+                response.setResponseValue( fieldInResponse.getValue( ) );
                 response.setField( fieldInResponse );
                 listResponse.add( response );
             }
@@ -135,19 +133,19 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
 
         for ( Field fieldInResponse : listFieldInResponse )
         {
-            if ( StringUtils.isNotEmpty( fieldInResponse.getValue(  ) ) )
+            if ( StringUtils.isNotEmpty( fieldInResponse.getValue( ) ) )
             {
                 nSubmitedFields++;
             }
         }
 
-        if ( nSubmitedFields < entry.getFields(  ).size(  ) )
+        if ( nSubmitedFields < entry.getFields( ).size( ) )
         {
-            if ( StringUtils.isNotBlank( entry.getErrorMessage(  ) ) )
+            if ( StringUtils.isNotBlank( entry.getErrorMessage( ) ) )
             {
-                GenericAttributeError formError = new GenericAttributeError(  );
+                GenericAttributeError formError = new GenericAttributeError( );
                 formError.setMandatoryError( true );
-                formError.setErrorMessage( entry.getErrorMessage(  ) );
+                formError.setErrorMessage( entry.getErrorMessage( ) );
 
                 return formError;
             }

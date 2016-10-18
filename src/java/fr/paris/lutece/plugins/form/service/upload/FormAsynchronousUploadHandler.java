@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.form.service.upload;
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  * FormAsynchronousUploadHandler.
  */
@@ -50,9 +49,10 @@ public class FormAsynchronousUploadHandler extends AbstractGenAttUploadHandler
 
     /**
      * Get the handler
+     * 
      * @return the handler
      */
-    public static FormAsynchronousUploadHandler getHandler(  )
+    public static FormAsynchronousUploadHandler getHandler( )
     {
         return SpringContextService.getBean( BEAN_FORM_ASYNCHRONOUS_UPLOAD_HANDLER );
     }
@@ -61,7 +61,7 @@ public class FormAsynchronousUploadHandler extends AbstractGenAttUploadHandler
      * {@inheritDoc}
      */
     @Override
-    public String getUploadSubmitPrefix(  )
+    public String getUploadSubmitPrefix( )
     {
         return UPLOAD_SUBMIT_PREFIX;
     }
@@ -70,7 +70,7 @@ public class FormAsynchronousUploadHandler extends AbstractGenAttUploadHandler
      * {@inheritDoc}
      */
     @Override
-    public String getUploadDeletePrefix(  )
+    public String getUploadDeletePrefix( )
     {
         return UPLOAD_DELETE_PREFIX;
     }
@@ -79,7 +79,7 @@ public class FormAsynchronousUploadHandler extends AbstractGenAttUploadHandler
      * {@inheritDoc}
      */
     @Override
-    public String getUploadCheckboxPrefix(  )
+    public String getUploadCheckboxPrefix( )
     {
         return UPLOAD_CHECKBOX_PREFIX;
     }
@@ -88,7 +88,7 @@ public class FormAsynchronousUploadHandler extends AbstractGenAttUploadHandler
      * {@inheritDoc}
      */
     @Override
-    public String getHandlerName(  )
+    public String getHandlerName( )
     {
         return HANDLER_NAME;
     }

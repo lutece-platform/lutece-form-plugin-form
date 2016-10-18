@@ -50,7 +50,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
-
 /**
  *
  * ExportResponsesDaemon
@@ -62,22 +61,22 @@ public class ExportResponsesDaemon extends Daemon
      * {@inheritDoc}
      */
     @Override
-    public void run(  )
+    public void run( )
     {
-        StringBuilder sbLog = new StringBuilder(  );
-        FormParameterService formParamService = FormParameterService.getService(  );
-        int nIdExport = formParamService.getIdExportResponsesDaemon(  );
+        StringBuilder sbLog = new StringBuilder( );
+        FormParameterService formParamService = FormParameterService.getService( );
+        int nIdExport = formParamService.getIdExportResponsesDaemon( );
         Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
         ExportFormat exportFormat = ExportFormatHome.findByPrimaryKey( nIdExport, plugin );
 
         if ( exportFormat != null )
         {
-            FormFilter filter = new FormFilter(  );
+            FormFilter filter = new FormFilter( );
             filter.setIdState( 1 );
 
             List<Form> listForms = FormHome.getFormList( filter, plugin );
 
-            if ( ( listForms != null ) && !listForms.isEmpty(  ) )
+            if ( ( listForms != null ) && !listForms.isEmpty( ) )
             {
                 for ( Form form : listForms )
                 {
@@ -94,31 +93,35 @@ public class ExportResponsesDaemon extends Daemon
         }
         else
         {
-            sbLog.append( 
-                "\nInvalid export format. The daemon is not well configured. \nPlease configure the daemon export format in the " +
-                "advanced parameters of the plugin-form." );
+            sbLog.append( "\nInvalid export format. The daemon is not well configured. \nPlease configure the daemon export format in the "
+                    + "advanced parameters of the plugin-form." );
         }
 
-        if ( StringUtils.isBlank( sbLog.toString(  ) ) )
+        if ( StringUtils.isBlank( sbLog.toString( ) ) )
         {
             sbLog.append( "\nNo responses to export" );
         }
 
-        setLastRunLogs( sbLog.toString(  ) );
+        setLastRunLogs( sbLog.toString( ) );
     }
 
     /**
      * Export the form responses
-     * @param form the form
-     * @param sbLog the log
-     * @param exportFormat the export format
-     * @param plugin the plugin
+     * 
+     * @param form
+     *            the form
+     * @param sbLog
+     *            the log
+     * @param exportFormat
+     *            the export format
+     * @param plugin
+     *            the plugin
      */
     private void exportFormResponses( Form form, StringBuilder sbLog, ExportFormat exportFormat, Plugin plugin )
     {
-        sbLog.append( "\nExporting responses for form ID " + form.getIdForm(  ) );
+        sbLog.append( "\nExporting responses for form ID " + form.getIdForm( ) );
 
-        IExportService exportService = FormParameterService.getService(  ).getFileExportDaemonType(  );
+        IExportService exportService = FormParameterService.getService( ).getFileExportDaemonType( );
 
         if ( exportService != null )
         {

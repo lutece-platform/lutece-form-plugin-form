@@ -39,10 +39,9 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
- *class  CategoryDAO
+ * class CategoryDAO
  *
  */
 public class CategoryDAO implements ICategoryDAO
@@ -53,30 +52,31 @@ public class CategoryDAO implements ICategoryDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO form_category (id_category,title,color )VALUES(?,?,?)";
     private static final String SQL_QUERY_UPDATE = "UPDATE form_category SET id_category=?,title=?,color=? WHERE id_category=?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_category WHERE id_category = ? ";
-    private static final String SQL_QUERY_COUNT_NUMBER_OF_FORM_ASSOCIATE_TO_THE_CATEGORY = "select COUNT(id_category) " +
-        " FROM form_form WHERE id_category=? ";
+    private static final String SQL_QUERY_COUNT_NUMBER_OF_FORM_ASSOCIATE_TO_THE_CATEGORY = "select COUNT(id_category) "
+            + " FROM form_form WHERE id_category=? ";
 
     /**
      * Generates a new primary key
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return The new primary key
      */
     protected int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey;
 
-        if ( !daoUtil.next(  ) )
+        if ( !daoUtil.next( ) )
         {
             // if the table is empty
             nKey = 1;
         }
 
         nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -90,11 +90,11 @@ public class CategoryDAO implements ICategoryDAO
         category.setIdCategory( newPrimaryKey( plugin ) );
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        daoUtil.setInt( 1, category.getIdCategory(  ) );
-        daoUtil.setString( 2, category.getTitle(  ) );
-        daoUtil.setString( 3, category.getColor(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( 1, category.getIdCategory( ) );
+        daoUtil.setString( 2, category.getTitle( ) );
+        daoUtil.setString( 3, category.getColor( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -105,12 +105,12 @@ public class CategoryDAO implements ICategoryDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setInt( 1, category.getIdCategory(  ) );
-        daoUtil.setString( 2, category.getTitle(  ) );
-        daoUtil.setString( 3, category.getColor(  ) );
-        daoUtil.setInt( 4, category.getIdCategory(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( 1, category.getIdCategory( ) );
+        daoUtil.setString( 2, category.getTitle( ) );
+        daoUtil.setString( 3, category.getColor( ) );
+        daoUtil.setInt( 4, category.getIdCategory( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -121,19 +121,19 @@ public class CategoryDAO implements ICategoryDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, idKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         Category category = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            category = new Category(  );
+            category = new Category( );
             category.setIdCategory( daoUtil.getInt( 1 ) );
             category.setTitle( daoUtil.getString( 2 ) );
             category.setColor( daoUtil.getString( 3 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return category;
     }
@@ -145,21 +145,21 @@ public class CategoryDAO implements ICategoryDAO
     public List<Category> select( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         Category category = null;
-        List<Category> listCategory = new ArrayList<Category>(  );
+        List<Category> listCategory = new ArrayList<Category>( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            category = new Category(  );
+            category = new Category( );
             category.setIdCategory( daoUtil.getInt( 1 ) );
             category.setTitle( daoUtil.getString( 2 ) );
             category.setColor( daoUtil.getString( 3 ) );
             listCategory.add( category );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listCategory;
     }
@@ -172,8 +172,8 @@ public class CategoryDAO implements ICategoryDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nIdCategory );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -184,19 +184,19 @@ public class CategoryDAO implements ICategoryDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_NUMBER_OF_FORM_ASSOCIATE_TO_THE_CATEGORY, plugin );
         daoUtil.setInt( 1, nIdCategory );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             if ( daoUtil.getInt( 1 ) != 0 )
             {
-                daoUtil.free(  );
+                daoUtil.free( );
 
                 return true;
             }
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return false;
     }

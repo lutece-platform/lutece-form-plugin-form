@@ -39,14 +39,13 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * SpaceActionDAO
  */
 public class FormActionDAO implements IFormActionDAO
 {
-    private static final String SQL_QUERY_SELECT_ACTIONS = "SELECT a.name_key, a.description_key, a.action_url, a.icon_url, a.action_permission ,a.form_state" +
-        " FROM form_action a  where a.form_state=? ";
+    private static final String SQL_QUERY_SELECT_ACTIONS = "SELECT a.name_key, a.description_key, a.action_url, a.icon_url, a.action_permission ,a.form_state"
+            + " FROM form_action a  where a.form_state=? ";
 
     /**
      * {@inheritDoc}
@@ -54,14 +53,14 @@ public class FormActionDAO implements IFormActionDAO
     @Override
     public List<FormAction> selectActionsByFormState( int nState, Plugin plugin )
     {
-        List<FormAction> listActions = new ArrayList<FormAction>(  );
+        List<FormAction> listActions = new ArrayList<FormAction>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ACTIONS, plugin );
         daoUtil.setInt( 1, nState );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            FormAction action = new FormAction(  );
+            FormAction action = new FormAction( );
             action.setNameKey( daoUtil.getString( 1 ) );
             action.setDescriptionKey( daoUtil.getString( 2 ) );
             action.setUrl( daoUtil.getString( 3 ) );
@@ -71,7 +70,7 @@ public class FormActionDAO implements IFormActionDAO
             listActions.add( action );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listActions;
     }

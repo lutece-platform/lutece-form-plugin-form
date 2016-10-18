@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.service.validator;
 
-
 /**
  * Validator
  */

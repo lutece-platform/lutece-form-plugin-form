@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * INotifySenderConfigurationDAO
  *
@@ -47,36 +46,50 @@ public interface INotifySenderConfigurationDAO
 {
     /**
      * Insert a new record in the table.
-     * @param notifySenderConfiguration instance of the NotifySenderConfiguration object to insert
-     * @param plugin plugin
+     * 
+     * @param notifySenderConfiguration
+     *            instance of the NotifySenderConfiguration object to insert
+     * @param plugin
+     *            plugin
      */
     void insert( NotifySenderConfiguration notifySenderConfiguration, Plugin plugin );
 
     /**
      * Load the data of the notifySenderConfiguration from the table
-     * @param nIdForm The identifier of the form associate to the notifySenderConfiguration
-     * @param plugin plugin
+     * 
+     * @param nIdForm
+     *            The identifier of the form associate to the notifySenderConfiguration
+     * @param plugin
+     *            plugin
      * @return the instance of the NotifySenderConfiguration
      */
     NotifySenderConfiguration load( int nIdForm, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nIdForm The identifier of the form associate to the notifySenderConfiguration
-     * @param plugin the plugin
+     * 
+     * @param nIdForm
+     *            The identifier of the form associate to the notifySenderConfiguration
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdForm, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param plugin plugin
-     * @param notifySenderConfiguration The reference of the notifySenderConfiguration
+     * 
+     * @param plugin
+     *            plugin
+     * @param notifySenderConfiguration
+     *            The reference of the notifySenderConfiguration
      */
     void store( NotifySenderConfiguration notifySenderConfiguration, Plugin plugin );
 
     /**
      * Load the data of all the notifySenderConfigurations and returns them as a collection
-     * @param plugin plugin
+     * 
+     * @param plugin
+     *            plugin
      * @return The Collection which contains the data of all the notifySenderConfigurations
      */
     List<NotifySenderConfiguration> selectNotifySenderConfigurationsList( Plugin plugin );

@@ -70,25 +70,28 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
  */
 import java.util.List;
 
-
 /**
-* IFormDAO Interface
-*/
+ * IFormDAO Interface
+ */
 public interface IGraphTypeDAO
 {
     /**
-         * Load the data of the graph type from the table
-         *
-         * @param idKey The identifier of the graph type
-         * @param plugin the plugin
-         * @return the instance of the GraphType
-         */
+     * Load the data of the graph type from the table
+     *
+     * @param idKey
+     *            The identifier of the graph type
+     * @param plugin
+     *            the plugin
+     * @return the instance of the GraphType
+     */
     GraphType load( int idKey, Plugin plugin );
 
     /**
-         * Load the data of all  graph type returns them in a  list
-         * @param plugin the plugin
-         * @return  the list of graph type
-         */
+     * Load the data of all graph type returns them in a list
+     * 
+     * @param plugin
+     *            the plugin
+     * @return the list of graph type
+     */
     List<GraphType> select( Plugin plugin );
 }

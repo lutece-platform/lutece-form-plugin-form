@@ -33,13 +33,12 @@
  */
 package fr.paris.lutece.plugins.form.modules.processornotifysender.business;
 
-
 /**
  * This is the business class for the object NotifySenderConfiguration
  */
 public class NotifySenderConfiguration
 {
-    // Variables declarations 
+    // Variables declarations
     private int _nIdForm;
     private int _nIdEntryEmailSender;
     private String _strMessage;
@@ -47,16 +46,19 @@ public class NotifySenderConfiguration
 
     /**
      * Returns the IdForm
+     * 
      * @return The IdForm
      */
-    public int getIdForm(  )
+    public int getIdForm( )
     {
         return _nIdForm;
     }
 
     /**
      * Sets the IdForm
-     * @param nIdForm The IdForm
+     * 
+     * @param nIdForm
+     *            The IdForm
      */
     public void setIdForm( int nIdForm )
     {
@@ -65,16 +67,19 @@ public class NotifySenderConfiguration
 
     /**
      * Returns the IdEntry associate to the email sender
+     * 
      * @return The IdEntry
      */
-    public int getIdEntryEmailSender(  )
+    public int getIdEntryEmailSender( )
     {
         return _nIdEntryEmailSender;
     }
 
     /**
-     * Sets  the IdEntry associate to the email sender
-     * @param nIdEntry The IdEntry
+     * Sets the IdEntry associate to the email sender
+     * 
+     * @param nIdEntry
+     *            The IdEntry
      */
     public void setIdEntryEmailSender( int nIdEntry )
     {
@@ -83,16 +88,19 @@ public class NotifySenderConfiguration
 
     /**
      * Returns the Message
+     * 
      * @return The Message
      */
-    public String getMessage(  )
+    public String getMessage( )
     {
         return _strMessage;
     }
 
     /**
      * Sets the Message
-     * @param strMessage The Message
+     * 
+     * @param strMessage
+     *            The Message
      */
     public void setMessage( String strMessage )
     {
@@ -101,7 +109,9 @@ public class NotifySenderConfiguration
 
     /**
      * Set true if it must send the attachments
-     * @param bSendAttachments true if it must send the attachments
+     * 
+     * @param bSendAttachments
+     *            true if it must send the attachments
      */
     public void setSendAttachments( boolean bSendAttachments )
     {
@@ -110,9 +120,10 @@ public class NotifySenderConfiguration
 
     /**
      * True if it must send the attachments
+     * 
      * @return true if it must send the attachments
      */
-    public boolean isSendAttachments(  )
+    public boolean isSendAttachments( )
     {
         return _bSendAttachment;
     }

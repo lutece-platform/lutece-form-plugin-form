@@ -35,10 +35,9 @@ package fr.paris.lutece.plugins.form.business;
 
 import java.sql.Timestamp;
 
-
 /**
  *
- *  class StatisticFormSubmit
+ * class StatisticFormSubmit
  *
  */
 public class StatisticFormSubmit
@@ -47,18 +46,21 @@ public class StatisticFormSubmit
     private Timestamp _tStatisticDate;
 
     /**
-     * return  the number of response
+     * return the number of response
+     * 
      * @return the number of response
      */
-    public int getNumberResponse(  )
+    public int getNumberResponse( )
     {
         return _nNumberResponse;
     }
 
     /**
-      * set the number of response
-      * @param numberResponse the number of response
-      */
+     * set the number of response
+     * 
+     * @param numberResponse
+     *            the number of response
+     */
     public void setNumberResponse( int numberResponse )
     {
         _nNumberResponse = numberResponse;
@@ -67,15 +69,17 @@ public class StatisticFormSubmit
     /**
      *
      * @return the statistic date
-      */
-    public Timestamp getStatisticDate(  )
+     */
+    public Timestamp getStatisticDate( )
     {
         return _tStatisticDate;
     }
 
     /**
      * set the statistic date
-     * @param statisticDate the statistic date
+     * 
+     * @param statisticDate
+     *            the statistic date
      */
     public void setStatisticDate( Timestamp statisticDate )
     {

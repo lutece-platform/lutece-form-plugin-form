@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.form.service.entrytype;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeGroup;
 
-
 /**
  *
  * class EntryTypeGroup
@@ -49,7 +48,7 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
      */
     public static final String BEAN_NAME = "form.entryTypeGroup";
 
-    //	templates
+    // templates
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_group.html";
     private static final String TEMPLATE_HTML_CODE = "skin/plugins/form/entries/html_code_entry_type_group.html";
 

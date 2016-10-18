@@ -14,7 +14,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * FieldHomeTest
  */
@@ -33,20 +32,18 @@ public class FieldHomeTest extends LuteceTestCase
     private final static boolean DEFAULT_VALUE_2 = false;
     private final static int MAX_SIZE_1 = 10;
     private final static int MAX_SIZE_2 = 20;
-    private final static Timestamp VALUE_TYPE_DATE_1 = new Timestamp( new Date(  ).getTime(  ) );
-    private final static Timestamp VALUE_TYPE_DATE_2 = new Timestamp( new Date(  ).getTime(  ) );
+    private final static Timestamp VALUE_TYPE_DATE_1 = new Timestamp( new Date( ).getTime( ) );
+    private final static Timestamp VALUE_TYPE_DATE_2 = new Timestamp( new Date( ).getTime( ) );
 
     /**
-     * Test method for
-     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#create(fr.paris.lutece.plugins.genericattributes.business.Field)}
-     * .
+     * Test method for {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#create(fr.paris.lutece.plugins.genericattributes.business.Field)} .
      */
-    public void testCreate(  )
+    public void testCreate( )
     {
-        EntryHomeTest entryHomeTest = new EntryHomeTest(  );
-        entryHomeTest.testCreate(  );
+        EntryHomeTest entryHomeTest = new EntryHomeTest( );
+        entryHomeTest.testCreate( );
 
-        Field field = new Field(  );
+        Field field = new Field( );
 
         Entry entry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
 
@@ -61,31 +58,29 @@ public class FieldHomeTest extends LuteceTestCase
 
         FieldHome.create( field );
 
-        Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+        Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField( ) );
 
-        assertEquals( fieldStored.getParentEntry(  ).getIdEntry(  ), field.getParentEntry(  ).getIdEntry(  ) );
-        assertEquals( fieldStored.getTitle(  ), field.getTitle(  ) );
-        assertEquals( fieldStored.getValue(  ), field.getValue(  ) );
-        assertEquals( fieldStored.getHeight(  ), field.getHeight(  ) );
-        assertEquals( fieldStored.getWidth(  ), field.getWidth(  ) );
-        assertEquals( fieldStored.isDefaultValue(  ), field.isDefaultValue(  ) );
-        assertTrue( ( fieldStored.getValueTypeDate(  ).getTime(  ) - field.getValueTypeDate(  ).getTime(  ) ) < 10 );
+        assertEquals( fieldStored.getParentEntry( ).getIdEntry( ), field.getParentEntry( ).getIdEntry( ) );
+        assertEquals( fieldStored.getTitle( ), field.getTitle( ) );
+        assertEquals( fieldStored.getValue( ), field.getValue( ) );
+        assertEquals( fieldStored.getHeight( ), field.getHeight( ) );
+        assertEquals( fieldStored.getWidth( ), field.getWidth( ) );
+        assertEquals( fieldStored.isDefaultValue( ), field.isDefaultValue( ) );
+        assertTrue( ( fieldStored.getValueTypeDate( ).getTime( ) - field.getValueTypeDate( ).getTime( ) ) < 10 );
     }
 
     /**
-     * Test method for
-     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#update(fr.paris.lutece.plugins.genericattributes.business.Field)}
-     * .
+     * Test method for {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#update(fr.paris.lutece.plugins.genericattributes.business.Field)} .
      */
-    public void testUpdate(  )
+    public void testUpdate( )
     {
         Field fieldLoad = FieldHome.findByPrimaryKey( ID_FIELD_1 );
 
-        Field field = new Field(  );
+        Field field = new Field( );
 
         Entry entry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
 
-        field.setIdField( fieldLoad.getIdField(  ) );
+        field.setIdField( fieldLoad.getIdField( ) );
         field.setParentEntry( entry );
         field.setTitle( TYTLE_2 );
         field.setValue( VALUE_2 );
@@ -97,23 +92,21 @@ public class FieldHomeTest extends LuteceTestCase
 
         FieldHome.update( field );
 
-        Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+        Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField( ) );
 
-        assertEquals( fieldStored.getParentEntry(  ).getIdEntry(  ), field.getParentEntry(  ).getIdEntry(  ) );
-        assertEquals( fieldStored.getTitle(  ), field.getTitle(  ) );
-        assertEquals( fieldStored.getValue(  ), field.getValue(  ) );
-        assertEquals( fieldStored.getHeight(  ), field.getHeight(  ) );
-        assertEquals( fieldStored.getWidth(  ), field.getWidth(  ) );
-        assertEquals( fieldStored.isDefaultValue(  ), field.isDefaultValue(  ) );
-        assertTrue( ( fieldStored.getValueTypeDate(  ).getTime(  ) - field.getValueTypeDate(  ).getTime(  ) ) < 10 );
+        assertEquals( fieldStored.getParentEntry( ).getIdEntry( ), field.getParentEntry( ).getIdEntry( ) );
+        assertEquals( fieldStored.getTitle( ), field.getTitle( ) );
+        assertEquals( fieldStored.getValue( ), field.getValue( ) );
+        assertEquals( fieldStored.getHeight( ), field.getHeight( ) );
+        assertEquals( fieldStored.getWidth( ), field.getWidth( ) );
+        assertEquals( fieldStored.isDefaultValue( ), field.isDefaultValue( ) );
+        assertTrue( ( fieldStored.getValueTypeDate( ).getTime( ) - field.getValueTypeDate( ).getTime( ) ) < 10 );
     }
 
     /**
-     * Test method for
-     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#getFieldListByIdEntry(int)}
-     * .
+     * Test method for {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#getFieldListByIdEntry(int)} .
      */
-    public void testGetFieldListByIdEntry(  )
+    public void testGetFieldListByIdEntry( )
     {
         List<Field> listField = null;
 
@@ -123,13 +116,11 @@ public class FieldHomeTest extends LuteceTestCase
     }
 
     /**
-     * Test method for
-     * {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#remove(int)}
-     * .
+     * Test method for {@link fr.paris.lutece.plugins.genericattributes.business.FieldHome#remove(int)} .
      */
-    public void testRemove(  )
+    public void testRemove( )
     {
-        Field field = new Field(  );
+        Field field = new Field( );
 
         Entry entry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
 
@@ -146,9 +137,9 @@ public class FieldHomeTest extends LuteceTestCase
 
         Field fieldLoad = FieldHome.findByPrimaryKey( lastIdField );
 
-        FieldHome.remove( fieldLoad.getIdField(  ) );
+        FieldHome.remove( fieldLoad.getIdField( ) );
 
-        Field fieldStored = FieldHome.findByPrimaryKey( fieldLoad.getIdField(  ) );
+        Field fieldStored = FieldHome.findByPrimaryKey( fieldLoad.getIdField( ) );
 
         assertNull( fieldStored );
     }

@@ -41,7 +41,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
  * ExportServiceFactory
@@ -58,7 +57,7 @@ public class ExportServiceFactory implements IExportServiceFactory
      * {@inheritDoc}
      */
     @Override
-    public List<IExportService> getExportServices(  )
+    public List<IExportService> getExportServices( )
     {
         return SpringContextService.getBeansOfType( IExportService.class );
     }
@@ -69,13 +68,13 @@ public class ExportServiceFactory implements IExportServiceFactory
     @Override
     public ReferenceList getExportServicesAsRefList( Locale locale )
     {
-        ReferenceList listExportTypes = new ReferenceList(  );
+        ReferenceList listExportTypes = new ReferenceList( );
 
-        for ( IExportService exportType : getExportServices(  ) )
+        for ( IExportService exportType : getExportServices( ) )
         {
             if ( exportType != null )
             {
-                listExportTypes.addItem( exportType.getKey(  ), exportType.getTitle( locale ) );
+                listExportTypes.addItem( exportType.getKey( ), exportType.getTitle( locale ) );
             }
         }
 
@@ -88,10 +87,9 @@ public class ExportServiceFactory implements IExportServiceFactory
     @Override
     public IExportService getExportService( String strKey )
     {
-        for ( IExportService exportService : getExportServices(  ) )
+        for ( IExportService exportService : getExportServices( ) )
         {
-            if ( ( exportService != null ) && StringUtils.isNotBlank( exportService.getKey(  ) ) &&
-                    exportService.getKey(  ).equals( strKey ) )
+            if ( ( exportService != null ) && StringUtils.isNotBlank( exportService.getKey( ) ) && exportService.getKey( ).equals( strKey ) )
             {
                 return exportService;
             }

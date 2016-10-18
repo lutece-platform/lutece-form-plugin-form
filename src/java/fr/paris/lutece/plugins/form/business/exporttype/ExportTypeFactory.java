@@ -41,7 +41,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
  * ExportDaemonTypeFactory
@@ -53,7 +52,7 @@ public class ExportTypeFactory implements IExportTypeFactory
      * {@inheritDoc}
      */
     @Override
-    public List<IExportType> getExportTypes(  )
+    public List<IExportType> getExportTypes( )
     {
         return SpringContextService.getBeansOfType( IExportType.class );
     }
@@ -64,13 +63,13 @@ public class ExportTypeFactory implements IExportTypeFactory
     @Override
     public ReferenceList getExportTypesAsRefList( Locale locale )
     {
-        ReferenceList listExportTypes = new ReferenceList(  );
+        ReferenceList listExportTypes = new ReferenceList( );
 
-        for ( IExportType exportType : getExportTypes(  ) )
+        for ( IExportType exportType : getExportTypes( ) )
         {
             if ( exportType != null )
             {
-                listExportTypes.addItem( exportType.getKey(  ), exportType.getTitle( locale ) );
+                listExportTypes.addItem( exportType.getKey( ), exportType.getTitle( locale ) );
             }
         }
 
@@ -83,16 +82,15 @@ public class ExportTypeFactory implements IExportTypeFactory
     @Override
     public IExportType getExportType( String strKey )
     {
-        for ( IExportType exportType : getExportTypes(  ) )
+        for ( IExportType exportType : getExportTypes( ) )
         {
-            if ( ( exportType != null ) && StringUtils.isNotBlank( exportType.getKey(  ) ) &&
-                    exportType.getKey(  ).equals( strKey ) )
+            if ( ( exportType != null ) && StringUtils.isNotBlank( exportType.getKey( ) ) && exportType.getKey( ).equals( strKey ) )
             {
                 return exportType;
             }
         }
 
         // Default : full export daemon type
-        return new FullExportType(  );
+        return new FullExportType( );
     }
 }

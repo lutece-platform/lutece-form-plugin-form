@@ -40,7 +40,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides Data Access methods for ReportingFiche objects
  */
@@ -48,36 +47,35 @@ public final class ExportFormatDAO implements IExportFormatDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_export ) FROM form_export_format";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_export,title,description,extension,xsl_file" +
-        " FROM form_export_format WHERE id_export = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO form_export_format( id_export,title,description,extension,xsl_file)" +
-        "VALUES(?,?,?,?,?)";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_export,title,description,extension,xsl_file"
+            + " FROM form_export_format WHERE id_export = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO form_export_format( id_export,title,description,extension,xsl_file)" + "VALUES(?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_export_format WHERE id_export = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE form_export_format SET id_export=?,title=?,description=?,extension=?,xsl_file=? WHERE id_export = ? ";
-    private static final String SQL_QUERY_SELECT = "SELECT id_export,title,description,extension" +
-        " FROM form_export_format";
+    private static final String SQL_QUERY_SELECT = "SELECT id_export,title,description,extension" + " FROM form_export_format";
 
     /**
      * Generates a new primary key
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return The new primary key
      */
     public int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey;
 
-        if ( !daoUtil.next(  ) )
+        if ( !daoUtil.next( ) )
         {
             // if the table is empty
             nKey = 1;
         }
 
         nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -85,8 +83,10 @@ public final class ExportFormatDAO implements IExportFormatDAO
     /**
      * Insert a new record in the table.
      *
-     * @param exportFormat instance of the ExportFormat object to insert
-     * @param plugin the plugin
+     * @param exportFormat
+     *            instance of the ExportFormat object to insert
+     * @param plugin
+     *            the plugin
      */
     @Override
     public synchronized void insert( ExportFormat exportFormat, Plugin plugin )
@@ -94,20 +94,22 @@ public final class ExportFormatDAO implements IExportFormatDAO
         exportFormat.setIdExport( newPrimaryKey( plugin ) );
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        daoUtil.setInt( 1, exportFormat.getIdExport(  ) );
-        daoUtil.setString( 2, exportFormat.getTitle(  ) );
-        daoUtil.setString( 3, exportFormat.getDescription(  ) );
-        daoUtil.setString( 4, exportFormat.getExtension(  ) );
-        daoUtil.setBytes( 5, exportFormat.getXsl(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( 1, exportFormat.getIdExport( ) );
+        daoUtil.setString( 2, exportFormat.getTitle( ) );
+        daoUtil.setString( 3, exportFormat.getDescription( ) );
+        daoUtil.setString( 4, exportFormat.getExtension( ) );
+        daoUtil.setBytes( 5, exportFormat.getXsl( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Load the data of the export format from the table
      *
-     * @param nId The identifier of the export format
-     * @param plugin the plugin
+     * @param nId
+     *            The identifier of the export format
+     * @param plugin
+     *            the plugin
      * @return the instance of the ExportFormat
      */
     @Override
@@ -115,13 +117,13 @@ public final class ExportFormatDAO implements IExportFormatDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         ExportFormat exportFormat = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            exportFormat = new ExportFormat(  );
+            exportFormat = new ExportFormat( );
             exportFormat.setIdExport( daoUtil.getInt( 1 ) );
             exportFormat.setTitle( daoUtil.getString( 2 ) );
             exportFormat.setDescription( daoUtil.getString( 3 ) );
@@ -129,7 +131,7 @@ public final class ExportFormatDAO implements IExportFormatDAO
             exportFormat.setXsl( daoUtil.getBytes( 5 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return exportFormat;
     }
@@ -137,55 +139,60 @@ public final class ExportFormatDAO implements IExportFormatDAO
     /**
      * Delete a record from the table
      *
-     * @param nIdExport The identifier of the ExportFormat
-     * @param plugin the plugin
+     * @param nIdExport
+     *            The identifier of the ExportFormat
+     * @param plugin
+     *            the plugin
      */
     @Override
     public void delete( int nIdExport, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nIdExport );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Update the exportFormat in the table
      *
-     * @param exportFormat instance of the ExportFormat object to update
-     * @param plugin the plugin
+     * @param exportFormat
+     *            instance of the ExportFormat object to update
+     * @param plugin
+     *            the plugin
      */
     @Override
     public void store( ExportFormat exportFormat, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        daoUtil.setInt( 1, exportFormat.getIdExport(  ) );
-        daoUtil.setString( 2, exportFormat.getTitle(  ) );
-        daoUtil.setString( 3, exportFormat.getDescription(  ) );
-        daoUtil.setString( 4, exportFormat.getExtension(  ) );
-        daoUtil.setBytes( 5, exportFormat.getXsl(  ) );
-        daoUtil.setInt( 6, exportFormat.getIdExport(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( 1, exportFormat.getIdExport( ) );
+        daoUtil.setString( 2, exportFormat.getTitle( ) );
+        daoUtil.setString( 3, exportFormat.getDescription( ) );
+        daoUtil.setString( 4, exportFormat.getExtension( ) );
+        daoUtil.setBytes( 5, exportFormat.getXsl( ) );
+        daoUtil.setInt( 6, exportFormat.getIdExport( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Load the data of all the ExportFormat and returns them in form of a list
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return The List which contains the data of all the ExportFormat
      */
     @Override
     public List<ExportFormat> selectListExport( Plugin plugin )
     {
-        List<ExportFormat> exportFormatList = new ArrayList<ExportFormat>(  );
+        List<ExportFormat> exportFormatList = new ArrayList<ExportFormat>( );
         ExportFormat exportFormat = null;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            exportFormat = new ExportFormat(  );
+            exportFormat = new ExportFormat( );
             exportFormat.setIdExport( daoUtil.getInt( 1 ) );
             exportFormat.setTitle( daoUtil.getString( 2 ) );
             exportFormat.setDescription( daoUtil.getString( 3 ) );
@@ -193,33 +200,35 @@ public final class ExportFormatDAO implements IExportFormatDAO
             exportFormatList.add( exportFormat );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return exportFormatList;
     }
 
     /**
-     * Load the data of all the export format returns them in a  reference list
-     * @param plugin the plugin
-     * @return  a  reference list of export format
+     * Load the data of all the export format returns them in a reference list
+     * 
+     * @param plugin
+     *            the plugin
+     * @return a reference list of export format
      */
     @Override
     public ReferenceList getListExport( Plugin plugin )
     {
-        ReferenceList listExport = new ReferenceList(  );
+        ReferenceList listExport = new ReferenceList( );
         ExportFormat exportFormat = null;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            exportFormat = new ExportFormat(  );
+            exportFormat = new ExportFormat( );
             exportFormat.setIdExport( daoUtil.getInt( 1 ) );
             exportFormat.setTitle( daoUtil.getString( 2 ) );
-            listExport.addItem( exportFormat.getIdExport(  ), exportFormat.getTitle(  ) );
+            listExport.addItem( exportFormat.getIdExport( ), exportFormat.getTitle( ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listExport;
     }

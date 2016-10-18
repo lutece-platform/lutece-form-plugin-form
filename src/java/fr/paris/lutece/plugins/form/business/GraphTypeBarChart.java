@@ -55,10 +55,9 @@ import java.text.DecimalFormat;
 
 import java.util.List;
 
-
 /**
  *
- *  class GraphTypeBarChart
+ * class GraphTypeBarChart
  *
  */
 public class GraphTypeBarChart extends GraphType
@@ -67,43 +66,45 @@ public class GraphTypeBarChart extends GraphType
      * {@inheritDoc}
      */
     @Override
-    public JFreeChart createChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle,
-        boolean nGraphThreeDimension, boolean nGraphLabelValue )
+    public JFreeChart createChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle, boolean nGraphThreeDimension, boolean nGraphLabelValue )
     {
         return createBarChart( listStatistic, strGraphTitle, nGraphThreeDimension, nGraphLabelValue );
     }
 
     /**
      * Return the JFreeChart BarChart graph
-     * @param listStatistic listStatistic
-     * @param strGraphTitle graph title
-     * @param nGraphThreeDimension true if the graph must be in three dimension
-     * @param nGraphLabelValue true if the labels must appear in the graph
+     * 
+     * @param listStatistic
+     *            listStatistic
+     * @param strGraphTitle
+     *            graph title
+     * @param nGraphThreeDimension
+     *            true if the graph must be in three dimension
+     * @param nGraphLabelValue
+     *            true if the labels must appear in the graph
      * @return the JFreeChart graph associate to the graph type
      */
-    public static JFreeChart createBarChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle,
-        boolean nGraphThreeDimension, boolean nGraphLabelValue )
+    public static JFreeChart createBarChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle, boolean nGraphThreeDimension,
+            boolean nGraphLabelValue )
     {
         JFreeChart chart;
         CategoryDataset dataset = createBarChartDataset( listStatistic );
 
         if ( nGraphThreeDimension )
         {
-            chart = ChartFactory.createBarChart3D( strGraphTitle, null, null, dataset, PlotOrientation.VERTICAL, true,
-                    false, false );
+            chart = ChartFactory.createBarChart3D( strGraphTitle, null, null, dataset, PlotOrientation.VERTICAL, true, false, false );
         }
         else
         {
-            chart = ChartFactory.createBarChart( strGraphTitle, null, null, dataset, PlotOrientation.VERTICAL, true,
-                    false, false );
+            chart = ChartFactory.createBarChart( strGraphTitle, null, null, dataset, PlotOrientation.VERTICAL, true, false, false );
         }
 
-        CategoryPlot categoryPlot = chart.getCategoryPlot(  );
-        CategoryAxis categoryAxis = categoryPlot.getDomainAxis(  );
+        CategoryPlot categoryPlot = chart.getCategoryPlot( );
+        CategoryAxis categoryAxis = categoryPlot.getDomainAxis( );
         CategoryLabelPositions labelPositions = CategoryLabelPositions.UP_45;
         categoryAxis.setCategoryLabelPositions( labelPositions );
 
-        BarRenderer renderer = (BarRenderer) categoryPlot.getRenderer(  );
+        BarRenderer renderer = (BarRenderer) categoryPlot.getRenderer( );
 
         if ( nGraphLabelValue )
         {
@@ -114,8 +115,7 @@ public class GraphTypeBarChart extends GraphType
 
             if ( nGraphThreeDimension )
             {
-                renderer.setPositiveItemLabelPositionFallback( new ItemLabelPosition( ItemLabelAnchor.OUTSIDE3,
-                        TextAnchor.BASELINE_LEFT ) );
+                renderer.setPositiveItemLabelPositionFallback( new ItemLabelPosition( ItemLabelAnchor.OUTSIDE3, TextAnchor.BASELINE_LEFT ) );
                 categoryPlot.setRenderer( renderer );
             }
         }
@@ -125,18 +125,18 @@ public class GraphTypeBarChart extends GraphType
 
     /**
      * Create barChatDataset function of the list of statistic
-     * @param listStatistic create barChatDataset function of the list of
-     *            statistic
+     * 
+     * @param listStatistic
+     *            create barChatDataset function of the list of statistic
      * @return barCharDataset
      */
     private static CategoryDataset createBarChartDataset( List<StatisticEntrySubmit> listStatistic )
     {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset(  );
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
 
         for ( StatisticEntrySubmit statistic : listStatistic )
         {
-            dataset.addValue( statistic.getNumberResponse(  ), statistic.getFieldLibelle(  ),
-                statistic.getFieldLibelle(  ) );
+            dataset.addValue( statistic.getNumberResponse( ), statistic.getFieldLibelle( ), statistic.getFieldLibelle( ) );
         }
 
         return dataset;

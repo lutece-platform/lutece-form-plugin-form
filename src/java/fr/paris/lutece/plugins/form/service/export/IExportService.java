@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.Locale;
 
-
 /**
  *
  * IFormExport
@@ -48,36 +47,48 @@ import java.util.Locale;
 public interface IExportService
 {
     /**
-    * Set the key
-    * @param strKey the key
-    */
+     * Set the key
+     * 
+     * @param strKey
+     *            the key
+     */
     void setKey( String strKey );
 
     /**
      * Get the key
+     * 
      * @return the key
      */
-    String getKey(  );
+    String getKey( );
 
     /**
      * Set the title i18n key
-     * @param strTitleI18nKey the i18n key
+     * 
+     * @param strTitleI18nKey
+     *            the i18n key
      */
     void setTitleI18nKey( String strTitleI18nKey );
 
     /**
      * Get the title
-     * @param locale the locale
+     * 
+     * @param locale
+     *            the locale
      * @return the title
      */
     String getTitle( Locale locale );
 
     /**
      * Do export the responses of the given form
-     * @param form the form
-     * @param sbLog the log
-     * @param exportFormat the export format
-     * @param plugin the plugin
+     * 
+     * @param form
+     *            the form
+     * @param sbLog
+     *            the log
+     * @param exportFormat
+     *            the export format
+     * @param plugin
+     *            the plugin
      */
     void doExport( Form form, StringBuilder sbLog, ExportFormat exportFormat, Plugin plugin );
 }

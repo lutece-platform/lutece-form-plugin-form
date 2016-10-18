@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-
 /**
  * Will remove fileItems uploaded by flash
  *
@@ -61,13 +60,13 @@ public class FormSessionListener implements HttpSessionListener
     @Override
     public void sessionDestroyed( HttpSessionEvent se )
     {
-        String strSessionId = se.getSession(  ).getId(  );
+        String strSessionId = se.getSession( ).getId( );
 
-        if ( AppLogService.isDebugEnabled(  ) )
+        if ( AppLogService.isDebugEnabled( ) )
         {
             AppLogService.debug( "FormSessionListener removing " + strSessionId );
         }
 
-        FormAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( strSessionId );
+        FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( strSessionId );
     }
 }

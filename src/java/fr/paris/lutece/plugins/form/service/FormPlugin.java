@@ -40,7 +40,6 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * class FormPlugin
  */
@@ -55,10 +54,10 @@ public class FormPlugin extends PluginDefaultImplementation implements Serializa
      * {@inheritDoc}
      */
     @Override
-    public void init(  )
+    public void init( )
     {
         // Initialize the Poll service
-        FormService.getInstance(  ).init(  );
+        FormService.getInstance( ).init( );
     }
 
     /**
@@ -73,7 +72,7 @@ public class FormPlugin extends PluginDefaultImplementation implements Serializa
         {
             int nIdForm = Integer.parseInt( strIdForm );
 
-            return FormService.getInstance(  ).getXPageTheme( nIdForm );
+            return FormService.getInstance( ).getXPageTheme( nIdForm );
         }
 
         return null;

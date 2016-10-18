@@ -47,7 +47,6 @@ import java.io.IOException;
 
 import java.util.List;
 
-
 /**
  *
  * FormExportService
@@ -64,28 +63,26 @@ public class FormExportService extends AbstractExportService
      * {@inheritDoc}
      */
     @Override
-    public void doExport( Form form, List<FormSubmit> listFormSubmit, String strFolderPath, ExportFormat exportFormat,
-        String strEncoding, StringBuilder sbLog, Plugin plugin )
+    public void doExport( Form form, List<FormSubmit> listFormSubmit, String strFolderPath, ExportFormat exportFormat, String strEncoding, StringBuilder sbLog,
+            Plugin plugin )
     {
-        String strFileName = FileUtils.buildFileName( form.getTitle(  ), exportFormat.getExtension(  ).trim(  ) );
+        String strFileName = FileUtils.buildFileName( form.getTitle( ), exportFormat.getExtension( ).trim( ) );
 
-        if ( ( listFormSubmit != null ) && !listFormSubmit.isEmpty(  ) )
+        if ( ( listFormSubmit != null ) && !listFormSubmit.isEmpty( ) )
         {
-            String strXmlSource = XmlUtil.getXmlHeader(  ) +
-                FormUtils.getXmlResponses( null, form, listFormSubmit, null, plugin );
-            String strXslUniqueId = XSL_UNIQUE_PREFIX_ID + exportFormat.getIdExport(  );
-            XmlTransformerService xmlTransformerService = new XmlTransformerService(  );
-            String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,
-                    exportFormat.getXsl(  ), strXslUniqueId, null, null );
+            String strXmlSource = XmlUtil.getXmlHeader( ) + FormUtils.getXmlResponses( null, form, listFormSubmit, null, plugin );
+            String strXslUniqueId = XSL_UNIQUE_PREFIX_ID + exportFormat.getIdExport( );
+            XmlTransformerService xmlTransformerService = new XmlTransformerService( );
+            String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource, exportFormat.getXsl( ), strXslUniqueId, null, null );
 
             try
             {
                 FileUtils.createFile( strFolderPath, strFileName, strFileOutPut, strEncoding );
-                sbLog.append( "\n\t" + listFormSubmit.size(  ) + " responses exported." );
+                sbLog.append( "\n\t" + listFormSubmit.size( ) + " responses exported." );
             }
-            catch ( IOException e )
+            catch( IOException e )
             {
-                AppLogService.error( e.getMessage(  ), e );
+                AppLogService.error( e.getMessage( ), e );
                 sbLog.append( "\n\tERROR when writing file " + strFileName );
             }
         }
@@ -97,9 +94,9 @@ public class FormExportService extends AbstractExportService
                 FileUtils.deleteFile( strFolderPath, strFileName );
                 sbLog.append( "\n\tNo response exported. Deleting file " + strFileName + "..." );
             }
-            catch ( IOException e )
+            catch( IOException e )
             {
-                AppLogService.error( e.getMessage(  ), e );
+                AppLogService.error( e.getMessage( ), e );
                 sbLog.append( "\n\tERROR when deleting file " + strFileName );
             }
         }

@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 
 import java.util.Locale;
 
-
 /**
  *
  * AbstractExportType
@@ -52,7 +51,7 @@ public abstract class AbstractExportType implements IExportType
      * {@inheritDoc}
      */
     @Override
-    public String getKey(  )
+    public String getKey( )
     {
         return _strKey;
     }
@@ -74,7 +73,7 @@ public abstract class AbstractExportType implements IExportType
     {
         if ( locale == null )
         {
-            return I18nService.getLocalizedString( _strTitleI18nKey, I18nService.getDefaultLocale(  ) );
+            return I18nService.getLocalizedString( _strTitleI18nKey, I18nService.getDefaultLocale( ) );
         }
 
         return I18nService.getLocalizedString( _strTitleI18nKey, locale );

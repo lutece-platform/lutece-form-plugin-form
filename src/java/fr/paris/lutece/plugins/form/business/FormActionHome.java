@@ -40,7 +40,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for SpaceAction objects
  */
@@ -52,15 +51,19 @@ public final class FormActionHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private FormActionHome(  )
+    private FormActionHome( )
     {
     }
 
     /**
      * Load the list of actions by form state
-     * @param nState the state of the form
-     * @param locale the locale
-     * @param plugin the plugin
+     * 
+     * @param nState
+     *            the state of the form
+     * @param locale
+     *            the locale
+     * @param plugin
+     *            the plugin
      * @return The Collection of actions
      */
     public static List<FormAction> selectActionsByFormState( int nState, Plugin plugin, Locale locale )

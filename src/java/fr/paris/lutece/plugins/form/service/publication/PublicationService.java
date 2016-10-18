@@ -45,7 +45,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
  * PublicationService
@@ -59,37 +58,34 @@ public final class PublicationService
      * PublicationService
      *
      */
-    private PublicationService(  )
+    private PublicationService( )
     {
     }
 
     /**
-     * disable all form who are enable and have
-     *  a date of end disponibility before the current date
+     * disable all form who are enable and have a date of end disponibility before the current date
      *
      */
-    public static void publication(  )
+    public static void publication( )
     {
         Plugin plugin = PluginService.getPlugin( CONSTANTE_PLUGIN_NAME_FORM );
-        FormFilter formFilter = new FormFilter(  );
+        FormFilter formFilter = new FormFilter( );
         List<Form> listForm = FormHome.getFormList( formFilter, plugin );
-        Calendar now = new GregorianCalendar( Calendar.getInstance(  ).get( Calendar.YEAR ),
-                Calendar.getInstance(  ).get( Calendar.MONTH ), Calendar.getInstance(  ).get( Calendar.DAY_OF_MONTH ) );
+        Calendar now = new GregorianCalendar( Calendar.getInstance( ).get( Calendar.YEAR ), Calendar.getInstance( ).get( Calendar.MONTH ), Calendar
+                .getInstance( ).get( Calendar.DAY_OF_MONTH ) );
 
-        //set disable form
+        // set disable form
         for ( Form form : listForm )
         {
-            boolean active = form.isActive(  );
-            boolean bAuthorizedAccordingToDateBegin = ( form.getDateBeginDisponibility(  ) == null ) ||
-                form.getDateBeginDisponibility(  ).before( now.getTime(  ) ) ||
-                form.getDateBeginDisponibility(  ).equals( now.getTime(  ) );
-            boolean bAuthorizedAccordingToDateEnd = ( form.getDateEndDisponibility(  ) == null ) ||
-                form.getDateEndDisponibility(  ).after( now.getTime(  ) ) ||
-                form.getDateEndDisponibility(  ).equals( now.getTime(  ) );
+            boolean active = form.isActive( );
+            boolean bAuthorizedAccordingToDateBegin = ( form.getDateBeginDisponibility( ) == null )
+                    || form.getDateBeginDisponibility( ).before( now.getTime( ) ) || form.getDateBeginDisponibility( ).equals( now.getTime( ) );
+            boolean bAuthorizedAccordingToDateEnd = ( form.getDateEndDisponibility( ) == null ) || form.getDateEndDisponibility( ).after( now.getTime( ) )
+                    || form.getDateEndDisponibility( ).equals( now.getTime( ) );
 
             if ( bAuthorizedAccordingToDateBegin && bAuthorizedAccordingToDateEnd )
             {
-                if ( form.isAutoPublicationActive(  ) )
+                if ( form.isAutoPublicationActive( ) )
                 {
                     form.setActive( true );
                 }
@@ -98,8 +94,8 @@ public final class PublicationService
             {
                 form.setActive( false );
 
-                // When the period of a suspended form is passed, reset the autoPublication to 'active' 
-                if ( !form.isAutoPublicationActive(  ) )
+                // When the period of a suspended form is passed, reset the autoPublication to 'active'
+                if ( !form.isAutoPublicationActive( ) )
                 {
                     form.setAutoPublicationActive( true );
                 }
@@ -107,9 +103,9 @@ public final class PublicationService
 
             FormHome.update( form, plugin );
 
-            if ( ( active != form.isActive(  ) ) && !form.isActive(  ) )
+            if ( ( active != form.isActive( ) ) && !form.isActive( ) )
             {
-                FormUtils.sendNotificationMailEndDisponibility( form, Locale.getDefault(  ) );
+                FormUtils.sendNotificationMailEndDisponibility( form, Locale.getDefault( ) );
             }
         }
     }

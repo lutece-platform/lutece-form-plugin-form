@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
-
 /**
  *
  * IEntryParameterDAO
@@ -46,26 +45,33 @@ import fr.paris.lutece.util.ReferenceList;
 public interface IEntryParameterDAO
 {
     /**
-    * Load all the parameter default values
-    * @param plugin Plugin
-    * @return a list of ReferenceItem
-    */
+     * Load all the parameter default values
+     * 
+     * @param plugin
+     *            Plugin
+     * @return a list of ReferenceItem
+     */
     ReferenceList selectAll( Plugin plugin );
 
     /**
-    * Load the parameter value
-    * @param strParameterKey the parameter key
-    * @param plugin Plugin
-    * @return The parameter
-    */
+     * Load the parameter value
+     * 
+     * @param strParameterKey
+     *            the parameter key
+     * @param plugin
+     *            Plugin
+     * @return The parameter
+     */
     ReferenceItem load( String strParameterKey, Plugin plugin );
 
     /**
      * Update the parameter value
-     * @param param A reference item contain the association key/value to
-     *            update. The key must be in the code parameter of the reference
-     *            item, and the value in the value parameter
-     * @param plugin The plugin
+     * 
+     * @param param
+     *            A reference item contain the association key/value to update. The key must be in the code parameter of the reference item, and the value in
+     *            the value parameter
+     * @param plugin
+     *            The plugin
      */
     void store( ReferenceItem param, Plugin plugin );
 }

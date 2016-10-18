@@ -39,7 +39,6 @@ import java.sql.Timestamp;
 
 import java.util.List;
 
-
 /**
  *
  * class FormResponse
@@ -57,14 +56,16 @@ public class FormSubmit
      *
      * @return the form associate to the response
      */
-    public Form getForm(  )
+    public Form getForm( )
     {
         return _form;
     }
 
     /**
      * set the form associate to the response
-     * @param form the form associate to the response
+     * 
+     * @param form
+     *            the form associate to the response
      */
     public void setForm( Form form )
     {
@@ -73,16 +74,19 @@ public class FormSubmit
 
     /**
      * return the id of form resonse
+     * 
      * @return the id of form resonse
      */
-    public int getIdFormSubmit(  )
+    public int getIdFormSubmit( )
     {
         return _nIdFormSubmit;
     }
 
     /**
      * set the id of form resonse
-     * @param idFormResponse the id of form resonse
+     * 
+     * @param idFormResponse
+     *            the id of form resonse
      */
     public void setIdFormSubmit( int idFormResponse )
     {
@@ -93,14 +97,16 @@ public class FormSubmit
      *
      * @return the ip adress of the response
      */
-    public String getIp(  )
+    public String getIp( )
     {
         return _strIp;
     }
 
     /**
      * set the ip adress of the response
-     * @param ip the ip adress of the response
+     * 
+     * @param ip
+     *            the ip adress of the response
      */
     public void setIp( String ip )
     {
@@ -108,17 +114,20 @@ public class FormSubmit
     }
 
     /**
-     *  return the response date
+     * return the response date
+     * 
      * @return the response date
      */
-    public Timestamp getDateResponse(  )
+    public Timestamp getDateResponse( )
     {
         return _tDateResponse;
     }
 
     /**
      * set the response date
-     * @param dateResponse the response date
+     * 
+     * @param dateResponse
+     *            the response date
      */
     public void setDateResponse( Timestamp dateResponse )
     {
@@ -129,14 +138,16 @@ public class FormSubmit
      *
      * @return the list of response associate to the form submit
      */
-    public List<Response> getListResponse(  )
+    public List<Response> getListResponse( )
     {
         return _listResponse;
     }
 
     /**
      * set the list of response associate to the form submit
-     * @param listResponse the list of response associate to the form submit
+     * 
+     * @param listResponse
+     *            the list of response associate to the form submit
      */
     public void setListResponse( List<Response> listResponse )
     {

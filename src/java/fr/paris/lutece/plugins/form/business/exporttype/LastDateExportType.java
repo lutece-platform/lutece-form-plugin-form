@@ -48,13 +48,10 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
- * This class represents the export type from the date written at the last line
- * of the file <strong>/plugins/form/export/formExportResponses</strong>.
- * In other words, every responses with a date greater than the date stored in the file
- * will be included in the export.
+ * This class represents the export type from the date written at the last line of the file <strong>/plugins/form/export/formExportResponses</strong>. In other
+ * words, every responses with a date greater than the date stored in the file will be included in the export.
  *
  */
 public class LastDateExportType extends AbstractExportType
@@ -70,11 +67,11 @@ public class LastDateExportType extends AbstractExportType
     public ResponseFilter getResponseFilter( Form form, Locale locale )
     {
         // Get the last date
-        String strLastDate = FileUtils.readLastLine( getLogFile(  ) );
+        String strLastDate = FileUtils.readLastLine( getLogFile( ) );
         Timestamp lastDate = DateUtils.formatTimestamp( strLastDate, locale );
 
-        ResponseFilter filter = new ResponseFilter(  );
-        filter.setIdResource( form.getIdForm(  ) );
+        ResponseFilter filter = new ResponseFilter( );
+        filter.setIdResource( form.getIdForm( ) );
         filter.setDateFirst( lastDate );
 
         return filter;
@@ -90,18 +87,18 @@ public class LastDateExportType extends AbstractExportType
 
         if ( StringUtils.isNotBlank( strCurrentDate ) )
         {
-            FileUtils.writeToFile( strCurrentDate, getLogFile(  ) );
+            FileUtils.writeToFile( strCurrentDate, getLogFile( ) );
         }
     }
 
     /**
      * Get the log file
+     * 
      * @return the log file
      */
-    private String getLogFile(  )
+    private String getLogFile( )
     {
-        String strFolderPath = AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( 
-                    PROPERTY_FILE_FOLDER_PATH ) );
+        String strFolderPath = AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( PROPERTY_FILE_FOLDER_PATH ) );
         String strLogFileName = AppPropertiesService.getProperty( PROPERTY_LOG_FILE_NAME );
 
         return strFolderPath + strLogFileName;

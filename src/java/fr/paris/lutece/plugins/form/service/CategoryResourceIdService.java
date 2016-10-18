@@ -46,7 +46,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.Locale;
 
-
 /**
  *
  * class ExportFormatResourceIdService
@@ -60,7 +59,7 @@ public class CategoryResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_MANAGE = "form.permission.label.manage.category";
 
     /** Creates a new instance of RegularExpressionResourceIdService */
-    public CategoryResourceIdService(  )
+    public CategoryResourceIdService( )
     {
         setPluginName( FormPlugin.PLUGIN_NAME );
     }
@@ -69,15 +68,15 @@ public class CategoryResourceIdService extends ResourceIdService
      * Initializes the service
      */
     @Override
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( CategoryResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( CategoryResourceIdService.class.getName( ) );
         rt.setPluginName( FormPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( Category.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_MANAGE );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE );
         rt.registerPermission( p );
@@ -86,7 +85,9 @@ public class CategoryResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of category resource ids
-     * @param locale The current locale
+     * 
+     * @param locale
+     *            The current locale
      * @return A list of resource ids
      */
     @Override
@@ -107,14 +108,13 @@ public class CategoryResourceIdService extends ResourceIdService
         {
             nIdCategory = Integer.parseInt( strId );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
 
-        Category category = CategoryHome.findByPrimaryKey( nIdCategory,
-                PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
+        Category category = CategoryHome.findByPrimaryKey( nIdCategory, PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
 
-        return category.getTitle(  );
+        return category.getTitle( );
     }
 }

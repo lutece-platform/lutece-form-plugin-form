@@ -49,7 +49,6 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-
 /**
  *
  * ZipUtils
@@ -62,15 +61,19 @@ public final class ZipUtils
     /**
      * Private constructor
      */
-    private ZipUtils(  )
+    private ZipUtils( )
     {
     }
 
     /**
      * This Method zip a folder and all files contained in it.
-     * @param strFolderToZip the folder to zip
-     * @param strZipDestination the place for the created zip
-     * @param strZipName the zip name
+     * 
+     * @param strFolderToZip
+     *            the folder to zip
+     * @param strZipDestination
+     *            the place for the created zip
+     * @param strZipName
+     *            the zip name
      */
     public static void zipFolder( String strFolderToZip, String strZipDestination, String strZipName )
     {
@@ -79,9 +82,9 @@ public final class ZipUtils
         // Delete zip if it exists
         File fileToDelete = new File( strZipDestination + strZipName );
 
-        if ( fileToDelete.exists(  ) )
+        if ( fileToDelete.exists( ) )
         {
-            if ( !fileToDelete.delete(  ) )
+            if ( !fileToDelete.delete( ) )
             {
                 AppLogService.error( MESSAGE_DELETE_ERROR + strZipDestination + strZipName );
             }
@@ -97,11 +100,11 @@ public final class ZipUtils
 
             zipFolder( folderToZip, zos, StringUtils.EMPTY );
         }
-        catch ( FileNotFoundException e )
+        catch( FileNotFoundException e )
         {
             AppLogService.error( e );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             AppLogService.error( e );
         }
@@ -113,15 +116,19 @@ public final class ZipUtils
 
     /**
      * This Method zip a folder and all files contained in it.
-     * @param dir folder to zip
-     * @param zos zip object
-     * @param path Current path in the zip
-     * @exception IOException exception if there is an error
+     * 
+     * @param dir
+     *            folder to zip
+     * @param zos
+     *            zip object
+     * @param path
+     *            Current path in the zip
+     * @exception IOException
+     *                exception if there is an error
      */
-    private static void zipFolder( File dir, ZipOutputStream zos, String path )
-        throws IOException
+    private static void zipFolder( File dir, ZipOutputStream zos, String path ) throws IOException
     {
-        if ( ( dir != null ) && dir.isDirectory(  ) )
+        if ( ( dir != null ) && dir.isDirectory( ) )
         {
             zipFileInFolder( dir, zos, path );
         }
@@ -129,32 +136,36 @@ public final class ZipUtils
 
     /**
      * Zip a given directory ( Recursive function )
-     * @param dir Current directory to zip
-     * @param zos Zip object
-     * @param path Current path in the zip object
-     * @exception IOException exception if there is an error
+     * 
+     * @param dir
+     *            Current directory to zip
+     * @param zos
+     *            Zip object
+     * @param path
+     *            Current path in the zip object
+     * @exception IOException
+     *                exception if there is an error
      */
-    private static void zipFileInFolder( File dir, ZipOutputStream zos, String path )
-        throws IOException
+    private static void zipFileInFolder( File dir, ZipOutputStream zos, String path ) throws IOException
     {
-        if ( ( dir != null ) && dir.isDirectory(  ) )
+        if ( ( dir != null ) && dir.isDirectory( ) )
         {
-            File[] entries = dir.listFiles(  );
+            File [ ] entries = dir.listFiles( );
             int sz = entries.length;
 
             for ( int j = 0; j < sz; j++ )
             {
-                if ( entries[j].isDirectory(  ) )
+                if ( entries [j].isDirectory( ) )
                 {
                     // FOLDER
 
                     // Add the new folder in the zip
-                    ZipEntry ze = new ZipEntry( path + entries[j].getName(  ) + File.separator );
+                    ZipEntry ze = new ZipEntry( path + entries [j].getName( ) + File.separator );
                     zos.putNextEntry( ze );
 
                     // Call method zipFolder
-                    File newDir = new File( dir.getAbsolutePath(  ) + File.separator + entries[j].getName(  ) );
-                    zipFolder( newDir, zos, path + entries[j].getName(  ) + File.separator );
+                    File newDir = new File( dir.getAbsolutePath( ) + File.separator + entries [j].getName( ) );
+                    zipFolder( newDir, zos, path + entries [j].getName( ) + File.separator );
                 }
                 else
                 {
@@ -165,18 +176,18 @@ public final class ZipUtils
 
                     try
                     {
-                        bis = new FileInputStream( entries[j].getAbsolutePath(  ) );
+                        bis = new FileInputStream( entries [j].getAbsolutePath( ) );
 
                         // Create new entry for the zip
-                        ZipEntry ze = new ZipEntry( path + StringUtil.replaceAccent( entries[j].getName(  ) ) );
-                        byte[] tab = IOUtils.toByteArray( bis );
+                        ZipEntry ze = new ZipEntry( path + StringUtil.replaceAccent( entries [j].getName( ) ) );
+                        byte [ ] tab = IOUtils.toByteArray( bis );
 
                         // Add the new entry to the zip
                         zos.putNextEntry( ze );
                         zos.write( tab );
-                        zos.closeEntry(  );
+                        zos.closeEntry( );
                     }
-                    catch ( FileNotFoundException e )
+                    catch( FileNotFoundException e )
                     {
                         AppLogService.error( e );
                     }

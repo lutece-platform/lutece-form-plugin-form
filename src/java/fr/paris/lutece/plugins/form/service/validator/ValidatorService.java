@@ -42,7 +42,6 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * ValidatorService
  */
@@ -53,19 +52,20 @@ public class ValidatorService
     /**
      * Creates a new instance of ValidatorService
      */
-    private ValidatorService(  )
+    private ValidatorService( )
     {
     }
 
     /**
      * Returns the unique instance of ValidatorService
+     * 
      * @return the unique instance of ValidatorService
      */
-    public static ValidatorService getInstance(  )
+    public static ValidatorService getInstance( )
     {
         if ( _singleton == null )
         {
-            _singleton = new ValidatorService(  );
+            _singleton = new ValidatorService( );
         }
 
         return _singleton;
@@ -73,24 +73,29 @@ public class ValidatorService
 
     /**
      * Returns all validators
+     * 
      * @return all validators
      */
-    public Collection<IValidator> getAllValidators(  )
+    public Collection<IValidator> getAllValidators( )
     {
         return SpringContextService.getBeansOfType( IValidator.class );
     }
 
     /**
      * Validates the form using all validators
-     * @param request {@link HttpServletRequest}
-     * @param formSubmit the form submit
-     * @param plugin the plugin
-     * @throws SiteMessageException If a site message should be displayed
+     * 
+     * @param request
+     *            {@link HttpServletRequest}
+     * @param formSubmit
+     *            the form submit
+     * @param plugin
+     *            the plugin
+     * @throws SiteMessageException
+     *             If a site message should be displayed
      */
-    public void validateForm( HttpServletRequest request, FormSubmit formSubmit, Plugin plugin )
-        throws SiteMessageException
+    public void validateForm( HttpServletRequest request, FormSubmit formSubmit, Plugin plugin ) throws SiteMessageException
     {
-        for ( IValidator validator : getAllValidators(  ) )
+        for ( IValidator validator : getAllValidators( ) )
         {
             validator.validateForm( request, formSubmit, plugin );
         }
@@ -98,12 +103,14 @@ public class ValidatorService
 
     /**
      * Checks if at least one validator is associated with the form
-     * @param nIdForm the form id
+     * 
+     * @param nIdForm
+     *            the form id
      * @return true if at least one validator is associated with the form, otherwise false
      */
     public boolean isAssociatedWithForm( int nIdForm )
     {
-        for ( IValidator validator : getAllValidators(  ) )
+        for ( IValidator validator : getAllValidators( ) )
         {
             if ( validator.isAssociatedWithForm( nIdForm ) )
             {
@@ -116,11 +123,13 @@ public class ValidatorService
 
     /**
      * Removes the associations between all validators and the form
-     * @param nIdForm the form id
+     * 
+     * @param nIdForm
+     *            the form id
      */
     public void removeAssociationsWithForm( int nIdForm )
     {
-        for ( IValidator validator : getAllValidators(  ) )
+        for ( IValidator validator : getAllValidators( ) )
         {
             validator.removeAssociationsWithForm( nIdForm );
         }

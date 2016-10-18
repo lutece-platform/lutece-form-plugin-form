@@ -39,7 +39,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * class FormProcessorDAO
@@ -47,11 +46,9 @@ import java.util.List;
  */
 public class FormProcessorDAO implements IFormProcessorDAO
 {
-    private static final String SQL_QUERY_SELECT_BY_ID_FORM = "SELECT id_form,key_processor" +
-        " FROM form_form_processor WHERE id_form=?";
+    private static final String SQL_QUERY_SELECT_BY_ID_FORM = "SELECT id_form,key_processor" + " FROM form_form_processor WHERE id_form=?";
     private static final String SQL_QUERY_SELECT_ALL = "SELECT id_form,key_processor" + " FROM form_form_processor ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO form_form_processor(id_form,key_processor)" +
-        "VALUES(?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO form_form_processor(id_form,key_processor)" + "VALUES(?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_form_processor WHERE id_form =? AND key_processor=? ";
 
     /**
@@ -60,22 +57,22 @@ public class FormProcessorDAO implements IFormProcessorDAO
     @Override
     public List<FormProcessor> selectByIdForm( int nIdForm, Plugin plugin )
     {
-        List<FormProcessor> listFormProcessor = new ArrayList<FormProcessor>(  );
+        List<FormProcessor> listFormProcessor = new ArrayList<FormProcessor>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ID_FORM, plugin );
         daoUtil.setInt( 1, nIdForm );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         FormProcessor formProcessor = null;
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            formProcessor = new FormProcessor(  );
+            formProcessor = new FormProcessor( );
             formProcessor.setIdForm( daoUtil.getInt( 1 ) );
             formProcessor.setKeyProcessor( daoUtil.getString( 2 ) );
             listFormProcessor.add( formProcessor );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listFormProcessor;
     }
@@ -86,22 +83,22 @@ public class FormProcessorDAO implements IFormProcessorDAO
     @Override
     public List<FormProcessor> selectAll( Plugin plugin )
     {
-        List<FormProcessor> listFormProcessor = new ArrayList<FormProcessor>(  );
+        List<FormProcessor> listFormProcessor = new ArrayList<FormProcessor>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         FormProcessor formProcessor = null;
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            formProcessor = new FormProcessor(  );
+            formProcessor = new FormProcessor( );
             formProcessor.setIdForm( daoUtil.getInt( 1 ) );
             formProcessor.setKeyProcessor( daoUtil.getString( 2 ) );
             listFormProcessor.add( formProcessor );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listFormProcessor;
     }
@@ -114,11 +111,11 @@ public class FormProcessorDAO implements IFormProcessorDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
-        daoUtil.setInt( 1, formProcessor.getIdForm(  ) );
-        daoUtil.setString( 2, formProcessor.getKeyProcessor(  ) );
+        daoUtil.setInt( 1, formProcessor.getIdForm( ) );
+        daoUtil.setString( 2, formProcessor.getKeyProcessor( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -128,10 +125,10 @@ public class FormProcessorDAO implements IFormProcessorDAO
     public void delete( FormProcessor formProcessor, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, formProcessor.getIdForm(  ) );
-        daoUtil.setString( 2, formProcessor.getKeyProcessor(  ) );
+        daoUtil.setInt( 1, formProcessor.getIdForm( ) );
+        daoUtil.setString( 2, formProcessor.getKeyProcessor( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 }

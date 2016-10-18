@@ -45,7 +45,6 @@ import java.sql.Timestamp;
 
 import java.util.List;
 
-
 /**
  * Response service
  *
@@ -54,69 +53,84 @@ public interface IResponseService
 {
     /**
      * Get the file service
+     * 
      * @return the file service
      */
-    FileService getFileService(  );
+    FileService getFileService( );
 
     /**
      * Create a form submit
-     * @param formSubmit The form submit to create
+     * 
+     * @param formSubmit
+     *            The form submit to create
      */
     @Transactional( "form.transactionManager" )
     void create( FormSubmit formSubmit );
 
     /**
      * Creation of an instance of response
-     * @param response The instance of the response which contains the
-     *            informations to store
-     * @param nIdFormSubmit The id of the form submit associated with this
-     *            response
+     * 
+     * @param response
+     *            The instance of the response which contains the informations to store
+     * @param nIdFormSubmit
+     *            The id of the form submit associated with this response
      */
     void create( Response response, int nIdFormSubmit );
 
     /**
      * Update of the response which is specified in parameter
-     * @param response The instance of the Response which contains the
-     *            informations to update
+     * 
+     * @param response
+     *            The instance of the Response which contains the informations to update
      */
     void update( Response response );
 
     /**
-     * Returns an instance of a Response whose identifier is specified in
-     * parameter
-     * @param nKey The entry primary key
-     * @param bGetFileData get file data
+     * Returns an instance of a Response whose identifier is specified in parameter
+     * 
+     * @param nKey
+     *            The entry primary key
+     * @param bGetFileData
+     *            get file data
      * @return an instance of Response
      */
     Response findByPrimaryKey( int nKey, boolean bGetFileData );
 
     /**
-     * Load the data of all the response who verify the filter and returns them
-     * in a list
-     * @param filter the filter
-     * @param bGetFileData get file data
+     * Load the data of all the response who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param bGetFileData
+     *            get file data
      * @return the list of response
      */
     List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData );
 
     /**
      * Return a list of statistic on the entry
-     * @param nIdEntry the id of the entry
+     * 
+     * @param nIdEntry
+     *            the id of the entry
      * @return return a list of statistic on the entry
      */
     List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry );
 
     /**
      * Anonymize entries of responses
-     * @param listIdEntries The list of id of responses to anonymize responses
-     *            of
-     * @param dateCleanTo Anonymize responses posted before this date
+     * 
+     * @param listIdEntries
+     *            The list of id of responses to anonymize responses of
+     * @param dateCleanTo
+     *            Anonymize responses posted before this date
      */
     void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo );
 
     /**
      * Remove responses associated with a given form submit
-     * @param nIdFormSubmit The id of the form submit
+     * 
+     * @param nIdFormSubmit
+     *            The id of the form submit
      */
     void removeFromFormSubmit( int nIdFormSubmit );
 }

@@ -38,27 +38,28 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for NotifySenderConfiguration objects
  */
 public final class NotifySenderConfigurationHome
 {
     // Static variable pointed at the DAO instance
-    private static INotifySenderConfigurationDAO _dao = SpringContextService.getBean( 
-            "form.notifySenderConfigurationDAO" );
+    private static INotifySenderConfigurationDAO _dao = SpringContextService.getBean( "form.notifySenderConfigurationDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private NotifySenderConfigurationHome(  )
+    private NotifySenderConfigurationHome( )
     {
     }
 
     /**
      * Create an instance of the notifySenderConfiguration class
-     * @param notifySenderConfiguration The instance of the NotifySenderConfiguration which contains the informations to store
-     * @param plugin the Plugin
+     * 
+     * @param notifySenderConfiguration
+     *            The instance of the NotifySenderConfiguration which contains the informations to store
+     * @param plugin
+     *            the Plugin
      */
     public static void create( NotifySenderConfiguration notifySenderConfiguration, Plugin plugin )
     {
@@ -67,8 +68,11 @@ public final class NotifySenderConfigurationHome
 
     /**
      * Update of the notifySenderConfiguration which is specified in parameter
-     * @param notifySenderConfiguration The instance of the NotifySenderConfiguration which contains the data to store
-     * @param plugin the Plugin
+     * 
+     * @param notifySenderConfiguration
+     *            The instance of the NotifySenderConfiguration which contains the data to store
+     * @param plugin
+     *            the Plugin
      */
     public static void update( NotifySenderConfiguration notifySenderConfiguration, Plugin plugin )
     {
@@ -77,21 +81,27 @@ public final class NotifySenderConfigurationHome
 
     /**
      * Remove the notifySenderConfiguration whose identifier is specified in parameter
-     * @param nIdForm The identifier of the form associate to the notifySenderConfiguration
-     * @param plugin the Plugin
+     * 
+     * @param nIdForm
+     *            The identifier of the form associate to the notifySenderConfiguration
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdForm, Plugin plugin )
     {
         _dao.delete( nIdForm, plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a notifySenderConfiguration whose identifier is specified in parameter
-     * @param nIdForm The identifier of the form associate to the notifySenderConfiguration
-     * @param plugin the Plugin
+     * 
+     * @param nIdForm
+     *            The identifier of the form associate to the notifySenderConfiguration
+     * @param plugin
+     *            the Plugin
      * @return an instance of NotifySenderConfiguration
      */
     public static NotifySenderConfiguration findByPrimaryKey( int nIdForm, Plugin plugin )
@@ -101,7 +111,9 @@ public final class NotifySenderConfigurationHome
 
     /**
      * Load the data of all the notifySenderConfiguration objects and returns them in form of a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return the collection which contains the data of all the notifySenderConfiguration objects
      */
     public static List<NotifySenderConfiguration> getNotifySenderConfigurationsList( Plugin plugin )

@@ -43,7 +43,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 
 import java.util.List;
 
-
 /**
  * Daemon to remove every submition of the form.
  */
@@ -55,14 +54,14 @@ public class RemoveResponsesDaemon extends Daemon
      * {@inheritDoc}
      */
     @Override
-    public void run(  )
+    public void run( )
     {
         Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
         List<Form> listForms = FormHome.getFormListForAutomaticCleaning( plugin );
 
         for ( Form form : listForms )
         {
-            FormService.getInstance(  ).cleanFormResponses( form );
+            FormService.getInstance( ).cleanFormResponses( form );
         }
 
         this.setLastRunLogs( MESSAGE_FORM_RESPONSES_REMOVED );

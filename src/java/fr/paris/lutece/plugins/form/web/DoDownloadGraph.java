@@ -67,7 +67,6 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  *
  * class DoDownloadGraph
@@ -85,8 +84,11 @@ public class DoDownloadGraph
 
     /**
      * Write in the http response the statistic graph of a question
-     * @param request the http request
-     * @param response The http response
+     * 
+     * @param request
+     *            the http request
+     * @param response
+     *            The http response
      *
      */
     public void doGenerateGraph( HttpServletRequest request, HttpServletResponse response )
@@ -117,9 +119,8 @@ public class DoDownloadGraph
             nGraphLabelValue = true;
         }
 
-        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) && ( strIdGraphType != null ) &&
-                !strIdGraphType.equals( EMPTY_STRING ) && ( strPluginName != null ) &&
-                !strPluginName.equals( EMPTY_STRING ) )
+        if ( ( strIdEntry != null ) && !strIdEntry.equals( EMPTY_STRING ) && ( strIdGraphType != null ) && !strIdGraphType.equals( EMPTY_STRING )
+                && ( strPluginName != null ) && !strPluginName.equals( EMPTY_STRING ) )
         {
             plugin = PluginService.getPlugin( strPluginName );
 
@@ -128,7 +129,7 @@ public class DoDownloadGraph
                 nIdEntry = Integer.parseInt( strIdEntry );
                 nIdGraphType = Integer.parseInt( strIdGraphType );
             }
-            catch ( NumberFormatException ne )
+            catch( NumberFormatException ne )
             {
                 AppLogService.error( ne );
             }
@@ -144,31 +145,29 @@ public class DoDownloadGraph
                 {
                     if ( isListStatisticValid( listStatistic ) )
                     {
-                        chart = graphType.createChart( listStatistic, entry.getTitle(  ), nGraphThreeDimension,
-                                nGraphLabelValue );
+                        chart = graphType.createChart( listStatistic, entry.getTitle( ), nGraphThreeDimension, nGraphLabelValue );
 
-                        ChartRenderingInfo info = new ChartRenderingInfo( new StandardEntityCollection(  ) );
+                        ChartRenderingInfo info = new ChartRenderingInfo( new StandardEntityCollection( ) );
                         BufferedImage chartImage = chart.createBufferedImage( 600, 200, info );
                         response.setContentType( "image/PNG" );
 
                         PngEncoder encoder = new PngEncoder( chartImage, false, 0, 9 );
-                        response.getOutputStream(  ).write( encoder.pngEncode(  ) );
-                        response.getOutputStream(  ).close(  );
+                        response.getOutputStream( ).write( encoder.pngEncode( ) );
+                        response.getOutputStream( ).close( );
                     }
                     else
                     {
-                        BufferedImage image = ImageIO.read( new File( AppPathService.getWebAppPath(  ) +
-                                    "/images/none.jpg" ) );
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream(  );
+                        BufferedImage image = ImageIO.read( new File( AppPathService.getWebAppPath( ) + "/images/none.jpg" ) );
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream( );
                         ImageIO.write( image, "png", baos );
 
-                        response.getOutputStream(  ).write( baos.toByteArray(  ) );
-                        response.getOutputStream(  ).close(  );
+                        response.getOutputStream( ).write( baos.toByteArray( ) );
+                        response.getOutputStream( ).close( );
                     }
                 }
-                catch ( Exception e )
+                catch( Exception e )
                 {
-                    AppLogService.error( e.getMessage(  ), e );
+                    AppLogService.error( e.getMessage( ), e );
                 }
             }
         }
@@ -176,7 +175,9 @@ public class DoDownloadGraph
 
     /**
      * Check if list statistic is valid for display
-     * @param listStatistic list of entry stats
+     * 
+     * @param listStatistic
+     *            list of entry stats
      * @return true if list is valid, false otherwise
      */
     private boolean isListStatisticValid( List<StatisticEntrySubmit> listStatistic )
@@ -188,7 +189,7 @@ public class DoDownloadGraph
 
         for ( StatisticEntrySubmit stat : listStatistic )
         {
-            if ( StringUtils.isBlank( stat.getFieldLibelle(  ) ) )
+            if ( StringUtils.isBlank( stat.getFieldLibelle( ) ) )
             {
                 return false;
             }

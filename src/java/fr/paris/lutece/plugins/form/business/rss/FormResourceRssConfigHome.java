@@ -33,13 +33,11 @@
  */
 package fr.paris.lutece.plugins.form.business.rss;
 
-
 //import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
-
 
 /**
  * FormResourceRssConfigHome
@@ -52,15 +50,17 @@ public final class FormResourceRssConfigHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private FormResourceRssConfigHome(  )
+    private FormResourceRssConfigHome( )
     {
     }
 
     /**
      * Insert new configuration
      *
-     * @param config object configuration
-     * @param plugin the plugin
+     * @param config
+     *            object configuration
+     * @param plugin
+     *            the plugin
      */
     public static void create( FormResourceRssConfig config, Plugin plugin )
     {
@@ -70,8 +70,10 @@ public final class FormResourceRssConfigHome
     /**
      * Update a configuration
      *
-     * @param config object configuration
-     * @param plugin the plugin
+     * @param config
+     *            object configuration
+     * @param plugin
+     *            the plugin
      */
     public static void update( FormResourceRssConfig config, Plugin plugin )
     {
@@ -80,8 +82,11 @@ public final class FormResourceRssConfigHome
 
     /**
      * Delete a configuration
-     * @param nIdFormResourceRssConfig id FormResourceRssConfig
-     * @param plugin the plugin
+     * 
+     * @param nIdFormResourceRssConfig
+     *            id FormResourceRssConfig
+     * @param plugin
+     *            the plugin
      */
     public static void remove( int nIdFormResourceRssConfig, Plugin plugin )
     {
@@ -90,8 +95,11 @@ public final class FormResourceRssConfigHome
 
     /**
      * Delete a configuration
-     * @param nIdFormResourceRssConfig id task
-     * @param plugin the plugin
+     * 
+     * @param nIdFormResourceRssConfig
+     *            id task
+     * @param plugin
+     *            the plugin
      * @return a configuration
      *
      */
@@ -104,7 +112,9 @@ public final class FormResourceRssConfigHome
 
     /**
      * Load All FormResourceRssConfig
-     * @param plugin the plugin
+     * 
+     * @param plugin
+     *            the plugin
      * @return a list of FormResourceRssConfig
      *
      */

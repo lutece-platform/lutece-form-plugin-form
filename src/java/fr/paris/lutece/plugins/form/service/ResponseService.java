@@ -50,7 +50,6 @@ import java.sql.Timestamp;
 
 import java.util.List;
 
-
 /**
  *
  * ResponseService
@@ -64,7 +63,7 @@ public class ResponseService implements IResponseService
      * {@inheritDoc}
      */
     @Override
-    public FileService getFileService(  )
+    public FileService getFileService( )
     {
         if ( _fileService == null )
         {
@@ -81,9 +80,9 @@ public class ResponseService implements IResponseService
     @Transactional( "form.transactionManager" )
     public void create( FormSubmit formSubmit )
     {
-        for ( Response response : formSubmit.getListResponse(  ) )
+        for ( Response response : formSubmit.getListResponse( ) )
         {
-            create( response, formSubmit.getIdFormSubmit(  ) );
+            create( response, formSubmit.getIdFormSubmit( ) );
         }
     }
 
@@ -94,8 +93,7 @@ public class ResponseService implements IResponseService
     public void create( Response response, int nIdFormSubmit )
     {
         ResponseHome.create( response );
-        FormSubmitHome.associateResponseWithFormSubmit( response.getIdResponse(  ), nIdFormSubmit,
-            FormUtils.getPlugin(  ) );
+        FormSubmitHome.associateResponseWithFormSubmit( response.getIdResponse( ), nIdFormSubmit, FormUtils.getPlugin( ) );
     }
 
     /**
@@ -117,9 +115,9 @@ public class ResponseService implements IResponseService
     {
         Response response = ResponseHome.findByPrimaryKey( nKey );
 
-        if ( bGetFileData && ( response.getFile(  ) != null ) )
+        if ( bGetFileData && ( response.getFile( ) != null ) )
         {
-            response.setFile( getFileService(  ).findByPrimaryKey( response.getFile(  ).getIdFile(  ), true ) );
+            response.setFile( getFileService( ).findByPrimaryKey( response.getFile( ).getIdFile( ), true ) );
         }
 
         return response;
@@ -133,13 +131,13 @@ public class ResponseService implements IResponseService
     {
         List<Response> listResponses = ResponseHome.getResponseList( filter );
 
-        if ( bGetFileData && ( listResponses != null ) && !listResponses.isEmpty(  ) )
+        if ( bGetFileData && ( listResponses != null ) && !listResponses.isEmpty( ) )
         {
             for ( Response response : listResponses )
             {
-                if ( response.getFile(  ) != null )
+                if ( response.getFile( ) != null )
                 {
-                    response.setFile( getFileService(  ).findByPrimaryKey( response.getFile(  ).getIdFile(  ), true ) );
+                    response.setFile( getFileService( ).findByPrimaryKey( response.getFile( ).getIdFile( ), true ) );
                 }
             }
         }
@@ -162,7 +160,7 @@ public class ResponseService implements IResponseService
     @Override
     public void anonymizeEntries( List<Integer> listIdEntries, Timestamp dateCleanTo )
     {
-        FormSubmitHome.anonymizeEntries( listIdEntries, dateCleanTo, FormUtils.getPlugin(  ) );
+        FormSubmitHome.anonymizeEntries( listIdEntries, dateCleanTo, FormUtils.getPlugin( ) );
     }
 
     /**
@@ -171,7 +169,7 @@ public class ResponseService implements IResponseService
     @Override
     public void removeFromFormSubmit( int nIdFormSubmit )
     {
-        Plugin plugin = FormUtils.getPlugin(  );
+        Plugin plugin = FormUtils.getPlugin( );
         List<Integer> listIdResponse = FormSubmitHome.getResponseListFromIdFormSubmit( nIdFormSubmit, plugin );
 
         for ( Integer nIdResponse : listIdResponse )

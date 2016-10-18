@@ -57,30 +57,29 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * FormResourceRss
  */
 public class FormResourceRss extends ResourceRss
 {
-    //templates
+    // templates
     private static final String TEMPLATE_PUSH_RSS_XML_FORM = "admin/plugins/form/rss/rss_xml_form.html";
     private static final String TEMPLATE_RSS_FORM_ITEM_TITLE = "admin/plugins/form/rss/rss_form_item_title.html";
 
-    //JSPs
+    // JSPs
     private static final String JSP_PAGE_FORM = "/jsp/site/Portal.jsp?page=form";
 
-    //Markers
+    // Markers
     private static final String MARK_RSS_ITEM_TITLE = "item_title";
     private static final String MARK_RSS_ITEM_DATE_BEGIN_FORM = "item_date_begin_form";
     private static final String MARK_RSS_ITEM_DATE_END_DISPONIBILITY_FORM = "item_date_end_form";
     private static final String MARK_RSS_ITEM_DESCRIPTION = "item_description";
 
-    //Parameters
+    // Parameters
     private static final String PARAMETER_ID_FORM = "id_form";
 
-    //Messages
+    // Messages
     private static final String PROPERTY_SITE_LANGUAGE = "rss.language";
     private static final String PROPERTY_WEBAPP_PROD_URL = "lutece.prod.url";
     private static final String PROPERTY_DESCRIPTION_WIRE = "form.resource_rss.description_wire";
@@ -91,11 +90,11 @@ public class FormResourceRss extends ResourceRss
      * {@inheritDoc}
      */
     @Override
-    public boolean contentResourceRss(  )
+    public boolean contentResourceRss( )
     {
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 
-        FormFilter filter = new FormFilter(  );
+        FormFilter filter = new FormFilter( );
 
         if ( FormHome.getFormList( filter, pluginForm ) != null )
         {
@@ -113,8 +112,8 @@ public class FormResourceRss extends ResourceRss
     {
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 
-        FormResourceRssConfig config = new FormResourceRssConfig(  );
-        config.setIdRss( this.getId(  ) );
+        FormResourceRssConfig config = new FormResourceRssConfig( );
+        config.setIdRss( this.getId( ) );
 
         FormResourceRssConfigHome.create( config, pluginForm );
     }
@@ -127,8 +126,8 @@ public class FormResourceRss extends ResourceRss
     {
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 
-        FormResourceRssConfig config = new FormResourceRssConfig(  );
-        config.setIdRss( this.getId(  ) );
+        FormResourceRssConfig config = new FormResourceRssConfig( );
+        config.setIdRss( this.getId( ) );
 
         FormResourceRssConfigHome.update( config, pluginForm );
     }
@@ -166,29 +165,29 @@ public class FormResourceRss extends ResourceRss
      * {@inheritDoc}
      */
     @Override
-    public String createHtmlRss(  )
+    public String createHtmlRss( )
     {
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 
         String strRssFileLanguage = AppPropertiesService.getProperty( PROPERTY_SITE_LANGUAGE );
         Locale locale = new Locale( strRssFileLanguage );
 
-        FormFilter formFilter = new FormFilter(  );
+        FormFilter formFilter = new FormFilter( );
         formFilter.setIdState( 1 );
 
         List<Form> listResultForm = FormHome.getFormList( formFilter, pluginForm );
-        List<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>(  );
+        List<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>( );
 
-        //Description of  the new form
+        // Description of the new form
         for ( Form form : listResultForm )
         {
-            HashMap<String, Object> item = new HashMap<String, Object>(  );
+            HashMap<String, Object> item = new HashMap<String, Object>( );
 
-            item.put( MARK_RSS_ITEM_TITLE, form.getTitle(  ) );
-            item.put( MARK_RSS_ITEM_DATE_BEGIN_FORM, form.getDateBeginDisponibility(  ) );
-            item.put( MARK_RSS_ITEM_DATE_END_DISPONIBILITY_FORM, form.getDateEndDisponibility(  ) );
-            item.put( MARK_RSS_ITEM_DESCRIPTION, form.getDescription(  ) );
+            item.put( MARK_RSS_ITEM_TITLE, form.getTitle( ) );
+            item.put( MARK_RSS_ITEM_DATE_BEGIN_FORM, form.getDateBeginDisponibility( ) );
+            item.put( MARK_RSS_ITEM_DATE_END_DISPONIBILITY_FORM, form.getDateEndDisponibility( ) );
+            item.put( MARK_RSS_ITEM_DESCRIPTION, form.getDescription( ) );
 
             listItem.add( item );
         }
@@ -197,14 +196,14 @@ public class FormResourceRss extends ResourceRss
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_PUSH_RSS_XML_FORM, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public IFeedResource getFeed(  )
+    public IFeedResource getFeed( )
     {
         String strRssFileLanguage = AppPropertiesService.getProperty( PROPERTY_SITE_LANGUAGE );
         Locale locale = new Locale( strRssFileLanguage );
@@ -214,39 +213,38 @@ public class FormResourceRss extends ResourceRss
 
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 
-        IFeedResource resource = new FeedResource(  );
+        IFeedResource resource = new FeedResource( );
         resource.setTitle( I18nService.getLocalizedString( PROPERTY_TITLE_WIRE, new Locale( strRssFileLanguage ) ) );
         resource.setLink( strSiteUrl + JSP_PAGE_FORM );
         resource.setLanguage( strRssFileLanguage );
-        resource.setDescription( I18nService.getLocalizedString( PROPERTY_DESCRIPTION_WIRE,
-                new Locale( strRssFileLanguage ) ) );
+        resource.setDescription( I18nService.getLocalizedString( PROPERTY_DESCRIPTION_WIRE, new Locale( strRssFileLanguage ) ) );
 
-        FormFilter formFilter = new FormFilter(  );
+        FormFilter formFilter = new FormFilter( );
         formFilter.setIdState( 1 );
 
         List<Form> listResultForm = FormHome.getFormList( formFilter, pluginForm );
-        List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>(  );
+        List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>( );
 
-        //Description of  the form
+        // Description of the form
         for ( Form form : listResultForm )
         {
-            IFeedResourceItem item = new FeedResourceItem(  );
+            IFeedResourceItem item = new FeedResourceItem( );
 
             String strTitle;
-            Map<String, Object> model = new HashMap<String, Object>(  );
+            Map<String, Object> model = new HashMap<String, Object>( );
 
-            model.put( MARK_RSS_ITEM_TITLE, form.getTitle(  ) );
-            model.put( MARK_RSS_ITEM_DATE_BEGIN_FORM, form.getDateBeginDisponibility(  ) );
-            model.put( MARK_RSS_ITEM_DATE_END_DISPONIBILITY_FORM, form.getDateEndDisponibility(  ) );
-            model.put( MARK_RSS_ITEM_DESCRIPTION, form.getDescription(  ) );
+            model.put( MARK_RSS_ITEM_TITLE, form.getTitle( ) );
+            model.put( MARK_RSS_ITEM_DATE_BEGIN_FORM, form.getDateBeginDisponibility( ) );
+            model.put( MARK_RSS_ITEM_DATE_END_DISPONIBILITY_FORM, form.getDateEndDisponibility( ) );
+            model.put( MARK_RSS_ITEM_DESCRIPTION, form.getDescription( ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_RSS_FORM_ITEM_TITLE, locale, model );
-            strTitle = template.getHtml(  );
+            strTitle = template.getHtml( );
 
             item.setTitle( strTitle );
-            item.setLink( strSiteUrl + JSP_PAGE_FORM + "&id_form=" + form.getIdForm(  ) );
-            item.setDescription( form.getDescription(  ) );
-            item.setDate( form.getDateCreation(  ) );
+            item.setLink( strSiteUrl + JSP_PAGE_FORM + "&id_form=" + form.getIdForm( ) );
+            item.setDescription( form.getDescription( ) );
+            item.setDate( form.getDateCreation( ) );
 
             listItems.add( item );
         }
@@ -272,7 +270,7 @@ public class FormResourceRss extends ResourceRss
     @Override
     public Map<String, String> getParameterToApply( HttpServletRequest request )
     {
-        Map<String, String> map = new HashMap<String, String>(  );
+        Map<String, String> map = new HashMap<String, String>( );
 
         map.put( PARAMETER_ID_FORM, request.getParameter( PARAMETER_ID_FORM ) );
 
@@ -283,10 +281,10 @@ public class FormResourceRss extends ResourceRss
      * {@inheritDoc}
      */
     @Override
-    public boolean checkResource(  )
+    public boolean checkResource( )
     {
         Plugin pluginForm = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
-        FormResourceRssConfig config = FormResourceRssConfigHome.findByPrimaryKey( this.getId(  ), pluginForm );
+        FormResourceRssConfig config = FormResourceRssConfigHome.findByPrimaryKey( this.getId( ), pluginForm );
 
         return ( config != null );
     }

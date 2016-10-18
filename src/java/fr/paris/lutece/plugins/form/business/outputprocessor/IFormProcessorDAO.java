@@ -37,38 +37,48 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * Interface for {@link FormProcessorDAO}
  */
 public interface IFormProcessorDAO
 {
     /**
-     * Load the data of all the  FormProcessor wich is associate to the form and returns them as a list
-     * @param nIdForm the id of the form
-     * @param plugin the plugin
+     * Load the data of all the FormProcessor wich is associate to the form and returns them as a list
+     * 
+     * @param nIdForm
+     *            the id of the form
+     * @param plugin
+     *            the plugin
      * @return a List of FormProcessor Object
      */
     List<FormProcessor> selectByIdForm( int nIdForm, Plugin plugin );
 
     /**
      * Load the data of all the FormProcessor and returns them as a List
-     * @param plugin the plugin
+     * 
+     * @param plugin
+     *            the plugin
      * @return a List of FormProcessor Object
      */
     List<FormProcessor> selectAll( Plugin plugin );
 
     /**
      * Insert a new record in the table.
-     * @param formProcessor formProcessor
-     * @param plugin the plugin
+     * 
+     * @param formProcessor
+     *            formProcessor
+     * @param plugin
+     *            the plugin
      */
     void insert( FormProcessor formProcessor, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param formProcessor formProcesor
-     * @param plugin the plugin
+     * 
+     * @param formProcessor
+     *            formProcesor
+     * @param plugin
+     *            the plugin
      */
     void delete( FormProcessor formProcessor, Plugin plugin );
 }

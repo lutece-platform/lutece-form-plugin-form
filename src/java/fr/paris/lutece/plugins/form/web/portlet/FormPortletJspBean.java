@@ -54,13 +54,12 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * This class provides the user interface to manage form Portlet
  */
 public class FormPortletJspBean extends PortletJspBean
 {
-    ////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////
     // Constants
     /**
      * Right to manage forms
@@ -72,43 +71,45 @@ public class FormPortletJspBean extends PortletJspBean
     private static final String PARAMETER_ID_FORM = "id_form";
     private static final String MESSAGE_YOU_MUST_CHOOSE_A_FORM = "form.message.mandatory.form";
 
-    ////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////
     // Class attributes
 
     /**
      * Returns the Download portlet creation form
      *
-     * @param request The HTTP request
+     * @param request
+     *            The HTTP request
      * @return The HTML form
      */
     @Override
     public String getCreate( HttpServletRequest request )
     {
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         String strIdPage = request.getParameter( PARAMETER_PAGE_ID );
         String strIdPortletType = request.getParameter( PARAMETER_PORTLET_TYPE_ID );
         PortletType portletType = PortletTypeHome.findByPrimaryKey( strIdPortletType );
-        Plugin plugin = PluginService.getPlugin( portletType.getPluginName(  ) );
-        ReferenceList refList = FormUtils.getFormList( plugin, getUser(  ) );
+        Plugin plugin = PluginService.getPlugin( portletType.getPluginName( ) );
+        ReferenceList refList = FormUtils.getFormList( plugin, getUser( ) );
 
         model.put( MARK_FORM_LIST, refList );
 
         HtmlTemplate template = getCreateTemplate( strIdPage, strIdPortletType, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * Returns the Download portlet modification form
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The HTML form
      */
     @Override
     public String getModify( HttpServletRequest request )
     {
         Form form;
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         String strPortletId = request.getParameter( PARAMETER_PORTLET_ID );
         int nPortletId = -1;
 
@@ -116,34 +117,35 @@ public class FormPortletJspBean extends PortletJspBean
         {
             nPortletId = Integer.parseInt( strPortletId );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
 
         FormPortlet portlet = (FormPortlet) PortletHome.findByPrimaryKey( nPortletId );
-        Plugin plugin = PluginService.getPlugin( portlet.getPluginName(  ) );
+        Plugin plugin = PluginService.getPlugin( portlet.getPluginName( ) );
         form = FormPortletHome.getFormByPortletId( nPortletId, plugin );
 
-        ReferenceList refList = FormUtils.getFormList( plugin, getUser(  ) );
+        ReferenceList refList = FormUtils.getFormList( plugin, getUser( ) );
         model.put( MARK_FORM_LIST, refList );
-        model.put( MARK_ID_FORM, form.getIdForm(  ) );
+        model.put( MARK_ID_FORM, form.getIdForm( ) );
 
         HtmlTemplate template = getModifyTemplate( portlet, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * Process portlet's creation
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The Jsp management URL of the process result
      */
     @Override
     public String doCreate( HttpServletRequest request )
     {
-        FormPortlet portlet = new FormPortlet(  );
+        FormPortlet portlet = new FormPortlet( );
         String strPageId = request.getParameter( PARAMETER_PAGE_ID );
         String strFormId = request.getParameter( PARAMETER_ID_FORM );
         int nPageId = -1;
@@ -157,15 +159,14 @@ public class FormPortletJspBean extends PortletJspBean
             nPageId = Integer.parseInt( strPageId );
             nFormId = Integer.parseInt( strFormId );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
 
         if ( ( strErrorUrl == null ) && ( nFormId == -1 ) )
         {
-            strErrorUrl = AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_CHOOSE_A_FORM,
-                    AdminMessage.TYPE_STOP );
+            strErrorUrl = AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_CHOOSE_A_FORM, AdminMessage.TYPE_STOP );
         }
 
         if ( strErrorUrl != null )
@@ -177,16 +178,17 @@ public class FormPortletJspBean extends PortletJspBean
         portlet.setFormId( nFormId );
 
         // Creating portlet
-        FormPortletHome.getInstance(  ).create( portlet );
+        FormPortletHome.getInstance( ).create( portlet );
 
-        //Displays the page with the new Portlet
+        // Displays the page with the new Portlet
         return getPageUrl( nPageId );
     }
 
     /**
      * Process portlet's modification
      *
-     * @param request The http request
+     * @param request
+     *            The http request
      * @return Management's Url
      */
     @Override
@@ -203,7 +205,7 @@ public class FormPortletJspBean extends PortletJspBean
             nPortletId = Integer.parseInt( strPortletId );
             nFormId = Integer.parseInt( strFormId );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
@@ -215,8 +217,7 @@ public class FormPortletJspBean extends PortletJspBean
 
         if ( ( strErrorUrl == null ) && ( nFormId == -1 ) )
         {
-            strErrorUrl = AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_CHOOSE_A_FORM,
-                    AdminMessage.TYPE_STOP );
+            strErrorUrl = AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_CHOOSE_A_FORM, AdminMessage.TYPE_STOP );
         }
 
         if ( strErrorUrl != null )
@@ -226,9 +227,9 @@ public class FormPortletJspBean extends PortletJspBean
 
         portlet.setFormId( nFormId );
         // updates the portlet
-        portlet.update(  );
+        portlet.update( );
 
         // displays the page withe the potlet updated
-        return getPageUrl( portlet.getPageId(  ) );
+        return getPageUrl( portlet.getPageId( ) );
     }
 }

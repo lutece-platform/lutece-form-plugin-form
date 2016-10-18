@@ -51,7 +51,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * class EntryTypeText
@@ -94,8 +93,7 @@ public class EntryTypeText extends AbstractEntryTypeText
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         GenericAttributeError formError = super.getResponseData( entry, request, listResponse, locale );
 
@@ -104,12 +102,12 @@ public class EntryTypeText extends AbstractEntryTypeText
             return formError;
         }
 
-        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) ).trim(  );
+        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
 
-        if ( entry.isUnique(  ) )
+        if ( entry.isUnique( ) )
         {
-            ResponseFilter filter = new ResponseFilter(  );
-            filter.setIdEntry( entry.getIdEntry(  ) );
+            ResponseFilter filter = new ResponseFilter( );
+            filter.setIdEntry( entry.getIdEntry( ) );
 
             IResponseService responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
             Collection<Response> listSubmittedResponses = responseService.getResponseList( filter, false );
@@ -118,14 +116,13 @@ public class EntryTypeText extends AbstractEntryTypeText
             {
                 String strSubmittedResponse = getResponseValueForRecap( entry, request, submittedResponse, locale );
 
-                if ( StringUtils.isNotBlank( strValueEntry ) && StringUtils.isNotBlank( strSubmittedResponse ) &&
-                        strValueEntry.equalsIgnoreCase( strSubmittedResponse ) )
+                if ( StringUtils.isNotBlank( strValueEntry ) && StringUtils.isNotBlank( strSubmittedResponse )
+                        && strValueEntry.equalsIgnoreCase( strSubmittedResponse ) )
                 {
-                    formError = new GenericAttributeError(  );
+                    formError = new GenericAttributeError( );
                     formError.setMandatoryError( false );
-                    formError.setTitleQuestion( entry.getTitle(  ) );
-                    formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_UNIQUE_FIELD,
-                            request.getLocale(  ) ) );
+                    formError.setTitleQuestion( entry.getTitle( ) );
+                    formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_UNIQUE_FIELD, request.getLocale( ) ) );
 
                     return formError;
                 }

@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business.rss;
 
-
 /**
  *
  * FormResourceRssConfig
@@ -44,17 +43,19 @@ public class FormResourceRssConfig
     private int _nIdRss;
 
     /**
-    *
-    * @return id Rss
-    */
-    public int getIdRss(  )
+     *
+     * @return id Rss
+     */
+    public int getIdRss( )
     {
         return _nIdRss;
     }
 
     /**
      * set id Rss
-     * @param idRss id Rss
+     * 
+     * @param idRss
+     *            id Rss
      */
     public void setIdRss( int idRss )
     {

@@ -41,50 +41,65 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
- *  IOutputProcessor
+ * IOutputProcessor
  *
  */
 public interface IOutputProcessor
 {
     /**
      * Get the processor key
+     * 
      * @return the processor key
      */
-    String getKey(  );
+    String getKey( );
 
     /**
      * set the processor key
-     * @param strKey the processor key
+     * 
+     * @param strKey
+     *            the processor key
      */
     void setKey( String strKey );
 
     /**
      * Return the processor configuration interface
-     * @param request The request
-     * @param form the form wich using the processor
-     * @param locale {@link Locale}
-     * @param plugin {@link Plugin}
+     * 
+     * @param request
+     *            The request
+     * @param form
+     *            the form wich using the processor
+     * @param locale
+     *            {@link Locale}
+     * @param plugin
+     *            {@link Plugin}
      * @return the processor configuration interface
      */
     String getOutputConfigForm( HttpServletRequest request, Form form, Locale locale, Plugin plugin );
 
     /**
      * Store the processor configuration
-     * @param request {@link HttpServletRequest}
-     * @param locale {@link Locale}
-     * @param plugin {@link Plugin}
+     * 
+     * @param request
+     *            {@link HttpServletRequest}
+     * @param locale
+     *            {@link Locale}
+     * @param plugin
+     *            {@link Plugin}
      * @return a message error if a error appear else null
      */
     String doOutputConfigForm( HttpServletRequest request, Locale locale, Plugin plugin );
 
     /**
      * Process the OutputProcessor
-     * @param formSubmit the formSubmit associate to the process
-     * @param request {@link HttpServletRequest}
-     * @param plugin {@link Plugin}
+     * 
+     * @param formSubmit
+     *            the formSubmit associate to the process
+     * @param request
+     *            {@link HttpServletRequest}
+     * @param plugin
+     *            {@link Plugin}
      * @return a message error if a error appear else null
      */
     String process( FormSubmit formSubmit, HttpServletRequest request, Plugin plugin );

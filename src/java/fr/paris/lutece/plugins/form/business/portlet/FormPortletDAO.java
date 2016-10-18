@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.form.business.portlet;
 import fr.paris.lutece.portal.business.portlet.Portlet;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  * This class provides Data Access methods for ArticlesListPortlet objects
  */
@@ -48,14 +47,15 @@ public final class FormPortletDAO implements IFormPortletDAO
     private static final String SQL_QUERY_UPDATE = "UPDATE form_portlet SET id_portlet = ?, id_form = ? WHERE id_portlet = ? ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM form_portlet WHERE id_portlet= ? ";
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //Access methods to data
+    // /////////////////////////////////////////////////////////////////////////////////////
+    // Access methods to data
 
     /**
      * Insert a new record in the table form_portlet
      *
      *
-     * @param portlet the instance of the Portlet object to insert
+     * @param portlet
+     *            the instance of the Portlet object to insert
      */
     @Override
     public void insert( Portlet portlet )
@@ -63,33 +63,35 @@ public final class FormPortletDAO implements IFormPortletDAO
         FormPortlet p = (FormPortlet) portlet;
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT );
-        daoUtil.setInt( 1, p.getId(  ) );
-        daoUtil.setInt( 2, p.getFormId(  ) );
+        daoUtil.setInt( 1, p.getId( ) );
+        daoUtil.setInt( 2, p.getFormId( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Deletes records for a portlet identifier in the table form_portlet
      *
      *
-     * @param nPortletId the portlet identifier
+     * @param nPortletId
+     *            the portlet identifier
      */
     @Override
     public void delete( int nPortletId )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE );
         daoUtil.setInt( 1, nPortletId );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Loads the data of Form Portlet whose identifier is specified in parameter
      *
      *
-     * @param nPortletId The Portlet identifier
+     * @param nPortletId
+     *            The Portlet identifier
      * @return theDocumentListPortlet object
      */
     @Override
@@ -97,24 +99,26 @@ public final class FormPortletDAO implements IFormPortletDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
         daoUtil.setInt( 1, nPortletId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        FormPortlet portlet = new FormPortlet(  );
+        FormPortlet portlet = new FormPortlet( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             portlet.setId( daoUtil.getInt( 1 ) );
             portlet.setFormId( daoUtil.getInt( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return portlet;
     }
 
     /**
      * return number of form portlet who are associate to the id form
-     * @param nIdForm the id of the form
+     * 
+     * @param nIdForm
+     *            the id of the form
      * @return number of form portlet who are associate to the id form
      */
     @Override
@@ -123,14 +127,14 @@ public final class FormPortletDAO implements IFormPortletDAO
         int nCountPortlet = 0;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_COUNT_PORTLET_BY_ID_FORM );
         daoUtil.setInt( 1, nIdForm );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             nCountPortlet = daoUtil.getInt( 1 );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nCountPortlet;
     }
@@ -139,17 +143,18 @@ public final class FormPortletDAO implements IFormPortletDAO
      * Update the record in the table
      *
      *
-     * @param portlet A portlet
+     * @param portlet
+     *            A portlet
      */
     @Override
     public void store( Portlet portlet )
     {
         FormPortlet p = (FormPortlet) portlet;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE );
-        daoUtil.setInt( 1, p.getId(  ) );
-        daoUtil.setInt( 2, p.getFormId(  ) );
-        daoUtil.setInt( 3, p.getId(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( 1, p.getId( ) );
+        daoUtil.setInt( 2, p.getFormId( ) );
+        daoUtil.setInt( 3, p.getId( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 }

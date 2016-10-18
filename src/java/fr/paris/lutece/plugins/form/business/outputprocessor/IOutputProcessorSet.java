@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.form.business.outputprocessor;
 
 import java.util.Collection;
 
-
 /**
  * IOutputProcessorSet
  */
@@ -43,14 +42,17 @@ public interface IOutputProcessorSet
 {
     /**
      * return the OutputProcessor which the key is specified in parameter
-     * @param strKey the key of the processor
+     * 
+     * @param strKey
+     *            the key of the processor
      * @return OutputProcessor Object
      */
     IOutputProcessor getOutputProcessor( String strKey );
 
     /**
      * return a collection OutputProcessor
+     * 
      * @return a collection of IOutputProcessor
      */
-    Collection<IOutputProcessor> getAllOutputProcessor(  );
+    Collection<IOutputProcessor> getAllOutputProcessor( );
 }

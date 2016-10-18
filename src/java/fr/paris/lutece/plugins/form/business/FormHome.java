@@ -48,10 +48,8 @@ import fr.paris.lutece.util.sql.TransactionManager;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * This class provides instances management methods (create, find, ...) for
- * ReportingProject objects
+ * This class provides instances management methods (create, find, ...) for ReportingProject objects
  */
 public final class FormHome
 {
@@ -61,16 +59,17 @@ public final class FormHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private FormHome(  )
+    private FormHome( )
     {
     }
 
     /**
      * Creation of an instance of Form
      *
-     * @param form The instance of the Form which contains the informations to
-     *            store
-     * @param plugin the Plugin
+     * @param form
+     *            The instance of the Form which contains the informations to store
+     * @param plugin
+     *            the Plugin
      * @return The primary key of the new form.
      */
     public static int create( Form form, Plugin plugin )
@@ -81,21 +80,23 @@ public final class FormHome
     /**
      * Copy of an instance of Form
      *
-     * @param form The instance of the Form who must copy
-     * @param plugin the Plugin
+     * @param form
+     *            The instance of the Form who must copy
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void copy( Form form, Plugin plugin )
     {
         Recap recap;
         List<Entry> listEntry;
-        EntryFilter filter = new EntryFilter(  );
-        filter.setIdResource( form.getIdForm(  ) );
+        EntryFilter filter = new EntryFilter( );
+        filter.setIdResource( form.getIdForm( ) );
         filter.setResourceType( Form.RESOURCE_TYPE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         listEntry = EntryHome.getEntryList( filter );
-        recap = RecapHome.findByPrimaryKey( form.getRecap(  ).getIdRecap(  ), plugin );
+        recap = RecapHome.findByPrimaryKey( form.getRecap( ).getIdRecap( ), plugin );
 
         TransactionManager.beginTransaction( plugin );
 
@@ -103,32 +104,33 @@ public final class FormHome
         {
             recap.setIdRecap( RecapHome.copy( recap, plugin ) );
             form.setRecap( recap );
-            form.setDateCreation( FormUtils.getCurrentTimestamp(  ) );
+            form.setDateCreation( FormUtils.getCurrentTimestamp( ) );
             form.setIdForm( create( form, plugin ) );
 
             for ( Entry entry : listEntry )
             {
-                entry = EntryHome.findByPrimaryKey( entry.getIdEntry(  ) );
-                entry.setIdResource( form.getIdForm(  ) );
+                entry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
+                entry.setIdResource( form.getIdForm( ) );
                 entry.setResourceType( Form.RESOURCE_TYPE );
                 EntryHome.copy( entry );
             }
 
             TransactionManager.commitTransaction( plugin );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             TransactionManager.rollBack( plugin );
-            throw new AppException( e.getMessage(  ), e );
+            throw new AppException( e.getMessage( ), e );
         }
     }
 
     /**
      * Update of the form which is specified in parameter
      *
-     * @param form The instance of the Form which contains the informations to
-     *            update
-     * @param plugin the Plugin
+     * @param form
+     *            The instance of the Form which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void update( Form form, Plugin plugin )
@@ -139,18 +141,20 @@ public final class FormHome
     /**
      * Remove the form whose identifier is specified in parameter
      *
-     * @param nIdForm The form Id
-     * @param plugin the Plugin
+     * @param nIdForm
+     *            The form Id
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdForm, Plugin plugin )
     {
-        ResponseFilter responseFilter = new ResponseFilter(  );
+        ResponseFilter responseFilter = new ResponseFilter( );
         responseFilter.setIdResource( nIdForm );
 
         List<FormSubmit> listFormSubmit = FormSubmitHome.getFormSubmitList( responseFilter, plugin );
         Form form = findByPrimaryKey( nIdForm, plugin );
-        EntryFilter entryFilter = new EntryFilter(  );
-        entryFilter.setIdResource( form.getIdForm(  ) );
+        EntryFilter entryFilter = new EntryFilter( );
+        entryFilter.setIdResource( form.getIdForm( ) );
         entryFilter.setResourceType( Form.RESOURCE_TYPE );
 
         List<Entry> listEntry = EntryHome.getEntryList( entryFilter );
@@ -161,32 +165,34 @@ public final class FormHome
         {
             for ( FormSubmit formSubmit : listFormSubmit )
             {
-                FormSubmitHome.remove( formSubmit.getIdFormSubmit(  ), plugin );
+                FormSubmitHome.remove( formSubmit.getIdFormSubmit( ), plugin );
             }
 
             for ( Entry entry : listEntry )
             {
-                EntryHome.remove( entry.getIdEntry(  ) );
+                EntryHome.remove( entry.getIdEntry( ) );
             }
 
             _dao.delete( nIdForm, plugin );
-            RecapHome.remove( form.getRecap(  ).getIdRecap(  ), plugin );
+            RecapHome.remove( form.getRecap( ).getIdRecap( ), plugin );
             TransactionManager.commitTransaction( plugin );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             TransactionManager.rollBack( plugin );
-            throw new AppException( e.getMessage(  ), e );
+            throw new AppException( e.getMessage( ), e );
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
     /**
      * Returns an instance of a Form whose identifier is specified in parameter
      *
-     * @param nKey The entry primary key
-     * @param plugin the Plugin
+     * @param nKey
+     *            The entry primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of Form
      */
     public static Form findByPrimaryKey( int nKey, Plugin plugin )
@@ -195,10 +201,12 @@ public final class FormHome
     }
 
     /**
-     * Load the data of all the form who verify the filter and returns them in a
-     * list
-     * @param filter the filter
-     * @param plugin the plugin
+     * Load the data of all the form who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return the list of form
      */
     public static List<Form> getFormList( FormFilter filter, Plugin plugin )
@@ -207,13 +215,11 @@ public final class FormHome
     }
 
     /**
-     * Get the list of forms that must be cleaned automatically. Only id,
-     * automatic cleaning and cleaning by removal attributes or form are
-     * fetched.
-     * @param plugin The plugin
-     * @return the list of form, or an empty list if no form was found. Only id,
-     *         automatic cleaning and cleaning by removal attributes or form are
-     *         fetched.
+     * Get the list of forms that must be cleaned automatically. Only id, automatic cleaning and cleaning by removal attributes or form are fetched.
+     * 
+     * @param plugin
+     *            The plugin
+     * @return the list of form, or an empty list if no form was found. Only id, automatic cleaning and cleaning by removal attributes or form are fetched.
      */
     public static List<Form> getFormListForAutomaticCleaning( Plugin plugin )
     {
@@ -222,7 +228,9 @@ public final class FormHome
 
     /**
      * Load the data of all enable form returns them in a reference list
-     * @param plugin the plugin
+     * 
+     * @param plugin
+     *            the plugin
      * @return a reference list of enable form
      */
     public static ReferenceList getFormList( Plugin plugin )
@@ -232,7 +240,9 @@ public final class FormHome
 
     /**
      * Load the xpage themes for all forms
-     * @param plugin The plugin
+     * 
+     * @param plugin
+     *            The plugin
      * @return A map of themes associated with form ids
      *
      */
@@ -243,11 +253,12 @@ public final class FormHome
 
     /**
      * Get the list of entries of a form to anonymize
-     * @param nIdForm The id of the form
-     * @param plugin The plugin
-     * @return The list of ids of entries to anonymize, or an empty list if the
-     *         form was not fount or if no entries of this form should be
-     *         anonymized
+     * 
+     * @param nIdForm
+     *            The id of the form
+     * @param plugin
+     *            The plugin
+     * @return The list of ids of entries to anonymize, or an empty list if the form was not fount or if no entries of this form should be anonymized
      */
     public static List<Integer> getAnonymizeEntryList( int nIdForm, Plugin plugin )
     {
@@ -256,9 +267,13 @@ public final class FormHome
 
     /**
      * Insert an entry in the anonymize entries table
-     * @param nIdForm The id of the form the entry is associated with
-     * @param nIdEntry The id of the entry to anonymize
-     * @param plugin The plugin
+     * 
+     * @param nIdForm
+     *            The id of the form the entry is associated with
+     * @param nIdEntry
+     *            The id of the entry to anonymize
+     * @param plugin
+     *            The plugin
      */
     public static void insertAnonymizeEntry( int nIdForm, int nIdEntry, Plugin plugin )
     {
@@ -267,8 +282,11 @@ public final class FormHome
 
     /**
      * Remove entries in the anonymize entries table
-     * @param nIdForm The id of the form
-     * @param plugin The plugin
+     * 
+     * @param nIdForm
+     *            The id of the form
+     * @param plugin
+     *            The plugin
      */
     public static void removeAnonymizeEntry( int nIdForm, Plugin plugin )
     {

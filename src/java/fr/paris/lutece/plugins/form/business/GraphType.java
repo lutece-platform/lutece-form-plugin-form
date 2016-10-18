@@ -39,7 +39,6 @@ import org.jfree.chart.JFreeChart;
 
 import java.util.List;
 
-
 /**
  *
  * class GraphType
@@ -55,14 +54,16 @@ public class GraphType
      *
      * @return the name of the class associate to the graph type
      */
-    public String getClassName(  )
+    public String getClassName( )
     {
         return _strClassName;
     }
 
     /**
      * set the name of the class associate to the graph type
-     * @param className the name of the class associate to the graph type
+     * 
+     * @param className
+     *            the name of the class associate to the graph type
      */
     public void setClassName( String className )
     {
@@ -70,17 +71,19 @@ public class GraphType
     }
 
     /**
-    *
-    * @return the id of the graph type
-    */
-    public int getIdGraphType(  )
+     *
+     * @return the id of the graph type
+     */
+    public int getIdGraphType( )
     {
         return _nIdGraphType;
     }
 
     /**
      * set the id of the graph type
-     * @param idGraphType the id of the graph type
+     * 
+     * @param idGraphType
+     *            the id of the graph type
      */
     public void setIdGraphType( int idGraphType )
     {
@@ -91,14 +94,16 @@ public class GraphType
      *
      * @return the title of the graph type
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
      * set the title of the graph type
-     * @param title the title of the graph type
+     * 
+     * @param title
+     *            the title of the graph type
      */
     public void setTitle( String title )
     {
@@ -107,14 +112,18 @@ public class GraphType
 
     /**
      * return the JFreeChart graph associate to the graph type
-     * @param listStatistic listStatistic
-     * @param strGraphTitle graph title
-     * @param nGraphThreeDimension true if the graph must be in three dimension
-     * @param nGraphLabelValue true if the labels must appear in the graph
+     * 
+     * @param listStatistic
+     *            listStatistic
+     * @param strGraphTitle
+     *            graph title
+     * @param nGraphThreeDimension
+     *            true if the graph must be in three dimension
+     * @param nGraphLabelValue
+     *            true if the labels must appear in the graph
      * @return the JFreeChart graph associate to the graph type
      */
-    public JFreeChart createChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle,
-        boolean nGraphThreeDimension, boolean nGraphLabelValue )
+    public JFreeChart createChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle, boolean nGraphThreeDimension, boolean nGraphLabelValue )
     {
         return null;
     }

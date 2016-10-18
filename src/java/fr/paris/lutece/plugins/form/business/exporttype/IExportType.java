@@ -40,54 +40,64 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
- * This class represents the export responses type.
- * The method {@link #getResponseFilter(Form, Locale)} enable
- * the user to get the response filter to get the desired
- * list of responses.
+ * This class represents the export responses type. The method {@link #getResponseFilter(Form, Locale)} enable the user to get the response filter to get the
+ * desired list of responses.
  *
  */
 public interface IExportType
 {
     /**
      * Set the key
-     * @param strKey the key
+     * 
+     * @param strKey
+     *            the key
      */
     void setKey( String strKey );
 
     /**
      * Get the key
+     * 
      * @return the key
      */
-    String getKey(  );
+    String getKey( );
 
     /**
      * Set the title i18n key
-     * @param strTitleI18nKey the i18n key
+     * 
+     * @param strTitleI18nKey
+     *            the i18n key
      */
     void setTitleI18nKey( String strTitleI18nKey );
 
     /**
      * Get the title
-     * @param locale the locale
+     * 
+     * @param locale
+     *            the locale
      * @return the title
      */
     String getTitle( Locale locale );
 
     /**
      * Get the response filter
-     * @param form The form
-     * @param locale the locale
+     * 
+     * @param form
+     *            The form
+     * @param locale
+     *            the locale
      * @return The response filter
      */
     ResponseFilter getResponseFilter( Form form, Locale locale );
 
     /**
      * Save the export
-     * @param listFormSubmits the list of form submits
-     * @param locale the locale
+     * 
+     * @param listFormSubmits
+     *            the list of form submits
+     * @param locale
+     *            the locale
      */
     void saveExport( List<FormSubmit> listFormSubmits, Locale locale );
 }

@@ -38,7 +38,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import java.util.Collection;
 import java.util.List;
 
-
 /**
  * OutputProcessorSet Object
  */
@@ -60,7 +59,7 @@ public class OutputProcessorSet implements IOutputProcessorSet
 
         for ( IOutputProcessor processor : listProcessors )
         {
-            if ( strKey.equals( processor.getKey(  ) ) )
+            if ( strKey.equals( processor.getKey( ) ) )
             {
                 return processor;
             }
@@ -73,7 +72,7 @@ public class OutputProcessorSet implements IOutputProcessorSet
      *
      * {@inheritDoc}
      */
-    public Collection<IOutputProcessor> getAllOutputProcessor(  )
+    public Collection<IOutputProcessor> getAllOutputProcessor( )
     {
         return SpringContextService.getBeansOfType( IOutputProcessor.class );
     }

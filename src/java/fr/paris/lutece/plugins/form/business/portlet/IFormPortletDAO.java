@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.form.business.portlet;
 
 import fr.paris.lutece.portal.business.portlet.IPortletInterfaceDAO;
 
-
 /**
  * IFormPortletDAO
  */
@@ -43,7 +42,9 @@ public interface IFormPortletDAO extends IPortletInterfaceDAO
 {
     /**
      * return number of form portlet who are associate to the id form
-     * @param nIdForm the id of the form
+     * 
+     * @param nIdForm
+     *            the id of the form
      * @return number of form portlet who are associate to the id form
      */
     int selectCountPortletByIdForm( int nIdForm );

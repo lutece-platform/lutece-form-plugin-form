@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.form.service;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.RemovalListenerService;
 
-
 /**
  * FormRemovalListenerService
  */
@@ -47,15 +46,16 @@ public final class FormRemovalListenerService
     /**
      * Private constructor
      */
-    private FormRemovalListenerService(  )
+    private FormRemovalListenerService( )
     {
     }
 
     /**
      * Returns the removal service
+     * 
      * @return The removal service
      */
-    public static RemovalListenerService getService(  )
+    public static RemovalListenerService getService( )
     {
         return SpringContextService.getBean( BEAN_FORM_REMOVAL_SERVICE );
     }

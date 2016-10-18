@@ -64,7 +64,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * ProcessorNotifySender s
@@ -72,7 +71,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ProcessorNotifySender extends OutputProcessor
 {
-    //templates
+    // templates
     private static final String TEMPLATE_CONFIGURATION_NOTIFY_SENDER = "admin/plugins/form/modules/processornotifysender/configuration_notify_sender.html";
     private static final String TEMPLATE_NOTIFICATION_NOTIFY_SENDER = "admin/plugins/form/modules/processornotifysender/notification_notify_sender.html";
     private static final String TEMPLATE_NOTIFICATION_NOTIFY_SENDER_RECAP = "admin/plugins/form/modules/processornotifysender/notification_notify_sender_recap.html";
@@ -102,7 +101,9 @@ public class ProcessorNotifySender extends OutputProcessor
 
     /**
      * Set the notify sender service
-     * @param notifySenderService the notify sender service
+     * 
+     * @param notifySenderService
+     *            the notify sender service
      */
     public void setNotifySenderService( NotifySenderService notifySenderService )
     {
@@ -111,7 +112,9 @@ public class ProcessorNotifySender extends OutputProcessor
 
     /**
      * Set the entry type service
-     * @param entryTypeService the entry type service
+     * 
+     * @param entryTypeService
+     *            the entry type service
      */
     public void setEntryTypeService( EntryTypeService entryTypeService )
     {
@@ -124,25 +127,24 @@ public class ProcessorNotifySender extends OutputProcessor
     @Override
     public String getOutputConfigForm( HttpServletRequest request, Form form, Locale locale, Plugin plugin )
     {
-        NotifySenderConfiguration configuration = NotifySenderConfigurationHome.findByPrimaryKey( form.getIdForm(  ),
-                plugin );
+        NotifySenderConfiguration configuration = NotifySenderConfigurationHome.findByPrimaryKey( form.getIdForm( ), plugin );
 
-        String strMessageRecap = I18nService.getLocalizedString( MESSAGE_RECAP_INFORMATION,
-                new String[] { AppPropertiesService.getProperty( PROPERTY_TAG_RECAP ) }, locale );
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        String strMessageRecap = I18nService.getLocalizedString( MESSAGE_RECAP_INFORMATION, new String [ ] {
+            AppPropertiesService.getProperty( PROPERTY_TAG_RECAP )
+        }, locale );
+        Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_FORM, form );
         model.put( MARK_CONFIGURATION, configuration );
         model.put( MARK_CONFIGURATION, configuration );
         model.put( MARK_LOCALE, locale );
-        model.put( MARK_REF_LIST_ENTRY, FormUtils.getRefListAllQuestions( form.getIdForm(  ), plugin ) );
+        model.put( MARK_REF_LIST_ENTRY, FormUtils.getRefListAllQuestions( form.getIdForm( ), plugin ) );
         model.put( MARK_MESSAGE_RECAP, strMessageRecap );
-        model.put( MARK_PERMISSION_SEND_ATTACHMENTS,
-            RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        model.put( MARK_PERMISSION_SEND_ATTACHMENTS, RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, AdminUserService.getAdminUser( request ) ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CONFIGURATION_NOTIFY_SENDER, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -158,12 +160,12 @@ public class ProcessorNotifySender extends OutputProcessor
         {
             nIdForm = Integer.parseInt( strIdForm );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
 
-        NotifySenderConfiguration config = new NotifySenderConfiguration(  );
+        NotifySenderConfiguration config = new NotifySenderConfiguration( );
         config.setIdForm( nIdForm );
 
         String strError = getConfigurationData( request, config );
@@ -191,48 +193,41 @@ public class ProcessorNotifySender extends OutputProcessor
     @Override
     public String process( FormSubmit formSubmit, HttpServletRequest request, Plugin plugin )
     {
-        NotifySenderConfiguration config = NotifySenderConfigurationHome.findByPrimaryKey( formSubmit.getForm(  )
-                                                                                                     .getIdForm(  ),
-                plugin );
+        NotifySenderConfiguration config = NotifySenderConfigurationHome.findByPrimaryKey( formSubmit.getForm( ).getIdForm( ), plugin );
 
         if ( config == null )
         {
             return MESSAGE_ERROR_NO_CONFIGURATION_ASSOCIATED;
         }
 
-        String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_NOTIFY_SENDER_SUBJECT,
-                request.getLocale(  ) );
-        String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_NOTIFY_SENDER_SENDER_NAME,
-                request.getLocale(  ) );
-        String strSenderEmail = MailService.getNoReplyEmail(  );
+        String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_NOTIFY_SENDER_SUBJECT, request.getLocale( ) );
+        String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_NOTIFY_SENDER_SENDER_NAME, request.getLocale( ) );
+        String strSenderEmail = MailService.getNoReplyEmail( );
 
         String strEmailSender = StringUtils.EMPTY;
 
-        //----------------------------------
-        for ( Response response : formSubmit.getListResponse(  ) )
+        // ----------------------------------
+        for ( Response response : formSubmit.getListResponse( ) )
         {
-            if ( response.getEntry(  ).getIdEntry(  ) == config.getIdEntryEmailSender(  ) )
+            if ( response.getEntry( ).getIdEntry( ) == config.getIdEntryEmailSender( ) )
             {
-                strEmailSender = EntryTypeServiceManager.getEntryTypeService( response.getEntry(  ) )
-                                                        .getResponseValueForExport( response.getEntry(  ), request,
-                        response, request.getLocale(  ) );
+                strEmailSender = EntryTypeServiceManager.getEntryTypeService( response.getEntry( ) ).getResponseValueForExport( response.getEntry( ), request,
+                        response, request.getLocale( ) );
             }
         }
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        Recap recap = RecapHome.findByPrimaryKey( ( formSubmit.getForm(  ) ).getRecap(  ).getIdRecap(  ), plugin );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        Recap recap = RecapHome.findByPrimaryKey( ( formSubmit.getForm( ) ).getRecap( ).getIdRecap( ), plugin );
 
-        if ( ( recap != null ) && recap.isRecapData(  ) )
+        if ( ( recap != null ) && recap.isRecapData( ) )
         {
-            //convert the value of the object response to string 
-            for ( Response response : formSubmit.getListResponse(  ) )
+            // convert the value of the object response to string
+            for ( Response response : formSubmit.getListResponse( ) )
             {
-                if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) || ( response.getFile(  ) != null ) )
+                if ( StringUtils.isNotBlank( response.getResponseValue( ) ) || ( response.getFile( ) != null ) )
                 {
-                    response.setToStringValueResponse( EntryTypeServiceManager.getEntryTypeService( 
-                            response.getEntry(  ) )
-                                                                              .getResponseValueForRecap( response.getEntry(  ),
-                            request, response, request.getLocale(  ) ) );
+                    response.setToStringValueResponse( EntryTypeServiceManager.getEntryTypeService( response.getEntry( ) ).getResponseValueForRecap(
+                            response.getEntry( ), request, response, request.getLocale( ) ) );
                 }
                 else
                 {
@@ -245,29 +240,30 @@ public class ProcessorNotifySender extends OutputProcessor
         model.put( MARK_FORM_SUBMIT, formSubmit );
         model.put( MARK_ENTRY_TYPE_SESSION, _entryTypeService.getEntryType( EntryTypeSession.BEAN_NAME ) );
 
-        HtmlTemplate templateRecap = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_NOTIFY_SENDER_RECAP,
-                request.getLocale(  ), model );
+        HtmlTemplate templateRecap = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_NOTIFY_SENDER_RECAP, request.getLocale( ), model );
 
-        //-------------------------------------------------------------
+        // -------------------------------------------------------------
         String strTagRecap = AppPropertiesService.getProperty( PROPERTY_TAG_RECAP );
-        String strMessage = config.getMessage(  ).replace( strTagRecap, templateRecap.getHtml(  ) );
+        String strMessage = config.getMessage( ).replace( strTagRecap, templateRecap.getHtml( ) );
 
         model.put( MARK_MESSAGE, strMessage );
         model.put( MARK_TITLE, strSubject );
 
-        HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_NOTIFY_SENDER, request.getLocale(  ),
-                model );
+        HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_NOTIFY_SENDER, request.getLocale( ), model );
 
-        _notifySenderService.sendNotification( formSubmit, strEmailSender, strSenderName, strSenderEmail, strSubject,
-            t.getHtml(  ), config.isSendAttachments(  ) );
+        _notifySenderService
+                .sendNotification( formSubmit, strEmailSender, strSenderName, strSenderEmail, strSubject, t.getHtml( ), config.isSendAttachments( ) );
 
         return null;
     }
 
     /**
      * Get the configuration data
-     * @param request the request
-     * @param config the configuration object
+     * 
+     * @param request
+     *            the request
+     * @param config
+     *            the configuration object
      * @return Message error if error appear else null
      */
     private String getConfigurationData( HttpServletRequest request, NotifySenderConfiguration config )
@@ -281,8 +277,7 @@ public class ProcessorNotifySender extends OutputProcessor
 
         // Check if it must send the attachments
         if ( RBACService.isAuthorized( NotifySenderResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, AdminUserService.getAdminUser( request ) ) &&
-                ( strSendAttachments != null ) )
+                NotifySenderResourceIdService.PERMISSION_SEND_ATTACHMENTS, AdminUserService.getAdminUser( request ) ) && ( strSendAttachments != null ) )
         {
             bSendAttachments = true;
         }
@@ -291,7 +286,7 @@ public class ProcessorNotifySender extends OutputProcessor
         {
             nIdEntryEmailSender = Integer.parseInt( strIdEntryEmailSender );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }

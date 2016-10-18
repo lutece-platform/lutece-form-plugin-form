@@ -40,10 +40,9 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
- *class  GraphTypeDAO
+ * class GraphTypeDAO
  *
  */
 public class GraphTypeDAO implements IGraphTypeDAO
@@ -59,34 +58,34 @@ public class GraphTypeDAO implements IGraphTypeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, idKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         GraphType graphType = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             try
             {
-                graphType = (GraphType) Class.forName( daoUtil.getString( 1 ) ).newInstance(  );
+                graphType = (GraphType) Class.forName( daoUtil.getString( 1 ) ).newInstance( );
                 graphType.setClassName( daoUtil.getString( 1 ) );
                 graphType.setIdGraphType( daoUtil.getInt( 2 ) );
                 graphType.setTitle( daoUtil.getString( 3 ) );
             }
-            catch ( ClassNotFoundException e )
+            catch( ClassNotFoundException e )
             {
-                //  class doesn't exist
+                // class doesn't exist
                 AppLogService.error( e );
 
                 return null;
             }
-            catch ( InstantiationException e )
+            catch( InstantiationException e )
             {
-                // Class is abstract or is an  interface or haven't accessible builder
+                // Class is abstract or is an interface or haven't accessible builder
                 AppLogService.error( e );
 
                 return null;
             }
-            catch ( IllegalAccessException e )
+            catch( IllegalAccessException e )
             {
                 // can't access to rhe class
                 AppLogService.error( e );
@@ -95,7 +94,7 @@ public class GraphTypeDAO implements IGraphTypeDAO
             }
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return graphType;
     }
@@ -107,20 +106,20 @@ public class GraphTypeDAO implements IGraphTypeDAO
     public List<GraphType> select( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        List<GraphType> listGraphType = new ArrayList<GraphType>(  );
+        List<GraphType> listGraphType = new ArrayList<GraphType>( );
         GraphType graphType = null;
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            graphType = new GraphType(  );
+            graphType = new GraphType( );
             graphType.setIdGraphType( daoUtil.getInt( 1 ) );
             graphType.setTitle( daoUtil.getString( 2 ) );
             listGraphType.add( graphType );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listGraphType;
     }

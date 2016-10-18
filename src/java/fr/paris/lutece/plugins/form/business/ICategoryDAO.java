@@ -37,10 +37,9 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  *
- *Interface IVoteTypeDAO
+ * Interface IVoteTypeDAO
  *
  */
 public interface ICategoryDAO
@@ -48,48 +47,61 @@ public interface ICategoryDAO
     /**
      * Insert a new record in the table.
      *
-     * @param category instance of the Category object to insert
-     * @param plugin the plugin
+     * @param category
+     *            instance of the Category object to insert
+     * @param plugin
+     *            the plugin
      */
     void insert( Category category, Plugin plugin );
 
     /**
      * update record in the table.
      *
-     * @param category instance of the Category object to update
-     * @param plugin the plugin
+     * @param category
+     *            instance of the Category object to update
+     * @param plugin
+     *            the plugin
      */
     void store( Category category, Plugin plugin );
 
     /**
      * Delete a record from the table
      *
-     * @param  nIdCategory The identifier of the category
-     * @param plugin the plugin
+     * @param nIdCategory
+     *            The identifier of the category
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdCategory, Plugin plugin );
 
     /**
      * Load the data of the category from the table
      *
-     * @param idKey The identifier of the category
-     * @param plugin the plugin
+     * @param idKey
+     *            The identifier of the category
+     * @param plugin
+     *            the plugin
      * @return The category
      */
     Category load( int idKey, Plugin plugin );
 
     /**
-     * Load the data of all category returns them in a  list
-     * @param plugin the plugin
-     * @return  the list of category
+     * Load the data of all category returns them in a list
+     * 
+     * @param plugin
+     *            the plugin
+     * @return the list of category
      */
     List<Category> select( Plugin plugin );
 
     /**
-    * true if there is a  form associate to the category
-    * @param nIdCategory the key of the category
-    * @param plugin the plugin
-    * @return true if there is a form associate to the category
-    */
+     * true if there is a form associate to the category
+     * 
+     * @param nIdCategory
+     *            the key of the category
+     * @param plugin
+     *            the plugin
+     * @return true if there is a form associate to the category
+     */
     boolean isAssociateToForm( int nIdCategory, Plugin plugin );
 }

@@ -49,7 +49,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import org.apache.commons.lang.StringUtils;
 
-
 /**
  *
  * FormParameterService
@@ -71,44 +70,48 @@ public final class FormParameterService
 
     /**
      * Get the instance of the service
+     * 
      * @return the instance of the service
      */
-    public static FormParameterService getService(  )
+    public static FormParameterService getService( )
     {
         return SpringContextService.getBean( BEAN_FORM_PARAMETER_SERVICE );
     }
 
     /**
      * Find all form parameters
+     * 
      * @return a {@link ReferenceList}
      */
-    public ReferenceList findAll(  )
+    public ReferenceList findAll( )
     {
-        return FormParameterHome.findAll( FormUtils.getPlugin(  ) );
+        return FormParameterHome.findAll( FormUtils.getPlugin( ) );
     }
 
     /**
      * Find the default value parameters of the form
+     * 
      * @return a {@link ReferenceList}
      */
-    public ReferenceList findDefaultValueParameters(  )
+    public ReferenceList findDefaultValueParameters( )
     {
-        FormParameterFilter filter = new FormParameterFilter(  );
+        FormParameterFilter filter = new FormParameterFilter( );
         filter.setExcludeParameterKeys( true );
         filter.addParameterKey( PARAMETER_EXPORT_CSV_ENCODING );
         filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
         filter.addParameterKey( PARAMETER_ID_EXPORT_FORMAT_DAEMON );
 
-        return FormParameterHome.findByFilter( filter, FormUtils.getPlugin(  ) );
+        return FormParameterHome.findByFilter( filter, FormUtils.getPlugin( ) );
     }
 
     /**
      * Find the export parameters
+     * 
      * @return a {@link ReferenceList}
      */
-    public ReferenceList findExportParameters(  )
+    public ReferenceList findExportParameters( )
     {
-        FormParameterFilter filter = new FormParameterFilter(  );
+        FormParameterFilter filter = new FormParameterFilter( );
         filter.setExcludeParameterKeys( false );
         filter.addParameterKey( PARAMETER_EXPORT_CSV_ENCODING );
         filter.addParameterKey( PARAMETER_EXPORT_XML_ENCODING );
@@ -116,35 +119,39 @@ public final class FormParameterService
         filter.addParameterKey( PARAMETER_EXPORT_DAEMON_TYPE );
         filter.addParameterKey( PARAMETER_FILE_EXPORT_DAEMON_TYPE );
 
-        return FormParameterHome.findByFilter( filter, FormUtils.getPlugin(  ) );
+        return FormParameterHome.findByFilter( filter, FormUtils.getPlugin( ) );
     }
 
     /**
-    * Load the parameter value
-    * @param strParameterKey the parameter key
-    * @return The parameter value
-    */
+     * Load the parameter value
+     * 
+     * @param strParameterKey
+     *            the parameter key
+     * @return The parameter value
+     */
     public ReferenceItem findByKey( String strParameterKey )
     {
-        return FormParameterHome.findByKey( strParameterKey, FormUtils.getPlugin(  ) );
+        return FormParameterHome.findByKey( strParameterKey, FormUtils.getPlugin( ) );
     }
 
     /**
      * Update the parameter value
-     * @param param A reference item contain the association key/value to
-     *            update. The key must be in the code parameter of the reference
-     *            item, and the value in the value parameter
+     * 
+     * @param param
+     *            A reference item contain the association key/value to update. The key must be in the code parameter of the reference item, and the value in
+     *            the value parameter
      */
     public void update( ReferenceItem param )
     {
-        FormParameterHome.update( param, FormUtils.getPlugin(  ) );
+        FormParameterHome.update( param, FormUtils.getPlugin( ) );
     }
 
     /**
      * Get the encoding for export CSV
+     * 
      * @return the encoding for export CSV
      */
-    public String getExportCSVEncoding(  )
+    public String getExportCSVEncoding( )
     {
         ReferenceItem param = findByKey( PARAMETER_EXPORT_CSV_ENCODING );
 
@@ -153,14 +160,15 @@ public final class FormParameterService
             return AppPropertiesService.getProperty( PROPERTY_DEFAULT_EXPORT_ENCODING );
         }
 
-        return param.getName(  );
+        return param.getName( );
     }
 
     /**
      * Get the encoding for export XML
+     * 
      * @return the encoding for export XML
      */
-    public String getExportXMLEncoding(  )
+    public String getExportXMLEncoding( )
     {
         ReferenceItem param = findByKey( PARAMETER_EXPORT_XML_ENCODING );
 
@@ -169,29 +177,31 @@ public final class FormParameterService
             return AppPropertiesService.getProperty( PROPERTY_DEFAULT_EXPORT_ENCODING );
         }
 
-        return param.getName(  );
+        return param.getName( );
     }
 
     /**
      * Get the id export responses for daemon
+     * 
      * @return the id export responses for daemon
      */
-    public int getIdExportResponsesDaemon(  )
+    public int getIdExportResponsesDaemon( )
     {
         ReferenceItem param = findByKey( PARAMETER_ID_EXPORT_FORMAT_DAEMON );
 
-        if ( ( param == null ) || StringUtils.isBlank( param.getName(  ) ) ||
-                !StringUtils.isNumeric( param.getName(  ) ) )
+        if ( ( param == null ) || StringUtils.isBlank( param.getName( ) ) || !StringUtils.isNumeric( param.getName( ) ) )
         {
             return 1;
         }
 
-        return GenericAttributesUtils.convertStringToInt( param.getName(  ) );
+        return GenericAttributesUtils.convertStringToInt( param.getName( ) );
     }
 
     /**
      * Check if the given key is from an encoding parameter
-     * @param strKey the key
+     * 
+     * @param strKey
+     *            the key
      * @return true if it is an encoding parameter, false otherwise
      */
     public boolean isExportEncodingParameter( String strKey )
@@ -208,40 +218,40 @@ public final class FormParameterService
     }
 
     /**
-     * Get the export daemon type configured in the advanced parameters of
-     * the plugin-form.
+     * Get the export daemon type configured in the advanced parameters of the plugin-form.
+     * 
      * @return a {@link IExportType}
      */
-    public IExportType getExportDaemonType(  )
+    public IExportType getExportDaemonType( )
     {
         ReferenceItem param = findByKey( PARAMETER_EXPORT_DAEMON_TYPE );
 
         IExportTypeFactory exportDaemonTypeFactory = SpringContextService.getBean( FormUtils.BEAN_EXPORT_DAEMON_TYPE_FACTORY );
 
-        if ( ( param == null ) || StringUtils.isBlank( param.getName(  ) ) )
+        if ( ( param == null ) || StringUtils.isBlank( param.getName( ) ) )
         {
             return exportDaemonTypeFactory.getExportType( StringUtils.EMPTY );
         }
 
-        return exportDaemonTypeFactory.getExportType( param.getName(  ) );
+        return exportDaemonTypeFactory.getExportType( param.getName( ) );
     }
 
     /**
-     * Get the export daemon type configured in the advanced parameters of
-     * the plugin-form.
+     * Get the export daemon type configured in the advanced parameters of the plugin-form.
+     * 
      * @return a {@link IExportType}
      */
-    public IExportService getFileExportDaemonType(  )
+    public IExportService getFileExportDaemonType( )
     {
         ReferenceItem param = findByKey( PARAMETER_FILE_EXPORT_DAEMON_TYPE );
 
         IExportServiceFactory fileExportDaemonTypeFactory = SpringContextService.getBean( ExportServiceFactory.BEAN_FACTORY );
 
-        if ( ( param == null ) || StringUtils.isBlank( param.getName(  ) ) )
+        if ( ( param == null ) || StringUtils.isBlank( param.getName( ) ) )
         {
             return fileExportDaemonTypeFactory.getExportService( StringUtils.EMPTY );
         }
 
-        return fileExportDaemonTypeFactory.getExportService( param.getName(  ) );
+        return fileExportDaemonTypeFactory.getExportService( param.getName( ) );
     }
 }

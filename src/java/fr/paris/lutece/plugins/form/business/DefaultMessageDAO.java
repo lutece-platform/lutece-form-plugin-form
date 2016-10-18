@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.form.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  *
  * class DefaultMessageDAO
@@ -44,52 +43,54 @@ import fr.paris.lutece.util.sql.DAOUtil;
  */
 public class DefaultMessageDAO implements IDefaultMessageDAO
 {
-    private static final String SQL_QUERY_SELECT = "SELECT welcome_message," +
-        "unavailability_message,requirement_message,recap_message,libelle_validate_button,libelle_reset_button,back_url " +
-        "FROM form_default_message";
-    private static final String SQL_QUERY_UPDATE = "UPDATE form_default_message SET welcome_message=?," +
-        "unavailability_message=?,requirement_message=? ,recap_message=?,libelle_validate_button=?,libelle_reset_button=?,back_url=?";
+    private static final String SQL_QUERY_SELECT = "SELECT welcome_message,"
+            + "unavailability_message,requirement_message,recap_message,libelle_validate_button,libelle_reset_button,back_url " + "FROM form_default_message";
+    private static final String SQL_QUERY_UPDATE = "UPDATE form_default_message SET welcome_message=?,"
+            + "unavailability_message=?,requirement_message=? ,recap_message=?,libelle_validate_button=?,libelle_reset_button=?,back_url=?";
 
     /**
      * Update the record in the table
      *
-     * @param defaultMessage the defaultMessage
-     * @param plugin the Plugin
+     * @param defaultMessage
+     *            the defaultMessage
+     * @param plugin
+     *            the Plugin
      */
     @Override
     public void store( DefaultMessage defaultMessage, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setString( 1, defaultMessage.getWelcomeMessage(  ) );
-        daoUtil.setString( 2, defaultMessage.getUnavailabilityMessage(  ) );
-        daoUtil.setString( 3, defaultMessage.getRequirement(  ) );
-        daoUtil.setString( 4, defaultMessage.getRecapMessage(  ) );
-        daoUtil.setString( 5, defaultMessage.getLibelleValidateButton(  ) );
-        daoUtil.setString( 6, defaultMessage.getLibelleResetButton(  ) );
-        daoUtil.setString( 7, defaultMessage.getBackUrl(  ) );
-        daoUtil.executeUpdate(  );
+        daoUtil.setString( 1, defaultMessage.getWelcomeMessage( ) );
+        daoUtil.setString( 2, defaultMessage.getUnavailabilityMessage( ) );
+        daoUtil.setString( 3, defaultMessage.getRequirement( ) );
+        daoUtil.setString( 4, defaultMessage.getRecapMessage( ) );
+        daoUtil.setString( 5, defaultMessage.getLibelleValidateButton( ) );
+        daoUtil.setString( 6, defaultMessage.getLibelleResetButton( ) );
+        daoUtil.setString( 7, defaultMessage.getBackUrl( ) );
+        daoUtil.executeUpdate( );
 
-        daoUtil.free(  );
+        daoUtil.free( );
     }
 
     /**
      * load the only record from the table
      *
-     * @param plugin the Plugin
+     * @param plugin
+     *            the Plugin
      * @return the default message object
      */
     @Override
     public DefaultMessage load( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         DefaultMessage defaultMessage = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            defaultMessage = new DefaultMessage(  );
+            defaultMessage = new DefaultMessage( );
             defaultMessage.setWelcomeMessage( daoUtil.getString( 1 ) );
             defaultMessage.setUnavailabilityMessage( daoUtil.getString( 2 ) );
             defaultMessage.setRequirement( daoUtil.getString( 3 ) );
@@ -99,7 +100,7 @@ public class DefaultMessageDAO implements IDefaultMessageDAO
             defaultMessage.setBackUrl( daoUtil.getString( 7 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return defaultMessage;
     }

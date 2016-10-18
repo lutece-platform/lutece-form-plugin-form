@@ -55,7 +55,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * NotifySenderService
@@ -71,23 +70,30 @@ public final class NotifySenderService
     /**
      * Private constructor
      */
-    private NotifySenderService(  )
+    private NotifySenderService( )
     {
     }
 
     /**
      * Send notification to the sender
-     * @param formSubmit the form submit
-     * @param strEmailSender the email of the sender
-     * @param strSenderName the sender name
-     * @param strSenderEmail the sender email
-     * @param strSubject the subject
-     * @param strMessage the message
-     * @param bSendAttachments true if it must send the attachments, false
-     *            otherwise
+     * 
+     * @param formSubmit
+     *            the form submit
+     * @param strEmailSender
+     *            the email of the sender
+     * @param strSenderName
+     *            the sender name
+     * @param strSenderEmail
+     *            the sender email
+     * @param strSubject
+     *            the subject
+     * @param strMessage
+     *            the message
+     * @param bSendAttachments
+     *            true if it must send the attachments, false otherwise
      */
-    public void sendNotification( FormSubmit formSubmit, String strEmailSender, String strSenderName,
-        String strSenderEmail, String strSubject, String strMessage, boolean bSendAttachments )
+    public void sendNotification( FormSubmit formSubmit, String strEmailSender, String strSenderName, String strSenderEmail, String strSubject,
+            String strMessage, boolean bSendAttachments )
     {
         if ( bSendAttachments )
         {
@@ -98,55 +104,60 @@ public final class NotifySenderService
             try
             {
                 // Send Mail
-                if ( AppLogService.isDebugEnabled(  ) )
+                if ( AppLogService.isDebugEnabled( ) )
                 {
                     AppLogService.debug( "NotifySenderService : Sending email to '" + strEmailSender + "'" );
                 }
 
                 MailService.sendMailHtml( strEmailSender, strSenderName, strSenderEmail, strSubject, strMessage );
             }
-            catch ( Exception e )
+            catch( Exception e )
             {
-                AppLogService.error( " Error during Process > Notify sender : " + e.getMessage(  ) );
+                AppLogService.error( " Error during Process > Notify sender : " + e.getMessage( ) );
             }
         }
     }
 
     /**
      * Send notification to the sender with its file
-     * @param formSubmit the form submit
-     * @param strEmailSender the email of the sender
-     * @param strSenderName the sender name
-     * @param strSenderEmail the sender email
-     * @param strSubject the subject
-     * @param strMessage the message
+     * 
+     * @param formSubmit
+     *            the form submit
+     * @param strEmailSender
+     *            the email of the sender
+     * @param strSenderName
+     *            the sender name
+     * @param strSenderEmail
+     *            the sender email
+     * @param strSubject
+     *            the subject
+     * @param strMessage
+     *            the message
      */
-    private synchronized void sendMultiPartNotification( FormSubmit formSubmit, String strEmailSender,
-        String strSenderName, String strSenderEmail, String strSubject, String strMessage )
+    private synchronized void sendMultiPartNotification( FormSubmit formSubmit, String strEmailSender, String strSenderName, String strSenderEmail,
+            String strSubject, String strMessage )
     {
-        int nIdFormSubmit = formSubmit.getIdFormSubmit(  );
+        int nIdFormSubmit = formSubmit.getIdFormSubmit( );
 
         // Add the response files to a temporary folder
-        for ( Response response : formSubmit.getListResponse(  ) )
+        for ( Response response : formSubmit.getListResponse( ) )
         {
-            if ( ( response.getFile(  ) != null ) && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) &&
-                    ( response.getFile(  ).getPhysicalFile(  ) != null ) &&
-                    ( response.getFile(  ).getPhysicalFile(  ).getValue(  ) != null ) )
+            if ( ( response.getFile( ) != null ) && StringUtils.isNotBlank( response.getFile( ).getTitle( ) )
+                    && ( response.getFile( ).getPhysicalFile( ) != null ) && ( response.getFile( ).getPhysicalFile( ).getValue( ) != null ) )
             {
-                if ( AppLogService.isDebugEnabled(  ) )
+                if ( AppLogService.isDebugEnabled( ) )
                 {
-                    AppLogService.debug( "NotifySenderService : Adding '" + response.getFile(  ).getTitle(  ) +
-                        "' to folder '" + getFileFolderPath(  ) + "'" );
+                    AppLogService.debug( "NotifySenderService : Adding '" + response.getFile( ).getTitle( ) + "' to folder '" + getFileFolderPath( ) + "'" );
                 }
 
                 try
                 {
-                    FileUtils.addFileResponseToFolder( response, getFileFolderPath(  ) );
+                    FileUtils.addFileResponseToFolder( response, getFileFolderPath( ) );
                 }
-                catch ( IOException e )
+                catch( IOException e )
                 {
-                    AppLogService.error( "NotifySenderService : Cannot add file '" + response.getFile(  ).getTitle(  ) +
-                        "' to folder '" + getFileFolderPath(  ) + "'" );
+                    AppLogService.error( "NotifySenderService : Cannot add file '" + response.getFile( ).getTitle( ) + "' to folder '" + getFileFolderPath( )
+                            + "'" );
                 }
             }
         }
@@ -156,50 +167,48 @@ public final class NotifySenderService
         try
         {
             // Zip the folder where the response files are stored
-            if ( AppLogService.isDebugEnabled(  ) )
+            if ( AppLogService.isDebugEnabled( ) )
             {
-                AppLogService.debug( "NotifySenderService : Ziping folder '" + getFileFolderPath(  ) + "'" );
+                AppLogService.debug( "NotifySenderService : Ziping folder '" + getFileFolderPath( ) + "'" );
             }
 
-            ZipUtils.zipFolder( getFileFolderPath(  ), getZipFolderPath(  ), getZipName( nIdFormSubmit ) );
+            ZipUtils.zipFolder( getFileFolderPath( ), getZipFolderPath( ), getZipName( nIdFormSubmit ) );
 
             // Add the zip to the email attachment
-            if ( AppLogService.isDebugEnabled(  ) )
+            if ( AppLogService.isDebugEnabled( ) )
             {
-                AppLogService.debug( "NotifySenderService : Reading zip '" + getZipFolderPath(  ) +
-                    getZipName( nIdFormSubmit ) + "'" );
+                AppLogService.debug( "NotifySenderService : Reading zip '" + getZipFolderPath( ) + getZipName( nIdFormSubmit ) + "'" );
             }
 
-            fis = new FileInputStream( getZipFolderPath(  ) + getZipName( nIdFormSubmit ) );
+            fis = new FileInputStream( getZipFolderPath( ) + getZipName( nIdFormSubmit ) );
 
-            byte[] data = IOUtils.toByteArray( fis );
+            byte [ ] data = IOUtils.toByteArray( fis );
 
             String strAttachmentName = AppPropertiesService.getProperty( PROPERTY_ATTACHMENT_NAME );
-            List<FileAttachment> listAttachments = new ArrayList<FileAttachment>(  );
-            listAttachments.add( new FileAttachment( strAttachmentName, data,
-                    FileSystemUtil.getMIMEType( strAttachmentName ) ) );
+            List<FileAttachment> listAttachments = new ArrayList<FileAttachment>( );
+            listAttachments.add( new FileAttachment( strAttachmentName, data, FileSystemUtil.getMIMEType( strAttachmentName ) ) );
 
             try
             {
                 // Send Mail
-                if ( AppLogService.isDebugEnabled(  ) )
+                if ( AppLogService.isDebugEnabled( ) )
                 {
                     AppLogService.debug( "NotifySenderService : Sending multipart email to '" + strEmailSender + "'" );
                 }
 
-                MailService.sendMailMultipartHtml( strEmailSender, StringUtils.EMPTY, StringUtils.EMPTY, strSenderName,
-                    strSenderEmail, strSubject, strMessage, null, listAttachments );
+                MailService.sendMailMultipartHtml( strEmailSender, StringUtils.EMPTY, StringUtils.EMPTY, strSenderName, strSenderEmail, strSubject, strMessage,
+                        null, listAttachments );
             }
-            catch ( Exception e )
+            catch( Exception e )
             {
-                AppLogService.error( " Error during Process > Notify sender : " + e.getMessage(  ) );
+                AppLogService.error( " Error during Process > Notify sender : " + e.getMessage( ) );
             }
         }
-        catch ( FileNotFoundException fnofe )
+        catch( FileNotFoundException fnofe )
         {
             AppLogService.error( fnofe );
         }
-        catch ( IOException ioe )
+        catch( IOException ioe )
         {
             AppLogService.error( ioe );
         }
@@ -209,33 +218,35 @@ public final class NotifySenderService
         }
 
         // Clean folders
-        FileUtils.cleanFolder( getFileFolderPath(  ) );
-        FileUtils.cleanFolder( getZipFolderPath(  ) );
+        FileUtils.cleanFolder( getFileFolderPath( ) );
+        FileUtils.cleanFolder( getZipFolderPath( ) );
     }
 
     /**
      * Get the tmp folder in which the zip will be generated
+     * 
      * @return the tmp folder
      */
-    private String getFileFolderPath(  )
+    private String getFileFolderPath( )
     {
-        return AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( 
-                PROPERTY_FILE_FOLDER_PATH ) );
+        return AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( PROPERTY_FILE_FOLDER_PATH ) );
     }
 
     /**
      * Get the zip folder path
+     * 
      * @return the zip folder path
      */
-    private String getZipFolderPath(  )
+    private String getZipFolderPath( )
     {
-        return AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( 
-                PROPERTY_ZIP_FOLDER_PATH ) );
+        return AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( PROPERTY_ZIP_FOLDER_PATH ) );
     }
 
     /**
      * Get the zip name
-     * @param nIdFormSubmit the id form submit
+     * 
+     * @param nIdFormSubmit
+     *            the id form submit
      * @return the zip name
      */
     private String getZipName( int nIdFormSubmit )

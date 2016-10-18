@@ -47,7 +47,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
 /**
  *
  * FileUtils
@@ -62,20 +61,25 @@ public final class FileUtils
     /**
      * Private constructor
      */
-    private FileUtils(  )
+    private FileUtils( )
     {
     }
 
     /**
-    * Create a file
-    * @param strFolderPath the folder path
-    * @param strFileName the file name
-    * @param strFileOutPut the file output
-    * @param strEncoding the encoding
-    * @throws IOException exception if there is an error during the deletion
-    */
-    public static void createFile( String strFolderPath, String strFileName, String strFileOutPut, String strEncoding )
-        throws IOException
+     * Create a file
+     * 
+     * @param strFolderPath
+     *            the folder path
+     * @param strFileName
+     *            the file name
+     * @param strFileOutPut
+     *            the file output
+     * @param strEncoding
+     *            the encoding
+     * @throws IOException
+     *             exception if there is an error during the deletion
+     */
+    public static void createFile( String strFolderPath, String strFileName, String strFileOutPut, String strEncoding ) throws IOException
     {
         File file = new File( strFolderPath + strFileName );
 
@@ -87,18 +91,21 @@ public final class FileUtils
 
     /**
      * Delete a file
-     * @param strFolderPath the folder path
-     * @param strFileName the file name
-     * @throws IOException exception if there is an error during the deletion
+     * 
+     * @param strFolderPath
+     *            the folder path
+     * @param strFileName
+     *            the file name
+     * @throws IOException
+     *             exception if there is an error during the deletion
      */
-    public static void deleteFile( String strFolderPath, String strFileName )
-        throws IOException
+    public static void deleteFile( String strFolderPath, String strFileName ) throws IOException
     {
         File file = new File( strFolderPath + strFileName );
 
-        if ( file.exists(  ) )
+        if ( file.exists( ) )
         {
-            if ( !file.delete(  ) )
+            if ( !file.delete( ) )
             {
                 throw new IOException( "ERROR when deleting the file or folder " + strFolderPath + strFileName );
             }
@@ -107,8 +114,11 @@ public final class FileUtils
 
     /**
      * Build the file name
-     * @param strFileName the name of the file
-     * @param strFormatExtension the format extension
+     * 
+     * @param strFileName
+     *            the name of the file
+     * @param strFormatExtension
+     *            the format extension
      * @return the file name
      */
     public static String buildFileName( String strFileName, String strFormatExtension )
@@ -130,7 +140,9 @@ public final class FileUtils
 
     /**
      * Read the last line from the given file
-     * @param strFile the file absolute path (ex : /home/filetopath/file.txt)
+     * 
+     * @param strFile
+     *            the file absolute path (ex : /home/filetopath/file.txt)
      * @return the last line, an empty string if the file does not exists
      */
     public static String readLastLine( String strFile )
@@ -141,7 +153,7 @@ public final class FileUtils
         {
             in = new FileInputStream( strFile );
         }
-        catch ( FileNotFoundException e )
+        catch( FileNotFoundException e )
         {
             return StringUtils.EMPTY;
         }
@@ -152,14 +164,14 @@ public final class FileUtils
 
         try
         {
-            while ( br.ready(  ) )
+            while ( br.ready( ) )
             {
-                strTmp = br.readLine(  );
+                strTmp = br.readLine( );
             }
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
         finally
         {
@@ -173,8 +185,11 @@ public final class FileUtils
 
     /**
      * Write to the given file
-     * @param strContent the content to write
-     * @param strFile the file
+     * 
+     * @param strContent
+     *            the content to write
+     * @param strFile
+     *            the file
      */
     public static void writeToFile( String strContent, String strFile )
     {
@@ -185,9 +200,9 @@ public final class FileUtils
             fw = new FileWriter( strFile, false );
             fw.write( strContent );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
         finally
         {

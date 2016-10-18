@@ -44,7 +44,6 @@ import fr.paris.lutece.plugins.form.web.FormJspBeanTest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-
 /**
  * This class is the main test suite for the package fr.paris.lutece.plugins.form
  */
@@ -52,13 +51,14 @@ public final class AllTests
 {
     /**
      * A set of tests
+     * 
      * @return Test the tests
      */
-    public static Test suite(  )
+    public static Test suite( )
     {
         TestSuite suite = new TestSuite( "*** Tests Plugin Form " );
 
-        //$JUnit-BEGIN$
+        // $JUnit-BEGIN$
         suite.addTest( new TestSuite( FormHomeTest.class ) );
         suite.addTest( new TestSuite( EntryHomeTest.class ) );
         suite.addTest( new TestSuite( FieldHomeTest.class ) );
@@ -69,7 +69,7 @@ public final class AllTests
 
         suite.addTest( new TestSuite( FormJspBeanTest.class ) );
 
-        //$JUnit-END$
+        // $JUnit-END$
         return suite;
     }
 }

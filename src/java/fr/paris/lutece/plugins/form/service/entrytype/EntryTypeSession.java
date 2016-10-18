@@ -36,16 +36,11 @@ package fr.paris.lutece.plugins.form.service.entrytype;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeSession;
 
-
 /**
  *
- * class EntryTypeSession
- * This entry is used to fetch the value of a session's attribute.
- * One example is when coupling form with crm, the module-crm-form
- * will put in session the ID demand and the user GUID. This entry will
- * be able to fetch the ID demand and user GUID when validating the form.
- * Then, it is easier to export the value to directory with the
- * module-form-exportdirectory.
+ * class EntryTypeSession This entry is used to fetch the value of a session's attribute. One example is when coupling form with crm, the module-crm-form will
+ * put in session the ID demand and the user GUID. This entry will be able to fetch the ID demand and user GUID when validating the form. Then, it is easier to
+ * export the value to directory with the module-form-exportdirectory.
  *
  */
 public class EntryTypeSession extends AbstractEntryTypeSession

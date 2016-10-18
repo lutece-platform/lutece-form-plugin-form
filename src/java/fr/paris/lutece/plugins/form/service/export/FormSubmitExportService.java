@@ -47,7 +47,6 @@ import java.io.IOException;
 
 import java.util.List;
 
-
 /**
  *
  * FormSubmitExportService
@@ -64,35 +63,33 @@ public class FormSubmitExportService extends AbstractExportService
      * {@inheritDoc}
      */
     @Override
-    public void doExport( Form form, List<FormSubmit> listFormSubmit, String strFolderPath, ExportFormat exportFormat,
-        String strEncoding, StringBuilder sbLog, Plugin plugin )
+    public void doExport( Form form, List<FormSubmit> listFormSubmit, String strFolderPath, ExportFormat exportFormat, String strEncoding, StringBuilder sbLog,
+            Plugin plugin )
     {
-        if ( ( listFormSubmit != null ) && !listFormSubmit.isEmpty(  ) )
+        if ( ( listFormSubmit != null ) && !listFormSubmit.isEmpty( ) )
         {
             for ( FormSubmit formSubmit : listFormSubmit )
             {
                 // Build the file name
-                String strFileName = FileUtils.buildFileName( form.getIdForm(  ) + FormUtils.CONSTANT_UNDERSCORE +
-                        formSubmit.getIdFormSubmit(  ), exportFormat.getExtension(  ).trim(  ) );
+                String strFileName = FileUtils.buildFileName( form.getIdForm( ) + FormUtils.CONSTANT_UNDERSCORE + formSubmit.getIdFormSubmit( ), exportFormat
+                        .getExtension( ).trim( ) );
 
                 // Build the XML of the form submit
-                String strXmlSource = XmlUtil.getXmlHeader(  ) +
-                    FormUtils.getXmlResponses( null, form, formSubmit, null, plugin );
+                String strXmlSource = XmlUtil.getXmlHeader( ) + FormUtils.getXmlResponses( null, form, formSubmit, null, plugin );
 
                 // XSL transform to the desired output file
-                String strXslUniqueId = XSL_UNIQUE_PREFIX_ID + exportFormat.getIdExport(  );
-                XmlTransformerService xmlTransformerService = new XmlTransformerService(  );
-                String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,
-                        exportFormat.getXsl(  ), strXslUniqueId, null, null );
+                String strXslUniqueId = XSL_UNIQUE_PREFIX_ID + exportFormat.getIdExport( );
+                XmlTransformerService xmlTransformerService = new XmlTransformerService( );
+                String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource, exportFormat.getXsl( ), strXslUniqueId, null, null );
 
                 try
                 {
                     FileUtils.createFile( strFolderPath, strFileName, strFileOutPut, strEncoding );
-                    sbLog.append( "\n\tForm submit ID " + formSubmit.getIdFormSubmit(  ) + " exported." );
+                    sbLog.append( "\n\tForm submit ID " + formSubmit.getIdFormSubmit( ) + " exported." );
                 }
-                catch ( IOException e )
+                catch( IOException e )
                 {
-                    AppLogService.error( e.getMessage(  ), e );
+                    AppLogService.error( e.getMessage( ), e );
                     sbLog.append( "\n\tERROR when writing file " + strFileName );
                 }
             }

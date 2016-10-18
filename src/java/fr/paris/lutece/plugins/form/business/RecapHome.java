@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.form.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  * class recap Home
  */
@@ -48,22 +47,24 @@ public final class RecapHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private RecapHome(  )
+    private RecapHome( )
     {
     }
 
     /**
      * Creation of an instance of Recap
      *
-     * @param recap The instance of the Recap which contains the informations to store
-     * @param plugin the Plugin
+     * @param recap
+     *            The instance of the Recap which contains the informations to store
+     * @param plugin
+     *            the Plugin
      * @return The primary key of the new recap.
      */
     public static int create( Recap recap, Plugin plugin )
     {
         DefaultMessage defaultMessage = DefaultMessageHome.find( plugin );
-        recap.setBackUrl( defaultMessage.getBackUrl(  ) );
-        recap.setRecapMessage( defaultMessage.getRecapMessage(  ) );
+        recap.setBackUrl( defaultMessage.getBackUrl( ) );
+        recap.setRecapMessage( defaultMessage.getRecapMessage( ) );
 
         return _dao.insert( recap, plugin );
     }
@@ -71,8 +72,10 @@ public final class RecapHome
     /**
      * Copy of an instance of recap
      *
-     * @param recap The instance of the Recap  who must copy
-     * @param plugin the Plugin
+     * @param recap
+     *            The instance of the Recap who must copy
+     * @param plugin
+     *            the Plugin
      * @return the id of the nex recap
      *
      */
@@ -84,8 +87,10 @@ public final class RecapHome
     /**
      * Update of the recap which is specified in parameter
      *
-     * @param recap The instance of the Recap which contains the informations to update
-     * @param plugin the Plugin
+     * @param recap
+     *            The instance of the Recap which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void update( Recap recap, Plugin plugin )
@@ -96,22 +101,26 @@ public final class RecapHome
     /**
      * Remove the recap whose identifier is specified in parameter
      *
-     * @param nIdRecap The recap Id
-     * @param plugin the Plugin
+     * @param nIdRecap
+     *            The recap Id
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdRecap, Plugin plugin )
     {
         _dao.delete( nIdRecap, plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a Recap whose identifier is specified in parameter
      *
-     * @param nKey The entry primary key
-     * @param plugin the Plugin
+     * @param nKey
+     *            The entry primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of Recap
      */
     public static Recap findByPrimaryKey( int nKey, Plugin plugin )

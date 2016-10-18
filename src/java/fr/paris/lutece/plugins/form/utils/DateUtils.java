@@ -46,7 +46,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-
 /**
  *
  * DateUtils
@@ -57,13 +56,15 @@ public final class DateUtils
     /**
      * Private constructor
      */
-    private DateUtils(  )
+    private DateUtils( )
     {
     }
 
     /**
      * Get the current date time
-     * @param locale the locale
+     * 
+     * @param locale
+     *            the locale
      * @return the current date as String
      */
     public static String getCurrentDateTime( Locale locale )
@@ -72,18 +73,21 @@ public final class DateUtils
 
         if ( localeTmp == null )
         {
-            localeTmp = I18nService.getDefaultLocale(  );
+            localeTmp = I18nService.getDefaultLocale( );
         }
 
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
 
-        return I18nService.getLocalizedDateTime( calendar.getTime(  ), localeTmp, DateFormat.SHORT, DateFormat.SHORT );
+        return I18nService.getLocalizedDateTime( calendar.getTime( ), localeTmp, DateFormat.SHORT, DateFormat.SHORT );
     }
 
     /**
      * Format a String into a timestamp
-     * @param strTimestamp the String to format
-     * @param locale the locale
+     * 
+     * @param strTimestamp
+     *            the String to format
+     * @param locale
+     *            the locale
      * @return a {@link Timestamp}
      */
     public static Timestamp formatTimestamp( String strTimestamp, Locale locale )
@@ -95,11 +99,11 @@ public final class DateUtils
         {
             date = dateFormatter.parse( strTimestamp );
 
-            return new Timestamp( date.getTime(  ) );
+            return new Timestamp( date.getTime( ) );
         }
-        catch ( ParseException e )
+        catch( ParseException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
 
         return null;

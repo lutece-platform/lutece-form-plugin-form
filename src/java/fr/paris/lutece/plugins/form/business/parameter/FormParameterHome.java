@@ -38,7 +38,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
-
 /**
  *
  * FormParameterHome
@@ -52,14 +51,16 @@ public final class FormParameterHome
     /**
      * Private constructor
      */
-    private FormParameterHome(  )
+    private FormParameterHome( )
     {
         // Private constructor
     }
 
     /**
      * Load all the parameter default values
-     * @param plugin Plugin
+     * 
+     * @param plugin
+     *            Plugin
      * @return a list of ReferenceItem
      */
     public static ReferenceList findAll( Plugin plugin )
@@ -69,8 +70,11 @@ public final class FormParameterHome
 
     /**
      * Load the parameter value
-     * @param strParameterKey the parameter key
-     * @param plugin The plugin
+     * 
+     * @param strParameterKey
+     *            the parameter key
+     * @param plugin
+     *            The plugin
      * @return The parameter value
      */
     public static ReferenceItem findByKey( String strParameterKey, Plugin plugin )
@@ -80,10 +84,12 @@ public final class FormParameterHome
 
     /**
      * Update the parameter value
-     * @param param A reference item contain the association key/value to
-     *            update. The key must be in the code parameter of the reference
-     *            item, and the value in the value parameter
-     * @param plugin The plugin
+     * 
+     * @param param
+     *            A reference item contain the association key/value to update. The key must be in the code parameter of the reference item, and the value in
+     *            the value parameter
+     * @param plugin
+     *            The plugin
      */
     public static void update( ReferenceItem param, Plugin plugin )
     {
@@ -92,8 +98,11 @@ public final class FormParameterHome
 
     /**
      * Load parameters by filter
-     * @param filter the filter
-     * @param plugin the plugin
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return a {@link ReferenceList}
      */
     public static ReferenceList findByFilter( FormParameterFilter filter, Plugin plugin )

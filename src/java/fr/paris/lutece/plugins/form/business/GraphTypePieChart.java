@@ -45,7 +45,6 @@ import org.jfree.data.general.PieDataset;
 
 import java.util.List;
 
-
 /**
  *
  * GraphTypePieChart
@@ -57,22 +56,26 @@ public class GraphTypePieChart extends GraphType
      * {@inheritDoc}
      */
     @Override
-    public JFreeChart createChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle,
-        boolean nGraphThreeDimension, boolean nGraphLabelValue )
+    public JFreeChart createChart( List<StatisticEntrySubmit> listStatistic, String strGraphTitle, boolean nGraphThreeDimension, boolean nGraphLabelValue )
     {
         return createPieChartGraph( listStatistic, strGraphTitle, nGraphThreeDimension, nGraphLabelValue );
     }
 
     /**
-        * return the PieChartGraph  JFreeChart graph
-        * @param listStatistic listStatistic
-        * @param strGraphTitle graph title
-        * @param nGraphThreeDimension true if the graph must be in three dimension
-        * @param nGraphLabelValue true if the labels must appear in the graph
-        * @return the JFreeChart graph associate to the graph type
-        */
-    public static JFreeChart createPieChartGraph( List<StatisticEntrySubmit> listStatistic, String strGraphTitle,
-        boolean nGraphThreeDimension, boolean nGraphLabelValue )
+     * return the PieChartGraph JFreeChart graph
+     * 
+     * @param listStatistic
+     *            listStatistic
+     * @param strGraphTitle
+     *            graph title
+     * @param nGraphThreeDimension
+     *            true if the graph must be in three dimension
+     * @param nGraphLabelValue
+     *            true if the labels must appear in the graph
+     * @return the JFreeChart graph associate to the graph type
+     */
+    public static JFreeChart createPieChartGraph( List<StatisticEntrySubmit> listStatistic, String strGraphTitle, boolean nGraphThreeDimension,
+            boolean nGraphLabelValue )
     {
         PieDataset pieDataset = createPieDataset( listStatistic );
         JFreeChart chart;
@@ -86,7 +89,7 @@ public class GraphTypePieChart extends GraphType
             chart = ChartFactory.createPieChart( strGraphTitle, pieDataset, true, true, false );
         }
 
-        PiePlot plot = (PiePlot) chart.getPlot(  );
+        PiePlot plot = (PiePlot) chart.getPlot( );
 
         if ( nGraphLabelValue )
         {
@@ -102,16 +105,18 @@ public class GraphTypePieChart extends GraphType
 
     /**
      * create dataset for pie chart with a statistic list
-     * @param listStatistic list of Statistic
+     * 
+     * @param listStatistic
+     *            list of Statistic
      * @return dataset for pie chart
      */
     private static PieDataset createPieDataset( List<StatisticEntrySubmit> listStatistic )
     {
-        DefaultPieDataset pieDataset = new DefaultPieDataset(  );
+        DefaultPieDataset pieDataset = new DefaultPieDataset( );
 
         for ( StatisticEntrySubmit statistic : listStatistic )
         {
-            pieDataset.setValue( statistic.getFieldLibelle(  ), statistic.getNumberResponse(  ) );
+            pieDataset.setValue( statistic.getFieldLibelle( ), statistic.getNumberResponse( ) );
         }
 
         return pieDataset;

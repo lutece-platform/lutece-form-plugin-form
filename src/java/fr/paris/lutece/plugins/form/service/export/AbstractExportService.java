@@ -54,7 +54,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
  * AbstractFormExportService
@@ -64,7 +63,7 @@ public abstract class AbstractExportService implements IExportService
 {
     // CONSTANTS
     protected static final String SQL_FILTER_ENTRY_POS = " ent.pos ";
-    protected static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId(  ) + "form-";
+    protected static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId( ) + "form-";
     protected static final String CONSTANT_CSV = "csv";
 
     // PROPERTIES
@@ -76,22 +75,30 @@ public abstract class AbstractExportService implements IExportService
 
     /**
      * Do export the form responses
-     * @param form the form
-     * @param listFormSubmit the list of form submits
-     * @param strFolderPath the folder path
-     * @param exportFormat the export format
-     * @param strEncoding the encoding
-     * @param sbLog the log
-     * @param plugin the plugin
+     * 
+     * @param form
+     *            the form
+     * @param listFormSubmit
+     *            the list of form submits
+     * @param strFolderPath
+     *            the folder path
+     * @param exportFormat
+     *            the export format
+     * @param strEncoding
+     *            the encoding
+     * @param sbLog
+     *            the log
+     * @param plugin
+     *            the plugin
      */
-    public abstract void doExport( Form form, List<FormSubmit> listFormSubmit, String strFolderPath,
-        ExportFormat exportFormat, String strEncoding, StringBuilder sbLog, Plugin plugin );
+    public abstract void doExport( Form form, List<FormSubmit> listFormSubmit, String strFolderPath, ExportFormat exportFormat, String strEncoding,
+            StringBuilder sbLog, Plugin plugin );
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getKey(  )
+    public String getKey( )
     {
         return _strKey;
     }
@@ -113,7 +120,7 @@ public abstract class AbstractExportService implements IExportService
     {
         if ( locale == null )
         {
-            return I18nService.getLocalizedString( _strTitleI18nKey, I18nService.getDefaultLocale(  ) );
+            return I18nService.getLocalizedString( _strTitleI18nKey, I18nService.getDefaultLocale( ) );
         }
 
         return I18nService.getLocalizedString( _strTitleI18nKey, locale );
@@ -134,10 +141,10 @@ public abstract class AbstractExportService implements IExportService
     @Override
     public void doExport( Form form, StringBuilder sbLog, ExportFormat exportFormat, Plugin plugin )
     {
-        IExportType exportType = FormParameterService.getService(  ).getExportDaemonType(  );
+        IExportType exportType = FormParameterService.getService( ).getExportDaemonType( );
 
         // Since it is a daemon, no Locale available. We take the default Locale
-        Locale locale = I18nService.getDefaultLocale(  );
+        Locale locale = I18nService.getDefaultLocale( );
 
         // Filter the responses given the export type defined in the advanced parameters of the plugin-form
         ResponseFilter filter = exportType.getResponseFilter( form, locale );
@@ -146,27 +153,26 @@ public abstract class AbstractExportService implements IExportService
 
         for ( FormSubmit formSubmit : listFormSubmit )
         {
-            filter = new ResponseFilter(  );
-            filter.setIdResource( formSubmit.getIdFormSubmit(  ) );
+            filter = new ResponseFilter( );
+            filter.setIdResource( formSubmit.getIdFormSubmit( ) );
             filter.setOrderBy( SQL_FILTER_ENTRY_POS );
             filter.setOrderByAsc( true );
             formSubmit.setListResponse( responseService.getResponseList( filter, false ) );
         }
 
         // Get the folder path from the file "form.properties"
-        String strFolderPath = AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( 
-                    PROPERTY_FILE_FOLDER_PATH ) );
+        String strFolderPath = AppPathService.getAbsolutePathFromRelativePath( AppPropertiesService.getProperty( PROPERTY_FILE_FOLDER_PATH ) );
 
         // Get the encoding defined in the advanced parameters of the plugin-form
         String strEncoding = StringUtils.EMPTY;
 
-        if ( CONSTANT_CSV.equals( exportFormat.getExtension(  ).trim(  ) ) )
+        if ( CONSTANT_CSV.equals( exportFormat.getExtension( ).trim( ) ) )
         {
-            strEncoding = FormParameterService.getService(  ).getExportCSVEncoding(  );
+            strEncoding = FormParameterService.getService( ).getExportCSVEncoding( );
         }
         else
         {
-            strEncoding = FormParameterService.getService(  ).getExportXMLEncoding(  );
+            strEncoding = FormParameterService.getService( ).getExportXMLEncoding( );
         }
 
         doExport( form, listFormSubmit, strFolderPath, exportFormat, strEncoding, sbLog, plugin );

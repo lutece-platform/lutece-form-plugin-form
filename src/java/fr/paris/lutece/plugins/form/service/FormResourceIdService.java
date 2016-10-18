@@ -45,7 +45,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.Locale;
 
-
 /**
  *
  * class FormResourceIdService
@@ -101,7 +100,7 @@ public class FormResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_MANAGE_ADVANCED_PARAMETERS = "form.permission.label.manage_advanced_parameters";
 
     /** Creates a new instance of DocumentTypeResourceIdService */
-    public FormResourceIdService(  )
+    public FormResourceIdService( )
     {
         setPluginName( FormPlugin.PLUGIN_NAME );
     }
@@ -110,65 +109,65 @@ public class FormResourceIdService extends ResourceIdService
      * Initializes the service
      */
     @Override
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( FormResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( FormResourceIdService.class.getName( ) );
         rt.setPluginName( FormPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( Form.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_CREATE );
         p.setPermissionTitleKey( PROPERTY_LABEL_CREATE );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_MODIFY );
         p.setPermissionTitleKey( PROPERTY_LABEL_MODIFY );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_COPY );
         p.setPermissionTitleKey( PROPERTY_LABEL_COPY );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_TEST );
         p.setPermissionTitleKey( PROPERTY_LABEL_TEST );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_CHANGE_STATE );
         p.setPermissionTitleKey( PROPERTY_LABEL_CHANGE_STATE );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_CHANGE_STATE_AUTO_PUBLICATION );
         p.setPermissionTitleKey( PROPERTY_LABEL_CHANGE_STATE_AUTO_PUBLICATION );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_MANAGE_OUTPUT_PROCESSOR );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE_OUTPUT_PROCESSOR );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_MANAGE_VALIDATOR );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE_VALIDATOR );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_VIEW_RESULT );
         p.setPermissionTitleKey( PROPERTY_LABEL_VIEW_RESULT );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_DELETE );
         p.setPermissionTitleKey( PROPERTY_LABEL_DELETE );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_MANAGE_ADVANCED_PARAMETERS );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE_ADVANCED_PARAMETERS );
         rt.registerPermission( p );
@@ -178,7 +177,9 @@ public class FormResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of form resource ids
-     * @param locale The current locale
+     * 
+     * @param locale
+     *            The current locale
      * @return A list of resource ids
      */
     @Override
@@ -199,13 +200,13 @@ public class FormResourceIdService extends ResourceIdService
         {
             nIdForm = Integer.parseInt( strId );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
 
         Form form = FormHome.findByPrimaryKey( nIdForm, PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
 
-        return form.getTitle(  );
+        return form.getTitle( );
     }
 }

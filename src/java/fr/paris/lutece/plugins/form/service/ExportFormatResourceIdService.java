@@ -45,7 +45,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.Locale;
 
-
 /**
  *
  * class ExportFormatResourceIdService
@@ -59,7 +58,7 @@ public class ExportFormatResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_MANAGE = "form.permission.label.manage.exportFormat";
 
     /** Creates a new instance of DocumentTypeResourceIdService */
-    public ExportFormatResourceIdService(  )
+    public ExportFormatResourceIdService( )
     {
         setPluginName( FormPlugin.PLUGIN_NAME );
     }
@@ -68,15 +67,15 @@ public class ExportFormatResourceIdService extends ResourceIdService
      * Initializes the service
      */
     @Override
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( ExportFormatResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( ExportFormatResourceIdService.class.getName( ) );
         rt.setPluginName( FormPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( ExportFormat.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_MANAGE );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE );
         rt.registerPermission( p );
@@ -85,7 +84,9 @@ public class ExportFormatResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of export format resource ids
-     * @param locale The current locale
+     * 
+     * @param locale
+     *            The current locale
      * @return A list of resource ids
      */
     @Override
@@ -106,14 +107,13 @@ public class ExportFormatResourceIdService extends ResourceIdService
         {
             nIdExport = Integer.parseInt( strId );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
 
-        ExportFormat export = ExportFormatHome.findByPrimaryKey( nIdExport,
-                PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
+        ExportFormat export = ExportFormatHome.findByPrimaryKey( nIdExport, PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
 
-        return export.getTitle(  );
+        return export.getTitle( );
     }
 }

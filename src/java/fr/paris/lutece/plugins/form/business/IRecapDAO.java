@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.form.business;
 
-
 /*
  * Copyright (c) 2002-2014, Mairie de Paris
  * All rights reserved.
@@ -69,7 +68,6 @@ package fr.paris.lutece.plugins.form.business;
  */
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 /**
  * IRecapDAO Interface
  */
@@ -78,8 +76,10 @@ public interface IRecapDAO
     /**
      * Insert a new record in the table.
      *
-     * @param recap instance of the Recap object to insert
-     * @param plugin the plugin
+     * @param recap
+     *            instance of the Recap object to insert
+     * @param plugin
+     *            the plugin
      * @return the id of the new recap
      */
     int insert( Recap recap, Plugin plugin );
@@ -87,27 +87,33 @@ public interface IRecapDAO
     /**
      * Update the recap in the table
      *
-     * @param recap instance of the Recap object to update
-     * @param plugin the plugin
+     * @param recap
+     *            instance of the Recap object to update
+     * @param plugin
+     *            the plugin
      */
     void store( Recap recap, Plugin plugin );
 
     /**
      * Delete a record from the table
      *
-     * @param nIdRecap The identifier of the recap
-     * @param plugin the plugin
+     * @param nIdRecap
+     *            The identifier of the recap
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdRecap, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Load the data of the recap from the table
      *
-     * @param nIdRecap The identifier of the recap
-     * @param plugin the plugin
+     * @param nIdRecap
+     *            The identifier of the recap
+     * @param plugin
+     *            the plugin
      * @return the instance of the Recap
      */
     Recap load( int nIdRecap, Plugin plugin );

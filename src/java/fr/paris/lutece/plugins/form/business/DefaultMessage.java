@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 import org.apache.commons.lang.StringUtils;
 
-
 /**
  *
  * class DefaultMessage
@@ -61,14 +60,16 @@ public class DefaultMessage implements RBACResource
      *
      * @return default back Url
      */
-    public String getBackUrl(  )
+    public String getBackUrl( )
     {
         return _strBackUrl;
     }
 
     /**
      * set default back url
-     * @param backUrl backurl
+     * 
+     * @param backUrl
+     *            backurl
      */
     public void setBackUrl( String backUrl )
     {
@@ -79,14 +80,16 @@ public class DefaultMessage implements RBACResource
      *
      * @return the default value of validate button
      */
-    public String getLibelleValidateButton(  )
+    public String getLibelleValidateButton( )
     {
         return _strLibelleValidateButton;
     }
 
     /**
      * set the default value of validate button
-     * @param libelleValidateButton value of validate button
+     * 
+     * @param libelleValidateButton
+     *            value of validate button
      */
     public void setLibelleValidateButton( String libelleValidateButton )
     {
@@ -97,15 +100,15 @@ public class DefaultMessage implements RBACResource
      *
      * @return the default summary who see by the user after validate form
      */
-    public String getRecapMessage(  )
+    public String getRecapMessage( )
     {
         return _strRecapMessage;
     }
 
     /**
      *
-     * @param recapMessage the default summary who see by the user after
-     *            validate form
+     * @param recapMessage
+     *            the default summary who see by the user after validate form
      */
     public void setRecapMessage( String recapMessage )
     {
@@ -116,14 +119,16 @@ public class DefaultMessage implements RBACResource
      *
      * @return the default requierement
      */
-    public String getRequirement(  )
+    public String getRequirement( )
     {
         return _strRequirement;
     }
 
     /**
      * set the default requierement
-     * @param requierementMessage the default requierement
+     * 
+     * @param requierementMessage
+     *            the default requierement
      */
     public void setRequirement( String requierementMessage )
     {
@@ -132,18 +137,18 @@ public class DefaultMessage implements RBACResource
 
     /**
      *
-     * @return the default Unavailability Message who see by the user when the
-     *         form will be enable
+     * @return the default Unavailability Message who see by the user when the form will be enable
      */
-    public String getUnavailabilityMessage(  )
+    public String getUnavailabilityMessage( )
     {
         return _strUnavailabilityMessage;
     }
 
     /**
-     * set the Unavailability Message who see by the user when the form will be
-     * enable
-     * @param unavailabilityMessage the default Unavailability Message
+     * set the Unavailability Message who see by the user when the form will be enable
+     * 
+     * @param unavailabilityMessage
+     *            the default Unavailability Message
      */
     public void setUnavailabilityMessage( String unavailabilityMessage )
     {
@@ -154,14 +159,16 @@ public class DefaultMessage implements RBACResource
      *
      * @return the default welcome message
      */
-    public String getWelcomeMessage(  )
+    public String getWelcomeMessage( )
     {
         return _strWelcomeMessage;
     }
 
     /**
      * set the default welcome message
-     * @param welcomeMessage the default welcome message
+     * 
+     * @param welcomeMessage
+     *            the default welcome message
      */
     public void setWelcomeMessage( String welcomeMessage )
     {
@@ -172,7 +179,7 @@ public class DefaultMessage implements RBACResource
      * {@inheritDoc}
      */
     @Override
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
@@ -181,14 +188,16 @@ public class DefaultMessage implements RBACResource
      * {@inheritDoc}
      */
     @Override
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return StringUtils.EMPTY;
     }
 
     /**
      * The default label to display for the Reset button
-     * @param strLibelleResetButton The label
+     * 
+     * @param strLibelleResetButton
+     *            The label
      */
     public void setLibelleResetButton( String strLibelleResetButton )
     {
@@ -197,9 +206,10 @@ public class DefaultMessage implements RBACResource
 
     /**
      * The default label to display for the Reset button
+     * 
      * @return the Reset button name
      */
-    public String getLibelleResetButton(  )
+    public String getLibelleResetButton( )
     {
         return _strLibelleResetButton;
     }

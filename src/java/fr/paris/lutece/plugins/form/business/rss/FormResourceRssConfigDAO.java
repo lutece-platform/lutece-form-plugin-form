@@ -39,7 +39,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * class FormResourceRssConfigDAO
@@ -63,10 +62,10 @@ public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
 
         int nPos = 0;
 
-        daoUtil.setInt( ++nPos, config.getIdRss(  ) );
+        daoUtil.setInt( ++nPos, config.getIdRss( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -79,11 +78,11 @@ public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
 
         int nPos = 0;
 
-        daoUtil.setInt( ++nPos, config.getIdRss(  ) );
+        daoUtil.setInt( ++nPos, config.getIdRss( ) );
 
-        daoUtil.setInt( ++nPos, config.getIdRss(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( ++nPos, config.getIdRss( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -97,17 +96,17 @@ public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
 
         daoUtil.setInt( 1, nIdRss );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nPos = 0;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            config = new FormResourceRssConfig(  );
+            config = new FormResourceRssConfig( );
             config.setIdRss( daoUtil.getInt( ++nPos ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return config;
     }
@@ -121,8 +120,8 @@ public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
 
         daoUtil.setInt( 1, nIdRss );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -131,22 +130,22 @@ public class FormResourceRssConfigDAO implements IFormResourceRssConfigDAO
     @Override
     public List<FormResourceRssConfig> loadAll( Plugin plugin )
     {
-        List<FormResourceRssConfig> configList = new ArrayList<FormResourceRssConfig>(  );
+        List<FormResourceRssConfig> configList = new ArrayList<FormResourceRssConfig>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ALL, plugin );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nPos = 0;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            FormResourceRssConfig config = new FormResourceRssConfig(  );
+            FormResourceRssConfig config = new FormResourceRssConfig( );
             config.setIdRss( daoUtil.getInt( ++nPos ) );
 
             configList.add( config );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return configList;
     }

@@ -71,60 +71,70 @@ import fr.paris.lutece.util.ReferenceList;
  */
 import java.util.List;
 
-
 /**
-* IFormDAO Interface
-*/
+ * IFormDAO Interface
+ */
 public interface IExportFormatDAO
 {
     /**
      * Insert a new record in the table.
      *
-     * @param exportFormat instance of the ExportFormat object to insert
-     * @param plugin the plugin
+     * @param exportFormat
+     *            instance of the ExportFormat object to insert
+     * @param plugin
+     *            the plugin
      */
     void insert( ExportFormat exportFormat, Plugin plugin );
 
     /**
-         * Update the exportFormat in the table
-         *
-         * @param exportFormat instance of the ExportFormat object to update
-         * @param plugin the plugin
-         */
+     * Update the exportFormat in the table
+     *
+     * @param exportFormat
+     *            instance of the ExportFormat object to update
+     * @param plugin
+     *            the plugin
+     */
     void store( ExportFormat exportFormat, Plugin plugin );
 
     /**
-         * Delete a record from the table
-         *
-         * @param nIdExport The identifier of the ExportFormat
-         * @param plugin the plugin
-         */
+     * Delete a record from the table
+     *
+     * @param nIdExport
+     *            The identifier of the ExportFormat
+     * @param plugin
+     *            the plugin
+     */
     void delete( int nIdExport, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-         * Load the data of the export format from the table
-         *
-         * @param nKey The identifier of the export format
-         * @param plugin the plugin
-         * @return the instance of the ExportFormat
-         */
+     * Load the data of the export format from the table
+     *
+     * @param nKey
+     *            The identifier of the export format
+     * @param plugin
+     *            the plugin
+     * @return the instance of the ExportFormat
+     */
     ExportFormat load( int nKey, Plugin plugin );
 
     /**
      * Load the data of all the ExportFormat and returns them in form of a list
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return The List which contains the data of all the ExportFormat
      */
     List<ExportFormat> selectListExport( Plugin plugin );
 
     /**
-     * Load the data of all the export format returns them in a  reference list
-     * @param plugin the plugin
-     * @return  a  reference list of export format
+     * Load the data of all the export format returns them in a reference list
+     * 
+     * @param plugin
+     *            the plugin
+     * @return a reference list of export format
      */
     ReferenceList getListExport( Plugin plugin );
 }

@@ -39,40 +39,39 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.test.LuteceTestCase;
 
-
 public class FormPortletHomeTest extends LuteceTestCase
 {
     private final static int ID_FORM_1 = 1;
     private final static int ID_PORTLET_1 = 1;
     private final Plugin _plugin = PluginService.getPlugin( "form" );
 
-    public void testGetInstance(  )
+    public void testGetInstance( )
     {
-        PortletHome portletHome = FormPortletHome.getInstance(  );
+        PortletHome portletHome = FormPortletHome.getInstance( );
 
         assertNotNull( portletHome );
     }
 
-    public void testGetPortletTypeId(  )
+    public void testGetPortletTypeId( )
     {
         String portletTypeId = null;
-        FormPortletHome formPortletHome = new FormPortletHome(  );
+        FormPortletHome formPortletHome = new FormPortletHome( );
 
-        portletTypeId = formPortletHome.getPortletTypeId(  );
+        portletTypeId = formPortletHome.getPortletTypeId( );
 
         assertNotNull( portletTypeId );
     }
 
-    public void testGetDAO(  )
+    public void testGetDAO( )
     {
-        FormPortletHome formPortletHome = new FormPortletHome(  );
+        FormPortletHome formPortletHome = new FormPortletHome( );
 
-        IPortletInterfaceDAO portletDAO = formPortletHome.getDAO(  );
+        IPortletInterfaceDAO portletDAO = formPortletHome.getDAO( );
 
         assertNotNull( portletDAO );
     }
 
-    public void testGetCountPortletByIdForm(  )
+    public void testGetCountPortletByIdForm( )
     {
         int nbPortletByIdForm;
 

@@ -35,11 +35,8 @@ package fr.paris.lutece.plugins.form.service.publication;
 
 import fr.paris.lutece.portal.service.daemon.Daemon;
 
-
 /**
- * Daemon publication
- * disable all form who are enable and have
- * a date of end disponibility before the current date
+ * Daemon publication disable all form who are enable and have a date of end disponibility before the current date
  *
  */
 public class DaemonPublication extends Daemon
@@ -48,8 +45,8 @@ public class DaemonPublication extends Daemon
      * Lauch the publication daemon
      */
     @Override
-    public void run(  )
+    public void run( )
     {
-        PublicationService.publication(  );
+        PublicationService.publication( );
     }
 }

@@ -42,14 +42,12 @@ import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
- * This class provides instances management methods for ArticlesListPortlet
- * objects
+ * This class provides instances management methods for ArticlesListPortlet objects
  */
 public class FormPortletHome extends PortletHome
 {
-    /////////////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////////
     // Constants
     // Static variable pointed at the DAO instance
     private static IFormPortletDAO _dao = SpringContextService.getBean( "form.formPortletDAO" );
@@ -60,7 +58,7 @@ public class FormPortletHome extends PortletHome
     /**
      * Constructor
      */
-    public FormPortletHome(  )
+    public FormPortletHome( )
     {
         if ( _singleton == null )
         {
@@ -73,11 +71,11 @@ public class FormPortletHome extends PortletHome
      *
      * @return the FormPortletHome instance
      */
-    public static PortletHome getInstance(  )
+    public static PortletHome getInstance( )
     {
         if ( _singleton == null )
         {
-            _singleton = new FormPortletHome(  );
+            _singleton = new FormPortletHome( );
         }
 
         return _singleton;
@@ -89,9 +87,9 @@ public class FormPortletHome extends PortletHome
      * @return the portlet type identifier
      */
     @Override
-    public String getPortletTypeId(  )
+    public String getPortletTypeId( )
     {
-        String strCurrentClassName = this.getClass(  ).getName(  );
+        String strCurrentClassName = this.getClass( ).getName( );
         String strPortletTypeId = PortletTypeHome.getPortletTypeId( strCurrentClassName );
 
         return strPortletTypeId;
@@ -103,7 +101,7 @@ public class FormPortletHome extends PortletHome
      * @return the instance of the DAO singleton
      */
     @Override
-    public IPortletInterfaceDAO getDAO(  )
+    public IPortletInterfaceDAO getDAO( )
     {
         return _dao;
     }
@@ -111,19 +109,21 @@ public class FormPortletHome extends PortletHome
     /**
      * Returns an instance of a Form associate to the portle witch identifier is specified in parameter
      *
-     * @param nPortletId the portlet identifier
-     * @param plugin the plugin
+     * @param nPortletId
+     *            the portlet identifier
+     * @param plugin
+     *            the plugin
      * @return An instance of Form
      */
     public static Form getFormByPortletId( int nPortletId, Plugin plugin )
     {
         Portlet portlet = PortletHome.findByPrimaryKey( nPortletId );
         FormPortlet formPortlet = (FormPortlet) _dao.load( nPortletId );
-        Form form = FormHome.findByPrimaryKey( formPortlet.getFormId(  ), plugin );
+        Form form = FormHome.findByPrimaryKey( formPortlet.getFormId( ), plugin );
 
         if ( form != null )
         {
-            form.setFormPageId( portlet.getPageId(  ) );
+            form.setFormPageId( portlet.getPageId( ) );
         }
 
         return form;
@@ -131,7 +131,9 @@ public class FormPortletHome extends PortletHome
 
     /**
      * return number of form portlet who are associate to the id form
-     * @param nIdForm the id of the form
+     * 
+     * @param nIdForm
+     *            the id of the form
      * @return number of form portlet who are associate to the id form
      */
     public static int getCountPortletByIdForm( int nIdForm )
