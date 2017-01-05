@@ -1,42 +1,36 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12">
-		<div class="box box-primary">
-			<div class="box-header">
-				<h3 class="box-title">#i18n{form.manageForm.title}</h3>
-				<div class="box-tools">
-					<form class="form-inline pull-left" action="" method="" name="" id="">
-						<label for="active">#i18n{form.manageForm.labelActive}</label>
-						<@comboWithParams name="active" items=active_list default_value="active_selected" additionalParameters=" class=\"form-control input-xs\"" />
-						<label for="">&#160; #i18n{form.manageForm.labelWorkGroup}</label>
-						<div class="input-group spaced">
-							<@comboWithParams name="workgroup" items=user_workgroup_list default_value=user_workgroup_selected additionalParameters=" class=\"form-control input-xs\"" />
-							<span class="input-group-btn">
-								<button class="btn btn-primary btn-xs btn-flat" type="submit">
-									<i class="fa fa-filter"></i> #i18n{form.manageForm.buttonSearch}</button>
-							</span>
-						</div>
-					</form>
-					<#if permission_manage_advanced_parameters>
-						<form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/form/ManageAdvancedParameters.jsp">
-							<button class="btn btn-primary btn-xs btn-flat" type="submit">
-								<i class="fa fa-cog"></i>
-								<span class="hidden-xs">#i18n{form.manageForm.button_manage_advanced_parameters}</span>
-							</button>
-						</form>
-					</#if>
-					<#if permission_create_form>
-						<form class="form-inline pull-right" method="post" action="jsp/admin/plugins/form/CreateForm.jsp">
-							<button class="btn btn-primary btn-xs btn-flat" type="submit">
-								<i class="fa fa-plus"></i>
-								<span class="hidden-xs">#i18n{form.manageForm.buttonCreate}</span>
-							</button>
-						</form>
-					</#if>
-				</div>
-			</div>
-			<div class="box-body table-responsive">
+<@row>
+	<@columns>
+		<@box color='primary' collapsed=true>
+			<@boxHeader title='#i18n{form.manageForm.title}' boxTools=true>
+				<#if permission_manage_advanced_parameters>
+					<@aButton href='jsp/admin/plugins/form/ManageAdvancedParameters.jsp' buttonIcon='cog' title='#i18n{form.manageForm.button_manage_advanced_parameters}' showTitleXs=false size='' />
+				</#if>
+				<#if permission_create_form>
+					<@aButton href='jsp/admin/plugins/form/CreateForm.jsp' buttonIcon='plus' title='#i18n{form.manageForm.buttonCreate}' showTitleXs=false size='' />
+				</#if>
+				<@button style='btn-box-tool' params='data-widget="collapse"' buttonIcon='plus' />
+			</@boxHeader>
+			<@boxBody>
+				<@tform action='' method='' name='' id=''>
+					<@formGroup labelFor='active' labelKey='#i18n{form.manageForm.labelActive}'>
+						<@select name='active' items=active_list default_value='${active_selected}' list=true size='sm' />
+					</@formGroup>
+					<@formGroup labelKey='#i18n{form.manageForm.labelWorkGroup}'>
+						<@inputGroup>
+							<@select name='workgroup' items=user_workgroup_list default_value='${user_workgroup_selected}' list=true size='sm' />
+							<@inputGroupItem>
+								<@button type='submit' buttonIcon='filter' title='#i18n{form.manageForm.buttonSearch}' showTitle=false />
+							</@inputGroupItem>
+						</@inputGroup>
+					</@formGroup>
+				</@tform>
+			</@boxBody>
+		</@box>
+		<@box color='solid'>
+			<@boxBody>
 				<@paginationAdmin paginator=paginator combo=1 />
-				<table class="table table-hover table-condensed">
+				<div class="clearfix"></div>
+				<@table>
 					<tr>
 						<th>#i18n{form.manageForm.rowTitle}
 							<@sort jsp_url="jsp/admin/plugins/form/ManageForm.jsp" attribute="title" />
@@ -49,22 +43,22 @@
 							<td>
 								<#if form.active>
 									<#if form.autoPublished>
-										<i class="fa fa-time" title="#i18n{form.manageForm.stateEnabledAutoPublication}"></i>
-										<#else>
-											<span class="label label-success"><i class="fa fa-check"></i></span>
+										<@icon style='close' title='#i18n{form.manageForm.stateEnabledAutoPublication}' />
+									<#else>
+										<@tag color='success'><@icon style='check' /></@tag>
 									</#if>
 									<#else>
 										<#if form.autoPublished>
 											<#if form.autoPublicationActive>
-												<span class="label label-success"><i class="fa fa-time"></i></span>
-												<#else>
-													<span class="label label-danger"><i class="fa fa-time"></i></span>
+												<@tag color='success'><@icon style='close' /></@tag>
+											<#else>
+												<@tag color='danger'><@icon style='close' /></@tag>
 											</#if>
 											<#else>
-												<span class="label label-danger"><i class="fa fa-remove"></i></span>
+												<@tag color='danger'><@icon style='close' /></@tag>
 										</#if>
 								</#if>
-								${form.title}&nbsp;<a href="jsp/site/Portal.jsp?page=form&id_form=${form.idForm}" title="Voir ${form.title}" target="_blank"><i class="fa fa-globe"></i></a>
+								&nbsp;${form.title}&nbsp;<a href="jsp/site/Portal.jsp?page=form&id_form=${form.idForm}" title="Voir ${form.title}" target="_blank"><i class="fa fa-globe"></i></a>
 							</td>
 							<td>
 								<#setting locale=locale.language>
@@ -85,18 +79,25 @@
 									<#list form.actions as action>
 										<#assign autoPublicationMode=( form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
 										<#if !((action.permission=='CHANGE_STATE' ) && autoPublicationMode) && !((action.permission=='CHANGE_STATE_AUTO_PUBLICATION' ) && (!autoPublicationMode || (!form.active && form.autoPublicationActive)))>
-											<a class="btn btn-xs <#if action.permission=='DELETE'>btn-danger<#elseif action.nameKey=='form.action.disable.name'>btn-danger<#elseif action.nameKey=='form.action.enable.name'>btn-success<#else>btn-primary</#if> btn-flat" href="${action.url}?id_form=${form.idForm}&plugin_name=form"	title="${action.description}">
-												<i class="${action.iconUrl} fa-fw"></i>
-											</a>
+											<#if action.permission=='DELETE'>
+												<#assign color='btn-danger' />
+											<#elseif action.nameKey=='form.action.disable.name'>
+												<#assign color='btn-danger' />
+											<#elseif action.nameKey=='form.action.enable.name'>
+												<#assign color='btn-success' />
+											<#else>
+												<#assign color='btn-primary' />
+											</#if>
+											<@aButton href='${action.url}?id_form=${form.idForm}&plugin_name=form' title='${action.description}' showTitle=false buttonIcon=action.iconUrl color=color />
 										</#if>
 									</#list>
 								</#if>
 							</td>
 						</tr>
 					</#list>
-				</table>
+				</@table>
 				<@paginationAdmin paginator=paginator />
-			</div>
-		</div>
-	</div>
-</div>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row>
