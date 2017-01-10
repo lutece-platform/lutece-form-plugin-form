@@ -1,13 +1,16 @@
  <#include "/admin/util/editor/editor.html" />
-<fieldset>
-	<legend class="sr-only">#i18n{form.modifyEntry.titleQuestion} : '${form.title}'</legend>
-	<@row>
+<@row>
+	<fieldset>
+		<legend class="sr-only">#i18n{form.modifyEntry.titleQuestion} : '${form.title}'</legend>
 		<@columns md=3 lg=3 xl=3>
 			<@box color='primary'>
 				<@boxHeader title='#i18n{form.modifyEntry.titleQuestion} : ${form.title}' />
 				<@boxBody>
 					<@tform action='jsp/admin/plugins/form/DoModifyEntry.jsp#list'>
 						<input name="id_entry" value="${entry.idEntry}" type="hidden">
+						<@formGroup labelFor='type' labelKey='#i18n{form.createEntry.labelType}' rows=2>
+							<@input type='text' name='type' id='type' readonly=true disabled=true value='${entry.entryType.title}' />
+						</@formGroup>
 						<@formGroup labelFor='title' labelKey='#i18n{form.createEntry.labelTitle}' helpKey='#i18n{form.createEntry.labelTitleComment}' mandatory=true rows=2>
 							<@input type='text' name='title' id='title' value='${entry.title}' maxlength=255 />
 						</@formGroup>
@@ -23,9 +26,6 @@
 								<option value=0 <#if !entry.fieldInLine >selected="selected" </#if>>#i18n{form.createEntry.selectPresentationNotInLine}</option>
 							</@select>
 						</@formGroup>
-						<@formGroup labelFor='type' labelKey='#i18n{form.createEntry.labelType}' rows=2>
-							<@input type='text' name='type' readonly=true disabled=true value='${entry.entryType.title}' />
-						</@formGroup>
 						<@formGroup labelFor='mandatory' labelKey='#i18n{form.createEntry.labelMandatory}' showLabel=false rows=2>
 							<#if entry.mandatory>
 								<#assign checked = true>
@@ -38,8 +38,8 @@
 							<@input type='text' name='css_class' value='${entry.CSSClass!}' maxlength=255 />
 						</@formGroup>
 						<@formGroup rows=2>
-							<@button type='submit' name='save' title='#i18n{form.modifyEntry.buttonSave}' buttonIcon='check' size='' showTitleXs=false showTitleMd=false />
-							<@button type='submit' name='apply' title='#i18n{form.modifyEntry.buttonApply}' value='apply' buttonIcon='check-circle' size='' showTitleXs=false showTitleMd=false />
+							<@button type='submit' name='save' title='#i18n{form.modifyEntry.buttonSave}' buttonIcon='save' size='' showTitleXs=false showTitleMd=false />
+							<@button type='submit' name='apply' title='#i18n{form.modifyEntry.buttonApply}' value='apply' buttonIcon='check' size='' showTitleXs=false showTitleMd=false />
 							<@aButton href='jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form' title='#i18n{form.createEntry.buttonCancel}' buttonIcon='close' size='' showTitleXs=false  showTitleMd=false color='btn-secondary'/>
 						</@formGroup>
 					</@tform>
@@ -55,7 +55,6 @@
 					</@tform>
 				</@boxHeader>
 				<@boxBody>
-					<hr class="hidden-md hidden-lg"></hr>
 					<fieldset>
 						<legend class="sr-only">#i18n{form.createEntry.manageField.title}</legend>
 						<a name="list" id="list"></a>
@@ -64,7 +63,7 @@
 							<tr> 
 								<th>#i18n{form.createEntry.manageField.rowTitle}</th>
 								<th>#i18n{form.createEntry.manageField.rowValue}</th>
-								<th><i class="glyphicon glyphicon-question-sign" title="#i18n{form.createEntry.manageField.rowConditionalQuestion}"></i>&nbsp;</th>
+								<th><@icon style='question-circle' title='#i18n{form.createEntry.manageField.rowConditionalQuestion}' /></th>
 								<th>#i18n{form.createEntry.manageField.rowActions}</th>
 							</tr>
 							<#assign cpt=0>
@@ -72,7 +71,11 @@
 									<#assign cpt=cpt+1>
 									<tr>
 										<td>${field.title}</td>
-										<td><#if field.defaultValue><span class="label label-success"><i class="glyphicon glyphicon-ok" title="#i18n{form.createEntry.manageField.rowDefaultValue}"></i></span></#if>&nbsp;${field.value}</td>
+										<td>
+											<#if field.defaultValue>
+												<@tag color='success'><@icon style='check' title='#i18n{form.createEntry.manageField.rowDefaultValue}' /></@tag>
+											</#if>&nbsp;${field.value}
+										</td>
 										<td>
 											<#if field.conditionalQuestions?exists>
 												 <#list field.conditionalQuestions as entry>
@@ -101,6 +104,6 @@
 				</@boxBody>
 			</@box>
 		</@columns>
-	</@row>
-</fieldset>
+	</fieldset>
+</@row>
 <@initEditor />

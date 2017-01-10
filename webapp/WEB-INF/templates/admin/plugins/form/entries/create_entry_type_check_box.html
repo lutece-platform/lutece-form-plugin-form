@@ -1,78 +1,56 @@
 <#include "/admin/plugins/form/commons.html" />
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<fieldset>
-			<legend>#i18n{form.createEntry.titleQuestion} : '${form.title}'</legend>
-			<form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateEntry.jsp#list" method="post" name="" id=""  >
-				<input name="id_type" value="${entry.entryType.idType}" type="hidden">
-				<#if entry.fieldDepend?exists>
-					<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden">
-				</#if>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title">#i18n{form.createEntry.labelTitle} * : </label>
-    				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<input type="text" class="form-control input-sm" name="title" id="title" value="" maxlength="255">
-						<span class="help-block">#i18n{form.createEntry.labelTitleComment}</span>
-					</div>
-				</div>
-    			<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" >  #i18n{form.createEntry.labelHelpMessage} :</label>
-			   		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<textarea name="help_message" id="help_message" rows="5" class="form-control input-sm"></textarea>
-			   			<span class="help-block">#i18n{form.createEntry.labelHelpMessageComment}</span>
-			   		</div>
-			    </div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="comment"> #i18n{form.createEntry.labelComment} :</label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">						<textarea name="comment" rows="2" class="form-control input-sm"></textarea>					</div>
-	    		</div>
-			    <div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="width">#i18n{form.createEntry.labelPresentation} :</label>
-					<#assign presentation_type = getName('field_in_line',list_param_default_values)!1>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<select id="field_in_line" name="field_in_line" class="form-control input-sm">
-							<option value=1 <#if presentation_type = '1' >selected="selected"</#if> >#i18n{form.createEntry.selectPresentationInLine}</option>
-							<option value=0 <#if presentation_type = '0' >selected="selected"</#if> >#i18n{form.createEntry.selectPresentationNotInLine}</option>
-						</select>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="mandatory">#i18n{form.createEntry.labelMandatory}</label>
-			        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<div class="checkbox">
-							<label>
-								<input name="mandatory" value="1" type="checkbox" ${getChecked('mandatory',list_param_default_values)} />&#160;
-							</label>
-						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="errorMessage"> #i18n{form.createEntry.labelMandatoryErrorMessage} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<textarea name="errorMessage" rows="2" class="form-control input-sm"></textarea>
-						<span class="help-block">#i18n{form.createEntry.labelMandatoryErrorMessageHelp}</span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<input type="text" class="form-control input-sm" name="css_class" value="" maxlength="255"  />
-						<span class="help-block">#i18n{form.createEntry.labelCSSClassComment}</span>
-					</div>
-				</div>
-				<div class="col-xs-12 col-sm-12 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
-					<div class="form-group">
-						<button class="btn btn-primary btn-sm btn-flat" name="save" type="submit"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{form.createEntry.buttonSave}</button>
-						<button class="btn btn-primary btn-sm btn-flat" name="apply" type="submit"><i class="glyphicon glyphicon-ok-circle"></i>&nbsp;#i18n{form.createEntry.buttonApplyAndManageResponse}</button>
-						<a class="btn btn-default btn-sm btn-flat" type="button" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form" >
-							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{form.createEntry.buttonCancel}
-						</a>
-					</div>
-				</div>
-			</form>
-		</fieldset>
-	</div>
-</div>
+<@row>
+	<@columns>
+		<@box color='primary'>
+			<@boxHeader title='#i18n{form.createEntry.titleQuestion} : "${form.title}"' />
+			<@boxBody>
+				<fieldset>
+					<legend class="sr-only">#i18n{form.createEntry.titleQuestion} : '${form.title}'</legend>
+					<@tform action='jsp/admin/plugins/form/DoCreateEntry.jsp#list'>
+						<input name="id_type" value="${entry.entryType.idType}" type="hidden">
+						<#if entry.fieldDepend?exists>
+							<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden">
+						</#if>
+						
+						<@formGroup labelFor='type' labelKey='#i18n{form.createEntry.labelType}'>
+							<@input type='text' name='type' id='type' readonly=true disabled=true value='${entry.entryType.title}' />
+						</@formGroup>
+						<@formGroup labelFor='title' labelKey='#i18n{form.createEntry.labelTitle}' helpKey='#i18n{form.createEntry.labelTitleComment}' mandatory=true>
+							<@input type='text' name='title' id='title' value='' maxlength=255 />
+						</@formGroup>
+						<@formGroup labelFor='help_message' labelKey='#i18n{form.createEntry.labelHelpMessage}' helpKey='#i18n{form.createEntry.labelHelpMessageComment}'>
+							<@input type='textarea' name='help_message' id='help_message'></@input>
+						</@formGroup>
+						<@formGroup labelFor='comment' labelKey='#i18n{form.createEntry.labelComment}'>
+							<@input type='textarea' name='comment' id='comment'></@input>
+						</@formGroup>
+						<@formGroup labelFor='field_in_line' labelKey='#i18n{form.createEntry.labelPresentation}'>
+							<#assign presentation_type = getName('field_in_line',list_param_default_values)!1>
+							<@select name='field_in_line' id='field_in_line'>
+								<option value=1 <#if presentation_type = '1' >selected="selected"</#if> >#i18n{form.createEntry.selectPresentationInLine}</option>
+								<option value=0 <#if presentation_type = '0' >selected="selected"</#if> >#i18n{form.createEntry.selectPresentationNotInLine}</option>
+							</@select>
+						</@formGroup>
+						<@formGroup labelFor='mandatory' labelKey='#i18n{form.createEntry.labelMandatory}'>
+							<@checkBox name='mandatory' value='1' checked=getChecked('mandatory',list_param_default_values) />
+						</@formGroup>
+						<@formGroup labelFor='errorMessage' labelKey='#i18n{form.createEntry.labelMandatoryErrorMessage}' helpKey='#i18n{form.createEntry.labelMandatoryErrorMessageHelp}'>
+							<@input type='textarea' name='errorMessage' id='errorMessage'></@input>
+						</@formGroup>
+						<@formGroup labelFor='css_class' labelKey='#i18n{form.createEntry.labelCSSClass}' helpKey='#i18n{form.createEntry.labelCSSClassComment}'>
+							<@input type='text' name='css_class' value='' maxlength=255 />
+						</@formGroup>
+						<@formGroup>
+							<@button type='submit' name='save' buttonIcon='save' title='#i18n{form.createEntry.buttonSave}' showTitleXs=false size='' />
+							<@button type='submit' name='apply' buttonIcon='check' title='#i18n{form.createEntry.buttonApplyAndManageResponse}' showTitleXs=false size='' />
+							<@aButton href='jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form' buttonIcon='close' title='#i18n{form.createEntry.buttonCancel}' showTitleXs=false size='' color='btn-secondary' />
+						</@formGroup>
+					</@tform>
+				</fieldset>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row>
  <#include "/admin/util/editor/editor.html" />
  <@initEditor />
  

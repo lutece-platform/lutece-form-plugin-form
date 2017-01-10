@@ -1,64 +1,41 @@
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<@row>
+	<@columns>
+		<@box color='primary'>
+			<@boxHeader title='#i18n{form.createField.title} : "${field.parentEntry.title}"' />
+			<@boxBody>
         <fieldset>
-            <legend>#i18n{form.createField.title} : '${field.parentEntry.title}'</legend>
-            <form class="form-horizontal" action="jsp/admin/plugins/form/DoCreateField.jsp#list" method="post" name="" id="">
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title">#i18n{form.createField.labelTitle} * :</label>
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                        <input type="text" name="title" id="title" value="" maxlength="255" class="form-control input-sm">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="value">#i18n{form.createField.labelValue} * :</label>
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                        <input type="text" name="value" id="value" value="" class="form-control input-sm">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="value">#i18n{form.createField.labelComment} : </label>
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                        <textarea name="comment" id="comment" class="form-control input-sm"></textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">#i18n{form.createField.labelDefaultValue} :</label>
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                        <div class="checkbox">
-                            <label>
-                                <input name="default_value" value="1" type="checkbox">&#160;
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <#if option_no_display_title>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">#i18n{form.createField.labelNoDisplayTitle} :</label>
-                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                        <div class="checkbox">
-                            <label>
-                                <input name="no_display_title" value="1" type="checkbox"  <#if field.noDisplayTitle>checked="checked"</#if>>&#160;
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                </#if>
-                <#if field.parentEntry.roleAssociated && role_list?exists >
-                    <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="role">#i18n{form.createField.labelRole} : </label>
-                        <div class="col-xs-12 col-sm-9">
-                            <@combo name="role_key" default_value="none" items=role_list />
-                            <span class="help-text">&nbsp;#i18n{form.createFiled.labelRoleComment}</span>
-                        </div>
-                    </div>
-                </#if>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-                        <button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{form.createForm.buttonSave}</button>
-                        <button class="btn btn-default btn-sm btn-flat" type="button" onclick="javascript:window.history.back();" ><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{form.createForm.buttonCancel}</button>
-                    </div>
-                </div>
-            </form>
+					<legend class="sr-only">#i18n{form.createField.title} : "${field.parentEntry.title}"</legend>
+					<@tform action='jsp/admin/plugins/form/DoCreateField.jsp#list'>
+						<@formGroup labelFor='title' labelKey='#i18n{form.createField.labelTitle}' mandatory=true>
+							<@input type='text' name='title' id='title' value='' maxlength=255 />
+						</@formGroup>
+						<@formGroup labelFor='value' labelKey='#i18n{form.createField.labelValue}' mandatory=true>
+							<@input type='text' name='value' id='value' value='' />
+						</@formGroup>
+						<@formGroup labelFor='comment' labelKey='#i18n{form.createField.labelComment}'>
+							<@input type='textarea' name='comment' id='comment'></@input>
+						</@formGroup>
+						<@formGroup>
+							<@checkBox name='default_value' value='1' labelKey='#i18n{form.createField.labelDefaultValue}' />
+						</@formGroup>
+						<#if option_no_display_title>
+							<@formGroup>
+								<#if field.noDisplayTitle><#assign checked = true /></#if>
+								<@checkBox name='no_display_title' value='1' checked=checked labelKey='#i18n{form.createField.labelNoDisplayTitle}' />
+							</@formGroup>
+						</#if>
+						<#if field.parentEntry.roleAssociated && role_list?exists >
+							<@formGroup labelFor='role' labelKey='#i18n{form.createField.labelRole}' helpKey='#i18n{form.createFiled.labelRoleComment}'>
+								<@select name='role_key' default_value='none' items=role_list list=true />
+							</@formGroup>
+						</#if>
+						<@formGroup>
+							<@button type='submit' buttonIcon='save' title='#i18n{form.createForm.buttonSave}' showTitleXs=false size='' />
+							<@button type='submit' buttonIcon='close' title='#i18n{form.createForm.buttonCancel}' showTitleXs=false size='' color='btn-secondary' params='onclick="javascript:window.history.back();"' />
+						</@formGroup>
+					</@tform>
         </fieldset>
-    </div>
-</div>
+			</@boxBody>
+		</@box>
+	</@columns>
+ </@row>
