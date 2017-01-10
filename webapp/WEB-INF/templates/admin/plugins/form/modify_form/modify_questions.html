@@ -1,12 +1,13 @@
 <#include "/admin/plugins/form/modify_form/tabs.html" />
 <#include "/admin/plugins/form/commons.html" />
+
 <@row>
 	<@tform action='jsp/admin/plugins/form/DoModifyForm.jsp'>
-		<@columns md=3 lg=3 xl=3>
+		<@columns>
 				<@modifyFormLeftColumn form=form category_list=category_list />
 		</@columns>
 	</@tform>
-	<@columns md=9 lg=9 xl=9>
+	<@columns>
 		<@box color='solid'>
 			<@boxBody>
 				<a name="list" id="list"></a>
@@ -49,6 +50,7 @@
 										
 							</#if>
 							<hr>
+							<@columns md=9 lg=9 xl=9>
 							<@table>
 								<thead>
 									<tr>
@@ -136,7 +138,7 @@
 										</#if>
 										
 										<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
-											<@aButton href='jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list' title='#i18n{form.modifyForm.manageEnter.titleCopy}' buttonIcon='copy' showTitle=false />
+											<@aButton href='jsp/admin/plugins/form/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list' title='#i18n{form.modifyForm.manageEnter.titleCopy}' buttonIcon='clone' showTitle=false />
 										</#if>
 										<#if !entry.entryType.myLuteceUser>
 											<@aButton href='jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#list' title='#i18n{form.modifyForm.manageEnter.titleDelete}' buttonIcon='trash' showTitle=false color='btn-danger' />
@@ -146,6 +148,70 @@
 							</#list>
 							</tbody>
 						</@table>
+						</@columns>
+						<@columns md=3 lg=3 xl=3>
+							<@listGroup>
+							<#list entry_type_list as item>
+								<a class="${listElementClass}" href="jsp/admin/plugins/form/CreateEntry.jsp?id_type=${item.code}">
+									<#switch item.code>
+										<#case "1">
+											<@icon style='dot-circle-o' />
+										<#break>
+										<#case "2">
+											<@icon style='check-square-o' />
+										<#break>
+										<#case "3">
+											<@icon style='comment-o' />
+										<#break>
+										<#case "4">
+											<@icon style='calendar' />
+										<#break>
+										<#case "5">
+											<@icon style='list-alt' />
+										<#break>
+										<#case "6">
+											<@icon style='file-text-o' />
+										<#break>
+										<#case "7">
+											<@icon style='file-text' />
+										<#break>
+										<#case "8">
+											<@icon style='file' />
+										<#break>
+										<#case "10">
+											<@icon style='database' />
+										<#break>
+										<#case "11">
+											<@icon style='map-o' />
+										<#break>
+										<#case "12">
+											<@icon style='image' />
+										<#break>
+										<#case "14">
+											<@icon style='sign-in' />
+										<#break>
+										<#case "15">
+											<@icon style='phone' />
+										<#break>
+										<#case "16">
+											<@icon style='check-square' />
+										<#break>
+										<#case "17">
+											<@icon style='user' />
+										<#break>
+										<#case "18">
+											<@icon style='table' />
+										<#break>
+										<#case "19">
+											<@icon style='image' />
+										<#break>
+										default
+									</#switch>
+									&#160;${item.name}
+								</a>
+							</#list>
+							</@listGroup>
+						</@columns>
 					</@tform>
 					<@paginationAdmin paginator=paginator combo=1  />
 				</@tabContent>

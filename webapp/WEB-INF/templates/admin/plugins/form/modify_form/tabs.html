@@ -24,17 +24,19 @@
 </#macro>
 
 <#macro modifyFormLeftColumn form category_list >
-<@box color='primary'>
-	<@boxHeader title='${form.title}' />
+<@box color='primary' collapsed=true>
+	<@boxHeader title='${form.title}' boxTools=true>
+		<@button style='btn-box-tool' params='data-widget="collapse"' buttonIcon='plus' />
+	</@boxHeader>
 	<@boxBody>
 		<input type="hidden" name="id_form" value="${form.idForm}">
-		<@formGroup labelFor='title' labelKey='#i18n{form.createForm.labelTitle}' helpKey='#i18n{form.createForm.labelTitleComment}' mandatory=true rows=2>
+		<@formGroup labelFor='title' labelKey='#i18n{form.createForm.labelTitle}' helpKey='#i18n{form.createForm.labelTitleComment}' mandatory=true>
 			<@input type='text' name='title' value='${form.title}' maxlength=255 />
 		</@formGroup>
-		<@formGroup labelFor='description' labelKey='#i18n{form.createForm.labelDescription}' helpKey='#i18n{form.createForm.labelDescriptionComment}' mandatory=true rows=2>
+		<@formGroup labelFor='description' labelKey='#i18n{form.createForm.labelDescription}' helpKey='#i18n{form.createForm.labelDescriptionComment}' mandatory=true>
 			<@input type='textarea' name='description'>${form.description}</@input>
 		</@formGroup>
-		<@formGroup labelFor='category' labelKey='#i18n{form.createForm.labelCategoryTitle}' helpKey='#i18n{form.createForm.labelCategoryComment}' rows=2>
+		<@formGroup labelFor='category' labelKey='#i18n{form.createForm.labelCategoryTitle}' helpKey='#i18n{form.createForm.labelCategoryComment}'>
 			<#if !form.category?exists>
 				<#assign category_default_value="-2" />
 			<#else>
@@ -42,7 +44,7 @@
 			</#if>
 			<@select name='id_category' items=category_list default_value=category_default_value list=true />
 		</@formGroup>
-		<@formGroup rows=2>
+		<@formGroup>
 			<@button type='submit' name='save' buttonIcon='save' title='#i18n{form.createForm.buttonSave}' size='' showTitleXs=false />
 			<@button type='submit' name='apply' buttonIcon='check' title='#i18n{form.modifyForm.buttonApply}' size='' showTitleXs=false />
 			<@aButton href='jsp/admin/plugins/form/ManageForm.jsp' title='#i18n{form.createForm.buttonCancel}' buttonIcon='close' color='btn-secondary' size='' showTitleXs=false />

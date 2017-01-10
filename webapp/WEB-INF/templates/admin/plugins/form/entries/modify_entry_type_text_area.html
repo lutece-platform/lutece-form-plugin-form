@@ -1,115 +1,70 @@
  <#include "/admin/util/editor/editor.html" />
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyEntry.jsp#list" method="post" name="" id=""  >
-			<fieldset>
-				<legend>#i18n{form.modifyEntry.titleQuestion} : '${form.title}'</legend>
-				
-			    <input name="id_entry" value="${entry.idEntry}" type="hidden">
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title">#i18n{form.createEntry.labelTitle} * : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<input type="text" class="form-control input-sm" name="title" id="title" value="${entry.title}"  maxlength="255">
-						<span class="help-block">#i18n{form.createEntry.labelTitleComment}</span>
-					</div>
-				</div>
-			    <div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="help_message">#i18n{form.createEntry.labelHelpMessage} : </label>
-			     	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<textarea name="help_message" id="help_message" rows="10" class="form-control input-sm">${entry.helpMessage}</textarea>
-						<span class="help-block">#i18n{form.createEntry.labelHelpMessageComment}</span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="comment"> #i18n{form.createEntry.labelComment} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<textarea name="comment" class="form-control input-sm" rows="2">${entry.comment}</textarea>
-					</div>
-			    </div> 
-			    <div class="form-group">
-			    	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">#i18n{form.createEntry.labelType} :</label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<p class="form-control-static">${entry.entryType.title}</p>
-					</div>
-			    </div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="value">#i18n{form.createEntry.labelValueDefault} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<textarea name="value" id="value" rows="10" class="form-control input-sm"><#list entry.fields as field>${field.value}</#list></textarea>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="mandatory">#i18n{form.createEntry.labelMandatory} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<div class="checkbox">
-							<label>
-								<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked"</#if>	 />&#160;
-							</label>
-						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="width">#i18n{form.createEntry.labelWidth} * : </label>
-					<#list entry.fields as field>
-						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-							<input type="text" class="form-control input-sm" name="width" id="width" value="${field.width}">
-						</div>
-					</#list>
-				</div>
-			  	<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="height">#i18n{form.createEntry.labelHeight} * : </label>
-					<#list entry.fields as field>
-			    		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-							<input  type="text" class="form-control input-sm" name="height" id="height" size="5" value="${field.height}">
-						</div>
-					</#list>	
-				</div>
-			   	<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="max_size_enter">#i18n{form.createEntry.labelMaxSizeEnter} : </label>
-					<#list entry.fields as field>
-						<#if field.maxSizeEnter!=-1>
-							<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-								<input type="text" class="form-control input-sm" name="max_size_enter" id="max_size_enter" value="${field.maxSizeEnter}">
-							</div>
-						<#else>
-						    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-								<input type="text" class="form-control input-sm" name="max_size_enter" id="max_size_enter" value="">
-							</div>
-						</#if>
-					</#list>	
-			  	</div>
-			  	<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<input type="text" class="form-control input-sm" name="css_class" value="${entry.CSSClass!}" maxlength="255">
-						<span class="help-block">#i18n{form.createEntry.labelCSSClassComment}</span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="css_class">#i18n{form.createEntry.labelUseRichText} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<!#-- 	fieldInLine means use rich text -->
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" name="useRichText" value="true" <#if entry.fieldInLine>checked="checked"</#if> />&#160;
-							</label>
-						</div>
-						<span class="help-block">#i18n{form.createEntry.labelUseRichTextComment}</span>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
-						<button class="btn btn-primary btn-sm btn-flat" type="submit">
-							<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{form.modifyEntry.buttonSave}
-						</button>
-						<a class="btn btn-default btn-sm btn-flat" type="button" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form" >
-							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{form.createEntry.buttonCancel}
-						</a>
-					</div>
-				</div>
-			</fieldset>
-		</form>
-	</div>
-</div>
-<@initEditor />
+<@row>
+	<@columns>
+		<@box color='primary'>
+			<@boxHeader title='#i18n{form.modifyEntry.titleQuestion} : "${form.title}"' />
+			<@boxBody>
+				<@tform action='jsp/admin/plugins/form/DoModifyEntry.jsp#list'>
+					<fieldset>
+						<legend class="sr-only">#i18n{form.modifyEntry.titleQuestion} : '${form.title}'</legend>
+						<input name="id_entry" value="${entry.idEntry}" type="hidden">
+						
+						<@formGroup labelFor='type' labelKey='#i18n{form.createEntry.labelType}'>
+							<@input type='text' name='type' id='type' readonly=true disabled=true value='${entry.entryType.title}' />
+						</@formGroup>
+						<@formGroup labelFor='title' labelKey='#i18n{form.createEntry.labelTitle}' helpKey='#i18n{form.createEntry.labelTitleComment}' mandatory=true>
+							<@input type='text' name='title' id='title' value='${entry.title}' maxlength=255 />
+						</@formGroup>
+						<@formGroup labelFor='help_message' labelKey='#i18n{form.createEntry.labelHelpMessage}' helpKey='#i18n{form.createEntry.labelHelpMessageComment}'>
+							<@input type='textarea' name='help_message' id='help_message' rows=10>${entry.helpMessage}</@input>
+						</@formGroup>
+						<@formGroup labelFor='comment' labelKey='#i18n{form.createEntry.labelComment}'>
+							<@input type='textarea' name='comment' id='comment' rows=2>${entry.comment}</@input>
+						</@formGroup>
+						<@formGroup labelFor='value' labelKey='#i18n{form.createEntry.labelValueDefault}'>
+							<@input type='textarea' name='value' id='value' rows=10><#list entry.fields as field>${field.value}</#list></@input>
+						</@formGroup>
+						<@formGroup>
+							<#if entry.mandatory><#assign checked = true /></#if>
+							<@checkBox labelFor='mandatory' labelKey='#i18n{form.createEntry.labelMandatory}' name='mandatory' id='mandatory' value='1' checked=checked />
+						</@formGroup>
+						<@formGroup labelFor='width' labelKey='#i18n{form.createEntry.labelWidth}' mandatory=true>
+							<#list entry.fields as field>
+								<@input type='text' name='width' id='width' value='${field.width}' />
+							</#list>
+						</@formGroup>
+						<@formGroup labelFor='height' labelKey='#i18n{form.createEntry.labelHeight}' mandatory=true>
+							<#list entry.fields as field>
+								<@input type='text' name='height' id='height' inputSize=5 value='${field.height}' />
+							</#list>	
+						</@formGroup>
+						<@formGroup labelFor='max_size_enter' labelKey='#i18n{form.createEntry.labelMaxSizeEnter}'>
+							<#list entry.fields as field>
+								<#if field.maxSizeEnter!=-1>
+									<#assign value='${field.maxSizeEnter}' />
+								<#else>
+									<#assign value='' />
+								</#if>
+								<@input type='text' name='max_size_enter' id='max_size_enter' value=value />
+							</#list>
+						</@formGroup>
+						<@formGroup labelFor='css_class' labelKey='#i18n{form.createEntry.labelCSSClass}' helpKey='#i18n{form.createEntry.labelCSSClassComment}'>
+							<@input type='text' name='css_class' id='css_class' value='${entry.CSSClass!}' maxlength=255 />
+						</@formGroup>
+						<@formGroup labelFor='css_class' labelKey='#i18n{form.createEntry.labelUseRichText}' helpKey='#i18n{form.createEntry.labelUseRichTextComment}'>
+							<!#-- 	fieldInLine means use rich text -->
+							<#if entry.fieldInLine><#assign checked = true /></#if>
+							<@checkBox name='useRichText' value='true' checked=checked />
+						</@formGroup>
+						<@formGroup>
+							<@button type='submit' name='save' buttonIcon='save' title='#i18n{form.modifyEntry.buttonSave}' showTitleXs=false size='' />
 
+							<@aButton href='jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form' buttonIcon='close' title='#i18n{form.createEntry.buttonCancel}' showTitleXs=false size='' color='btn-secondary' />
+						</@formGroup>		
+					</fieldset>
+				</@tform>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row>
+<@initEditor />
