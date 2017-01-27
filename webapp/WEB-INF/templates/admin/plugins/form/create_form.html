@@ -11,7 +11,7 @@
 						<@input type='textarea' name='description'></@input>
 					</@formGroup>
 					<@formGroup labelFor='category' labelKey='#i18n{form.createForm.labelCategoryTitle}' helpKey='#i18n{form.createForm.labelCategoryComment}'>
-						<@select name='id_category' items=category_list default_value='-2' list=true />
+						<@select name='id_category' items=category_list default_value='-2' />
 					</@formGroup>
 					<@actionButtons button1Name='save' i18nValue1Key='form.createForm.buttonSave' i18nValue2Key='form.createForm.buttonCancel' url2='jsp/admin/plugins/form/ManageForm.jsp' />
 				</@tform>

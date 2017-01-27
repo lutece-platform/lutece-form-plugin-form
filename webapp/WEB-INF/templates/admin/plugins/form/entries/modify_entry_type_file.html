@@ -22,8 +22,7 @@
 							<@input type='textarea' name='comment' id='comment' rows=2>${entry.comment}</@input>
 						</@formGroup>
 						<@formGroup labelFor='mandatory' labelKey='#i18n{form.createEntry.labelMandatory}'>
-							<#if entry.mandatory><#assign checked = true /></#if>
-							<@checkBox name='mandatory' id='mandatory' value='1' checked=checked />
+							<@checkBox name='mandatory' id='mandatory' value='1' checked=entry.mandatory />
 						</@formGroup>
 						<@formGroup labelFor='width' labelKey='#i18n{form.createEntry.labelWidth}' mandatory=true>
 							<#list entry.fields as field>
@@ -41,8 +40,7 @@
 							<@input type='text' name='max_files' id='max_files' value=getMaxFiles(entry) maxlength=2 />
 						</@formGroup>
 						<@formGroup labelFor='export_binary' labelKey='#i18n{form.createEntry.labelExportBinary}'>
-							<#if exportBinary( entry )><#assign checked = true /></#if>
-							<@checkBox labelKey='#i18n{form.createEntry.labelExportBinaryComment}' name='export_binary' id='export_binary' value='1' checked=checked />
+							<@checkBox labelKey='#i18n{form.createEntry.labelExportBinaryComment}' name='export_binary' id='export_binary' value='1' checked=exportBinary( entry ) />
 							<@tag color='warning'>#i18n{form.createEntry.labelExportBinaryWarning}</@tag>
 						</@formGroup>
 						<@formGroup labelFor='css_class' labelKey='#i18n{form.createEntry.labelCSSClass}' helpKey='#i18n{form.createEntry.labelCSSClassComment}'>
@@ -69,7 +67,7 @@
 					<input name="id_field" value="${id_field}" type="hidden" />
 					<@formGroup labelFor='id_expression' labelKey='#i18n{form.createEntry.manageRegularExpression.labelInsert}' helpKey='#i18n{form.createEntry.manageRegularExpression.labelInsertComment}'>
 						<@inputGroup>
-							<@select name='id_expression' id='id_expression' items=regular_expression_list default_value='-1' list=true size='sm' />
+							<@select name='id_expression' id='id_expression' items=regular_expression_list default_value='-1' size='sm' />
 							<@inputGroupItem>
 								<@button type='submit' title='#i18n{form.createEntry.manageRegularExpression.buttonInsert}' showTitle=false buttonIcon='plus' />
 							</@inputGroupItem>

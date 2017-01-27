@@ -28,7 +28,7 @@
 							<#else>
 								<#assign default_value='-1' />
 							</#if>
-							<@select name='map_provider' id='map_provider' items=entryTypeService.mapProvidersRefList default_value=default_value list=true />
+							<@select name='map_provider' id='map_provider' items=entryTypeService.mapProvidersRefList default_value=default_value />
 						</@formGroup>
 						<!-- champs mode d’édition (suggestPOI, ligne, polygone)  -->
 						<@formGroup labelFor='edit_mode' labelKey='#i18n{form.createEntry.editMode}'>
@@ -42,9 +42,9 @@
 								</#list>
 							</#if>
 							<#if editModeValue?has_content>
-								<@select name='edit_mode' items=entryTypeService.editModeRefList default_value=editModeValue list=true />
+								<@select name='edit_mode' items=entryTypeService.editModeRefList default_value=editModeValue />
 							<#else>
-								<@select name='edit_mode' items=entryTypeService.editModeRefList default_value='-1' list=true />
+								<@select name='edit_mode' items=entryTypeService.editModeRefList default_value='-1' />
 							</#if>
 						</@formGroup>
 						<!-- view number  -->

@@ -27,11 +27,11 @@
 							<@input type='textarea' name='comment' id='comment'></@input>
 						</@formGroup>
 						<@formGroup labelFor='map_provider' labelKey='#i18n{form.createEntry.mapProvider}'>
-							<@select name='map_provider' id='map_provider' items=entryTypeService.mapProvidersRefList default_value='-1' list=true />
+							<@select name='map_provider' id='map_provider' items=entryTypeService.mapProvidersRefList default_value='-1' />
 						</@formGroup>
 						<!-- champs mode d’édition (suggestPOI, ligne, polygone)  -->
 						<@formGroup labelFor='edit_mode' labelKey='#i18n{form.createEntry.editMode}'>
-							<@select name='edit_mode' items=entryTypeService.editModeRefList default_value='-1' list=true />
+							<@select name='edit_mode' items=entryTypeService.editModeRefList default_value='-1' />
 						</@formGroup>
 						<!-- view number  -->
 						<@formGroup labelFor='view_number' labelKey='#i18n{form.createEntry.viewNumber}'>

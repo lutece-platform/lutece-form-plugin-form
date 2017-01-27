@@ -13,11 +13,11 @@
 			<@boxBody>
 				<@tform action='' method='' name='' id=''>
 					<@formGroup labelFor='active' labelKey='#i18n{form.manageForm.labelActive}'>
-						<@select name='active' items=active_list default_value='${active_selected}' list=true size='sm' />
+						<@select name='active' items=active_list default_value='${active_selected}' size='sm' />
 					</@formGroup>
 					<@formGroup labelKey='#i18n{form.manageForm.labelWorkGroup}'>
 						<@inputGroup>
-							<@select name='workgroup' items=user_workgroup_list default_value='${user_workgroup_selected}' list=true size='sm' />
+							<@select name='workgroup' items=user_workgroup_list default_value='${user_workgroup_selected}' size='sm' />
 							<@inputGroupItem>
 								<@button type='submit' buttonIcon='filter' title='#i18n{form.manageForm.buttonSearch}' showTitle=false />
 							</@inputGroupItem>
