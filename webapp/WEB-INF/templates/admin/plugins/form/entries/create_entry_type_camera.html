@@ -17,92 +17,44 @@
 						<@formGroup labelFor='title' labelKey='#i18n{form.createEntry.labelTitle}' helpKey='#i18n{form.createEntry.labelTitleComment}' mandatory=true>
 							<@input type='text' name='title' id='title' value='' maxlength=255 />
 						</@formGroup>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title">#i18n{form.createEntry.labelTitle} * : </label>
-			    	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<input type="text" class="form-control input-sm" name="title" id="title" value="" maxlength="255" class="form-control input-sm">
-						<span class="help-block">#i18n{form.createEntry.labelTitleComment}</span>
-					</div>
-				</div>
-			    <div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3">  #i18n{form.createEntry.labelHelpMessage} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">						<textarea name="help_message" id="help_message" rows="5" class="form-control input-sm"></textarea>
-						<span class="help-block">#i18n{form.createEntry.labelHelpMessageComment}</span>					</div>
-			    </div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="comment"> #i18n{form.createEntry.labelComment} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">						<textarea name="comment" rows="2" class="form-control input-sm"></textarea>					</div>
-			    </div>
-			    <div class="form-group">
-			    	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3">#i18n{form.createEntry.labelType} :</label>  
-			    	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-			    		${entry.entryType.title}
-			    	</div>
-			    </div>
-			    <div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="maxImageSize">#i18n{form.createEntry.labelImageSize} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<input type="text" name="maxImageSize" id="maxImageSize" class="form-control input-sm" value="2097152">
-					</div>
-				</div>
-				  <div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="maxImageSize">#i18n{form.createEntry.labelImageType} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<select name="image_type">
-						  <option value="png" selected> png </option> 
-						  <option value="jpeg" > jpeg </option>
-						</select>
-					</div>
-				</div>
-				<@formGroup labelFor='mandatory' labelKey='#i18n{form.createEntry.labelMandatory}'>
-					<@input name='mandatory' id='mandatory' value='1' checked=getChecked('mandatory',list_param_default_values) />
-				</@formGroup>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="errorMessage"> #i18n{form.createEntry.labelMandatoryErrorMessage} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<textarea name="errorMessage" rows="2" class="form-control input-sm"></textarea>
-						<span class="help-block">#i18n{form.createEntry.labelMandatoryErrorMessageHelp}</span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="width">#i18n{form.createEntry.labelWidthImage} : </label>
-			   		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<input type="text" class="form-control input-sm" name="width" id="width" value="${getName('width_text',list_param_default_values)}">
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="height">#i18n{form.createEntry.labelHeightImage}  : </label>
-			   		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<input type="text" class="form-control input-sm" name="height" id="height" value="${getName('height_text',list_param_default_values)}">
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="unique_field">#i18n{form.createEntry.labelUniqueField} :</label>
-			   		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<div class="checkbox">
-							<label>
-								<input name="unique_field" id="unique_field" value="1" type="checkbox">&#160;
-							</label>
-						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="css_class">#i18n{form.createEntry.labelCSSClass} : </label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<input type="text" name="css_class" value="" maxlength="255" class="form-control input-sm">
-						<span class="help-block">#i18n{form.createEntry.labelCSSClassComment}</span>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-						<button class="btn btn-primary btn-sm btn-flat" name="save" type="submit" ><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{form.createEntry.buttonSave}</button>
-						<button class="btn btn-primary btn-sm btn-flat" name="apply" type="submit" ><i class="glyphicon glyphicon-ok-circle"></i>&nbsp;#i18n{form.createEntry.buttonApplyAndManageVerification}</button>
-						<a class="btn btn-default btn-sm btn-flat" type="button" href="jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form" >
-							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{form.createEntry.buttonCancel}
-						</a>
-					</div>
-				</div>
+						<@formGroup labelFor='help_message' labelKey='#i18n{form.createEntry.labelHelpMessage}' helpKey='#i18n{form.createEntry.labelHelpMessageComment}'>
+							<@input type='textarea' name='help_message' id='help_message' rows=2></@input>
+						</@formGroup>
+						<@formGroup labelFor='comment' labelKey='#i18n{form.createEntry.labelComment}'>
+							<@input type='textarea' name='comment' id='comment' rows=2></@input>
+						</@formGroup>
+						<@formGroup labelFor='maxImageSize' labelKey='#i18n{form.createEntry.labelImageSize}'>
+							<@input type='text' name='maxImageSize' id='maxImageSize' value='2097152' />
+						</@formGroup>
+						<@formGroup labelFor='imageType' labelKey='#i18n{form.createEntry.labelImageType}'>
+							<@select name='image_type'>
+								<option value="png" selected>png</option> 
+								<option value="jpeg" >jpeg</option>
+							</@select>
+						</@formGroup>
+						<@formGroup labelFor='mandatory' labelKey='#i18n{form.createEntry.labelMandatory}'>
+							<@checkBox name='mandatory' id='mandatory' value='1' checked=getChecked('mandatory',list_param_default_values) />
+						</@formGroup>
+						<@formGroup labelFor='errorMessage' labelKey='#i18n{form.createEntry.labelMandatoryErrorMessage}' helpKey='#i18n{form.createEntry.labelMandatoryErrorMessageHelp}'>
+							<@input type='textarea' name='errorMessage' id='errorMessage' rows=2></@input>
+						</@formGroup>
+						<@formGroup labelFor='width' labelKey='#i18n{form.createEntry.labelWidthImage}'>
+							<@input type='text' name='width' id='width' value=getName('width_text',list_param_default_values) />
+						</@formGroup>
+						<@formGroup labelFor='height' labelKey='#i18n{form.createEntry.labelHeightImage}'>
+							<@input type='text' name='height' id='height' value=getName('height_text',list_param_default_values) />
+						</@formGroup>
+						<@formGroup labelFor='unique_field' labelKey='#i18n{form.createEntry.labelUniqueField}'>
+							<@checkBox name='unique_field' id='unique_field' value='1' />
+						</@formGroup>
+						<@formGroup labelFor='css_class' labelKey='#i18n{form.createEntry.labelCSSClass}' helpKey='#i18n{form.createEntry.labelCSSClassComment}'>
+							<@input type='text' name='css_class' id='css_class' value='${entry.CSSClass!}' maxlength=255 />
+						</@formGroup>
+						<@formGroup>
+							<@button type='submit' name='save' buttonIcon='save' title='#i18n{form.modifyEntry.buttonSave}' showTitleXs=false size='' />
+							<@button type='submit' name='apply' buttonIcon='check' title='#i18n{form.createEntry.buttonApplyAndManageVerification}' showTitleXs=false size='' />
+							<@aButton href='jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form' buttonIcon='close' title='#i18n{form.createEntry.buttonCancel}' showTitleXs=false size='' color='btn-secondary' />
+						</@formGroup>
 					</@tform>
 				</fieldset>
 			</@boxBody>
@@ -110,7 +62,5 @@
 	</@columns>
 </@row>
 <#include "/admin/util/editor/editor.html" />
- 
- <@initEditor />
-
+<@initEditor />
  
