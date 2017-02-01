@@ -48,6 +48,8 @@ INSERT INTO core_admin_role_resource (rbac_id,role_key,resource_type,resource_id
  (906,'form_manager_admin','FORM_DEFAULT_MESSAGE_TYPE','*','*');
  INSERT INTO core_admin_role_resource (rbac_id,role_key,resource_type,resource_id,permission) VALUES 
  (907,'form_manager','FORM_FORM_TYPE','*','*');
+ INSERT INTO core_admin_role_resource (rbac_id,role_key,resource_type,resource_id,permission) VALUES 
+ (908,'form_manager','FORM_CATEGORY_TYPE','*','*');
 
 --
 -- Dumping data for table core_user_role
