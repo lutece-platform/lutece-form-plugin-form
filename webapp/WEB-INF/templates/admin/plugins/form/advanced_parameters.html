@@ -1,202 +1,98 @@
 <#include "/admin/plugins/form/commons.html" />
-<div class="nav-tabs-custom">
-	<ul class="nav nav-tabs" role="tablist">
+<@tabs>
+	<@listTabs>
 		<li class="active"><a href="#tab_form" data-toggle="tab" title="#i18n{form.manage_advanced_parameters.label_create_form_default_values}">#i18n{form.manage_advanced_parameters.label_create_form_default_values_tab}</a></li>
 		<li><a href="#tab_entry" data-toggle="tab" title="#i18n{form.manage_advanced_parameters.label_create_entry_default_values}">#i18n{form.manage_advanced_parameters.label_create_entry_default_values_tab}</a></li>
 		<li><a href="#tab_export" data-toggle="tab" title="#i18n{form.manage_advanced_parameters.label_export_encoding_parameters}">#i18n{form.manage_advanced_parameters.label_export_encoding_parameters}</a></li>
-	</ul>
-	<div class="tab-content">
+	</@listTabs>
+	<@tabContent>
 		<div class="tab-pane active" id="tab_form">
-			<form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoModifyFormParameterDefaultValues.jsp">
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" name="limit_number_response" value="1" ${getChecked('limit_number_response',list_form_param_default_values)}/>
-								#i18n{form.createForm.labelLimitNumberResponse}
-							</label>
-							<span class="help-block">#i18n{form.createForm.labelLimitNumberResponseComment}</span>
-						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" name="active_store_adresse" value="1" ${getChecked('active_store_adresse',list_form_param_default_values)} />#i18n{form.createForm.labelStoreAdresse}
-						</label>
-						<span class="help-block">#i18n{form.createForm.labelStoreAdresseComment}</span>
-					</div>
-					</div>
-				</div>
-			    <#if is_active_mylutece_authentification>
-			    <div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" name="active_mylutece_authentification" value="1" ${getChecked('active_mylutece_authentification',list_form_param_default_values)} />#i18n{form.createForm.labelActiveMyLuteceAuthentification}
-						</label>
-						<span class="help-block">#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}</span>
-					</div>
-					</div>
-			    </div>
-			    </#if>
-			    <#if is_active_captcha>
-			    <div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" name="active_captcha" value="1" ${getChecked('active_captcha',list_form_param_default_values)} />
-							#i18n{form.createForm.labelActiveCaptcha}
-						</label>
-						<span class="help-block">#i18n{form.createForm.labelActiveCaptchaComment}</span>
-					</div>
-					</div>
-			    </div>
-			    </#if>
-			    <div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" name="active_requirement" value="1" ${getChecked('active_requirement',list_form_param_default_values)}/>&#160;
-							</label>
-							<span class="help-block">#i18n{form.createForm.labelActiveRequirementComment}</span>
-						</div>
-					</div>
-			    </div>
-			    <div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-						<div class="checkbox">
-						<label>
-							<input type="checkbox" name="support_https" value="1" ${getChecked('support_https',list_form_param_default_values)}/>
-							#i18n{form.createForm.supportHTTPS} :
-						</label>
-						<span class="help-block">#i18n{form.createForm.labelSupportHTTPS_comment}</span>
-						</div>
-					</div>
-			    </div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_theme_list">#i18n{form.createForm.labelThemeXpage}</label>
-						<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-						<@comboWithParams name="id_theme_list" items=theme_list default_value=getName('id_theme_list',list_form_param_default_values)!default_theme additionalParameters="class='form-control input-sm'" />
-						</div>
-						<span class="help-block"></span>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-						<button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-edit"></i>&nbsp;#i18n{form.manage_advanced_parameters.buttonModify}</button>
-					</div>
-				</div>
-			</form>
-	</div>
-	<div class="tab-pane" id="tab_entry">
-		<form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoModifyEntryParameterDefaultValues.jsp">
-		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="width">#i18n{form.createEntry.labelPresentation}</label>
-			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-			<#assign presentation_type = getName('field_in_line',list_entry_param_default_values)!1>
-			<select id="field_in_line" name="field_in_line" class="form-control input-sm">
-				<option value=1 <#if presentation_type = '1' >selected="selected"</#if> >#i18n{form.createEntry.selectPresentationInLine}</option>
-				<option value=0 <#if presentation_type = '0' >selected="selected"</#if> >#i18n{form.createEntry.selectPresentationNotInLine}</option>
-			</select>
-			</div>
+			<@tform action='jsp/admin/plugins/form/DoModifyFormParameterDefaultValues.jsp'>
+				<@formGroup helpKey='#i18n{form.createForm.labelLimitNumberResponseComment}'>
+					<@checkBox name='limit_number_response' id='limit_number_response' value='1' checked=getChecked('limit_number_response',list_form_param_default_values) labelFor='limit_number_response' labelKey='#i18n{form.createForm.labelLimitNumberResponse}' />
+				</@formGroup>
+				<@formGroup helpKey='#i18n{form.createForm.labelStoreAdresseComment}'>
+					<@checkBox name='active_store_adresse' id='active_store_adresse' value='1' checked=getChecked('active_store_adresse',list_form_param_default_values) labelFor='active_store_adresse' labelKey='#i18n{form.createForm.labelStoreAdresse}' />
+				</@formGroup>
+				<#if is_active_mylutece_authentification>
+					<@formGroup helpKey='#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}'>
+						<@checkBox name='active_mylutece_authentification' id='active_mylutece_authentification' value='1' checked=getChecked('active_mylutece_authentification',list_form_param_default_values) labelFor='active_mylutece_authentification' labelKey='#i18n{form.createForm.labelActiveMyLuteceAuthentification}' />
+					</@formGroup>
+				</#if>
+				<#if is_active_captcha>
+					<@formGroup helpKey='#i18n{form.createForm.labelActiveCaptchaComment}'>
+						<@checkBox name='active_captcha' id='active_captcha' value=1 checked=getChecked('active_captcha',list_form_param_default_values) labelFor='active_captcha' labelKey='#i18n{form.createForm.labelActiveCaptcha}' />
+					</@formGroup>
+				</#if>
+				<@formGroup helpKey='#i18n{form.createForm.labelActiveRequirementComment}'>
+					<@checkBox name='active_requirement' id='active_requirement' value='1' checked=getChecked('active_requirement',list_form_param_default_values) labelFor='active_requirement' labelKey='#i18n{form.createForm.labelActiveRequirementComment}' />
+				</@formGroup>
+				<@formGroup helpKey='#i18n{form.createForm.labelSupportHTTPS_comment}'>
+					<@checkBox name='support_https' id='support_https' value='1' checked=getChecked('support_https',list_form_param_default_values) labelFor='support_https' labelKey='#i18n{form.createForm.supportHTTPS}' />
+				</@formGroup>
+				<@formGroup labelFor='id_theme_list' labelKey='#i18n{form.createForm.labelThemeXpage}'>
+					<@select name='id_theme_list' items=theme_list default_value=getName('id_theme_list',list_form_param_default_values)!default_theme />
+				</@formGroup>
+				<@formGroup>
+					<@button type='submit' buttonIcon='save' title='#i18n{form.manage_advanced_parameters.buttonModify}' size='' />
+				</@formGroup>
+			</@tform>
 		</div>
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-				<div class="checkbox">
-					<label>
-						<input name="mandatory" value="1" type="checkbox"  ${getChecked('mandatory',list_entry_param_default_values)}>#i18n{form.createEntry.labelMandatory}
-					</label>
-				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="width">#i18n{form.createEntry.labelWidth} * </label>
-			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-				<input type="text" name="width" id="width" size="5" value="${getName('width',list_entry_param_default_values)}" class="form-control input-sm">
-				<span class="help-block"></span>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="height">#i18n{form.createEntry.labelHeight} * </label>
-			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-				<input type="text" name="height" id="height" size="5" value="${getName('height',list_entry_param_default_values)}" class="form-control input-sm">
-				<span class="help-block"></span>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="max_size_enter">#i18n{form.createEntry.labelMaxSizeEnter} </label>
-			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-				<input type="text" name="max_size_enter" id="max_size_enter" size="5" value="${getName('max_size_enter',list_entry_param_default_values)}" class="form-control input-sm">
-				<span class="help-block"></span>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="file_max_size">#i18n{form.createEntry.labelFileMaxSize} </label>
-			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-				<input type="text" name="file_max_size" size="10" maxlength="255" value="${getName('file_max_size',list_entry_param_default_values)}" class="form-control input-sm">
-				<span class="help-block"></span>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="max_files">#i18n{form.createEntry.labelMaxFiles} </label>
-			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-				<input type="text" name="max_files" size="2" maxlength="255" value="${getName('max_files',list_entry_param_default_values)}" class="form-control input-sm">
-				<span class="help-block"></span>
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-				<button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-edit"></i>&nbsp;#i18n{form.manage_advanced_parameters.buttonModify}</button>
-			</div>
-		</div>
-		</form>
+		<div class="tab-pane" id="tab_entry">
+		<@tform action='jsp/admin/plugins/form/DoModifyEntryParameterDefaultValues.jsp'>
+			<@formGroup labelFor='width' labelKey='#i18n{form.createEntry.labelPresentation}'>
+				<#assign presentation_type = getName('field_in_line',list_entry_param_default_values)!1>
+				<@select id='field_in_line' name='field_in_line'>
+					<option value=1 <#if presentation_type = '1' >selected="selected"</#if> >#i18n{form.createEntry.selectPresentationInLine}</option>
+					<option value=0 <#if presentation_type = '0' >selected="selected"</#if> >#i18n{form.createEntry.selectPresentationNotInLine}</option>
+				</@select>
+			</@formGroup>
+			<@formGroup>
+				<@checkBox name='mandatory' id='mandatory' value='1' checked=getChecked('mandatory',list_entry_param_default_values) labelFor='mandatory' labelKey='#i18n{form.createEntry.labelMandatory}' />
+			</@formGroup>
+			<@formGroup>
+				<@input type='text' name='width' id='width' value=getName('width',list_entry_param_default_values) />
+			</@formGroup>
+			<@formGroup labelFor='height' labelKey='#i18n{form.createEntry.labelHeight}' mandatory=true>
+				<@input type='text' name='height' id='height' value=getName('height',list_entry_param_default_values) />
+			</@formGroup>
+			<@formGroup labelFor='max_size_enter' labelKey='#i18n{form.createEntry.labelMaxSizeEnter}'>
+				<@input type='text' name='max_size_enter' id='max_size_enter' value=getName('max_size_enter',list_entry_param_default_values) />
+			</@formGroup>
+			<@formGroup labelFor='file_max_size' labelKey='#i18n{form.createEntry.labelFileMaxSize}'>
+				<@input type='text' name='file_max_size' maxlength=255 value=getName('file_max_size',list_entry_param_default_values) />
+			</@formGroup>
+			<@formGroup labelFor='max_files' labelKey='#i18n{form.createEntry.labelMaxFiles}'>
+				<@input type='text' name='max_files' maxlength=255 value=getName('max_files',list_entry_param_default_values) />
+			</@formGroup>
+			<@formGroup>
+				<@button type='submit' buttonIcon='save' title='#i18n{form.manage_advanced_parameters.buttonModify}' size='' />
+			</@formGroup>
+		</@tform>
 	</div>
 	<#if list_export_param?? && list_export_param?has_content>
 		<div class="tab-pane" id="tab_export">
-			<form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoModifyExportParameters.jsp">
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="export_csv_encoding">#i18n{form.manage_advanced_parameters.label_export_csv_encoding} * </label>
-					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-						<input type="text" name="export_csv_encoding" id="export_csv_encoding" size="20" maxlength="100" value="${getName('export_csv_encoding',list_export_param)}" class="form-control input-sm">
-						<span class="help-block"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="export_xml_encoding">#i18n{form.manage_advanced_parameters.label_export_xml_encoding} * </label>
-					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-						<input type="text" name="export_xml_encoding" id="export_xml_encoding" size="20" maxlength="100" value="${getName('export_xml_encoding',list_export_param)}" class="form-control input-sm">
-						<span class="help-block"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_export_format_daemon">#i18n{form.manage_advanced_parameters.label_export_format_daemon} </label>
-					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-						<@comboWithParams name="id_export_format_daemon" items=export_format_list default_value=getName('id_export_format_daemon',list_export_param) additionalParameters="class='form-control input-sm'" />
-						<span class="help-block">&#160;</span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="export_daemon_type">#i18n{form.manage_advanced_parameters.label_export_daemon_type} </label>
-					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-						<@comboWithParams name="export_daemon_type" items=export_daemon_type_list default_value=getName('export_daemon_type',list_export_param) additionalParameters="class='form-control input-sm'" />
-						<span class="help-block"></span>
-					</div>
-				</div>
-				<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="file_export_daemon_type">&nbsp;</label>
-					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-						<@comboWithParams name="file_export_daemon_type" items=file_export_daemon_type_list default_value=getName('file_export_daemon_type',list_export_param) additionalParameters="class='form-control input-sm'" />
-						<span class="help-block"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-						<button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-edit"></i>&nbsp;#i18n{form.manage_advanced_parameters.buttonModify}</button>
-					</div>
-				</div>
-			</form>
+			<@tform action='jsp/admin/plugins/form/DoModifyExportParameters.jsp'>
+				<@formGroup labelFor='export_csv_encoding' labelKey='#i18n{form.manage_advanced_parameters.label_export_csv_encoding}' mandatory=true>
+					<@input type='text' name='export_csv_encoding' id='export_csv_encoding' maxlength=100 value=getName('export_csv_encoding',list_export_param) />
+				</@formGroup>
+				<@formGroup labelFor='export_xml_encoding' labelKey='#i18n{form.manage_advanced_parameters.label_export_xml_encoding}' mandatory=true>
+					<@input type='text' name='export_xml_encoding' id='export_xml_encoding' maxlength=100 value=getName('export_xml_encoding',list_export_param) />
+				</@formGroup>
+				<@formGroup labelFor='id_export_format_daemon' labelKey='#i18n{form.manage_advanced_parameters.label_export_format_daemon}'>
+					<@select name='id_export_format_daemon' id='id_export_format_daemon' items=export_format_list default_value=getName('id_export_format_daemon',list_export_param) />
+				</@formGroup>
+				<@formGroup labelFor='export_daemon_type' labelKey='#i18n{form.manage_advanced_parameters.label_export_daemon_type}'>
+					<@select name='export_daemon_type' id='export_daemon_type' items=export_daemon_type_list default_value=getName('export_daemon_type',list_export_param) />
+				</@formGroup>
+				<@formGroup labelFor='file_export_daemon_type'>
+					<@select name='file_export_daemon_type' items=file_export_daemon_type_list default_value=getName('file_export_daemon_type',list_export_param) />
+				</@formGroup>
+				<@formGroup>
+					<@button type='submit' buttonIcon='save' title='#i18n{form.manage_advanced_parameters.buttonModify}' size='' />
+				</@formGroup>
+			</@tform>
 		</div>
 	</#if>
-	</div>
-</div>
+	</@tabContent>
+</@tabs>
