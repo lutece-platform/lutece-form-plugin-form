@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.form.web;
 import fr.paris.lutece.plugins.form.business.DefaultMessage;
 import fr.paris.lutece.plugins.form.business.DefaultMessageHome;
 import fr.paris.lutece.plugins.form.service.DefaultMessageResourceIdService;
+import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -49,6 +50,7 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -109,7 +111,7 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
     public String getManageDefaultMessage( HttpServletRequest request )
     {
         Locale locale = getLocale( );
-        HashMap<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = FormService.getInstance( ).getManageAdvancedParameters( getUser( ) );
         DefaultMessage defaultMessage = DefaultMessageHome.find( getPlugin( ) );
 
         model.put( MARK_DEFAULT_MESSAGE, defaultMessage );

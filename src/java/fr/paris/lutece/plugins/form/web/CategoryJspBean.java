@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.form.web;
 import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.CategoryHome;
 import fr.paris.lutece.plugins.form.service.CategoryResourceIdService;
+import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -119,7 +120,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
     {
         Plugin plugin = getPlugin( );
         Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = FormService.getInstance( ).getManageAdvancedParameters( getUser( ) );
         List<Category> listCategory = CategoryHome.getList( plugin );
         listCategory = (List<Category>) RBACService.getAuthorizedCollection( listCategory, CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) );
 

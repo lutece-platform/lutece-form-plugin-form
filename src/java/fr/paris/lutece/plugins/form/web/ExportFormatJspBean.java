@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.form.web;
 import fr.paris.lutece.plugins.form.business.ExportFormat;
 import fr.paris.lutece.plugins.form.business.ExportFormatHome;
 import fr.paris.lutece.plugins.form.service.ExportFormatResourceIdService;
+import fr.paris.lutece.plugins.form.service.FormService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -64,6 +65,7 @@ import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -139,7 +141,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
     {
         Plugin plugin = getPlugin( );
         Locale locale = getLocale( );
-        HashMap<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = FormService.getInstance( ).getManageAdvancedParameters( getUser( ) );
         List<ExportFormat> listExportFormat = ExportFormatHome.getList( plugin );
         listExportFormat = (List<ExportFormat>) RBACService.getAuthorizedCollection( listExportFormat, ExportFormatResourceIdService.PERMISSION_MANAGE,
                 getUser( ) );
