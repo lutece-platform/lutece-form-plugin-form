@@ -7,15 +7,21 @@
           <li>
 						<a href="jsp/admin/plugins/form/ManageAdvancedParameters.jsp"><@icon style='cog' /> #i18n{form.manage_advanced_parameters.pageTitle}</a>
 					</li>
+					<#if permission_manage_export_format>
           <li>
             <a href="jsp/admin/plugins/form/ManageExportFormat.jsp?plugin_name=form" title="#i18n{form.home.labelExportFormatComment}"><@icon style='download' /> #i18n{form.home.labelExportFormatComment}</a>
           </li>
+					</#if>
+					<#if permission_manage_default_message>
           <li class="active">
             <a href="jsp/admin/plugins/form/ManageDefaultMessage.jsp?plugin_name=form" title="#i18n{form.home.labelDefaultMessageComment}"><@icon style='comments-o' /> #i18n{form.home.labelDefaultMessageComment}</a>
           </li>
+					</#if>
+					<#if permission_manage_category>
           <li>
             <a href="jsp/admin/plugins/form/ManageCategory.jsp?plugin_name=form" title="#i18n{form.home.labelCategoryComment}"><@icon style='tags' /> #i18n{form.home.labelCategoryComment}</a>
           </li>
+					</#if>
         </@listTabs>
       </@boxBody>
     </@box>

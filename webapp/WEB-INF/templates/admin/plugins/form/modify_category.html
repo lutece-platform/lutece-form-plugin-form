@@ -1,42 +1,28 @@
-<div class="row">
-  <div class="col-xs-12 col-sm-12 col-md-12">
-    <div class="box box-primary">
-      <div class="box-header">
-        <h3 class="box-title">#i18n{form.createCategory.title}</h3>
-      </div>
-      <div class="box-body">
-        <form class="form-horizontal" method="post" action="jsp/admin/plugins/form/DoModifyCategory.jsp">
+<@row>
+  <@columns>
+    <@box>
+      <@boxHeader title='#i18n{form.createCategory.title}' />
+			<@boxBody>
+        <@tform action='jsp/admin/plugins/form/DoModifyCategory.jsp'>
           <input type="hidden" name="id_category" value="${category.idCategory}">
-          <div class="form-group">
-            <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title">#i18n{form.createCategory.labelTitle} * </label>
-            <div class="col-xs-12 col-sm-6 col-md-6">
-              <input type="text" class="form-control" id="title" name="title" maxlength="50" value="${category.title!}">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="color">#i18n{form.createCategory.labelColor} *</label>
-            <div class="col-xs-12 col-sm-3 col-md-2">
-              <div class="input-group" id="color">
-                <input type="text" class="form-control" name="color" maxlength="7" value="${category.color}">
-                <div class="input-group-addon" ><i></i></div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-xs-12 col-sm-12 col-md-9 col-md-offset-3">
-              <button class="btn btn-primary btn-sm btn-flat" type="submit">
-                <i class="fa fa-check"></i> #i18n{form.createCategory.buttonSave}
-              </button>
-              <button class="btn btn-default btn-sm btn-flat" onclick="javascript:history.back();return false;">
-                <i class="fa fa-remove"></i> #i18n{form.createCategory.buttonCancel}
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+					<@formGroup labelFor='title' labelKey='#i18n{form.createCategory.labelTitle}' mandatory=true>
+						<@input type='text' name='title' id='title' maxlength=50 value=category.title! />
+					</@formGroup>
+					<@formGroup labelFor='color' labelKey='#i18n{form.createCategory.labelColor}' mandatory=true>
+						<@inputGroup id='color'>
+							<@input type='text' name='color' id='color' maxlength=7 value=category.color />
+							<@inputGroupItem type='addon'><i></i></@inputGroupItem>
+						</@inputGroup>
+					</@formGroup>
+					<@formGroup>
+						<@button type='submit' buttonIcon='save' size='' title='#i18n{form.createCategory.buttonSave}' />
+						<@button type='button' params='onclick="javascript:history.back();return false;"' buttonIcon='remove' size='' title='#i18n{form.createCategory.buttonCancel}' color='btn-secondary' />
+					</@formGroup>
+        </@tform>
+      </@boxBody>
+    </@box>
+  </@columns>
+</@row>
 <script src="js/bootstrap-colorpicker.js"></script>
 <script>
 $(function(){
