@@ -1,29 +1,20 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12">
-		<div class="box box-primary">
-			<div class="box-header">
-				<h3 class="box-title">#i18n{form.manageValidator.title}</h3>
-            </div>
-			<div class="box-body">
-				<div class="row">
+<@row>
+	<@columns>
+		<@box color='primary'>
+			<@boxHeader title='#i18n{form.manageValidator.title}' />
+			<@boxBody>
+				<@row>
 				<#if validator_list?has_content>
 					<#list validator_list as validator>
-						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-							<div class="material-box">
-								<div class="material-box-icon">
-									<span class="fa fa-4x fa-gavel"></span>
-								</div>
-								<div class="info">
-									${validator}
-								</div>
-							</div>
-						</div>
+						<@columns lg=6 xl=6>
+							${validator}
+						</@columns>
 					</#list>
 				<#else>
 					<div class="alert alert-danger">#i18n{form.manageValidator.noValidator}</div>
 				</#if>
-				</div>
-			</div>
-		</div>
-    </div>
-</div>
+				</@row>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row>

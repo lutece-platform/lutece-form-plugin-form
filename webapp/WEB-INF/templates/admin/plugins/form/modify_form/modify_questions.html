@@ -60,7 +60,7 @@
 										<th>#i18n{form.modifyForm.manageEnter.rowTitle}</th>
 										<th>#i18n{form.modifyForm.manageEnter.rowType}</th>
 										<th>
-											<i class="glyphicon glyphicon-question-sign" title="#i18n{form.modifyForm.manageEnter.rowConditionalQuestion}"></i>
+											<@icon style='question-circle' title='#i18n{form.modifyForm.manageEnter.rowConditionalQuestion}' />
 										</th>
 										<th>#i18n{form.modifyForm.manageEnter.rowOrder}</th>
 										<th>#i18n{form.modifyForm.manageEnter.rowActions}</th>
@@ -74,25 +74,25 @@
 										<#if entry.entryType.group>
 											<h5 class="pull-right" ><span class="fa fa-indent"></span></h5>
 										<#else>
-											<input type="checkbox" name="entry_id" value="${entry.idEntry!}" title="#i18n{form.modifyForm.select}">
+											<@checkBox name='entry_id' id='entry_id_${entry.idEntry}' value=entry.idEntry! title='#i18n{form.modifyForm.select}' />
 										</#if>
 									</td>
 									<td>
 										<#if entry.entryType.group>
 											<h4>${entry.title}</h4>
 										<#elseif entry.parent?exists>
-											<span class="fa fa-fw fa-caret-right"></span>
+											<@icon style='caret-right' />
 										<#if entry.entryType.comment>
 											${entry.comment}
 										<#else>
 											${entry.title}
 										</#if>
 									<#elseif entry.entryType.myLuteceUser>
-										<span class="fa fa-fw fa-caret-right"></span>
+										<@icon style='caret-right' />
 										${entry.title}
 									<#else>
 										<#if entry.entryType.comment>
-											<span class="fa fa-comment pull-left"></span> ${entry.comment}
+											<@icon style='comment' />
 										<#else>
 											${entry.title}
 										</#if>

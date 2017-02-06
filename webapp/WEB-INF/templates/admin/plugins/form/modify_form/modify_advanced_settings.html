@@ -1,170 +1,77 @@
 <#include "/admin/plugins/form/modify_form/tabs.html" />
-<form action="jsp/admin/plugins/form/modifyForm/DoModifyFormAdvancedParameters.jsp" method="post" class="form-horizontal" >
-	<div class="row">
-		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+<@tform action='jsp/admin/plugins/form/modifyForm/DoModifyFormAdvancedParameters.jsp'>
+	<@row>
+		<@columns>
 			<@modifyFormLeftColumn form=form category_list=category_list />
-		</div>
-		<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-		<div class="box box-primary">
-			<div class="box-header with-border">
-				<div class="box-tools">
-				<button type="submit" class="btn btn-primary btn-xs btn-flat" name="save">
-					<i class="fa fa-save"></i>&nbsp;#i18n{form.createForm.buttonSave}
-				</button>
-				<button type="submit" class="btn btn-primary btn-xs btn-flat" name="apply">
-					<i class="fa fa-check"></i>&nbsp;#i18n{form.modifyForm.buttonApply}
-				</button>
-				</div>
-			</div>
-			<div class="box-body">
-				<div role="tabpanel" class="nav-tabs-custom">
-					<@tabs tab="advanced" />
-				</div>
-				<div class="tab-content">
-					<div class="tab-pane active" >
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="front_office_title">#i18n{form.createForm.frontOfficeTitle}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
-									<input type="text" name="front_office_title" value="${form.frontOfficeTitle!}" class="form-control" maxlength="255">
-									<span class="help-block">#i18n{form.createForm.frontOfficeTitleComment}</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="is_shown_front_office_title">#i18n{form.createForm.frontOfficeTitleIsShown}</label>
-								<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="is_shown_front_office_title" value="1" <#if form?exists && form.shownFrontOfficeTitle?? && form.shownFrontOfficeTitle> checked="checked"</#if> />&#160;
-										</label>
-									</div>
-									<span class="help-block">#i18n{form.createForm.frontOfficeTitleIsShownComment}</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="workgroup">#i18n{form.createForm.labelWorkgroup}</label>
-								<div class="col-xs-12 col-sm-12 col-md-4">
-									<@comboWithParams name="workgroup" additionalParameters="class=\"form-control\"" items=user_workgroup_list default_value=form.workgroup! />
-									<span class="help-block">#i18n{form.createForm.labelWorkgroupComment}</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_mailing_list">#i18n{form.createForm.labelNotify}</label>
-								<div class="col-xs-12 col-sm-12 col-md-4">
-									<@comboWithParams name="id_mailing_list" additionalParameters="class=\"form-control\"" items=mailing_list default_value="${form.idMailingList}" />
-									<span class="help-block">#i18n{form.createForm.labelNotifyComment}</span>
-								</div>
-							</div>
+		</@columns>
+		<@columns>
+			<@box color='solid'>
+				<@boxBody>
+					<@tabs>
+						<@formTabs tab="advanced" />
+					</@tabs>
+					<@tabContent>
+						<div class="tab-pane active">
+							<@formGroup labelFor='front_office_title' labelKey='#i18n{form.createForm.frontOfficeTitle}' helpKey='#i18n{form.createForm.frontOfficeTitleComment}'>
+								<@input type='text' name='front_office_title' value=form.frontOfficeTitle! maxlength=255 />
+							</@formGroup>
+							<@formGroup labelFor='is_shown_front_office_title' labelKey='#i18n{form.createForm.frontOfficeTitleIsShown}' helpKey='#i18n{form.createForm.frontOfficeTitleIsShownComment}'>
+								<@checkBox labelFor='is_shown_front_office_title' name='is_shown_front_office_title' id='is_shown_front_office_title' value='1' checked=form?exists && form.shownFrontOfficeTitle?? && form.shownFrontOfficeTitle />
+							</@formGroup>
+							<@formGroup labelFor='workgroup' labelKey='#i18n{form.createForm.labelWorkgroup}' helpKey='#i18n{form.createForm.labelWorkgroupComment}'>
+								<@select name='workgroup' id='workgroup' items=user_workgroup_list default_value=form.workgroup! />
+							</@formGroup>
+							<@formGroup labelFor='id_mailing_list' labelKey='#i18n{form.createForm.labelNotify}' helpKey='#i18n{form.createForm.labelNotifyComment}'>
+								<@select name='id_mailing_list' id='id_mailing_list' items=mailing_list default_value='${form.idMailingList}' />
+							</@formGroup>
 							<#if is_active_captcha>
-								<div class="form-group">
-									<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="active_captcha">#i18n{form.createForm.labelActiveCaptcha}</label>
-									<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" name="active_captcha" value="1" <#if form?exists && form.activeCaptcha> checked="checked"</#if> />&#160;
-											</label>
-										</div>
-										<span class="help-block">#i18n{form.createForm.labelActiveCaptchaComment}</span>
-									</div>
-								</div>
+								<@formGroup labelFor='active_captcha' labelKey='#i18n{form.createForm.labelActiveCaptcha}' helpKey='#i18n{form.createForm.labelActiveCaptchaComment}'>
+									<@checkBox name='active_captcha' id='active_captcha' value='1' checked=form?exists && form.activeCaptcha />
+								</@formGroup>
 							</#if>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_theme_list">#i18n{form.createForm.labelThemeXpage}</label>
-								<div class="col-xs-12 col-sm-12 col-md-4">
-									<@comboWithParams name="id_theme_list" additionalParameters="class=\"form-control\"" items=theme_list default_value=form.codeTheme />
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" class="checkbox" for="limit_number_response">#i18n{form.createForm.labelLimitNumberResponse}</label>
-								<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="limit_number_response" value="1" <#if form?exists && form.limitNumberResponse>checked="checked"</#if> />&#160;
-										</label>
-									</div>
-									<span class="help-block">#i18n{form.createForm.labelLimitNumberResponseComment}</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" class="checkbox" for="active_store_adresse">#i18n{form.createForm.labelStoreAdresse}</label>
-								<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="active_store_adresse" value="1" <#if form?exists && form.activeStoreAdresse>checked="checked"</#if> />&#160;
-										</label>
-									</div>
-									<span class="help-block">#i18n{form.createForm.labelStoreAdresseComment}</span>
-								</div>
-							</div>
+							<@formGroup labelFor='id_theme_list' labelKey='#i18n{form.createForm.labelThemeXpage}'>
+								<@select name='id_theme_list' items=theme_list default_value=form.codeTheme />
+							</@formGroup>
+							<@formGroup labelFor='limit_number_response' labelKey='#i18n{form.createForm.labelLimitNumberResponse}' helpKey='#i18n{form.createForm.labelLimitNumberResponseComment}'>
+								<@checkBox name='limit_number_response' id='limit_number_response' value='1' checked=form?exists && form.limitNumberResponse />
+							</@formGroup>
+							<@formGroup labelFor='active_store_adresse' labelKey='#i18n{form.createForm.labelStoreAdresse}' helpKey='#i18n{form.createForm.labelStoreAdresseComment}'>
+								<@checkBox labelFor='active_store_adresse' name='active_store_adresse' id='active_store_adresse' value='1' checked=form?exists && form.activeStoreAdresse />
+							</@formGroup>
 							<#if is_active_mylutece_authentification>
-								<div class="form-group">
-									<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="active_mylutece_authentification">#i18n{form.createForm.labelActiveMyLuteceAuthentification}</label>
-									<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" name="active_mylutece_authentification" value="1" <#if form?exists && form.activeMyLuteceAuthentification>checked="checked"</#if> />&#160;
-											</label>
-										</div>
-										<span class="help-block">#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}</span>
-									</div>
-								</div>
+								<@formGroup labelFor='active_mylutece_authentification' labelKey='#i18n{form.createForm.labelActiveMyLuteceAuthentification}' helpKey='#i18n{form.createForm.labelActiveMyLuteceAuthentificationComment}'>
+									<@checkBox labelFor='active_mylutece_authentification' name='active_mylutece_authentification' id='active_mylutece_authentification' value='1' checked=form?exists&&form.activeMyLuteceAuthentification />
+								</@formGroup>
 							</#if>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" class="checkbox" for="active_requirement">#i18n{form.createForm.labelActiveRequirement}</label>
-								<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="active_requirement" value="1" <#if form?exists && form.activeRequirement>checked="checked"</#if> />&#160;
-										</label>
-									</div>
-									<span class="help-block">#i18n{form.createForm.labelActiveRequirementComment}</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_1">#i18n{form.createForm.labelInformationComplementary_1}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
-									<input type="text" name="information_complementary_1" value="${form.infoComplementary1?if_exists}" class="form-control" maxlength="255">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_2">#i18n{form.createForm.labelInformationComplementary_2}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
-									<input type="text" name="information_complementary_2" value="${form.infoComplementary2?if_exists}" class="form-control" maxlength="255">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_3">#i18n{form.createForm.labelInformationComplementary_3}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
-									<input type="text" name="information_complementary_3" value="${form.infoComplementary3?if_exists}" class="form-control" maxlength="255">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_4">#i18n{form.createForm.labelInformationComplementary_4}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
-									<input type="text" name="information_complementary_4" value="${form.infoComplementary4?if_exists}" class="form-control" maxlength="255">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="information_complementary_5">#i18n{form.createForm.labelInformationComplementary_5}</label>
-								<div class="col-xs-12 col-sm-12 col-md-6">
-									<input type="text" name="information_complementary_5" value="${form.infoComplementary5?if_exists}" class="form-control" maxlength="255">
-									<span class="help-block">#i18n{form.createForm.labelInformationComplementary_comment}</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="support_https">#i18n{form.createForm.supportHTTPS}</label>
-								<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="support_https" value="1" <#if form.supportHTTPS?has_content && form.supportHTTPS>checked="checked"</#if> />&#160;
-										</label>
-									</div>
-									<span class="help-block">#i18n{form.createForm.labelSupportHTTPS_comment}</span>
-								</div>
-							</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</form>
+							<@formGroup labelFor='active_requirement' labelKey='#i18n{form.createForm.labelActiveRequirement}' helpKey='#i18n{form.createForm.labelActiveRequirementComment}'>
+								<@checkBox name='active_requirement' id='active_requirement' value='1' checked=form?exists&&form.activeRequirement />
+							</@formGroup>
+							<@formGroup labelFor='information_complementary_1' labelKey='#i18n{form.createForm.labelInformationComplementary_1}'>
+								<@input type='text' name='information_complementary_1' value=form.infoComplementary1?if_exists maxlength=255 />
+							</@formGroup>
+							<@formGroup labelFor='information_complementary_2' labelKey='#i18n{form.createForm.labelInformationComplementary_2}'>
+								<@input type='text' name='information_complementary_2' id='information_complementary_2' value=form.infoComplementary2?if_exists maxlength=255 />
+							</@formGroup>
+							<@formGroup labelFor='information_complementary_3' labelKey='#i18n{form.createForm.labelInformationComplementary_3}'>
+								<@input type='text' name='information_complementary_3' id='information_complementary_3' value=form.infoComplementary3?if_exists maxlength=255 />
+							</@formGroup>
+							<@formGroup labelFor='information_complementary_4' labelKey='#i18n{form.createForm.labelInformationComplementary_4}'>
+								<@input type='text' name='information_complementary_4' id='information_complementary_4' value=form.infoComplementary4?if_exists maxlength=255 />
+							</@formGroup>
+							<@formGroup labelFor='information_complementary_5' labelKey='#i18n{form.createForm.labelInformationComplementary_5}' helpKey='#i18n{form.createForm.labelInformationComplementary_comment}'>
+								<@input type='text' name='information_complementary_5' id='information_complementary_5' value=form.infoComplementary5?if_exists maxlength=255 />
+							</@formGroup>
+							<@formGroup labelFor='support_https' labelKey='#i18n{form.createForm.supportHTTPS}' helpKey='#i18n{form.createForm.labelSupportHTTPS_comment}'>
+								<@checkBox name='support_https' id='support_https' value='1' checked=form.supportHTTPS?has_content&&form.supportHTTPS />
+							</@formGroup>
+							<@formGroup>
+								<@button type='submit' name='save' buttonIcon='save' title='#i18n{form.createForm.buttonSave}' size='' />
+								<@button type='submit' name='apply' buttonIcon='check' title='#i18n{form.modifyForm.buttonApply}' size='' />
+							</@formGroup>
+						</div>
+					</@tabContent>
+				</@boxBody>
+			</@box>
+		</@columns>
+	</@row>
+</@tform>
