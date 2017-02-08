@@ -1,95 +1,49 @@
  <#include "/admin/util/editor/editor.html" />
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="box box-primary">
-            <div class="box-header">
-                <h3 class="box-title">#i18n{form.modifyRecap.title} : '${recap.form.title}'</h3>
-			</div> 
-			<div class="box-body">
-				<form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyRecap.jsp" method="post" name="" id=""  >
+<@row>
+	<@columns>
+		<@box color='primary'>
+			<@boxHeader title='#i18n{form.modifyRecap.title} : "${recap.form.title}"' />
+			<@boxBody>
+				<@tform action='jsp/admin/plugins/form/DoModifyRecap.jsp'>
 					<input name="id_recap" value="${recap.idRecap}" type="hidden">
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-12 col-md-3" for="back_url">#i18n{form.modifyRecap.labelBackUrl} *</label>
-						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-							<input type="text" name="back_url" id="back_url" value="${recap.backUrl}" class="form-control">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="recap_message"> #i18n{form.modifyRecap.labelRecapMessage} * </label>
-						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-							<textarea class="richtext form-control" name="recap_message" id="recap_message" rows="5">${recap.recapMessage}</textarea>
-						</div>
-					 </div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="recap_data">#i18n{form.modifyRecap.labelRecapData} </label>
-						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-							<div class="checkbox">
-								<label>
-									<input name="recap_data" value="1" type="checkbox"  <#if recap.recapData>checked="checked"</#if>>&#160;
-								</label>
-							</div>
-							<span class="help-block">#i18n{form.modifyRecap.labelRecapDataComment}</span>
-						</div>
-					</div>
-					
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="graph">#i18n{form.modifyRecap.labelGraph}</label>
-						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-							<div class="checkbox">
-								<label>
-									<input name="graph" id="graph" value="1" type="checkbox" <#if recap.graph>checked="checked"</#if>>&#160;
-								</label>
-							</div>
-							<span class="help-block">#i18n{form.modifyRecap.labelGraphComment}</span>
-						</div>
-					</div>
+					<@formGroup labelFor='back_url' labelKey='#i18n{form.modifyRecap.labelBackUrl}' mandatory=true>
+						<@input type='text' name='back_url' id='back_url' value=recap.backUrl />
+					</@formGroup>
+					<@formGroup labelFor='recap_message' labelKey='#i18n{form.modifyRecap.labelRecapMessage}' mandatory=true>
+						<@input type='textarea' name='recap_message' id='recap_message' rows=5 richtext=true>${recap.recapMessage}</@input>
+					</@formGroup>
+					<@formGroup labelFor='recap_data' labelKey='#i18n{form.modifyRecap.labelRecapData}' helpKey='#i18n{form.modifyRecap.labelRecapDataComment}'>
+						<@checkBox name='recap_data' id='recap_data' value='1' checked=recap.recapData />
+					</@formGroup>
+					<@formGroup labelFor='graph' labelKey='#i18n{form.modifyRecap.labelGraph}' helpKey='#i18n{form.modifyRecap.labelGraphComment}'>
+						<@checkBox name='graph' id='graph' value='1' checked=recap.graph />
+					</@formGroup>
 					<fieldset id="graph-properties">
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_graph_type">#i18n{form.modifyRecap.labelGraphType}</label>
-						<div class="col-xs-12 col-sm-12 col-md-2">
+						<@formGroup labelFor='id_graph_type' labelKey='#i18n{form.modifyRecap.labelGraphType}'>
 							<#if recap.graphType?exists>
-								<@comboWithParams name="id_graph_type" items=graph_type_list default_value=recap.graphType.idGraphType?string additionalParameters='class="form-control"' />
+								<#assign default_value = recap.graphType.idGraphType?string />
 							<#else>
-								<@comboWithParams name="id_graph_type" items=graph_type_list default_value="-1" additionalParameters='class="form-control"' />
+								<#assign default_value = "-1" />
 							</#if>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">#i18n{form.modifyRecap.labelGraphStyle}</label>
-						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-							<div class="radio">
-								<label class="radio-inline">
-									<input type="radio" name="graph_three_dimension" value="0" checked="checked">#i18n{form.modifyRecap.selectGraphStyle2d}
-								</label>
-								<label class="radio-inline">
-									<input type="radio" name="graph_three_dimension" value="1"  <#if recap.graphThreeDimension >checked="checked"</#if> >
-									#i18n{form.modifyRecap.selectGraphStyle3d}
-								</label>
-							</div>
-						</div>
-					</div> 
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="graph_label_value">#i18n{form.modifyRecap.labelGraphLabel}</label>
-						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-							<div class="checkbox">
-								<label>
-									<input name="graph_label_value" value="1" type="checkbox" <#if recap.graphLabelValue>checked="checked"</#if> >&#160;
-								</label>
-							</div>
-						</div>
-					</div>
+							<@select name='id_graph_type' id='id_graph_type' items=graph_type_list default_value=default_value />
+						</@formGroup>
+						<@formGroup labelKey='#i18n{form.modifyRecap.labelGraphStyle}'>
+							<@radioButton name='graph_three_dimension' id='graph_three_dimension_2d' labelFor='graph_three_dimension_2d' labelKey='#i18n{form.modifyRecap.selectGraphStyle2d}' orientation='horizontal' value='0' checked=true />
+							<@radioButton name='graph_three_dimension' id='graph_three_dimension_3d' labelFor='graph_three_dimension_3d' labelKey='#i18n{form.modifyRecap.selectGraphStyle3d}' orientation='horizontal' value='1' checked=recap.graphThreeDimension />
+						</@formGroup>
+						<@formGroup labelFor='graph_label_value' labelKey='#i18n{form.modifyRecap.labelGraphLabel}'>
+							<@checkBox name='graph_label_value' id='graph_label_value' value='1' checked=recap.graphLabelValue />
+						</@formGroup>
 					</fieldset>
-					<div class="form-group">
-						<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
-							<button class="btn btn-primary btn-flat" type="submit" ><i class="fa fa-check"></i> #i18n{form.modifyRecap.buttonSave}</button>
-							<a class="btn btn-default btn-flat" type="button" href="jsp/admin/plugins/form/ManageForm.jsp" title="#i18n{form.modifyMessage.buttonCancel}"><i class="fa fa-remove"></i> #i18n{form.modifyRecap.buttonCancel}</button>
-						</div>
-					</div>
-				</form>
-			</div> 
-		</div> 
-    </div> 
-</div> 
+					<@formGroup>
+						<@button type='submit' buttonIcon='save' title='#i18n{form.modifyRecap.buttonSave}' size='' />
+						<@aButton href='jsp/admin/plugins/form/ManageForm.jsp' title='#i18n{form.modifyMessage.buttonCancel}' buttonIcon='remove' title='#i18n{form.modifyRecap.buttonCancel}' size='' color='btn-secondary' />
+					</@formGroup>
+				</@tform>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row> 
 <@initEditor />
 <script>
 $(document).ready( function(){

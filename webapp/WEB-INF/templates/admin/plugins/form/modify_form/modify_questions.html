@@ -99,7 +99,74 @@
 									</#if>
 									</td>
 									<td>
-										<#if !entry.entryType.group><span class="badge">${entry.entryType.title}</span></#if>
+										<#if !entry.entryType.group>
+											<@tag>
+											<#switch entry.entryType.idType?string>
+												<#case "1">
+													<@icon style='dot-circle-o' />
+												<#break>
+												<#case "2">
+													<@icon style='check-square-o' />
+												<#break>
+												<#case "3">
+													<@icon style='comment-o' />
+												<#break>
+												<#case "4">
+													<@icon style='calendar' />
+												<#break>
+												<#case "5">
+													<@icon style='list-alt' />
+												<#break>
+												<#case "6">
+													<@icon style='file-text-o' />
+												<#break>
+												<#case "7">
+													<@icon style='file-text' />
+												<#break>
+												<#case "8">
+													<@icon style='file' />
+												<#break>
+												<#case "9">
+													<@icon style='indent' />
+												<#break>
+												<#case "10">
+													<@icon style='database' />
+												<#break>
+												<#case "11">
+													<@icon style='map-o' />
+												<#break>
+												<#case "12">
+													<@icon style='image' />
+												<#break>
+												<#case "13">
+													<@icon style='user' />
+												<#break>
+												<#case "14">
+													<@icon style='sign-in' />
+												<#break>
+												<#case "15">
+													<@icon style='phone' />
+												<#break>
+												<#case "16">
+													<@icon style='check-square' />
+												<#break>
+												<#case "17">
+													<@icon style='user' />
+												<#break>
+												<#case "18">
+													<@icon style='table' />
+												<#break>
+												<#case "19">
+													<@icon style='image' />
+												<#break>
+												<#case "20">
+													<@icon style='camera' />
+												<#break>
+												default
+											</#switch>
+											&#160;${entry.entryType.title}
+											</@tag>
+										</#if>
 									</td>
 									<td>
 										<#if entry.numberConditionalQuestion!=0>${entry.numberConditionalQuestion}</#if>
@@ -178,6 +245,9 @@
 										<#case "8">
 											<@icon style='file' />
 										<#break>
+										<#case "9">
+											<@icon style='indent' />
+										<#break>
 										<#case "10">
 											<@icon style='database' />
 										<#break>
@@ -186,6 +256,9 @@
 										<#break>
 										<#case "12">
 											<@icon style='image' />
+										<#break>
+										<#case "13">
+											<@icon style='user' />
 										<#break>
 										<#case "14">
 											<@icon style='sign-in' />
@@ -204,6 +277,9 @@
 										<#break>
 										<#case "19">
 											<@icon style='image' />
+										<#break>
+										<#case "20">
+											<@icon style='camera' />
 										<#break>
 										default
 									</#switch>
