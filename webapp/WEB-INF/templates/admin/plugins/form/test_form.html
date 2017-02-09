@@ -1,29 +1,25 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12">
-		<div class="box box-primary">
-			<div class="box-header">
-				<h3 class="box-title">#i18n{form.testForm.title}</h3>
-				<div class="box-tools pull-right">
-					<form class="form-inline" action="jsp/admin/plugins/form/DoExportResponseTestForm.jsp" method="post" name="" id=""  >
-						<input name="id_form" value="${form.idForm}" type="hidden">
-						<label for="">#i18n{form.testForm.labelExportResponse} </label>	
-						<div class="input-group">
-							<@comboWithParams name="id_export_format"  items=export_format_list default_value="-1" additionalParameters="class=\"form-control input-xs\"" />
-							<span class="input-group-btn">
-								<button class="btn btn-primary btn-xs btn-flat" type="submit" >
-									<i class="fa fa-download fa-fw"></i><span class="hidden-xs"> #i18n{form.result.buttonExportResult}</span>
-								</button>
-							</span>
-						</div>
-					</form>
-                </div>
-            </div>
-			<div class="box-body">
-				<div class="well">
+<@row>
+	<@columns>
+		<@box color='primary'>
+			<@boxHeader title='#i18n{form.testForm.title}' boxTools=true>
+				<@tform class='form-inline' action='jsp/admin/plugins/form/DoExportResponseTestForm.jsp'>
+					<input name="id_form" value="${form.idForm}" type="hidden">
+					<@formGroup labelKey='#i18n{form.testForm.labelExportResponse}' formStyle='inline'>
+						<@inputGroup>
+							<@select name='id_export_format' id='id_export_format' items=export_format_list default_value='-1' size='sm' />
+							<@inputGroupItem>
+								<@button type='submit' buttonIcon='download' title='#i18n{form.result.buttonExportResult}' showTitle=false />
+							</@inputGroupItem>
+						</@inputGroup>
+					</@formGroup>
+				</@tform>
+			</@boxHeader>
+			<@boxBody>
+				<@alert class='success'>
 					${str_form}
-				</div>
-			</div>
-		</div> 
-    </div> 
-</div>	 
+				</@alert>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row> 
 <script type="text/javascript" src="js/plugins/form/form.js"></script>

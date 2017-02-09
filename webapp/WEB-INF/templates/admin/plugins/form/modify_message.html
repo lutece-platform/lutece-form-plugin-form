@@ -1,66 +1,34 @@
 <#include "/admin/util/editor/editor.html" />
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="box box-primary">
-            <div class="box-header">
-                <h3 class="box-title">#i18n{form.modifyMessage.title} : '${form.title}'</h3>
-			</div> 
-			<div class="box-body">
-				<form class="form-horizontal" action="jsp/admin/plugins/form/DoModifyMessage.jsp" method="post">
-                    <input type="hidden" name="id_form" value="${form.idForm}" >
-                    <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-12 col-md-3" for="libelle_validate_button">#i18n{form.modifyMessage.labelLibelleValidateButton} * </label>
-                        <div class="col-xs-12 col-sm-12 col-md-2">
-                            <input type="text" name="libelle_validate_button" value="${form.libelleValidateButton}" maxlength="255" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-12 col-md-3" for="libelle_reset_button">#i18n{form.modifyMessage.labelLibelleResetButton} </label>
-                        <div class="col-xs-12 col-sm-12 col-md-2">
-                            <input type="text" name="libelle_reset_button" value="${form.libelleResetButton}" maxlength="255" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-12 col-md-3" for="unavailability_message">#i18n{form.modifyMessage.labelUnavailabilityMessage} * </label>
-						<div class="col-xs-12 col-sm-12 col-md-9">
-							<#if form.unavailabilityMessage?exists>
-							<textarea class="richtext form-control" name="unavailability_message" id="unavailability_message" rows="5" cols="90">${form.unavailabilityMessage}</textarea>
-							<#else>
-							<textarea class="richtext form-control" name="unavailability_message" id="unavailability_message" rows="5" cols="90"></textarea>
-							</#if>
-							<span class="help-block">#i18n{form.modifyMessage.labelUnavailabilityMessageComment}</span>
-						</div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-12 col-md-3" for="welcome_message">#i18n{form.modifyMessage.labelWelcomeMessage} </label>
-						<div class="col-xs-12 col-sm-12 col-md-9">
-							<#if form.welcomeMessage?exists>
-							<textarea class="richtext form-control" name="welcome_message" id="welcome_message" rows="5" cols="90">${form.welcomeMessage}</textarea>
-							<#else>
-							<textarea class="richtext form-control" name="welcome_message" id="welcome_message" rows="5" cols="90"></textarea>
-							</#if>
-						</div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-12 col-md-3" for="requirement">#i18n{form.modifyMessage.labelRequirement} * </label>
-						<div class="col-xs-12 col-sm-12 col-md-9">
-							<#if form.requirement?exists>
-							<textarea class="richtext form-control" name="requirement" id="requirement" rows="5" cols="90">${form.requirement}</textarea>
-							<#else>
-							<textarea class="richtext form-control" name="requirement" id="requirement" rows="5" cols="90"></textarea>
-							</#if>
-						</div>
-                    </div>
-                    <div class="form-group">
-						<div class="col-xs-12 col-sm-12 col-md-offset-3">
-							<button class="btn btn-primary btn-flat" type="submit" ><i class="fa fa-check"></i>&nbsp;#i18n{form.modifyMessage.buttonSave}</button>
-							<a class="btn btn-default btn-flat" href="jsp/admin/plugins/form/ManageForm.jsp" title="#i18n{form.modifyMessage.buttonCancel}" ><i class="fa fa-remove"></i>&nbsp;#i18n{form.modifyMessage.buttonCancel}</button>
-						</div>   
-                    </div>   
-                </form>
-			</div> 
-		</div> 
-    </div> 
-</div> 
-
+<@row>
+	<@columns>
+		<@box color='primary'>
+			<@boxHeader title='#i18n{form.modifyMessage.title} : "${form.title}"' />
+			<@boxBody>
+				<@tform action='jsp/admin/plugins/form/DoModifyMessage.jsp'>
+					<input type="hidden" name="id_form" value="${form.idForm}">
+					
+					<@formGroup labelFor='libelle_validate_button' labelKey='#i18n{form.modifyMessage.labelLibelleValidateButton}' mandatory=true>
+						<@input type='text' name='libelle_validate_button' id='libelle_validate_button' value=form.libelleValidateButton maxlength=255 />
+					</@formGroup>
+					<@formGroup labelFor='libelle_reset_button' labelKey='#i18n{form.modifyMessage.labelLibelleResetButton}'>
+						<@input type='text' name='libelle_reset_button' id='libelle_reset_button' value=form.libelleResetButton maxlength=255 />
+					</@formGroup>
+					<@formGroup labelFor='unavailability_message' labelKey='#i18n{form.modifyMessage.labelUnavailabilityMessage}' mandatory=true helpKey='#i18n{form.modifyMessage.labelUnavailabilityMessageComment}'>
+						<@input type='textarea' richtext=true name='unavailability_message' id='unavailability_message' rows=5 cols=90><#if form.unavailabilityMessage?exists>${form.unavailabilityMessage}</#if></@input>
+					</@formGroup>
+					<@formGroup labelFor='welcome_message' labelKey='#i18n{form.modifyMessage.labelWelcomeMessage}'>
+						<@input type='textarea' richtext=true name='welcome_message' id='welcome_message' rows=5 cols=90><#if form.welcomeMessage?exists>${form.welcomeMessage}</#if></@input>
+					</@formGroup>
+					<@formGroup labelFor='requirement' labelKey='#i18n{form.modifyMessage.labelRequirement}' mandatory=true>
+						<@input type='textarea' richtext=true name='requirement' id='requirement' rows=5 cols=90><#if form.requirement?exists>${form.requirement}</#if></@input>
+					</@formGroup>
+					<@formGroup>
+						<@button type='submit' buttonIcon='save' title='#i18n{form.modifyMessage.buttonSave}' size='' />
+					<@aButton href='jsp/admin/plugins/form/ManageForm.jsp' title='#i18n{form.modifyMessage.buttonCancel}' buttonIcon='remove' title='#i18n{form.modifyMessage.buttonCancel}' size='' color='btn-secondary' />
+					</@formGroup>
+				</@tform>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row> 
 <@initEditor />

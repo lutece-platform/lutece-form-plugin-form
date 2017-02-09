@@ -1,78 +1,103 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12">
-		<div class="box box-primary">
-			<div class="box-header">
-				<h3 class="box-title">#i18n{form.result.title} : '${form.title}'</h3>
-            </div>
-			<div class="box-body">
-				<form class="form-inline" action="jsp/admin/plugins/form/Result.jsp" method="post" name="" id=""  >
+<@row>
+	<@columns>
+		<@box color='primary'>
+			<@boxHeader title='#i18n{form.result.title} : "${form.title}"' />
+			<@boxBody>
+				<@tform action='jsp/admin/plugins/form/Result.jsp'>
 					<input name="id_form" value="${form.idForm}" type="hidden" />
-					<label for="fist_response_date_filter" >#i18n{form.result.labelValidationDate}</label>
-						<div class="input-daterange inline">
-							<div class="input-group">
-							<input type="text" name="fist_response_date_filter" id="fist_response_date_filter" class="form-control input-sm" value="<#if fist_response_date_filter?has_content>${fist_response_date_filter?date}</#if>" />
-							<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-							</div>
-							<span class="add-on">#i18n{form.result.labelAnd}</span>
-							<div class="input-group">
-								<input type="text" name="last_response_date_filter" id="last_response_date_filter" class="form-control input-sm" value="<#if last_response_date_filter?has_content>${last_response_date_filter?if_exists?date}</#if>" />
-							<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-							</div>
-						</div>
-						<span class="help-text">#i18n{form.result.labelGraph}</span>
-						<label class="radio-inline">
-							<input type="radio" name="times_unit" value="0" <#if times_unit=="0">checked</#if>> #i18n{form.result.radioButtonDay}
-						</label>	
-						<label class="radio-inline">
-							<input type="radio" name="times_unit" value="1" <#if times_unit=="1">checked</#if>> #i18n{form.result.radioButtonWeek}
-						</label>	
-						<label class="radio-inline">
-							<input type="radio" name="times_unit" value="2" <#if times_unit=="2">checked</#if>> #i18n{form.result.radioButtonMonth}
-						</label>	
-						<button class="btn btn-primary btn-xs btn-flat" type="submit" ><i class="glyphicon glyphicon-filter"></i> #i18n{form.result.buttonSearch}</button>
-				</form>
-			</div>
-		</div>
-		<div class="box box-primary">
-			<div class="box-header">
-				<h3 class="box-title">#i18n{form.result.titleStatistic}</h3>
-				<div class="box-tools pull-right">
-					<form class="form-inline" action="jsp/admin/plugins/form/DoExportResult.jsp" method="post" name="" id=""  >
-						<!-- label>#i18n{form.result.titleDataSave}</label -->
-						<input name="id_form" value="${form.idForm}" type="hidden">
-						<#if fist_response_date_filter?exists>
-							<input name="fist_response_date_filter" value="${fist_response_date_filter?date?if_exists}" type="hidden">	
-						</#if>	
-						<#if last_response_date_filter?exists>
-							<input name="last_response_date_filter" value="${last_response_date_filter?date?if_exists}" type="hidden">	
-						</#if>	
-						<label for="">#i18n{form.result.labelExportResult} </label>	
-						<div class="input-group">
-							<@comboWithParams name="id_export_format"  items=export_format_list default_value="-1" additionalParameters="class=\"form-control input-xs\"" />
-							<span class="input-group-btn">
-								<button class="btn btn-primary btn-xs btn-flat" type="submit" >
-									<i class="fa fa-download fa-fw"></i><span class="hidden-xs"> #i18n{form.result.buttonExportResult}</span>
-								</button>
-							</span>
-						</div>
-					</form>
-                </div>
-			 </div>
-			<div class="box-body">
-				<div class="row">
-					<div class="col-xs-12 col-sm-4 col-md-4">
-						<div class="callout callout-info">
-                            <h4><i class="fa fa-pie-chart"></i> #i18n{form.result.labelNumberResponse} <span class="text-muted pull-right">${number_response}<span></h4>
-                          
-						</div>
-						<div class="callout callout-info">
-                            <h4><i class="fa fa-calendar-o"></i> #i18n{form.result.labelFistResponseDate} <span class="text-muted pull-right"><#if fist_response_date?exists>${fist_response_date?date} <#else>-</#if></span></h4>
-						</div>
-						<div class="callout callout-info">
-							<h4><i class="fa fa-calendar-o"></i> #i18n{form.result.labelLastResponseDate} <span class="text-muted pull-right"><#if last_response_date?exists>${last_response_date?date}<#else>-</#if></span></h4>
-						</div>
+					<div class="input-daterange inline">
+					<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{form.result.labelValidationDate}'>
+						<@inputGroup>
+							<#if fist_response_date_filter?has_content>
+								<#assign value = fist_response_date_filter?date />
+							<#else>
+								<#assign value = '' />
+							</#if>
+							<@input type='text' name='fist_response_date_filter' id='fist_response_date_filter' value=value />
+							<@inputGroupItem type='addon'>
+								<@icon style='calendar' />
+							</@inputGroupItem>
+						</@inputGroup>
+					</@formGroup>
+					<@formGroup labelFor='last_response_date_filter' labelKey='#i18n{form.result.labelAnd}'>
+						<@inputGroup>
+							<#if fist_response_date_filter?has_content>
+								<#assign value = last_response_date_filter?if_exists?date />
+							<#else>
+								<#assign value = '' />
+							</#if>
+							<@input type='text' name='last_response_date_filter' id='last_response_date_filter' value='' />
+							<@inputGroupItem type='addon'>
+								<@icon style='calendar' />
+							</@inputGroupItem>
+						</@inputGroup>
+					</@formGroup>
 					</div>
-					<div class="col-xs-12 col-sm-4 col-md-4">
+					
+					<@formGroup labelKey='#i18n{form.result.labelGraph}'>
+						<#if times_unit=="0">
+							<#assign checked = true />
+						<#else>
+							<#assign checked = false />
+						</#if>
+						<@radioButton name='times_unit' id='times_unit' value=0 checked=checked labelKey='#i18n{form.result.radioButtonDay}' orientation='horizontal' />
+						
+						<#if times_unit=="1">
+							<#assign checked = true />
+						<#else>
+							<#assign checked = false />
+						</#if>
+						<@radioButton name='times_unit' id='times_unit' value=1 checked=checked labelKey='#i18n{form.result.radioButtonWeek}' orientation='horizontal' />
+						
+						<#if times_unit=="2">
+							<#assign checked = true />
+						<#else>
+							<#assign checked = false />
+						</#if>
+						<@radioButton name='times_unit' id='times_unit' value=2 checked=checked labelKey='#i18n{form.result.radioButtonMonth}' orientation='horizontal' />
+					</@formGroup>
+					
+					<@formGroup>
+						<@button type='submit' buttonIcon='filter' title='#i18n{form.result.buttonSearch}' size='' />
+					</@formGroup>
+				</@tform>
+			</@boxBody>
+		</@box>
+		<@box color='primary'>
+			<@boxHeader title='#i18n{form.result.titleStatistic}' boxTools=true>
+				<@tform action='jsp/admin/plugins/form/DoExportResult.jsp' class='form-inline'>
+					<input name="id_form" value="${form.idForm}" type="hidden">
+					<#if fist_response_date_filter?exists>
+						<input name="fist_response_date_filter" value="${fist_response_date_filter?date?if_exists}" type="hidden">	
+					</#if>	
+					<#if last_response_date_filter?exists>
+						<input name="last_response_date_filter" value="${last_response_date_filter?date?if_exists}" type="hidden">	
+					</#if>
+					
+					<@formGroup labelKey='#i18n{form.result.labelExportResult}' formStyle='inline'>
+						<@inputGroup>
+							<@select name='id_export_format' id='id_export_format' items=export_format_list default_value='-1' size='sm' />
+							<@inputGroupItem>
+								<@button type='submit' buttonIcon='download' title='#i18n{form.result.buttonExportResult}' showTitle=false />
+							</@inputGroupItem>
+						</@inputGroup>
+					</@formGroup>
+				</@tform>
+      </@boxHeader>
+			<@boxBody>
+				<@row>
+					<@columns md=4 lg=4 xl=4>
+						<@callOut color='info' callOutIcon='pie-chart' title='#i18n{form.result.labelNumberResponse}' titleLevel='h4'>
+							${number_response}
+						</@callOut>
+						<@callOut color='info' callOutIcon='calendar' title='#i18n{form.result.labelFistResponseDate}' titleLevel='h4'>
+							<#if fist_response_date?exists>${fist_response_date?date} <#else>-</#if>
+						</@callOut>
+						<@callOut color='info' callOutIcon='calendar' title='#i18n{form.result.labelLastResponseDate}' titleLevel='h4'>
+							<#if last_response_date?exists>${last_response_date?date}<#else>-</#if>
+						</@callOut>
+					</@columns>
+					<@columns md=8 lg=8 xl=8>
 						<#if fist_response_date_filter?exists&&last_response_date_filter?exists>
 							<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}&amp;fist_response_date_filter=${fist_response_date_filter?date?if_exists}&amp;last_response_date_filter=${last_response_date_filter?date?if_exists}">
 						<#elseif  fist_response_date_filter?exists > 
@@ -82,12 +107,11 @@
 						<#else>
 							<img src="jsp/admin/plugins/form/DoGenerateGraph.jsp?id_form=${form.idForm}&amp;times_unit=${times_unit}">
 						</#if>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+					</@columns>
+				</@row>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row>
 
 <@getDatePickerRangeBootstrap language=locale />
-	 
