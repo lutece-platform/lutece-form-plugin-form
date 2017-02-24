@@ -1,50 +1,35 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12">
-		<div class="box box-primary">
-			<div class="box-header">
-				<h3 class="box-title">#i18n{form.manageOutputProcessor.title}</h3>
-            </div>
-			<div class="box-body">
+<@row>
+	<@columns>
+		<@box color='primary'>
+			<@boxHeader title='#i18n{form.manageOutputProcessor.title}' />
+			<@boxBody>
 				<div class="row">
 				<#assign nIndex=1>
 				<#list processor_list as processor>
-					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-						<div class="material-box">
-							<div class="material-box-icon">
-								<span class="fa fa-4x fa-cogs"></span>
-							</div>
-							<div class="info">
-								<form class="form" action="jsp/admin/plugins/form/DoManageOutputProcessor.jsp" method="post">
+					<@columns md=6 lg=6 xl=6>
+						<@box>
+							<@tform action="jsp/admin/plugins/form/DoManageOutputProcessor.jsp" method="post">
+								<#assign title>
+									<@formGroup rows=2>
+									<@checkBox labelFor='is_selected_${nIndex}' labelKey='#i18n{form.manageOutputProcessor.useOutputProcessor}' name='is_selected' id='is_selected_${nIndex}' checked=processor.is_selected />
+									</@formGroup>
+								</#assign>
+								<@boxHeader titleLevel='span' title=title/>
+								<@boxBody>
 									<input name="id_form" value="${form.idForm}" type="hidden">
 									<input type="hidden" name="processor_key" value= "${processor.processor_key}">
-									<div class="checkbox">
-										<label class="checkbox-inline" for="is_selected_${nIndex}">
-											<h3><input type="checkbox" name="is_selected" id="is_selected_${nIndex}" <#if processor.is_selected>checked="checked"</#if>>&#160;#i18n{form.manageOutputProcessor.useOutputProcessor}</h3>
-										</label>
-									</div>
-									<div class="process-content">
-										${processor.processor_configuration}
-									</div>
-									<div class="form-group">
-										<button class="btn btn-primary btn-sm btn-flat" type="submit">
-											<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{form.createForm.buttonSave}
-										</button>
-									</div>
-								</form>
-							 </div>
-						</div>
-					</div>
+									${processor.processor_configuration}
+									<@formGroup rows=2>
+										<@button type='submit' buttonIcon='save' title='#i18n{form.createForm.buttonSave}' size='' />
+									</@formGroup>
+								</@boxBody>
+							</@tform>
+						</@box>
+					</@columns>
 					<#assign nIndex = nIndex + 1 >
 				</#list>
 				</div>
-			</div>
-		</div>
-    </div>
-</div>
-<script language="javascript">
-$(document).ready(function(){
-	var html = $("h3.process-title").prev().html();
-	$("h3.process-title").prepend( html );
-	$("h3.process-title").prev().remove();
-});
-</script>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row>

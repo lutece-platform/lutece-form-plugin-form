@@ -1,59 +1,43 @@
-<div class="row" >
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<@row>
+	<@columns>
 		<fieldset>
 		<legend>#i18n{form.home.title}</legend>
-		<table class="table table-striped table-condensed">
-		<tr>
-			<td>
-				<a class="btn btn-primary btn-sm btn-flat" href="jsp/admin/plugins/form/ManageForm.jsp?plugin_name=form"  title="null" >
-					<i class="glyphicon glyphicon-question-sign"></i>
-				</a>
-			</td>
-			<td>#i18n{form.home.labelManageFormComment}</td>
-	</tr>
-    <#if permission_manage_category>   
-	<tr>
-		<td>
-			<a class="btn btn-primary btn-sm btn-flat" href="jsp/admin/plugins/form/ManageCategory.jsp?plugin_name=form"  title="null" >
-					<i class="glyphicon glyphicon-question-sign"></i>
-			</a>
-		</td>
-		<td>#i18n{form.home.labelCategoryComment}</td>
-	</tr>
-	</#if>
-	     
-        <#if permission_manage_export_format>
-	        <tr>
-	             
-	            <td>
-	            	<a class="btn btn-primary btn-sm btn-flat" href="jsp/admin/plugins/form/ManageExportFormat.jsp?plugin_name=form"  title="null" >
-	<i class="glyphicon glyphicon-question-sign"></i>
-	</a>
-
-	            </td>       
-	              <td>    
-	             		#i18n{form.home.labelExportFormatComment}
-	              </td>
-	        </tr>	
-        </#if>
-        <#if permission_manage_default_message>   
+		<@table>
 			<tr>
 				<td>
-	                <a class="btn btn-primary btn-sm btn-flat" href="jsp/admin/plugins/form/ManageDefaultMessage.jsp?plugin_name=form"  title="null" >
-	<i class="glyphicon glyphicon-question-sign"></i>
-	</a>
-
-	       		</td>
-	            <td>
-				 	#i18n{form.home.labelDefaultMessageComment}
-	            </td>
-	        </tr>
-	     </#if>
-	    </table>
+					<@aButton href='jsp/admin/plugins/form/ManageForm.jsp?plugin_name=form' title='null' showTitle=false buttonIcon='question-circle-o' />
+				</td>
+				<td>#i18n{form.home.labelManageFormComment}</td>
+			</tr>
+			<#if permission_manage_category>   
+			<tr>
+				<td>
+					<@aButton href='jsp/admin/plugins/form/ManageCategory.jsp?plugin_name=form' title='null' showTitle=false buttonIcon='question-circle-o' />
+				</td>
+				<td>#i18n{form.home.labelCategoryComment}</td>
+			</tr>
+			</#if>
+			<#if permission_manage_export_format>
+	      <tr>
+					<td>
+						<@aButton href='jsp/admin/plugins/form/ManageExportFormat.jsp?plugin_name=form'  title='null' showTitle=false buttonIcon='question-circle-o' />
+					</td>       
+					<td>    
+						#i18n{form.home.labelExportFormatComment}
+	        </td>
+	      </tr>	
+			</#if>
+			<#if permission_manage_default_message>   
+				<tr>
+					<td>
+						<@aButton href='jsp/admin/plugins/form/ManageDefaultMessage.jsp?plugin_name=form'  title='null'showTitle=false buttonIcon='question-circle-o' />
+					</td>
+	        <td>
+						#i18n{form.home.labelDefaultMessageComment}
+					</td>
+				</tr>
+			</#if>
+	  </@table>
 		</fieldset>
-	</div>
-</div>
-
- 
-
- 
+	</@columns>
+</@row>
