@@ -41,7 +41,7 @@
 						<@formGroup>
 							<@checkBox labelFor='confirm_field' labelKey='#i18n{form.createEntry.labelConfirmField}' name='confirm_field' id='confirm_field' value='1' params='onchange="javascript:changeVisilityConfirmFieldTitle();"' />
 						</@formGroup>
-						<@formGroup labelFor='confirm_field_title' labelKey='#i18n{form.createEntry.labelConfirmFieldTitle}' mandatory=true>
+						<@formGroup labelFor='confirm_field_title' id="confirm_field_title_group" labelKey='#i18n{form.createEntry.labelConfirmFieldTitle}' >
 							<@input type='text' name='confirm_field_title' id='confirm_field_title' maxlength=255 />
 						</@formGroup>
 						<@formGroup>
@@ -68,11 +68,11 @@ function changeVisilityConfirmFieldTitle()
 	{
 		if(document.getElementById("confirm_field").checked)
 		{
-	  		document.getElementById("confirm_field_title_p").style.display = 'block';
+	  		document.getElementById("confirm_field_title_group").style.display = 'block';
 		}
 		else
 		{
-	  		document.getElementById("confirm_field_title_p").style.display = 'none';
+	  		document.getElementById("confirm_field_title_group").style.display = 'none';
 		}
 	} 
   </script>
