@@ -21,7 +21,7 @@
 				</#if>
 				<#if is_active_captcha>
 					<@formGroup helpKey='#i18n{form.createForm.labelActiveCaptchaComment}'>
-						<@checkBox name='active_captcha' id='active_captcha' value=1 checked=getChecked('active_captcha',list_form_param_default_values) labelFor='active_captcha' labelKey='#i18n{form.createForm.labelActiveCaptcha}' />
+						<@checkBox name='active_captcha' id='active_captcha' value='1' checked=getChecked('active_captcha',list_form_param_default_values) labelFor='active_captcha' labelKey='#i18n{form.createForm.labelActiveCaptcha}' />
 					</@formGroup>
 				</#if>
 				<@formGroup helpKey='#i18n{form.createForm.labelActiveRequirementComment}'>

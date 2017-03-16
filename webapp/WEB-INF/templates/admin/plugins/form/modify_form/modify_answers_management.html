@@ -26,13 +26,13 @@
 								<@formGroup labelFor='anonymizeEntries' labelKey='#i18n{form.createForm.labelAnonymizeEntries}'>
 									<#list entry_list as entry>
 										<#if !entry.entryType.group>
-											<@checkBox labelFor='anonymizeEntries_${entry.idEntry}' labelKey=entry.title name='anonymizeEntries' id='anonymizeEntries_${entry.idEntry}' value=entry.idEntry checked=anonymize_entry_list?seq_contains(entry.idEntry) />
+											<@checkBox labelFor='anonymizeEntries_${entry.idEntry}' labelKey=entry.title name='anonymizeEntries' id='anonymizeEntries_${entry.idEntry}' value='${entry.idEntry}' checked=anonymize_entry_list?seq_contains(entry.idEntry) />
 											<#if (entry.fields)?? && 0 < entry.fields?size>
 												<#list entry.fields as field>
 													<#if (field.conditionalQuestions)?? && 0 < field.conditionalQuestions?size>
 														<#list field.conditionalQuestions as child>
 															<#if !child.entryType.group>
-																<@checkBox labelFor='anonymizeEntries_${child.idEntry}' labelKey=child.title name='anonymizeEntries' id='anonymizeEntries_${child.idEntry}' value=child.idEntry checked=anonymize_entry_list?seq_contains(child.idEntry) />
+																<@checkBox labelFor='anonymizeEntries_${child.idEntry}' labelKey=child.title name='anonymizeEntries' id='anonymizeEntries_${child.idEntry}' value='${child.idEntry}' checked=anonymize_entry_list?seq_contains(child.idEntry) />
 															</#if>
 														</#list>
 													</#if>
