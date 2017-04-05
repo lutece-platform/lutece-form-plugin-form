@@ -40,21 +40,21 @@
 						<#else>
 							<#assign checked = false />
 						</#if>
-						<@radioButton name='times_unit' id='times_unit' value=0 checked=checked labelKey='#i18n{form.result.radioButtonDay}' orientation='horizontal' />
+						<@radioButton name='times_unit' id='times_unit' value='0' checked=checked labelKey='#i18n{form.result.radioButtonDay}' orientation='horizontal' />
 						
 						<#if times_unit=="1">
 							<#assign checked = true />
 						<#else>
 							<#assign checked = false />
 						</#if>
-						<@radioButton name='times_unit' id='times_unit' value=1 checked=checked labelKey='#i18n{form.result.radioButtonWeek}' orientation='horizontal' />
+						<@radioButton name='times_unit' id='times_unit' value='1' checked=checked labelKey='#i18n{form.result.radioButtonWeek}' orientation='horizontal' />
 						
 						<#if times_unit=="2">
 							<#assign checked = true />
 						<#else>
 							<#assign checked = false />
 						</#if>
-						<@radioButton name='times_unit' id='times_unit' value=2 checked=checked labelKey='#i18n{form.result.radioButtonMonth}' orientation='horizontal' />
+						<@radioButton name='times_unit' id='times_unit' value='2' checked=checked labelKey='#i18n{form.result.radioButtonMonth}' orientation='horizontal' />
 					</@formGroup>
 					
 					<@formGroup>
