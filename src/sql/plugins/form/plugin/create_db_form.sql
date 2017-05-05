@@ -68,7 +68,7 @@ CREATE TABLE form_graph_type (
 --
 CREATE TABLE form_form_processor (
 	id_form int default 0 NOT NULL,
-	key_processor varchar(255) default NULL,
+	key_processor varchar(255) NOT NULL,
 	PRIMARY KEY (id_form,key_processor)
 );
 
