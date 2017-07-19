@@ -1,55 +1,52 @@
+<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-	<parent>
+    <parent>
         <artifactId>lutece-global-pom</artifactId>
         <groupId>fr.paris.lutece.tools</groupId>
-        <version>3.0.10</version>
+        <version>3.0.11</version>
     </parent>
-
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>fr.paris.lutece.plugins</groupId>
-	<artifactId>plugin-form</artifactId>
-	<packaging>lutece-plugin</packaging>
-	<version>4.1.6-SNAPSHOT</version>
-	<name>Lutece form plugin</name>
-
-	<repositories>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>fr.paris.lutece.plugins</groupId>
+    <artifactId>plugin-form</artifactId>
+    <packaging>lutece-plugin</packaging>
+    <version>4.1.6-SNAPSHOT</version>
+    <name>Lutece form plugin</name>
+    <repositories>
         <repository>
-          <id>luteceSnapshot</id>
-          <name>luteceSnapshot</name>
-          <url>http://dev.lutece.paris.fr/snapshot_repository</url>
-          <snapshots>
-              <enabled>true</enabled>
-          </snapshots>
+            <id>luteceSnapshot</id>
+            <name>luteceSnapshot</name>
+            <url>http://dev.lutece.paris.fr/snapshot_repository</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
         <repository>
-          <id>lutece</id>
-          <name>luteceRepository</name>
-          <url>http://dev.lutece.paris.fr/maven_repository</url>
-          <snapshots>
-              <enabled>false</enabled>
-          </snapshots>
+            <id>lutece</id>
+            <name>luteceRepository</name>
+            <url>http://dev.lutece.paris.fr/maven_repository</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
-
-	<dependencies>
-		<dependency>
-	    	<groupId>fr.paris.lutece</groupId>
-	    	<artifactId>lutece-core</artifactId>
-	    	<version>[6.0.0-SNAPSHOT,)</version>
-	    	<type>lutece-core</type>
-	  	</dependency>
-		<dependency>
-	    	<groupId>fr.paris.lutece.plugins</groupId>
-	    	<artifactId>plugin-genericattributes</artifactId>
-	    	<version>[1.1.2-SNAPSHOT,)</version>
-        	<type>lutece-plugin</type>
-	  	</dependency>
-	  	<dependency>
-    		<groupId>jfree</groupId>
-    		<artifactId>jfreechart</artifactId>
-    		<version>1.0.5</version>
-		</dependency> 
+    <dependencies>
+        <dependency>
+            <groupId>fr.paris.lutece</groupId>
+            <artifactId>lutece-core</artifactId>
+            <version>[6.0.0-SNAPSHOT,)</version>
+            <type>lutece-core</type>
+        </dependency>
+        <dependency>
+            <groupId>fr.paris.lutece.plugins</groupId>
+            <artifactId>plugin-genericattributes</artifactId>
+            <version>[1.1.2-SNAPSHOT,)</version>
+            <type>lutece-plugin</type>
+        </dependency>
+        <dependency>
+            <groupId>jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.5</version>
+        </dependency>
         <!-- Blobstore -->
         <dependency>
             <groupId>fr.paris.lutece.plugins</groupId>
@@ -57,18 +54,15 @@
             <version>[1.0.0-SNAPSHOT,)</version>
             <type>jar</type>
         </dependency>
-        	
-	</dependencies>
-
-	<properties>
-		<componentName>form</componentName>
-		<jiraProjectName>FORM</jiraProjectName>
-		<jiraComponentId>10153</jiraComponentId>
-	</properties>
-
+    </dependencies>
+    <properties>
+        <componentName>form</componentName>
+        <jiraProjectName>FORM</jiraProjectName>
+        <jiraComponentId>10153</jiraComponentId>
+    </properties>
     <scm>
-        <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/directory-form-workflow/plugin-form</connection>
-        <developerConnection>scm:svn:https://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/directory-form-workflow/plugin-form</developerConnection>
-        <url>http://dev.lutece.paris.fr/viewvc/lutece/portal/trunk/plugins/directory-form-workflow/plugin-form</url>
+        <connection>scm:git:https://github.com/lutece-platform/lutece-form-plugin-form.git</connection>
+        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-form-plugin-form.git</developerConnection>
+        <url>https://github.com/lutece-platform/lutece-form-plugin-form.git</url>
     </scm>
 </project>
