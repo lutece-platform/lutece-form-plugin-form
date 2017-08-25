@@ -153,6 +153,7 @@ CREATE TABLE form_form (
 	automatic_cleaning SMALLINT default 0,
 	cleaning_by_removal SMALLINT default 0,
 	nb_days_before_cleaning INT default 0,
+	max_number_response INT default 0,
 	PRIMARY KEY (id_form)
 );
 
