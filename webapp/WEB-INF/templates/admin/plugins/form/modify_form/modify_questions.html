@@ -61,7 +61,7 @@
 										<#if entry.entryType.group>
 											<h5 class="pull-right" ><span class="fa fa-indent"></span></h5>
 										<#else>
-											<@checkBox name='entry_id' id='entry_id_${entry.idEntry}' value='{entry.idEntry!}' title='#i18n{form.modifyForm.select}' />
+											<@checkBox name='entry_id' id='entry_id_${entry.idEntry}' value='${entry.idEntry!}' title='#i18n{form.modifyForm.select}' />
 										</#if>
 									</td>
 									<td>

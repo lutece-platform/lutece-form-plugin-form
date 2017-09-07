@@ -674,6 +674,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         Entry entry;
         List<Entry> listGroup;
         EntryFilter filter;
+        Plugin plugin = getPlugin( );
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = -1;
         int nIdForm = getFormId( );
@@ -683,6 +684,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
             try
             {
                 nIdEntry = Integer.parseInt( strIdEntry );
+                
             }
             catch( NumberFormatException ne )
             {
@@ -699,6 +701,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
 
         _nIdEntry = nIdEntry;
         entry = EntryHome.findByPrimaryKey( nIdEntry );
+        Form form = FormHome.findByPrimaryKey( entry.getIdResource( ), plugin );
 
         // recup group
         filter = new EntryFilter( );
@@ -710,6 +713,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
         Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_ENTRY, entry );
         model.put( MARK_ENTRY_LIST, listGroup );
+        model.put( MARK_FORM, form );
         setPageTitleProperty( EMPTY_STRING );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MOVE_ENTRY, getLocale( ), model );
