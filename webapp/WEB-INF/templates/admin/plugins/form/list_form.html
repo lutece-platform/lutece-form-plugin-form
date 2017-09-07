@@ -1,8 +1,8 @@
 <@formGroup labelFor='id_form' labelKey='#i18n{form.listForm.labelForm}' mandatory=true>
 	<#if id_form?exists>
-		<#asssign formListDefaultValue = id_form />
+		<#assign formListDefaultValue = id_form />
 	<#else>
-		<<#assign formListDefaultValue = -1 />
+		<#assign formListDefaultValue = -1 />
 	</#if>
 	<@select name='id_form' items=form_list default_value=formListDefaultValue />
 </@formGroup>
