@@ -50,7 +50,7 @@
 			<@formGroup>
 				<@checkBox name='mandatory' id='mandatory' value='1' checked=getChecked('mandatory',list_entry_param_default_values) labelFor='mandatory' labelKey='#i18n{form.createEntry.labelMandatory}' />
 			</@formGroup>
-			<@formGroup>
+			<@formGroup labelFor='width' labelKey='#i18n{form.createEntry.labelWidth}' mandatory=true>
 				<@input type='text' name='width' id='width' value=getName('width',list_entry_param_default_values) />
 			</@formGroup>
 			<@formGroup labelFor='height' labelKey='#i18n{form.createEntry.labelHeight}' mandatory=true>
