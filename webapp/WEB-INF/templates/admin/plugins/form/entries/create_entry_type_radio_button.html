@@ -6,7 +6,7 @@
 			<@boxBody>
 				<fieldset>
 					<legend class="sr-only">#i18n{form.createEntry.titleQuestion} : '${form.title}'</legend>
-					<@tform action='jsp/admin/plugins/form/DoCreateEntry.jsp#list'>
+					<@tform action='jsp/admin/plugins/form/DoCreateEntry.jsp'>
 						<input name="id_type" value="${entry.entryType.idType}" type="hidden">
 						<#if entry.fieldDepend?exists>
 							<input name="id_field" value="${entry.fieldDepend.idField}" type="hidden">
