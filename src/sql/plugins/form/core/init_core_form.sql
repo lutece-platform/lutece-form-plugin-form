@@ -58,10 +58,6 @@ INSERT INTO core_user_role (role_key,id_user) VALUES ('form_manager_admin',1);
 INSERT INTO core_user_role (role_key,id_user) VALUES ('form_manager',1);
 INSERT INTO core_user_role (role_key,id_user) VALUES ('form_manager',2);
 
--- add the exemple form in a portlet
-INSERT INTO core_portlet (id_portlet, id_portlet_type, id_page, name, date_update, status, portlet_order, column_no, id_style, accept_alias, date_creation, display_portlet_title) VALUES (94,'FORM_PORTLET',11,'Questionnaire','2009-06-16 12:55:48',0,1,1,1500,1,'2009-06-16 12:55:48',1);
-INSERT INTO form_portlet (id_portlet, id_form) VALUES (94,1);
-
 --
 -- Init  table core_admin_dashboard
 --

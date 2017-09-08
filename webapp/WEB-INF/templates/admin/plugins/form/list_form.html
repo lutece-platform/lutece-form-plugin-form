@@ -4,5 +4,5 @@
 	<#else>
 		<#assign formListDefaultValue = -1 />
 	</#if>
-	<@select name='id_form' items=form_list default_value=formListDefaultValue />
+	<@select name='id_form' items=form_list default_value='${formListDefaultValue!}' />
 </@formGroup>
