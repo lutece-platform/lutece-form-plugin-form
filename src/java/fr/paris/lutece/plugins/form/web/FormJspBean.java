@@ -58,6 +58,7 @@ import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
+import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.validator.IValidator;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
@@ -126,6 +127,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * This class provides the user interface to manage form features ( manage, create, modify, remove)
@@ -273,6 +275,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_TIMES_UNIT = "times_unit";
     private static final String PARAMETER_PROCESSOR_KEY = "processor_key";
     private static final String PARAMETER_IS_SELECTED = "is_selected";
+    private static final String PARAMETER_RESET = "reset";
 
     // other constants
     private static final String EMPTY_STRING = "";
@@ -1305,6 +1308,16 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         form = FormHome.findByPrimaryKey( nIdForm, plugin );
 
+        if ( request.getParameter( PARAMETER_RESET ) != null )
+        {
+        	HttpSession session = request.getSession( );
+            FormUtils.removeResponses( session );
+            FormUtils.removeFormErrors( session );
+            FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
+            
+        	return getJspTestForm( request, nIdForm );
+        }
+        
         if ( form.isActiveRequirement( ) && ( strRequirement == null ) )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_REQUIREMENT_ERROR, AdminMessage.TYPE_STOP );
