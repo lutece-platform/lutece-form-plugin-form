@@ -17,12 +17,12 @@
 						<@input type='textarea' name='comment' id='comment'>${field.comment!}</@input>
 					</@formGroup>
 					<@formGroup labelFor='default_value' labelKey='#i18n{form.createField.labelDefaultValue}'>
-						<#if field.defaultValue><#assign checked = true /></#if>
-						<@checkBox labelFor='default_value' name='default_value' value='1' checked=checked />
+						<#if field.defaultValue><#assign default_checked = true /></#if>
+						<@checkBox labelFor='default_value' name='default_value' value='1' checked=default_checked />
 					</@formGroup>
 					<@formGroup labelFor='no_display_title' labelKey='#i18n{form.createField.labelNoDisplayTitle}'>
-						<#if field.noDisplayTitle><#assign checked = true /></#if>
-						<@checkBox labelFor='no_display_title' name='no_display_title' value='1' checked=checked />
+						<#if field.noDisplayTitle><#assign notitle_checked = true /></#if>
+						<@checkBox labelFor='no_display_title' name='no_display_title' value='1' checked=notitle_checked />
 					</@formGroup>
 					<@formGroup>
 						<@button type='submit' name='save' buttonIcon='check' title='#i18n{form.createForm.buttonSave}' showTitleXs=false size='' />
