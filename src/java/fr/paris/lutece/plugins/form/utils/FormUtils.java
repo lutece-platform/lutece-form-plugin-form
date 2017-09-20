@@ -33,6 +33,35 @@
  */
 package fr.paris.lutece.plugins.form.utils;
 
+import java.awt.Color;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.Month;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.time.Week;
+import org.jfree.data.xy.XYDataset;
+
 import fr.paris.lutece.plugins.form.business.Category;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormFilter;
@@ -77,40 +106,6 @@ import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
-
-import org.apache.commons.lang.StringUtils;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-
-import org.jfree.data.time.Day;
-import org.jfree.data.time.Month;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.time.Week;
-import org.jfree.data.xy.XYDataset;
-
-import java.awt.Color;
-
-import java.sql.Timestamp;
-
-import java.text.DateFormat;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * Utility class for plugin Form
@@ -832,16 +827,28 @@ public final class FormUtils
         if ( request != null )
         {
             Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession( ) );
-
+            List<Response> listResponses = new ArrayList<>( );
+            
             if ( listSubmittedResponses != null )
             {
-                List<Response> listResponses = listSubmittedResponses.get( entry.getIdEntry( ) );
-
-                if ( listResponses != null )
-                {
-                    model.put( MARK_LIST_RESPONSES, listResponses );
-                }
+                listResponses = listSubmittedResponses.get( entry.getIdEntry( ) );
             }
+            else
+            {
+                String strEntryParameter = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+                
+                if ( StringUtils.isNotBlank( strEntryParameter ) )
+                {
+                    EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponses, locale );
+                }
+                
+            }
+            
+            if ( listResponses != null && !listResponses.isEmpty( ) )
+            {
+                model.put( MARK_LIST_RESPONSES, listResponses );
+            }
+            
         }
 
         IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
