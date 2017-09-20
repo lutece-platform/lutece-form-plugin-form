@@ -828,7 +828,7 @@ public final class FormUtils
         {
             Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession( ) );
             List<Response> listResponses = new ArrayList<>( );
-            
+
             if ( listSubmittedResponses != null )
             {
                 listResponses = listSubmittedResponses.get( entry.getIdEntry( ) );
@@ -836,19 +836,19 @@ public final class FormUtils
             else
             {
                 String strEntryParameter = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
-                
+
                 if ( StringUtils.isNotBlank( strEntryParameter ) )
                 {
                     EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponses, locale );
                 }
-                
+
             }
-            
+
             if ( listResponses != null && !listResponses.isEmpty( ) )
             {
                 model.put( MARK_LIST_RESPONSES, listResponses );
             }
-            
+
         }
 
         IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
