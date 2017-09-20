@@ -1310,14 +1310,14 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
 
         if ( request.getParameter( PARAMETER_RESET ) != null )
         {
-        	HttpSession session = request.getSession( );
+            HttpSession session = request.getSession( );
             FormUtils.removeResponses( session );
             FormUtils.removeFormErrors( session );
             FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
-            
-        	return getJspTestForm( request, nIdForm );
+
+            return getJspTestForm( request, nIdForm );
         }
-        
+
         if ( form.isActiveRequirement( ) && ( strRequirement == null ) )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_REQUIREMENT_ERROR, AdminMessage.TYPE_STOP );

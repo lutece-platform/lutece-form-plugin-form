@@ -535,16 +535,16 @@ public class FormApp implements XPageApplication
 
             return null;
         }
-        
+
         ResponseFilter responseFilter = new ResponseFilter( );
         responseFilter.setIdResource( Integer.parseInt( strFormId ) );
 
-        // If  max number of responses is set and reached, then deactivate access to the form
-        if ( ( form.getMaxNumberResponse( ) > 0)  && ( FormSubmitHome.getCountFormSubmit( responseFilter, plugin ) >=  form.getMaxNumberResponse( ) ) )
+        // If max number of responses is set and reached, then deactivate access to the form
+        if ( ( form.getMaxNumberResponse( ) > 0 ) && ( FormSubmitHome.getCountFormSubmit( responseFilter, plugin ) >= form.getMaxNumberResponse( ) ) )
         {
-        	model.put( MARK_MESSAGE_FORM_INACTIVE, form.getUnavailabilityMessage( ) );
+            model.put( MARK_MESSAGE_FORM_INACTIVE, form.getUnavailabilityMessage( ) );
         }
-        
+
         // Check if the session contains all the attributes set by the mandatory EntryTypeSession
         if ( !FormService.getInstance( ).isSessionValid( form, request ) )
         {

@@ -183,7 +183,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
     private static final String PARAMETER_CLEANING_BY_REMOVAL = "cleaningByRemoval";
     private static final String PARAMETER_NB_DAYS_BEFORE_CLEANING = "nb_days_before_cleaning";
     private static final String PARAMETER_WORKGROUP = "workgroup";
-	private static final String PARAMETER_MAX_NUMBER_RESPONSE = "max_number_response";
+    private static final String PARAMETER_MAX_NUMBER_RESPONSE = "max_number_response";
 
     // other constants
     private static final String EMPTY_STRING = "";
@@ -554,7 +554,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         {
             form.setCodeTheme( ThemesService.getGlobalTheme( ) );
         }
-        
+
         Map<String, Object> model = new HashMap<String, Object>( );
 
         model.put( MARK_FORM, form );
@@ -1116,7 +1116,7 @@ public abstract class ModifyFormJspBean extends FormJspBean
         try
         {
             int nMaxNumberResponse = Integer.parseInt( strMaxNumberResponse );
-            form.setMaxNumberResponse( nMaxNumberResponse >= 0 ? nMaxNumberResponse : 0);
+            form.setMaxNumberResponse( nMaxNumberResponse >= 0 ? nMaxNumberResponse : 0 );
         }
         catch( NumberFormatException ne )
         {

@@ -684,7 +684,7 @@ public class FormEntryJspBean extends ModifyFormJspBean
             try
             {
                 nIdEntry = Integer.parseInt( strIdEntry );
-                
+
             }
             catch( NumberFormatException ne )
             {

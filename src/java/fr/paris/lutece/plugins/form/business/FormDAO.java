@@ -186,7 +186,7 @@ public final class FormDAO implements IFormDAO
         daoUtil.setBoolean( nIndex++, form.getAutomaticCleaning( ) );
         daoUtil.setBoolean( nIndex++, form.getCleaningByRemoval( ) );
         daoUtil.setInt( nIndex++, form.getNbDaysBeforeCleaning( ) );
-        daoUtil.setInt(  nIndex++,  form.getMaxNumberResponse( ) );
+        daoUtil.setInt( nIndex++, form.getMaxNumberResponse( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
