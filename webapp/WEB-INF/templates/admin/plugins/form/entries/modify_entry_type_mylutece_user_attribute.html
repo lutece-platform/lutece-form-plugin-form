@@ -24,7 +24,7 @@
 							<#if !attributeValue??>
 								<#assign attributeValue="">
 							</#if>
-							<@select items=entryTypeService.luteceUserAttributesRefList name='mylutece_attribute_name' default_value=attributeValue />
+							<@select items=entryTypeService.getLuteceUserAttributesRefList(locale) name='mylutece_attribute_name' default_value=attributeValue />
 						</@formGroup>
 						<@formGroup labelFor='display_front_office' labelKey='#i18n{form.createEntry.labelDisplayFrontOffice}'>
 							<@checkBox name='display_front_office' id='display_front_office' value='true' checked=entry.confirmField />

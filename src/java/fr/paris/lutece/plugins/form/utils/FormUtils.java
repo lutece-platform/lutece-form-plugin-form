@@ -120,6 +120,8 @@ public final class FormUtils
     public static final String BEAN_FORM_RESPONSE_SERVICE = "form.responseService";
     public static final String BEAN_EXPORT_DAEMON_TYPE_FACTORY = "form.exportTypeFactory";
     public static final String CONSTANT_UNDERSCORE = "_";
+    public static final String CONSTANT_COMMA = ",";
+    public static final String CONSTANT_MYLUTECE_ATTRIBUTE_I18N_SUFFIX = "form.entrytype.myluteceuserattribute.attribute.";
 
     // session
     public static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
@@ -198,6 +200,7 @@ public final class FormUtils
     private static final String PROPERTY_LUTECE_ADMIN_PROD_URL = "lutece.admin.prod.url";
     private static final String PROPERTY_LUTECE_BASE_URL = "lutece.base.url";
     private static final String PROPERTY_LUTECE_PROD_URL = "lutece.prod.url";
+    public static final String PROPERTY_MY_LUTECE_ATTRIBUTES_LIST = "entrytype.myluteceuserattribute.attributes.list";
     private static final String SLASH = "/";
 
     /**

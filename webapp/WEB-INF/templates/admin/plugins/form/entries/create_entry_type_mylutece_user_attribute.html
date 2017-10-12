@@ -22,7 +22,7 @@
 							<@input type='textarea' name='help_message' id='help_message' rows=2></@input>
 						</@formGroup>
 						<@formGroup labelFor='mylutece_attribute_name' labelKey='#i18n{form.createEntry.labelMyLuteceUserAttribute}'>
-							<@select name='mylutece_attribute_name' id='mylutece_attribute_name' default_value='' items=entryTypeService.luteceUserAttributesRefList />
+							<@select name='mylutece_attribute_name' id='mylutece_attribute_name' default_value='' items=entryTypeService.getLuteceUserAttributesRefList( locale ) />
 						</@formGroup>
 						<@formGroup labelFor='mandatory' labelKey='#i18n{form.createEntry.labelMandatory}'>
 							<@checkBox name='mandatory' id='mandatory' value='true' />
