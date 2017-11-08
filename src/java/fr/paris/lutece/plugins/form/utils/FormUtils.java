@@ -51,6 +51,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
@@ -760,14 +761,8 @@ public final class FormUtils
 
         if ( entry.getEntryType( ).getGroup( ) )
         {
-            StringBuffer strGroupStringBuffer = new StringBuffer( );
-
-            for ( Entry entryChild : entry.getChildren( ) )
-            {
-                getHtmlEntry( entryChild.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request );
-            }
-
-            model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
+            // Create the Html for the entry of type Group
+            EntryTypeGroupUtils.getHtmlGroupEntry( request, entry, model, bDisplayFront );
         }
         else
         {
@@ -804,7 +799,7 @@ public final class FormUtils
 
             model.put( MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString( ) );
         }
-
+        
         model.put( MARK_ENTRY, entry );
         model.put( MARK_LOCALE, locale );
 
@@ -829,7 +824,7 @@ public final class FormUtils
             Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession( ) );
             List<Response> listResponses = new ArrayList<>( );
 
-            if ( listSubmittedResponses != null )
+            if ( listSubmittedResponses != null && !EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
             {
                 listResponses = listSubmittedResponses.get( entry.getIdEntry( ) );
             }
@@ -841,11 +836,18 @@ public final class FormUtils
                 {
                     EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponses, locale );
                 }
-
+                
+                // Check if the current entry has a parent and if the parent is of entry type group or not
+                if ( entry != null && entry.getParent( ) != null )
+                {
+                    // Manage the response for an entry belong to an iterable group
+                    EntryTypeGroupUtils.manageIterableGroupResponse( request, entry, listResponses );
+                }
             }
 
+            // The list of response to the model
             if ( listResponses != null && !listResponses.isEmpty( ) )
-            {
+            {                
                 model.put( MARK_LIST_RESPONSES, listResponses );
             }
 
@@ -863,7 +865,7 @@ public final class FormUtils
         template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ), locale, model );
         stringBuffer.append( template.getHtml( ) );
     }
-
+    
     /**
      * Perform in the object formSubmit the responses associates with a entry specify in parameter.<br />
      * Return null if there is no error in the response else return a FormError Object
@@ -903,10 +905,8 @@ public final class FormUtils
 
         if ( entry.getEntryType( ).getGroup( ) )
         {
-            for ( Entry entryChild : entry.getChildren( ) )
-            {
-                listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry( ), plugin, formSubmit, false, bReturnErrors, locale ) );
-            }
+            // Get all the responses for the entry of type group
+            EntryTypeGroupUtils.getResponseGroupEntry( request, listFormErrors, entry, plugin, formSubmit, bReturnErrors, locale );
         }
         else
             if ( !entry.getEntryType( ).getComment( ) )
@@ -915,11 +915,20 @@ public final class FormUtils
 
                 if ( !bResponseNull )
                 {
+                    // Manage errors
                     formError = EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponse, locale );
 
                     if ( formError != null )
                     {
-                        formError.setUrl( getEntryUrl( entry ) );
+                        // If the entry belong to an iterable entry group we must recreate the name of the parameters for the current iteration                        
+                        if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
+                        {                            
+                            formError.setUrl( EntryTypeGroupUtils.getIterableEntryChildUrl( entry, request.getAttribute( FormConstants.ATTRIBUTE_ITERATION_NUMBER ) ) );
+                        }
+                        else
+                        {
+                            formError.setUrl( getEntryUrl( entry ) );
+                        }
                     }
                 }
                 else
@@ -946,6 +955,13 @@ public final class FormUtils
                     }
                 }
 
+                // If the entry belong to an iterable group we will change the id of every entry
+                // of their responses to avoid create grouping on the recap page
+                if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
+                {
+                    EntryTypeGroupUtils.modifyResponseEntryId( request, entry, listResponse );
+                }
+                
                 formSubmit.getListResponse( ).addAll( listResponse );
 
                 if ( entry.getNumberConditionalQuestion( ) != 0 )
@@ -1389,10 +1405,32 @@ public final class FormUtils
                 filter.setIdEntryParent( entryFirstLevel.getIdEntry( ) );
                 filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
-                for ( Entry entryChild : EntryHome.getEntryList( filter ) )
+                entryFirstLevel.setFields( FieldHome.getFieldListByIdEntry( entryFirstLevel.getIdEntry( ) ) );
+                int nNumberOfIterationMax = EntryTypeGroupUtils.getEntryMaxIterationAllowed( entryFirstLevel );
+                if ( nNumberOfIterationMax != NumberUtils.INTEGER_ZERO )
                 {
-                    listEntry.add( entryChild );
-                    addConditionnalsEntry( entryChild, listEntry, plugin );
+                    for( int nCurrentIterationNumber = NumberUtils.INTEGER_ONE; nCurrentIterationNumber <= nNumberOfIterationMax ; nCurrentIterationNumber++ )
+                    {
+                        for ( Entry entryChild : EntryHome.getEntryList( filter ) )
+                        {
+                            // Compute the new id for the entry of the iteration
+                            int nNewIdEntry = EntryTypeGroupUtils.computeIterationId( entryChild.getIdEntry( ), nCurrentIterationNumber );
+                            
+                            listEntry.add( entryChild );
+                            addConditionnalsEntry( entryChild, listEntry, plugin );
+                            
+                            // Change the id of the entry
+                            entryChild.setIdEntry( nNewIdEntry );
+                        }
+                    }
+                }
+                else
+                {
+                    for ( Entry entryChild : EntryHome.getEntryList( filter ) )
+                    {
+                        listEntry.add( entryChild );
+                        addConditionnalsEntry( entryChild, listEntry, plugin );
+                    } 
                 }
             }
             else
@@ -1480,7 +1518,7 @@ public final class FormUtils
 
         return listEntry;
     }
-
+    
     /**
      * Builds a query with filters placed in parameters
      * 

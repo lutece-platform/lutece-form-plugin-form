@@ -33,8 +33,14 @@
  */
 package fr.paris.lutece.plugins.form.service;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.FormSubmitHome;
+import fr.paris.lutece.plugins.form.utils.EntryTypeGroupUtils;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
@@ -43,12 +49,6 @@ import fr.paris.lutece.plugins.genericattributes.business.StatisticEntrySubmit;
 import fr.paris.lutece.plugins.genericattributes.service.file.FileService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Timestamp;
-
-import java.util.List;
 
 /**
  *
@@ -130,6 +130,9 @@ public class ResponseService implements IResponseService
     public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
     {
         List<Response> listResponses = ResponseHome.getResponseList( filter );
+        
+        // Find the Response associated to an iterable entry
+        EntryTypeGroupUtils.completeListResponse( listResponses, filter.getListId( ) );
 
         if ( bGetFileData && ( listResponses != null ) && !listResponses.isEmpty( ) )
         {

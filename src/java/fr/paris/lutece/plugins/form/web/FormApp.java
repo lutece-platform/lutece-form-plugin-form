@@ -33,6 +33,21 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
 import fr.paris.lutece.plugins.form.business.CaptchaFormError;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormFilter;
@@ -52,6 +67,8 @@ import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeNumbering;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeSession;
 import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
+import fr.paris.lutece.plugins.form.utils.EntryTypeGroupUtils;
+import fr.paris.lutece.plugins.form.utils.FormConstants;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
@@ -82,18 +99,6 @@ import fr.paris.lutece.portal.web.xpages.XPageApplication;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.http.SecurityUtil;
 import fr.paris.lutece.util.sql.TransactionManager;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * This class manages Form page.
@@ -310,7 +315,18 @@ public class FormApp implements XPageApplication
                             }
                         }
                         else
-                            if ( request.getParameter( PARAMETER_ID_FORM ) != null )
+                        {
+                            // Retrieve iteration parameters from the request
+                            String strAddIteration = request.getParameter( FormConstants.PARAMETER_ADD_ITERATION );
+                            String strRemoveIteration = request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION );
+                            
+                            // Check if we are in the case of an adding or a removing of an iteration of an entry group
+                            if ( request.getParameter( FormConstants.PARAMETER_ID_ENTRY ) != null && ( strAddIteration != null || strRemoveIteration != null ) )
+                            {
+                                // Get the XPage of the current form
+                                page = manageGroupIteration( request, session, nMode, strRemoveIteration, plugin );
+                            }
+                            else if ( request.getParameter( FormConstants.PARAMETER_ID_FORM ) != null )
                             {
                                 // Reset all responses in session if the user has not submitted any form
                                 // there is a few chances that PARAMETER_SESSION may not be blank but will be overwritten by draft if any
@@ -345,7 +361,7 @@ public class FormApp implements XPageApplication
                                 page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_LIST_FORMS_PATHLABEL, request.getLocale( ) ) );
                                 page.setContent( getFormList( request, session, nMode, plugin ) );
                             }
-
+                        }
         return page;
     }
 
@@ -384,7 +400,7 @@ public class FormApp implements XPageApplication
         if ( formSubmit.getListResponse( ) != null )
         {
             for ( Response response : formSubmit.getListResponse( ) )
-            {
+            {                
                 if ( ( response != null ) && ( response.getEntry( ) != null ) && response.getEntry( ).isUnique( ) )
                 {
                     String strValueEntry = response.getToStringValueResponse( );
@@ -429,6 +445,13 @@ public class FormApp implements XPageApplication
         {
             recap.setBackUrl( AppHTTPSService.getHTTPSUrl( request ) + recap.getBackUrl( ) );
         }
+        
+        // During the validation of the form we will restore all original id of the entries
+        // because all entries belong to an iterable group entry have their identifiers recreated
+        if ( bDoPerformSubmit )
+        {
+            manageFormSubmitResponseOnValidate( formSubmit );
+        }
 
         Map<String, Object> model = new HashMap<String, Object>( );
 
@@ -441,6 +464,40 @@ public class FormApp implements XPageApplication
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_RECAP_FORM_SUBMIT, locale, model );
 
         return template.getHtml( );
+    }
+    
+    /**
+     * Manage the adding or the removing of an iteration group
+     * 
+     * @param request
+     *          The HttpServletRequest
+     * @param session
+     *          The HttpSession
+     * @param nMode
+     *          The mode
+     * @param strRemoveDuplicate
+     *          The iteration group to remove if necessary
+     * @param plugin
+     *          The plugin
+     * @return the XPage associate for the current iteration management
+     * @throws SiteMessageException
+     * @throws UserNotSignedException
+     */
+    private XPage manageGroupIteration( HttpServletRequest request, HttpSession session, int nMode, String strRemoveDuplicate, Plugin plugin ) throws SiteMessageException, UserNotSignedException
+    {
+        // Remove response list and errors list from session
+        FormUtils.removeResponses( session );
+        FormUtils.removeFormErrors( session );
+        
+        // check if the id entry is valid or not
+        if ( NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ID_ENTRY ), NumberUtils.INTEGER_MINUS_ONE ) != NumberUtils.INTEGER_MINUS_ONE )
+        {
+            // Retrieve all parameters values from the request to iterations of the current entry
+            manageEntryTypeGroupIteration( request, strRemoveDuplicate );
+        }
+
+        // Get the XPage of the current form
+        return getForm( request, session, nMode, plugin );
     }
 
     /**
@@ -695,7 +752,10 @@ public class FormApp implements XPageApplication
         if ( !listFormErrors.isEmpty( ) || !bValidateRequirement )
         {
             FormUtils.restoreFormErrors( session, listFormErrors );
-
+            
+            // Add an attribute in the request to tell that there are errors during the validation of the form
+            request.setAttribute( FormConstants.ATTRIBUTE_RETURN_FROM_ERRORS, Boolean.TRUE );
+            
             return getForm( request, session, nMode, plugin );
         }
 
@@ -710,6 +770,10 @@ public class FormApp implements XPageApplication
             FormUtils.removeResponses( session );
             FormUtils.removeFormErrors( session );
             session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
+            
+            // Reset the list of response with the group management to the form
+            List<Response> responseManagedList = EntryTypeGroupUtils.manageResponsesList( formSubmit.getListResponse( ) );
+            formSubmit.setListResponse( responseManagedList );
 
             // convert the value of the object response to string
             for ( Response response : formSubmit.getListResponse( ) )
@@ -763,7 +827,7 @@ public class FormApp implements XPageApplication
 
         return page;
     }
-
+    
     /**
      * Return the form requirement
      * 
@@ -1005,6 +1069,78 @@ public class FormApp implements XPageApplication
             AppLogService.error( e.getMessage( ), e );
 
             return AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_KO );
+        }
+    }
+    
+    /**
+     * Retrieve the parameters associated to all iterations of an entry and set them in the request as attribute
+     * 
+     * @param request
+     *          the HttpServletRequest
+     * @param strRemoveDuplicate
+     *          the iteration to remove
+     */
+    private void manageEntryTypeGroupIteration( HttpServletRequest request, String strRemoveDuplicate )
+    {
+        // Get the current number of iteration for the current entry
+        Boolean bNoSelectionMade = Boolean.TRUE;
+        
+        // Retrieve the list of all parameters name
+        @SuppressWarnings( "unchecked" )
+        List<String> listParameterNames = Collections.list( request.getParameterNames( ) );
+        
+        if ( listParameterNames == null || listParameterNames.isEmpty( ) )
+        {
+            return;
+        }
+            
+        // Retrieve the current number of iteration
+        String strNbCurrentIteration = request.getParameter( String.format( FormConstants.PATTERN_CURRENT_ITERATION, request.getParameter( FormConstants.PARAMETER_ID_ENTRY ) ) );
+        if ( StringUtils.isNotBlank( strNbCurrentIteration ) )
+        {
+            // Retrieve all parameters associated to the iterations of an entry and set them in the request as attribute
+            bNoSelectionMade = EntryTypeGroupUtils.retrieveAllIterationValues( request, listParameterNames, strNbCurrentIteration, strRemoveDuplicate );
+        }
+        
+        // Save in session the fact that no selection has been made
+        if ( bNoSelectionMade.booleanValue( ) )
+        {
+            request.setAttribute( FormConstants.ATTRIBUTE_NO_FILLED_ENTRY_GROUP, bNoSelectionMade.booleanValue( ) );
+        }
+    }
+    
+    /**
+     * Reset the identifiers of all entries foreach response of the formSubmit object
+     * 
+     * @param formSubmit
+     *          The FormSubmir which contains the list of response
+     */
+    private void manageFormSubmitResponseOnValidate( FormSubmit formSubmit )
+    {
+        List<Integer> listIdEntryProcessed = new ArrayList<>( );
+        if ( formSubmit != null && formSubmit.getForm( ) != null && formSubmit.getListResponse( ) != null && !formSubmit.getListResponse( ).isEmpty( ) )
+        {
+            Iterator<Response> iteratorResponse = formSubmit.getListResponse( ).iterator( );
+            while ( iteratorResponse.hasNext( )  )
+            {
+                Response response = iteratorResponse.next( );
+                if ( response != null && response.getEntry( ) != null )
+                {
+                    // Retrieve the original identifier of the entry
+                    int nIdEntryProcessed = EntryTypeGroupUtils.retrieveOriginalIdEntry( response.getEntry( ).getIdEntry( ), formSubmit.getForm( ).getIdForm( ) );
+                    
+                    if ( !listIdEntryProcessed.contains( nIdEntryProcessed ) )
+                    {
+                        response.getEntry( ).setIdEntry( nIdEntryProcessed );
+                        listIdEntryProcessed.add( nIdEntryProcessed );
+                    }
+                    else
+                    {
+                        // We will remove all entry which are already present in the list for display only one graphic on the final page
+                        iteratorResponse.remove( );
+                    }
+                }   
+            }
         }
     }
 

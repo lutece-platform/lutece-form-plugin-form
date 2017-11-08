@@ -1,0 +1,14 @@
+<div id="${iteration_code!''}" class="form-group">	
+
+	<#if remove_iteration_number?? && (remove_iteration_number?number > 1)>
+		<button class="btn btn-sm btn-danger btn-flat pull-right remove_iteration" type="submit" name="remove_iteration" value="${remove_iteration_number}" title="#i18n{form.modifyForm.manageEnter.buttonRemoveIteration}">
+			<input type="hidden" name="id_entry" value="${id_entry}"/>
+			<i class="fa fa-remove" aria-hidden="true"></i>
+			<span class="sr-only">#i18n{form.modifyForm.manageEnter.buttonRemoveIteration}</span>
+		</button>
+	</#if>
+	
+	<input name="remove_iteration_number" type="hidden" value="${remove_iteration_number!''}" />
+	
+	${iteration_children!''}
+</div>
