@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.form.service.entrytype;
 
+import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -44,6 +45,8 @@ import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
 import org.apache.commons.lang.StringUtils;
@@ -172,95 +175,36 @@ public class EntryTypeMyLuteceUserAttribute extends AbstractEntryTypeMyLuteceUse
     /**
      * Get a reference list with every lutece user attributes
      * 
+     * @param strLangage the langage of admin user
      * @return The reference list with every user attributes
      */
-    public ReferenceList getLuteceUserAttributesRefList( )
+    public ReferenceList getLuteceUserAttributesRefList( String strLangage )
     {
         if ( _refListUserAttributes != null )
         {
             return _refListUserAttributes;
         }
 
-        ReferenceList referenceList = new fr.paris.lutece.util.ReferenceList( );
-
-        referenceList.addItem( LuteceUser.BDATE, LuteceUser.BDATE );
-        referenceList.addItem( LuteceUser.GENDER, LuteceUser.GENDER );
-        referenceList.addItem( LuteceUser.EMPLOYER, LuteceUser.EMPLOYER );
-        referenceList.addItem( LuteceUser.DEPARTMENT, LuteceUser.DEPARTMENT );
-        referenceList.addItem( LuteceUser.JOBTITLE, LuteceUser.JOBTITLE );
-        referenceList.addItem( LuteceUser.PREFIX, LuteceUser.PREFIX );
-        referenceList.addItem( LuteceUser.DATE_LAST_LOGIN, LuteceUser.DATE_LAST_LOGIN );
-        referenceList.addItem( LuteceUser.NAME_GIVEN, LuteceUser.NAME_GIVEN );
-        referenceList.addItem( LuteceUser.NAME_FAMILY, LuteceUser.NAME_FAMILY );
-        referenceList.addItem( LuteceUser.NAME_MIDDLE, LuteceUser.NAME_MIDDLE );
-        referenceList.addItem( LuteceUser.NAME_SUFFIX, LuteceUser.NAME_SUFFIX );
-        referenceList.addItem( LuteceUser.NAME_NICKNAME, LuteceUser.NAME_NICKNAME );
-        referenceList.addItem( LuteceUser.NAME_CIVILITY, LuteceUser.NAME_CIVILITY );
-
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_NAME, LuteceUser.HOME_INFO_POSTAL_NAME );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_STREET, LuteceUser.HOME_INFO_POSTAL_STREET );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_STREET_NUMBER, LuteceUser.HOME_INFO_POSTAL_STREET_NUMBER );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_STREET_SUFFIX, LuteceUser.HOME_INFO_POSTAL_STREET_SUFFIX );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_STREET_NAME, LuteceUser.HOME_INFO_POSTAL_STREET_NAME );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_STREET_TYPE, LuteceUser.HOME_INFO_POSTAL_STREET_NAME );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_STREET_URBAN_DISTRICT, LuteceUser.HOME_INFO_POSTAL_STREET_URBAN_DISTRICT );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_CITY, LuteceUser.HOME_INFO_POSTAL_CITY );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_STATEPROV, LuteceUser.HOME_INFO_POSTAL_STATEPROV );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_POSTALCODE, LuteceUser.HOME_INFO_POSTAL_POSTALCODE );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_COUNTRY, LuteceUser.HOME_INFO_POSTAL_COUNTRY );
-        referenceList.addItem( LuteceUser.HOME_INFO_POSTAL_ORGANIZATION, LuteceUser.HOME_INFO_POSTAL_ORGANIZATION );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_TELEPHONE_INTCODE, LuteceUser.HOME_INFO_TELECOM_TELEPHONE_INTCODE );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_TELEPHONE_LOCCODE, LuteceUser.HOME_INFO_TELECOM_TELEPHONE_LOCCODE );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_TELEPHONE_NUMBER, LuteceUser.HOME_INFO_TELECOM_TELEPHONE_NUMBER );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_TELEPHONE_EXT, LuteceUser.HOME_INFO_TELECOM_TELEPHONE_EXT );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_TELEPHONE_COMMENT, LuteceUser.HOME_INFO_TELECOM_TELEPHONE_COMMENT );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_FAX_INT, LuteceUser.HOME_INFO_TELECOM_FAX_INT );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_FAX_LOCCODE, LuteceUser.HOME_INFO_TELECOM_FAX_LOCCODE );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_FAX_NUMBER, LuteceUser.HOME_INFO_TELECOM_FAX_NUMBER );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_FAX_EXT, LuteceUser.HOME_INFO_TELECOM_FAX_EXT );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_FAX_COMMENT, LuteceUser.HOME_INFO_TELECOM_FAX_COMMENT );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_MOBILE_INTCODE, LuteceUser.HOME_INFO_TELECOM_MOBILE_INTCODE );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_MOBILE_LOCCODE, LuteceUser.HOME_INFO_TELECOM_MOBILE_LOCCODE );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_MOBILE_NUMBER, LuteceUser.HOME_INFO_TELECOM_MOBILE_NUMBER );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_MOBILE_EXT, LuteceUser.HOME_INFO_TELECOM_MOBILE_EXT );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_MOBILE_COMMENT, LuteceUser.HOME_INFO_TELECOM_MOBILE_COMMENT );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_PAGER_INTCODE, LuteceUser.HOME_INFO_TELECOM_PAGER_INTCODE );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_PAGER_LOCCODE, LuteceUser.HOME_INFO_TELECOM_PAGER_LOCCODE );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_PAGER_NUMBER, LuteceUser.HOME_INFO_TELECOM_PAGER_NUMBER );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_PAGER_EXT, LuteceUser.HOME_INFO_TELECOM_PAGER_EXT );
-        referenceList.addItem( LuteceUser.HOME_INFO_TELECOM_PAGER_COMMENT, LuteceUser.HOME_INFO_TELECOM_PAGER_COMMENT );
-        referenceList.addItem( LuteceUser.HOME_INFO_ONLINE_EMAIL, LuteceUser.HOME_INFO_ONLINE_EMAIL );
-        referenceList.addItem( LuteceUser.HOME_INFO_ONLINE_URI, LuteceUser.HOME_INFO_ONLINE_URI );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_POSTAL_NAME, LuteceUser.BUSINESS_INFO_POSTAL_NAME );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_POSTAL_STREET, LuteceUser.BUSINESS_INFO_POSTAL_STREET );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_POSTAL_CITY, LuteceUser.BUSINESS_INFO_POSTAL_CITY );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_POSTAL_STATEPROV, LuteceUser.BUSINESS_INFO_POSTAL_STATEPROV );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_POSTAL_POSTALCODE, LuteceUser.BUSINESS_INFO_POSTAL_POSTALCODE );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_POSTAL_COUNTRY, LuteceUser.BUSINESS_INFO_POSTAL_COUNTRY );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_POSTAL_ORGANIZATION, LuteceUser.BUSINESS_INFO_POSTAL_ORGANIZATION );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_TELEPHONE_INTCODE, LuteceUser.BUSINESS_INFO_TELECOM_TELEPHONE_INTCODE );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_TELEPHONE_LOCCODE, LuteceUser.BUSINESS_INFO_TELECOM_TELEPHONE_LOCCODE );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_TELEPHONE_NUMBER, LuteceUser.BUSINESS_INFO_TELECOM_TELEPHONE_NUMBER );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_TELEPHONE_EXT, LuteceUser.BUSINESS_INFO_TELECOM_TELEPHONE_EXT );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_TELEPHONE_COMMENT, LuteceUser.BUSINESS_INFO_TELECOM_TELEPHONE_COMMENT );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_FAX_INTCODE, LuteceUser.BUSINESS_INFO_TELECOM_FAX_INTCODE );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_FAX_LOCCODE, LuteceUser.BUSINESS_INFO_TELECOM_FAX_LOCCODE );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_FAX_NUMBER, LuteceUser.BUSINESS_INFO_TELECOM_FAX_NUMBER );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_FAX_EXT, LuteceUser.BUSINESS_INFO_TELECOM_FAX_EXT );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_FAX_COMMENT, LuteceUser.BUSINESS_INFO_TELECOM_FAX_COMMENT );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_MOBILE_INTCODE, LuteceUser.BUSINESS_INFO_TELECOM_MOBILE_INTCODE );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_MOBILE_LOCCODE, LuteceUser.BUSINESS_INFO_TELECOM_MOBILE_LOCCODE );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_MOBILE_NUMBER, LuteceUser.BUSINESS_INFO_TELECOM_MOBILE_NUMBER );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_MOBILE_EXT, LuteceUser.BUSINESS_INFO_TELECOM_MOBILE_EXT );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_MOBILE_COMMENT, LuteceUser.BUSINESS_INFO_TELECOM_MOBILE_COMMENT );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_PAGER_INTCODE, LuteceUser.BUSINESS_INFO_TELECOM_PAGER_INTCODE );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_PAGER_LOCCODE, LuteceUser.BUSINESS_INFO_TELECOM_PAGER_LOCCODE );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_PAGER_NUMBER, LuteceUser.BUSINESS_INFO_TELECOM_PAGER_NUMBER );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_PAGER_EXT, LuteceUser.BUSINESS_INFO_TELECOM_PAGER_EXT );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_TELECOM_PAGER_COMMENT, LuteceUser.BUSINESS_INFO_TELECOM_PAGER_COMMENT );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL, LuteceUser.BUSINESS_INFO_ONLINE_EMAIL );
-        referenceList.addItem( LuteceUser.BUSINESS_INFO_ONLINE_URI, LuteceUser.BUSINESS_INFO_ONLINE_URI );
-
+        ReferenceList referenceList = new ReferenceList( );
+        
+        String strAttributesList = AppPropertiesService.getProperty( FormUtils.PROPERTY_MY_LUTECE_ATTRIBUTES_LIST );
+        String[] tabAttributes = StringUtils.split( strAttributesList, FormUtils.CONSTANT_COMMA );
+        for ( String strAttribute : tabAttributes )
+        {
+            ReferenceItem item = new ReferenceItem();
+            
+            //First set the code
+            item.setCode( strAttribute );
+            
+            //Then construct the item
+            StringBuilder myLuteceAttribute18nKey = new StringBuilder();
+            myLuteceAttribute18nKey.append( FormUtils.CONSTANT_MYLUTECE_ATTRIBUTE_I18N_SUFFIX );
+            myLuteceAttribute18nKey.append( strAttribute );
+            item.setName( I18nService.getLocalizedString( myLuteceAttribute18nKey.toString( ), Locale.forLanguageTag( strLangage ) ) );
+            
+            referenceList.add( item );
+        }
+        
         // We save the reference list to avoid its generation each time this method is called
         _refListUserAttributes = referenceList;
 
