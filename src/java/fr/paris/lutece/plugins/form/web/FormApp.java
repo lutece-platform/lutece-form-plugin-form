@@ -107,25 +107,17 @@ import fr.paris.lutece.util.sql.TransactionManager;
 public class FormApp implements XPageApplication
 {
     /**
-     * Parameter 'id_form'
-     */
-    public static final String PARAMETER_ID_FORM = "id_form";
-
-    /**
      * /** Serial version UID
      */
     private static final long serialVersionUID = -1385222847493418480L;
 
     // markers
     private static final String MARK_RECAP = "recap";
-    private static final String MARK_FORM_SUBMIT = "formSubmit";
     private static final String MARK_REQUIREMENT = "requirement";
     private static final String MARK_VALIDATE_RECAP = "validate_recap";
     private static final String MARK_LIST_FORMS = "forms_list";
     private static final String MARK_FORM_HTML = "form_html";
-    private static final String MARK_FORM = "form";
     private static final String MARK_MESSAGE_FORM_INACTIVE = "form_inactive";
-    private static final String MARK_URL_ACTION = "url_action";
     private static final String MARK_ENTRY_TYPE_SESSION = "entry_type_session";
     private static final String MARK_ENTRY_TYPE_NUMBERING = "entry_type_numbering";
     private static final String MARK_IS_DRAFT_SAVED = "is_draft_saved";
@@ -146,6 +138,10 @@ public class FormApp implements XPageApplication
     private static final String PROPERTY_XPAGE_PAGETITLE = "form.xpage.pagetitle";
     private static final String PROPERTY_XPAGE_PATHLABEL = "form.xpage.pathlabel";
     private static final String PROPERTY_SESSION_INVALIDATE_URL_RETURN = "form.session.invalidate.urlReturn";
+    private static final String PROPERTY_CLEAN_FORM_ANSWERS_KEY = "form.cleanFormAnswers.key";
+    private static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_UNAUTHORIZED = "form.cleanFormAnswers.returnCode.unauthorized";
+    private static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_OK = "form.cleanFormAnswers.returnCode.ok";
+    private static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_KO = "form.cleanFormAnswers.returnCode.ko";
 
     // request parameters
     private static final String PARAMETER_FORM_SUBMIT = "form_submit";
@@ -168,12 +164,10 @@ public class FormApp implements XPageApplication
     private static final String MESSAGE_ERROR_FORM_INACTIVE = "form.message.errorFormInactive";
     private static final String MESSAGE_SESSION_LOST = "form.message.session.lost";
     private static final String MESSAGE_UNIQUE_FIELD = "form.message.errorUniqueField";
-    private static final String EMPTY_STRING = "";
 
     // Urls
     private static final String JSP_DO_SUBMIT_FORM = "jsp/site/Portal.jsp?page=form&id_form=";
     private static final String JSP_PAGE_FORM = "jsp/site/Portal.jsp?page=form";
-    private static final String MARK_WEBAPP_URL = "webapp_url";
 
     // Misc
     private static final String REGEX_ID = "^[\\d]+$";
@@ -204,10 +198,10 @@ public class FormApp implements XPageApplication
         HttpSession session = request.getSession( );
 
         // we find the required form
-        String strIdForm = request.getParameter( PARAMETER_ID_FORM );
+        String strIdForm = request.getParameter( FormConstants.PARAMETER_ID_FORM );
         int nIdForm = -1;
 
-        if ( ( strIdForm != null ) && !strIdForm.equals( EMPTY_STRING ) )
+        if ( ( strIdForm != null ) && !strIdForm.equals( StringUtils.EMPTY ) )
         {
             try
             {
@@ -263,7 +257,7 @@ public class FormApp implements XPageApplication
                 page.setContent( getRequirement( request, nMode, plugin ) );
             }
             else
-                if ( ( request.getParameter( PARAMETER_SAVE_DRAFT ) != null ) && ( request.getParameter( PARAMETER_ID_FORM ) != null ) )
+                if ( ( request.getParameter( PARAMETER_SAVE_DRAFT ) != null ) && ( request.getParameter( FormConstants.PARAMETER_ID_FORM ) != null ) )
                 {
                     // the formsubmit may no be reused
                     FormSubmit formSubmit = new FormSubmit( );
@@ -286,7 +280,7 @@ public class FormApp implements XPageApplication
                     }
                     else
                         if ( ( ( request.getParameter( PARAMETER_SAVE ) != null ) || ( strUploadAction != null ) )
-                                && ( request.getParameter( PARAMETER_ID_FORM ) != null ) )
+                                && ( request.getParameter( FormConstants.PARAMETER_ID_FORM ) != null ) )
                         {
                             page = getRecap( request, session, nMode, plugin );
 
@@ -417,7 +411,7 @@ public class FormApp implements XPageApplication
                             String strSubmittedResponse = EntryTypeServiceManager.getEntryTypeService( submittedResponse.getEntry( ) )
                                     .getResponseValueForRecap( submittedResponse.getEntry( ), request, submittedResponse, locale );
 
-                            if ( !strValueEntry.equals( EMPTY_STRING ) && ( strSubmittedResponse != null ) && !strSubmittedResponse.equals( EMPTY_STRING )
+                            if ( !strValueEntry.equals( StringUtils.EMPTY ) && ( strSubmittedResponse != null ) && !strSubmittedResponse.equals( StringUtils.EMPTY )
                                     && strValueEntry.equalsIgnoreCase( strSubmittedResponse ) )
                             {
                                 Object [ ] tabRequiredFields = {
@@ -456,7 +450,7 @@ public class FormApp implements XPageApplication
         Map<String, Object> model = new HashMap<String, Object>( );
 
         model.put( MARK_RECAP, recap );
-        model.put( MARK_FORM_SUBMIT, formSubmit );
+        model.put( FormConstants.MARK_FORM_SUBMIT, formSubmit );
         model.put( MARK_ENTRY_TYPE_SESSION, getEntryTypeService( ).getEntryType( EntryTypeSession.BEAN_NAME ) );
         model.put( MARK_ENTRY_TYPE_NUMBERING, getEntryTypeService( ).getEntryType( EntryTypeNumbering.BEAN_NAME ) );
 
@@ -577,7 +571,7 @@ public class FormApp implements XPageApplication
     {
         XPage page = new XPage( );
         Map<String, Object> model = new HashMap<String, Object>( );
-        String strFormId = request.getParameter( PARAMETER_ID_FORM );
+        String strFormId = request.getParameter( FormConstants.PARAMETER_ID_FORM );
 
         if ( !strFormId.matches( REGEX_ID ) )
         {
@@ -638,7 +632,7 @@ public class FormApp implements XPageApplication
             }
 
             model.put( MARK_FORM_HTML, FormUtils.getHtmlForm( form, strUrlAction + form.getIdForm( ), request.getLocale( ), true, request ) );
-            model.put( MARK_FORM, form );
+            model.put( FormConstants.MARK_FORM, form );
         }
 
         // The draft is saved either by clicking on "save" or by clicking on "validate"
@@ -646,7 +640,7 @@ public class FormApp implements XPageApplication
 
         if ( FormDraftBackupService.isDraftSupported( ) )
         {
-            bIsDraftSaved = ( request.getParameter( PARAMETER_ID_FORM ) != null )
+            bIsDraftSaved = ( request.getParameter( FormConstants.PARAMETER_ID_FORM ) != null )
                     && ( ( request.getParameter( PARAMETER_SAVE ) != null ) || ( request.getParameter( PARAMETER_SAVE_DRAFT ) != null ) );
         }
 
@@ -684,9 +678,9 @@ public class FormApp implements XPageApplication
         int nIdForm = -1;
         Map<String, Object> model = new HashMap<String, Object>( );
         Locale locale = request.getLocale( );
-        String strIdForm = request.getParameter( PARAMETER_ID_FORM );
+        String strIdForm = request.getParameter( FormConstants.PARAMETER_ID_FORM );
 
-        if ( ( strIdForm != null ) && !strIdForm.equals( EMPTY_STRING ) )
+        if ( ( strIdForm != null ) && !strIdForm.equals( StringUtils.EMPTY ) )
         {
             try
             {
@@ -800,7 +794,7 @@ public class FormApp implements XPageApplication
         }
 
         model.put( MARK_RECAP, recap );
-        model.put( MARK_FORM_SUBMIT, formSubmit );
+        model.put( FormConstants.MARK_FORM_SUBMIT, formSubmit );
         model.put( MARK_ENTRY_TYPE_SESSION, getEntryTypeService( ).getEntryType( EntryTypeSession.BEAN_NAME ) );
         model.put( MARK_ENTRY_TYPE_NUMBERING, getEntryTypeService( ).getEntryType( EntryTypeNumbering.BEAN_NAME ) );
 
@@ -815,7 +809,7 @@ public class FormApp implements XPageApplication
             strActionUrl = JSP_PAGE_FORM;
         }
 
-        model.put( MARK_URL_ACTION, strActionUrl );
+        model.put( FormConstants.MARK_URL_ACTION, strActionUrl );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_RECAP_FORM_SUBMIT, locale, model );
 
@@ -846,9 +840,9 @@ public class FormApp implements XPageApplication
         int nIdForm = -1;
         Map<String, Object> model = new HashMap<String, Object>( );
         Locale locale = request.getLocale( );
-        String strIdForm = request.getParameter( PARAMETER_ID_FORM );
+        String strIdForm = request.getParameter( FormConstants.PARAMETER_ID_FORM );
 
-        if ( ( strIdForm != null ) && !strIdForm.equals( EMPTY_STRING ) )
+        if ( ( strIdForm != null ) && !strIdForm.equals( StringUtils.EMPTY ) )
         {
             try
             {
@@ -943,13 +937,13 @@ public class FormApp implements XPageApplication
         // has not already answer to the form before submitting the response
         if ( form.isLimitNumberResponse( ) )
         {
-            if ( session.getAttribute( PARAMETER_ID_FORM + formSubmit.getForm( ).getIdForm( ) ) != null )
+            if ( session.getAttribute( FormConstants.PARAMETER_ID_FORM + formSubmit.getForm( ).getIdForm( ) ) != null )
             {
                 SiteMessageService.setMessage( request, MESSAGE_ALREADY_SUBMIT_ERROR, SiteMessage.TYPE_STOP );
             }
             else
             {
-                session.setAttribute( PARAMETER_ID_FORM + formSubmit.getForm( ).getIdForm( ), PARAMETER_VOTED );
+                session.setAttribute( FormConstants.PARAMETER_ID_FORM + formSubmit.getForm( ).getIdForm( ), PARAMETER_VOTED );
             }
         }
 
@@ -1043,17 +1037,17 @@ public class FormApp implements XPageApplication
     {
         try
         {
-            String strKey = request.getParameter( FormUtils.PARAMETER_KEY );
-            String strPrivateKey = AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_KEY );
+            String strKey = request.getParameter( FormConstants.PARAMETER_KEY );
+            String strPrivateKey = AppPropertiesService.getProperty( PROPERTY_CLEAN_FORM_ANSWERS_KEY );
 
             if ( ( strPrivateKey != null ) && StringUtils.isNotEmpty( strPrivateKey ) && !StringUtils.equals( strKey, strPrivateKey ) )
             {
                 AppLogService.error( "Illegal attempt to clean form responses : " + SecurityUtil.getRealIp( request ) );
 
-                return AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_UNAUTHORIZED );
+                return AppPropertiesService.getProperty( PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_UNAUTHORIZED );
             }
 
-            String strIdForm = request.getParameter( PARAMETER_ID_FORM );
+            String strIdForm = request.getParameter( FormConstants.PARAMETER_ID_FORM );
 
             if ( ( strIdForm != null ) && StringUtils.isNumeric( strIdForm ) )
             {
@@ -1062,13 +1056,13 @@ public class FormApp implements XPageApplication
                 FormService.getInstance( ).cleanFormResponses( form );
             }
 
-            return AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_OK );
+            return AppPropertiesService.getProperty( PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_OK );
         }
         catch( Exception e )
         {
             AppLogService.error( e.getMessage( ), e );
 
-            return AppPropertiesService.getProperty( FormUtils.PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_KO );
+            return AppPropertiesService.getProperty( PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_KO );
         }
     }
     

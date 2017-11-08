@@ -113,38 +113,22 @@ import fr.paris.lutece.util.xml.XmlUtil;
  */
 public final class FormUtils
 {
-    // other constants
-    public static final String CONSTANT_GROUP_BY_DAY = "0";
-    public static final String CONSTANT_GROUP_BY_WEEK = "1";
-    public static final String CONSTANT_GROUP_BY_MONTH = "2";
+    // Bean
     public static final String BEAN_ENTRY_TYPE_SERVICE = "form.entryTypeService";
     public static final String BEAN_FORM_RESPONSE_SERVICE = "form.responseService";
     public static final String BEAN_EXPORT_DAEMON_TYPE_FACTORY = "form.exportTypeFactory";
-    public static final String CONSTANT_UNDERSCORE = "_";
 
-    // session
-    public static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
+    // Session
+    private static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";
     public static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
-    public static final String SESSION_FORM_ERRORS = "form_errors";
 
-    // parameters
-    public static final String PARAMETER_ID_ENTRY = "id_entry";
-    public static final String PARAMETER_KEY = "key";
-    public static final String PROPERTY_CLEAN_FORM_ANSWERS_KEY = "form.cleanFormAnswers.key";
-    public static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_UNAUTHORIZED = "form.cleanFormAnswers.returnCode.unauthorized";
-    public static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_OK = "form.cleanFormAnswers.returnCode.ok";
-    public static final String PROPERTY_CLEAN_FORM_ANSWERS_RETURN_CODE_KO = "form.cleanFormAnswers.returnCode.ko";
-    private static final String PARAMETER_ID_FORM = "id_form";
-    private static final String PREFIX_ATTRIBUTE = "attribute";
+    // Parameters
+    private static final String PARAMETER_ID_ENTRY_TYPE = "id_type";
 
-    // marks
+    // Marks
     private static final String MARK_LOCALE = "locale";
-    private static final String MARK_URL_ACTION = "url_action";
     private static final String MARK_ENTRY = "entry";
     private static final String MARK_FIELD = "field";
-    private static final String MARK_STR_LIST_CHILDREN = "str_list_entry_children";
-    private static final String MARK_FORM = "form";
-    private static final String MARK_FORM_SUBMIT = "formSubmit";
     private static final String MARK_JCAPTCHA = "jcaptcha";
     private static final String MARK_STR_ENTRY = "str_entry";
     private static final String MARK_CATEGORY_LIST = "category_list";
@@ -155,15 +139,8 @@ public final class FormUtils
     private static final String MARK_UPLOAD_HANDLER = "uploadHandler";
     private static final String MARK_WEBAPP_URL = "webapp_url";
 
-    // Parameters
-    private static final String PARAMETER_ID_ENTRY_TYPE = "id_type";
-
     // Name of the JCaptcha plugin
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
-
-    // Constants
-    private static final String CONSTANT_WHERE = " WHERE ";
-    private static final String CONSTANT_AND = " AND ";
 
     // Xml Tags
     private static final String TAG_FORM = "form";
@@ -184,13 +161,13 @@ public final class FormUtils
     private static final String TAG_FORM_ENTRY_ID = "form-entry-id";
     private static final String TAG_FORM_ENTRY_TITLE = "form-entry-title";
 
-    // TEMPLATE
+    // Templates
     private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "skin/plugins/form/html_code_div_conditional_entry.html";
     private static final String TEMPLATE_HTML_CODE_FORM = "skin/plugins/form/html_code_form.html";
     private static final String TEMPLATE_NOTIFICATION_MAIL_END_DISPONIBILITY = "admin/plugins/form/notification_mail_end_disponibility.html";
     private static final String TEMPLATE_NOTIFICATION_MAIL_FORM_SUBMIT = "admin/plugins/form/notification_mail_form_submit.html";
 
-    // property
+    // Properties
     private static final String PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SUBJECT = "form.notificationMailEndDisponibility.subject";
     private static final String PROPERTY_NOTIFICATION_MAIL_END_DISPONIBILITY_SENDER_NAME = "form.notificationMailEndDisponibility.senderName";
     private static final String PROPERTY_NOTIFICATION_MAIL_FORM_SUBMIT_SUBJECT = "form.notificationMailFormSubmit.subject";
@@ -199,8 +176,13 @@ public final class FormUtils
     private static final String PROPERTY_LUTECE_ADMIN_PROD_URL = "lutece.admin.prod.url";
     private static final String PROPERTY_LUTECE_BASE_URL = "lutece.base.url";
     private static final String PROPERTY_LUTECE_PROD_URL = "lutece.prod.url";
-    private static final String SLASH = "/";
-
+    
+    // Constants
+    public static final String CONSTANT_UNDERSCORE = "_";
+    public static final String CONSTANT_GROUP_BY_DAY = "0";
+    public static final String CONSTANT_GROUP_BY_WEEK = "1";
+    public static final String CONSTANT_GROUP_BY_MONTH = "2";
+    
     /**
      * FormUtils
      *
@@ -227,7 +209,7 @@ public final class FormUtils
 
             Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( form.getIdMailingList( ) );
             Map<String, Object> model = new HashMap<String, Object>( );
-            model.put( MARK_FORM, form );
+            model.put( FormConstants.MARK_FORM, form );
 
             HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_MAIL_END_DISPONIBILITY, locale, model );
 
@@ -256,8 +238,8 @@ public final class FormUtils
     {
         Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( formSubmit.getForm( ).getIdMailingList( ) );
         Map<String, Object> model = new HashMap<String, Object>( );
-        model.put( MARK_FORM, formSubmit.getForm( ) );
-        model.put( MARK_FORM_SUBMIT, formSubmit );
+        model.put( FormConstants.MARK_FORM, formSubmit.getForm( ) );
+        model.put( FormConstants.MARK_FORM_SUBMIT, formSubmit );
         sendNotificationMailFormSubmit( model, listRecipients, locale );
     }
 
@@ -426,12 +408,12 @@ public final class FormUtils
     {
         int nTimesUnit = Calendar.DAY_OF_MONTH;
 
-        if ( strTimesUnit.equals( FormUtils.CONSTANT_GROUP_BY_WEEK ) )
+        if ( strTimesUnit.equals( CONSTANT_GROUP_BY_WEEK ) )
         {
             nTimesUnit = Calendar.WEEK_OF_MONTH;
         }
         else
-            if ( strTimesUnit.equals( FormUtils.CONSTANT_GROUP_BY_MONTH ) )
+            if ( strTimesUnit.equals( CONSTANT_GROUP_BY_MONTH ) )
             {
                 nTimesUnit = Calendar.MONTH;
             }
@@ -656,8 +638,8 @@ public final class FormUtils
         }
 
         model.put( MARK_CATEGORY_LIST, refCategoryList );
-        model.put( MARK_FORM, form );
-        model.put( MARK_URL_ACTION, strUrlAction );
+        model.put( FormConstants.MARK_FORM, form );
+        model.put( FormConstants.MARK_URL_ACTION, strUrlAction );
         model.put( MARK_STR_ENTRY, strBuffer.toString( ) );
         model.put( MARK_LOCALE, locale );
 
@@ -790,14 +772,14 @@ public final class FormUtils
                         getHtmlEntry( entryConditional.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request );
                     }
 
-                    model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
+                    model.put( FormConstants.MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
                     model.put( MARK_FIELD, field );
                     template = AppTemplateService.getTemplate( TEMPLATE_DIV_CONDITIONAL_ENTRY, locale, model );
                     strConditionalQuestionStringBuffer.append( template.getHtml( ) );
                 }
             }
 
-            model.put( MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString( ) );
+            model.put( FormConstants.MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString( ) );
         }
         
         model.put( MARK_ENTRY, entry );
@@ -830,7 +812,7 @@ public final class FormUtils
             }
             else
             {
-                String strEntryParameter = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+                String strEntryParameter = request.getParameter( FormConstants.PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
 
                 if ( StringUtils.isNotBlank( strEntryParameter ) )
                 {
@@ -996,8 +978,8 @@ public final class FormUtils
 
         if ( ( entry != null ) && ( entry.getIdResource( ) > 0 ) )
         {
-            url.addParameter( PARAMETER_ID_FORM, entry.getIdResource( ) );
-            url.setAnchor( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+            url.addParameter( FormConstants.PARAMETER_ID_FORM, entry.getIdResource( ) );
+            url.setAnchor( FormConstants.PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         }
 
         return url.getUrl( );
@@ -1543,14 +1525,14 @@ public final class FormUtils
         {
             if ( ++nCount == 1 )
             {
-                strBuffer.append( CONSTANT_WHERE );
+                strBuffer.append( FormConstants.CONSTANT_WHERE );
             }
 
             strBuffer.append( strFilter );
 
             if ( nCount != listStrFilter.size( ) )
             {
-                strBuffer.append( CONSTANT_AND );
+                strBuffer.append( FormConstants.CONSTANT_AND );
             }
         }
 
@@ -1700,7 +1682,7 @@ public final class FormUtils
      */
     public static void restoreFormErrors( HttpSession session, List<GenericAttributeError> listFormErrors )
     {
-        session.setAttribute( SESSION_FORM_ERRORS, listFormErrors );
+        session.setAttribute( FormConstants.SESSION_FORM_ERRORS, listFormErrors );
     }
 
     /**
@@ -1711,7 +1693,7 @@ public final class FormUtils
      */
     public static void removeFormErrors( HttpSession session )
     {
-        session.removeAttribute( SESSION_FORM_ERRORS );
+        session.removeAttribute( FormConstants.SESSION_FORM_ERRORS );
     }
 
     /**
@@ -1723,7 +1705,7 @@ public final class FormUtils
      */
     public static List<GenericAttributeError> getFormErrors( HttpSession session )
     {
-        return (List<GenericAttributeError>) session.getAttribute( SESSION_FORM_ERRORS );
+        return (List<GenericAttributeError>) session.getAttribute( FormConstants.SESSION_FORM_ERRORS );
     }
 
     /**
@@ -1785,9 +1767,9 @@ public final class FormUtils
 
         if ( StringUtils.isNotBlank( strBaseUrl ) )
         {
-            if ( !strBaseUrl.endsWith( SLASH ) )
+            if ( !strBaseUrl.endsWith( FormConstants.SLASH ) )
             {
-                return strBaseUrl + SLASH;
+                return strBaseUrl + FormConstants.SLASH;
             }
         }
 
