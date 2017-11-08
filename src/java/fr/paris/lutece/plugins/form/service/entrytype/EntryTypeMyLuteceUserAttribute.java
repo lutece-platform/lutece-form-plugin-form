@@ -175,7 +175,8 @@ public class EntryTypeMyLuteceUserAttribute extends AbstractEntryTypeMyLuteceUse
     /**
      * Get a reference list with every lutece user attributes
      * 
-     * @param strLangage the langage of admin user
+     * @param strLangage
+     *            the langage of admin user
      * @return The reference list with every user attributes
      */
     public ReferenceList getLuteceUserAttributesRefList( String strLangage )
@@ -186,25 +187,25 @@ public class EntryTypeMyLuteceUserAttribute extends AbstractEntryTypeMyLuteceUse
         }
 
         ReferenceList referenceList = new ReferenceList( );
-        
+
         String strAttributesList = AppPropertiesService.getProperty( FormUtils.PROPERTY_MY_LUTECE_ATTRIBUTES_LIST );
-        String[] tabAttributes = StringUtils.split( strAttributesList, FormUtils.CONSTANT_COMMA );
+        String [ ] tabAttributes = StringUtils.split( strAttributesList, FormUtils.CONSTANT_COMMA );
         for ( String strAttribute : tabAttributes )
         {
-            ReferenceItem item = new ReferenceItem();
-            
-            //First set the code
+            ReferenceItem item = new ReferenceItem( );
+
+            // First set the code
             item.setCode( strAttribute );
-            
-            //Then construct the item
-            StringBuilder myLuteceAttribute18nKey = new StringBuilder();
+
+            // Then construct the item
+            StringBuilder myLuteceAttribute18nKey = new StringBuilder( );
             myLuteceAttribute18nKey.append( FormUtils.CONSTANT_MYLUTECE_ATTRIBUTE_I18N_SUFFIX );
             myLuteceAttribute18nKey.append( strAttribute );
             item.setName( I18nService.getLocalizedString( myLuteceAttribute18nKey.toString( ), Locale.forLanguageTag( strLangage ) ) );
-            
+
             referenceList.add( item );
         }
-        
+
         // We save the reference list to avoid its generation each time this method is called
         _refListUserAttributes = referenceList;
 
