@@ -46,7 +46,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
  */
 public class GroupResponseComparator implements Comparator<Response>
 {
-    
+
     /**
      * The comparison of the responses is based on the id of their entries
      */
@@ -55,17 +55,17 @@ public class GroupResponseComparator implements Comparator<Response>
     {
         Integer nIdEntryResponse1 = NumberUtils.INTEGER_ZERO;
         Integer nIdEntryResponse2 = NumberUtils.INTEGER_ZERO;
-        
+
         if ( response1 != null && response1.getEntry( ) != null )
         {
             nIdEntryResponse1 = Integer.valueOf( response1.getEntry( ).getIdEntry( ) );
         }
-        
+
         if ( response2 != null && response2.getEntry( ) != null )
         {
             nIdEntryResponse2 = Integer.valueOf( response2.getEntry( ).getIdEntry( ) );
         }
-        
+
         return nIdEntryResponse1.compareTo( nIdEntryResponse2 );
     }
 

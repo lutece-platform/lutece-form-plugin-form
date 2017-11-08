@@ -58,13 +58,13 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
      * Name of the bean of this service
      */
     public static final String BEAN_NAME = "form.entryTypeGroup";
-    
+
     // Parameters
     private static final String PARAMETER_NB_ITERATION = "nb_iterations";
-    
+
     // Attributes
     public static final String ATTRIBUTE_CURRENT_ITERATION = "attribute_current_iteration";
-    
+
     // Constants
     public static final String CONSTANT_NB_ITERATION = "nb_iterations";
     private static final String MESSAGE_FIELD_NB_ITERATIONS = "form.modifyEntry.typeGroup.message.fieldNbIterations";
@@ -84,7 +84,7 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
         {
             return TEMPLATE_HTML_CODE_MULTI_GROUP;
         }
-        
+
         return TEMPLATE_HTML_CODE;
     }
 
@@ -96,46 +96,47 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
     {
         return TEMPLATE_MODIFY;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
-        String  strMessageUrl = super.getRequestData( entry, request, locale );
-        
+        String strMessageUrl = super.getRequestData( entry, request, locale );
+
         if ( strMessageUrl != null )
         {
             return strMessageUrl;
         }
-        
+
         return manageNbIterationsField( request, entry );
     }
-    
+
     /**
-     * Create a new Field and set it to the entry if the number of iteration parameter
-     * is present in the request otherwise do nothing
+     * Create a new Field and set it to the entry if the number of iteration parameter is present in the request otherwise do nothing
      * 
      * @param request
-     *          the request to retrieve data from
+     *            the request to retrieve data from
      * @param entry
-     *          the entry to inject the new Field
+     *            the entry to inject the new Field
      * @return null if there is no problem false otherwise
      */
     private String manageNbIterationsField( HttpServletRequest request, Entry entry )
     {
         String strNbIterations = request.getParameter( PARAMETER_NB_ITERATION );
-        
+
         if ( entry != null && StringUtils.isNotBlank( strNbIterations ) )
-        {           
+        {
             if ( !StringUtils.isNumeric( strNbIterations ) )
             {
-                Object [ ] tabRequiredFields = { I18nService.getLocalizedString( MESSAGE_FIELD_NB_ITERATIONS, request.getLocale( ) ) };
-                
-                return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP  );
+                Object [ ] tabRequiredFields = {
+                    I18nService.getLocalizedString( MESSAGE_FIELD_NB_ITERATIONS, request.getLocale( ) )
+                };
+
+                return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
             }
-            
+
             Field fieldNbIteration = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_NB_ITERATION, entry.getFields( ) );
 
             if ( fieldNbIteration == null )
@@ -146,10 +147,10 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
             fieldNbIteration.setParentEntry( entry );
             fieldNbIteration.setTitle( CONSTANT_NB_ITERATION );
             fieldNbIteration.setValue( strNbIterations );
-            
+
             entry.getFields( ).add( fieldNbIteration );
         }
-        
+
         return null;
     }
 }

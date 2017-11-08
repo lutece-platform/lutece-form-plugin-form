@@ -45,28 +45,28 @@ public class GroupHttpServletRequestWrapper extends HttpServletRequestWrapper
 {
     // Pattern
     private static final String PATTERN_PARAM_PREFIX_ITERATION = "nIt%s_";
-    
+
     // Variable
     private String _strIterationParameterName;
-    
+
     /**
      * Constructor
      * 
      * @param request
-     *          The HttpServletRequest base
+     *            The HttpServletRequest base
      * @param nIterationNumber
-     *          The iteration number
+     *            The iteration number
      */
     public GroupHttpServletRequestWrapper( HttpServletRequest request, int nIterationNumber )
     {
         super( request );
         _strIterationParameterName = String.format( PATTERN_PARAM_PREFIX_ITERATION, nIterationNumber );
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public String[] getParameterValues( String name )
+    public String [ ] getParameterValues( String name )
     {
         return super.getParameterValues( _strIterationParameterName + name );
     }
@@ -76,6 +76,6 @@ public class GroupHttpServletRequestWrapper extends HttpServletRequestWrapper
      */
     public String getParameter( String name )
     {
-        return super.getParameter( _strIterationParameterName + name ); 
+        return super.getParameter( _strIterationParameterName + name );
     }
 }

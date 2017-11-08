@@ -130,7 +130,7 @@ public class ResponseService implements IResponseService
     public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
     {
         List<Response> listResponses = ResponseHome.getResponseList( filter );
-        
+
         // Find the Response associated to an iterable entry
         EntryTypeGroupUtils.completeListResponse( listResponses, filter.getListId( ) );
 

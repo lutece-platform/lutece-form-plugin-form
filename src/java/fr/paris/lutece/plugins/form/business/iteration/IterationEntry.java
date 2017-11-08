@@ -45,7 +45,7 @@ public class IterationEntry
     private int _nIdEntryOriginal;
     private int _nIdIterableParentGroup;
     private int _nIterationNumber;
-    
+
     /**
      * Return the nIdEntryComputed
      * 
@@ -55,12 +55,12 @@ public class IterationEntry
     {
         return _nIdEntryComputed;
     }
-    
+
     /**
      * Set the nIdEntryComputed
      * 
      * @param nIdEntryComputed
-     *      the nIdEntryComputed to set
+     *            the nIdEntryComputed to set
      */
     public void setIdEntryComputed( int nIdEntryComputed )
     {
@@ -81,7 +81,7 @@ public class IterationEntry
      * Set the nIdEntryOriginal
      * 
      * @param nIdEntryOriginal
-     *      the nIdEntryOriginal to set
+     *            the nIdEntryOriginal to set
      */
     public void setIdEntryOriginal( int nIdEntryOriginal )
     {
@@ -101,8 +101,8 @@ public class IterationEntry
     /**
      * Set the nIdIterableParentGroup
      * 
-     * @param nIdIterableParentGroup 
-     *      the nIdIterableParentGroup to set
+     * @param nIdIterableParentGroup
+     *            the nIdIterableParentGroup to set
      */
     public void setIdIterableParentGroup( int nIdIterableParentGroup )
     {
@@ -123,13 +123,13 @@ public class IterationEntry
      * Set the nIterationNumber
      * 
      * @param nIterationNumber
-     *      the nIterationNumber to set
+     *            the nIterationNumber to set
      */
     public void setIterationNumber( int nIterationNumber )
     {
         this._nIterationNumber = nIterationNumber;
     }
-    
+
     /**
      * Return the title of the entry of the iteration
      * 
@@ -139,7 +139,7 @@ public class IterationEntry
     {
         return getTitle( _nIdEntryOriginal );
     }
-    
+
     /**
      * Return the title of the parent entry of the iteration
      * 
@@ -149,23 +149,23 @@ public class IterationEntry
     {
         return getTitle( _nIdIterableParentGroup );
     }
-    
+
     /**
      * Return the title of an entry from its id
      * 
      * @param nIdEntry
-     *      the id of the entry to retrieve the title from
+     *            the id of the entry to retrieve the title from
      * @return the title of the entry or null if not found
      */
     private String getTitle( int nIdEntry )
     {
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
-        
+
         if ( entry != null )
         {
             return entry.getTitle( );
         }
-        
-        return null; 
+
+        return null;
     }
 }

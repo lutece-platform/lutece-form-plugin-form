@@ -42,7 +42,7 @@ public class FormConstants
 {
     // Session
     public static final String SESSION_FORM_ERRORS = "form_errors";
-    
+
     // Parameters
     public static final String PARAMETER_ID_FORM = "id_form";
     public static final String PARAMETER_ID_ENTRY = "id_entry";
@@ -60,17 +60,17 @@ public class FormConstants
     public static final String MARK_FORM_SUBMIT = "formSubmit";
     public static final String MARK_URL_ACTION = "url_action";
     public static final String MARK_STR_LIST_CHILDREN = "str_list_entry_children";
-    
+
     // Patterns
     public static final String PATTERN_CURRENT_ITERATION = "nb_current_iteration_%s";
-    
+
     // Prefixes
     public static final String PREFIX_ATTRIBUTE = "attribute";
-    
+
     // Symbols
     public static final String ANCHOR_DELIMITER = "#";
     public static final String SLASH = "/";
-    
+
     // Other constants
     public static final String CONSTANT_WHERE = " WHERE ";
     public static final String CONSTANT_AND = " AND ";

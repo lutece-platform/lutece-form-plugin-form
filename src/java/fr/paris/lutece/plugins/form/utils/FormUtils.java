@@ -176,13 +176,13 @@ public final class FormUtils
     private static final String PROPERTY_LUTECE_ADMIN_PROD_URL = "lutece.admin.prod.url";
     private static final String PROPERTY_LUTECE_BASE_URL = "lutece.base.url";
     private static final String PROPERTY_LUTECE_PROD_URL = "lutece.prod.url";
-    
+
     // Constants
     public static final String CONSTANT_UNDERSCORE = "_";
     public static final String CONSTANT_GROUP_BY_DAY = "0";
     public static final String CONSTANT_GROUP_BY_WEEK = "1";
     public static final String CONSTANT_GROUP_BY_MONTH = "2";
-    
+
     /**
      * FormUtils
      *
@@ -781,7 +781,7 @@ public final class FormUtils
 
             model.put( FormConstants.MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString( ) );
         }
-        
+
         model.put( MARK_ENTRY, entry );
         model.put( MARK_LOCALE, locale );
 
@@ -818,7 +818,7 @@ public final class FormUtils
                 {
                     EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponses, locale );
                 }
-                
+
                 // Check if the current entry has a parent and if the parent is of entry type group or not
                 if ( entry != null && entry.getParent( ) != null )
                 {
@@ -829,7 +829,7 @@ public final class FormUtils
 
             // The list of response to the model
             if ( listResponses != null && !listResponses.isEmpty( ) )
-            {                
+            {
                 model.put( MARK_LIST_RESPONSES, listResponses );
             }
 
@@ -847,7 +847,7 @@ public final class FormUtils
         template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ), locale, model );
         stringBuffer.append( template.getHtml( ) );
     }
-    
+
     /**
      * Perform in the object formSubmit the responses associates with a entry specify in parameter.<br />
      * Return null if there is no error in the response else return a FormError Object
@@ -902,10 +902,11 @@ public final class FormUtils
 
                     if ( formError != null )
                     {
-                        // If the entry belong to an iterable entry group we must recreate the name of the parameters for the current iteration                        
+                        // If the entry belong to an iterable entry group we must recreate the name of the parameters for the current iteration
                         if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
-                        {                            
-                            formError.setUrl( EntryTypeGroupUtils.getIterableEntryChildUrl( entry, request.getAttribute( FormConstants.ATTRIBUTE_ITERATION_NUMBER ) ) );
+                        {
+                            formError.setUrl( EntryTypeGroupUtils.getIterableEntryChildUrl( entry,
+                                    request.getAttribute( FormConstants.ATTRIBUTE_ITERATION_NUMBER ) ) );
                         }
                         else
                         {
@@ -943,7 +944,7 @@ public final class FormUtils
                 {
                     EntryTypeGroupUtils.modifyResponseEntryId( request, entry, listResponse );
                 }
-                
+
                 formSubmit.getListResponse( ).addAll( listResponse );
 
                 if ( entry.getNumberConditionalQuestion( ) != 0 )
@@ -1391,16 +1392,16 @@ public final class FormUtils
                 int nNumberOfIterationMax = EntryTypeGroupUtils.getEntryMaxIterationAllowed( entryFirstLevel );
                 if ( nNumberOfIterationMax != NumberUtils.INTEGER_ZERO )
                 {
-                    for( int nCurrentIterationNumber = NumberUtils.INTEGER_ONE; nCurrentIterationNumber <= nNumberOfIterationMax ; nCurrentIterationNumber++ )
+                    for ( int nCurrentIterationNumber = NumberUtils.INTEGER_ONE; nCurrentIterationNumber <= nNumberOfIterationMax; nCurrentIterationNumber++ )
                     {
                         for ( Entry entryChild : EntryHome.getEntryList( filter ) )
                         {
                             // Compute the new id for the entry of the iteration
                             int nNewIdEntry = EntryTypeGroupUtils.computeIterationId( entryChild.getIdEntry( ), nCurrentIterationNumber );
-                            
+
                             listEntry.add( entryChild );
                             addConditionnalsEntry( entryChild, listEntry, plugin );
-                            
+
                             // Change the id of the entry
                             entryChild.setIdEntry( nNewIdEntry );
                         }
@@ -1412,7 +1413,7 @@ public final class FormUtils
                     {
                         listEntry.add( entryChild );
                         addConditionnalsEntry( entryChild, listEntry, plugin );
-                    } 
+                    }
                 }
             }
             else
@@ -1500,7 +1501,7 @@ public final class FormUtils
 
         return listEntry;
     }
-    
+
     /**
      * Builds a query with filters placed in parameters
      * 
