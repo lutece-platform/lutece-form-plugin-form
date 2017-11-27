@@ -1,7 +1,11 @@
 <#assign width= 320>
 <#assign height= 261>
 <div class="form-group">
-		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+		<#assign idName = 'attribute' + entry.idEntry>
+		<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+			<#assign idName = 'nIt' + entry_iteration_number + '_attribute' + entry.idEntry>
+		</#if>
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="${idName}">${entry.title}<#if entry.mandatory> *</#if></label>
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		   <#list entry.fields as field>
 		   			<#if field.imageType?? >
@@ -21,7 +25,7 @@
 							<button align="left" type="button" id="snap${entry.idEntry}" class="btn btn-primary btn-sm" ><i class="glyphicon glyphicon-camera" ></i> #i18n{form.snapPhoto}</button>
 							<button align="left" type="button" id="clear${entry.idEntry}" class="btn btn-primary btn-sm" ><i class="glyphicon glyphicon-remove-circle" ></i> Clear</button>							
 							<canvas id="canvas${entry.idEntry}" width="${width}" height="${height}" class="camera" ></canvas>
-							<input type="hidden"  id="attribute${entry.idEntry}" name="attribute${entry.idEntry}" width="${width}" height="${height}" 
+							<input type="hidden"  id="${idName}" name="${idName}" width="${width}" height="${height}" 
 							<#if list_responses??>
 								<#list list_responses as response>
 								<#if response.entry.idEntry == entry.idEntry>

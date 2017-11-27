@@ -33,36 +33,29 @@
  */
 package fr.paris.lutece.plugins.form.web.http;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 
 /**
  * 
- * Wrapper of ServletRequest for entry of type iterable Group
+ * Wrapper of MultipartHttpServletRequest for entry of type iterable Group
  *
  */
-public class GroupHttpServletRequestWrapper extends HttpServletRequestWrapper
+public class GroupMultipartHttpServletRequestWrapper extends MultipartHttpServletRequest
 {
     // Pattern
     private static final String PATTERN_PARAM_PREFIX_ITERATION = "nIt%s_";
 
     // Variable
     private String _strIterationParameterName;
-
-    /**
-     * Constructor
-     * 
-     * @param request
-     *            The HttpServletRequest base
-     * @param nIterationNumber
-     *            The iteration number
-     */
-    public GroupHttpServletRequestWrapper( HttpServletRequest request, int nIterationNumber )
+    
+    // Constructor
+    @SuppressWarnings( "unchecked" )
+    public GroupMultipartHttpServletRequestWrapper( MultipartHttpServletRequest request, int nIterationNumber )
     {
-        super( request );
+        super( request, request.getFileListMap( ), request.getParameterMap( ) );
         _strIterationParameterName = String.format( PATTERN_PARAM_PREFIX_ITERATION, nIterationNumber );
     }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -99,4 +92,5 @@ public class GroupHttpServletRequestWrapper extends HttpServletRequestWrapper
     {
         this._strIterationParameterName = strIterationParameterName;
     }
+
 }

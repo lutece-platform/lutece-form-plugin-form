@@ -51,11 +51,11 @@ function hide(id)
 {
 	if (isChecked) 
 	{
-		doDisplay(id);
+		displayId(id);
 	} 
 	else 
 	{
-		hide(id);
+		hideId(id);
 	}
 }
 function openFrontRequirement(url)

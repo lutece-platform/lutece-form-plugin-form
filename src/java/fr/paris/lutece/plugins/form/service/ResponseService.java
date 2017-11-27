@@ -40,7 +40,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.FormSubmitHome;
-import fr.paris.lutece.plugins.form.utils.EntryTypeGroupUtils;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
@@ -130,9 +129,6 @@ public class ResponseService implements IResponseService
     public List<Response> getResponseList( ResponseFilter filter, boolean bGetFileData )
     {
         List<Response> listResponses = ResponseHome.getResponseList( filter );
-
-        // Find the Response associated to an iterable entry
-        EntryTypeGroupUtils.completeListResponse( listResponses, filter.getListId( ) );
 
         if ( bGetFileData && ( listResponses != null ) && !listResponses.isEmpty( ) )
         {

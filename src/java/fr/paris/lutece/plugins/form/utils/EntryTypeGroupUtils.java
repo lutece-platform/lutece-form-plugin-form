@@ -33,10 +33,12 @@
  */
 package fr.paris.lutece.plugins.form.utils;
 
-import java.util.AbstractMap.SimpleEntry;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -50,48 +52,46 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
-import fr.paris.lutece.plugins.form.business.FormSubmitHome;
-import fr.paris.lutece.plugins.form.business.iteration.IterationEntry;
+import fr.paris.lutece.plugins.form.business.iteration.IterationGroup;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeArray;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGroup;
 import fr.paris.lutece.plugins.form.web.http.GroupHttpServletRequestWrapper;
+import fr.paris.lutece.plugins.form.web.http.GroupMultipartHttpServletRequestWrapper;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
+import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
 public class EntryTypeGroupUtils
 {
-    // Prefix
-    private static final String PREFIX_ITERATION = "nIt";
-
     // Pattern
-    private static final String REGEX_PREFIX_ID_ATTRIBUTE = "\\b(?!%s)\\w*%s";
     private static final String PATTERN_PREFIX_ITERATION = "nIt%s";
     private static final String PATTERN_URL_ATTRIBUTE_NAME = "^\\b(%s)([0-9]+)$";
-    private static final String PATTERN_NEW_ATTRIBUTE_ID = PREFIX_ITERATION + "%s_%s";
 
     // Marks
     private static final String MARK_ITERATION_CODE = "iteration_code";
     private static final String MARK_REMOVE_ITERATION_NUMBER = "remove_iteration_number";
     private static final String MARK_ITERATION_CHILDREN = "iteration_children";
     private static final String MARK_INFO_ITERABLE_GROUP = "infos_iterable_group";
-    private static final String MARK_NB_CURRENT_ITERATION = "nb_current_iteration";
 
     // Template
     private static final String TEMPLATE_GROUP_ITERATION_CHILDREN = "skin/plugins/form/entries/html_code_entry_type_group_children.html";
@@ -116,21 +116,20 @@ public class EntryTypeGroupUtils
      *            The boolean which tell if it must be displayed in front or not
      */
     public static void getHtmlGroupEntry( HttpServletRequest request, Entry entry, Map<String, Object> model, boolean bDisplayFront )
-    {
-        // Boolean which tell if errors are present or not
-        Boolean bErrorPresent = Boolean.FALSE;
-
+    {        
+        // Generate the Html associate at the children of the entry
+        StringBuilder sbGroup = generateHtmlEntryGroup( request, entry, bDisplayFront );
+        model.put( FormConstants.MARK_STR_LIST_CHILDREN, sbGroup.toString( ) );
+        
         // Manage the case of an adding or a removing of an iteration children group of an entry type group
-        if ( request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ) != null || request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ) != null
+        int nIdEntryToRemoveIteration = getRemoveIterationParameter( request ).getKey( );
+        int nIdEntryAddIteration =  NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
+        if ( nIdEntryAddIteration == entry.getIdEntry( ) || nIdEntryToRemoveIteration == entry.getIdEntry( )
                 || request.getAttribute( FormConstants.ATTRIBUTE_RETURN_FROM_ERRORS ) != null )
         {
             // Populate the model with group informations
-            bErrorPresent = populateModelIterableGroupInfo( request, model, entry );
+            populateModelIterableGroupInfo( request, model, entry );
         }
-
-        // Generate the Html associate at the children of the entry
-        StringBuilder sbGroup = generateHtmlEntryGroup( request, entry, bDisplayFront, bErrorPresent );
-        model.put( FormConstants.MARK_STR_LIST_CHILDREN, sbGroup.toString( ) );
     }
 
     /**
@@ -146,19 +145,21 @@ public class EntryTypeGroupUtils
      *            True if an error is present false otherwise
      * @return the StringBuffer containing the html code of the current entry of type group
      */
-    public static StringBuilder generateHtmlEntryGroup( HttpServletRequest request, Entry entry, boolean bDisplayFront, boolean bErrorPresent )
+    public static StringBuilder generateHtmlEntryGroup( HttpServletRequest request, Entry entry, boolean bDisplayFront )
     {
         StringBuilder sbGroup = new StringBuilder( );
 
         // Case where the group allow multiple iterations
-        int nbIterationMax = getEntryMaxIterationAllowed( entry );
-        if ( nbIterationMax != NumberUtils.INTEGER_ZERO )
+        int nbIterationMax = getEntryMaxIterationAllowed( entry.getIdEntry( ) );
+        if ( nbIterationMax != NumberUtils.INTEGER_MINUS_ONE )
         {
-            // Compute the number of iteration to determine how many group of children of the entry group
-            // are necessary and compare it with the max limit allowed by the entry type
-            int nbIteration = computeNumberOfIteration( request, entry.getIdEntry( ), nbIterationMax, bErrorPresent );
+            sbGroup = getHtmlIteratedEntryGroup( request, entry, bDisplayFront );
 
-            sbGroup = getHtmlIteratedEntryGroup( request, entry, bDisplayFront, nbIteration );
+            // Remove an iteration for the group on the IterationGroup map in the session if it is necessary
+            if ( request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ) != null && getRemoveIterationParameter( request ).getKey( ) == entry.getIdEntry( ) )
+            {
+                removeIterationFromMapIterationGroup( request );
+            }
         }
         // Case where the entry has no iteration possible
         else
@@ -170,29 +171,31 @@ public class EntryTypeGroupUtils
     }
 
     /**
-     * Return the maximum number of iterations allowed for the entry. Return 0 if none iterations are allowed.
+     * Return the maximum number of iterations allowed for the entry. Return -1 if none iterations are allowed.
      * 
-     * @param entry
-     *            The entry to find the maximum number of iterations
-     * @return the maximum number of iterations allowed for the entry return 0 if none iterations are allowed
+     * @param idEntry
+     *            The id of the entry to find the maximum number of iterations
+     * @return the maximum number of iterations allowed for the entry return -1 if none iterations are allowed
      */
-    public static int getEntryMaxIterationAllowed( Entry entry )
+    public static int getEntryMaxIterationAllowed( int idEntry )
     {
+        Entry entry = EntryHome.findByPrimaryKey( idEntry );
+        
         if ( entry != null )
         {
             Field fieldNbIteration = GenericAttributesUtils.findFieldByTitleInTheList( EntryTypeGroup.CONSTANT_NB_ITERATION, entry.getFields( ) );
             if ( fieldNbIteration != null )
             {
-                return NumberUtils.toInt( fieldNbIteration.getValue( ), NumberUtils.INTEGER_ZERO );
+                return NumberUtils.toInt( fieldNbIteration.getValue( ), NumberUtils.INTEGER_MINUS_ONE );
             }
 
             // If the field doesn't exist it means that the group doesn't allow iteration
-            return NumberUtils.INTEGER_ZERO;
+            return NumberUtils.INTEGER_MINUS_ONE;
         }
 
-        return NumberUtils.INTEGER_ZERO;
+        return NumberUtils.INTEGER_MINUS_ONE;
     }
-
+    
     /**
      * Returns the StringBuffer containing the html code associated for the current entry which allow multiple iteration
      * 
@@ -206,36 +209,82 @@ public class EntryTypeGroupUtils
      *            The maximum number of iteration allowed for the group
      * @return the StringBuffer containing the html code associated for the current entry
      */
-    public static StringBuilder getHtmlIteratedEntryGroup( HttpServletRequest request, Entry entry, boolean bDisplayFront, int nbIteration )
+    public static StringBuilder getHtmlIteratedEntryGroup( HttpServletRequest request, Entry entry, boolean bDisplayFront )
     {
         StringBuilder sbGroup = new StringBuilder( );
 
         // Construct the list of all children for the group
-        int nbCurrentIteration = NumberUtils.INTEGER_ONE;
-        while ( nbCurrentIteration <= nbIteration )
+        int nIdEntry = entry.getIdEntry( );
+        IterationGroup iterationGroup = retrieveIterationGroup( request, nIdEntry );
+
+        // Iterate on all existing iterations
+        for ( Integer iterationNumber : iterationGroup.getSetIterationNumber( ) )
         {
             // Get the Html associate to all the children of the group for the current iteration
-            StringBuilder sbCurrentChildrenGroup = getHtmlEntryGroup( request, entry, bDisplayFront, new StringBuilder( ), nbCurrentIteration );
-            String strCurrentIterationCode = String.format( EntryTypeGroupUtils.PATTERN_PREFIX_ITERATION, nbCurrentIteration );
-
-            // Generate the model associate with the current iteration
-            Map<String, Object> model = new LinkedHashMap<String, Object>( );
-            model.put( FormConstants.PARAMETER_ID_ENTRY, entry.getIdEntry( ) );
-            model.put( MARK_REMOVE_ITERATION_NUMBER, nbCurrentIteration );
-            model.put( MARK_ITERATION_CODE, strCurrentIterationCode );
-            model.put( MARK_ITERATION_CHILDREN, sbCurrentChildrenGroup.toString( ) );
-
-            // Populate the template with the model
-            HtmlTemplate templateChildrenIterationGroup = AppTemplateService.getTemplate( TEMPLATE_GROUP_ITERATION_CHILDREN, request.getLocale( ), model );
+            HtmlTemplate templateChildrenIterationGroup = generateChildrenItreationGroupTemplate( request, entry, bDisplayFront, iterationNumber );
 
             // Aggregate the current iteration template with the other of the group
-            sbGroup.append( templateChildrenIterationGroup.getHtml( ) );
-
-            // Make the next iteration
-            nbCurrentIteration++;
+            if ( templateChildrenIterationGroup != null )
+            {
+                sbGroup.append( templateChildrenIterationGroup.getHtml( ) );
+            }
+        }
+        
+        // Add another iteration if we are in the case of an iteration adding and if the user has filled the field of the previous iteration
+        int nIdEntryAddIteration =  NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
+        if ( request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ) != null && nIdEntryAddIteration == nIdEntry )
+        {
+            int nLastIterationNumber = iterationGroup.getLastIterationNumber( );
+            boolean bFillingMade = iterationGroup.fillingMadeOnIteration( nLastIterationNumber );
+            if ( bFillingMade )
+            {
+                if ( !isEntryIterationLimitReached( request, nIdEntryAddIteration ) )
+                {
+                    HtmlTemplate htmTemplateNextIteration = generateChildrenItreationGroupTemplate( request, entry, bDisplayFront, nLastIterationNumber + NumberUtils.INTEGER_ONE );
+                    if ( htmTemplateNextIteration != null )
+                    {
+                        sbGroup.append( htmTemplateNextIteration.getHtml( ) );
+                    }
+                }
+            }
+            else
+            {
+                // Add an attribute into the request to notify the fact that the user has not filled any field of the last iteration
+                request.setAttribute( FormConstants.ATTRIBUTE_NO_FILLED_ENTRY_GROUP, Boolean.TRUE );
+            }
         }
 
         return sbGroup;
+    }
+
+    /**
+     * 
+     * 
+     * @param request
+     *            The HttpServletRequest
+     * @param entry
+     *            The entry type group
+     * @param bDisplayFront
+     *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office
+     * @param nIterationNumber
+     *             The current iteration number to generate the iteration template
+     * @return the HtmlTemplate for the current entry for the specified iteration
+     */
+    private static HtmlTemplate generateChildrenItreationGroupTemplate( HttpServletRequest request, Entry entry, boolean bDisplayFront, int nIterationNumber )
+    {
+        // Get the Html associate to all the children of the group for the current iteration
+        StringBuilder sbCurrentChildrenGroup = getHtmlEntryGroup( request, entry, bDisplayFront, new StringBuilder( ), nIterationNumber );
+        String strCurrentIterationCode = String.format( PATTERN_PREFIX_ITERATION, nIterationNumber );
+
+        // Generate the model associate with the current iteration
+        Map<String, Object> model = new LinkedHashMap<String, Object>( );
+        model.put( FormConstants.PARAMETER_ID_ENTRY, entry.getIdEntry( ) );
+        model.put( MARK_REMOVE_ITERATION_NUMBER, nIterationNumber );
+        model.put( MARK_ITERATION_CODE, strCurrentIterationCode );
+        model.put( MARK_ITERATION_CHILDREN, sbCurrentChildrenGroup.toString( ) );
+
+        // Populate the template with the model
+        return AppTemplateService.getTemplate( TEMPLATE_GROUP_ITERATION_CHILDREN, request.getLocale( ), model );
     }
 
     /**
@@ -257,26 +306,12 @@ public class EntryTypeGroupUtils
         {
             int nIdEntryChild = entryChild.getIdEntry( );
 
-            // Set the current iteration to associate an entry with her fields
-            request.setAttribute( EntryTypeGroup.ATTRIBUTE_CURRENT_ITERATION, nbIteration );
-
             // Construct the Html template for the current entry
             StringBuffer stringBufferHtmEntryGroup = new StringBuffer( sbEntryGroup.toString( ) );
-            FormUtils.getHtmlEntry( nIdEntryChild, stringBufferHtmEntryGroup, request.getLocale( ), bDisplayFront, request );
-
-            // If the group allow multiple iteration we change the construction of the name and the id of every field for this attribute
-            if ( nbIteration != NumberUtils.INTEGER_ZERO )
-            {
-                String strPrefix = FormConstants.PREFIX_ATTRIBUTE + nIdEntryChild;
-                String strAttributeRegex = String.format( REGEX_PREFIX_ID_ATTRIBUTE, PREFIX_ITERATION, strPrefix );
-                String strNewAttributeId = String.format( PATTERN_NEW_ATTRIBUTE_ID, nbIteration, strPrefix );
-                sbEntryGroup = new StringBuilder( stringBufferHtmEntryGroup.toString( ).replaceAll( strAttributeRegex, strNewAttributeId ) );
-            }
-            else
-            {
-                // In the case where no iteration are necessaries we made no modifications
-                sbEntryGroup = new StringBuilder( stringBufferHtmEntryGroup.toString( ) );
-            }
+            FormUtils.getHtmlEntry( nIdEntryChild, stringBufferHtmEntryGroup, request.getLocale( ), bDisplayFront, request, nbIteration );
+            
+            // Convert the StringBuffer html to the StringBuilder
+            sbEntryGroup = new StringBuilder( stringBufferHtmEntryGroup.toString( ) );
         }
 
         return sbEntryGroup;
@@ -310,20 +345,40 @@ public class EntryTypeGroupUtils
 
         if ( entry != null )
         {
-            int nbCurrentIteration = getCurrentNumberOfIteration( request, entry.getIdEntry( ) );
+            int nNbMaxIteration = getEntryMaxIterationAllowed( entry.getIdEntry( ) );
             for ( Entry entryChild : entry.getChildren( ) )
             {
                 // If there are a number of iteration on the current group we will check errors on the children on every iteration
-                if ( nbCurrentIteration != NumberUtils.INTEGER_MINUS_ONE )
+                if ( nNbMaxIteration != NumberUtils.INTEGER_MINUS_ONE )
                 {
-                    for ( int numIteration = NumberUtils.INTEGER_ONE; numIteration <= nbCurrentIteration; numIteration++ )
+                    // The set of all iteration number used in the form
+                    Set<Integer> setIterationNumber = new LinkedHashSet<>( );
+                    IterationGroup iterationGroup = retrieveIterationGroup( request, entry.getIdEntry( ) );
+                    if ( iterationGroup != null )
+                    {
+                        setIterationNumber = iterationGroup.getSetIterationNumber( );
+                    }
+                    
+                    // Check if the entry is of type File or Image
+                    boolean bIsEntryTypeFileImage = isEntryOfUploadType( request, entryChild );
+                    
+                    for ( Integer nIterationNumber : setIterationNumber )
                     {
                         // Wrap the current request to allow modification during the gathering of parameter value on the parameter name
-                        HttpServletRequest requestWrapper = new GroupHttpServletRequestWrapper( request, numIteration );
-                        requestWrapper.setAttribute( FormConstants.ATTRIBUTE_ITERATION_NUMBER, numIteration );
+                        HttpServletRequest requestWrapper = null;
+                        if ( bIsEntryTypeFileImage && request instanceof MultipartHttpServletRequest )
+                        {
+                            requestWrapper = new GroupMultipartHttpServletRequestWrapper( ( MultipartHttpServletRequest ) request, nNbMaxIteration );
+                        }
+                        else
+                        {
+                            requestWrapper = new GroupHttpServletRequestWrapper( request, nIterationNumber );
+                        }
+                        
+                        requestWrapper.setAttribute( FormConstants.ATTRIBUTE_ITERATION_NUMBER, nIterationNumber );
 
                         listFormErrors.addAll( FormUtils.getResponseEntry( requestWrapper, entryChild.getIdEntry( ), plugin, formSubmit, Boolean.FALSE,
-                                bReturnErrors, locale ) );
+                                bReturnErrors, locale, nIterationNumber ) );
                         requestWrapper.removeAttribute( FormConstants.ATTRIBUTE_ITERATION_NUMBER );
                     }
                 }
@@ -337,162 +392,6 @@ public class EntryTypeGroupUtils
     }
 
     /**
-     * Compute the number of iteration necessary for the current displaying of the form
-     * 
-     * @param request
-     *            The HttpServletRequest
-     * @param entry
-     *            The entry type group
-     * @param nbIterationMax
-     *            The number of max iteration allowed for the group
-     * @param bErrorPresent
-     *            the boolean which tell if an error is present or not
-     * @return the number of iteration necessary for the current form
-     */
-    public static int computeNumberOfIteration( HttpServletRequest request, int idEntry, int nbIterationMax, boolean bErrorPresent )
-    {
-        // In all case there always must be one iteration
-        Integer nbIteration = NumberUtils.INTEGER_ONE;
-
-        // Retrieve the current number of iteration from the request
-        int nbCurrentIteration = getCurrentNumberOfIteration( request, idEntry );
-
-        if ( nbCurrentIteration != NumberUtils.INTEGER_MINUS_ONE )
-        {
-            // Manage the case where an error is present
-            if ( bErrorPresent || request.getSession( ).getAttribute( FormConstants.SESSION_FORM_ERRORS ) != null )
-            {
-                return nbCurrentIteration;
-            }
-
-            // Iteration duplication case
-            if ( request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ) != null )
-            {
-                nbIteration = nbCurrentIteration + NumberUtils.INTEGER_ONE;
-            }
-
-            // Iteration removing case
-            if ( request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ) != null )
-            {
-                nbIteration = nbCurrentIteration - NumberUtils.INTEGER_ONE;
-            }
-        }
-
-        // We cannot create more iteration than the group authorize
-        return ( nbIteration > nbIterationMax ) ? nbIterationMax : nbIteration;
-    }
-
-    /**
-     * Retrieve all parameters associated to all iteration of an entry and return true if the user has made a selection false otherwise
-     * 
-     * @param request
-     *            the HttpServletRequest
-     * @param listParameterNames
-     *            the list of all parameters name of the request
-     * @param strNbCurrentIteration
-     *            the current number of iteration
-     * @param strRemoveIteration
-     *            the iteration to remove
-     * @return true if the user has made selection false otherwise
-     */
-    public static Boolean retrieveAllIterationValues( HttpServletRequest request, List<String> listParameterNames, String strNbCurrentIteration,
-            String strRemoveIteration )
-    {
-        // Boolean which check if a user has filled entries
-        Boolean bNoFilledEntry = Boolean.TRUE;
-
-        if ( listParameterNames != null && !listParameterNames.isEmpty( ) )
-        {
-            int nNbCurrentIteration = NumberUtils.toInt( strNbCurrentIteration, NumberUtils.INTEGER_ONE );
-            int nRemoveIteration = NumberUtils.toInt( strRemoveIteration, NumberUtils.INTEGER_MINUS_ONE );
-
-            // Boolean which check if an iteration must be skipped or not
-            Boolean bSkipIteration = Boolean.FALSE;
-
-            for ( int nbIteration = NumberUtils.INTEGER_ONE; nbIteration <= nNbCurrentIteration; nbIteration++ )
-            {
-                // If we are in the case of a removing we will skip the removed iteration
-                if ( strRemoveIteration != null && nRemoveIteration != NumberUtils.INTEGER_MINUS_ONE && nRemoveIteration == nbIteration )
-                {
-                    // Set to true to tell the next iterations to set their value to the previous attribute
-                    bSkipIteration = Boolean.TRUE;
-                    continue;
-                }
-
-                // Retrieve all parameter values for the current iteration and set them to the request
-                bNoFilledEntry = retrieveIterationParameterValues( request, listParameterNames, nbIteration, bSkipIteration );
-            }
-        }
-
-        return bNoFilledEntry;
-    }
-
-    /**
-     * Determine if a user filled entries or not and add in the request all the value associate to the parameter of an iteration
-     * 
-     * @param listParameterNames
-     *            the list of all parameters
-     * @param nbIteration
-     *            the iteration number
-     * @param bSkipIteration
-     *            the boolean which tell if we must skip an iteration (in the case of a removing)
-     * @param request
-     *            the HttpServletRequest
-     * @return true if a filling has been made false otherwise
-     */
-    public static Boolean retrieveIterationParameterValues( HttpServletRequest request, List<String> listParameterNames, int nbIteration, Boolean bSkipIteration )
-    {
-        Boolean bNoFilledEntry = Boolean.TRUE;
-
-        if ( listParameterNames != null && !listParameterNames.isEmpty( ) )
-        {
-            // Generate the prefix of the current iteration
-            String strCurrentParameterIteration = String.format( PATTERN_PREFIX_ITERATION, nbIteration );
-
-            // We will check if there is a filling has been made for the current iteration by checking
-            // if a parameter associate to the current iteration is present or not
-            for ( String strParamName : listParameterNames )
-            {
-                if ( StringUtils.isNotBlank( strParamName ) && strParamName.contains( strCurrentParameterIteration ) )
-                {
-                    String [ ] listParameterValuesList = request.getParameterValues( strParamName );
-                    if ( listParameterValuesList == null || listParameterValuesList.length == NumberUtils.INTEGER_ZERO
-                            || StringUtils.isBlank( listParameterValuesList [NumberUtils.INTEGER_ZERO] ) )
-                    {
-                        continue;
-                    }
-
-                    // In the case of a removing we will skip an iteration so will get all the values associate
-                    // to the current iteration and associate them to the previous one because it doesn't exist
-                    // anymore
-                    if ( bSkipIteration.booleanValue( ) )
-                    {
-                        String strAttributeName = strParamName.replace( strCurrentParameterIteration, StringUtils.EMPTY );
-                        String strPreviousParameterIteration = String.format( PATTERN_PREFIX_ITERATION, ( nbIteration - NumberUtils.INTEGER_ONE ) );
-
-                        // Create the parameter name based on the previous iteration
-                        StringBuilder sbNewParamName = new StringBuilder( );
-                        sbNewParamName.append( strPreviousParameterIteration );
-                        sbNewParamName.append( strAttributeName );
-
-                        // Associate the current parameter value to the previous one named
-                        request.setAttribute( sbNewParamName.toString( ), listParameterValuesList );
-                    }
-                    else
-                    {
-                        request.setAttribute( strParamName, listParameterValuesList );
-                    }
-
-                    // A filling has been made
-                    bNoFilledEntry = Boolean.FALSE;
-                }
-            }
-        }
-
-        return bNoFilledEntry;
-    }
-
-    /**
      * Manage the errors of iterations of a entry type group
      * 
      * @param request
@@ -503,21 +402,22 @@ public class EntryTypeGroupUtils
      *            the list of all existing messages
      * @return true if there are errors false otherwise
      */
-    public static Boolean manageIterationGroupErrors( HttpServletRequest request, Entry entry, List<MVCMessage> listInfosIterableGroup, int NbIteration )
+    public static Boolean manageIterationGroupErrors( HttpServletRequest request, Entry entry, List<MVCMessage> listInfosIterableGroup )
     {
         // Check if a filling has been made or not
-        Object objAttributeNoEntryGroupFilled = request.getAttribute( FormConstants.ATTRIBUTE_NO_FILLED_ENTRY_GROUP );
-        Boolean bNoFillingMade = (Boolean) objAttributeNoEntryGroupFilled;
-        if ( objAttributeNoEntryGroupFilled != null && BooleanUtils.isTrue( bNoFillingMade ) )
+        if ( request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ) != null && request.getAttribute( FormConstants.ATTRIBUTE_NO_FILLED_ENTRY_GROUP ) != null )
         {
+            request.removeAttribute( FormConstants.ATTRIBUTE_NO_FILLED_ENTRY_GROUP );
+            
             listInfosIterableGroup.add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_CANT_ADD_ITERATION, request.getLocale( ) ) ) );
             return Boolean.TRUE;
         }
 
         // Check if the user has reach the max limit of duplication and if is not the case of a removing
-        if ( getEntryMaxIterationAllowed( entry ) <= NbIteration && request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ) != null
-                && request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ) == null )
+        if ( isEntryIterationLimitReached( request, entry.getIdEntry( ) ) && request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ) != null
+                && getRemoveIterationParameter( request ).getKey( ) != entry.getIdEntry( ) )
         {
+            
             listInfosIterableGroup.add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_LIMIT_IETRATION_REACHED, request.getLocale( ) ) ) );
             return Boolean.TRUE;
         }
@@ -576,7 +476,7 @@ public class EntryTypeGroupUtils
                         && strUrlError.split( FormConstants.ANCHOR_DELIMITER ).length > 1 )
                 {
                     String strIterateAttributeName = strUrlError.split( FormConstants.ANCHOR_DELIMITER ) [NumberUtils.INTEGER_ONE];
-                    String strPatternPrefixIteration = String.format( EntryTypeGroupUtils.PATTERN_PREFIX_ITERATION, nCurrentIterationNumber );
+                    String strPatternPrefixIteration = String.format( PATTERN_PREFIX_ITERATION, nCurrentIterationNumber );
 
                     // Get the attribute name
                     if ( StringUtils.isNotBlank( strIterateAttributeName ) )
@@ -623,30 +523,17 @@ public class EntryTypeGroupUtils
     {
         Boolean bErrorPresent = Boolean.FALSE;
 
-        int nIdEntryParameter = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ID_ENTRY ), NumberUtils.INTEGER_MINUS_ONE );
-        if ( entry != null && nIdEntryParameter == entry.getIdEntry( ) )
+        // Retrieve the existing list of error message
+        List<MVCMessage> listInfosIterableGroup = getIterableGroupMessageList( model );
+
+        // Check if there are errors on iteration
+        if ( getRemoveIterationParameter( request ).getKey( ) != entry.getIdEntry( ) )
         {
-            int nIdEntry = entry.getIdEntry( );
-
-            // Retrieve the existing list of error message
-            List<MVCMessage> listInfosIterableGroup = getIterableGroupMessageList( model );
-
-            // Check if there are errors on iteration
-            if ( request.getAttribute( FormConstants.ATTRIBUTE_NO_FILLED_ENTRY_GROUP ) == null
-                    || request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ) == null )
-            {
-                int nbCurrentIteration = getCurrentNumberOfIteration( request, nIdEntry );
-                bErrorPresent = manageIterationGroupErrors( request, entry, listInfosIterableGroup, nbCurrentIteration );
-            }
-
-            // Compute the number of iteration from the request managing the adding or removing cases
-            int nbMaxIterationAllowed = getEntryMaxIterationAllowed( entry );
-            int nbIteration = computeNumberOfIteration( request, nIdEntry, nbMaxIterationAllowed, bErrorPresent );
-
-            // Populate the model
-            model.put( MARK_NB_CURRENT_ITERATION, nbIteration );
-            model.put( MARK_INFO_ITERABLE_GROUP, listInfosIterableGroup );
+            bErrorPresent = manageIterationGroupErrors( request, entry, listInfosIterableGroup );
         }
+
+        // Populate the model
+        model.put( MARK_INFO_ITERABLE_GROUP, listInfosIterableGroup );
 
         return bErrorPresent;
     }
@@ -661,25 +548,19 @@ public class EntryTypeGroupUtils
      * @param listResponses
      *            The list of existing responses
      */
-    public static void manageIterableGroupResponse( HttpServletRequest request, Entry entry, List<Response> listResponses )
+    public static void manageIterableGroupResponse( HttpServletRequest request, Entry entry, List<Response> listResponses, int nIterationNumber )
     {
         if ( entry != null )
         {
-            // Check if the parent of the entry is of group type
-            Entry entryParent = EntryHome.findByPrimaryKey( entry.getParent( ).getIdEntry( ) );
-            if ( isEntryTypeGroup( entryParent ) )
+            // Check if the current entry belong to an iterable group or not
+            if ( entryBelongIterableGroup( entry ) )
             {
-                // Check if the parent allow iteration or not
-                if ( getEntryMaxIterationAllowed( entryParent ) != NumberUtils.INTEGER_ZERO )
+                // Retrieve the current iteration
+                String strPatternName = getPatternIteratedAttributeName( entry.getIdEntry( ) );
+                if ( nIterationNumber != NumberUtils.INTEGER_MINUS_ONE )
                 {
-                    // Retrieve the current iteration
-                    String strPatternName = getPatternIteratedAttributeName( entry.getIdEntry( ) );
-                    Integer nCurrentIteration = (Integer) request.getAttribute( EntryTypeGroup.ATTRIBUTE_CURRENT_ITERATION );
-                    if ( nCurrentIteration != null && nCurrentIteration != NumberUtils.INTEGER_ZERO )
-                    {
-                        // Retrieve the response of the entry which belong to a group
-                        retrieveGroupResponses( request, entry, listResponses, strPatternName, nCurrentIteration );
-                    }
+                    // Retrieve the response of the entry which belong to a group
+                    retrieveGroupResponses( request, entry, listResponses, strPatternName, nIterationNumber );
                 }
             }
         }
@@ -702,21 +583,32 @@ public class EntryTypeGroupUtils
     private static void retrieveGroupResponses( HttpServletRequest request, Entry entry, List<Response> listResponses, String strPatternName,
             int nCurrentIteration )
     {
-        // Consume the current iteration attribute to manage it only one time
-        request.removeAttribute( EntryTypeGroup.ATTRIBUTE_CURRENT_ITERATION );
-
         // Retrieve the error of the current entry for the current iteration if exists
         GenericAttributeError currentIterationEntryError = getGenericAttributeEntryError( request, entry.getIdEntry( ), nCurrentIteration );
 
         // Get all the parameter values associate to the current attribute for the current iteration
         String strAttributeName = String.format( strPatternName, nCurrentIteration );
-        String [ ] listCurrentRequestParamValues = retrieveParameterValues( request, strAttributeName );
+        String [ ] listCurrentRequestParamValues = request.getParameterValues( strAttributeName );
+        
+        if ( listCurrentRequestParamValues == null || listCurrentRequestParamValues.length == 0 )
+        {
+            List<String> listResultValue = new ArrayList<>( );
+            
+            @SuppressWarnings( "unchecked" )
+            List<String> listParameterNames = new ArrayList<>( request.getParameterMap( ).keySet( ) );
+            for ( String strParameterName : listParameterNames )
+            {
+                if ( strParameterName.contains( strAttributeName ) )
+                {
+                    listResultValue.add( request.getParameter( strParameterName ) );
+                }
+            }
+            
+            listCurrentRequestParamValues = listResultValue.toArray( new String[ listResultValue.size( ) ] );
+        }
 
         // Fill the list of response for the current entry
-        fillResponseList( request, listResponses, listCurrentRequestParamValues, entry, currentIterationEntryError );
-
-        // Consume each attribute name to manage them only one time
-        request.removeAttribute( strAttributeName );
+        fillResponseList( request, listResponses, listCurrentRequestParamValues, entry, currentIterationEntryError, nCurrentIteration );
     }
 
     /**
@@ -732,39 +624,52 @@ public class EntryTypeGroupUtils
      *            The entry to retrieve the response from
      * @param currentIterationEntryError
      *            The GenericAttributeError for the entry if exist
+     * @param nCurrentIteration
+     *            The current iteration number
      */
     private static void fillResponseList( HttpServletRequest request, List<Response> listResponses, String [ ] strCurrentRequestParamValues, Entry entry,
-            GenericAttributeError currentIterationEntryError )
+            GenericAttributeError currentIterationEntryError, int nCurrentIteration )
     {
         if ( listResponses == null )
         {
             listResponses = new ArrayList<>( );
         }
-
+        
+        // Retrieve the entryTypeService of the current entry
+        IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
+        
         if ( strCurrentRequestParamValues != null && strCurrentRequestParamValues.length > 0 )
-        {
-            // Create a response for each parameter values
-            for ( String strCurrentValue : strCurrentRequestParamValues )
-            {
-                // Retrieve the id of the field
-                int nIdField = NumberUtils.toInt( strCurrentValue, NumberUtils.INTEGER_MINUS_ONE );
+        {            
+            // Create a GroupHttpServletRequestWrapper for the entry type which need it
+            GroupHttpServletRequestWrapper groupHttpServletRequestWrapper = new GroupHttpServletRequestWrapper( request, nCurrentIteration );
+            groupHttpServletRequestWrapper.setAttribute( FormConstants.ATTRIBUTE_RESPONSE_ITERATION_NUMBER, nCurrentIteration );
 
-                if ( nIdField != NumberUtils.INTEGER_MINUS_ONE )
-                {
-                    listResponses.add( getResponseWithField( entry, currentIterationEntryError, nIdField ) );
-                }
-                // If a parameter exists but there are none field associated it means that the current value is the response
-                else
-                {
-                    listResponses.add( getResponseWithoutField( entry, currentIterationEntryError, strCurrentValue ) );
-                }
+            if ( entryTypeService instanceof EntryTypeArray )
+            {
+                // Reset the specific iteration parameter name for this entry type
+                StringBuilder strIterationParameterName = new StringBuilder( groupHttpServletRequestWrapper.getIterationParameterName( ) );
+                strIterationParameterName.append( FormConstants.PREFIX_ATTRIBUTE );
+                strIterationParameterName.append( entry.getIdEntry( ) );
+                strIterationParameterName.append( FormConstants.UNDERSCORE );
+                
+                groupHttpServletRequestWrapper.setIterationParameterName( strIterationParameterName.toString( ) );
             }
+            
+            entryTypeService.getResponseData( entry, groupHttpServletRequestWrapper, listResponses, request.getLocale( ) );
+        }
+        // Case of an entry of type Upload
+        else if ( isEntryOfUploadType( request, entry ) )
+        {
+            GroupMultipartHttpServletRequestWrapper groupMultipartHttpServletRequest = new GroupMultipartHttpServletRequestWrapper( ( MultipartHttpServletRequest ) request, nCurrentIteration );
+            groupMultipartHttpServletRequest.setAttribute( FormConstants.ATTRIBUTE_RESPONSE_ITERATION_NUMBER, nCurrentIteration );
+            
+            entryTypeService.getResponseData( entry, groupMultipartHttpServletRequest, listResponses, request.getLocale( ) );
         }
         else
         {
             if ( currentIterationEntryError != null )
             {
-                listResponses.add( getResponseWithField( entry, currentIterationEntryError, NumberUtils.INTEGER_MINUS_ONE ) );
+                listResponses.add( getResponseWithField( entry, currentIterationEntryError, NumberUtils.INTEGER_MINUS_ONE, nCurrentIteration ) );
             }
         }
     }
@@ -777,10 +682,12 @@ public class EntryTypeGroupUtils
      * @param genericAttributeEntryError
      *            The generic attribute of the error. Equal to null if not exist
      * @param nIdField
-     *            The id of the field of the response. If equal to -1 none field will be attached.
+     *            The id of the field of the response. If equal to -1 none field will be attached to the response.
+     * @param nCurrentIterationNumber
+     *              The current iteration number
      * @return the response associated to the entry
      */
-    private static Response getResponseWithField( Entry entry, GenericAttributeError genericAttributeEntryError, int nIdField )
+    private static Response getResponseWithField( Entry entry, GenericAttributeError genericAttributeEntryError, int nIdField, int nCurrentIterationNumber )
     {
         Response response = new Response( );
 
@@ -790,6 +697,7 @@ public class EntryTypeGroupUtils
             entry.setError( genericAttributeEntryError );
         }
         response.setEntry( entry );
+        response.setIterationNumber( nCurrentIterationNumber );
 
         // Add field value if necessary
         if ( nIdField != NumberUtils.INTEGER_MINUS_ONE )
@@ -806,135 +714,155 @@ public class EntryTypeGroupUtils
 
         return response;
     }
-
+    
     /**
-     * Create a response for the specified entry without field
-     * 
-     * @param entry
-     *            The entry to create the response from
-     * @param genericAttributeEntryError
-     *            The generic attribute of the error. Equal to null if not exist
-     * @param responseValue
-     *            The value of the response retrieve from the request
-     * @return the response associated to the entry
-     */
-    private static Response getResponseWithoutField( Entry entry, GenericAttributeError genericAttributeEntryError, String responseValue )
-    {
-        Response response = new Response( );
-
-        // Add errors if exists
-        if ( genericAttributeEntryError != null )
-        {
-            entry.setError( genericAttributeEntryError );
-        }
-
-        response.setEntry( entry );
-        response.setField( null );
-        response.setResponseValue( responseValue );
-
-        return response;
-    }
-
-    /**
-     * Retrieve all parameter values for the current pattern name
-     * 
-     * @param request
-     *            The HttpServletRequest
-     * @param strAttributeName
-     *            The name of the attribute to retrieve
-     * @return the string array of all parameters for the current pattern name for the current iteration
-     */
-    private static String [ ] retrieveParameterValues( HttpServletRequest request, String strAttributeName )
-    {
-        String [ ] strRequestParamValues = null;
-
-        if ( request.getAttribute( FormConstants.ATTRIBUTE_RETURN_FROM_ERRORS ) != null
-                && ( (Boolean) request.getAttribute( FormConstants.ATTRIBUTE_RETURN_FROM_ERRORS ) ) )
-        {
-            strRequestParamValues = request.getParameterValues( strAttributeName );
-        }
-        else
-        {
-            try
-            {
-                strRequestParamValues = (String [ ]) request.getAttribute( strAttributeName );
-            }
-            catch( ClassCastException e )
-            {
-                strRequestParamValues = String.valueOf( request.getAttribute( strAttributeName ) ).split( StringUtils.EMPTY );
-            }
-        }
-
-        return strRequestParamValues;
-    }
-
-    /**
-     * Manage the case where response are linked to an entry of which belong to an iterable group. In this case the id of the entry will be modified to allow
-     * the capacity to distinguish them. The list of responses must be sorted by the group of their entry which they belong to.
+     * Reorder the list of Response with the management of the iterations and return
+     * the new list of ordered response
      * 
      * @param responsesList
-     *            The list of response to analyze
-     * @return the list of response with the management of iterable entry
+     *          The list of Response to reorder for the iteration management
+     * @return the ordered list of responses
      */
-    public static List<Response> manageResponsesList( List<Response> responsesList )
+    public static List<Response> orderResponseList( HttpServletRequest request, List<Response> responsesList )
     {
-        List<Response> resulResponsesList = new ArrayList<>( );
-
-        if ( responsesList != null )
+        List<Response> listResultResponse = new ArrayList<>( );
+        
+        if ( responsesList != null && !responsesList.isEmpty( ) )
         {
-            // The list which contains response of a same iterable group
-            List<Response> groupResponsesList = new ArrayList<>( );
+            Map<Integer, List<Response>> mapIdEntryListResponse = new LinkedHashMap<>( );
 
-            // The comparator used to compare to response of entries belong to a multi group
-            GroupResponseComparator groupResponseComparator = new GroupResponseComparator( );
-
-            int nIdPreviousParent = NumberUtils.INTEGER_MINUS_ONE;
             for ( Response response : responsesList )
             {
-                Entry currentEntry = response.getEntry( );
-
-                // Check if the entry is belong to an iterable group
-                if ( currentEntry != null && entryBelongIterableGroup( currentEntry ) )
+                Entry entryResponse = response.getEntry( );
+                Entry entryResponseParent = entryResponse.getParent( );
+                
+                if ( entryResponseParent != null )
                 {
-                    int nIdParent = currentEntry.getParent( ).getIdEntry( );
-
-                    // If the id of the parent is different from the previous it means that we have switch to another group
-                    // so we will sort the current group list and add its elements to the result list before clean it
-                    if ( nIdPreviousParent != NumberUtils.INTEGER_MINUS_ONE && nIdParent != nIdPreviousParent )
+                    // Case of an entry which belong to a group
+                    int nIdParent = entryResponseParent.getIdEntry( );
+                    if ( !mapIdEntryListResponse.containsKey( nIdParent ) )
                     {
-                        Collections.sort( groupResponsesList, groupResponseComparator );
-                        resulResponsesList.addAll( groupResponsesList );
-                        groupResponsesList = new ArrayList<>( );
+                        mapIdEntryListResponse.put( nIdParent, new ArrayList<Response>( ) );
                     }
 
-                    // Add the iteration entry to the group list
-                    groupResponsesList.add( response );
+                    mapIdEntryListResponse.get( nIdParent ).add( response );
+                }
+                else if ( entryResponse.getFieldDepend( ) != null )
+                {
+                    // Case of a conditional entry - retrieve the parent entry of the  conditional entry 
+                    // to store the Response in the map
+                    Field field = FieldHome.findByPrimaryKey( entryResponse.getFieldDepend( ).getIdField( ) );
+                    Entry entryField = EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) );
+                    while ( entryField.getParent( ) == null && entryField.getFieldDepend( ) != null )
+                    {
+                        field = FieldHome.findByPrimaryKey( entryField.getFieldDepend( ).getIdField( ) );
+                        entryField = EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) );
+                    }
+                    
+                    int nIdParentConditional = entryField.getParent( ).getIdEntry( );
+                    if ( !mapIdEntryListResponse.containsKey( nIdParentConditional ) )
+                    {
+                        mapIdEntryListResponse.put( nIdParentConditional, new ArrayList<Response>( ) );
+                    }
+
+                    mapIdEntryListResponse.get( nIdParentConditional ).add( response );
                 }
                 else
                 {
-                    // If the group list is not empty we will sort all of its elements and add them to the result list
-                    // and clean the list
-                    if ( !groupResponsesList.isEmpty( ) )
-                    {
-                        Collections.sort( groupResponsesList, groupResponseComparator );
-                        resulResponsesList.addAll( groupResponsesList );
-                        groupResponsesList = new ArrayList<>( );
-                    }
-
-                    // Add the entry to the result list
-                    resulResponsesList.add( response );
+                    // The entry of the current response doesn't belong to a group and its not a conditional entry
+                    mapIdEntryListResponse.put( entryResponse.getIdEntry( ), Arrays.asList( response ) );
                 }
             }
-
-            // If the loop is over but it remains responses on group list we will add all its elements to the result list
-            if ( !groupResponsesList.isEmpty( ) )
+            
+            // When the map is fulfilled we will sort each Response list by the iteration number
+            if ( !mapIdEntryListResponse.isEmpty( ) )
             {
-                Collections.sort( groupResponsesList, groupResponseComparator );
-                resulResponsesList.addAll( groupResponsesList );
+                for ( java.util.Map.Entry<Integer, List<Response>> entryIdEntryListReponse : mapIdEntryListResponse.entrySet( ) )
+                {
+                    int nIdEntryIterableGroup = entryIdEntryListReponse.getKey( );
+                    List<Response> listCurrentResponses = entryIdEntryListReponse.getValue( );
+                    
+                    // If the entry is an iterable group we will sort its list of response by the iteration number
+                    if ( getEntryMaxIterationAllowed( nIdEntryIterableGroup ) != NumberUtils.INTEGER_MINUS_ONE )
+                    {
+                        // Sort the list of Response by the iteration number of response
+                        Collections.sort( listCurrentResponses, new GroupResponseComparator( ) );
+                        
+                        // Reset the iteration number of response for the current iterable group
+                        resetResponseIterationNumber( request, nIdEntryIterableGroup, listCurrentResponses );
+                    }
+                    
+                    listResultResponse.addAll( listCurrentResponses );
+                }
             }
         }
-
-        return resulResponsesList;
+        
+        return listResultResponse;
+    }
+    
+    /**
+     * Reset the iteration number with the position of their current iteration number in the list of all iteration number used for the specified group
+     * 
+     * @param request
+     *          The httpServletRequest to retrieve the IterationGroup of the specified group from
+     * @param nIdIterableGroup
+     *          The id of the entry to retrieve the IterationGroup
+     * @param listResponse
+     *          The list of Response of the iterable group to reorder
+     */
+    private static void resetResponseIterationNumber( HttpServletRequest request, int nIdIterableGroup, List<Response> listResponse )
+    {
+        List<Integer> listIteratioNumber = new ArrayList<>( );
+        
+        // Retrieve the IterationGroup object from the session for the current group
+        IterationGroup iterationGroup = retrieveIterationGroup( request, nIdIterableGroup );
+        if ( iterationGroup != null )
+        {
+            listIteratioNumber = new ArrayList<>( iterationGroup.getSetIterationNumber( ) );
+        }
+        
+        // Reset the iteration number of the response if they belong to an iterable group
+        if ( !listIteratioNumber.isEmpty( ) )
+        {
+            for ( Response response : listResponse )
+            {
+                // Reset the iteration number of the response to their position inside the list of iteration number used
+                int nIterationNumber = listIteratioNumber.indexOf( response.getIterationNumber( ) );
+                if ( nIterationNumber != NumberUtils.INTEGER_MINUS_ONE )
+                {
+                    response.setIterationNumber( nIterationNumber + NumberUtils.INTEGER_ONE );
+                }
+            }
+        }
+    }
+    
+    /**
+     * Remove an iteration from the map of IterationGroup for the requested entry for the iteration number in request
+     * 
+     * @param request
+     *          The HttpServletRequest
+     */
+    private static void removeIterationFromMapIterationGroup( HttpServletRequest request )
+    {
+        // Retrieve the iteration to remove from the request
+        java.util.Map.Entry<Integer, Integer> mapIdEntryIterationNumber = getRemoveIterationParameter( request );
+        int nRemoveIteration = mapIdEntryIterationNumber.getValue( );
+        
+        if ( nRemoveIteration != NumberUtils.INTEGER_MINUS_ONE )
+        {
+            // Retrieve the IterationGroup map from the request
+            Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
+            if ( mapIterationGroup != null )
+            {
+                // Retrieve the id of the entry to remove the iteration from
+                int nIdEntry = mapIdEntryIterationNumber.getKey( );
+                IterationGroup iterationGroup = mapIterationGroup.get( nIdEntry );
+                if ( iterationGroup != null )
+                {
+                    iterationGroup.removeIteration( nRemoveIteration );
+                }
+            }
+        }
     }
 
     /**
@@ -946,7 +874,7 @@ public class EntryTypeGroupUtils
      */
     public static String getPatternIteratedAttributeName( int idEntry )
     {
-        return PREFIX_ITERATION + "%s_" + FormConstants.PREFIX_ATTRIBUTE + idEntry;
+        return FormConstants.PREFIX_ITERATION + "%s_" + FormConstants.PREFIX_ATTRIBUTE + idEntry;
     }
 
     /**
@@ -956,16 +884,20 @@ public class EntryTypeGroupUtils
      *            the HttpServletRequest
      * @param idEntry
      *            the id of the entry to retrieve the number of iteration
-     * @return the number of iteration from the request or -1 if an error occurred.
+     * @return the number of iteration from the request or -1 if the map doesn't exist;
      */
-    public static int getCurrentNumberOfIteration( HttpServletRequest request, int idEntry )
-    {
-        String strParameterIteration = String.format( FormConstants.PATTERN_CURRENT_ITERATION, idEntry );
-        String strParameterNbIterationValue = request.getParameter( strParameterIteration );
-
-        if ( StringUtils.isNotBlank( strParameterNbIterationValue ) )
+    public static int getCurrentNumberOfIteration( HttpServletRequest request, int nIdEntry )
+    {        
+        Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
+        
+        if ( mapIterationGroup != null )
         {
-            return NumberUtils.toInt( strParameterNbIterationValue, NumberUtils.INTEGER_MINUS_ONE );
+            IterationGroup iterationGroup = mapIterationGroup.get( nIdEntry );
+            
+            if ( iterationGroup!= null )
+            {
+                return iterationGroup.getIterationNumber( );
+            }
         }
 
         return NumberUtils.INTEGER_MINUS_ONE;
@@ -1001,242 +933,69 @@ public class EntryTypeGroupUtils
 
         return url.getUrl( );
     }
-
+    
     /**
-     * Manage the Response which belong to an iterable Entry. In this case the Response is associated to an Entry with an unknown id. This method will find this
-     * Entry an return it or will return null if not found
-     * 
-     * @param response
-     *            the Response to retrieve the Entry which is belong to
-     * @return the Entry of the specified Response or null if not found
-     */
-    public static Entry findResponseGroupEntry( Response response )
-    {
-        Entry entry = null;
-
-        if ( response != null )
-        {
-            // Retrieve the FormSubmit linked to the response for retrieve the form associated
-            FormSubmit formSubmit = FormSubmitHome.findFormSubmitFromResponseId( response.getIdResponse( ), FormUtils.getPlugin( ) );
-            if ( formSubmit != null && formSubmit.getForm( ) != null )
-            {
-                // Retrieve the original id of the entry linked to the response from the modified id of the response and the id of the form
-                int nIdEntry = response.getEntry( ).getIdEntry( );
-                int nOriginalId = retrieveOriginalIdEntry( nIdEntry, formSubmit.getForm( ).getIdForm( ) );
-
-                // If the id are different it means that the original entry of the response has been found
-                if ( nOriginalId != nIdEntry )
-                {
-                    entry = EntryHome.findByPrimaryKey( nOriginalId );
-                }
-            }
-        }
-
-        return entry;
-    }
-
-    /**
-     * Find Response missing in the Response list of a formSubmit from the list of id Responses of a FormSubmit. This difference is probably due to the fact
-     * that the Response is associated to an iterable entry and has been saved with a computed id
-     * 
-     * @param listResponses
-     *            the list of Response of a FormSubmit
-     * @param listIdResponse
-     *            the list of all Response id of a FormSubmit
-     */
-    public static void completeListResponse( List<Response> listResponses, List<Integer> listIdResponse )
-    {
-        if ( listIdResponse == null || listIdResponse.isEmpty( ) )
-        {
-            return;
-        }
-
-        // Retrieve the id from the response list which are not belong to a response from the result list
-        if ( listResponses != null && !listResponses.isEmpty( ) )
-        {
-            for ( Response response : listResponses )
-            {
-                int nIdResponse = response.getIdResponse( );
-                if ( listIdResponse.contains( nIdResponse ) )
-                {
-                    listIdResponse.remove( Integer.valueOf( nIdResponse ) );
-                }
-            }
-        }
-
-        // If some response id don't have a response it's probably because they are belong
-        // to an iterable entry so we will try find this entry if it exists
-        if ( !listIdResponse.isEmpty( ) )
-        {
-            for ( Integer idResponse : listIdResponse )
-            {
-                Response currentResponse = ResponseHome.lazyFindByPrimaryKey( idResponse );
-                Entry entry = findResponseGroupEntry( currentResponse );
-
-                if ( entry != null )
-                {
-                    currentResponse.setEntry( entry );
-                    listResponses.add( currentResponse );
-                }
-            }
-        }
-    }
-
-    /**
-     * Modify the id of response of an entry which is belong to an iterable group
+     * Populate the map from the session with the list of response for the given entry for the specified iteration
      * 
      * @param request
-     *            The HttpServletRequest
+     *          the HttpServletRequest
      * @param entry
-     *            The entry to modify is id in response
-     * @param listResponse
-     *            The list of response of the entry
-     */
-    public static void modifyResponseEntryId( HttpServletRequest request, Entry entry, List<Response> listResponse )
-    {
-        if ( entry != null && listResponse != null )
-        {
-            int nIdEntryOriginal = entry.getIdEntry( );
-            for ( Response response : listResponse )
-            {
-                int nIterationNumber = (Integer) request.getAttribute( FormConstants.ATTRIBUTE_ITERATION_NUMBER );
-                entry.setIdEntry( computeIterationId( nIdEntryOriginal, nIterationNumber ) );
-                response.setEntry( entry );
-            }
-        }
-    }
-
-    /**
-     * Compute the new id of the entry which belong to an iterable group for an iteration
-     * 
-     * @param nIdEntry
-     *            the id of the entry to modify
+     *          the entry to create a new IterationResponse
      * @param nIterationNumber
-     *            the number of the iteration to make the calculation from
-     * @return the new id of the entry or the given id if the passing parameters are less or equal than 0
+     *          the iteration number to add the new IterationResponse
+     * @param listResponses
+     *          the list of response of the entry
      */
-    public static int computeIterationId( int nIdEntry, int nIterationNumber )
+    public static void populateMapIterationGroup( HttpServletRequest request, Entry entry, int nIterationNumber, List<Response> listResponses )
     {
-        int nComputedId = nIdEntry;
-
-        if ( nIdEntry > NumberUtils.INTEGER_ZERO && nIterationNumber > NumberUtils.INTEGER_ZERO )
+        // Retrieve the map from the session
+        Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
+        
+        if ( mapIterationGroup != null && entry.getParent( ) != null )
         {
-            nComputedId = nIdEntry * FormConstants.ENTRY_ID_MULTIPLIER * nIterationNumber;
+            int nIdEntryGroupParent = entry.getParent( ).getIdEntry( );
+            if ( !mapIterationGroup.containsKey( nIdEntryGroupParent ) )
+            {
+                mapIterationGroup.put( nIdEntryGroupParent, new IterationGroup( nIdEntryGroupParent ) );
+            }
+            
+            // Add the list of Response for the current entry to the IterationGroup
+            // for the current iteration
+            IterationGroup iterationGroup = mapIterationGroup.get( nIdEntryGroupParent );
+            iterationGroup.addEntryResponses( nIterationNumber, entry.getIdEntry( ), listResponses );
         }
-
-        return nComputedId;
     }
-
+    
     /**
-     * Return the original id of an entry or the identifier given as parameter if no result have been found
+     * Retrieve the map which associate for each iterable group entry identifier its IterationGroup object associated
      * 
+     * @param request
+     *          the HttpServletRequest to retrieve the map from
+     * @return the map which associate for each iterable group entry identifier its IterationGroup object associated
+     */
+    @SuppressWarnings( "unchecked" )
+    public static Map<Integer, IterationGroup> retrieveIterationMap( HttpServletRequest request )
+    {
+        if ( request != null )
+        {
+            return (Map<Integer, IterationGroup>) request.getSession( ).getAttribute( FormConstants.SESSION_ITERATION_MAP );
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Retrieve the IterationGroup from the id of an iterable entry from the map store in the session
+     * 
+     * @param request
+     *          The httpServletRequest to retrieve the map from the session
      * @param nIdEntry
-     *            the identifier of the entry to analyze
-     * @param nIdForm
-     *            the identifier of the form where entry belong to
-     * @return the original identifier of the entry or the identifier given as parameter if no result have been found
+     *          The id of the entry to retrieve the IterationGroup associate
+     * @return the IterationGroup associate to the specified id or null if not exist
      */
-    public static int retrieveOriginalIdEntry( int nIdEntry, int nIdForm )
+    public static IterationGroup retrieveIterationGroup( HttpServletRequest request, int nIdEntry )
     {
-        IterationEntry iterationEntry = createIterationEntry( nIdEntry, nIdForm );
-
-        if ( iterationEntry != null )
-        {
-            return iterationEntry.getIdEntryOriginal( );
-        }
-
-        return nIdEntry;
-    }
-
-    /**
-     * Create an IterationEntry from the modified id of an entry and the id of the form of which is attached
-     * 
-     * @param nIdEntry
-     *            the modified id of an entry
-     * @param nIdForm
-     *            the id of the form where the entry belong to
-     * @return the IterationEntry object associated to this entry or null if not found
-     */
-    public static IterationEntry createIterationEntry( int nIdEntry, int nIdForm )
-    {
-        IterationEntry iterationEntry = null;
-
-        Map<Integer, String> mapEntryIdValue = EntryHome.findEntryByForm( PluginService.getPlugin( FormPlugin.PLUGIN_NAME ), nIdForm );
-        if ( mapEntryIdValue != null && !mapEntryIdValue.isEmpty( ) )
-        {
-            Set<Integer> setIdFormEntry = mapEntryIdValue.keySet( );
-            for ( Integer currentIdEntry : setIdFormEntry )
-            {
-                Entry entry = EntryHome.findByPrimaryKey( currentIdEntry );
-                if ( isEntryTypeGroup( entry ) && getEntryMaxIterationAllowed( entry ) != NumberUtils.INTEGER_ZERO )
-                {
-                    java.util.Map.Entry<Integer, Integer> entryIdEntryIteration = findOriginalIdEntry( nIdEntry, entry );
-                    if ( entryIdEntryIteration != null && entryIdEntryIteration.getKey( ) != nIdEntry
-                            && entryIdEntryIteration.getValue( ) != NumberUtils.INTEGER_MINUS_ONE )
-                    {
-                        iterationEntry = new IterationEntry( );
-                        iterationEntry.setIdEntryComputed( nIdEntry );
-                        iterationEntry.setIdEntryOriginal( entryIdEntryIteration.getKey( ) );
-                        iterationEntry.setIdIterableParentGroup( entry.getIdEntry( ) );
-                        iterationEntry.setIterationNumber( entryIdEntryIteration.getValue( ) );
-
-                        break;
-                    }
-                }
-            }
-        }
-
-        return iterationEntry;
-    }
-
-    /**
-     * Retrieve the original Id of an entry which belong to an iterable group and the number of the iteration for which it has been constructed
-     * 
-     * @param nIdModified
-     *            the identifier of the entry which has been modified
-     * @param entryParent
-     *            the parent entry of the current entry to analyze the identifier
-     * @return the entry which contains the original id and the number of the iteration associated or the given id and {@link NumberUtils#INTEGER_MINUS_ONE} if
-     *         not found
-     */
-    private static java.util.Map.Entry<Integer, Integer> findOriginalIdEntry( int nIdModified, Entry entryParent )
-    {
-        // Check if the parent is of type group and allow the iterations
-        if ( entryParent != null && isEntryTypeGroup( entryParent ) && getEntryMaxIterationAllowed( entryParent ) != NumberUtils.INTEGER_ZERO )
-        {
-            int nNumberIterationMaxAllowed = getEntryMaxIterationAllowed( entryParent );
-
-            List<Integer> listEntryChildrenId = new ArrayList<>( );
-            List<Entry> childrenEntryList = entryParent.getChildren( );
-
-            // Construct the list of all id of children belong to the group
-            if ( childrenEntryList != null && !childrenEntryList.isEmpty( ) )
-            {
-                for ( Entry entry : childrenEntryList )
-                {
-                    listEntryChildrenId.add( entry.getIdEntry( ) );
-                }
-            }
-
-            if ( !listEntryChildrenId.isEmpty( ) )
-            {
-                // Make a loop on all iteration possible for the group
-                for ( int currentIterationNumber = NumberUtils.INTEGER_ONE; currentIterationNumber <= nNumberIterationMaxAllowed; currentIterationNumber++ )
-                {
-                    // Compute the potential original identifier
-                    int nOriginalId = nIdModified / ( FormConstants.ENTRY_ID_MULTIPLIER * currentIterationNumber );
-
-                    // If the computed identifier has been found we return it because it is the original identifier
-                    if ( listEntryChildrenId.contains( nOriginalId ) )
-                    {
-                        return new SimpleEntry<Integer, Integer>( nOriginalId, currentIterationNumber );
-                    }
-                }
-            }
-        }
-
-        // Return the given identifier if no result have been found
-        return new SimpleEntry<Integer, Integer>( nIdModified, NumberUtils.INTEGER_MINUS_ONE );
+        return retrieveIterationMap( request ).get( nIdEntry );
     }
 
     /**
@@ -1248,12 +1007,26 @@ public class EntryTypeGroupUtils
      */
     public static boolean entryBelongIterableGroup( Entry entry )
     {
-        if ( entry != null && entry.getParent( ) != null )
+        if ( entry != null )
         {
-            Entry entryParent = EntryHome.findByPrimaryKey( entry.getParent( ).getIdEntry( ) );
-            if ( entryParent != null && entryParent.getEntryType( ) != null && entryParent.getEntryType( ).getGroup( ) )
+            if ( entry.getParent( ) != null )
             {
-                return ( Integer.valueOf( getEntryMaxIterationAllowed( entryParent ) ) != NumberUtils.INTEGER_ZERO );
+                Entry entryParent = EntryHome.findByPrimaryKey( entry.getParent( ).getIdEntry( ) );
+                if ( entryParent != null && entryParent.getEntryType( ) != null && entryParent.getEntryType( ).getGroup( ) )
+                {
+                    return ( Integer.valueOf( getEntryMaxIterationAllowed( entryParent.getIdEntry( ) ) ) != NumberUtils.INTEGER_MINUS_ONE );
+                }
+            }
+            else
+            {
+                if ( entry.getFieldDepend( ) != null )
+                {
+                    Field field = FieldHome.findByPrimaryKey( entry.getFieldDepend( ).getIdField( ) );
+                    if ( field != null && field.getParentEntry( ) != null )
+                    {
+                        return entryBelongIterableGroup( EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) ) );
+                    }
+                }
             }
         }
 
@@ -1299,5 +1072,115 @@ public class EntryTypeGroupUtils
         }
 
         return Boolean.FALSE;
+    }
+
+    /**
+     * Return the list of all id of entries from the form which allowed iterations
+     * 
+     * @param nParameterIdForm
+     *          The id of the form to retrieve the entries from
+     * @return the list of all id of entries from the form which allowed iterations or null if there
+     *          are no entry which iteration in the form
+     */
+    public static List<Integer> findIdEntryGroupIterable( int nIdForm )
+    {
+        List<Integer> listIdEntry = null;
+        
+        EntryFilter filter = new EntryFilter( );
+        filter.setIdResource( nIdForm );
+        filter.setResourceType( Form.RESOURCE_TYPE );
+        filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+        filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+        
+        List<Entry> listEntryFirstLevel = EntryHome.getEntryList( filter );
+        if ( listEntryFirstLevel != null && !listEntryFirstLevel.isEmpty( ) )
+        {
+            listIdEntry = new ArrayList<>( );
+            for ( Entry entry : listEntryFirstLevel )
+            {
+                int nIdEntry = entry.getIdEntry( );
+                if ( getEntryMaxIterationAllowed( nIdEntry ) != NumberUtils.INTEGER_MINUS_ONE )
+                {
+                    listIdEntry.add( nIdEntry );
+                }
+            }
+        }
+        
+        return listIdEntry;
+    }
+    
+    /**
+     * Return the couple of the parameters for removing an iteration. The key is the identifier of the entry and the value is
+     * the iteration number to remove. If the parameter is not found in the request the key and the value will be equals to -1.
+     * 
+     * @param request
+     *          The request to retrieve the parameter from
+     * @return the couple of the id of the entry and the iteration number to remove
+     */
+    public static java.util.Map.Entry<Integer, Integer> getRemoveIterationParameter( HttpServletRequest request )
+    {
+        java.util.Map.Entry<Integer, Integer> entryIdEntryIterationNumber = new AbstractMap.SimpleEntry<>( NumberUtils.INTEGER_MINUS_ONE, NumberUtils.INTEGER_MINUS_ONE );
+        
+        if ( request != null && request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ) != null )
+        {
+            String[ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ).split( FormConstants.UNDERSCORE );
+            if ( listParameterRemoveIteration != null && listParameterRemoveIteration.length > 1 )
+            {
+                int nIdEntry = NumberUtils.toInt( listParameterRemoveIteration[0], NumberUtils.INTEGER_MINUS_ONE );
+                int nIterationNumber = NumberUtils.toInt( listParameterRemoveIteration[1], NumberUtils.INTEGER_MINUS_ONE );
+                entryIdEntryIterationNumber = new AbstractMap.SimpleEntry<>( nIdEntry, nIterationNumber );
+            }
+        }
+        
+        return entryIdEntryIterationNumber;
+    }
+    
+    /**
+     * Check if the entry belong to a service type of a file upload (file or image) and if the request is of type 
+     * MultipartHttpServletRequest which allow the upload
+     * 
+     * @param request
+     *          The HtpServletRequest to analyze
+     * @param entry
+     *          The entry to analyze
+     * @return true if the entry belong to an entry type which allow the upload and if the request allow it too
+     */
+    private static boolean isEntryOfUploadType( HttpServletRequest request, Entry entry )
+    {
+        boolean bIsEntryOfUploadType = Boolean.FALSE;
+        
+        if ( entry != null )
+        {
+            IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
+            bIsEntryOfUploadType =  request instanceof MultipartHttpServletRequest && EntryTypeUploadEnum.getValues( ).contains( entryTypeService.getClass( ).getName( ) );
+        }
+        
+        return bIsEntryOfUploadType;
+    }
+    
+    /**
+     * Tell if an iterable group has reached its maximum iteration limit or not.
+     * 
+     * @param request
+     *          The HttpServletRequest to retrieve the ietrationGroup of the entry from
+     * @param nIdEntry
+     *          The id of the entry to retrieve the IterationGroup
+     * @return true if the iteration limit has been reached false otherwise
+     */
+    public static boolean isEntryIterationLimitReached( HttpServletRequest request, int nIdEntry )
+    {
+        boolean bLimitReached = Boolean.FALSE;
+        
+        // Retrieve the current IterationGroup for the specified entry
+        Map<Integer, IterationGroup> mapIterationGroup = EntryTypeGroupUtils.retrieveIterationMap( request );
+        IterationGroup iterationGroup = mapIterationGroup.get( nIdEntry );
+
+        // Check if the user reach the limit of iteration for the current entry
+        if ( iterationGroup != null )
+        {
+            bLimitReached = iterationGroup.isIterationLimitReached( );
+        }
+
+        return bLimitReached; 
     }
 }

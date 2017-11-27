@@ -62,9 +62,6 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
     // Parameters
     private static final String PARAMETER_NB_ITERATION = "nb_iterations";
 
-    // Attributes
-    public static final String ATTRIBUTE_CURRENT_ITERATION = "attribute_current_iteration";
-
     // Constants
     public static final String CONSTANT_NB_ITERATION = "nb_iterations";
     private static final String MESSAGE_FIELD_NB_ITERATIONS = "form.modifyEntry.typeGroup.message.fieldNbIterations";
@@ -72,7 +69,7 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
     // templates
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_group.html";
     private static final String TEMPLATE_HTML_CODE = "skin/plugins/form/entries/html_code_entry_type_group.html";
-    private static final String TEMPLATE_HTML_CODE_MULTI_GROUP = "skin/plugins/form/entries/html_code_multi_entry_type_group.html";
+    private static final String TEMPLATE_HTML_CODE_MULTI_GROUP = "skin/plugins/form/entries/html_code_iterable_entry_type_group.html";
 
     /**
      * {@inheritDoc}

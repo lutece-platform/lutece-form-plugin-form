@@ -4,17 +4,13 @@
 
 <@messages infos = infos_iterable_group />
 <fieldset class="multi-group">
-
+	
 	<#if (nb_iterations != "") && (nb_iterations?number > 1)>
-		<button class="btn btn-sm btn-primary btn-flat pull-right add_iteration" type="submit" name="add_iteration" title="#i18n{form.modifyForm.manageEnter.buttonInsertIteration}">
-			<input type="hidden" name="id_entry" value="${entry.idEntry}"/>
+		<button class="btn btn-sm btn-primary btn-flat pull-right add_iteration" type="submit" name="add_iteration" value="${entry.idEntry}" title="#i18n{form.modifyForm.manageEnter.buttonInsertIteration}">
 			<i class="fa fa-plus" aria-hidden="true"></i>
 			<span class="sr-only">#i18n{form.modifyForm.manageEnter.buttonInsertIteration}</span>
 		</button>
 	</#if>
-	
-	<input type="hidden" name="nb_current_iteration_${entry.idEntry}" value="${nb_current_iteration!1}" />
-	
+
 	<#include "/skin/plugins/form/entries/html_code_entry_type_group.html" />
-	
 </fieldset>

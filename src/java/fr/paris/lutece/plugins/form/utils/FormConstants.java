@@ -42,6 +42,7 @@ public class FormConstants
 {
     // Session
     public static final String SESSION_FORM_ERRORS = "form_errors";
+    public static final String SESSION_ITERATION_MAP = "session_iteration_map";
 
     // Parameters
     public static final String PARAMETER_ID_FORM = "id_form";
@@ -54,22 +55,24 @@ public class FormConstants
     public static final String ATTRIBUTE_ITERATION_NUMBER = "attribute_iteration_number";
     public static final String ATTRIBUTE_NO_FILLED_ENTRY_GROUP = "attribute_no_selection";
     public static final String ATTRIBUTE_RETURN_FROM_ERRORS = "attribute_return_from_errors";
+    public static final String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
 
     // Marks
     public static final String MARK_FORM = "form";
+    public static final String MARK_ID_FORM = "id_form";
     public static final String MARK_FORM_SUBMIT = "formSubmit";
     public static final String MARK_URL_ACTION = "url_action";
     public static final String MARK_STR_LIST_CHILDREN = "str_list_entry_children";
 
-    // Patterns
-    public static final String PATTERN_CURRENT_ITERATION = "nb_current_iteration_%s";
-
     // Prefixes
+    public static final String PREFIX_ITERATION = "nIt";
     public static final String PREFIX_ATTRIBUTE = "attribute";
+    public static final String PREFIX_ATTRIBUTE_ITERATION = "iteration";
 
     // Symbols
     public static final String ANCHOR_DELIMITER = "#";
     public static final String SLASH = "/";
+    public static final String UNDERSCORE = "_";
 
     // Other constants
     public static final String CONSTANT_WHERE = " WHERE ";

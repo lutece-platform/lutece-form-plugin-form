@@ -1,18 +1,27 @@
 <#assign hide="">
 <#list entry.fields as field>
-<#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0>
-	<#assign hide=hide+"hide(${field.idField});">
-</#if>	
+	<#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0>
+		<#assign idName = 'div'>
+		<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+			<#assign idName = 'div_nIt' + entry_iteration_number + '_'>
+		</#if>
+		<#assign idConditional = idName + field.idField>
+		<#assign hide=hide+"hideId(${idConditional}.id);">
+	</#if>
 </#list>
 ${entry.CSSClass!}
 
 	<div class="form-group">
+		<#assign idName = 'attribute' + entry.idEntry>
+		<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+			<#assign idName = 'nIt' + entry_iteration_number + '_attribute' + entry.idEntry>
+		</#if>
 		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<#list entry.fields as field>
 			<#if entry.fieldInLine != true><div class="radio"></#if>
-				<label <#if entry.fieldInLine>class="radio-inline"</#if> for="attribute${entry.idEntry}_${field.idField}" <#if field.comment?? && field.comment != ''>title="${field.comment}"</#if> > 
-					<input type="radio" id="attribute${entry.idEntry}_${field.idField}" name="attribute${entry.idEntry}" value="${field.idField}"
+				<label <#if entry.fieldInLine>class="radio-inline"</#if> for="${idName}_${field.idField}" <#if field.comment?? && field.comment != ''>title="${field.comment}"</#if> > 
+					<input type="radio" id="${idName}_${field.idField}" name="${idName}" value="${field.idField}"
 					<#if list_responses??>
 						<#list list_responses as response>
 							<#if response.entry.idEntry == entry.idEntry && response.field??>
@@ -21,7 +30,14 @@ ${entry.CSSClass!}
 						</#list>
 					<#else>
 						<#if field.defaultValue>checked="checked"</#if>
-					</#if> onclick="${hide} <#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0>doDisplay(${field.idField});</#if>"/>
+					</#if> onclick="${hide} <#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0>
+						<#assign idName = 'div'>
+						<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+							<#assign idName = 'div_nIt' + entry_iteration_number + '_'>
+						</#if>
+						<#assign idConditional = idName + field.idField>
+						displayId(${idConditional}.id);</#if>"
+					/>
 			 <#if !field.noDisplayTitle>
 			 	${field.title}
 			 </#if>
@@ -49,8 +65,12 @@ ${entry.CSSClass!}
 <#if list_responses??>
 	<script type="text/javascript">
 		<#list list_responses as response>
+			var idName = '';
+			<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+				idName = '_nIt' + ${entry_iteration_number} + '_';
+			</#if>
 			<#if response.entry.idEntry == entry.idEntry && response.field??>
-				var baliseId = "div" + ${response.field.idField};
+				var baliseId = "div" + idName + ${response.field.idField};
 				if(document.getElementById && document.getElementById(baliseId) != null)
 				{
 					document.getElementById(baliseId).style.visibility='visible';
@@ -63,7 +83,11 @@ ${entry.CSSClass!}
 	<#list entry.fields as field>
 		<#if field.defaultValue && field.conditionalQuestions?exists && field.conditionalQuestions?size != 0>
 			<script type="text/javascript">
-				var baliseId = "div" + ${field.idField};
+				var idName = '';
+				<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+					idName = '_nIt' + ${entry_iteration_number} + '_';
+				</#if>
+				var baliseId = "div" + idName + ${field.idField};
 				
 				if(document.getElementById && document.getElementById(baliseId) != null)
 				{

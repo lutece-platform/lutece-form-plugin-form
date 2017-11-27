@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -73,6 +74,7 @@ import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUser;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
+import fr.paris.lutece.plugins.form.web.http.GroupHttpServletRequestWrapper;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -82,6 +84,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeArray;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
@@ -138,6 +141,7 @@ public final class FormUtils
     private static final String MARK_USER = "user";
     private static final String MARK_UPLOAD_HANDLER = "uploadHandler";
     private static final String MARK_WEBAPP_URL = "webapp_url";
+    private static final String MARK_ENTRY_ITERATION_NUMBER = "entry_iteration_number";
 
     // Name of the JCaptcha plugin
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
@@ -154,12 +158,14 @@ public final class FormUtils
     private static final String TAG_QUESTION = "question";
     private static final String TAG_QUESTION_TITLE = "question-title";
     private static final String TAG_QUESTION_ID = "question-id";
+    private static final String TAG_QUESTION_ITERATION_NUMBER = "iteration-number";
     private static final String TAG_RESPONSES = "responses";
     private static final String TAG_RESPONSE = "response";
     private static final String TAG_FORM_ENTRIES = "form-entries";
     private static final String TAG_FORM_ENTRY = "form-entry";
     private static final String TAG_FORM_ENTRY_ID = "form-entry-id";
     private static final String TAG_FORM_ENTRY_TITLE = "form-entry-title";
+    private static final String TAG_FORM_ENTRY_ITERATION_NUMBER = "form-entry-iteration-number";
 
     // Templates
     private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "skin/plugins/form/html_code_div_conditional_entry.html";
@@ -734,6 +740,27 @@ public final class FormUtils
      */
     public static void getHtmlEntry( int nIdEntry, StringBuffer stringBuffer, Locale locale, boolean bDisplayFront, HttpServletRequest request )
     {
+        getHtmlEntry( nIdEntry, stringBuffer, locale, bDisplayFront, request, NumberUtils.INTEGER_MINUS_ONE );
+    }
+    
+    /**
+     * Insert in the string buffer the content of the HTML code of the entry
+     * 
+     * @param nIdEntry
+     *            the key of the entry which HTML code must be insert in the stringBuffer
+     * @param stringBuffer
+     *            the buffer which contains the HTML code
+     * @param locale
+     *            the locale
+     * @param bDisplayFront
+     *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office.
+     * @param request
+     *            HttpServletRequest
+     * @param nIterationNumber
+     *            the current iteration number
+     */
+    public static void getHtmlEntry( int nIdEntry, StringBuffer stringBuffer, Locale locale, boolean bDisplayFront, HttpServletRequest request, int nIterationNumber )
+    {
         Map<String, Object> model = new HashMap<String, Object>( );
         StringBuffer strConditionalQuestionStringBuffer = null;
         HtmlTemplate template;
@@ -772,11 +799,12 @@ public final class FormUtils
 
                     for ( Entry entryConditional : field.getConditionalQuestions( ) )
                     {
-                        getHtmlEntry( entryConditional.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request );
+                        getHtmlEntry( entryConditional.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request, nIterationNumber );
                     }
 
                     model.put( FormConstants.MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
                     model.put( MARK_FIELD, field );
+                    model.put( MARK_ENTRY_ITERATION_NUMBER, nIterationNumber );
                     template = AppTemplateService.getTemplate( TEMPLATE_DIV_CONDITIONAL_ENTRY, locale, model );
                     strConditionalQuestionStringBuffer.append( template.getHtml( ) );
                 }
@@ -786,6 +814,7 @@ public final class FormUtils
         }
 
         model.put( MARK_ENTRY, entry );
+        model.put( MARK_ENTRY_ITERATION_NUMBER, nIterationNumber );
         model.put( MARK_LOCALE, locale );
 
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
@@ -823,10 +852,16 @@ public final class FormUtils
                 }
 
                 // Check if the current entry has a parent and if the parent is of entry type group or not
-                if ( entry != null && entry.getParent( ) != null )
+                if ( ( entry != null && entry.getParent( ) != null ) || entry.getFieldDepend( ) != null )
                 {
                     // Manage the response for an entry belong to an iterable group
-                    EntryTypeGroupUtils.manageIterableGroupResponse( request, entry, listResponses );
+                    EntryTypeGroupUtils.manageIterableGroupResponse( request, entry, listResponses, nIterationNumber );
+                    
+                    // Populate the IterationGroup map in the session
+                    if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
+                    {
+                        EntryTypeGroupUtils.populateMapIterationGroup( request, entry, nIterationNumber, listResponses );
+                    }
                 }
             }
 
@@ -874,6 +909,34 @@ public final class FormUtils
     public static List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin, FormSubmit formSubmit,
             boolean bResponseNull, boolean bReturnErrors, Locale locale )
     {
+        return getResponseEntry( request, nIdEntry, plugin, formSubmit, bResponseNull, bReturnErrors, locale, NumberUtils.INTEGER_MINUS_ONE );
+    }
+    
+    /**
+     * Perform in the object formSubmit the responses associates with a entry specify in parameter.<br />
+     * Return null if there is no error in the response else return a FormError Object
+     * 
+     * @param request
+     *            the request
+     * @param nIdEntry
+     *            the key of the entry
+     * @param plugin
+     *            the plugin
+     * @param formSubmit
+     *            Form Submit Object
+     * @param bResponseNull
+     *            true if the response create must be null
+     * @param bReturnErrors
+     *            true if errors must be returned
+     * @param locale
+     *            the locale
+     * @param nIterationNumber
+     *            the current iteration number
+     * @return null if there is no error in the response else return a FormError Object
+     */
+    public static List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin, FormSubmit formSubmit,
+            boolean bResponseNull, boolean bReturnErrors, Locale locale, int nIterationNumber )
+    {
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
         List<Response> listResponse = new ArrayList<Response>( );
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
@@ -900,8 +963,25 @@ public final class FormUtils
 
                 if ( !bResponseNull )
                 {
+                    // Set the iteration number in the request to retrieve it from the EntryTypeService
+                    request.setAttribute( FormConstants.ATTRIBUTE_RESPONSE_ITERATION_NUMBER, nIterationNumber );
+                    
+                    // Manage the case of an entry of type array
+                    if ( EntryTypeServiceManager.getEntryTypeService( entry ) instanceof AbstractEntryTypeArray && request instanceof GroupHttpServletRequestWrapper )
+                    {
+                        StringBuilder strIterationParameterName = new StringBuilder( ( ( GroupHttpServletRequestWrapper ) request ).getIterationParameterName( ) );
+                        strIterationParameterName.append( FormConstants.PREFIX_ATTRIBUTE );
+                        strIterationParameterName.append( entry.getIdEntry( ) );
+                        strIterationParameterName.append( FormConstants.UNDERSCORE );
+                        
+                        ( ( GroupHttpServletRequestWrapper ) request ).setIterationParameterName( strIterationParameterName.toString( ) );
+                    }
+                    
                     // Manage errors
                     formError = EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponse, locale );
+                    
+                    // Remove the attribute when it has been used
+                    request.removeAttribute( FormConstants.ATTRIBUTE_RESPONSE_ITERATION_NUMBER );
 
                     if ( formError != null )
                     {
@@ -921,6 +1001,7 @@ public final class FormUtils
                 {
                     Response response = new Response( );
                     response.setEntry( entry );
+                    response.setIterationNumber( nIterationNumber );
                     listResponse.add( response );
                 }
 
@@ -941,11 +1022,11 @@ public final class FormUtils
                     }
                 }
 
-                // If the entry belong to an iterable group we will change the id of every entry
-                // of their responses to avoid create grouping on the recap page
+                // If the entry belong to an iterable group we will populate the iteration map in the session
                 if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
                 {
-                    EntryTypeGroupUtils.modifyResponseEntryId( request, entry, listResponse );
+                    // Populate the IterationGroup map in the session
+                    EntryTypeGroupUtils.populateMapIterationGroup( request, entry, nIterationNumber, listResponse );
                 }
 
                 formSubmit.getListResponse( ).addAll( listResponse );
@@ -959,7 +1040,7 @@ public final class FormUtils
                         for ( Entry conditionalEntry : field.getConditionalQuestions( ) )
                         {
                             listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry( ), plugin, formSubmit, !bIsFieldInResponseList,
-                                    bReturnErrors, locale ) );
+                                    bReturnErrors, locale, nIterationNumber ) );
                         }
                     }
                 }
@@ -1035,11 +1116,29 @@ public final class FormUtils
 
         // Build entries list XML
         XmlUtil.beginElement( buffer, TAG_FORM_ENTRIES );
+        Map<Integer, Integer> mapIdEntryIterationNumber = new LinkedHashMap<>( );
 
         for ( Entry entry : getAllQuestionList( form.getIdForm( ), plugin ) )
         {
             XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
             XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry( ) );
+            
+            // Add an iteration-number tag to the document
+            int nIterationNumber = NumberUtils.INTEGER_MINUS_ONE;
+            if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
+            {
+                int nIdEntry = entry.getIdEntry( );
+                if ( !mapIdEntryIterationNumber.containsKey( nIdEntry ) )
+                {
+                    mapIdEntryIterationNumber.put( nIdEntry, NumberUtils.INTEGER_ONE );
+                }
+                
+                int nCurrentEntryIterationNumber = mapIdEntryIterationNumber.get( nIdEntry ); 
+                nIterationNumber = nCurrentEntryIterationNumber;
+                mapIdEntryIterationNumber.put( nIdEntry, nCurrentEntryIterationNumber + NumberUtils.INTEGER_ONE );
+            }
+            XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ITERATION_NUMBER, nIterationNumber );
+            
             XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle( ) );
             XmlUtil.endElement( buffer, TAG_FORM_ENTRY );
         }
@@ -1150,17 +1249,20 @@ public final class FormUtils
                     response.setField( field );
                 }
 
-                if ( ( responseStore != null ) && ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) ) )
+                if ( responseStore != null && ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) 
+                        || response.getIterationNumber( ) != responseStore.getIterationNumber( ) ) )
                 {
                     XmlUtil.endElement( buffer, TAG_RESPONSES );
                     XmlUtil.endElement( buffer, TAG_QUESTION );
                 }
 
-                if ( ( responseStore == null ) || ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) ) )
+                if ( responseStore == null || ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) 
+                        || response.getIterationNumber( ) != responseStore.getIterationNumber( ) ) )
                 {
                     XmlUtil.beginElement( buffer, TAG_QUESTION );
                     XmlUtil.addElementHtml( buffer, TAG_QUESTION_TITLE, response.getEntry( ).getTitle( ) );
                     XmlUtil.addElement( buffer, TAG_QUESTION_ID, response.getEntry( ).getIdEntry( ) );
+                    XmlUtil.addElement( buffer, TAG_QUESTION_ITERATION_NUMBER, response.getIterationNumber( ) );
                     XmlUtil.beginElement( buffer, TAG_RESPONSES );
                 }
 
@@ -1392,22 +1494,19 @@ public final class FormUtils
                 filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
                 entryFirstLevel.setFields( FieldHome.getFieldListByIdEntry( entryFirstLevel.getIdEntry( ) ) );
-                int nNumberOfIterationMax = EntryTypeGroupUtils.getEntryMaxIterationAllowed( entryFirstLevel );
-                if ( nNumberOfIterationMax != NumberUtils.INTEGER_ZERO )
+                
+                // Manage the case of an iteration
+                int nIterationEntryMax = EntryTypeGroupUtils.getEntryMaxIterationAllowed( entryFirstLevel.getIdEntry( ) );
+                if ( nIterationEntryMax != NumberUtils.INTEGER_MINUS_ONE )
                 {
-                    for ( int nCurrentIterationNumber = NumberUtils.INTEGER_ONE; nCurrentIterationNumber <= nNumberOfIterationMax; nCurrentIterationNumber++ )
+                    for ( int nCurrentIterationNumber = NumberUtils.INTEGER_ONE; nCurrentIterationNumber <= nIterationEntryMax; nCurrentIterationNumber++ )
                     {
                         for ( Entry entryChild : EntryHome.getEntryList( filter ) )
                         {
-                            // Compute the new id for the entry of the iteration
-                            int nNewIdEntry = EntryTypeGroupUtils.computeIterationId( entryChild.getIdEntry( ), nCurrentIterationNumber );
-
                             listEntry.add( entryChild );
                             addConditionnalsEntry( entryChild, listEntry, plugin );
-
-                            // Change the id of the entry
-                            entryChild.setIdEntry( nNewIdEntry );
                         }
+
                     }
                 }
                 else

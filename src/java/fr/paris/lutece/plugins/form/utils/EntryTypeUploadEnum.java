@@ -31,72 +31,57 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.form.web.http;
+package fr.paris.lutece.plugins.form.utils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeFile;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeImage;
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeCropImage;
 
 /**
- * 
- * Wrapper of ServletRequest for entry of type iterable Group
- *
+ * Enumeration of all EntryType which need to upload file (file, image, etc...)
  */
-public class GroupHttpServletRequestWrapper extends HttpServletRequestWrapper
-{
-    // Pattern
-    private static final String PATTERN_PARAM_PREFIX_ITERATION = "nIt%s_";
+public enum EntryTypeUploadEnum {
 
-    // Variable
-    private String _strIterationParameterName;
+    EntryTypeFile( EntryTypeFile.class.getName( ) ),
+    EntryTypeImage( EntryTypeImage.class.getName( ) ),
+    EntryTypeCropImage( EntryTypeCropImage.class.getName( ) );
+    
+    // The name of the class of the EntryType
+    private String _strEntryTypeClassName;
 
-    /**
-     * Constructor
-     * 
-     * @param request
-     *            The HttpServletRequest base
-     * @param nIterationNumber
-     *            The iteration number
-     */
-    public GroupHttpServletRequestWrapper( HttpServletRequest request, int nIterationNumber )
+    // Private constructor
+    private EntryTypeUploadEnum( String strEntryTypeClassName)
     {
-        super( request );
-        _strIterationParameterName = String.format( PATTERN_PARAM_PREFIX_ITERATION, nIterationNumber );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String [ ] getParameterValues( String name )
-    {
-        return super.getParameterValues( _strIterationParameterName + name );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getParameter( String name )
-    {
-        return super.getParameter( _strIterationParameterName + name );
+        _strEntryTypeClassName = strEntryTypeClassName;
     }
     
     /**
-     * Return the iterationParameterName
+     * Return the value of the enumeration
      * 
-     * @return the iterationParameterName
+     * @return the value of the enumeration
      */
-    public String getIterationParameterName( )
+    public String getValue( )
     {
-        return _strIterationParameterName;
+        return _strEntryTypeClassName;
     }
-
+    
     /**
-     * Set the iteration parameter name
+     * Return all the value of the Enumeration
      * 
-     * @param strIterationParameterName 
-     *          the iterationParameterName to set
+     * @return all the value of the Enumeration
      */
-    public void setIterationParameterName( String strIterationParameterName )
+    public static Set<String> getValues( )
     {
-        this._strIterationParameterName = strIterationParameterName;
+        Set<String> setEntryTypeName = new LinkedHashSet<>( );
+        
+        EntryTypeUploadEnum[ ] entryTypeUploadEnums =  values( );
+        for ( EntryTypeUploadEnum entryTypeUploadEnum : entryTypeUploadEnums )
+        {
+            setEntryTypeName.add( entryTypeUploadEnum.getValue( ) );
+        }
+        
+        return setEntryTypeName;
     }
 }

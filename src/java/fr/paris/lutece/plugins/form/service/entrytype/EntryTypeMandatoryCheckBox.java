@@ -115,6 +115,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
         {
             response = new Response( );
             response.setEntry( entry );
+            response.setIterationNumber( getResponseIterationValue( request ) );
             listResponse.add( response );
         }
         else
@@ -125,6 +126,7 @@ public class EntryTypeMandatoryCheckBox extends EntryTypeCheckBox
                 response.setEntry( entry );
                 response.setResponseValue( fieldInResponse.getValue( ) );
                 response.setField( fieldInResponse );
+                response.setIterationNumber( getResponseIterationValue( request ) );
                 listResponse.add( response );
             }
         }

@@ -1,7 +1,11 @@
 	<div class="form-group">
-		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3"  for="attribute${entry.idEntry}">${entry.title} <#if entry.mandatory>*</#if></label>
+		<#assign idName = 'attribute' + entry.idEntry>
+		<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+			<#assign idName = 'nIt' + entry_iteration_number + '_attribute' + entry.idEntry>
+		</#if>
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3"  for="${idName}">${entry.title} <#if entry.mandatory>*</#if></label>
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">	 
-			<select class="form-control input-sm" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}"
+			<select class="form-control input-sm" name="${idName}" id="${idName}"
 				<#if list_responses??>
 					<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry && response.entry.error??>

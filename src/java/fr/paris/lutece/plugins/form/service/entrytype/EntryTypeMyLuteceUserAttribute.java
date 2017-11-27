@@ -166,6 +166,7 @@ public class EntryTypeMyLuteceUserAttribute extends AbstractEntryTypeMyLuteceUse
         Response response = new Response( );
         response.setEntry( entry );
         response.setResponseValue( user.getUserInfo( strAttribute ) );
+        response.setIterationNumber( getResponseIterationValue( request ) );
 
         listResponse.add( response );
 

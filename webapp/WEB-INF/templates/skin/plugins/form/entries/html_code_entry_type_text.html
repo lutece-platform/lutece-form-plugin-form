@@ -1,9 +1,13 @@
 	<div class="form-group">
-		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+		<#assign idName = 'attribute' + entry.idEntry>
+		<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+			<#assign idName = 'nIt' + entry_iteration_number + '_attribute' + entry.idEntry>
+		</#if>
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="${idName}">${entry.title}<#if entry.mandatory> *</#if></label>
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			<#list entry.fields as field>
 				<#if field.title?? &&  field.title == "additionalAddress">
-					<input readonly="readonly" type="text" class="form-control input-sm" name="attribute${entry.idEntry}" id="id_additional_address" <#if field.width &gt; 0>style="width:${field.width}px;"</#if>
+					<input readonly="readonly" type="text" class="form-control input-sm" name="${idName}" id="id_additional_address" <#if field.width &gt; 0>style="width:${field.width}px;"</#if>
 					<#if list_responses??>
 						<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry>
@@ -27,7 +31,7 @@
 					</#if>
 				class="${entry.CSSClass!} "	/>
 				<#else>
-					<input type="text" class="form-control input-sm" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" <#if field.width &gt; 0>style="width:${field.width}px;"</#if>
+					<input type="text" class="form-control input-sm" name="${idName}" id="${idName}" <#if field.width &gt; 0>style="width:${field.width}px;"</#if>
 					<#if list_responses??>
 						<#list list_responses as response>
 						<#if response.entry.idEntry == entry.idEntry>
@@ -69,10 +73,14 @@
 </#if>
 <#if entry.confirmField>
 	<div class="form-group">
-		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="attribute${entry.idEntry}_confirm_field">${entry.confirmFieldTitle}<#if entry.mandatory> *</#if></label>
+		<#assign idName = 'attribute' + entry.idEntry>
+		<#if entry_iteration_number?has_content && entry_iteration_number != -1>
+			<#assign idName = 'nIt' + entry_iteration_number + '_attribute' + entry.idEntry>
+		</#if>
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="${idName}_confirm_field">${entry.confirmFieldTitle}<#if entry.mandatory> *</#if></label>
 		<#list entry.fields as field>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-				<input type="text" class="form-control input-sm" name="attribute${entry.idEntry}_confirm_field" id="attribute${entry.idEntry}_confirm_field" size="${field.width}" value="" 
+				<input type="text" class="form-control input-sm" name="${idName}_confirm_field" id="${idName}_confirm_field" size="${field.width}" value="" 
 				<#if field.maxSizeEnter!=-1>maxlength="${field.maxSizeEnter}"</#if>/>
 			</div>
 		</#list>

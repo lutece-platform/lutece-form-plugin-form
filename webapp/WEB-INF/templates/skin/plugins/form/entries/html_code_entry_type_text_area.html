@@ -1,14 +1,22 @@
 <#macro getTextAreaContent responseContent has_error entry field>
+	<#assign idName = 'attribute' + entry.idEntry>
+	<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+		<#assign idName = 'nIt' + entry_iteration_number + '_attribute' + entry.idEntry>
+	</#if>
 	<!#-- 	fieldInLine means use rich text -->
 	<#if has_error>
-		<textarea name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="alert alert-danger<#if entry.fieldInLine> richtext</#if> form-control">${responseContent}</textarea>
+		<textarea name="${idName}" id="${idName}" cols="${field.width}" rows="${field.height}" class="alert alert-danger<#if entry.fieldInLine> richtext</#if> form-control">${responseContent}</textarea>
 	<#else>
-		<textarea name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" cols="${field.width}" rows="${field.height}" class="${entry.CSSClass!}<#if entry.fieldInLine> richtext</#if> form-control">${responseContent}</textarea>
+		<textarea name="${idName}" id="${idName}" cols="${field.width}" rows="${field.height}" class="${entry.CSSClass!}<#if entry.fieldInLine> richtext</#if> form-control">${responseContent}</textarea>
 	</#if>
 </#macro>
 
 	<div class="form-group">
-		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+		<#assign idName = 'attribute' + entry.idEntry>
+		<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+			<#assign idName = 'nIt' + entry_iteration_number + '_attribute' + entry.idEntry>
+		</#if>
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="${idName}">${entry.title}<#if entry.mandatory> *</#if></label>
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			<#list entry.fields as field>
 				<#if list_responses??>

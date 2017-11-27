@@ -1,3 +1,7 @@
-<div class="form-element-conditionnel" id="div${field.getIdField()}" style="visibility:hidden; display:none;">
+<#assign idName = 'div' + field.idField>
+<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+	<#assign idName =  'div' + '_nIt' + entry_iteration_number + '_' + field.idField>
+</#if>
+<div class="form-element-conditionnel" id="${idName}" style="visibility:hidden; display:none;">
 	${str_list_entry_children}
 </div>

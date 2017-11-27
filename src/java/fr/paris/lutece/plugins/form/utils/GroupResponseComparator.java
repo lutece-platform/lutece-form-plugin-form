@@ -41,32 +41,32 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 
 /**
  * 
- * Comparator class for response which are belong to an entry of a multi group
+ * Comparator class for response which are belong to an entry of an iterable group based on their iteration number
  *
  */
 public class GroupResponseComparator implements Comparator<Response>
 {
 
     /**
-     * The comparison of the responses is based on the id of their entries
+     * The comparison of the responses is based on the iteration number
      */
     @Override
     public int compare( Response response1, Response response2 )
     {
-        Integer nIdEntryResponse1 = NumberUtils.INTEGER_ZERO;
-        Integer nIdEntryResponse2 = NumberUtils.INTEGER_ZERO;
+        Integer nIterationNumberResponse1 = NumberUtils.INTEGER_MINUS_ONE;
+        Integer nIterationNumberResponse2 = NumberUtils.INTEGER_MINUS_ONE;
 
-        if ( response1 != null && response1.getEntry( ) != null )
+        if ( response1 != null )
         {
-            nIdEntryResponse1 = Integer.valueOf( response1.getEntry( ).getIdEntry( ) );
+            nIterationNumberResponse1 = response1.getIterationNumber( );
         }
 
-        if ( response2 != null && response2.getEntry( ) != null )
+        if ( response2 != null )
         {
-            nIdEntryResponse2 = Integer.valueOf( response2.getEntry( ).getIdEntry( ) );
+            nIterationNumberResponse2 = response2.getIterationNumber( );
         }
 
-        return nIdEntryResponse1.compareTo( nIdEntryResponse2 );
+        return nIterationNumberResponse1.compareTo( nIterationNumberResponse2 );
     }
 
 }
