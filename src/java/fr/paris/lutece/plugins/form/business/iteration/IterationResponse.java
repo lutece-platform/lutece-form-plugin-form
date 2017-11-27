@@ -47,12 +47,12 @@ public class IterationResponse
 {
     private final int _nIdEntry;
     private List<Response> _listEntryResponses = new ArrayList<>( );
-    
+
     /**
      * Constructor
      * 
      * @param nIdEntry
-     *      the id of the entry where the IterationResponse belong to
+     *            the id of the entry where the IterationResponse belong to
      */
     public IterationResponse( int nIdEntry )
     {
@@ -82,14 +82,14 @@ public class IterationResponse
     /**
      * Set the responses of the entry
      * 
-     * @param entryResponses 
-     *      the response of the entry
+     * @param entryResponses
+     *            the response of the entry
      */
     public void setEntryResponses( List<Response> entryResponses )
     {
         _listEntryResponses = entryResponses;
     }
-    
+
     /**
      * Tell if the entry of the IterationResponse has response or not
      * 
@@ -98,7 +98,7 @@ public class IterationResponse
     public boolean hasResponse( )
     {
         boolean bEntryHasResponse = Boolean.FALSE;
-        
+
         if ( _listEntryResponses != null && !_listEntryResponses.isEmpty( ) )
         {
             for ( Response response : _listEntryResponses )

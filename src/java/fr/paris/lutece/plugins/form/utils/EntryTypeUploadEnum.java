@@ -42,21 +42,20 @@ import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeCropImage;
 /**
  * Enumeration of all EntryType which need to upload file (file, image, etc...)
  */
-public enum EntryTypeUploadEnum {
+public enum EntryTypeUploadEnum
+{
 
-    EntryTypeFile( EntryTypeFile.class.getName( ) ),
-    EntryTypeImage( EntryTypeImage.class.getName( ) ),
-    EntryTypeCropImage( EntryTypeCropImage.class.getName( ) );
-    
+    EntryTypeFile( EntryTypeFile.class.getName( ) ), EntryTypeImage( EntryTypeImage.class.getName( ) ), EntryTypeCropImage( EntryTypeCropImage.class.getName( ) );
+
     // The name of the class of the EntryType
     private String _strEntryTypeClassName;
 
     // Private constructor
-    private EntryTypeUploadEnum( String strEntryTypeClassName)
+    private EntryTypeUploadEnum( String strEntryTypeClassName )
     {
         _strEntryTypeClassName = strEntryTypeClassName;
     }
-    
+
     /**
      * Return the value of the enumeration
      * 
@@ -66,7 +65,7 @@ public enum EntryTypeUploadEnum {
     {
         return _strEntryTypeClassName;
     }
-    
+
     /**
      * Return all the value of the Enumeration
      * 
@@ -75,13 +74,13 @@ public enum EntryTypeUploadEnum {
     public static Set<String> getValues( )
     {
         Set<String> setEntryTypeName = new LinkedHashSet<>( );
-        
-        EntryTypeUploadEnum[ ] entryTypeUploadEnums =  values( );
+
+        EntryTypeUploadEnum [ ] entryTypeUploadEnums = values( );
         for ( EntryTypeUploadEnum entryTypeUploadEnum : entryTypeUploadEnums )
         {
             setEntryTypeName.add( entryTypeUploadEnum.getValue( ) );
         }
-        
+
         return setEntryTypeName;
     }
 }

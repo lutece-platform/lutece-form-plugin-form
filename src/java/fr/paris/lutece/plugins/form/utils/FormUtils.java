@@ -742,7 +742,7 @@ public final class FormUtils
     {
         getHtmlEntry( nIdEntry, stringBuffer, locale, bDisplayFront, request, NumberUtils.INTEGER_MINUS_ONE );
     }
-    
+
     /**
      * Insert in the string buffer the content of the HTML code of the entry
      * 
@@ -759,7 +759,8 @@ public final class FormUtils
      * @param nIterationNumber
      *            the current iteration number
      */
-    public static void getHtmlEntry( int nIdEntry, StringBuffer stringBuffer, Locale locale, boolean bDisplayFront, HttpServletRequest request, int nIterationNumber )
+    public static void getHtmlEntry( int nIdEntry, StringBuffer stringBuffer, Locale locale, boolean bDisplayFront, HttpServletRequest request,
+            int nIterationNumber )
     {
         Map<String, Object> model = new HashMap<String, Object>( );
         StringBuffer strConditionalQuestionStringBuffer = null;
@@ -856,7 +857,7 @@ public final class FormUtils
                 {
                     // Manage the response for an entry belong to an iterable group
                     EntryTypeGroupUtils.manageIterableGroupResponse( request, entry, listResponses, nIterationNumber );
-                    
+
                     // Populate the IterationGroup map in the session
                     if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
                     {
@@ -911,7 +912,7 @@ public final class FormUtils
     {
         return getResponseEntry( request, nIdEntry, plugin, formSubmit, bResponseNull, bReturnErrors, locale, NumberUtils.INTEGER_MINUS_ONE );
     }
-    
+
     /**
      * Perform in the object formSubmit the responses associates with a entry specify in parameter.<br />
      * Return null if there is no error in the response else return a FormError Object
@@ -965,21 +966,22 @@ public final class FormUtils
                 {
                     // Set the iteration number in the request to retrieve it from the EntryTypeService
                     request.setAttribute( FormConstants.ATTRIBUTE_RESPONSE_ITERATION_NUMBER, nIterationNumber );
-                    
+
                     // Manage the case of an entry of type array
-                    if ( EntryTypeServiceManager.getEntryTypeService( entry ) instanceof AbstractEntryTypeArray && request instanceof GroupHttpServletRequestWrapper )
+                    if ( EntryTypeServiceManager.getEntryTypeService( entry ) instanceof AbstractEntryTypeArray
+                            && request instanceof GroupHttpServletRequestWrapper )
                     {
-                        StringBuilder strIterationParameterName = new StringBuilder( ( ( GroupHttpServletRequestWrapper ) request ).getIterationParameterName( ) );
+                        StringBuilder strIterationParameterName = new StringBuilder( ( (GroupHttpServletRequestWrapper) request ).getIterationParameterName( ) );
                         strIterationParameterName.append( FormConstants.PREFIX_ATTRIBUTE );
                         strIterationParameterName.append( entry.getIdEntry( ) );
                         strIterationParameterName.append( FormConstants.UNDERSCORE );
-                        
-                        ( ( GroupHttpServletRequestWrapper ) request ).setIterationParameterName( strIterationParameterName.toString( ) );
+
+                        ( (GroupHttpServletRequestWrapper) request ).setIterationParameterName( strIterationParameterName.toString( ) );
                     }
-                    
+
                     // Manage errors
                     formError = EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponse, locale );
-                    
+
                     // Remove the attribute when it has been used
                     request.removeAttribute( FormConstants.ATTRIBUTE_RESPONSE_ITERATION_NUMBER );
 
@@ -1122,7 +1124,7 @@ public final class FormUtils
         {
             XmlUtil.beginElement( buffer, TAG_FORM_ENTRY );
             XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry( ) );
-            
+
             // Add an iteration-number tag to the document
             int nIterationNumber = NumberUtils.INTEGER_MINUS_ONE;
             if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
@@ -1132,13 +1134,13 @@ public final class FormUtils
                 {
                     mapIdEntryIterationNumber.put( nIdEntry, NumberUtils.INTEGER_ONE );
                 }
-                
-                int nCurrentEntryIterationNumber = mapIdEntryIterationNumber.get( nIdEntry ); 
+
+                int nCurrentEntryIterationNumber = mapIdEntryIterationNumber.get( nIdEntry );
                 nIterationNumber = nCurrentEntryIterationNumber;
                 mapIdEntryIterationNumber.put( nIdEntry, nCurrentEntryIterationNumber + NumberUtils.INTEGER_ONE );
             }
             XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ITERATION_NUMBER, nIterationNumber );
-            
+
             XmlUtil.addElementHtml( buffer, TAG_FORM_ENTRY_TITLE, entry.getTitle( ) );
             XmlUtil.endElement( buffer, TAG_FORM_ENTRY );
         }
@@ -1249,15 +1251,17 @@ public final class FormUtils
                     response.setField( field );
                 }
 
-                if ( responseStore != null && ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) 
-                        || response.getIterationNumber( ) != responseStore.getIterationNumber( ) ) )
+                if ( responseStore != null
+                        && ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) || response.getIterationNumber( ) != responseStore
+                                .getIterationNumber( ) ) )
                 {
                     XmlUtil.endElement( buffer, TAG_RESPONSES );
                     XmlUtil.endElement( buffer, TAG_QUESTION );
                 }
 
-                if ( responseStore == null || ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) 
-                        || response.getIterationNumber( ) != responseStore.getIterationNumber( ) ) )
+                if ( responseStore == null
+                        || ( response.getEntry( ).getIdEntry( ) != responseStore.getEntry( ).getIdEntry( ) || response.getIterationNumber( ) != responseStore
+                                .getIterationNumber( ) ) )
                 {
                     XmlUtil.beginElement( buffer, TAG_QUESTION );
                     XmlUtil.addElementHtml( buffer, TAG_QUESTION_TITLE, response.getEntry( ).getTitle( ) );
@@ -1494,7 +1498,7 @@ public final class FormUtils
                 filter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
                 entryFirstLevel.setFields( FieldHome.getFieldListByIdEntry( entryFirstLevel.getIdEntry( ) ) );
-                
+
                 // Manage the case of an iteration
                 int nIterationEntryMax = EntryTypeGroupUtils.getEntryMaxIterationAllowed( entryFirstLevel.getIdEntry( ) );
                 if ( nIterationEntryMax != NumberUtils.INTEGER_MINUS_ONE )

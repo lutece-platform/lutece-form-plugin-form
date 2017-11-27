@@ -47,7 +47,7 @@ public class GroupMultipartHttpServletRequestWrapper extends MultipartHttpServle
 
     // Variable
     private String _strIterationParameterName;
-    
+
     // Constructor
     @SuppressWarnings( "unchecked" )
     public GroupMultipartHttpServletRequestWrapper( MultipartHttpServletRequest request, int nIterationNumber )
@@ -55,7 +55,7 @@ public class GroupMultipartHttpServletRequestWrapper extends MultipartHttpServle
         super( request, request.getFileListMap( ), request.getParameterMap( ) );
         _strIterationParameterName = String.format( PATTERN_PARAM_PREFIX_ITERATION, nIterationNumber );
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -71,7 +71,7 @@ public class GroupMultipartHttpServletRequestWrapper extends MultipartHttpServle
     {
         return super.getParameter( _strIterationParameterName + name );
     }
-    
+
     /**
      * Return the iterationParameterName
      * 
@@ -85,8 +85,8 @@ public class GroupMultipartHttpServletRequestWrapper extends MultipartHttpServle
     /**
      * Set the iteration parameter name
      * 
-     * @param strIterationParameterName 
-     *          the iterationParameterName to set
+     * @param strIterationParameterName
+     *            the iterationParameterName to set
      */
     public void setIterationParameterName( String strIterationParameterName )
     {

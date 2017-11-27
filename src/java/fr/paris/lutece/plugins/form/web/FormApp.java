@@ -321,26 +321,26 @@ public class FormApp implements XPageApplication
                                 // Get the XPage of the current form
                                 FormUtils.removeResponses( session );
                                 FormUtils.removeFormErrors( session );
-                                
+
                                 int nIdEntry = NumberUtils.INTEGER_MINUS_ONE;
                                 int nIdIterationRemove = NumberUtils.INTEGER_MINUS_ONE;
                                 if ( StringUtils.isNotBlank( strRemoveIteration ) )
                                 {
-                                    String[ ] listParametersRemoveIteration = strRemoveIteration.split( FormConstants.UNDERSCORE );
+                                    String [ ] listParametersRemoveIteration = strRemoveIteration.split( FormConstants.UNDERSCORE );
                                     if ( listParametersRemoveIteration != null && listParametersRemoveIteration.length > 1 )
                                     {
-                                        nIdEntry = NumberUtils.toInt( listParametersRemoveIteration[0] ,NumberUtils.INTEGER_MINUS_ONE );
-                                        nIdIterationRemove = NumberUtils.toInt( listParametersRemoveIteration[1] ,NumberUtils.INTEGER_MINUS_ONE ); 
+                                        nIdEntry = NumberUtils.toInt( listParametersRemoveIteration [0], NumberUtils.INTEGER_MINUS_ONE );
+                                        nIdIterationRemove = NumberUtils.toInt( listParametersRemoveIteration [1], NumberUtils.INTEGER_MINUS_ONE );
                                     }
                                 }
-                                
+
                                 // Remove an iteration case
                                 if ( nIdIterationRemove != NumberUtils.INTEGER_MINUS_ONE )
-                                {   
+                                {
                                     // Retrieve the IterationGroup from the session map
                                     Map<Integer, IterationGroup> mapIterationGroup = EntryTypeGroupUtils.retrieveIterationMap( request );
                                     IterationGroup iterationGroup = mapIterationGroup.get( nIdEntry );
-                                    
+
                                     iterationGroup.removeIteration( nIdIterationRemove );
                                 }
 
@@ -366,10 +366,11 @@ public class FormApp implements XPageApplication
                                         }
 
                                         FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( strSessionId );
-                                        
+
                                         // Add the iterationMap to the session
                                         Map<Integer, IterationGroup> mapIterationGroup = new LinkedHashMap<Integer, IterationGroup>( );
-                                        int nParameterIdForm = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ID_FORM ), NumberUtils.INTEGER_MINUS_ONE );
+                                        int nParameterIdForm = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ID_FORM ),
+                                                NumberUtils.INTEGER_MINUS_ONE );
                                         List<Integer> listIdEntryGroupIterable = EntryTypeGroupUtils.findIdEntryGroupIterable( nParameterIdForm );
                                         if ( listIdEntryGroupIterable != null )
                                         {
@@ -378,7 +379,7 @@ public class FormApp implements XPageApplication
                                                 mapIterationGroup.put( identryIterableGroup, new IterationGroup( identryIterableGroup ) );
                                             }
                                         }
-                                        
+
                                         session.setAttribute( FormConstants.SESSION_ITERATION_MAP, mapIterationGroup );
                                     }
 

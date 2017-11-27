@@ -51,7 +51,7 @@ public class IterationGroup
 {
     private final int _nNbMaxIteration;
     private Map<Integer, List<IterationResponse>> _mapIterationResponses = new LinkedHashMap<>( );
-    
+
     // Constructor
     public IterationGroup( int nIdEntry )
     {
@@ -68,7 +68,7 @@ public class IterationGroup
     {
         return _nNbMaxIteration;
     }
-    
+
     /**
      * Return the last iteration number used for the group
      * 
@@ -77,14 +77,14 @@ public class IterationGroup
     public int getLastIterationNumber( )
     {
         int nIterationNumber = NumberUtils.INTEGER_ONE;
-        
+
         Set<Integer> setIterationNumber = _mapIterationResponses.keySet( );
         if ( setIterationNumber != null && !setIterationNumber.isEmpty( ) )
         {
             int nSetSize = setIterationNumber.size( );
-            nIterationNumber = setIterationNumber.toArray( new Integer[ nSetSize ] )[ nSetSize - NumberUtils.INTEGER_ONE ];
+            nIterationNumber = setIterationNumber.toArray( new Integer [ nSetSize] ) [nSetSize - NumberUtils.INTEGER_ONE];
         }
-        
+
         return nIterationNumber;
     }
 
@@ -97,7 +97,7 @@ public class IterationGroup
     {
         return _mapIterationResponses.size( );
     }
-    
+
     /**
      * Remove an iteration to the group
      */
@@ -105,22 +105,22 @@ public class IterationGroup
     {
         _mapIterationResponses.remove( nIterationNumber );
     }
-    
+
     /**
      * Add Responses for the specified entry for the specified iteration
      * 
      * @param nIterationNumber
-     *      the iteration number
+     *            the iteration number
      * @param nIdEntry
-     *      the id of the entry to attached the list of Response
+     *            the id of the entry to attached the list of Response
      * @param responseList
-     *      the Response list of the Entry
+     *            the Response list of the Entry
      */
     public void addEntryResponses( int nIterationNumber, int nIdEntry, List<Response> responseList )
     {
         List<IterationResponse> listIterationResponse = _mapIterationResponses.get( nIterationNumber );
 
-        // Create a new list of IterationResponse if it doesn't exist for the specified iteration 
+        // Create a new list of IterationResponse if it doesn't exist for the specified iteration
         if ( listIterationResponse == null )
         {
             listIterationResponse = new ArrayList<>( );
@@ -130,31 +130,31 @@ public class IterationGroup
         // Retrieve the IterationResponse form the list of existing IterationResponse
         IterationResponse iterationResponse = retrieveEntryIterationResponse( nIdEntry, listIterationResponse );
 
-        // If there is no IterationResponse object for the given entry we will create a new one 
-        // and add it to the list of IterationResponse for the given iteration 
+        // If there is no IterationResponse object for the given entry we will create a new one
+        // and add it to the list of IterationResponse for the given iteration
         if ( iterationResponse == null )
         {
             iterationResponse = new IterationResponse( nIdEntry );
             listIterationResponse.add( iterationResponse );
         }
 
-        // Update the list of response for the given entry 
+        // Update the list of response for the given entry
         iterationResponse.setEntryResponses( responseList );
     }
-    
+
     /**
      * Return the IterationResponse object from a list of IterationResponse
      * 
      * @param nIdEntry
-     *          the id of the entry to retrieve the list of IterationResponse from
+     *            the id of the entry to retrieve the list of IterationResponse from
      * @param listIterationResponse
-     *          the list of IterationResponse to search from
+     *            the list of IterationResponse to search from
      * @return the IterationResponse associated to the entry from the given list or null if not found
      */
     private IterationResponse retrieveEntryIterationResponse( int nIdEntry, List<IterationResponse> listIterationResponse )
     {
         IterationResponse iterationResponseResult = null;
-        
+
         if ( listIterationResponse != null && !listIterationResponse.isEmpty( ) )
         {
             for ( IterationResponse iterationResponse : listIterationResponse )
@@ -166,7 +166,7 @@ public class IterationGroup
                 }
             }
         }
-        
+
         return iterationResponseResult;
     }
 
@@ -179,7 +179,7 @@ public class IterationGroup
     {
         return _mapIterationResponses.keySet( );
     }
-    
+
     /**
      * Return a boolean which indicate if the user filled at last one field for the specified iteration
      * 
@@ -204,7 +204,7 @@ public class IterationGroup
 
         return bFillingMade;
     }
-    
+
     /**
      * Tell if the maximum number of iteration has been reached or not
      * 

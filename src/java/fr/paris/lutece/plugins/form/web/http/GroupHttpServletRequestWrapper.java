@@ -78,7 +78,7 @@ public class GroupHttpServletRequestWrapper extends HttpServletRequestWrapper
     {
         return super.getParameter( _strIterationParameterName + name );
     }
-    
+
     /**
      * Return the iterationParameterName
      * 
@@ -92,8 +92,8 @@ public class GroupHttpServletRequestWrapper extends HttpServletRequestWrapper
     /**
      * Set the iteration parameter name
      * 
-     * @param strIterationParameterName 
-     *          the iterationParameterName to set
+     * @param strIterationParameterName
+     *            the iterationParameterName to set
      */
     public void setIterationParameterName( String strIterationParameterName )
     {
