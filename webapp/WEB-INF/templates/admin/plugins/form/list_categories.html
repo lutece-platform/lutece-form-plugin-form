@@ -1,0 +1,8 @@
+<@formGroup labelFor='id_category' labelKey='#i18n{form.listForm.labelFormCategory}' mandatory=true>
+	<#if id_category?exists>
+		<#assign categoryListDefaultValue = id_category />
+	<#else>
+		<#assign categoryListDefaultValue = -1 />
+	</#if>
+	<@select name='id_category' items=categories_list default_value='${categoryListDefaultValue!}' />
+</@formGroup>

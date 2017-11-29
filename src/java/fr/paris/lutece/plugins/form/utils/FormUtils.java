@@ -121,7 +121,7 @@ public final class FormUtils
     public static final String BEAN_EXPORT_DAEMON_TYPE_FACTORY = "form.exportTypeFactory";
     public static final String CONSTANT_UNDERSCORE = "_";
     public static final String CONSTANT_COMMA = ",";
-    public static final String CONSTANT_MYLUTECE_ATTRIBUTE_I18N_SUFFIX = "form.entrytype.myluteceuserattribute.attribute.";
+    public static final String CONSTANT_MYLUTECE_ATTRIBUTE_I18N_SUFFIX = "form.entrytype.attribute.";
 
     // session
     public static final String SESSION_FORM_LIST_SUBMITTED_RESPONSES = "form_list_submitted_responses";

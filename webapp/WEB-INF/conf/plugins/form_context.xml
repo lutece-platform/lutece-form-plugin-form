@@ -11,6 +11,7 @@
  	 <bean id="form.formActionDAO"  class="fr.paris.lutece.plugins.form.business.FormActionDAO" />
  	 <bean id="form.formSubmitDAO"  class="fr.paris.lutece.plugins.form.business.FormSubmitDAO" />
  	 <bean id="form.formPortletDAO"  class="fr.paris.lutece.plugins.form.business.portlet.FormPortletDAO" />
+ 	 <bean id="form.listFormPortletDAO"  class="fr.paris.lutece.plugins.form.business.portlet.ListFormPortletDAO" />
  	 <bean id="form.formProcessorDAO"  class="fr.paris.lutece.plugins.form.business.outputprocessor.FormProcessorDAO" />
      <bean id="form.notifySenderConfigurationDAO" 	class="fr.paris.lutece.plugins.form.modules.processornotifysender.business.NotifySenderConfigurationDAO" />
  	 <bean id="form.entryParameterDAO" class="fr.paris.lutece.plugins.form.business.parameter.EntryParameterDAO" />
