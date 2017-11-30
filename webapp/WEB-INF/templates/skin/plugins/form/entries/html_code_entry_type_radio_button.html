@@ -14,6 +14,7 @@ ${entry.CSSClass!}
 	<div class="form-group">
 		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+		<#assign inLine = entry.fieldInLine>
 		<#list entry.fields as field>
 			<#assign idName = 'attribute' + entry.idEntry>
 			<#if entry_iteration_number?has_content && entry_iteration_number != 0>
@@ -43,6 +44,11 @@ ${entry.CSSClass!}
 			 </#if>
 				</label>
 				<#if entry.fieldInLine != true></div></#if>
+				
+				<#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0 && !inLine>
+					<#if str_list_entry_children?exists>${str_list_entry_children}</#if>
+				</#if>
+				
 			</#list>
 			<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
 			<span class="help-block">${entry.helpMessage}</span>
@@ -60,7 +66,10 @@ ${entry.CSSClass!}
 		</#if>
 	</#list>
 </#if>
-<#if str_list_entry_children?exists>${str_list_entry_children}</#if>
+
+<#if inLine>
+	<#if str_list_entry_children?exists>${str_list_entry_children}</#if>
+</#if>
 
 <#if list_responses??>
 	<script type="text/javascript">
