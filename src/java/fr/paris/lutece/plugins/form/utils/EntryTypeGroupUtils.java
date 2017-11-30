@@ -251,13 +251,15 @@ public class EntryTypeGroupUtils
                 else
                 {
                     // Add an error message to notify the fact the user has reached the maximum limit of iteration allowed
-                    iterationGroup.getListErrorMessages( ).add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_LIMIT_IETRATION_REACHED, request.getLocale( ) ) ) );
+                    iterationGroup.getListErrorMessages( ).add(
+                            new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_LIMIT_IETRATION_REACHED, request.getLocale( ) ) ) );
                 }
             }
             else
             {
                 // Add an error message to notify the fact that the user has not filled any field of the last iteration
-                iterationGroup.getListErrorMessages( ).add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_CANT_ADD_ITERATION, request.getLocale( ) ) ) );
+                iterationGroup.getListErrorMessages( ).add(
+                        new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_CANT_ADD_ITERATION, request.getLocale( ) ) ) );
             }
         }
 
@@ -412,12 +414,12 @@ public class EntryTypeGroupUtils
     public static Boolean manageIterationGroupErrors( HttpServletRequest request, Entry entry, List<MVCMessage> listInfosIterableGroup )
     {
         boolean bHasErrors = Boolean.FALSE;
-        
+
         if ( entry != null )
         {
             int nIdEntry = entry.getIdEntry( );
             String strParameterAddIteration = request.getParameter( FormConstants.PARAMETER_ADD_ITERATION );
-            
+
             if ( StringUtils.isNotBlank( strParameterAddIteration ) && NumberUtils.toInt( strParameterAddIteration, NumberUtils.INTEGER_MINUS_ONE ) == nIdEntry )
             {
                 // Check if there are some errors for the current entry
@@ -427,13 +429,13 @@ public class EntryTypeGroupUtils
                 {
                     listInfosIterableGroup.addAll( listErrorMessages );
                     bHasErrors = Boolean.TRUE;
-                    
+
                     // Reset the list of errors message for the iteration group
                     iterationGroup.resetListErrorMessages( );
                 }
             }
         }
-        
+
         return bHasErrors;
     }
 

@@ -330,7 +330,8 @@ public class FormApp implements XPageApplication
                                     if ( listParametersRemoveIteration != null && listParametersRemoveIteration.length > 1 )
                                     {
                                         nIdEntry = NumberUtils.toInt( listParametersRemoveIteration [NumberUtils.INTEGER_ZERO], NumberUtils.INTEGER_MINUS_ONE );
-                                        nIdIterationRemove = NumberUtils.toInt( listParametersRemoveIteration [NumberUtils.INTEGER_ONE], FormConstants.DEFAULT_ITERATION_NUMBER );
+                                        nIdIterationRemove = NumberUtils.toInt( listParametersRemoveIteration [NumberUtils.INTEGER_ONE],
+                                                FormConstants.DEFAULT_ITERATION_NUMBER );
                                     }
                                 }
 
