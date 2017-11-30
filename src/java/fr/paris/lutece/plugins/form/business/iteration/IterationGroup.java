@@ -43,6 +43,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.form.utils.EntryTypeGroupUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
 
 /**
  * Object which represent the iterations of a group
@@ -51,6 +52,7 @@ public class IterationGroup
 {
     private final int _nNbMaxIteration;
     private Map<Integer, List<IterationResponse>> _mapIterationResponses = new LinkedHashMap<>( );
+    private List<MVCMessage> _listErrorMessages = new ArrayList<>( );
 
     // Constructor
     public IterationGroup( int nIdEntry )
@@ -67,6 +69,24 @@ public class IterationGroup
     public int getNbMaxIteration( )
     {
         return _nNbMaxIteration;
+    }
+
+    /**
+     * Return the list of error messages
+     * 
+     * @return the list of error messages of the iteration group
+     */
+    public List<MVCMessage> getListErrorMessages( )
+    {
+        return _listErrorMessages;
+    }
+
+    /**
+     * Reset the list of error messages for the iteration group
+     */
+    public void resetListErrorMessages( )
+    {
+        _listErrorMessages = new ArrayList<>( );
     }
 
     /**

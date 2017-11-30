@@ -740,7 +740,7 @@ public final class FormUtils
      */
     public static void getHtmlEntry( int nIdEntry, StringBuffer stringBuffer, Locale locale, boolean bDisplayFront, HttpServletRequest request )
     {
-        getHtmlEntry( nIdEntry, stringBuffer, locale, bDisplayFront, request, NumberUtils.INTEGER_MINUS_ONE );
+        getHtmlEntry( nIdEntry, stringBuffer, locale, bDisplayFront, request, FormConstants.DEFAULT_ITERATION_NUMBER );
     }
 
     /**
@@ -910,7 +910,7 @@ public final class FormUtils
     public static List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin, FormSubmit formSubmit,
             boolean bResponseNull, boolean bReturnErrors, Locale locale )
     {
-        return getResponseEntry( request, nIdEntry, plugin, formSubmit, bResponseNull, bReturnErrors, locale, NumberUtils.INTEGER_MINUS_ONE );
+        return getResponseEntry( request, nIdEntry, plugin, formSubmit, bResponseNull, bReturnErrors, locale, FormConstants.DEFAULT_ITERATION_NUMBER );
     }
 
     /**
@@ -974,7 +974,7 @@ public final class FormUtils
                         StringBuilder strIterationParameterName = new StringBuilder( ( (GroupHttpServletRequestWrapper) request ).getIterationParameterName( ) );
                         strIterationParameterName.append( FormConstants.PREFIX_ATTRIBUTE );
                         strIterationParameterName.append( entry.getIdEntry( ) );
-                        strIterationParameterName.append( FormConstants.UNDERSCORE );
+                        strIterationParameterName.append( FormUtils.CONSTANT_UNDERSCORE );
 
                         ( (GroupHttpServletRequestWrapper) request ).setIterationParameterName( strIterationParameterName.toString( ) );
                     }
@@ -1126,7 +1126,7 @@ public final class FormUtils
             XmlUtil.addElement( buffer, TAG_FORM_ENTRY_ID, entry.getIdEntry( ) );
 
             // Add an iteration-number tag to the document
-            int nIterationNumber = NumberUtils.INTEGER_MINUS_ONE;
+            int nIterationNumber = FormConstants.DEFAULT_ITERATION_NUMBER;
             if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
             {
                 int nIdEntry = entry.getIdEntry( );
@@ -1501,7 +1501,7 @@ public final class FormUtils
 
                 // Manage the case of an iteration
                 int nIterationEntryMax = EntryTypeGroupUtils.getEntryMaxIterationAllowed( entryFirstLevel.getIdEntry( ) );
-                if ( nIterationEntryMax != NumberUtils.INTEGER_MINUS_ONE )
+                if ( nIterationEntryMax != FormConstants.DEFAULT_ITERATION_NUMBER )
                 {
                     for ( int nCurrentIterationNumber = NumberUtils.INTEGER_ONE; nCurrentIterationNumber <= nIterationEntryMax; nCurrentIterationNumber++ )
                     {

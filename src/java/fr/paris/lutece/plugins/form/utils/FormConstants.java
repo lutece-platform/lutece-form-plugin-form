@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.form.utils;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 /**
  * 
  * Constants class for the plugin-form
@@ -53,7 +55,6 @@ public class FormConstants
 
     // Attributes
     public static final String ATTRIBUTE_ITERATION_NUMBER = "attribute_iteration_number";
-    public static final String ATTRIBUTE_NO_FILLED_ENTRY_GROUP = "attribute_no_selection";
     public static final String ATTRIBUTE_RETURN_FROM_ERRORS = "attribute_return_from_errors";
     public static final String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
 
@@ -67,15 +68,13 @@ public class FormConstants
     // Prefixes
     public static final String PREFIX_ITERATION = "nIt";
     public static final String PREFIX_ATTRIBUTE = "attribute";
-    public static final String PREFIX_ATTRIBUTE_ITERATION = "iteration";
 
     // Symbols
     public static final String ANCHOR_DELIMITER = "#";
     public static final String SLASH = "/";
-    public static final String UNDERSCORE = "_";
 
     // Other constants
     public static final String CONSTANT_WHERE = " WHERE ";
     public static final String CONSTANT_AND = " AND ";
-    public static final int ENTRY_ID_MULTIPLIER = 1297;
+    public static final int DEFAULT_ITERATION_NUMBER = NumberUtils.INTEGER_MINUS_ONE;
 }

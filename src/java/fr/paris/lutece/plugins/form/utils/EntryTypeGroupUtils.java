@@ -151,7 +151,7 @@ public class EntryTypeGroupUtils
 
         // Case where the group allow multiple iterations
         int nbIterationMax = getEntryMaxIterationAllowed( entry.getIdEntry( ) );
-        if ( nbIterationMax != NumberUtils.INTEGER_MINUS_ONE )
+        if ( nbIterationMax != FormConstants.DEFAULT_ITERATION_NUMBER )
         {
             sbGroup = getHtmlIteratedEntryGroup( request, entry, bDisplayFront );
 
@@ -187,14 +187,14 @@ public class EntryTypeGroupUtils
             Field fieldNbIteration = GenericAttributesUtils.findFieldByTitleInTheList( EntryTypeGroup.CONSTANT_NB_ITERATION, entry.getFields( ) );
             if ( fieldNbIteration != null )
             {
-                return NumberUtils.toInt( fieldNbIteration.getValue( ), NumberUtils.INTEGER_MINUS_ONE );
+                return NumberUtils.toInt( fieldNbIteration.getValue( ), FormConstants.DEFAULT_ITERATION_NUMBER );
             }
 
             // If the field doesn't exist it means that the group doesn't allow iteration
-            return NumberUtils.INTEGER_MINUS_ONE;
+            return FormConstants.DEFAULT_ITERATION_NUMBER;
         }
 
-        return NumberUtils.INTEGER_MINUS_ONE;
+        return FormConstants.DEFAULT_ITERATION_NUMBER;
     }
 
     /**
@@ -239,7 +239,7 @@ public class EntryTypeGroupUtils
             boolean bFillingMade = iterationGroup.fillingMadeOnIteration( nLastIterationNumber );
             if ( bFillingMade )
             {
-                if ( !isEntryIterationLimitReached( request, nIdEntryAddIteration ) )
+                if ( !iterationGroup.isIterationLimitReached( ) )
                 {
                     HtmlTemplate htmTemplateNextIteration = generateChildrenItreationGroupTemplate( request, entry, bDisplayFront, nLastIterationNumber
                             + NumberUtils.INTEGER_ONE );
@@ -248,11 +248,16 @@ public class EntryTypeGroupUtils
                         sbGroup.append( htmTemplateNextIteration.getHtml( ) );
                     }
                 }
+                else
+                {
+                    // Add an error message to notify the fact the user has reached the maximum limit of iteration allowed
+                    iterationGroup.getListErrorMessages( ).add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_LIMIT_IETRATION_REACHED, request.getLocale( ) ) ) );
+                }
             }
             else
             {
-                // Add an attribute into the request to notify the fact that the user has not filled any field of the last iteration
-                request.setAttribute( FormConstants.ATTRIBUTE_NO_FILLED_ENTRY_GROUP, Boolean.TRUE );
+                // Add an error message to notify the fact that the user has not filled any field of the last iteration
+                iterationGroup.getListErrorMessages( ).add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_CANT_ADD_ITERATION, request.getLocale( ) ) ) );
             }
         }
 
@@ -351,7 +356,7 @@ public class EntryTypeGroupUtils
             for ( Entry entryChild : entry.getChildren( ) )
             {
                 // If there are a number of iteration on the current group we will check errors on the children on every iteration
-                if ( nNbMaxIteration != NumberUtils.INTEGER_MINUS_ONE )
+                if ( nNbMaxIteration != FormConstants.DEFAULT_ITERATION_NUMBER )
                 {
                     // The set of all iteration number used in the form
                     Set<Integer> setIterationNumber = new LinkedHashSet<>( );
@@ -406,26 +411,30 @@ public class EntryTypeGroupUtils
      */
     public static Boolean manageIterationGroupErrors( HttpServletRequest request, Entry entry, List<MVCMessage> listInfosIterableGroup )
     {
-        // Check if a filling has been made or not
-        if ( request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ) != null
-                && request.getAttribute( FormConstants.ATTRIBUTE_NO_FILLED_ENTRY_GROUP ) != null )
+        boolean bHasErrors = Boolean.FALSE;
+        
+        if ( entry != null )
         {
-            request.removeAttribute( FormConstants.ATTRIBUTE_NO_FILLED_ENTRY_GROUP );
-
-            listInfosIterableGroup.add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_CANT_ADD_ITERATION, request.getLocale( ) ) ) );
-            return Boolean.TRUE;
+            int nIdEntry = entry.getIdEntry( );
+            String strParameterAddIteration = request.getParameter( FormConstants.PARAMETER_ADD_ITERATION );
+            
+            if ( StringUtils.isNotBlank( strParameterAddIteration ) && NumberUtils.toInt( strParameterAddIteration, NumberUtils.INTEGER_MINUS_ONE ) == nIdEntry )
+            {
+                // Check if there are some errors for the current entry
+                IterationGroup iterationGroup = retrieveIterationGroup( request, entry.getIdEntry( ) );
+                List<MVCMessage> listErrorMessages = iterationGroup.getListErrorMessages( );
+                if ( listErrorMessages != null && !listErrorMessages.isEmpty( ) )
+                {
+                    listInfosIterableGroup.addAll( listErrorMessages );
+                    bHasErrors = Boolean.TRUE;
+                    
+                    // Reset the list of errors message for the iteration group
+                    iterationGroup.resetListErrorMessages( );
+                }
+            }
         }
-
-        // Check if the user has reach the max limit of duplication and if is not the case of a removing
-        if ( isEntryIterationLimitReached( request, entry.getIdEntry( ) ) && request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ) != null
-                && getRemoveIterationParameter( request ).getKey( ) != entry.getIdEntry( ) )
-        {
-
-            listInfosIterableGroup.add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_LIMIT_IETRATION_REACHED, request.getLocale( ) ) ) );
-            return Boolean.TRUE;
-        }
-
-        return Boolean.FALSE;
+        
+        return bHasErrors;
     }
 
     /**
@@ -560,7 +569,7 @@ public class EntryTypeGroupUtils
             {
                 // Retrieve the current iteration
                 String strPatternName = getPatternIteratedAttributeName( entry.getIdEntry( ) );
-                if ( nIterationNumber != NumberUtils.INTEGER_MINUS_ONE )
+                if ( nIterationNumber != FormConstants.DEFAULT_ITERATION_NUMBER )
                 {
                     // Retrieve the response of the entry which belong to a group
                     retrieveGroupResponses( request, entry, listResponses, strPatternName, nIterationNumber );
@@ -653,7 +662,7 @@ public class EntryTypeGroupUtils
                 StringBuilder strIterationParameterName = new StringBuilder( groupHttpServletRequestWrapper.getIterationParameterName( ) );
                 strIterationParameterName.append( FormConstants.PREFIX_ATTRIBUTE );
                 strIterationParameterName.append( entry.getIdEntry( ) );
-                strIterationParameterName.append( FormConstants.UNDERSCORE );
+                strIterationParameterName.append( FormUtils.CONSTANT_UNDERSCORE );
 
                 groupHttpServletRequestWrapper.setIterationParameterName( strIterationParameterName.toString( ) );
             }
@@ -833,7 +842,7 @@ public class EntryTypeGroupUtils
             {
                 // Reset the iteration number of the response to their position inside the list of iteration number used
                 int nIterationNumber = listIteratioNumber.indexOf( response.getIterationNumber( ) );
-                if ( nIterationNumber != NumberUtils.INTEGER_MINUS_ONE )
+                if ( nIterationNumber != FormConstants.DEFAULT_ITERATION_NUMBER )
                 {
                     response.setIterationNumber( nIterationNumber + NumberUtils.INTEGER_ONE );
                 }
@@ -853,7 +862,7 @@ public class EntryTypeGroupUtils
         java.util.Map.Entry<Integer, Integer> mapIdEntryIterationNumber = getRemoveIterationParameter( request );
         int nRemoveIteration = mapIdEntryIterationNumber.getValue( );
 
-        if ( nRemoveIteration != NumberUtils.INTEGER_MINUS_ONE )
+        if ( nRemoveIteration != FormConstants.DEFAULT_ITERATION_NUMBER )
         {
             // Retrieve the IterationGroup map from the request
             Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
@@ -905,7 +914,7 @@ public class EntryTypeGroupUtils
             }
         }
 
-        return NumberUtils.INTEGER_MINUS_ONE;
+        return FormConstants.DEFAULT_ITERATION_NUMBER;
     }
 
     /**
@@ -1124,15 +1133,15 @@ public class EntryTypeGroupUtils
     public static java.util.Map.Entry<Integer, Integer> getRemoveIterationParameter( HttpServletRequest request )
     {
         java.util.Map.Entry<Integer, Integer> entryIdEntryIterationNumber = new AbstractMap.SimpleEntry<>( NumberUtils.INTEGER_MINUS_ONE,
-                NumberUtils.INTEGER_MINUS_ONE );
+                FormConstants.DEFAULT_ITERATION_NUMBER );
 
         if ( request != null && request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ) != null )
         {
-            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ).split( FormConstants.UNDERSCORE );
-            if ( listParameterRemoveIteration != null && listParameterRemoveIteration.length > 1 )
+            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ).split( FormUtils.CONSTANT_UNDERSCORE );
+            if ( listParameterRemoveIteration != null && listParameterRemoveIteration.length > NumberUtils.INTEGER_ONE )
             {
-                int nIdEntry = NumberUtils.toInt( listParameterRemoveIteration [0], NumberUtils.INTEGER_MINUS_ONE );
-                int nIterationNumber = NumberUtils.toInt( listParameterRemoveIteration [1], NumberUtils.INTEGER_MINUS_ONE );
+                int nIdEntry = NumberUtils.toInt( listParameterRemoveIteration [NumberUtils.INTEGER_ZERO], NumberUtils.INTEGER_MINUS_ONE );
+                int nIterationNumber = NumberUtils.toInt( listParameterRemoveIteration [NumberUtils.INTEGER_ONE], FormConstants.DEFAULT_ITERATION_NUMBER );
                 entryIdEntryIterationNumber = new AbstractMap.SimpleEntry<>( nIdEntry, nIterationNumber );
             }
         }
@@ -1162,31 +1171,5 @@ public class EntryTypeGroupUtils
         }
 
         return bIsEntryOfUploadType;
-    }
-
-    /**
-     * Tell if an iterable group has reached its maximum iteration limit or not.
-     * 
-     * @param request
-     *            The HttpServletRequest to retrieve the ietrationGroup of the entry from
-     * @param nIdEntry
-     *            The id of the entry to retrieve the IterationGroup
-     * @return true if the iteration limit has been reached false otherwise
-     */
-    public static boolean isEntryIterationLimitReached( HttpServletRequest request, int nIdEntry )
-    {
-        boolean bLimitReached = Boolean.FALSE;
-
-        // Retrieve the current IterationGroup for the specified entry
-        Map<Integer, IterationGroup> mapIterationGroup = EntryTypeGroupUtils.retrieveIterationMap( request );
-        IterationGroup iterationGroup = mapIterationGroup.get( nIdEntry );
-
-        // Check if the user reach the limit of iteration for the current entry
-        if ( iterationGroup != null )
-        {
-            bLimitReached = iterationGroup.isIterationLimitReached( );
-        }
-
-        return bLimitReached;
     }
 }

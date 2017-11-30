@@ -323,19 +323,19 @@ public class FormApp implements XPageApplication
                                 FormUtils.removeFormErrors( session );
 
                                 int nIdEntry = NumberUtils.INTEGER_MINUS_ONE;
-                                int nIdIterationRemove = NumberUtils.INTEGER_MINUS_ONE;
+                                int nIdIterationRemove = FormConstants.DEFAULT_ITERATION_NUMBER;
                                 if ( StringUtils.isNotBlank( strRemoveIteration ) )
                                 {
-                                    String [ ] listParametersRemoveIteration = strRemoveIteration.split( FormConstants.UNDERSCORE );
+                                    String [ ] listParametersRemoveIteration = strRemoveIteration.split( FormUtils.CONSTANT_UNDERSCORE );
                                     if ( listParametersRemoveIteration != null && listParametersRemoveIteration.length > 1 )
                                     {
-                                        nIdEntry = NumberUtils.toInt( listParametersRemoveIteration [0], NumberUtils.INTEGER_MINUS_ONE );
-                                        nIdIterationRemove = NumberUtils.toInt( listParametersRemoveIteration [1], NumberUtils.INTEGER_MINUS_ONE );
+                                        nIdEntry = NumberUtils.toInt( listParametersRemoveIteration [NumberUtils.INTEGER_ZERO], NumberUtils.INTEGER_MINUS_ONE );
+                                        nIdIterationRemove = NumberUtils.toInt( listParametersRemoveIteration [NumberUtils.INTEGER_ONE], FormConstants.DEFAULT_ITERATION_NUMBER );
                                     }
                                 }
 
                                 // Remove an iteration case
-                                if ( nIdIterationRemove != NumberUtils.INTEGER_MINUS_ONE )
+                                if ( nIdIterationRemove != FormConstants.DEFAULT_ITERATION_NUMBER )
                                 {
                                     // Retrieve the IterationGroup from the session map
                                     Map<Integer, IterationGroup> mapIterationGroup = EntryTypeGroupUtils.retrieveIterationMap( request );
