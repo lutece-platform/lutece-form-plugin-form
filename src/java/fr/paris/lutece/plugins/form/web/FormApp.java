@@ -765,6 +765,10 @@ public class FormApp implements XPageApplication
 
         // get form Recap
         Recap recap = RecapHome.findByPrimaryKey( form.getRecap( ).getIdRecap( ), plugin );
+        
+        // Sort the list of response with the group management to the form
+        List<Response> responseManagedList = EntryTypeGroupUtils.orderResponseList( request, formSubmit.getListResponse( ) );
+        formSubmit.setListResponse( responseManagedList );
 
         if ( ( recap != null ) && recap.isRecapData( ) )
         {
@@ -774,10 +778,6 @@ public class FormApp implements XPageApplication
             FormUtils.removeResponses( session );
             FormUtils.removeFormErrors( session );
             session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
-
-            // Sort the list of response with the group management to the form
-            List<Response> responseManagedList = EntryTypeGroupUtils.orderResponseList( request, formSubmit.getListResponse( ) );
-            formSubmit.setListResponse( responseManagedList );
 
             // convert the value of the object response to string
             for ( Response response : formSubmit.getListResponse( ) )
