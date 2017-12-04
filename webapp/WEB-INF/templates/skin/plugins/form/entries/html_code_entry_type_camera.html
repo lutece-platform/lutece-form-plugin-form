@@ -2,7 +2,7 @@
 <#assign height= 261>
 <div class="form-group">
 		<#assign idName = 'attribute' + entry.idEntry>
-		<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+		<#if entry_iteration_number?has_content && entry_iteration_number gt 0>
 			<#assign idName = 'nIt' + entry_iteration_number + '_attribute' + entry.idEntry>
 		</#if>
 		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="${idName}">${entry.title}<#if entry.mandatory> *</#if></label>

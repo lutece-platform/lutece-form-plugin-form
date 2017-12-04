@@ -7,7 +7,7 @@ ${entry.CSSClass!}
 		<#assign inLine = entry.fieldInLine>
 		<#list entry.fields as field>
 			<#assign idName = 'attribute' + entry.idEntry>
-			<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+			<#if entry_iteration_number?has_content && entry_iteration_number gt 0>
 				<#assign idName = 'nIt' + entry_iteration_number + '_attribute' + entry.idEntry>
 			</#if>
 			<#if entry.fieldInLine != true><div class="checkbox"></#if>
@@ -24,7 +24,7 @@ ${entry.CSSClass!}
 					</#if>
 					<#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0>
 						<#assign idName = 'div'>
-						<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+						<#if entry_iteration_number?has_content && entry_iteration_number gt 0>
 							<#assign idName = 'div_nIt' + entry_iteration_number + '_'>
 						</#if>
 						<#assign idConditional = idName + field.idField>
@@ -72,7 +72,7 @@ ${entry.CSSClass!}
 		<script type="text/javascript">
 		<#list list_responses as response>
 			var idName = '';
-			<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+			<#if entry_iteration_number?has_content && entry_iteration_number gt 0>
 				idName = '_nIt' + ${entry_iteration_number} + '_';
 			</#if>
 			<#if response.entry.idEntry == entry.idEntry && response.field??>
@@ -90,7 +90,7 @@ ${entry.CSSClass!}
 			<#if field.defaultValue && field.conditionalQuestions?exists && field.conditionalQuestions?size != 0>
 				<script type="text/javascript">
 					var idName = '';
-					<#if entry_iteration_number?has_content && entry_iteration_number != 0>
+					<#if entry_iteration_number?has_content && entry_iteration_number gt 0>
 						idName = '_nIt' + ${entry_iteration_number} + '_';
 					</#if>
 					var baliseId = "div" + idName + ${field.idField};
