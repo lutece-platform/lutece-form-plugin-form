@@ -50,8 +50,8 @@ public class FormConstants
     public static final String PARAMETER_ID_FORM = "id_form";
     public static final String PARAMETER_ID_ENTRY = "id_entry";
     public static final String PARAMETER_KEY = "key";
-    public static final String PARAMETER_ADD_ITERATION = "add_iteration";
-    public static final String PARAMETER_REMOVE_ITERATION = "remove_iteration";
+    public static final String PARAMETER_ACTION_ADD_ITERATION = "action_addIteration";
+    public static final String PARAMETER_ACTION_REMOVE_ITERATION = "action_removeIteration";
 
     // Attributes
     public static final String ATTRIBUTE_ITERATION_NUMBER = "attribute_iteration_number";

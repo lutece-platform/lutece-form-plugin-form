@@ -20,7 +20,7 @@
 						<div class="">
 							<div class="checkbox">
 								<label for="requirement">
-									<input type="checkbox" name="requirement" id="requirement" value="" <#if validate_requirement?? && validate_requirement>checked="checked"</#if>> <a href="jsp/site/RunStandaloneApp.jsp?page=form&view_requirement=view_requirement&id_form=${form.idForm}" onclick="javascript:openFrontRequirement(this.href); return false;" target="_blank"> #i18n{form.htmlCodeForm.requirement}</a>
+									<input type="checkbox" name="requirement" id="requirement" value="" <#if validate_requirement?? && validate_requirement>checked="checked"</#if>> <a href="jsp/site/RunStandaloneApp.jsp?page=form&view=viewRequirement&id_form=${form.idForm}" onclick="javascript:openFrontRequirement(this.href); return false;" target="_blank"> #i18n{form.htmlCodeForm.requirement}</a>
 								</label>
 								<#if validate_requirement?? && !validate_requirement>
 										<div class="alert alert-danger">#i18n{form.message.requirementError}</div>
@@ -35,18 +35,18 @@
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
 						<br />
-						<button class="btn btn-primary btn-sm" type="submit" name="save" >
+						<button class="btn btn-primary btn-sm" type="submit" name="action_submitForm" >
 							<i class="glyphicon glyphicon-ok"></i>&nbsp;${form.libelleValidateButton}
 						</button>
 						<#if user?has_content>
 							<#if draft_supported>
-								<button class="btn btn-primary btn-sm" name="save_draft"  type="submit" >
+								<button class="btn btn-primary btn-sm" name="action_saveDraft"  type="submit" >
 									<i class="glyphicon glyphicon-briefcase"></i>&nbsp;#i18n{form.button.saveDraft}
 								</button>
 							</#if>
 						</#if>
 						<#if form.libelleResetButton?has_content>
-							<button type="submit" name="reset" class="btn btn-default btn-sm">
+							<button type="submit" name="action_resetForm" class="btn btn-default btn-sm">
 								<i class="glyphicon glyphicon-refresh"></i>&nbsp;${form.libelleResetButton}
 							</button>
 						</#if>

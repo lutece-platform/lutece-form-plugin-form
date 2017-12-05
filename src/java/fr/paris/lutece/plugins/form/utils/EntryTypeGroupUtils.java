@@ -123,7 +123,7 @@ public class EntryTypeGroupUtils
 
         // Manage the case of an adding or a removing of an iteration children group of an entry type group
         int nIdEntryToRemoveIteration = getRemoveIterationParameter( request ).getKey( );
-        int nIdEntryAddIteration = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
+        int nIdEntryAddIteration = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
         if ( nIdEntryAddIteration == entry.getIdEntry( ) || nIdEntryToRemoveIteration == entry.getIdEntry( )
                 || request.getAttribute( FormConstants.ATTRIBUTE_RETURN_FROM_ERRORS ) != null )
         {
@@ -156,7 +156,7 @@ public class EntryTypeGroupUtils
             sbGroup = getHtmlIteratedEntryGroup( request, entry, bDisplayFront );
 
             // Remove an iteration for the group on the IterationGroup map in the session if it is necessary
-            if ( request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ) != null
+            if ( request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ) != null
                     && getRemoveIterationParameter( request ).getKey( ) == entry.getIdEntry( ) )
             {
                 removeIterationFromMapIterationGroup( request );
@@ -219,21 +219,24 @@ public class EntryTypeGroupUtils
         IterationGroup iterationGroup = retrieveIterationGroup( request, nIdEntry );
 
         // Iterate on all existing iterations
-        for ( Integer iterationNumber : iterationGroup.getSetIterationNumber( ) )
+        if ( iterationGroup != null )
         {
-            // Get the Html associate to all the children of the group for the current iteration
-            HtmlTemplate templateChildrenIterationGroup = generateChildrenItreationGroupTemplate( request, entry, bDisplayFront, iterationNumber );
-
-            // Aggregate the current iteration template with the other of the group
-            if ( templateChildrenIterationGroup != null )
+            for ( Integer iterationNumber : iterationGroup.getSetIterationNumber( ) )
             {
-                sbGroup.append( templateChildrenIterationGroup.getHtml( ) );
+                // Get the Html associate to all the children of the group for the current iteration
+                HtmlTemplate templateChildrenIterationGroup = generateChildrenItreationGroupTemplate( request, entry, bDisplayFront, iterationNumber );
+
+                // Aggregate the current iteration template with the other of the group
+                if ( templateChildrenIterationGroup != null )
+                {
+                    sbGroup.append( templateChildrenIterationGroup.getHtml( ) );
+                }
             }
         }
 
         // Add another iteration if we are in the case of an iteration adding and if the user has filled the field of the previous iteration
-        int nIdEntryAddIteration = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
-        if ( request.getParameter( FormConstants.PARAMETER_ADD_ITERATION ) != null && nIdEntryAddIteration == nIdEntry )
+        int nIdEntryAddIteration = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
+        if ( request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION ) != null && nIdEntryAddIteration == nIdEntry )
         {
             int nLastIterationNumber = iterationGroup.getLastIterationNumber( );
             boolean bFillingMade = iterationGroup.fillingMadeOnIteration( nLastIterationNumber );
@@ -297,7 +300,7 @@ public class EntryTypeGroupUtils
     }
 
     /**
-     * Generate the html code for the entry of type group. Modify the name of the id attribute if the entry allow iterations simply construct the html otherwise
+     * Generate the html code for the entry of type group.
      * 
      * @param request
      *            The HttpServletRequest
@@ -418,20 +421,23 @@ public class EntryTypeGroupUtils
         if ( entry != null )
         {
             int nIdEntry = entry.getIdEntry( );
-            String strParameterAddIteration = request.getParameter( FormConstants.PARAMETER_ADD_ITERATION );
+            String strParameterAddIteration = request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION );
 
             if ( StringUtils.isNotBlank( strParameterAddIteration ) && NumberUtils.toInt( strParameterAddIteration, NumberUtils.INTEGER_MINUS_ONE ) == nIdEntry )
             {
                 // Check if there are some errors for the current entry
                 IterationGroup iterationGroup = retrieveIterationGroup( request, entry.getIdEntry( ) );
-                List<MVCMessage> listErrorMessages = iterationGroup.getListErrorMessages( );
-                if ( listErrorMessages != null && !listErrorMessages.isEmpty( ) )
+                if ( iterationGroup != null )
                 {
-                    listInfosIterableGroup.addAll( listErrorMessages );
-                    bHasErrors = Boolean.TRUE;
+                    List<MVCMessage> listErrorMessages = iterationGroup.getListErrorMessages( );
+                    if ( listErrorMessages != null && !listErrorMessages.isEmpty( ) )
+                    {
+                        listInfosIterableGroup.addAll( listErrorMessages );
+                        bHasErrors = Boolean.TRUE;
 
-                    // Reset the list of errors message for the iteration group
-                    iterationGroup.resetListErrorMessages( );
+                        // Reset the list of errors message for the iteration group
+                        iterationGroup.resetListErrorMessages( );
+                    }
                 }
             }
         }
@@ -1011,7 +1017,15 @@ public class EntryTypeGroupUtils
      */
     public static IterationGroup retrieveIterationGroup( HttpServletRequest request, int nIdEntry )
     {
-        return retrieveIterationMap( request ).get( nIdEntry );
+        IterationGroup iterationGroup = null;
+        
+        Map<Integer, IterationGroup> mapIdEntryIterationGroup = retrieveIterationMap( request );
+        if ( mapIdEntryIterationGroup != null && !mapIdEntryIterationGroup.isEmpty( ) )
+        {
+            iterationGroup = retrieveIterationMap( request ).get( nIdEntry );
+        }
+        
+        return iterationGroup;
     }
 
     /**
@@ -1123,6 +1137,46 @@ public class EntryTypeGroupUtils
 
         return listIdEntry;
     }
+    
+    /**
+     * Retrieve the parameter values associated to the request for the removing of an iteration.
+     * Remove the iteration for the group in the session map.
+     * 
+     * @param request
+     *          The request to retrieve the parameter values from and to retrieve the session to remove the iteration from.
+     */
+    public static void manageRemoveIterationGroup( HttpServletRequest request )
+    {
+        // Retrieve the information of the iteration to remove from the request
+        java.util.Map.Entry<Integer, Integer> entryIdEntryIterationNumber = getRemoveIterationParameter( request );
+
+        // Remove an iteration case
+        removeIterationGroup( request, entryIdEntryIterationNumber.getKey( ), entryIdEntryIterationNumber.getValue( ) );
+    }
+    
+    /**
+     * Remove the specified iteration for the given iteration group for the iteration group map in the session.
+     * 
+     * @param request
+     *          The request to retrieve the iterationGroup from
+     * @param nIdEntry
+     *          The id of the entry group to retrieve the iteration from
+     * @param nIterationNumber
+     *          The iteration to remove to the group
+     */
+    private static void removeIterationGroup( HttpServletRequest request, int nIdEntry, int nIterationNumber )
+    {
+        // Check if the given iteration number is a valid number
+        if ( nIterationNumber != FormConstants.DEFAULT_ITERATION_NUMBER )
+        {
+            // Retrieve the IterationGroup from the session map
+            Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
+            
+            // Remove the iteration to the group
+            IterationGroup iterationGroup = mapIterationGroup.get( nIdEntry );
+            iterationGroup.removeIteration( nIterationNumber );
+        }
+    }
 
     /**
      * Return the couple of the parameters for removing an iteration. The key is the identifier of the entry and the value is the iteration number to remove. If
@@ -1137,9 +1191,9 @@ public class EntryTypeGroupUtils
         java.util.Map.Entry<Integer, Integer> entryIdEntryIterationNumber = new AbstractMap.SimpleEntry<>( NumberUtils.INTEGER_MINUS_ONE,
                 FormConstants.DEFAULT_ITERATION_NUMBER );
 
-        if ( request != null && request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ) != null )
+        if ( request != null && request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ) != null )
         {
-            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_REMOVE_ITERATION ).split( FormUtils.CONSTANT_UNDERSCORE );
+            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ).split( FormUtils.CONSTANT_UNDERSCORE );
             if ( listParameterRemoveIteration != null && listParameterRemoveIteration.length > NumberUtils.INTEGER_ONE )
             {
                 int nIdEntry = NumberUtils.toInt( listParameterRemoveIteration [NumberUtils.INTEGER_ZERO], NumberUtils.INTEGER_MINUS_ONE );
