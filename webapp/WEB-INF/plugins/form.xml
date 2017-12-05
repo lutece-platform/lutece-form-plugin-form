@@ -93,6 +93,24 @@
             <portlet-create-specific-form-template/>
             <portlet-modify-specific-form-template/>
         </portlet>
+        
+        <portlet>
+            <portlet-class>fr.paris.lutece.plugins.form.business.portlet.ListFormPortletHome</portlet-class>
+            <portlet-type-id>LIST_FORM_PORTLET</portlet-type-id>
+            <portlet-type-name>form.portlet.listForm.name</portlet-type-name>
+            <portlet-creation-url>plugins/form/CreateListFormPortlet.jsp</portlet-creation-url>
+            <portlet-update-url>plugins/form/ModifyListFormPortlet.jsp</portlet-update-url>
+            <portlet-create-action-url>plugins/form/DoCreateListFormPortlet.jsp</portlet-create-action-url>
+            <portlet-modify-action-url>plugins/form/DoModifyListFormPortlet.jsp</portlet-modify-action-url>
+
+            <!-- optional entries -->
+            <portlet-create-script-template/>
+            <portlet-modify-script-template/>
+            <portlet-create-specific-template>/admin/plugins/form/list_categories.html</portlet-create-specific-template>
+            <portlet-modify-specific-template>/admin/plugins/form/list_categories.html</portlet-modify-specific-template>
+            <portlet-create-specific-form-template/>
+            <portlet-modify-specific-form-template/>
+        </portlet>
     </portlets>
 
     <!-- Xpage configuration -->
