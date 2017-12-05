@@ -53,8 +53,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ListFormPortlet extends Portlet
 {
-    
-     // ///////////////////////////////////////////////////////////////////////////////
+
+    // ///////////////////////////////////////////////////////////////////////////////
     // Xml Tags
     private static final String TAG_FORM_PORTLET = "form-portlet";
     private static final String TAG_FORM_PORTLET_CONTENT = "form-portlet-content";
@@ -65,37 +65,38 @@ public class ListFormPortlet extends Portlet
     private static final String TAG_CATEGORY_ID = "category-id";
     private static final String TAG_CATEGORY_COLOR = "category-color";
     private static final String TAG_CATEGORY_TITLE = "category-title";
-    
+
     private int _nIdCategory;
 
     /**
      * Get the id category of the listFormPortlet
+     * 
      * @return the id category of the listFormPortlet
      */
-    public int getIdCategory()
+    public int getIdCategory( )
     {
         return _nIdCategory;
     }
 
     /**
      * Set the id category of the listFormPortlet
-     * @param nIdCategory 
+     * 
+     * @param nIdCategory
      */
     public void setIdCategory( int nIdCategory )
     {
         _nIdCategory = nIdCategory;
     }
-    
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void remove()
+    public void remove( )
     {
         ListFormPortletHome.getInstance( ).remove( this );
     }
-    
+
     /**
      * Updates the current instance of the form portlet object
      */
@@ -124,31 +125,31 @@ public class ListFormPortlet extends Portlet
 
         StringBuffer strXml = new StringBuffer( );
         XmlUtil.beginElement( strXml, TAG_FORM_PORTLET );
-        
-        //Get the portlet
-        ListFormPortlet portlet = (ListFormPortlet)ListFormPortletHome.findByPrimaryKey( getId( ) );
-        
-        //Get the list of forms for the configured category
-        Category category = CategoryHome.findByPrimaryKey( portlet.getIdCategory(), plugin );
+
+        // Get the portlet
+        ListFormPortlet portlet = (ListFormPortlet) ListFormPortletHome.findByPrimaryKey( getId( ) );
+
+        // Get the list of forms for the configured category
+        Category category = CategoryHome.findByPrimaryKey( portlet.getIdCategory( ), plugin );
         FormFilter filter = new FormFilter( );
         filter.setIdCategory( category.getIdCategory( ) );
         List<Form> listForm = FormHome.getFormList( filter, plugin );
-        
+
         XmlUtil.beginElement( strXml, TAG_FORM_PORTLET_CONTENT );
         if ( category != null )
         {
             XmlUtil.beginElement( strXml, TAG_CATEGORY );
             XmlUtil.addElement( strXml, TAG_CATEGORY_ID, category.getIdCategory( ) );
-            XmlUtil.addElement( strXml, TAG_CATEGORY_COLOR, category.getColor() );
+            XmlUtil.addElement( strXml, TAG_CATEGORY_COLOR, category.getColor( ) );
             XmlUtil.addElement( strXml, TAG_CATEGORY_TITLE, category.getTitle( ) );
             XmlUtil.endElement( strXml, TAG_CATEGORY );
         }
-        
-        if ( !listForm.isEmpty() )
+
+        if ( !listForm.isEmpty( ) )
         {
             for ( Form form : listForm )
             {
-                if ( form.isActive() )
+                if ( form.isActive( ) )
                 {
                     XmlUtil.beginElement( strXml, TAG_FORM );
                     XmlUtil.addElement( strXml, TAG_FORM_ID, form.getIdForm( ) );
@@ -173,5 +174,5 @@ public class ListFormPortlet extends Portlet
     {
         return XmlUtil.getXmlHeader( ) + getXml( request );
     }
-    
+
 }

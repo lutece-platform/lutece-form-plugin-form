@@ -40,5 +40,5 @@ import fr.paris.lutece.portal.business.portlet.IPortletInterfaceDAO;
  */
 public interface IListFormPortletDAO extends IPortletInterfaceDAO
 {
-    
+
 }

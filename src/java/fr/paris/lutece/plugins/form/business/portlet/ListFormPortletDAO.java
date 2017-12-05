@@ -126,7 +126,7 @@ public final class ListFormPortletDAO implements IListFormPortletDAO
         ListFormPortlet p = (ListFormPortlet) portlet;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE );
         daoUtil.setInt( 1, p.getId( ) );
-        daoUtil.setInt( 2, p.getIdCategory( ));
+        daoUtil.setInt( 2, p.getIdCategory( ) );
         daoUtil.setInt( 3, p.getId( ) );
         daoUtil.executeUpdate( );
         daoUtil.free( );
