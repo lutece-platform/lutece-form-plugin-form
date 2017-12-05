@@ -116,7 +116,7 @@ public class FormApp extends MVCApplication
      * /** Serial version UID
      */
     private static final long serialVersionUID = -1385222847493418480L;
-    
+
     // Controller properties
     protected static final String XPAGE_NAME = "form";
     protected static final String MESSAGE_PAGE_TITLE = "form.xpage.form.pageTitle";
@@ -164,12 +164,12 @@ public class FormApp extends MVCApplication
 
     // session
     private static final String SESSION_VALIDATE_REQUIREMENT = "session_validate_requirement";
-    
+
     // Views
     private static final String VIEW_LIST_FORM = "listForm";
     private static final String VIEW_FORM = "viewForm";
     private static final String VIEW_REQUIREMENT = "viewRequirement";
-    
+
     // Actions
     private static final String ACTION_ADD_ITERATION = "addIteration";
     private static final String ACTION_REMOVE_ITERATION = "removeIteration";
@@ -194,22 +194,22 @@ public class FormApp extends MVCApplication
     private static final String REGEX_ID = "^[\\d]+$";
     private transient IResponseService _responseService;
     private transient EntryTypeService _entryTypeService;
-    
+
     /**
      * Return the default XPage with the list of all available Form
      * 
      * @param request
-     *          The HttpServletRequest
+     *            The HttpServletRequest
      * @return the list of all available forms
-     * @throws SiteMessageException 
-     * @throws UserNotSignedException 
+     * @throws SiteMessageException
+     * @throws UserNotSignedException
      */
     @View( value = VIEW_LIST_FORM, defaultView = true )
     public XPage getListFormView( HttpServletRequest request ) throws SiteMessageException, UserNotSignedException
     {
         XPage page = new XPage( );
         Locale locale = request.getLocale( );
-        
+
         // Special case for upload fields : if no action is specified, a submit
         // button associated with an upload might have been pressed :
         String strUploadAction = FormAsynchronousUploadHandler.getHandler( ).getUploadAction( request );
@@ -217,39 +217,39 @@ public class FormApp extends MVCApplication
         {
             return doSubmitForm( request );
         }
-        
-        if( request.getParameter( FormConstants.PARAMETER_ID_FORM ) != null )
+
+        if ( request.getParameter( FormConstants.PARAMETER_ID_FORM ) != null )
         {
             return getFormView( request );
         }
-        
+
         page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_LIST_FORMS_PAGETITLE, locale ) );
         page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_LIST_FORMS_PATHLABEL, locale ) );
         page.setContent( getFormList( request ) );
-        
+
         return page;
     }
-    
+
     /**
      * Return the XPage associated to a Form content
      * 
      * @param request
-     *          The HttpServletrequest
+     *            The HttpServletrequest
      * @return the XPage associated to a Form
-     * @throws SiteMessageException 
-     * @throws UserNotSignedException 
+     * @throws SiteMessageException
+     * @throws UserNotSignedException
      */
     @View( value = VIEW_FORM )
     public XPage getFormView( HttpServletRequest request ) throws SiteMessageException, UserNotSignedException
     {
         XPage page = new XPage( );
-        
+
         int nIdForm = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ID_FORM ), NumberUtils.INTEGER_MINUS_ONE );
         if ( nIdForm == NumberUtils.INTEGER_MINUS_ONE )
         {
             return getListFormView( request );
         }
-        
+
         String strSessionId = request.getParameter( PARAMETER_SESSION );
         if ( StringUtils.isBlank( strSessionId ) || isIterationMapLost( request ) )
         {
@@ -265,18 +265,18 @@ public class FormApp extends MVCApplication
             // Get the page associated to the draft
             page = getForm( request );
         }
-        
+
         return page;
     }
-    
+
     /**
      * Add an iteration to a group
      * 
      * @param request
-     *          The HttpServletRequest
+     *            The HttpServletRequest
      * @return the page of the Form with an iteration added to the group
-     * @throws UserNotSignedException 
-     * @throws SiteMessageException 
+     * @throws UserNotSignedException
+     * @throws SiteMessageException
      */
     @Action( value = ACTION_ADD_ITERATION )
     public XPage doAddIteration( HttpServletRequest request ) throws SiteMessageException, UserNotSignedException
@@ -285,25 +285,25 @@ public class FormApp extends MVCApplication
         {
             return getFormView( request );
         }
-        
+
         if ( request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION ) != null )
         {
             cleanSession( request.getSession( ) );
-            
+
             return getForm( request );
         }
-        
+
         return getFormView( request );
     }
-    
+
     /**
      * Remove an iteration to an iteration group
      * 
      * @param request
-     *          The HttpServletRequest
+     *            The HttpServletRequest
      * @return the page of the Form with the iteration removed
-     * @throws UserNotSignedException 
-     * @throws SiteMessageException 
+     * @throws UserNotSignedException
+     * @throws SiteMessageException
      */
     @Action( value = ACTION_REMOVE_ITERATION )
     public XPage doRemoveIteration( HttpServletRequest request ) throws SiteMessageException, UserNotSignedException
@@ -312,28 +312,28 @@ public class FormApp extends MVCApplication
         {
             return getFormView( request );
         }
-        
+
         String strRemoveIteration = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION );
         if ( StringUtils.isNotBlank( strRemoveIteration ) )
         {
             cleanSession( request.getSession( ) );
-            
+
             EntryTypeGroupUtils.manageRemoveIterationGroup( request );
 
             return getForm( request );
         }
-        
+
         return getFormView( request );
     }
-    
+
     /**
      * Submit the Form with the data filling by the user
      * 
      * @param request
-     *          The HttpServletRequest
+     *            The HttpServletRequest
      * @return the page associated to the recap page
-     * @throws UserNotSignedException 
-     * @throws SiteMessageException 
+     * @throws UserNotSignedException
+     * @throws SiteMessageException
      */
     @Action( value = ACTION_SUBMIT_FORM )
     public XPage doSubmitForm( HttpServletRequest request ) throws SiteMessageException, UserNotSignedException
@@ -342,21 +342,21 @@ public class FormApp extends MVCApplication
         {
             return getFormView( request );
         }
-        
+
         XPage page = getRecap( request );
-        
+
         Form form = getFormFromRequest( request );
 
         validateDraft( request, form );
-        
+
         return page;
     }
-    
+
     /**
      * Reset a Form
      * 
      * @param request
-     *          The HttpServletRequest
+     *            The HttpServletRequest
      * @return the XPage of the Form
      * @throws SiteMessageException
      * @throws UserNotSignedException
@@ -368,28 +368,28 @@ public class FormApp extends MVCApplication
         {
             return getFormView( request );
         }
-        
+
         HttpSession session = request.getSession( );
-        
+
         cleanSession( session );
 
         // Remove the uploaded file in session
         FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
-        
+
         Map<String, String> model = new LinkedHashMap<>( );
         model.put( FormConstants.PARAMETER_ID_FORM, request.getParameter( FormConstants.PARAMETER_ID_FORM ) );
-        
+
         return redirect( request, VIEW_FORM, model );
     }
-    
+
     /**
      * Save the draft of a Form
      * 
      * @param request
-     *          The HttpServletRequest
-     * @return 
-     * @throws SiteMessageException 
-     * @throws UserNotSignedException 
+     *            The HttpServletRequest
+     * @return
+     * @throws SiteMessageException
+     * @throws UserNotSignedException
      */
     @Action( value = ACTION_SAVE_DRAFT )
     public XPage doSaveDraft( HttpServletRequest request ) throws SiteMessageException, UserNotSignedException
@@ -398,29 +398,29 @@ public class FormApp extends MVCApplication
         {
             return getFormView( request );
         }
-        
+
         Form form = getFormFromRequest( request );
-        
+
         // Create a new FormSubmit object
         FormSubmit formSubmit = new FormSubmit( );
         formSubmit.setForm( form );
-        
+
         // Parse request
         doInsertResponseInFormSubmit( request, formSubmit, true );
-        
+
         // Save the draft
         FormDraftBackupService.saveDraft( request, form );
-        
+
         return getForm( request );
     }
-    
+
     /**
      * Return the requirement view
      * 
      * @param request
-     *          The HttpServletRequest
-     * @return the view associated to the Requirement 
-     * @throws SiteMessageException 
+     *            The HttpServletRequest
+     * @return the view associated to the Requirement
+     * @throws SiteMessageException
      */
     @View( value = VIEW_REQUIREMENT )
     public XPage getRequirementView( HttpServletRequest request ) throws SiteMessageException
@@ -429,43 +429,43 @@ public class FormApp extends MVCApplication
         page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale( ) ) );
         page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale( ) ) );
         page.setContent( getRequirement( request ) );
-        
+
         return page;
     }
-    
+
     /**
      * Validate the recap of a Form
      * 
      * @param request
-     *          The HttpServletRequest
+     *            The HttpServletRequest
      * @return the view after the validation of the recap
-     * @throws SiteMessageException 
+     * @throws SiteMessageException
      */
     @Action( value = ACTION_VALIDATE_RECAP )
     public XPage doValidateRecap( HttpServletRequest request ) throws SiteMessageException
     {
         XPage page = new XPage( );
         Locale locale = request.getLocale( );
-        
+
         page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, locale ) );
         page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, locale ) );
         page.setContent( getResult( request, true ) );
 
         // Remove existing draft
         FormDraftBackupService.validateDraft( request, getFormFromRequest( request ) );
-        
+
         return page;
     }
-    
+
     /**
      * Initialize the session object
      * 
      * @param session
-     *          The session to clean
+     *            The session to clean
      * @param strSessionId
-     *          The id of the session
+     *            The id of the session
      * @param nIdForm
-     *          The id of the form
+     *            The id of the form
      */
     private void initializeSession( HttpSession session, String strSessionId, int nIdForm )
     {
@@ -473,7 +473,7 @@ public class FormApp extends MVCApplication
         // there is a few chances that PARAMETER_SESSION may not be blank but will be overwritten by draft if any
         cleanSession( session );
         session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
-        
+
         if ( strSessionId == null )
         {
             strSessionId = session.getId( );
@@ -485,13 +485,12 @@ public class FormApp extends MVCApplication
         // Add the iterationMap to the session
         populateIterationGroupMap( session, nIdForm );
     }
-    
+
     /**
-     * Clean the session. Remove the attributes SESSION_FORM_LIST_SUBMITTED_RESPONSES and
-     * SESSION_FORM_ERRORS from the session
+     * Clean the session. Remove the attributes SESSION_FORM_LIST_SUBMITTED_RESPONSES and SESSION_FORM_ERRORS from the session
      * 
      * @param session
-     *          The session to cleaned
+     *            The session to cleaned
      */
     private void cleanSession( HttpSession session )
     {
@@ -501,49 +500,49 @@ public class FormApp extends MVCApplication
             FormUtils.removeFormErrors( session );
         }
     }
-    
+
     /**
      * Return the Form from the request
      * 
      * @param request
-     *          The HttpServletRequest to retrieve the Form from
+     *            The HttpServletRequest to retrieve the Form from
      * @return the Form which is in the request
      * @throws SiteMessageException
      */
     private Form getFormFromRequest( HttpServletRequest request ) throws SiteMessageException
-    {        
+    {
         // Find the required form
         Form form = getFormFromIdParameter( request );
-        
+
         HttpSession session = request.getSession( );
-        
+
         // Find form submit stored in session if the Form has not been found with the parameter values
         if ( form == null )
         {
             form = getFormFromFormSubmit( session );
         }
-        
+
         // Put real base url in session if Https is supported
         if ( form != null && form.isSupportHTTPS( ) && AppHTTPSService.isHTTPSSupportEnabled( ) )
         {
             session.setAttribute( AppPathService.SESSION_BASE_URL, AppPathService.getBaseUrl( request ) );
         }
-        
+
         return form;
     }
-    
+
     /**
      * Return the Form associated to the form id specified in the request
      * 
      * @param request
-     *          The request to retrieve the parameter from
+     *            The request to retrieve the parameter from
      * @return the Form associated to the id in the request or null if not found
      * @throws SiteMessageException
      */
     private Form getFormFromIdParameter( HttpServletRequest request ) throws SiteMessageException
     {
         Form form = null;
-        
+
         String strIdForm = request.getParameter( FormConstants.PARAMETER_ID_FORM );
         if ( StringUtils.isNotBlank( strIdForm ) )
         {
@@ -560,23 +559,23 @@ public class FormApp extends MVCApplication
 
             form = FormHome.findByPrimaryKey( nIdForm, PluginService.getPlugin( FormPlugin.PLUGIN_NAME ) );
         }
-        
+
         return form;
     }
-    
+
     /**
      * Return the Form from the FormSubmit object in the session
      * 
      * @param session
-     *          The session to retrieve the attribute from
+     *            The session to retrieve the attribute from
      * @return the Form associated to the FormSubmit in the session
      */
     private Form getFormFromFormSubmit( HttpSession session )
     {
         Form form = null;
-        
+
         Object objFormSubmit = session.getAttribute( PARAMETER_FORM_SUBMIT );
-        
+
         if ( objFormSubmit != null )
         {
             try
@@ -588,17 +587,17 @@ public class FormApp extends MVCApplication
                 AppLogService.error( ce );
             }
         }
-        
+
         return form;
     }
-    
+
     /**
      * Save the draft of a Form and return the content of the Result page if necessary
      * 
      * @param request
-     *          The HttpServletRequest
+     *            The HttpServletRequest
      * @param form
-     *          The form object to save the draft
+     *            The form object to save the draft
      * @return the content of a result page if the FormSubmit object exist null otherwise
      * @throws SiteMessageException
      */
@@ -606,7 +605,7 @@ public class FormApp extends MVCApplication
     {
         String strResult = null;
         HttpSession session = request.getSession( );
-        
+
         // Validate draft if the form does not have a recap and the session
         // contains a list of responses without errors
         if ( !FormService.getInstance( ).hasRecap( form ) && !FormService.getInstance( ).hasFormErrors( session ) )
@@ -629,7 +628,7 @@ public class FormApp extends MVCApplication
                 FormDraftBackupService.saveDraft( request, formSubmit );
             }
         }
-        
+
         // Return the content of the result page if the FormSubmit exists
         return strResult;
     }
@@ -649,7 +648,7 @@ public class FormApp extends MVCApplication
     {
         // Retrieve the session from the request
         HttpSession session = request.getSession( );
-        
+
         if ( ( session == null ) || ( session.getAttribute( PARAMETER_FORM_SUBMIT ) == null ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_SESSION_LOST, SiteMessage.TYPE_STOP );
@@ -696,7 +695,7 @@ public class FormApp extends MVCApplication
                 }
             }
         }
-        
+
         // Retrieve the plugin
         Plugin plugin = PluginService.getPlugin( FormPlugin.PLUGIN_NAME );
 
@@ -850,7 +849,7 @@ public class FormApp extends MVCApplication
 
         // Retrieve the session from the request
         HttpSession session = request.getSession( );
-        
+
         if ( !form.isActive( ) )
         {
             model.put( MARK_MESSAGE_FORM_INACTIVE, form.getUnavailabilityMessage( ) );
@@ -985,7 +984,7 @@ public class FormApp extends MVCApplication
 
         // get form Recap
         Recap recap = RecapHome.findByPrimaryKey( form.getRecap( ).getIdRecap( ), plugin );
-        
+
         // Sort the list of response with the group management to the form
         List<Response> responseManagedList = EntryTypeGroupUtils.orderResponseList( request, formSubmit.getListResponse( ) );
         formSubmit.setListResponse( responseManagedList );
@@ -1019,7 +1018,7 @@ public class FormApp extends MVCApplication
             }
         }
         else
-        {            
+        {
             doPerformFormSubmit( request, session, formSubmit, plugin );
         }
 
@@ -1322,18 +1321,18 @@ public class FormApp extends MVCApplication
             }
         }
     }
-    
+
     /**
      * Populate the iteration map of a form and set it to the session
      * 
      * @param session
-     *          The session to set the map inside
+     *            The session to set the map inside
      * @param nIdForm
-     *          The id of the form to create the iteration group from
+     *            The id of the form to create the iteration group from
      */
     private void populateIterationGroupMap( HttpSession session, int nIdForm )
     {
-        if( session != null )
+        if ( session != null )
         {
             Map<Integer, IterationGroup> mapIterationGroup = new LinkedHashMap<Integer, IterationGroup>( );
             List<Integer> listIdEntryGroupIterable = EntryTypeGroupUtils.findIdEntryGroupIterable( nIdForm );
@@ -1348,12 +1347,12 @@ public class FormApp extends MVCApplication
             session.setAttribute( FormConstants.SESSION_ITERATION_MAP, mapIterationGroup );
         }
     }
-    
+
     /**
      * Detect if the iteration map of the form is lost or not.
      * 
      * @param request
-     *          The HttpServletRequest to retrieve the map from its session
+     *            The HttpServletRequest to retrieve the map from its session
      * @return true if the Iteration map is no more present in the session of the request false otherwise.
      */
     private boolean isIterationMapLost( HttpServletRequest request )

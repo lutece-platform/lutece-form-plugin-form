@@ -1018,13 +1018,13 @@ public class EntryTypeGroupUtils
     public static IterationGroup retrieveIterationGroup( HttpServletRequest request, int nIdEntry )
     {
         IterationGroup iterationGroup = null;
-        
+
         Map<Integer, IterationGroup> mapIdEntryIterationGroup = retrieveIterationMap( request );
         if ( mapIdEntryIterationGroup != null && !mapIdEntryIterationGroup.isEmpty( ) )
         {
             iterationGroup = retrieveIterationMap( request ).get( nIdEntry );
         }
-        
+
         return iterationGroup;
     }
 
@@ -1137,13 +1137,12 @@ public class EntryTypeGroupUtils
 
         return listIdEntry;
     }
-    
+
     /**
-     * Retrieve the parameter values associated to the request for the removing of an iteration.
-     * Remove the iteration for the group in the session map.
+     * Retrieve the parameter values associated to the request for the removing of an iteration. Remove the iteration for the group in the session map.
      * 
      * @param request
-     *          The request to retrieve the parameter values from and to retrieve the session to remove the iteration from.
+     *            The request to retrieve the parameter values from and to retrieve the session to remove the iteration from.
      */
     public static void manageRemoveIterationGroup( HttpServletRequest request )
     {
@@ -1153,16 +1152,16 @@ public class EntryTypeGroupUtils
         // Remove an iteration case
         removeIterationGroup( request, entryIdEntryIterationNumber.getKey( ), entryIdEntryIterationNumber.getValue( ) );
     }
-    
+
     /**
      * Remove the specified iteration for the given iteration group for the iteration group map in the session.
      * 
      * @param request
-     *          The request to retrieve the iterationGroup from
+     *            The request to retrieve the iterationGroup from
      * @param nIdEntry
-     *          The id of the entry group to retrieve the iteration from
+     *            The id of the entry group to retrieve the iteration from
      * @param nIterationNumber
-     *          The iteration to remove to the group
+     *            The iteration to remove to the group
      */
     private static void removeIterationGroup( HttpServletRequest request, int nIdEntry, int nIterationNumber )
     {
@@ -1171,7 +1170,7 @@ public class EntryTypeGroupUtils
         {
             // Retrieve the IterationGroup from the session map
             Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
-            
+
             // Remove the iteration to the group
             IterationGroup iterationGroup = mapIterationGroup.get( nIdEntry );
             iterationGroup.removeIteration( nIterationNumber );
@@ -1193,7 +1192,8 @@ public class EntryTypeGroupUtils
 
         if ( request != null && request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ) != null )
         {
-            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ).split( FormUtils.CONSTANT_UNDERSCORE );
+            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ).split(
+                    FormUtils.CONSTANT_UNDERSCORE );
             if ( listParameterRemoveIteration != null && listParameterRemoveIteration.length > NumberUtils.INTEGER_ONE )
             {
                 int nIdEntry = NumberUtils.toInt( listParameterRemoveIteration [NumberUtils.INTEGER_ZERO], NumberUtils.INTEGER_MINUS_ONE );
