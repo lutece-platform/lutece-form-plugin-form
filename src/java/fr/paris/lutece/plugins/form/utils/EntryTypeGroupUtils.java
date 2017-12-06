@@ -781,13 +781,22 @@ public class EntryTypeGroupUtils
                             entryField = EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) );
                         }
 
-                        int nIdParentConditional = entryField.getParent( ).getIdEntry( );
-                        if ( !mapIdEntryListResponse.containsKey( nIdParentConditional ) )
+                        Entry entryParent = entryField.getParent( );
+                        if ( entryParent != null )
                         {
-                            mapIdEntryListResponse.put( nIdParentConditional, new ArrayList<Response>( ) );
-                        }
+                            int nIdParentConditional = entryParent.getIdEntry( );
+                            if ( !mapIdEntryListResponse.containsKey( nIdParentConditional ) )
+                            {
+                                mapIdEntryListResponse.put( nIdParentConditional, new ArrayList<Response>( ) );
+                            }
 
-                        mapIdEntryListResponse.get( nIdParentConditional ).add( response );
+                            mapIdEntryListResponse.get( nIdParentConditional ).add( response );
+                        }
+                        else
+                        {
+                            // If the entry doesn't have parent it means that it doesn't belong to a group
+                            mapIdEntryListResponse.put( entryResponse.getIdEntry( ), Arrays.asList( response ) );
+                        }
                     }
                     else
                     {
