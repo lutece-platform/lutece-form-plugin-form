@@ -970,12 +970,30 @@ public class EntryTypeGroupUtils
     {
         if ( entry != null )
         {
+            return Integer.valueOf( getIterationNumberOfIterableEntry( entry ) ) != FormConstants.DEFAULT_ITERATION_NUMBER;
+        }
+
+        return Boolean.FALSE;
+    }
+    
+    /**
+     * Return the maximum number of iteration of an entry which belong to an iterable group. It will return
+     * {@code FormConstants.DEFAULT_ITERATION_NUMBER} if the specified entry doesn't belong to an entry.
+     * 
+     * @param entry
+     *          The entry to retrieve the maximum number of iteration from which it belongs
+     * @return the maximum number of iteration possible for the given entry or {@code FormConstants.DEFAULT_ITERATION_NUMBER} if it doesn't belong to an iterable group.
+     */
+    public static int getIterationNumberOfIterableEntry( Entry entry )
+    {
+        if ( entry != null )
+        {
             if ( entry.getParent( ) != null )
             {
                 Entry entryParent = EntryHome.findByPrimaryKey( entry.getParent( ).getIdEntry( ) );
                 if ( entryParent != null && entryParent.getEntryType( ) != null && entryParent.getEntryType( ).getGroup( ) )
                 {
-                    return ( Integer.valueOf( getEntryMaxIterationAllowed( entryParent.getIdEntry( ) ) ) != NumberUtils.INTEGER_MINUS_ONE );
+                    return Integer.valueOf( getEntryMaxIterationAllowed( entryParent.getIdEntry( ) ) );
                 }
             }
             else
@@ -985,13 +1003,13 @@ public class EntryTypeGroupUtils
                     Field field = FieldHome.findByPrimaryKey( entry.getFieldDepend( ).getIdField( ) );
                     if ( field != null && field.getParentEntry( ) != null )
                     {
-                        return entryBelongIterableGroup( EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) ) );
+                        return getIterationNumberOfIterableEntry( EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) ) );
                     }
                 }
             }
         }
-
-        return Boolean.FALSE;
+        
+        return FormConstants.DEFAULT_ITERATION_NUMBER;
     }
 
     /**
