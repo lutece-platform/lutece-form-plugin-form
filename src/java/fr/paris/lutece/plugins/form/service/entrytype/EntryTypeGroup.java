@@ -38,12 +38,13 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeGroup;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
-import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 
@@ -60,11 +61,13 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
     public static final String BEAN_NAME = "form.entryTypeGroup";
 
     // Parameters
+    private static final String PARAMETER_IS_ITERABLE = "is_iterable";
     private static final String PARAMETER_NB_ITERATION = "nb_iterations";
 
     // Constants
     public static final String CONSTANT_NB_ITERATION = "nb_iterations";
-    private static final String MESSAGE_FIELD_NB_ITERATIONS = "form.modifyEntry.typeGroup.message.fieldNbIterations";
+    private static final String MESSAGE_ERROR_MANDATORY_FIELD_NB_ITERATIONS = "form.modifyEntry.typeGroup.message.error.fieldNbIterations.mandatory";
+    private static final String MESSAGE_ERROR_FIELD_NB_ITERATIONS = "form.modifyEntry.typeGroup.message.error.fieldNbIterations";
 
     // templates
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_group.html";
@@ -120,32 +123,46 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
      * @return null if there is no problem false otherwise
      */
     private String manageNbIterationsField( HttpServletRequest request, Entry entry )
-    {
-        String strNbIterations = request.getParameter( PARAMETER_NB_ITERATION );
-
-        if ( entry != null && StringUtils.isNotBlank( strNbIterations ) )
+    {        
+        if ( entry != null )
         {
-            if ( !StringUtils.isNumeric( strNbIterations ) )
-            {
-                Object [ ] tabRequiredFields = {
-                    I18nService.getLocalizedString( MESSAGE_FIELD_NB_ITERATIONS, request.getLocale( ) )
-                };
-
-                return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
-            }
-
             Field fieldNbIteration = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_NB_ITERATION, entry.getFields( ) );
-
-            if ( fieldNbIteration == null )
+            
+            if ( request.getParameter( PARAMETER_IS_ITERABLE ) != null )
             {
-                fieldNbIteration = new Field( );
+                String strNbIterations = request.getParameter( PARAMETER_NB_ITERATION );
+                
+                if ( StringUtils.isBlank( strNbIterations ) )
+                {
+                    return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
+                }
+                
+                if ( !StringUtils.isNumeric( strNbIterations ) || NumberUtils.toInt( strNbIterations, NumberUtils.INTEGER_ZERO ) < NumberUtils.INTEGER_ONE )
+                {
+                    return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
+                }
+
+                if ( fieldNbIteration == null )
+                {
+                    fieldNbIteration = new Field( );
+                    
+                    entry.getFields( ).add( fieldNbIteration );
+                }
+
+                fieldNbIteration.setParentEntry( entry );
+                fieldNbIteration.setTitle( CONSTANT_NB_ITERATION );
+                fieldNbIteration.setValue( strNbIterations );
             }
-
-            fieldNbIteration.setParentEntry( entry );
-            fieldNbIteration.setTitle( CONSTANT_NB_ITERATION );
-            fieldNbIteration.setValue( strNbIterations );
-
-            entry.getFields( ).add( fieldNbIteration );
+            else
+            {
+                // The iterations has been disabled on this group so we remove the field which concern the iteration for this entry
+                if ( fieldNbIteration != null )
+                {
+                    entry.getFields( ).remove( fieldNbIteration );
+                    
+                    FieldHome.remove( fieldNbIteration.getIdField( ) );
+                }
+            }
         }
 
         return null;
