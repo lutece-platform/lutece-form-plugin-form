@@ -123,20 +123,20 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
      * @return null if there is no problem false otherwise
      */
     private String manageNbIterationsField( HttpServletRequest request, Entry entry )
-    {        
+    {
         if ( entry != null )
         {
             Field fieldNbIteration = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_NB_ITERATION, entry.getFields( ) );
-            
+
             if ( request.getParameter( PARAMETER_IS_ITERABLE ) != null )
             {
                 String strNbIterations = request.getParameter( PARAMETER_NB_ITERATION );
-                
+
                 if ( StringUtils.isBlank( strNbIterations ) )
                 {
                     return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
                 }
-                
+
                 if ( !StringUtils.isNumeric( strNbIterations ) || NumberUtils.toInt( strNbIterations, NumberUtils.INTEGER_ZERO ) < NumberUtils.INTEGER_ONE )
                 {
                     return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
@@ -145,7 +145,7 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
                 if ( fieldNbIteration == null )
                 {
                     fieldNbIteration = new Field( );
-                    
+
                     entry.getFields( ).add( fieldNbIteration );
                 }
 
@@ -159,7 +159,7 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
                 if ( fieldNbIteration != null )
                 {
                     entry.getFields( ).remove( fieldNbIteration );
-                    
+
                     FieldHome.remove( fieldNbIteration.getIdField( ) );
                 }
             }

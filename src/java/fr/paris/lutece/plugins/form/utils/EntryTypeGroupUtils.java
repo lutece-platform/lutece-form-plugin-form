@@ -92,7 +92,7 @@ public class EntryTypeGroupUtils
     private static final String MARK_REMOVE_ITERATION_NUMBER = "remove_iteration_number";
     private static final String MARK_ITERATION_CHILDREN = "iteration_children";
     private static final String MARK_INFO_ITERABLE_GROUP = "infos_iterable_group";
-    
+
     // Parameters
     private static final String PARAMETER_ACTION_ADD_ITERATION = "action_addIteration";
     private static final String PARAMETER_ACTION_REMOVE_ITERATION = "action_removeIteration";
@@ -123,7 +123,7 @@ public class EntryTypeGroupUtils
         // Generate the Html associate at the children of the entry
         StringBuilder sbGroup = generateHtmlEntryGroup( request, entry, bDisplayFront );
         model.put( FormConstants.MARK_STR_LIST_CHILDREN, sbGroup.toString( ) );
-        
+
         // Populate the model with group informations
         populateModelIterableGroupInfo( request, model, entry );
     }
@@ -975,14 +975,15 @@ public class EntryTypeGroupUtils
 
         return Boolean.FALSE;
     }
-    
+
     /**
-     * Return the maximum number of iteration of an entry which belong to an iterable group. It will return
-     * {@code FormConstants.DEFAULT_ITERATION_NUMBER} if the specified entry doesn't belong to an entry.
+     * Return the maximum number of iteration of an entry which belong to an iterable group. It will return {@code FormConstants.DEFAULT_ITERATION_NUMBER} if
+     * the specified entry doesn't belong to an entry.
      * 
      * @param entry
-     *          The entry to retrieve the maximum number of iteration from which it belongs
-     * @return the maximum number of iteration possible for the given entry or {@code FormConstants.DEFAULT_ITERATION_NUMBER} if it doesn't belong to an iterable group.
+     *            The entry to retrieve the maximum number of iteration from which it belongs
+     * @return the maximum number of iteration possible for the given entry or {@code FormConstants.DEFAULT_ITERATION_NUMBER} if it doesn't belong to an
+     *         iterable group.
      */
     public static int getIterationNumberOfIterableEntry( Entry entry )
     {
@@ -1008,7 +1009,7 @@ public class EntryTypeGroupUtils
                 }
             }
         }
-        
+
         return FormConstants.DEFAULT_ITERATION_NUMBER;
     }
 
@@ -1141,8 +1142,7 @@ public class EntryTypeGroupUtils
 
         if ( request != null && request.getParameter( PARAMETER_ACTION_REMOVE_ITERATION ) != null )
         {
-            String [ ] listParameterRemoveIteration = request.getParameter( PARAMETER_ACTION_REMOVE_ITERATION ).split(
-                    FormUtils.CONSTANT_UNDERSCORE );
+            String [ ] listParameterRemoveIteration = request.getParameter( PARAMETER_ACTION_REMOVE_ITERATION ).split( FormUtils.CONSTANT_UNDERSCORE );
             if ( listParameterRemoveIteration != null && listParameterRemoveIteration.length > NumberUtils.INTEGER_ONE )
             {
                 int nIdEntry = NumberUtils.toInt( listParameterRemoveIteration [NumberUtils.INTEGER_ZERO], NumberUtils.INTEGER_MINUS_ONE );
@@ -1153,14 +1153,13 @@ public class EntryTypeGroupUtils
 
         return entryIdEntryIterationNumber;
     }
-    
+
     /**
-     * Check if the adding of an iteration to a group is authorized or not. If it is it will
-     * add a new iteration to the group otherwise it will create the errors message and add
-     * it to the IterationGroup
+     * Check if the adding of an iteration to a group is authorized or not. If it is it will add a new iteration to the group otherwise it will create the
+     * errors message and add it to the IterationGroup
      * 
      * @param request
-     *          The HttpServletRequest to retrieve the data from
+     *            The HttpServletRequest to retrieve the data from
      */
     public static void manageAddingIteration( HttpServletRequest request )
     {

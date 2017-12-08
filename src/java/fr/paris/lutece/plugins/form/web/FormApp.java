@@ -287,7 +287,7 @@ public class FormApp extends MVCApplication
         }
 
         cleanSession( request.getSession( ) );
-        
+
         EntryTypeGroupUtils.manageAddingIteration( request );
 
         return getForm( request );
@@ -775,7 +775,7 @@ public class FormApp extends MVCApplication
 
         return template.getHtml( );
     }
-    
+
     /**
      * Generate the HTML code for form xpage
      * 
