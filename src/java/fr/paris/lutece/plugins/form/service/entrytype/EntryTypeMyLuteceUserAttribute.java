@@ -200,7 +200,7 @@ public class EntryTypeMyLuteceUserAttribute extends AbstractEntryTypeMyLuteceUse
 
             // Then construct the item
             StringBuilder myLuteceAttribute18nKey = new StringBuilder( );
-            myLuteceAttribute18nKey.append( FormUtils.CONSTANT_MYLUTECE_ATTRIBUTE_I18N_SUFFIX );
+            myLuteceAttribute18nKey.append( FormUtils.CONSTANT_MYLUTECE_ATTRIBUTE_I18N_PREFIX );
             myLuteceAttribute18nKey.append( strAttribute );
             item.setName( I18nService.getLocalizedString( myLuteceAttribute18nKey.toString( ), Locale.forLanguageTag( strLangage ) ) );
 

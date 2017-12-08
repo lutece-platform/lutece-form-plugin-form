@@ -182,7 +182,7 @@ public final class FormUtils
     private static final String PROPERTY_LUTECE_ADMIN_PROD_URL = "lutece.admin.prod.url";
     private static final String PROPERTY_LUTECE_BASE_URL = "lutece.base.url";
     private static final String PROPERTY_LUTECE_PROD_URL = "lutece.prod.url";
-    public static final String CONSTANT_MYLUTECE_ATTRIBUTE_I18N_SUFFIX = "form.entrytype.attribute.";
+    public static final String CONSTANT_MYLUTECE_ATTRIBUTE_I18N_PREFIX = "form.entrytype.myluteceuserattribute.attribute.";
     public static final String PROPERTY_MY_LUTECE_ATTRIBUTES_LIST = "entrytype.myluteceuserattribute.attributes.list";
 
     // Constants
