@@ -92,12 +92,15 @@ public class EntryTypeGroupUtils
     private static final String MARK_REMOVE_ITERATION_NUMBER = "remove_iteration_number";
     private static final String MARK_ITERATION_CHILDREN = "iteration_children";
     private static final String MARK_INFO_ITERABLE_GROUP = "infos_iterable_group";
+    
+    // Parameters
+    private static final String PARAMETER_ACTION_ADD_ITERATION = "action_addIteration";
+    private static final String PARAMETER_ACTION_REMOVE_ITERATION = "action_removeIteration";
 
     // Template
     private static final String TEMPLATE_GROUP_ITERATION_CHILDREN = "skin/plugins/form/entries/html_code_entry_type_group_children.html";
 
     // Messages
-    private static final String MESSAGE_INFO_CANT_ADD_ITERATION = "form.message.cantAddIteration";
     private static final String MESSAGE_INFO_LIMIT_IETRATION_REACHED = "form.message.limitIterationReached";
 
     // Constants
@@ -120,16 +123,9 @@ public class EntryTypeGroupUtils
         // Generate the Html associate at the children of the entry
         StringBuilder sbGroup = generateHtmlEntryGroup( request, entry, bDisplayFront );
         model.put( FormConstants.MARK_STR_LIST_CHILDREN, sbGroup.toString( ) );
-
-        // Manage the case of an adding or a removing of an iteration children group of an entry type group
-        int nIdEntryToRemoveIteration = getRemoveIterationParameter( request ).getKey( );
-        int nIdEntryAddIteration = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
-        if ( nIdEntryAddIteration == entry.getIdEntry( ) || nIdEntryToRemoveIteration == entry.getIdEntry( )
-                || request.getAttribute( FormConstants.ATTRIBUTE_RETURN_FROM_ERRORS ) != null )
-        {
-            // Populate the model with group informations
-            populateModelIterableGroupInfo( request, model, entry );
-        }
+        
+        // Populate the model with group informations
+        populateModelIterableGroupInfo( request, model, entry );
     }
 
     /**
@@ -154,13 +150,6 @@ public class EntryTypeGroupUtils
         if ( nbIterationMax != FormConstants.DEFAULT_ITERATION_NUMBER )
         {
             sbGroup = getHtmlIteratedEntryGroup( request, entry, bDisplayFront );
-
-            // Remove an iteration for the group on the IterationGroup map in the session if it is necessary
-            if ( request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ) != null
-                    && getRemoveIterationParameter( request ).getKey( ) == entry.getIdEntry( ) )
-            {
-                removeIterationFromMapIterationGroup( request );
-            }
         }
         // Case where the entry has no iteration possible
         else
@@ -231,38 +220,6 @@ public class EntryTypeGroupUtils
                 {
                     sbGroup.append( templateChildrenIterationGroup.getHtml( ) );
                 }
-            }
-        }
-
-        // Add another iteration if we are in the case of an iteration adding and if the user has filled the field of the previous iteration
-        int nIdEntryAddIteration = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
-        if ( request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION ) != null && nIdEntryAddIteration == nIdEntry )
-        {
-            int nLastIterationNumber = iterationGroup.getLastIterationNumber( );
-            boolean bFillingMade = iterationGroup.fillingMadeOnIteration( nLastIterationNumber );
-            if ( bFillingMade )
-            {
-                if ( !iterationGroup.isIterationLimitReached( ) )
-                {
-                    HtmlTemplate htmTemplateNextIteration = generateChildrenItreationGroupTemplate( request, entry, bDisplayFront, nLastIterationNumber
-                            + NumberUtils.INTEGER_ONE );
-                    if ( htmTemplateNextIteration != null )
-                    {
-                        sbGroup.append( htmTemplateNextIteration.getHtml( ) );
-                    }
-                }
-                else
-                {
-                    // Add an error message to notify the fact the user has reached the maximum limit of iteration allowed
-                    iterationGroup.getListErrorMessages( ).add(
-                            new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_LIMIT_IETRATION_REACHED, request.getLocale( ) ) ) );
-                }
-            }
-            else
-            {
-                // Add an error message to notify the fact that the user has not filled any field of the last iteration
-                iterationGroup.getListErrorMessages( ).add(
-                        new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_CANT_ADD_ITERATION, request.getLocale( ) ) ) );
             }
         }
 
@@ -420,24 +377,18 @@ public class EntryTypeGroupUtils
 
         if ( entry != null )
         {
-            int nIdEntry = entry.getIdEntry( );
-            String strParameterAddIteration = request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION );
-
-            if ( StringUtils.isNotBlank( strParameterAddIteration ) && NumberUtils.toInt( strParameterAddIteration, NumberUtils.INTEGER_MINUS_ONE ) == nIdEntry )
+            // Check if there are some errors for the current entry
+            IterationGroup iterationGroup = retrieveIterationGroup( request, entry.getIdEntry( ) );
+            if ( iterationGroup != null )
             {
-                // Check if there are some errors for the current entry
-                IterationGroup iterationGroup = retrieveIterationGroup( request, entry.getIdEntry( ) );
-                if ( iterationGroup != null )
+                List<MVCMessage> listErrorMessages = iterationGroup.getListErrorMessages( );
+                if ( listErrorMessages != null && !listErrorMessages.isEmpty( ) )
                 {
-                    List<MVCMessage> listErrorMessages = iterationGroup.getListErrorMessages( );
-                    if ( listErrorMessages != null && !listErrorMessages.isEmpty( ) )
-                    {
-                        listInfosIterableGroup.addAll( listErrorMessages );
-                        bHasErrors = Boolean.TRUE;
+                    listInfosIterableGroup.addAll( listErrorMessages );
+                    bHasErrors = Boolean.TRUE;
 
-                        // Reset the list of errors message for the iteration group
-                        iterationGroup.resetListErrorMessages( );
-                    }
+                    // Reset the list of errors message for the iteration group
+                    iterationGroup.resetListErrorMessages( );
                 }
             }
         }
@@ -868,35 +819,6 @@ public class EntryTypeGroupUtils
     }
 
     /**
-     * Remove an iteration from the map of IterationGroup for the requested entry for the iteration number in request
-     * 
-     * @param request
-     *            The HttpServletRequest
-     */
-    private static void removeIterationFromMapIterationGroup( HttpServletRequest request )
-    {
-        // Retrieve the iteration to remove from the request
-        java.util.Map.Entry<Integer, Integer> mapIdEntryIterationNumber = getRemoveIterationParameter( request );
-        int nRemoveIteration = mapIdEntryIterationNumber.getValue( );
-
-        if ( nRemoveIteration != FormConstants.DEFAULT_ITERATION_NUMBER )
-        {
-            // Retrieve the IterationGroup map from the request
-            Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
-            if ( mapIterationGroup != null )
-            {
-                // Retrieve the id of the entry to remove the iteration from
-                int nIdEntry = mapIdEntryIterationNumber.getKey( );
-                IterationGroup iterationGroup = mapIterationGroup.get( nIdEntry );
-                if ( iterationGroup != null )
-                {
-                    iterationGroup.removeIteration( nRemoveIteration );
-                }
-            }
-        }
-    }
-
-    /**
      * Construct the pattern of the attribute name for entry which allow iterations
      * 
      * @param idEntry
@@ -1199,9 +1121,9 @@ public class EntryTypeGroupUtils
         java.util.Map.Entry<Integer, Integer> entryIdEntryIterationNumber = new AbstractMap.SimpleEntry<>( NumberUtils.INTEGER_MINUS_ONE,
                 FormConstants.DEFAULT_ITERATION_NUMBER );
 
-        if ( request != null && request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ) != null )
+        if ( request != null && request.getParameter( PARAMETER_ACTION_REMOVE_ITERATION ) != null )
         {
-            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ).split(
+            String [ ] listParameterRemoveIteration = request.getParameter( PARAMETER_ACTION_REMOVE_ITERATION ).split(
                     FormUtils.CONSTANT_UNDERSCORE );
             if ( listParameterRemoveIteration != null && listParameterRemoveIteration.length > NumberUtils.INTEGER_ONE )
             {
@@ -1212,6 +1134,34 @@ public class EntryTypeGroupUtils
         }
 
         return entryIdEntryIterationNumber;
+    }
+    
+    /**
+     * Check if the adding of an iteration to a group is authorized or not. If it is it will
+     * add a new iteration to the group otherwise it will create the errors message and add
+     * it to the IterationGroup
+     * 
+     * @param request
+     *          The HttpServletRequest to retrieve the data from
+     */
+    public static void manageAddingIteration( HttpServletRequest request )
+    {
+        // Retrieve the identifier of the group to add an iteration
+        int nIdEntryAddIteration = NumberUtils.toInt( request.getParameter( PARAMETER_ACTION_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
+        IterationGroup iterationGroup = EntryTypeGroupUtils.retrieveIterationGroup( request, nIdEntryAddIteration );
+        if ( iterationGroup != null )
+        {
+            if ( !iterationGroup.isIterationLimitReached( ) )
+            {
+                iterationGroup.addIteration( );
+            }
+            else
+            {
+                // Add an error message to notify the fact the user has reached the maximum limit of iteration allowed
+                iterationGroup.getListErrorMessages( ).add(
+                        new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_LIMIT_IETRATION_REACHED, request.getLocale( ) ) ) );
+            }
+        }
     }
 
     /**

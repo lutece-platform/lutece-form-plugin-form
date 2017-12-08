@@ -286,14 +286,11 @@ public class FormApp extends MVCApplication
             return getFormView( request );
         }
 
-        if ( request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION ) != null )
-        {
-            cleanSession( request.getSession( ) );
+        cleanSession( request.getSession( ) );
+        
+        EntryTypeGroupUtils.manageAddingIteration( request );
 
-            return getForm( request );
-        }
-
-        return getFormView( request );
+        return getForm( request );
     }
 
     /**
@@ -313,17 +310,11 @@ public class FormApp extends MVCApplication
             return getFormView( request );
         }
 
-        String strRemoveIteration = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION );
-        if ( StringUtils.isNotBlank( strRemoveIteration ) )
-        {
-            cleanSession( request.getSession( ) );
+        cleanSession( request.getSession( ) );
 
-            EntryTypeGroupUtils.manageRemoveIterationGroup( request );
+        EntryTypeGroupUtils.manageRemoveIterationGroup( request );
 
-            return getForm( request );
-        }
-
-        return getFormView( request );
+        return getForm( request );
     }
 
     /**
@@ -784,7 +775,7 @@ public class FormApp extends MVCApplication
 
         return template.getHtml( );
     }
-
+    
     /**
      * Generate the HTML code for form xpage
      * 

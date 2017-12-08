@@ -125,6 +125,14 @@ public class IterationGroup
     {
         _mapIterationResponses.remove( nIterationNumber );
     }
+    
+    /**
+     * Add an iteration to the group
+     */
+    public void addIteration( )
+    {
+        _mapIterationResponses.put( getLastIterationNumber( ) + NumberUtils.INTEGER_ONE, new ArrayList<IterationResponse>( ) );
+    }
 
     /**
      * Add Responses for the specified entry for the specified iteration
