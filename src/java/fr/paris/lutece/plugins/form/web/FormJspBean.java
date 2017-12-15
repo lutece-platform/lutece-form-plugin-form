@@ -33,6 +33,32 @@
  */
 package fr.paris.lutece.plugins.form.web;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
+
 import com.keypoint.PngEncoder;
 
 import fr.paris.lutece.plugins.form.business.ExportFormat;
@@ -58,37 +84,29 @@ import fr.paris.lutece.plugins.form.service.IResponseService;
 import fr.paris.lutece.plugins.form.service.OutputProcessorService;
 import fr.paris.lutece.plugins.form.service.parameter.EntryParameterService;
 import fr.paris.lutece.plugins.form.service.parameter.FormParameterService;
-import fr.paris.lutece.plugins.form.service.upload.FormAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.form.service.validator.IValidator;
 import fr.paris.lutece.plugins.form.service.validator.ValidatorService;
 import fr.paris.lutece.plugins.form.utils.FormUtils;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
-import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
-import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
-import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
 import fr.paris.lutece.portal.service.html.XmlTransformerService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppException;
-import fr.paris.lutece.portal.service.util.AppHTTPSService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
-import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
+import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceItem;
@@ -101,38 +119,10 @@ import fr.paris.lutece.util.sql.TransactionManager;
 import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.entity.StandardEntityCollection;
-
-import java.awt.image.BufferedImage;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-
-import java.sql.Timestamp;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 /**
  * This class provides the user interface to manage form features ( manage, create, modify, remove)
  */
-public abstract class FormJspBean extends PluginAdminPageJspBean
+public abstract class FormJspBean extends MVCAdminJspBean
 {
     /**
      * Right to manage forms
@@ -157,7 +147,6 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     // templates
     private static final String TEMPLATE_MANAGE_FORM = "admin/plugins/form/manage_form.html";
     private static final String TEMPLATE_MANAGE_OUTPUT_PROCESSOR = "admin/plugins/form/manage_output_processor.html";
-    private static final String TEMPLATE_HTML_TEST_FORM = "admin/plugins/form/test_form.html";
     private static final String TEMPLATE_MODIFY_RECAP = "admin/plugins/form/modify_recap.html";
     private static final String TEMPLATE_RESULT = "admin/plugins/form/result.html";
     private static final String TEMPLATE_MODIFY_MESSAGE = "admin/plugins/form/modify_message.html";
@@ -173,11 +162,7 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     private static final String MESSAGE_CONFIRM_DISABLE_FORM = "form.message.confirmDisableForm";
     private static final String MESSAGE_CONFIRM_DISABLE_FORM_WITH_PORTLET = "form.message.confirmDisableFormWithPortlet";
     private static final String MESSAGE_MANDATORY_FIELD = "form.message.mandatory.field";
-    private static final String MESSAGE_MANDATORY_QUESTION = "form.message.mandatory.question";
-    private static final String MESSAGE_CAPTCHA_ERROR = "form.message.captchaError";
-    private static final String MESSAGE_REQUIREMENT_ERROR = "form.message.requirementError";
     private static final String MESSAGE_NO_RESPONSE = "form.message.noResponse";
-    private static final String MESSAGE_FORM_ERROR = "form.message.formError";
     private static final String MESSAGE_CANT_ENABLE_FORM_DATE_END_DISPONIBILITY_BEFORE_CURRENT_DATE = "form.message.cantEnableFormDateEndDisponibilityBeforeCurrentDate";
     private static final String MESSAGE_ERROR_DURING_DOWNLOAD_FILE = "form.message.errorDuringDownloadFile";
     private static final String MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE = "form.message.youAreNotAllowedToDownloadFile";
@@ -217,7 +202,6 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     private static final String MARK_FORM_LIST = "form_list";
     private static final String MARK_FORM = "form";
     private static final String MARK_PERMISSION_CREATE_FORM = "permission_create_form";
-    private static final String MARK_STR_FORM = "str_form";
     private static final String MARK_GRAPH_TYPE_REF_LIST = "graph_type_list";
     private static final String MARK_EXPORT_FORMAT_REF_LIST = "export_format_list";
     private static final String MARK_FIRST_RESPONSE_DATE_FILTER = "fist_response_date_filter";
@@ -242,8 +226,6 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     private static final String JSP_DO_DISABLE_AUTO_FORM = "jsp/admin/plugins/form/DoDisableAutoForm.jsp";
     private static final String JSP_DO_REMOVE_FORM = "jsp/admin/plugins/form/DoRemoveForm.jsp";
     private static final String JSP_MANAGE_FORM = "jsp/admin/plugins/form/ManageForm.jsp";
-    private static final String JSP_TEST_FORM = "jsp/admin/plugins/form/TestForm.jsp";
-    private static final String JSP_DO_TEST_FORM = "jsp/admin/plugins/form/DoTestForm.jsp";
     private static final String JSP_MANAGE_OUTPUT_PROCESS_FORM = "jsp/admin/plugins/form/ManageOutputProcessor.jsp";
     private static final String JSP_MANAGE_VALIDATOR_FORM = "jsp/admin/plugins/form/ManageValidator.jsp";
     private static final String JSP_MANAGE_ADVANCED_PARAMETERS = "jsp/admin/plugins/form/ManageAdvancedParameters.jsp";
@@ -268,18 +250,15 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ID_GRAPH_TYPE = "id_graph_type";
     private static final String PARAMETER_ID_RESPONSE = "id_response";
     private static final String PARAMETER_CANCEL = "cancel";
-    private static final String PARAMETER_SESSION = "session";
     private static final String PARAMETER_ID_EXPORT_FORMAT = "id_export_format";
     private static final String PARAMETER_FIRST_RESPONSE_DATE_FILTER = "fist_response_date_filter";
     private static final String PARAMETER_LAST_RESPONSE_DATE_FILTER = "last_response_date_filter";
     private static final String PARAMETER_TIMES_UNIT = "times_unit";
     private static final String PARAMETER_PROCESSOR_KEY = "processor_key";
     private static final String PARAMETER_IS_SELECTED = "is_selected";
-    private static final String PARAMETER_RESET = "reset";
 
     // other constants
     private static final String EMPTY_STRING = "";
-    private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String QUESTION_MARK_STRING = "?";
     private static final String EQUAL_STRING = "=";
     private static final String CONST_ZERO = "0";
@@ -299,7 +278,6 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     private int _nIdActive = -1;
     private int _nItemsPerPageForm;
     private String _strWorkGroup = AdminWorkgroupService.ALL_GROUPS;
-    private List<FormSubmit> _listFormSubmitTest;
     private final IResponseService _responseService = SpringContextService.getBean( FormUtils.BEAN_FORM_RESPONSE_SERVICE );
 
     /*-------------------------------MANAGEMENT  FORM-----------------------------*/
@@ -1211,271 +1189,6 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * Gets the form test page
-     * 
-     * @param request
-     *            the http request
-     * @return the form test page
-     */
-    public String getTestForm( HttpServletRequest request )
-    {
-        if ( request.getParameter( PARAMETER_SESSION ) == null )
-        {
-            _listFormSubmitTest = new ArrayList<FormSubmit>( );
-        }
-
-        Plugin plugin = getPlugin( );
-        HtmlTemplate template;
-
-        String strIdForm = request.getParameter( PARAMETER_ID_FORM );
-        int nIdForm = -1;
-        Form form;
-
-        if ( ( strIdForm != null ) && !strIdForm.equals( EMPTY_STRING ) )
-        {
-            try
-            {
-                nIdForm = Integer.parseInt( strIdForm );
-            }
-            catch( NumberFormatException ne )
-            {
-                AppLogService.error( ne );
-
-                return getManageForm( request );
-            }
-        }
-
-        if ( ( nIdForm == -1 ) || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_TEST, getUser( ) ) )
-        {
-            return getManageForm( request );
-        }
-
-        form = FormHome.findByPrimaryKey( nIdForm, plugin );
-
-        Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
-        model.put( MARK_FORM, form );
-
-        String strUrlAction = JSP_DO_TEST_FORM;
-
-        if ( form.isSupportHTTPS( ) && AppHTTPSService.isHTTPSSupportEnabled( ) )
-        {
-            strUrlAction = AppHTTPSService.getHTTPSUrl( request ) + strUrlAction;
-        }
-
-        model.put( MARK_STR_FORM, FormUtils.getHtmlForm( form, strUrlAction, locale, false, request ) );
-        model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( plugin ) );
-        setPageTitleProperty( EMPTY_STRING );
-        template = AppTemplateService.getTemplate( TEMPLATE_HTML_TEST_FORM, locale, model );
-
-        return getAdminPage( template.getHtml( ) );
-    }
-
-    /**
-     * if there is no error perform in session the response of the form else return the error
-     * 
-     * @param request
-     *            the http request
-     * @return The URL to go after performing the action
-     */
-    public String doTestForm( HttpServletRequest request )
-    {
-        Plugin plugin = getPlugin( );
-        List<Entry> listEntryFirstLevel;
-        EntryFilter filter;
-        String strIdForm = request.getParameter( PARAMETER_ID_FORM );
-        String strRequirement = request.getParameter( PARAMETER_REQUIREMENT );
-        String strErrorMessage = null;
-        int nIdForm = -1;
-        Form form;
-
-        if ( ( strIdForm != null ) && !strIdForm.equals( EMPTY_STRING ) )
-        {
-            try
-            {
-                nIdForm = Integer.parseInt( strIdForm );
-            }
-            catch( NumberFormatException ne )
-            {
-                AppLogService.error( ne );
-            }
-        }
-
-        if ( ( nIdForm == -1 ) || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_TEST, getUser( ) ) )
-        {
-            return getManageForm( request );
-        }
-
-        form = FormHome.findByPrimaryKey( nIdForm, plugin );
-
-        if ( request.getParameter( PARAMETER_RESET ) != null )
-        {
-            HttpSession session = request.getSession( );
-            FormUtils.removeResponses( session );
-            FormUtils.removeFormErrors( session );
-            FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
-
-            return getJspTestForm( request, nIdForm );
-        }
-
-        if ( form.isActiveRequirement( ) && ( strRequirement == null ) )
-        {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_REQUIREMENT_ERROR, AdminMessage.TYPE_STOP );
-        }
-
-        if ( form.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
-        {
-            CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService( );
-
-            if ( !captchaSecurityService.validate( request ) )
-            {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_CAPTCHA_ERROR, AdminMessage.TYPE_STOP );
-            }
-        }
-
-        filter = new EntryFilter( );
-        filter.setIdResource( nIdForm );
-        filter.setResourceType( Form.RESOURCE_TYPE );
-        filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-        filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        filter.setIdIsComment( EntryFilter.FILTER_FALSE );
-        listEntryFirstLevel = EntryHome.getEntryList( filter );
-
-        Locale locale = getLocale( );
-
-        // create form response
-        FormSubmit formSubmit = new FormSubmit( );
-        formSubmit.setForm( form );
-        formSubmit.setDateResponse( FormUtils.getCurrentTimestamp( ) );
-
-        if ( form.isActiveStoreAdresse( ) )
-        {
-            formSubmit.setIp( request.getRemoteAddr( ) );
-        }
-
-        List<Response> listResponse = new ArrayList<Response>( );
-        formSubmit.setListResponse( listResponse );
-
-        for ( Entry entry : listEntryFirstLevel )
-        {
-            List<GenericAttributeError> listFormError = FormUtils.getResponseEntry( request, entry.getIdEntry( ), plugin, formSubmit, false, true, locale );
-
-            if ( ( listFormError != null ) && !listFormError.isEmpty( ) )
-            {
-                // Only display the first error
-                GenericAttributeError formError = listFormError.get( 0 );
-
-                if ( formError != null )
-                {
-                    if ( formError.isMandatoryError( ) )
-                    {
-                        Object [ ] tabRequiredFields = {
-                            formError.getTitleQuestion( )
-                        };
-
-                        strErrorMessage = AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_QUESTION, tabRequiredFields, AdminMessage.TYPE_STOP );
-                    }
-                    else
-                    {
-                        Object [ ] tabRequiredFields = {
-                                formError.getTitleQuestion( ), formError.getErrorMessage( )
-                        };
-
-                        strErrorMessage = AdminMessageService.getMessageUrl( request, MESSAGE_FORM_ERROR, tabRequiredFields, AdminMessage.TYPE_STOP );
-                    }
-
-                    return strErrorMessage;
-                }
-            }
-        }
-
-        _listFormSubmitTest.add( formSubmit );
-
-        return getJspTestForm( request, nIdForm );
-    }
-
-    /**
-     * write in the http response the export file of all response submit who are save during the test. if there is no response return a error
-     * 
-     * @param request
-     *            the http request
-     * @param response
-     *            The http response
-     * @return The URL to go after performing the action
-     */
-    public String doExportResponseTestForm( HttpServletRequest request, HttpServletResponse response )
-    {
-        if ( request.getParameter( PARAMETER_CANCEL ) == null )
-        {
-            Plugin plugin = getPlugin( );
-            Locale locale = getLocale( );
-            String strIdForm = request.getParameter( PARAMETER_ID_FORM );
-            String strIdExportFormat = request.getParameter( PARAMETER_ID_EXPORT_FORMAT );
-            int nIdForm = -1;
-            int nIdExportFormat = -1;
-
-            Form form;
-            ExportFormat exportFormat;
-
-            if ( ( strIdForm != null ) && ( strIdExportFormat != null ) && !strIdForm.equals( EMPTY_STRING ) && !strIdExportFormat.equals( EMPTY_STRING ) )
-            {
-                try
-                {
-                    nIdForm = Integer.parseInt( strIdForm );
-                    nIdExportFormat = Integer.parseInt( strIdExportFormat );
-                }
-                catch( NumberFormatException ne )
-                {
-                    AppLogService.error( ne );
-
-                    return getManageForm( request );
-                }
-            }
-
-            if ( ( nIdForm == -1 ) || ( nIdExportFormat == -1 )
-                    || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_TEST, getUser( ) ) )
-            {
-                return getManageForm( request );
-            }
-
-            exportFormat = ExportFormatHome.findByPrimaryKey( nIdExportFormat, plugin );
-            form = FormHome.findByPrimaryKey( nIdForm, plugin );
-
-            if ( ( _listFormSubmitTest != null ) && ( _listFormSubmitTest.size( ) != 0 ) )
-            {
-                XmlTransformerService xmlTransformerService = new XmlTransformerService( );
-                String strXmlSource = XmlUtil.getXmlHeader( ) + FormUtils.getXmlResponses( request, form, _listFormSubmitTest, locale, plugin );
-                String strXslUniqueId = XSL_UNIQUE_PREFIX_ID + nIdExportFormat;
-                String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource, exportFormat.getXsl( ), strXslUniqueId, null, null );
-
-                byte [ ] byteFileOutPut = strFileOutPut.getBytes( );
-
-                try
-                {
-                    String strFormatExtension = exportFormat.getExtension( ).trim( );
-                    String strFileName = form.getTitle( ) + "." + strFormatExtension;
-                    FormUtils.addHeaderResponse( request, response, strFileName, strFormatExtension );
-                    response.setContentLength( byteFileOutPut.length );
-
-                    OutputStream os = response.getOutputStream( );
-                    os.write( byteFileOutPut );
-                    os.close( );
-                }
-                catch( IOException e )
-                {
-                    AppLogService.error( e );
-                }
-            }
-            else
-            {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_NO_RESPONSE, AdminMessage.TYPE_STOP );
-            }
-        }
-
-        return getJspManageForm( request );
-    }
-
-    /**
      * Gets the form result page
      * 
      * @param request
@@ -2324,20 +2037,6 @@ public abstract class FormJspBean extends PluginAdminPageJspBean
     protected String getJspManageForm( HttpServletRequest request )
     {
         return AppPathService.getBaseUrl( request ) + JSP_MANAGE_FORM;
-    }
-
-    /**
-     * Return the URL of the JSP test form
-     * 
-     * @param request
-     *            The HTTP request
-     * @param nIdForm
-     *            The key of form to modify
-     * @return The return URL of the JSP modify form
-     */
-    protected String getJspTestForm( HttpServletRequest request, int nIdForm )
-    {
-        return AppPathService.getBaseUrl( request ) + JSP_TEST_FORM + "?id_form=" + nIdForm + "&session=session";
     }
 
     /**

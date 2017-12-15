@@ -47,6 +47,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -92,10 +93,6 @@ public class EntryTypeGroupUtils
     private static final String MARK_REMOVE_ITERATION_NUMBER = "remove_iteration_number";
     private static final String MARK_ITERATION_CHILDREN = "iteration_children";
     private static final String MARK_INFO_ITERABLE_GROUP = "infos_iterable_group";
-
-    // Parameters
-    private static final String PARAMETER_ACTION_ADD_ITERATION = "action_addIteration";
-    private static final String PARAMETER_ACTION_REMOVE_ITERATION = "action_removeIteration";
 
     // Template
     private static final String TEMPLATE_GROUP_ITERATION_CHILDREN = "skin/plugins/form/entries/html_code_entry_type_group_children.html";
@@ -920,6 +917,31 @@ public class EntryTypeGroupUtils
     }
 
     /**
+     * Populate the iteration map of a form and set it to the session
+     * 
+     * @param session
+     *            The session to set the map inside
+     * @param nIdForm
+     *            The id of the form to create the iteration group from
+     */
+    public static void populateIterationGroupMap( HttpSession session, int nIdForm )
+    {
+        if ( session != null )
+        {
+            Map<Integer, IterationGroup> mapIterationGroup = new LinkedHashMap<Integer, IterationGroup>( );
+            List<Integer> listIdEntryGroupIterable = findIdEntryGroupIterable( nIdForm );
+            if ( listIdEntryGroupIterable != null )
+            {
+                for ( Integer identryIterableGroup : listIdEntryGroupIterable )
+                {
+                    mapIterationGroup.put( identryIterableGroup, new IterationGroup( identryIterableGroup ) );
+                }
+            }
+
+            session.setAttribute( FormConstants.SESSION_ITERATION_MAP, mapIterationGroup );
+        }
+    }
+    /**
      * Retrieve the map which associate for each iterable group entry identifier its IterationGroup object associated
      * 
      * @param request
@@ -1140,9 +1162,9 @@ public class EntryTypeGroupUtils
         java.util.Map.Entry<Integer, Integer> entryIdEntryIterationNumber = new AbstractMap.SimpleEntry<>( NumberUtils.INTEGER_MINUS_ONE,
                 FormConstants.DEFAULT_ITERATION_NUMBER );
 
-        if ( request != null && request.getParameter( PARAMETER_ACTION_REMOVE_ITERATION ) != null )
+        if ( request != null && request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ) != null )
         {
-            String [ ] listParameterRemoveIteration = request.getParameter( PARAMETER_ACTION_REMOVE_ITERATION ).split( FormUtils.CONSTANT_UNDERSCORE );
+            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ).split( FormUtils.CONSTANT_UNDERSCORE );
             if ( listParameterRemoveIteration != null && listParameterRemoveIteration.length > NumberUtils.INTEGER_ONE )
             {
                 int nIdEntry = NumberUtils.toInt( listParameterRemoveIteration [NumberUtils.INTEGER_ZERO], NumberUtils.INTEGER_MINUS_ONE );
@@ -1164,7 +1186,7 @@ public class EntryTypeGroupUtils
     public static void manageAddingIteration( HttpServletRequest request )
     {
         // Retrieve the identifier of the group to add an iteration
-        int nIdEntryAddIteration = NumberUtils.toInt( request.getParameter( PARAMETER_ACTION_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
+        int nIdEntryAddIteration = NumberUtils.toInt( request.getParameter( FormConstants.PARAMETER_ACTION_ADD_ITERATION ), NumberUtils.INTEGER_MINUS_ONE );
         IterationGroup iterationGroup = EntryTypeGroupUtils.retrieveIterationGroup( request, nIdEntryAddIteration );
         if ( iterationGroup != null )
         {

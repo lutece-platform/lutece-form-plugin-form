@@ -294,11 +294,11 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId( ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormEntryJspBean instance = new FormEntryJspBean( );
+        TestFormJspBean instance = new TestFormJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
-        String result = instance.getTestForm( request );
+        String result = instance.getViewTestForm( request );
 
         assertNotNull( result );
     }
@@ -778,11 +778,11 @@ public class FormJspBeanTest extends LuteceTestCase
         user.setRoles( AdminUserHome.getRolesListForUser( user.getUserId( ) ) );
         request.registerAdminUserWithRigth( user, FormJspBean.RIGHT_MANAGE_FORM );
 
-        FormEntryJspBean instance = new FormEntryJspBean( );
+        TestFormJspBean instance = new TestFormJspBean( );
 
         instance.init( request, FormJspBean.RIGHT_MANAGE_FORM );
 
-        String result = instance.doTestForm( request );
+        String result = instance.doSubmitForm( request );
 
         assertNotNull( result );
     }

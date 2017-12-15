@@ -57,7 +57,6 @@ import fr.paris.lutece.plugins.form.business.FormSubmitHome;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
 import fr.paris.lutece.plugins.form.business.RequirementFormError;
-import fr.paris.lutece.plugins.form.business.iteration.IterationGroup;
 import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
 import fr.paris.lutece.plugins.form.service.EntryTypeService;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
@@ -474,7 +473,7 @@ public class FormApp extends MVCApplication
         FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( strSessionId );
 
         // Add the iterationMap to the session
-        populateIterationGroupMap( session, nIdForm );
+        EntryTypeGroupUtils.populateIterationGroupMap( session, nIdForm );
     }
 
     /**
@@ -1310,32 +1309,6 @@ public class FormApp extends MVCApplication
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Populate the iteration map of a form and set it to the session
-     * 
-     * @param session
-     *            The session to set the map inside
-     * @param nIdForm
-     *            The id of the form to create the iteration group from
-     */
-    private void populateIterationGroupMap( HttpSession session, int nIdForm )
-    {
-        if ( session != null )
-        {
-            Map<Integer, IterationGroup> mapIterationGroup = new LinkedHashMap<Integer, IterationGroup>( );
-            List<Integer> listIdEntryGroupIterable = EntryTypeGroupUtils.findIdEntryGroupIterable( nIdForm );
-            if ( listIdEntryGroupIterable != null )
-            {
-                for ( Integer identryIterableGroup : listIdEntryGroupIterable )
-                {
-                    mapIterationGroup.put( identryIterableGroup, new IterationGroup( identryIterableGroup ) );
-                }
-            }
-
-            session.setAttribute( FormConstants.SESSION_ITERATION_MAP, mapIterationGroup );
         }
     }
 
