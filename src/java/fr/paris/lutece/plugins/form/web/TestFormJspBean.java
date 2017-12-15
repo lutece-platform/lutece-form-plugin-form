@@ -96,22 +96,22 @@ public class TestFormJspBean extends FormJspBean
     protected static final String TEST_FORM_CONTROLLER_JSP_NAME = "TestForm.jsp";
     protected static final String TEST_FORM_CONTROLLER_PATH = "jsp/admin/plugins/form";
     protected static final String TEST_FORM_CONTROLLER_RIGHT = "FORM_MANAGEMENT";
-    
+
     // Views
     private static final String VIEW_TEST_FORM = "testForm";
-    
+
     // Actions
     private static final String ACTION_ADD_ITERATION = "addIteration";
     private static final String ACTION_REMOVE_ITERATION = "removeIteration";
     private static final String ACTION_SUBMIT_FORM = "submitForm";
     private static final String ACTION_EXPORT_RESPONSES = "exportResponses";
-    
+
     // Template
     private static final String TEMPLATE_HTML_TEST_FORM = "admin/plugins/form/test_form.html";
-    
+
     // Url
     private static final String URL_ACTION = "jsp/admin/plugins/form/TestForm.jsp";
-    
+
     // Parameters
     private static final String PARAMETER_SESSION = "session";
     private static final String PARAMETER_ID_FORM = "id_form";
@@ -119,29 +119,29 @@ public class TestFormJspBean extends FormJspBean
     private static final String PARAMETER_RESET = "reset";
     private static final String PARAMETER_CANCEL = "cancel";
     private static final String PARAMETER_ID_EXPORT_FORMAT = "id_export_format";
-    
+
     // Marks
     private static final String MARK_FORM = "form";
     private static final String MARK_STR_FORM = "str_form";
     private static final String MARK_EXPORT_FORMAT_REF_LIST = "export_format_list";
-    
+
     // Messages
     private static final String MESSAGE_REQUIREMENT_ERROR = "form.message.requirementError";
     private static final String MESSAGE_CAPTCHA_ERROR = "form.message.captchaError";
     private static final String MESSAGE_MANDATORY_QUESTION = "form.message.mandatory.question";
     private static final String MESSAGE_FORM_ERROR = "form.message.formError";
     private static final String MESSAGE_NO_RESPONSE = "form.message.noResponse";
-    
+
     // Plugin
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
-    
+
     // Properties
     private static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId( ) + "form-";
-    
+
     // Variables
     private HttpServletResponse _response;
     private List<FormSubmit> _listFormSubmitTest;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -151,7 +151,7 @@ public class TestFormJspBean extends FormJspBean
         _response = response;
         return super.processController( request, response );
     }
-    
+
     /**
      * Gets the form test page
      * 
@@ -159,7 +159,7 @@ public class TestFormJspBean extends FormJspBean
      *            The HttpServletRequest
      * @return the form test page
      */
-    @View( value = VIEW_TEST_FORM, defaultView = true)
+    @View( value = VIEW_TEST_FORM, defaultView = true )
     public String getViewTestForm( HttpServletRequest request )
     {
         if ( request.getParameter( PARAMETER_SESSION ) == null )
@@ -184,19 +184,20 @@ public class TestFormJspBean extends FormJspBean
             }
         }
 
-        if ( nIdForm == NumberUtils.INTEGER_MINUS_ONE || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_TEST, getUser( ) ) )
+        if ( nIdForm == NumberUtils.INTEGER_MINUS_ONE
+                || !RBACService.isAuthorized( Form.RESOURCE_TYPE, strIdForm, FormResourceIdService.PERMISSION_TEST, getUser( ) ) )
         {
             return getManageForm( request );
         }
-        
+
         // Populate the session with the information of the iteration
         EntryTypeGroupUtils.populateIterationGroupMap( request.getSession( ), nIdForm );
-        
+
         HtmlTemplate template = getHtmlTemplatePage( request, nIdForm );
 
         return getAdminPage( template.getHtml( ) );
     }
-    
+
     /**
      * Add an iteration for the specified group and return the test form page
      * 
@@ -208,7 +209,7 @@ public class TestFormJspBean extends FormJspBean
     public String doAddIteration( HttpServletRequest request )
     {
         EntryTypeGroupUtils.manageAddingIteration( request );
-        
+
         int nIdForm = NumberUtils.INTEGER_MINUS_ONE;
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         if ( StringUtils.isNotBlank( strIdForm ) )
@@ -224,24 +225,24 @@ public class TestFormJspBean extends FormJspBean
                 return getManageForm( request );
             }
         }
-        
+
         HtmlTemplate template = getHtmlTemplatePage( request, nIdForm );
 
         return getAdminPage( template.getHtml( ) );
     }
-    
+
     /**
      * Remove an iteration for the specified group and return the test form page
      * 
      * @param request
-     *          The HttpServletRequest
+     *            The HttpServletRequest
      * @return the test form page
      */
     @Action( value = ACTION_REMOVE_ITERATION )
     public String doRemoveIteration( HttpServletRequest request )
     {
         EntryTypeGroupUtils.manageRemoveIterationGroup( request );
-        
+
         int nIdForm = NumberUtils.INTEGER_MINUS_ONE;
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         if ( StringUtils.isNotBlank( strIdForm ) )
@@ -257,12 +258,12 @@ public class TestFormJspBean extends FormJspBean
                 return getManageForm( request );
             }
         }
-        
+
         HtmlTemplate template = getHtmlTemplatePage( request, nIdForm );
 
         return getAdminPage( template.getHtml( ) );
     }
-    
+
     /**
      * if there is no error perform in session the response of the form else return the error
      * 
@@ -281,7 +282,7 @@ public class TestFormJspBean extends FormJspBean
         String strRequirement = request.getParameter( PARAMETER_REQUIREMENT );
         String strErrorMessage = null;
         int nIdForm = -1;
-        
+
         Form form;
 
         if ( StringUtils.isNotBlank( strIdForm ) )
@@ -380,7 +381,7 @@ public class TestFormJspBean extends FormJspBean
                 }
             }
         }
-        
+
         // Reorder the responses which belong to iteration
         EntryTypeGroupUtils.orderResponseList( request, formSubmit.getListResponse( ) );
 
@@ -391,10 +392,10 @@ public class TestFormJspBean extends FormJspBean
         Map<String, String> model = new LinkedHashMap<>( );
         model.put( PARAMETER_ID_FORM, strIdForm );
         model.put( PARAMETER_SESSION, "session" );
-        
+
         return redirect( request, VIEW_TEST_FORM, model );
     }
-    
+
     /**
      * write in the http response the export file of all response submit who are save during the test. if there is no response return a error
      * 
@@ -448,7 +449,7 @@ public class TestFormJspBean extends FormJspBean
                 XmlTransformerService xmlTransformerService = new XmlTransformerService( );
                 String strXmlSource = XmlUtil.getXmlHeader( ) + FormUtils.getXmlResponses( request, form, _listFormSubmitTest, locale, plugin );
                 String strXslUniqueId = XSL_UNIQUE_PREFIX_ID + nIdExportFormat;
-                
+
                 String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource, exportFormat.getXsl( ), strXslUniqueId, null, null );
 
                 byte [ ] byteFileOutPut = strFileOutPut.getBytes( );
@@ -477,12 +478,12 @@ public class TestFormJspBean extends FormJspBean
 
         return getManageForm( request );
     }
-    
+
     /**
      * Clean the session, remove the response, the errors and the files attached to it
      * 
      * @param session
-     *          The HttpSession to clean
+     *            The HttpSession to clean
      */
     public void cleanSession( HttpSession session )
     {
@@ -493,36 +494,36 @@ public class TestFormJspBean extends FormJspBean
             FormAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
         }
     }
-    
+
     /**
      * Generate the Html Template of a Test Form page
      * 
      * @param request
-     *          The HttpServletRequest
+     *            The HttpServletRequest
      * @param nIdForm
-     *          The identifier of the form
+     *            The identifier of the form
      * @return the HtmlTemplate of the Test Form
      */
     private HtmlTemplate getHtmlTemplatePage( HttpServletRequest request, int nIdForm )
     {
         String strUrlAction = URL_ACTION;
         Plugin plugin = getPlugin( );
-        
+
         Form form = FormHome.findByPrimaryKey( nIdForm, plugin );
-        
+
         if ( form.isSupportHTTPS( ) && AppHTTPSService.isHTTPSSupportEnabled( ) )
         {
             strUrlAction = AppHTTPSService.getHTTPSUrl( request ) + strUrlAction;
         }
-        
+
         Locale locale = getLocale( );
         Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_FORM, form );
         model.put( MARK_STR_FORM, FormUtils.getHtmlForm( form, strUrlAction, locale, false, request ) );
         model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( plugin ) );
         setPageTitleProperty( StringUtils.EMPTY );
-        
+
         return AppTemplateService.getTemplate( TEMPLATE_HTML_TEST_FORM, locale, model );
     }
-    
+
 }

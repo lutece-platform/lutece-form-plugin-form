@@ -941,6 +941,7 @@ public class EntryTypeGroupUtils
             session.setAttribute( FormConstants.SESSION_ITERATION_MAP, mapIterationGroup );
         }
     }
+
     /**
      * Retrieve the map which associate for each iterable group entry identifier its IterationGroup object associated
      * 
@@ -1164,7 +1165,8 @@ public class EntryTypeGroupUtils
 
         if ( request != null && request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ) != null )
         {
-            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ).split( FormUtils.CONSTANT_UNDERSCORE );
+            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ).split(
+                    FormUtils.CONSTANT_UNDERSCORE );
             if ( listParameterRemoveIteration != null && listParameterRemoveIteration.length > NumberUtils.INTEGER_ONE )
             {
                 int nIdEntry = NumberUtils.toInt( listParameterRemoveIteration [NumberUtils.INTEGER_ZERO], NumberUtils.INTEGER_MINUS_ONE );
