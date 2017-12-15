@@ -1924,13 +1924,12 @@ public final class FormUtils
 
         return listFieldAuthorized;
     }
-    
+
     /**
-     * Return the source content of an img html tag for the front office picture 
-     * or null if an information is missing
+     * Return the source content of an img html tag for the front office picture or null if an information is missing
      * 
      * @param nIdPictureFile
-     *          The id of the picture to retrieve the information from
+     *            The id of the picture to retrieve the information from
      * @return the source data of the picture or null if information are missing
      */
     private static String getFrontOfficePictureSource( int nIdPictureFile )
@@ -1953,9 +1952,9 @@ public final class FormUtils
                         StringBuilder sbFrontOfficePictureSource = new StringBuilder( );
                         sbFrontOfficePictureSource.append( "data:" );
                         sbFrontOfficePictureSource.append( strMimeType );
-                        sbFrontOfficePictureSource.append( ";base64,");
+                        sbFrontOfficePictureSource.append( ";base64," );
                         sbFrontOfficePictureSource.append( strFrontOfficePicture );
-                        
+
                         return sbFrontOfficePictureSource.toString( );
                     }
                 }

@@ -528,7 +528,7 @@ public class FormAdvancedParametersJspBean extends ModifyFormJspBean
                 return strError;
             }
 
-            // If an picture is already present in form and the user don't upload another the 
+            // If an picture is already present in form and the user don't upload another the
             // content of the uploaded file will be empty
             if ( fileItemPictureFrontOffice.get( ) != null )
             {
