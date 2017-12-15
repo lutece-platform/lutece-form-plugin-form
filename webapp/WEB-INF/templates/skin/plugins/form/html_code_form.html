@@ -1,5 +1,8 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<#if form.shownFrontOfficePicture?? && form.shownFrontOfficePicture && frontOfficePictureSource?has_content>
+			<img class="front-office-form-picture" src="${frontOfficePictureSource}" />
+		</#if>
 		<p class="lead">
 		<#if form.frontOfficeTitle?? && form.frontOfficeTitle!="" && form.shownFrontOfficeTitle! >
 			${form.frontOfficeTitle} 

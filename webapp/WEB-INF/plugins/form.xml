@@ -26,6 +26,10 @@
         <css-stylesheet>form/form.css</css-stylesheet>
     </css-stylesheets>
     
+    <admin-css-stylesheets>
+        <admin-css-stylesheet>css/admin/plugins/form/form.css</admin-css-stylesheet>
+    </admin-css-stylesheets>
+    
     
     <!-- Specific plugin JAVASCRIPT -->
     <javascript-files>

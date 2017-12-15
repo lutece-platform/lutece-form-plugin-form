@@ -72,6 +72,8 @@ public class Form implements AdminWorkgroupResource, RBACResource
     private String _strTitle;
     private String _strFrontOfficeTitle;
     private boolean _bIsShownFrontOfficeTitle;
+    private boolean _bIsShownFrontOfficePicture;
+    private int _nIdPictureFile;
     private String _strDescription;
     private String _strWelcomeMessage;
     private String _strUnavailabilityMessage;
@@ -345,6 +347,48 @@ public class Form implements AdminWorkgroupResource, RBACResource
     public void setIsShownFrontOfficeTitle( boolean bIsShownFrontOfficeTitle )
     {
         this._bIsShownFrontOfficeTitle = bIsShownFrontOfficeTitle;
+    }
+
+    /**
+     * get the value of the boolean isShownFrontOfficePicture
+     * 
+     * @return bIsShownFrontOfficePicture
+     */
+    public boolean isShownFrontOfficePicture( )
+    {
+        return _bIsShownFrontOfficePicture;
+    }
+
+    /**
+     * set the value of the boolean isShownFrontOfficePicture
+     * 
+     * @param bIsShownFrontOfficePicture
+     *            The value of the boolean isShownFrontOfficePicture
+     */
+    public void setIsShownFrontOfficePicture( boolean bIsShownFrontOfficePicture )
+    {
+        this._bIsShownFrontOfficePicture = bIsShownFrontOfficePicture;
+    }
+
+    /**
+     * get the value of the integer nIdPictureFile
+     * 
+     * @return the nIdPictureFile
+     */
+    public int getIdPictureFile( )
+    {
+        return _nIdPictureFile;
+    }
+
+    /**
+     * Set the value of the integer nIdPictureFile
+     * 
+     * @param nIdPictureFile
+     *            the nIdPictureFile to set
+     */
+    public void setIdPictureFile( int nIdPictureFile )
+    {
+        this._nIdPictureFile = nIdPictureFile;
     }
 
     /**

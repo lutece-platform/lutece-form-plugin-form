@@ -154,6 +154,8 @@ CREATE TABLE form_form (
 	cleaning_by_removal SMALLINT default 0,
 	nb_days_before_cleaning INT default 0,
 	max_number_response INT default 0,
+	is_shown_front_office_picture SMALLINT default 0,
+	id_file_front_office_picture INT default 0,
 	PRIMARY KEY (id_form)
 );
 

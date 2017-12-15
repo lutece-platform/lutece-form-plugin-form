@@ -1,5 +1,5 @@
 <#include "/admin/plugins/form/modify_form/tabs.html" />
-<@tform action='jsp/admin/plugins/form/modifyForm/DoModifyFormAdvancedParameters.jsp'>
+<@tform action='jsp/admin/plugins/form/modifyForm/ModifyFormAdvancedParameters.jsp' params='enctype="multipart/form-data"'>
 	<@row>
 		<@columns>
 			<@modifyFormLeftColumn form=form category_list=category_list />
@@ -16,7 +16,14 @@
 								<@input type='text' name='front_office_title' value=form.frontOfficeTitle! maxlength=255 />
 							</@formGroup>
 							<@formGroup labelFor='is_shown_front_office_title' labelKey='#i18n{form.createForm.frontOfficeTitleIsShown}' helpKey='#i18n{form.createForm.frontOfficeTitleIsShownComment}'>
-								<@checkBox labelFor='is_shown_front_office_title' name='is_shown_front_office_title' id='is_shown_front_office_title' value='1' checked=form?exists && form.shownFrontOfficeTitle?? && form.shownFrontOfficeTitle />
+								<@checkBox labelFor='is_shown_front_office_title' name='is_shown_front_office_title' id='is_shown_front_office_title' value='1' checked=(form?exists && form.shownFrontOfficeTitle?? && form.shownFrontOfficeTitle) />
+							</@formGroup>
+							<@formGroup labelFor='is_shown_picture_front_office' labelKey='#i18n{form.createForm.frontOfficePictureIsShown}' helpKey='#i18n{form.createForm.frontOfficePictureIsShownComment}'>
+								<@checkBox labelFor='is_shown_picture_front_office' name='is_shown_picture_front_office' id='is_shown_picture_front_office' value='1' checked=(form?exists && form.shownFrontOfficePicture?? && form.shownFrontOfficePicture) />
+							</@formGroup>
+							<@formGroup labelKey='#i18n{form.createForm.frontOfficePicture}' params='style="z-index:-1;"'>
+								<input id="uploadFrontOfficePicture" type="file" name="front_office_picture" onchange="PreviewFrontOfficePicture()" />
+								<img id="uploadFrontOfficePicturePreview" class="frontOfficePicturePreview" style="width: 100px; height: 100px;" <#if frontOfficePicture?has_content && frontOfficePictureSource?has_content>src="data:${frontOfficePicture.mimeType};base64,${frontOfficePictureSource}"</#if>/>
 							</@formGroup>
 							<@formGroup labelFor='workgroup' labelKey='#i18n{form.createForm.labelWorkgroup}' helpKey='#i18n{form.createForm.labelWorkgroupComment}'>
 								<@select name='workgroup' id='workgroup' items=user_workgroup_list default_value=form.workgroup! />
@@ -68,9 +75,16 @@
 								<@checkBox name='support_https' id='support_https' value='1' checked=form.supportHTTPS?has_content&&form.supportHTTPS />
 							</@formGroup>
 							<@formGroup>
-								<@button type='submit' name='save' buttonIcon='save' title='#i18n{form.createForm.buttonSave}' size='' />
-								<@button type='submit' name='apply' buttonIcon='check' title='#i18n{form.modifyForm.buttonApply}' size='' />
+								<@button type='submit' name='action_save' buttonIcon='save' title='#i18n{form.createForm.buttonSave}' size='' />
+								<@button type='submit' name='action_apply' buttonIcon='check' title='#i18n{form.modifyForm.buttonApply}' size='' />
 							</@formGroup>
+						</div>
+						<div id="modal-frontoffice-picture" class="modal">
+							<span class="close">
+								<@icon style='times' />
+							</span>
+							<img class="modal-content" id="frontoffice-picture">
+							<div id="frontoffice-picture-caption"></div>
 						</div>
 					</@tabContent>
 				</@boxBody>
@@ -78,3 +92,30 @@
 		</@columns>
 	</@row>
 </@tform>
+<script type="text/javascript">
+function PreviewFrontOfficePicture() {
+	var fileReader = new FileReader();
+	fileReader.readAsDataURL(document.getElementById('uploadFrontOfficePicture').files[0]);
+	fileReader.onload = function (fileReaderEvent) {
+		document.getElementById('uploadFrontOfficePicturePreview').src = fileReaderEvent.target.result;
+	};
+};
+	
+// Get the modal
+var modal = document.getElementById('modal-frontoffice-picture');
+
+// Get the image and insert it inside the modal
+var img = document.getElementById('uploadFrontOfficePicturePreview');
+var modalImg = document.getElementById('frontoffice-picture');
+var captionText = document.getElementById('frontoffice-picture-caption');
+img.onclick = function(){
+	modal.style.display = "block";
+	modalImg.src = this.src;
+	captionText.innerHTML = this.alt;
+}
+
+var span = document.getElementsByClassName('close')[0];
+span.onclick = function() {
+	modal.style.display = "none";
+} 
+</script>

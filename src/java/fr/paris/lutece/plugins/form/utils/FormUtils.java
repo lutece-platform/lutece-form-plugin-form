@@ -51,6 +51,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jfree.chart.ChartFactory;
@@ -88,7 +89,11 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntry
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.portal.business.file.File;
+import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
+import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
+import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
 import fr.paris.lutece.portal.service.content.XPageAppService;
@@ -184,6 +189,9 @@ public final class FormUtils
     private static final String PROPERTY_LUTECE_PROD_URL = "lutece.prod.url";
     public static final String CONSTANT_MYLUTECE_ATTRIBUTE_I18N_PREFIX = "form.entrytype.myluteceuserattribute.attribute.";
     public static final String PROPERTY_MY_LUTECE_ATTRIBUTES_LIST = "entrytype.myluteceuserattribute.attributes.list";
+
+    // Parameters
+    private static final String MARK_UPLOAD_FRONT_OFFICE_PICTURE_SRC = "frontOfficePictureSource";
 
     // Constants
     public static final String CONSTANT_UNDERSCORE = "_";
@@ -682,6 +690,14 @@ public final class FormUtils
          * Theme theme = ThemeHome.findByPrimaryKey("red"); model.put( MARK_THEME_URL, theme.getPathCss( ) );
          */
         model.put( MARK_DRAFT_SUPPORTED, FormDraftBackupService.isDraftSupported( ) );
+
+        // Add information about Form picture in front-office
+        int nIdPictureFile = form.getIdPictureFile( );
+        if ( nIdPictureFile != NumberUtils.INTEGER_ZERO )
+        {
+            model.put( MARK_UPLOAD_FRONT_OFFICE_PICTURE_SRC, getFrontOfficePictureSource( nIdPictureFile ) );
+        }
+
         template = AppTemplateService.getTemplate( TEMPLATE_HTML_CODE_FORM, locale, model );
 
         return template.getHtml( );
@@ -1907,5 +1923,45 @@ public final class FormUtils
         }
 
         return listFieldAuthorized;
+    }
+    
+    /**
+     * Return the source content of an img html tag for the front office picture 
+     * or null if an information is missing
+     * 
+     * @param nIdPictureFile
+     *          The id of the picture to retrieve the information from
+     * @return the source data of the picture or null if information are missing
+     */
+    private static String getFrontOfficePictureSource( int nIdPictureFile )
+    {
+        File filePicture = FileHome.findByPrimaryKey( nIdPictureFile );
+        if ( filePicture != null )
+        {
+            PhysicalFile physicalFileLazyLoading = filePicture.getPhysicalFile( );
+            if ( physicalFileLazyLoading != null )
+            {
+                PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( physicalFileLazyLoading.getIdPhysicalFile( ) );
+                if ( physicalFile != null && physicalFile.getValue( ) != null )
+                {
+                    byte [ ] bEncodedPhysicalFile = new Base64( ).encode( physicalFile.getValue( ) );
+                    String strFrontOfficePicture = new String( bEncodedPhysicalFile );
+                    String strMimeType = filePicture.getMimeType( );
+
+                    if ( StringUtils.isNotBlank( strMimeType ) && StringUtils.isNotBlank( strFrontOfficePicture ) )
+                    {
+                        StringBuilder sbFrontOfficePictureSource = new StringBuilder( );
+                        sbFrontOfficePictureSource.append( "data:" );
+                        sbFrontOfficePictureSource.append( strMimeType );
+                        sbFrontOfficePictureSource.append( ";base64,");
+                        sbFrontOfficePictureSource.append( strFrontOfficePicture );
+                        
+                        return sbFrontOfficePictureSource.toString( );
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }

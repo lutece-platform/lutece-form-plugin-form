@@ -71,6 +71,7 @@ INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('export
 INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('id_export_format_daemon', '3');
 INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('export_daemon_type', 'full');
 INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ('file_export_daemon_type', 'form');
+INSERT INTO form_form_parameter (parameter_key, parameter_value) VALUES ( 'front_office_picture_max_size', '2097152');
 
 INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('field_in_line', '1');
 INSERT INTO form_entry_parameter (parameter_key, parameter_value) VALUES ('mandatory', '0');

@@ -155,3 +155,8 @@ a.info:hover span {
 	border: 3px black dashed; 
 	border-radius: 10px;
 }
+
+.front-office-form-picture {
+	max-height: 300px;
+	width: 100%;
+}
