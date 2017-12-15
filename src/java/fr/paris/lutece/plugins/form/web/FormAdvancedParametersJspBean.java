@@ -488,6 +488,10 @@ public class FormAdvancedParametersJspBean extends ModifyFormJspBean
         {
             form.setIsShownFrontOfficePicture( Boolean.TRUE );
         }
+        else
+        {
+            form.setIsShownFrontOfficePicture( Boolean.FALSE );
+        }
 
         if ( request instanceof MultipartHttpServletRequest )
         {
