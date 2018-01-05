@@ -38,29 +38,35 @@ package fr.paris.lutece.plugins.form.business;
  * class ConditionalEntryFieldMapper
  *
  */
-public class ConditionalEntriesFieldMapper {
+public class ConditionalEntriesFieldMapper
+{
 
-	private int _nIdField;
-	private String _strConditionalEntries;
+    private int _nIdField;
+    private String _strConditionalEntries;
 
-	public ConditionalEntriesFieldMapper(int nIdField, String strGroupStringBuffer ){
-		this._nIdField = nIdField;
-		this._strConditionalEntries = strGroupStringBuffer;
-	}
+    public ConditionalEntriesFieldMapper( int nIdField, String strGroupStringBuffer )
+    {
+        this._nIdField = nIdField;
+        this._strConditionalEntries = strGroupStringBuffer;
+    }
 
-	public int getIdField() {
-		return _nIdField;
-	}
-	
-	public void setIdField(int _nIdField) {
-		this._nIdField = _nIdField;
-	}
-	
-	public String getConditionalEntries() {
-		return _strConditionalEntries;
-	}
-	
-	public void setConditionalEntries(String _strConditionalEntries) {
-		this._strConditionalEntries = _strConditionalEntries;
-	}
+    public int getIdField( )
+    {
+        return _nIdField;
+    }
+
+    public void setIdField( int _nIdField )
+    {
+        this._nIdField = _nIdField;
+    }
+
+    public String getConditionalEntries( )
+    {
+        return _strConditionalEntries;
+    }
+
+    public void setConditionalEntries( String _strConditionalEntries )
+    {
+        this._strConditionalEntries = _strConditionalEntries;
+    }
 }

@@ -809,27 +809,27 @@ public final class FormUtils
         if ( entry.getNumberConditionalQuestion( ) != 0 )
         {
             strConditionalQuestionStringBuffer = new StringBuffer( );
-    		lstConditionalFieldMapper = new ArrayList<ConditionalEntriesFieldMapper>( );
+            lstConditionalFieldMapper = new ArrayList<ConditionalEntriesFieldMapper>( );
 
             for ( Field field : entry.getFields( ) )
             {
-            	if ( field.getConditionalQuestions( ).size( ) != 0 )
-            	{
-            		StringBuffer strGroupStringBuffer = new StringBuffer( );
+                if ( field.getConditionalQuestions( ).size( ) != 0 )
+                {
+                    StringBuffer strGroupStringBuffer = new StringBuffer( );
 
-            		for ( Entry entryConditional : field.getConditionalQuestions( ) )
-            		{
-            			getHtmlEntry( entryConditional.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request, nIterationNumber );
-            			
-            		}
-            		model.put( FormConstants.MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
-            		model.put( MARK_FIELD, field );
-            		model.put( MARK_ENTRY_ITERATION_NUMBER, nIterationNumber );
-            		template = AppTemplateService.getTemplate( TEMPLATE_DIV_CONDITIONAL_ENTRY, locale, model );
-            		lstConditionalFieldMapper.add(new ConditionalEntriesFieldMapper( field.getIdField( ), template.getHtml( ) ) );
-            	}
+                    for ( Entry entryConditional : field.getConditionalQuestions( ) )
+                    {
+                        getHtmlEntry( entryConditional.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request, nIterationNumber );
+
+                    }
+                    model.put( FormConstants.MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
+                    model.put( MARK_FIELD, field );
+                    model.put( MARK_ENTRY_ITERATION_NUMBER, nIterationNumber );
+                    template = AppTemplateService.getTemplate( TEMPLATE_DIV_CONDITIONAL_ENTRY, locale, model );
+                    lstConditionalFieldMapper.add( new ConditionalEntriesFieldMapper( field.getIdField( ), template.getHtml( ) ) );
+                }
             }
-    		model.put( FormConstants.MARK_LIST_MAP_CHILDREN, lstConditionalFieldMapper);
+            model.put( FormConstants.MARK_LIST_MAP_CHILDREN, lstConditionalFieldMapper );
         }
 
         model.put( MARK_ENTRY, entry );
