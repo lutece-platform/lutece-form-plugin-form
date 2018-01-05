@@ -66,6 +66,7 @@ import org.jfree.data.time.Week;
 import org.jfree.data.xy.XYDataset;
 
 import fr.paris.lutece.plugins.form.business.Category;
+import fr.paris.lutece.plugins.form.business.ConditionalEntriesFieldMapper;
 import fr.paris.lutece.plugins.form.business.Form;
 import fr.paris.lutece.plugins.form.business.FormFilter;
 import fr.paris.lutece.plugins.form.business.FormHome;
@@ -780,6 +781,7 @@ public final class FormUtils
     {
         Map<String, Object> model = new HashMap<String, Object>( );
         StringBuffer strConditionalQuestionStringBuffer = null;
+        List<ConditionalEntriesFieldMapper> lstConditionalFieldMapper = null;
         HtmlTemplate template;
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
@@ -807,27 +809,27 @@ public final class FormUtils
         if ( entry.getNumberConditionalQuestion( ) != 0 )
         {
             strConditionalQuestionStringBuffer = new StringBuffer( );
+    		lstConditionalFieldMapper = new ArrayList<ConditionalEntriesFieldMapper>( );
 
             for ( Field field : entry.getFields( ) )
             {
-                if ( field.getConditionalQuestions( ).size( ) != 0 )
-                {
-                    StringBuffer strGroupStringBuffer = new StringBuffer( );
+            	if ( field.getConditionalQuestions( ).size( ) != 0 )
+            	{
+            		StringBuffer strGroupStringBuffer = new StringBuffer( );
 
-                    for ( Entry entryConditional : field.getConditionalQuestions( ) )
-                    {
-                        getHtmlEntry( entryConditional.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request, nIterationNumber );
-                    }
-
-                    model.put( FormConstants.MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
-                    model.put( MARK_FIELD, field );
-                    model.put( MARK_ENTRY_ITERATION_NUMBER, nIterationNumber );
-                    template = AppTemplateService.getTemplate( TEMPLATE_DIV_CONDITIONAL_ENTRY, locale, model );
-                    strConditionalQuestionStringBuffer.append( template.getHtml( ) );
-                }
+            		for ( Entry entryConditional : field.getConditionalQuestions( ) )
+            		{
+            			getHtmlEntry( entryConditional.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request, nIterationNumber );
+            			
+            		}
+            		model.put( FormConstants.MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
+            		model.put( MARK_FIELD, field );
+            		model.put( MARK_ENTRY_ITERATION_NUMBER, nIterationNumber );
+            		template = AppTemplateService.getTemplate( TEMPLATE_DIV_CONDITIONAL_ENTRY, locale, model );
+            		lstConditionalFieldMapper.add(new ConditionalEntriesFieldMapper( field.getIdField( ), template.getHtml( ) ) );
+            	}
             }
-
-            model.put( FormConstants.MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString( ) );
+    		model.put( FormConstants.MARK_LIST_MAP_CHILDREN, lstConditionalFieldMapper);
         }
 
         model.put( MARK_ENTRY, entry );

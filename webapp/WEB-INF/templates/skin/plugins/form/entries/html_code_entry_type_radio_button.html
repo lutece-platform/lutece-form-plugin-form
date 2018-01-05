@@ -46,7 +46,11 @@ ${entry.CSSClass!}
 				<#if entry.fieldInLine != true></div></#if>
 				
 				<#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0 && !inLine>
-					<#if str_list_entry_children?exists>${str_list_entry_children}</#if>
+					<#if list_entry_children??>
+						<#list list_entry_children as children>
+							<#if children.idField == field.idField && children.conditionalEntries??>${children.conditionalEntries}</#if>
+						</#list>
+					</#if>
 				</#if>
 				
 			</#list>
@@ -68,7 +72,11 @@ ${entry.CSSClass!}
 </#if>
 
 <#if inLine>
-	<#if str_list_entry_children?exists>${str_list_entry_children}</#if>
+	<#if list_entry_children??>
+		<#list list_entry_children as children>
+			<#if children.conditionalEntries??>${children.conditionalEntries}</#if>
+		</#list>
+	</#if>
 </#if>
 
 <#if list_responses??>
@@ -80,7 +88,7 @@ ${entry.CSSClass!}
 			</#if>
 			<#if response.entry.idEntry == entry.idEntry && response.field??>
 				var baliseId = "div" + idName + ${response.field.idField};
-				if(document.getElementById && document.getElementById(baliseId) != null)
+				if( document.getElementById(baliseId) != null)
 				{
 					document.getElementById(baliseId).style.visibility='visible';
 					document.getElementById(baliseId).style.display='block';

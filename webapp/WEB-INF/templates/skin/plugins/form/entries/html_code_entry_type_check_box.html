@@ -41,8 +41,12 @@ ${entry.CSSClass!}
 				<#if entry.fieldInLine != true></div></#if>		
 				
 				<#if field.conditionalQuestions?exists&&field.conditionalQuestions?size!=0 && !inLine>
-					<#if str_list_entry_children?exists>${str_list_entry_children}</#if>
-				</#if>	
+					<#if list_entry_children??>
+						<#list list_entry_children as children>
+							<#if children.idField == field.idField && children.conditionalEntries??>${children.conditionalEntries}</#if>
+						</#list>
+					</#if>
+				</#if>
 					
 			</#list>
 			
@@ -62,7 +66,11 @@ ${entry.CSSClass!}
 			</#if>
 			
 			<#if inLine>
-				<#if str_list_entry_children?exists>${str_list_entry_children}</#if>
+				<#if list_entry_children??>
+					<#list list_entry_children as children>
+						<#if children.conditionalEntries??>${children.conditionalEntries}</#if>
+					</#list>
+				</#if>
 			</#if>
 			
 		</div>

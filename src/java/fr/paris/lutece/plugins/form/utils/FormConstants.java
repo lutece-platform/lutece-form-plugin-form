@@ -64,6 +64,7 @@ public class FormConstants
     public static final String MARK_FORM_SUBMIT = "formSubmit";
     public static final String MARK_URL_ACTION = "url_action";
     public static final String MARK_STR_LIST_CHILDREN = "str_list_entry_children";
+    public static final String MARK_LIST_MAP_CHILDREN = "list_entry_children";
 
     // Prefixes
     public static final String PREFIX_ITERATION = "nIt";
