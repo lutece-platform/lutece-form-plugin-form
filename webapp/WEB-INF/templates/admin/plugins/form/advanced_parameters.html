@@ -33,6 +33,9 @@
 				<@formGroup labelFor='id_theme_list' labelKey='#i18n{form.createForm.labelThemeXpage}'>
 					<@select name='id_theme_list' items=theme_list default_value=getName('id_theme_list',list_form_param_default_values)!default_theme />
 				</@formGroup>
+				<@formGroup labelFor='front_office_picture_max_size' labelKey='#i18n{form.createForm.labelFormPictureMaxSize}'>
+					<@input type='text' name='front_office_picture_max_size' maxlength=255 value=getName('front_office_picture_max_size',list_form_param_default_values) />
+				</@formGroup>
 				<@formGroup>
 					<@button type='submit' buttonIcon='save' title='#i18n{form.manage_advanced_parameters.buttonModify}' size='' />
 				</@formGroup>

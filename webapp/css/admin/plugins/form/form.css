@@ -18,6 +18,17 @@
 .modal-content {
     margin: auto;
     display: block;
+    left: 25%;
+}
+
+#modal-frontoffice-picture {
+	margin-top: 50px;
+	height: auto;
+}
+
+#frontoffice-picture-block {
+	position: relative;
+	display: inline-block;
 }
 
 #frontoffice-picture-caption {
@@ -40,6 +51,7 @@
     color: #f1f1f1;
     font-size: 40px;
     font-weight: bold;
+    left: 25%;
 }
 
 .close:hover,
@@ -58,4 +70,8 @@
 .front-office-form-picture {
 	max-height: 300px;
 	width: 100%;
+}
+
+.hide-body-scrollbar {
+	overflow: hidden;
 }

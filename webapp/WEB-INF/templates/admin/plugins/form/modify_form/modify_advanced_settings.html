@@ -80,11 +80,13 @@
 							</@formGroup>
 						</div>
 						<div id="modal-frontoffice-picture" class="modal">
-							<span class="close">
-								<@icon style='times' />
-							</span>
-							<img class="modal-content" id="frontoffice-picture">
-							<div id="frontoffice-picture-caption"></div>
+							<div id="frontoffice-picture-block">
+								<span class="close">
+									<@icon style='times' />
+								</span>
+								<img class="modal-content" id="frontoffice-picture">
+								<div id="frontoffice-picture-caption"></div>
+							</div>
 						</div>
 					</@tabContent>
 				</@boxBody>
@@ -112,10 +114,14 @@ img.onclick = function(){
 	modal.style.display = "block";
 	modalImg.src = this.src;
 	captionText.innerHTML = this.alt;
+	var bodyElement = document.body;
+	bodyElement.className += " hide-body-scrollbar";
 }
 
 var span = document.getElementsByClassName('close')[0];
 span.onclick = function() {
 	modal.style.display = "none";
+	var bodyElement = document.body;
+	bodyElement.classList.remove("hide-body-scrollbar");
 } 
 </script>
