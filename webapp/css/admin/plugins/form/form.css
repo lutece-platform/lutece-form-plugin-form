@@ -18,12 +18,12 @@
 .modal-content {
     margin: auto;
     display: block;
-    left: 25%;
 }
 
 #modal-frontoffice-picture {
 	margin-top: 50px;
 	height: auto;
+	text-align: center;
 }
 
 #frontoffice-picture-block {
@@ -51,7 +51,6 @@
     color: #f1f1f1;
     font-size: 40px;
     font-weight: bold;
-    left: 25%;
 }
 
 .close:hover,
