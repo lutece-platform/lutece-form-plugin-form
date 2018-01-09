@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.form.utils;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -719,6 +718,8 @@ public class EntryTypeGroupUtils
                 else
                     if ( entryResponse.getFieldDepend( ) != null )
                     {
+                        int nIdEntry = NumberUtils.INTEGER_MINUS_ONE;
+                        
                         // Case of a conditional entry - retrieve the parent entry of the conditional entry
                         // to store the Response in the map
                         Field field = FieldHome.findByPrimaryKey( entryResponse.getFieldDepend( ).getIdField( ) );
@@ -732,24 +733,32 @@ public class EntryTypeGroupUtils
                         Entry entryParent = entryField.getParent( );
                         if ( entryParent != null )
                         {
-                            int nIdParentConditional = entryParent.getIdEntry( );
-                            if ( !mapIdEntryListResponse.containsKey( nIdParentConditional ) )
-                            {
-                                mapIdEntryListResponse.put( nIdParentConditional, new ArrayList<Response>( ) );
-                            }
-
-                            mapIdEntryListResponse.get( nIdParentConditional ).add( response );
+                            nIdEntry = entryParent.getIdEntry( );
                         }
                         else
                         {
                             // If the entry doesn't have parent it means that it doesn't belong to a group
-                            mapIdEntryListResponse.put( entryResponse.getIdEntry( ), Arrays.asList( response ) );
+                            nIdEntry = entryResponse.getIdEntry( );
                         }
+                        
+                        // Add the response to the attached entry
+                        if ( !mapIdEntryListResponse.containsKey( nIdEntry ) )
+                        {
+                            mapIdEntryListResponse.put( nIdEntry, new ArrayList<Response>( ) );
+                        }
+                        
+                        mapIdEntryListResponse.get( nIdEntry ).add( response );
                     }
                     else
                     {
                         // The entry of the current response doesn't belong to a group and its not a conditional entry
-                        mapIdEntryListResponse.put( entryResponse.getIdEntry( ), Arrays.asList( response ) );
+                        int nIdEntry = entryResponse.getIdEntry( );
+                        if ( !mapIdEntryListResponse.containsKey( nIdEntry ) )
+                        {
+                            mapIdEntryListResponse.put( nIdEntry, new ArrayList<Response>( ) );
+                        }
+                        
+                        mapIdEntryListResponse.get( nIdEntry ).add( response );
                     }
             }
 
