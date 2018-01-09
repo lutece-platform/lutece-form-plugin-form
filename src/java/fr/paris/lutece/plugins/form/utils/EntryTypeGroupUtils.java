@@ -719,7 +719,7 @@ public class EntryTypeGroupUtils
                     if ( entryResponse.getFieldDepend( ) != null )
                     {
                         int nIdEntry = NumberUtils.INTEGER_MINUS_ONE;
-                        
+
                         // Case of a conditional entry - retrieve the parent entry of the conditional entry
                         // to store the Response in the map
                         Field field = FieldHome.findByPrimaryKey( entryResponse.getFieldDepend( ).getIdField( ) );
@@ -740,13 +740,13 @@ public class EntryTypeGroupUtils
                             // If the entry doesn't have parent it means that it doesn't belong to a group
                             nIdEntry = entryResponse.getIdEntry( );
                         }
-                        
+
                         // Add the response to the attached entry
                         if ( !mapIdEntryListResponse.containsKey( nIdEntry ) )
                         {
                             mapIdEntryListResponse.put( nIdEntry, new ArrayList<Response>( ) );
                         }
-                        
+
                         mapIdEntryListResponse.get( nIdEntry ).add( response );
                     }
                     else
@@ -757,7 +757,7 @@ public class EntryTypeGroupUtils
                         {
                             mapIdEntryListResponse.put( nIdEntry, new ArrayList<Response>( ) );
                         }
-                        
+
                         mapIdEntryListResponse.get( nIdEntry ).add( response );
                     }
             }
