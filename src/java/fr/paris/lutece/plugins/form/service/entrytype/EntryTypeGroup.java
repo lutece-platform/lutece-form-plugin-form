@@ -63,9 +63,11 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
     // Parameters
     private static final String PARAMETER_IS_ITERABLE = "is_iterable";
     private static final String PARAMETER_NB_ITERATION = "nb_iterations";
+    private static final String PARAMETER_ITERATION_ADDING_LABEL = "iteration_adding_label";
 
     // Constants
     public static final String CONSTANT_NB_ITERATION = "nb_iterations";
+    public static final String CONSTANT_ITERATION_ADDING_LABEL = "iteration_adding_label"; 
     private static final String MESSAGE_ERROR_MANDATORY_FIELD_NB_ITERATIONS = "form.modifyEntry.typeGroup.message.error.fieldNbIterations.mandatory";
     private static final String MESSAGE_ERROR_FIELD_NB_ITERATIONS = "form.modifyEntry.typeGroup.message.error.fieldNbIterations";
 
@@ -110,7 +112,60 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
             return strMessageUrl;
         }
 
-        return manageNbIterationsField( request, entry );
+        return manageIterationFields( request, entry );
+    }
+    
+    /**
+     * Check all the fields related to the iteration
+     * 
+     * @param request
+     *            the request to retrieve data from
+     * @param entry
+     *            the entry to inject the new Field
+     * @return null if there is no problem false otherwise
+     */
+    private String manageIterationFields( HttpServletRequest request, Entry entry )
+    {
+        String strError = null;
+        
+        strError = manageNbIterationsField( request, entry );
+        if( strError != null )
+        {
+            return strError;
+        }
+        
+        strError = manageIterationAddingLabel( request, entry );
+        
+        return strError;
+    }
+    
+    /**
+     * Create a new Field and set it to the entry if the label for the iteration adding button is present in the request otherwise do nothing
+     * 
+     * @param request
+     *            the request to retrieve data from
+     * @param entry
+     *            the entry to inject the new Field
+     * @return null if there is no problem false otherwise
+     */
+    private String manageIterationAddingLabel( HttpServletRequest request, Entry entry )
+    {
+        if ( entry != null )
+        {
+            Field fieldIterationAddingLabel = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ITERATION_ADDING_LABEL, entry.getFields( ) );
+            
+            if ( request.getParameter( PARAMETER_IS_ITERABLE ) != null )
+            {
+                createIterationField( entry, fieldIterationAddingLabel, CONSTANT_ITERATION_ADDING_LABEL, request.getParameter( PARAMETER_ITERATION_ADDING_LABEL ) );
+            }
+            else
+            {
+                // The iterations has been disabled on this group so we remove the field which concern the iteration for this entry
+                removeIterationField( entry, fieldIterationAddingLabel );
+            }
+        }
+        
+        return null;
     }
 
     /**
@@ -142,29 +197,56 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
                     return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
                 }
 
-                if ( fieldNbIteration == null )
-                {
-                    fieldNbIteration = new Field( );
-
-                    entry.getFields( ).add( fieldNbIteration );
-                }
-
-                fieldNbIteration.setParentEntry( entry );
-                fieldNbIteration.setTitle( CONSTANT_NB_ITERATION );
-                fieldNbIteration.setValue( strNbIterations );
+                createIterationField( entry, fieldNbIteration, CONSTANT_NB_ITERATION, strNbIterations );
             }
             else
             {
                 // The iterations has been disabled on this group so we remove the field which concern the iteration for this entry
-                if ( fieldNbIteration != null )
-                {
-                    entry.getFields( ).remove( fieldNbIteration );
-
-                    FieldHome.remove( fieldNbIteration.getIdField( ) );
-                }
+                removeIterationField( entry, fieldNbIteration );
             }
         }
 
         return null;
+    }
+    
+    /**
+     * Create a new field for an entry or update it if it already exists
+     * 
+     * @param entry
+     *          The entry to add or update a field
+     * @param field
+     *          The field to add to the entry
+     * @param fieldTitle
+     *          The title to set to the field
+     * @param fieldValue
+     *          The value to set to the field
+     */
+    private void createIterationField( Entry entry, Field field, String fieldTitle, String fieldValue )
+    {
+        if ( field == null )
+        {
+            field = new Field( );
+
+            entry.getFields( ).add( field );
+        }
+
+        field.setParentEntry( entry );
+        field.setTitle( fieldTitle );
+        field.setValue( fieldValue );
+    }
+    
+    /**
+     * Remove a field to an entry and remove it from database
+     * 
+     * @param entry
+     *          The entry to remove the field
+     * @param fieldToRemove
+     *          The field to remove from the entry
+     */
+    private void removeIterationField( Entry entry, Field fieldToRemove )
+    {
+        entry.getFields( ).remove( fieldToRemove );
+
+        FieldHome.remove( fieldToRemove.getIdField( ) );
     }
 }
