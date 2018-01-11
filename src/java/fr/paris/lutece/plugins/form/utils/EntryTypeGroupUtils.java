@@ -227,7 +227,7 @@ public class EntryTypeGroupUtils
             for ( Integer iterationNumber : iterationGroup.getSetIterationNumber( ) )
             {
                 // Get the Html associate to all the children of the group for the current iteration
-                HtmlTemplate templateChildrenIterationGroup = generateChildrenItreationGroupTemplate( request, entry, bDisplayFront, iterationNumber );
+                HtmlTemplate templateChildrenIterationGroup = generateChildrenIterationGroupTemplate( request, entry, bDisplayFront, iterationNumber );
 
                 // Aggregate the current iteration template with the other of the group
                 if ( templateChildrenIterationGroup != null )
@@ -253,7 +253,7 @@ public class EntryTypeGroupUtils
      *            The current iteration number to generate the iteration template
      * @return the HtmlTemplate for the current entry for the specified iteration
      */
-    private static HtmlTemplate generateChildrenItreationGroupTemplate( HttpServletRequest request, Entry entry, boolean bDisplayFront, int nIterationNumber )
+    private static HtmlTemplate generateChildrenIterationGroupTemplate( HttpServletRequest request, Entry entry, boolean bDisplayFront, int nIterationNumber )
     {
         // Get the Html associate to all the children of the group for the current iteration
         StringBuilder sbCurrentChildrenGroup = getHtmlEntryGroup( request, entry, bDisplayFront, new StringBuilder( ), nIterationNumber );
@@ -972,7 +972,7 @@ public class EntryTypeGroupUtils
      * @param listResponses
      *            the list of response of the entry
      */
-    public static void populateMapIterationGroup( HttpServletRequest request, Entry entry, int nIterationNumber, List<Response> listResponses )
+    public static void populateIterationGroup( HttpServletRequest request, Entry entry, int nIterationNumber, List<Response> listResponses )
     {
         // Retrieve the map from the session
         Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );

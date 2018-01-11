@@ -882,7 +882,7 @@ public final class FormUtils
                     // Populate the IterationGroup map in the session
                     if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
                     {
-                        EntryTypeGroupUtils.populateMapIterationGroup( request, entry, nIterationNumber, listResponses );
+                        EntryTypeGroupUtils.populateIterationGroup( request, entry, nIterationNumber, listResponses );
                     }
                 }
             }
@@ -1063,7 +1063,7 @@ public final class FormUtils
                 if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
                 {
                     // Populate the IterationGroup map in the session
-                    EntryTypeGroupUtils.populateMapIterationGroup( request, entry, nIterationNumber, listResponse );
+                    EntryTypeGroupUtils.populateIterationGroup( request, entry, nIterationNumber, listResponse );
                 }
 
                 formSubmit.getListResponse( ).addAll( listResponse );
