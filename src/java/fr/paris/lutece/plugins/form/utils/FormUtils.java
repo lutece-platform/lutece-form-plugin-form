@@ -72,6 +72,7 @@ import fr.paris.lutece.plugins.form.business.FormFilter;
 import fr.paris.lutece.plugins.form.business.FormHome;
 import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.StatisticFormSubmit;
+import fr.paris.lutece.plugins.form.business.iteration.IterationGroup;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.draft.FormDraftBackupService;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeMyLuteceUser;
@@ -87,6 +88,7 @@ import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeArray;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeGroup;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
@@ -148,6 +150,7 @@ public final class FormUtils
     private static final String MARK_UPLOAD_HANDLER = "uploadHandler";
     private static final String MARK_WEBAPP_URL = "webapp_url";
     private static final String MARK_ENTRY_ITERATION_NUMBER = "entry_iteration_number";
+    private static final String MARK_ENTRY_ITERATION_LIMIT_REACHED = "entry_iteration_limit_reached";
 
     // Name of the JCaptcha plugin
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
@@ -900,6 +903,19 @@ public final class FormUtils
         }
 
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
+        
+        // Check if the maximum number of iteration has been reached for the entry of type group
+        if ( entryTypeService instanceof AbstractEntryTypeGroup && EntryTypeGroupUtils.getEntryMaxIterationAllowed( nIdEntry ) != FormConstants.DEFAULT_ITERATION_NUMBER )
+        {
+            Boolean isLimitReached = Boolean.TRUE;
+            IterationGroup iterationGroup = EntryTypeGroupUtils.retrieveIterationGroup( request, nIdEntry );
+            if ( iterationGroup != null )
+            {
+                isLimitReached = iterationGroup.isIterationLimitReached( );
+            }
+            
+            model.put( MARK_ENTRY_ITERATION_LIMIT_REACHED, isLimitReached );
+        }
 
         template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ), locale, model );
         stringBuffer.append( template.getHtml( ) );
