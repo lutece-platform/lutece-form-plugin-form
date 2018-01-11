@@ -63,7 +63,7 @@ public class IterationGroup
     {
         int nNbMaxIteration = FormConstants.DEFAULT_MINIMUM_ITERATION_NUMBER;
         int nNbMinIteration = FormConstants.DEFAULT_MINIMUM_ITERATION_NUMBER;
-        
+
         if ( entry != null )
         {
             int nIdEntry = entry.getIdEntry( );
@@ -71,13 +71,13 @@ public class IterationGroup
 
             int nMinNumberOfIteration = getEntryMinIterationAllowed( nIdEntry );
             nNbMinIteration = nMinNumberOfIteration;
-            
+
             for ( int nIterationNumber = NumberUtils.INTEGER_ONE; nIterationNumber <= nMinNumberOfIteration; nIterationNumber++ )
             {
                 _mapIterationResponses.put( nIterationNumber, new ArrayList<IterationResponse>( ) );
             }
         }
-        
+
         _nNbMaxIteration = nNbMaxIteration;
         _nNbMinIteration = nNbMinIteration;
     }
@@ -91,7 +91,7 @@ public class IterationGroup
     {
         return _nNbMaxIteration;
     }
-    
+
     /**
      * Return the minimum number of iteration necessary for the group
      * 
@@ -273,7 +273,7 @@ public class IterationGroup
     {
         return getIterationNumber( ) >= _nNbMaxIteration;
     }
-    
+
     /**
      * Return the minimum number of iterations necessary for the entry. Return 0 if a problem occurred.
      * 

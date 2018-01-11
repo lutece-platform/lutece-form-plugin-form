@@ -169,16 +169,16 @@ public class EntryTypeGroupUtils
     {
         return findFieldValue( idEntry, EntryTypeGroup.CONSTANT_NB_ITERATION, FormConstants.DEFAULT_ITERATION_NUMBER );
     }
-    
+
     /**
      * Retrieve the value of field of an entry. Return the value if found the default value is returned otherwise
      * 
      * @param nIdEntry
-     *          The entry to retrieve the field from
+     *            The entry to retrieve the field from
      * @param strFieldName
-     *          The name of the field to retrieve
+     *            The name of the field to retrieve
      * @param nDefaultValue
-     *          The default value to returned if the field has not found
+     *            The default value to returned if the field has not found
      * @return the value of the field from its name or the default value if not found
      */
     public static int findFieldValue( int nIdEntry, String strFieldName, int nDefaultValue )
@@ -264,7 +264,7 @@ public class EntryTypeGroupUtils
         Map<String, Object> model = new LinkedHashMap<String, Object>( );
         model.put( FormConstants.PARAMETER_ID_ENTRY, nIdEntry );
         model.put( MARK_REMOVE_ITERATION_NUMBER, nIterationNumber );
-        
+
         // Retrieve the maximum number of iteration and the minimum number of iterations necessary from the request
         Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
 
@@ -280,7 +280,7 @@ public class EntryTypeGroupUtils
                 nNbMinIterationAllowed = iterationGroup.getNbMinIteration( );
             }
         }
-        
+
         model.put( MARK_MINIMUM_ITERATION_NUMBER, nNbMinIterationAllowed );
         model.put( MARK_CURRENT_ITERATION_NUMBER, nNbCurrentIterationNumber );
         model.put( MARK_ITERATION_CODE, strCurrentIterationCode );
@@ -928,7 +928,7 @@ public class EntryTypeGroupUtils
     {
         return FormConstants.PREFIX_ITERATION + "%s_" + FormConstants.PREFIX_ATTRIBUTE + idEntry;
     }
-    
+
     /**
      * Construct the url for an entry of an iterable group for errors
      * 

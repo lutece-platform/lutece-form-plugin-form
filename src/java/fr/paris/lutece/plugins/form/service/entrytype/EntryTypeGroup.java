@@ -201,16 +201,16 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
                 {
                     return strError;
                 }
-                
+
                 // Check the minimum number of iterations
                 strError = checkMinimumIterationNumber( request );
                 if ( strError != null )
                 {
                     return strError;
                 }
-                
+
                 // Control that the maximum number of iteration is superior or equal to the minimum number of iteration
-                if ( NumberUtils.toInt( strNbIterations ) < NumberUtils.toInt (strNbMinimumIterations ) )
+                if ( NumberUtils.toInt( strNbIterations ) < NumberUtils.toInt( strNbMinimumIterations ) )
                 {
                     return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_FIELD_NB_ITERATIONS_BAD_VALUE, AdminMessage.TYPE_STOP );
                 }
@@ -229,18 +229,18 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
 
         return null;
     }
-    
+
     /**
      * Check the parameter value of the maximum number of iteration
      * 
      * @param request
-     *          The HttpServletRequest to retrieve the parameter value from
+     *            The HttpServletRequest to retrieve the parameter value from
      * @return the url to display the page if an error occurred null otherwise
      */
     private String checkMaximumIterationNumber( HttpServletRequest request )
     {
         String strNbIterations = request.getParameter( PARAMETER_NB_ITERATION );
-        
+
         if ( StringUtils.isBlank( strNbIterations ) )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
@@ -250,31 +250,32 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
         }
-        
+
         return null;
     }
-    
+
     /**
      * Check the parameter value of the minimum number of iteration
      * 
      * @param request
-     *          The HttpServletRequest to retrieve the parameter value from
+     *            The HttpServletRequest to retrieve the parameter value from
      * @return the url to display the page if an error occurred null otherwise
      */
     private String checkMinimumIterationNumber( HttpServletRequest request )
     {
         String strNbMinimumIterations = request.getParameter( PARAMETER_NB_MINIMUM_ITERATION );
-        
+
         if ( StringUtils.isBlank( strNbMinimumIterations ) )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELD_NB_MINIMUM_ITERATIONS, AdminMessage.TYPE_STOP );
         }
-        
-        if ( !StringUtils.isNumeric( strNbMinimumIterations ) || NumberUtils.toInt( strNbMinimumIterations, NumberUtils.INTEGER_MINUS_ONE ) < NumberUtils.INTEGER_ZERO )
+
+        if ( !StringUtils.isNumeric( strNbMinimumIterations )
+                || NumberUtils.toInt( strNbMinimumIterations, NumberUtils.INTEGER_MINUS_ONE ) < NumberUtils.INTEGER_ZERO )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_FIELD_NB_MINIMUM_ITERATIONS, AdminMessage.TYPE_STOP );
         }
-        
+
         return null;
     }
 
