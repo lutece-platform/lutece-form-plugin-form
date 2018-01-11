@@ -5,26 +5,49 @@
 			<legend> #i18n{form.recapFormSubmit.labelLegendRecap} </legend>
 			<form action="${url_action}" method="post" name="" id="" class="form-horizontal" >
 			<input name="validate_recap" value="validate_recap" type="hidden">
-			<#list formSubmit.listResponse as response>
-				<#if response.toStringValueResponse?has_content>
-				<div class="form-group">
-					<#assign entryTitle = response.entry.title>
-					<#if response.iterationNumber != -1>
-						<#assign entryTitle = entryTitle + ' - ' + '#i18n{form.recapFormSubmit.labelIterationNumber}' + response.iterationNumber>
+			<#assign previousIdGroup = -1>
+			<#assign previousIterationNumber = -1>
+			<#list list_recap_response as recapResponse>
+				<#assign response = recapResponse.response>
+				<#assign recapResponseIdGroup = recapResponse.idGroup>
+				<#if recapResponseIdGroup != previousIdGroup>
+					<#assign previousIterationNumber = response.iterationNumber>
+					<#if previousIdGroup != -1>
+						</fieldset>
 					</#if>
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3"><#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>${entryTitle}<#assign entrySave=response.entry></#if></label>
-					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-						<#if response.toStringValueResponse?has_content && response.toStringValueResponse?contains("href")>
-						${response.toStringValueResponse}
-						<#else>
-							<#if response.isImage>
-								<img src="${response.toStringValueResponse}" >
-							<#else>
-								<input type="text" value="${response.toStringValueResponse}" class="input-sm form-control" disabled title="${response.toStringValueResponse}">
-							</#if>
+					<#assign previousIdGroup = recapResponseIdGroup>
+					<#if recapResponseIdGroup != -1 && response.toStringValueResponse?has_content>
+						<fieldset>
+						<legend>${recapResponse.groupTitle}</legend>
+					<#else>
+						<br /><br />
+					</#if>
+				<#else>
+					<#assign responseIterationNumber = response.iterationNumber>
+					<#if responseIterationNumber != previousIterationNumber>
+						<#if previousIterationNumber != -1 && responseIterationNumber != -1 && response.toStringValueResponse?has_content>
+							</fieldset>
+							<fieldset>
+							<legend>${recapResponse.groupTitle}</legend>
 						</#if>
+						<#assign previousIterationNumber = responseIterationNumber>
+					</#if>
+				</#if>
+				<#if response.toStringValueResponse?has_content>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3"><#if !entrySave?exists||entrySave.idEntry!=response.entry.idEntry>${response.entry.title}<#assign entrySave=response.entry></#if></label>
+						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+							<#if response.toStringValueResponse?has_content && response.toStringValueResponse?contains("href")>
+								${response.toStringValueResponse}
+							<#else>
+								<#if response.isImage>
+									<img src="${response.toStringValueResponse}" >
+								<#else>
+									<input type="text" value="${response.toStringValueResponse}" class="input-sm form-control" disabled title="${response.toStringValueResponse}">
+								</#if>
+							</#if>
+						</div>
 					</div>
-				</div>
 				</#if>
 			</#list>
 			<br>

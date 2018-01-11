@@ -720,17 +720,7 @@ public class EntryTypeGroupUtils
                     {
                         int nIdEntry = NumberUtils.INTEGER_MINUS_ONE;
 
-                        // Case of a conditional entry - retrieve the parent entry of the conditional entry
-                        // to store the Response in the map
-                        Field field = FieldHome.findByPrimaryKey( entryResponse.getFieldDepend( ).getIdField( ) );
-                        Entry entryField = EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) );
-                        while ( entryField.getParent( ) == null && entryField.getFieldDepend( ) != null )
-                        {
-                            field = FieldHome.findByPrimaryKey( entryField.getFieldDepend( ).getIdField( ) );
-                            entryField = EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) );
-                        }
-
-                        Entry entryParent = entryField.getParent( );
+                        Entry entryParent = retrieveEntryParentOfConditionalEntry( entryResponse );
                         if ( entryParent != null )
                         {
                             nIdEntry = entryParent.getIdEntry( );
@@ -822,6 +812,72 @@ public class EntryTypeGroupUtils
                 }
             }
         }
+    }
+    
+    /**
+     * Find the identifier of the group of the entry of the response manage the case if the entry is a conditional entry.
+     * Return the identifier of the entry group if exist otherwise if the entry of the response doesn't belong to a group it will return 
+     * {@link FormConstants.DEFAULT_GROUP_NUMBER}
+     * 
+     * @param response
+     *          The response to retrieve the identifier of the group where its entry belong to
+     * @return the identifier of the group where the entry of the response belong to or {@link FormConstants.DEFAULT_GROUP_NUMBER} if
+     *  the entry doesn't belong to a group
+     */
+    public static int findIdGroupEntryResponse( Response response )
+    {
+        int nIdGroupEntryResponse = FormConstants.DEFAULT_GROUP_NUMBER;
+
+        if ( response != null )
+        {
+            Entry responseEntry = response.getEntry( );
+            Entry entryParent = responseEntry.getParent( );
+            if ( entryParent != null )
+            {
+                nIdGroupEntryResponse = entryParent.getIdEntry( );
+            }
+            else
+            {
+                Entry entryConditionalParent = retrieveEntryParentOfConditionalEntry( responseEntry );
+                if ( entryConditionalParent != null )
+                {
+                    nIdGroupEntryResponse = entryConditionalParent.getIdEntry( );
+                }
+            }
+        }
+        
+        return nIdGroupEntryResponse;
+    }
+    
+    /**
+     * Retrieve the Entry parent of a conditional entry
+     * 
+     * @param entryConditional
+     *          The conditional entry to retrieve the parent from
+     * @return the parent entry of the given entry or null if not found
+     */
+    private static Entry retrieveEntryParentOfConditionalEntry( Entry entryConditional )
+    {
+        if ( entryConditional != null )
+        {
+            Field responseFieldDepend = entryConditional.getFieldDepend( );
+            if ( responseFieldDepend != null )
+            {
+                // Case of a conditional entry - retrieve the parent entry of the conditional entry
+                // to store the Response in the map
+                Field field = FieldHome.findByPrimaryKey( responseFieldDepend.getIdField( ) );
+                Entry entryField = EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) );
+                while ( entryField.getParent( ) == null && entryField.getFieldDepend( ) != null )
+                {
+                    field = FieldHome.findByPrimaryKey( entryField.getFieldDepend( ).getIdField( ) );
+                    entryField = EntryHome.findByPrimaryKey( field.getParentEntry( ).getIdEntry( ) );
+                }
+
+                return entryField.getParent( );
+            }
+        }
+        
+        return null;
     }
 
     /**

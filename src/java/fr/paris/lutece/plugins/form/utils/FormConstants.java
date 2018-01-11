@@ -77,5 +77,6 @@ public class FormConstants
     // Other constants
     public static final String CONSTANT_WHERE = " WHERE ";
     public static final String CONSTANT_AND = " AND ";
+    public static final int DEFAULT_GROUP_NUMBER = NumberUtils.INTEGER_MINUS_ONE;
     public static final int DEFAULT_ITERATION_NUMBER = NumberUtils.INTEGER_MINUS_ONE;
 }

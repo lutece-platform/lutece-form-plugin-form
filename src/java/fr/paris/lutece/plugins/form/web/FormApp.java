@@ -56,6 +56,7 @@ import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.FormSubmitHome;
 import fr.paris.lutece.plugins.form.business.Recap;
 import fr.paris.lutece.plugins.form.business.RecapHome;
+import fr.paris.lutece.plugins.form.business.RecapResponse;
 import fr.paris.lutece.plugins.form.business.RequirementFormError;
 import fr.paris.lutece.plugins.form.business.outputprocessor.IOutputProcessor;
 import fr.paris.lutece.plugins.form.service.EntryTypeService;
@@ -134,6 +135,7 @@ public class FormApp extends MVCApplication
     private static final String MARK_FORM_ERRORS = "form_errors";
     private static final String MARK_ORDER = "order";
     private static final String MARK_ASC = "asc";
+    private static final String MARK_LIST_RECAP_RESPONSE = "list_recap_response";
 
     // templates
     private static final String TEMPLATE_XPAGE_RECAP_FORM_SUBMIT = "skin/plugins/form/recap_form_submit.html";
@@ -988,6 +990,9 @@ public class FormApp extends MVCApplication
             FormUtils.removeFormErrors( session );
             session.removeAttribute( SESSION_VALIDATE_REQUIREMENT );
 
+            // Create the list of RecapResponse objects
+            List<RecapResponse> listRecapResponse = new ArrayList<>( );
+            
             // convert the value of the object response to string
             for ( Response response : formSubmit.getListResponse( ) )
             {
@@ -1000,7 +1005,13 @@ public class FormApp extends MVCApplication
                 {
                     response.setToStringValueResponse( StringUtils.EMPTY );
                 }
+                
+                // Create a RecapResponse object for the current Response and add it to the list
+                listRecapResponse.add( new RecapResponse( response ) );
             }
+            
+            // Add the list of RecapResponse object to the model
+            model.put( MARK_LIST_RECAP_RESPONSE, listRecapResponse );
 
             if ( form.isSupportHTTPS( ) && AppHTTPSService.isHTTPSSupportEnabled( ) )
             {
