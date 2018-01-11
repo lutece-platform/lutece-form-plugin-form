@@ -813,16 +813,15 @@ public class EntryTypeGroupUtils
             }
         }
     }
-    
+
     /**
-     * Find the identifier of the group of the entry of the response manage the case if the entry is a conditional entry.
-     * Return the identifier of the entry group if exist otherwise if the entry of the response doesn't belong to a group it will return 
-     * {@link FormConstants.DEFAULT_GROUP_NUMBER}
+     * Find the identifier of the group of the entry of the response manage the case if the entry is a conditional entry. Return the identifier of the entry
+     * group if exist otherwise if the entry of the response doesn't belong to a group it will return {@link FormConstants.DEFAULT_GROUP_NUMBER}
      * 
      * @param response
-     *          The response to retrieve the identifier of the group where its entry belong to
-     * @return the identifier of the group where the entry of the response belong to or {@link FormConstants.DEFAULT_GROUP_NUMBER} if
-     *  the entry doesn't belong to a group
+     *            The response to retrieve the identifier of the group where its entry belong to
+     * @return the identifier of the group where the entry of the response belong to or {@link FormConstants.DEFAULT_GROUP_NUMBER} if the entry doesn't belong
+     *         to a group
      */
     public static int findIdGroupEntryResponse( Response response )
     {
@@ -845,15 +844,15 @@ public class EntryTypeGroupUtils
                 }
             }
         }
-        
+
         return nIdGroupEntryResponse;
     }
-    
+
     /**
      * Retrieve the Entry parent of a conditional entry
      * 
      * @param entryConditional
-     *          The conditional entry to retrieve the parent from
+     *            The conditional entry to retrieve the parent from
      * @return the parent entry of the given entry or null if not found
      */
     private static Entry retrieveEntryParentOfConditionalEntry( Entry entryConditional )
@@ -876,7 +875,7 @@ public class EntryTypeGroupUtils
                 return entryField.getParent( );
             }
         }
-        
+
         return null;
     }
 

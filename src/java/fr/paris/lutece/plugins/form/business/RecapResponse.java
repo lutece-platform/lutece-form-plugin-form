@@ -51,16 +51,16 @@ public class RecapResponse
     private final Response _response;
     private final int _nIdGroup;
     private final String _strGroupTitle;
-    
+
     // Constructor
     public RecapResponse( Response response )
     {
         _response = response;
-        
+
         // Retrieve the identifier of the group where the entry of the response belong to
         int nIdGroupEntryResponse = EntryTypeGroupUtils.findIdGroupEntryResponse( response );
         _nIdGroup = nIdGroupEntryResponse;
-        
+
         // Retrieve the title of the group if it exists
         String strEntryGrouptitle = StringUtils.EMPTY;
         if ( nIdGroupEntryResponse != FormConstants.DEFAULT_GROUP_NUMBER )

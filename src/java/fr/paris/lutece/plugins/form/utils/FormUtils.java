@@ -903,9 +903,10 @@ public final class FormUtils
         }
 
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        
+
         // Check if the maximum number of iteration has been reached for the entry of type group
-        if ( entryTypeService instanceof AbstractEntryTypeGroup && EntryTypeGroupUtils.getEntryMaxIterationAllowed( nIdEntry ) != FormConstants.DEFAULT_ITERATION_NUMBER )
+        if ( entryTypeService instanceof AbstractEntryTypeGroup
+                && EntryTypeGroupUtils.getEntryMaxIterationAllowed( nIdEntry ) != FormConstants.DEFAULT_ITERATION_NUMBER )
         {
             Boolean isLimitReached = Boolean.TRUE;
             IterationGroup iterationGroup = EntryTypeGroupUtils.retrieveIterationGroup( request, nIdEntry );
@@ -913,7 +914,7 @@ public final class FormUtils
             {
                 isLimitReached = iterationGroup.isIterationLimitReached( );
             }
-            
+
             model.put( MARK_ENTRY_ITERATION_LIMIT_REACHED, isLimitReached );
         }
 

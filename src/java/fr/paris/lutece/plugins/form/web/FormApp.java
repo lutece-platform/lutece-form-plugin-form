@@ -992,7 +992,7 @@ public class FormApp extends MVCApplication
 
             // Create the list of RecapResponse objects
             List<RecapResponse> listRecapResponse = new ArrayList<>( );
-            
+
             // convert the value of the object response to string
             for ( Response response : formSubmit.getListResponse( ) )
             {
@@ -1005,11 +1005,11 @@ public class FormApp extends MVCApplication
                 {
                     response.setToStringValueResponse( StringUtils.EMPTY );
                 }
-                
+
                 // Create a RecapResponse object for the current Response and add it to the list
                 listRecapResponse.add( new RecapResponse( response ) );
             }
-            
+
             // Add the list of RecapResponse object to the model
             model.put( MARK_LIST_RECAP_RESPONSE, listRecapResponse );
 
