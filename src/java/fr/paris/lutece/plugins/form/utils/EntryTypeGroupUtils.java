@@ -90,8 +90,10 @@ public class EntryTypeGroupUtils
     // Marks
     private static final String MARK_ITERATION_CODE = "iteration_code";
     private static final String MARK_REMOVE_ITERATION_NUMBER = "remove_iteration_number";
+    private static final String MARK_MINIMUM_ITERATION_NUMBER = "minimum_iteration_number";
     private static final String MARK_ITERATION_CHILDREN = "iteration_children";
     private static final String MARK_INFO_ITERABLE_GROUP = "infos_iterable_group";
+    private static final String MARK_CURRENT_ITERATION_NUMBER = "current_iteration_number";
 
     // Template
     private static final String TEMPLATE_GROUP_ITERATION_CHILDREN = "skin/plugins/form/entries/html_code_entry_type_group_children.html";
@@ -165,21 +167,37 @@ public class EntryTypeGroupUtils
      */
     public static int getEntryMaxIterationAllowed( int idEntry )
     {
-        Entry entry = EntryHome.findByPrimaryKey( idEntry );
+        return findFieldValue( idEntry, EntryTypeGroup.CONSTANT_NB_ITERATION, FormConstants.DEFAULT_ITERATION_NUMBER );
+    }
+    
+    /**
+     * Retrieve the value of field of an entry. Return the value if found the default value is returned otherwise
+     * 
+     * @param nIdEntry
+     *          The entry to retrieve the field from
+     * @param strFieldName
+     *          The name of the field to retrieve
+     * @param nDefaultValue
+     *          The default value to returned if the field has not found
+     * @return the value of the field from its name or the default value if not found
+     */
+    public static int findFieldValue( int nIdEntry, String strFieldName, int nDefaultValue )
+    {
+        Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        if ( entry != null )
+        if ( entry != null && StringUtils.isNotBlank( strFieldName ) )
         {
-            Field fieldNbIteration = GenericAttributesUtils.findFieldByTitleInTheList( EntryTypeGroup.CONSTANT_NB_ITERATION, entry.getFields( ) );
+            Field fieldNbIteration = GenericAttributesUtils.findFieldByTitleInTheList( strFieldName, entry.getFields( ) );
             if ( fieldNbIteration != null )
             {
-                return NumberUtils.toInt( fieldNbIteration.getValue( ), FormConstants.DEFAULT_ITERATION_NUMBER );
+                return NumberUtils.toInt( fieldNbIteration.getValue( ), nDefaultValue );
             }
 
-            // If the field doesn't exist it means that the group doesn't allow iteration
-            return FormConstants.DEFAULT_ITERATION_NUMBER;
+            // If the field doesn't exist we will return the default value
+            return nDefaultValue;
         }
 
-        return FormConstants.DEFAULT_ITERATION_NUMBER;
+        return nDefaultValue;
     }
 
     /**
@@ -242,9 +260,29 @@ public class EntryTypeGroupUtils
         String strCurrentIterationCode = String.format( PATTERN_PREFIX_ITERATION, nIterationNumber );
 
         // Generate the model associate with the current iteration
+        int nIdEntry = entry.getIdEntry( );
         Map<String, Object> model = new LinkedHashMap<String, Object>( );
-        model.put( FormConstants.PARAMETER_ID_ENTRY, entry.getIdEntry( ) );
+        model.put( FormConstants.PARAMETER_ID_ENTRY, nIdEntry );
         model.put( MARK_REMOVE_ITERATION_NUMBER, nIterationNumber );
+        
+        // Retrieve the maximum number of iteration and the minimum number of iterations necessary from the request
+        Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
+
+        int nNbCurrentIterationNumber = FormConstants.DEFAULT_ITERATION_NUMBER;
+        int nNbMinIterationAllowed = FormConstants.DEFAULT_MINIMUM_ITERATION_NUMBER;
+        if ( mapIterationGroup != null )
+        {
+            IterationGroup iterationGroup = mapIterationGroup.get( nIdEntry );
+
+            if ( iterationGroup != null )
+            {
+                nNbCurrentIterationNumber = iterationGroup.getIterationNumber( );
+                nNbMinIterationAllowed = iterationGroup.getNbMinIteration( );
+            }
+        }
+        
+        model.put( MARK_MINIMUM_ITERATION_NUMBER, nNbMinIterationAllowed );
+        model.put( MARK_CURRENT_ITERATION_NUMBER, nNbCurrentIterationNumber );
         model.put( MARK_ITERATION_CODE, strCurrentIterationCode );
         model.put( MARK_ITERATION_CHILDREN, sbCurrentChildrenGroup.toString( ) );
 
@@ -890,33 +928,7 @@ public class EntryTypeGroupUtils
     {
         return FormConstants.PREFIX_ITERATION + "%s_" + FormConstants.PREFIX_ATTRIBUTE + idEntry;
     }
-
-    /**
-     * Return the number of current iteration from the request
-     * 
-     * @param request
-     *            the HttpServletRequest
-     * @param idEntry
-     *            the id of the entry to retrieve the number of iteration
-     * @return the number of iteration from the request or -1 if the map doesn't exist;
-     */
-    public static int getCurrentNumberOfIteration( HttpServletRequest request, int nIdEntry )
-    {
-        Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
-
-        if ( mapIterationGroup != null )
-        {
-            IterationGroup iterationGroup = mapIterationGroup.get( nIdEntry );
-
-            if ( iterationGroup != null )
-            {
-                return iterationGroup.getIterationNumber( );
-            }
-        }
-
-        return FormConstants.DEFAULT_ITERATION_NUMBER;
-    }
-
+    
     /**
      * Construct the url for an entry of an iterable group for errors
      * 
@@ -964,13 +976,14 @@ public class EntryTypeGroupUtils
     {
         // Retrieve the map from the session
         Map<Integer, IterationGroup> mapIterationGroup = retrieveIterationMap( request );
+        Entry entryParent = entry.getParent( );
 
-        if ( mapIterationGroup != null && entry.getParent( ) != null )
+        if ( mapIterationGroup != null && entryParent != null )
         {
-            int nIdEntryGroupParent = entry.getParent( ).getIdEntry( );
+            int nIdEntryGroupParent = entryParent.getIdEntry( );
             if ( !mapIterationGroup.containsKey( nIdEntryGroupParent ) )
             {
-                mapIterationGroup.put( nIdEntryGroupParent, new IterationGroup( nIdEntryGroupParent ) );
+                mapIterationGroup.put( nIdEntryGroupParent, new IterationGroup( entryParent ) );
             }
 
             // Add the list of Response for the current entry to the IterationGroup
@@ -996,9 +1009,10 @@ public class EntryTypeGroupUtils
             List<Integer> listIdEntryGroupIterable = findIdEntryGroupIterable( nIdForm );
             if ( listIdEntryGroupIterable != null )
             {
-                for ( Integer identryIterableGroup : listIdEntryGroupIterable )
+                for ( Integer nIdEntryIterableGroup : listIdEntryGroupIterable )
                 {
-                    mapIterationGroup.put( identryIterableGroup, new IterationGroup( identryIterableGroup ) );
+                    Entry entryGroup = EntryHome.findByPrimaryKey( nIdEntryIterableGroup );
+                    mapIterationGroup.put( nIdEntryIterableGroup, new IterationGroup( entryGroup ) );
                 }
             }
 

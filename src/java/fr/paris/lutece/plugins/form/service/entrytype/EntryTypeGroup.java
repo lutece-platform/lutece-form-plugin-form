@@ -63,13 +63,18 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
     // Parameters
     private static final String PARAMETER_IS_ITERABLE = "is_iterable";
     private static final String PARAMETER_NB_ITERATION = "nb_iterations";
+    private static final String PARAMETER_NB_MINIMUM_ITERATION = "nb_iterations_minimum";
     private static final String PARAMETER_ITERATION_ADDING_LABEL = "iteration_adding_label";
 
     // Constants
     public static final String CONSTANT_NB_ITERATION = "nb_iterations";
+    public static final String CONSTANT_NB_MINIMUM_ITERATION = "nb_iterations_minimum";
     public static final String CONSTANT_ITERATION_ADDING_LABEL = "iteration_adding_label";
     private static final String MESSAGE_ERROR_MANDATORY_FIELD_NB_ITERATIONS = "form.modifyEntry.typeGroup.message.error.fieldNbIterations.mandatory";
     private static final String MESSAGE_ERROR_FIELD_NB_ITERATIONS = "form.modifyEntry.typeGroup.message.error.fieldNbIterations";
+    private static final String MESSAGE_ERROR_MANDATORY_FIELD_NB_MINIMUM_ITERATIONS = "form.modifyEntry.typeGroup.message.error.fieldNbMinimumIterations.mandatory";
+    private static final String MESSAGE_ERROR_FIELD_NB_MINIMUM_ITERATIONS = "form.modifyEntry.typeGroup.message.error.fieldNbMinimumIterations";
+    private static final String MESSAGE_ERROR_FIELD_NB_ITERATIONS_BAD_VALUE = "form.modifyEntry.typeGroup.message.error.fieldNbIterations.badValue";
 
     // templates
     private static final String TEMPLATE_MODIFY = "admin/plugins/form/entries/modify_entry_type_group.html";
@@ -183,30 +188,93 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
         if ( entry != null )
         {
             Field fieldNbIteration = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_NB_ITERATION, entry.getFields( ) );
+            Field fieldNbMinimumIteration = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_NB_MINIMUM_ITERATION, entry.getFields( ) );
 
             if ( request.getParameter( PARAMETER_IS_ITERABLE ) != null )
             {
                 String strNbIterations = request.getParameter( PARAMETER_NB_ITERATION );
+                String strNbMinimumIterations = request.getParameter( PARAMETER_NB_MINIMUM_ITERATION );
 
-                if ( StringUtils.isBlank( strNbIterations ) )
+                // Check the maximum number of iterations
+                String strError = checkMaximumIterationNumber( request );
+                if ( strError != null )
                 {
-                    return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
+                    return strError;
+                }
+                
+                // Check the minimum number of iterations
+                strError = checkMinimumIterationNumber( request );
+                if ( strError != null )
+                {
+                    return strError;
+                }
+                
+                // Control that the maximum number of iteration is superior or equal to the minimum number of iteration
+                if ( NumberUtils.toInt( strNbIterations ) < NumberUtils.toInt (strNbMinimumIterations ) )
+                {
+                    return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_FIELD_NB_ITERATIONS_BAD_VALUE, AdminMessage.TYPE_STOP );
                 }
 
-                if ( !StringUtils.isNumeric( strNbIterations ) || NumberUtils.toInt( strNbIterations, NumberUtils.INTEGER_ZERO ) < NumberUtils.INTEGER_ONE )
-                {
-                    return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
-                }
-
+                // Create the fields
                 createIterationField( entry, fieldNbIteration, CONSTANT_NB_ITERATION, strNbIterations );
+                createIterationField( entry, fieldNbMinimumIteration, CONSTANT_NB_MINIMUM_ITERATION, strNbMinimumIterations );
             }
             else
             {
                 // The iterations has been disabled on this group so we remove the field which concern the iteration for this entry
                 removeIterationField( entry, fieldNbIteration );
+                removeIterationField( entry, fieldNbMinimumIteration );
             }
         }
 
+        return null;
+    }
+    
+    /**
+     * Check the parameter value of the maximum number of iteration
+     * 
+     * @param request
+     *          The HttpServletRequest to retrieve the parameter value from
+     * @return the url to display the page if an error occurred null otherwise
+     */
+    private String checkMaximumIterationNumber( HttpServletRequest request )
+    {
+        String strNbIterations = request.getParameter( PARAMETER_NB_ITERATION );
+        
+        if ( StringUtils.isBlank( strNbIterations ) )
+        {
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
+        }
+
+        if ( !StringUtils.isNumeric( strNbIterations ) || NumberUtils.toInt( strNbIterations, NumberUtils.INTEGER_ZERO ) < NumberUtils.INTEGER_ONE )
+        {
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_FIELD_NB_ITERATIONS, AdminMessage.TYPE_STOP );
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Check the parameter value of the minimum number of iteration
+     * 
+     * @param request
+     *          The HttpServletRequest to retrieve the parameter value from
+     * @return the url to display the page if an error occurred null otherwise
+     */
+    private String checkMinimumIterationNumber( HttpServletRequest request )
+    {
+        String strNbMinimumIterations = request.getParameter( PARAMETER_NB_MINIMUM_ITERATION );
+        
+        if ( StringUtils.isBlank( strNbMinimumIterations ) )
+        {
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELD_NB_MINIMUM_ITERATIONS, AdminMessage.TYPE_STOP );
+        }
+        
+        if ( !StringUtils.isNumeric( strNbMinimumIterations ) || NumberUtils.toInt( strNbMinimumIterations, NumberUtils.INTEGER_MINUS_ONE ) < NumberUtils.INTEGER_ZERO )
+        {
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_FIELD_NB_MINIMUM_ITERATIONS, AdminMessage.TYPE_STOP );
+        }
+        
         return null;
     }
 
@@ -246,8 +314,11 @@ public class EntryTypeGroup extends AbstractEntryTypeGroup
      */
     private void removeIterationField( Entry entry, Field fieldToRemove )
     {
-        entry.getFields( ).remove( fieldToRemove );
+        if ( fieldToRemove != null )
+        {
+            entry.getFields( ).remove( fieldToRemove );
 
-        FieldHome.remove( fieldToRemove.getIdField( ) );
+            FieldHome.remove( fieldToRemove.getIdField( ) );
+        }
     }
 }

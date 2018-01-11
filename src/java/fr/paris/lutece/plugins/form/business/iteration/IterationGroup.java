@@ -41,7 +41,10 @@ import java.util.Set;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
+import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGroup;
 import fr.paris.lutece.plugins.form.utils.EntryTypeGroupUtils;
+import fr.paris.lutece.plugins.form.utils.FormConstants;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
 
@@ -51,14 +54,32 @@ import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
 public class IterationGroup
 {
     private final int _nNbMaxIteration;
+    private final int _nNbMinIteration;
     private Map<Integer, List<IterationResponse>> _mapIterationResponses = new LinkedHashMap<>( );
     private List<MVCMessage> _listErrorMessages = new ArrayList<>( );
 
     // Constructor
-    public IterationGroup( int nIdEntry )
+    public IterationGroup( Entry entry )
     {
-        _nNbMaxIteration = EntryTypeGroupUtils.getEntryMaxIterationAllowed( nIdEntry );
-        _mapIterationResponses.put( NumberUtils.INTEGER_ONE, new ArrayList<IterationResponse>( ) );
+        int nNbMaxIteration = FormConstants.DEFAULT_MINIMUM_ITERATION_NUMBER;
+        int nNbMinIteration = FormConstants.DEFAULT_MINIMUM_ITERATION_NUMBER;
+        
+        if ( entry != null )
+        {
+            int nIdEntry = entry.getIdEntry( );
+            nNbMaxIteration = EntryTypeGroupUtils.getEntryMaxIterationAllowed( nIdEntry );
+
+            int nMinNumberOfIteration = getEntryMinIterationAllowed( nIdEntry );
+            nNbMinIteration = nMinNumberOfIteration;
+            
+            for ( int nIterationNumber = NumberUtils.INTEGER_ONE; nIterationNumber <= nMinNumberOfIteration; nIterationNumber++ )
+            {
+                _mapIterationResponses.put( nIterationNumber, new ArrayList<IterationResponse>( ) );
+            }
+        }
+        
+        _nNbMaxIteration = nNbMaxIteration;
+        _nNbMinIteration = nNbMinIteration;
     }
 
     /**
@@ -69,6 +90,16 @@ public class IterationGroup
     public int getNbMaxIteration( )
     {
         return _nNbMaxIteration;
+    }
+    
+    /**
+     * Return the minimum number of iteration necessary for the group
+     * 
+     * @return the minimum number of iteration necessary for the group
+     */
+    public int getNbMinIteration( )
+    {
+        return _nNbMinIteration;
     }
 
     /**
@@ -241,5 +272,17 @@ public class IterationGroup
     public boolean isIterationLimitReached( )
     {
         return getIterationNumber( ) >= _nNbMaxIteration;
+    }
+    
+    /**
+     * Return the minimum number of iterations necessary for the entry. Return 0 if a problem occurred.
+     * 
+     * @param idEntry
+     *            The id of the entry to find the minimum number of iterations necessary
+     * @return the minimum number of iterations necessary for the entry return 0 if a problem occurred
+     */
+    public static int getEntryMinIterationAllowed( int idEntry )
+    {
+        return EntryTypeGroupUtils.findFieldValue( idEntry, EntryTypeGroup.CONSTANT_NB_MINIMUM_ITERATION, FormConstants.DEFAULT_MINIMUM_ITERATION_NUMBER );
     }
 }

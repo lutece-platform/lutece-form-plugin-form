@@ -1,6 +1,6 @@
 <div id="${iteration_code!''}" class="form-group">	
 
-	<#if remove_iteration_number?? && (remove_iteration_number?number > 1)>
+	<#if current_iteration_number gt minimum_iteration_number>
 		<button class="btn btn-sm btn-danger btn-flat pull-right remove_iteration" type="submit" name="action_removeIteration" value="${id_entry}_${remove_iteration_number}" title="#i18n{form.modifyForm.manageEnter.buttonRemoveIteration}">
 			<i class="fa fa-remove" aria-hidden="true"></i>
 			<span class="sr-only">#i18n{form.modifyForm.manageEnter.buttonRemoveIteration}</span>
