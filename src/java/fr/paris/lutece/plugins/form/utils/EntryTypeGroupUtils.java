@@ -1135,7 +1135,7 @@ public class EntryTypeGroupUtils
             listIdEntry = new ArrayList<>( );
             for ( Entry entry : listEntryFirstLevel )
             {
-                IterationGroup iterationGroup = new IterationGroup( entry ) ;
+                IterationGroup iterationGroup = new IterationGroup( entry );
                 if ( iterationGroup.getNbMaxIteration( ) != NumberUtils.INTEGER_MINUS_ONE )
                 {
                     listIdEntry.add( entry.getIdEntry( ) );

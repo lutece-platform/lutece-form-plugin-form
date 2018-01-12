@@ -288,7 +288,7 @@ public class IterationGroup
     {
         return findFieldValue( idEntry, EntryTypeGroup.CONSTANT_NB_MINIMUM_ITERATION, FormConstants.DEFAULT_MINIMUM_ITERATION_NUMBER );
     }
-    
+
     /**
      * Return the maximum number of iterations allowed for the entry. Return -1 if none iterations are allowed.
      * 
