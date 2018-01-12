@@ -783,7 +783,6 @@ public final class FormUtils
             int nIterationNumber )
     {
         Map<String, Object> model = new HashMap<String, Object>( );
-        StringBuffer strConditionalQuestionStringBuffer = null;
         List<ConditionalEntriesFieldMapper> lstConditionalFieldMapper = null;
         HtmlTemplate template;
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
@@ -811,7 +810,6 @@ public final class FormUtils
 
         if ( entry.getNumberConditionalQuestion( ) != 0 )
         {
-            strConditionalQuestionStringBuffer = new StringBuffer( );
             lstConditionalFieldMapper = new ArrayList<ConditionalEntriesFieldMapper>( );
 
             for ( Field field : entry.getFields( ) )
