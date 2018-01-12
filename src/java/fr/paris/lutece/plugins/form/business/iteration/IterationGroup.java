@@ -39,13 +39,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGroup;
-import fr.paris.lutece.plugins.form.utils.EntryTypeGroupUtils;
 import fr.paris.lutece.plugins.form.utils.FormConstants;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
 
 /**
@@ -67,7 +70,7 @@ public class IterationGroup
         if ( entry != null )
         {
             int nIdEntry = entry.getIdEntry( );
-            nNbMaxIteration = EntryTypeGroupUtils.getEntryMaxIterationAllowed( nIdEntry );
+            nNbMaxIteration = getEntryMaxIterationAllowed( nIdEntry );
 
             int nMinNumberOfIteration = getEntryMinIterationAllowed( nIdEntry );
             nNbMinIteration = nMinNumberOfIteration;
@@ -283,6 +286,48 @@ public class IterationGroup
      */
     public static int getEntryMinIterationAllowed( int idEntry )
     {
-        return EntryTypeGroupUtils.findFieldValue( idEntry, EntryTypeGroup.CONSTANT_NB_MINIMUM_ITERATION, FormConstants.DEFAULT_MINIMUM_ITERATION_NUMBER );
+        return findFieldValue( idEntry, EntryTypeGroup.CONSTANT_NB_MINIMUM_ITERATION, FormConstants.DEFAULT_MINIMUM_ITERATION_NUMBER );
+    }
+    
+    /**
+     * Return the maximum number of iterations allowed for the entry. Return -1 if none iterations are allowed.
+     * 
+     * @param idEntry
+     *            The id of the entry to find the maximum number of iterations
+     * @return the maximum number of iterations allowed for the entry return -1 if none iterations are allowed
+     */
+    public static int getEntryMaxIterationAllowed( int idEntry )
+    {
+        return findFieldValue( idEntry, EntryTypeGroup.CONSTANT_NB_ITERATION, FormConstants.DEFAULT_ITERATION_NUMBER );
+    }
+
+    /**
+     * Retrieve the value of field of an entry. Return the value if found the default value is returned otherwise
+     * 
+     * @param nIdEntry
+     *            The entry to retrieve the field from
+     * @param strFieldName
+     *            The name of the field to retrieve
+     * @param nDefaultValue
+     *            The default value to returned if the field has not found
+     * @return the value of the field from its name or the default value if not found
+     */
+    public static int findFieldValue( int nIdEntry, String strFieldName, int nDefaultValue )
+    {
+        Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
+
+        if ( entry != null && StringUtils.isNotBlank( strFieldName ) )
+        {
+            Field fieldNbIteration = GenericAttributesUtils.findFieldByTitleInTheList( strFieldName, entry.getFields( ) );
+            if ( fieldNbIteration != null )
+            {
+                return NumberUtils.toInt( fieldNbIteration.getValue( ), nDefaultValue );
+            }
+
+            // If the field doesn't exist we will return the default value
+            return nDefaultValue;
+        }
+
+        return nDefaultValue;
     }
 }

@@ -906,7 +906,7 @@ public final class FormUtils
 
         // Check if the maximum number of iteration has been reached for the entry of type group
         if ( entryTypeService instanceof AbstractEntryTypeGroup
-                && EntryTypeGroupUtils.getEntryMaxIterationAllowed( nIdEntry ) != FormConstants.DEFAULT_ITERATION_NUMBER )
+                && new IterationGroup( entry ).getNbMaxIteration( ) != FormConstants.DEFAULT_ITERATION_NUMBER )
         {
             Boolean isLimitReached = Boolean.TRUE;
             IterationGroup iterationGroup = EntryTypeGroupUtils.retrieveIterationGroup( request, nIdEntry );
@@ -1535,7 +1535,7 @@ public final class FormUtils
                 entryFirstLevel.setFields( FieldHome.getFieldListByIdEntry( entryFirstLevel.getIdEntry( ) ) );
 
                 // Manage the case of an iteration
-                int nIterationEntryMax = EntryTypeGroupUtils.getEntryMaxIterationAllowed( entryFirstLevel.getIdEntry( ) );
+                int nIterationEntryMax = new IterationGroup( entryFirstLevel ).getNbMaxIteration( );
                 if ( nIterationEntryMax != FormConstants.DEFAULT_ITERATION_NUMBER )
                 {
                     for ( int nCurrentIterationNumber = NumberUtils.INTEGER_ONE; nCurrentIterationNumber <= nIterationEntryMax; nCurrentIterationNumber++ )

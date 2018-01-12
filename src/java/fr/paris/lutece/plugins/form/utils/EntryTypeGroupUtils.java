@@ -57,7 +57,6 @@ import fr.paris.lutece.plugins.form.business.FormSubmit;
 import fr.paris.lutece.plugins.form.business.iteration.IterationGroup;
 import fr.paris.lutece.plugins.form.service.FormPlugin;
 import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeArray;
-import fr.paris.lutece.plugins.form.service.entrytype.EntryTypeGroup;
 import fr.paris.lutece.plugins.form.web.http.GroupHttpServletRequestWrapper;
 import fr.paris.lutece.plugins.form.web.http.GroupMultipartHttpServletRequestWrapper;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -70,7 +69,6 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
-import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -144,8 +142,8 @@ public class EntryTypeGroupUtils
         StringBuilder sbGroup = new StringBuilder( );
 
         // Case where the group allow multiple iterations
-        int nbIterationMax = getEntryMaxIterationAllowed( entry.getIdEntry( ) );
-        if ( nbIterationMax != FormConstants.DEFAULT_ITERATION_NUMBER )
+        IterationGroup iterationGroup = new IterationGroup( entry );
+        if ( iterationGroup.getNbMaxIteration( ) != FormConstants.DEFAULT_ITERATION_NUMBER )
         {
             sbGroup = getHtmlIteratedEntryGroup( request, entry, bDisplayFront );
         }
@@ -156,48 +154,6 @@ public class EntryTypeGroupUtils
         }
 
         return sbGroup;
-    }
-
-    /**
-     * Return the maximum number of iterations allowed for the entry. Return -1 if none iterations are allowed.
-     * 
-     * @param idEntry
-     *            The id of the entry to find the maximum number of iterations
-     * @return the maximum number of iterations allowed for the entry return -1 if none iterations are allowed
-     */
-    public static int getEntryMaxIterationAllowed( int idEntry )
-    {
-        return findFieldValue( idEntry, EntryTypeGroup.CONSTANT_NB_ITERATION, FormConstants.DEFAULT_ITERATION_NUMBER );
-    }
-
-    /**
-     * Retrieve the value of field of an entry. Return the value if found the default value is returned otherwise
-     * 
-     * @param nIdEntry
-     *            The entry to retrieve the field from
-     * @param strFieldName
-     *            The name of the field to retrieve
-     * @param nDefaultValue
-     *            The default value to returned if the field has not found
-     * @return the value of the field from its name or the default value if not found
-     */
-    public static int findFieldValue( int nIdEntry, String strFieldName, int nDefaultValue )
-    {
-        Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
-
-        if ( entry != null && StringUtils.isNotBlank( strFieldName ) )
-        {
-            Field fieldNbIteration = GenericAttributesUtils.findFieldByTitleInTheList( strFieldName, entry.getFields( ) );
-            if ( fieldNbIteration != null )
-            {
-                return NumberUtils.toInt( fieldNbIteration.getValue( ), nDefaultValue );
-            }
-
-            // If the field doesn't exist we will return the default value
-            return nDefaultValue;
-        }
-
-        return nDefaultValue;
     }
 
     /**
@@ -348,7 +304,7 @@ public class EntryTypeGroupUtils
 
         if ( entry != null )
         {
-            int nNbMaxIteration = getEntryMaxIterationAllowed( entry.getIdEntry( ) );
+            int nNbMaxIteration = new IterationGroup( entry ).getNbMaxIteration( );
             for ( Entry entryChild : entry.getChildren( ) )
             {
                 // If there are a number of iteration on the current group we will check errors on the children on every iteration
@@ -799,7 +755,8 @@ public class EntryTypeGroupUtils
                     List<Response> listCurrentResponses = entryIdEntryListReponse.getValue( );
 
                     // If the entry is an iterable group we will sort its list of response by the iteration number
-                    if ( getEntryMaxIterationAllowed( nIdEntryIterableGroup ) != NumberUtils.INTEGER_MINUS_ONE )
+                    IterationGroup iterationGroup = new IterationGroup( EntryHome.findByPrimaryKey( nIdEntryIterableGroup ) );
+                    if ( iterationGroup.getNbMaxIteration( ) != NumberUtils.INTEGER_MINUS_ONE )
                     {
                         // Sort the list of Response by the iteration number of response
                         Collections.sort( listCurrentResponses, new GroupResponseComparator( ) );
@@ -1095,7 +1052,7 @@ public class EntryTypeGroupUtils
                 Entry entryParent = EntryHome.findByPrimaryKey( entry.getParent( ).getIdEntry( ) );
                 if ( entryParent != null && entryParent.getEntryType( ) != null && entryParent.getEntryType( ).getGroup( ) )
                 {
-                    return Integer.valueOf( getEntryMaxIterationAllowed( entryParent.getIdEntry( ) ) );
+                    return new IterationGroup( entryParent ).getNbMaxIteration( );
                 }
             }
             else
@@ -1178,10 +1135,10 @@ public class EntryTypeGroupUtils
             listIdEntry = new ArrayList<>( );
             for ( Entry entry : listEntryFirstLevel )
             {
-                int nIdEntry = entry.getIdEntry( );
-                if ( getEntryMaxIterationAllowed( nIdEntry ) != NumberUtils.INTEGER_MINUS_ONE )
+                IterationGroup iterationGroup = new IterationGroup( entry ) ;
+                if ( iterationGroup.getNbMaxIteration( ) != NumberUtils.INTEGER_MINUS_ONE )
                 {
-                    listIdEntry.add( nIdEntry );
+                    listIdEntry.add( entry.getIdEntry( ) );
                 }
             }
         }
