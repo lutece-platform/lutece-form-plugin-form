@@ -26,12 +26,30 @@
 						<@formGroup labelFor='is_iterable' labelKey='#i18n{form.createEntry.labelIteration}'>
 							<@checkBox id='checkbox_is_iterable' name='is_iterable' value='true' checked=checked params='onclick="javascript:displayHideIteration();"' />
 						</@formGroup>
-						<@formGroup id='iterationNumber' labelFor='nb_iterations' labelKey='#i18n{form.createEntry.labelNbIteration}' helpKey='#i18n{form.createEntry.labelHelpNbIteration}' params=style >
-							<@input type='text' name='nb_iterations' value='${nbIteration}' maxlength=5 />
-						</@formGroup>
-						<@formGroup id='iterationNumberMinimum' labelFor='nb_iterations_minimum' labelKey='#i18n{form.createEntry.labelNbMinimumIteration}' helpKey='#i18n{form.createEntry.labelHelpNbMinimumIteration}' params=style >
-							<@input type='text' name='nb_iterations_minimum' value='${nbIteration_minimum}' maxlength=5 />
-						</@formGroup>
+						<div id="iterationNumber" class="form-group" ${style}>
+							<label class="col-xs-12 col-sm-3 control-label" for="nb_iterations">
+								#i18n{form.createEntry.labelNbIteration}
+								<i class="fa fa-asterisk" aria-hidden="true"></i>
+							</label>
+							<div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+								<@input type='text' name='nb_iterations' value='${nbIteration}' maxlength=5 />
+								<span id="nb_iterations_help" class="help-block">
+									#i18n{form.createEntry.labelHelpNbIteration}
+								</span>
+							</div>
+						</div>
+						<div id="iterationNumberMinimum" class="form-group" ${style}>
+							<label class="col-xs-12 col-sm-3 control-label" for="nb_iterations_minimum">
+								#i18n{form.createEntry.labelNbMinimumIteration}
+								<i class="fa fa-asterisk" aria-hidden="true"></i>
+							</label>
+							<div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+								<@input type='text' name='nb_iterations_minimum' value='${nbIteration_minimum}' maxlength=5 />
+								<span id="nb_iterations_help" class="help-block">
+									#i18n{form.createEntry.labelHelpNbMinimumIteration}
+								</span>
+							</div>
+						</div>
 						<@formGroup id='iterationAddingLabel' labelFor='iteration_adding_label' labelKey='#i18n{form.createEntry.labelIterationAddingLabel}' helpKey='#i18n{form.createEntry.labelHelpIterationAddingLabel}' params=style >
 							<@input type='text' name='iteration_adding_label' value='${iterationAddingLabel}' maxlength=255 />
 						</@formGroup>
