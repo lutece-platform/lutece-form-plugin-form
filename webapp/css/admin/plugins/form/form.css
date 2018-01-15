@@ -1,10 +1,9 @@
 #uploadFrontOfficePicturePreview { cursor: pointer; }
 #uploadFrontOfficePicturePreview:hover {opacity: 0.7;}
 
-.modal {
+.modal-preview-form-picture {
     display: none;
     position: fixed;
-    z-index: 10;
     padding-top: 100px;
     left: 0;
     top: 0;
@@ -21,8 +20,7 @@
 }
 
 #modal-frontoffice-picture {
-	margin-top: 50px;
-	height: auto;
+    z-index: 10000;
 	text-align: center;
 }
 
