@@ -664,35 +664,18 @@ public final class FormUtils
         model.put( MARK_STR_ENTRY, strBuffer.toString( ) );
         model.put( MARK_LOCALE, locale );
 
-        if ( ( request != null ) && ( request.getSession( ) != null ) )
+        Object objectSessionValidateRequirement = request.getSession( ).getAttribute( SESSION_VALIDATE_REQUIREMENT );
+        if ( objectSessionValidateRequirement != null )
         {
-            if ( request.getSession( ).getAttribute( SESSION_VALIDATE_REQUIREMENT ) != null )
-            {
-                boolean bValidateRequirement = (Boolean) request.getSession( ).getAttribute( SESSION_VALIDATE_REQUIREMENT );
-                model.put( MARK_VALIDATE_REQUIREMENT, bValidateRequirement );
-            }
+            boolean bValidateRequirement = (Boolean) objectSessionValidateRequirement;
+            model.put( MARK_VALIDATE_REQUIREMENT, bValidateRequirement );
         }
 
-        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
-
-        if ( ( user == null ) && SecurityService.isAuthenticationEnable( ) && SecurityService.getInstance( ).isExternalAuthentication( ) && ( request != null ) )
-        {
-            try
-            {
-                user = SecurityService.getInstance( ).getRemoteUser( request );
-            }
-            catch( UserNotSignedException e )
-            {
-                // Nothing to do : lutece user is not mandatory
-            }
-        }
-
+        // Retrieve the user from the request
+        LuteceUser user = retrieveLuteceUserFromRequest( request );
         model.put( MARK_USER, user );
 
-        // Theme management
-        /*
-         * Theme theme = ThemeHome.findByPrimaryKey("red"); model.put( MARK_THEME_URL, theme.getPathCss( ) );
-         */
+        // Check if draft is supported or not
         model.put( MARK_DRAFT_SUPPORTED, FormDraftBackupService.isDraftSupported( ) );
 
         // Add information about Form picture in front-office
@@ -724,24 +707,6 @@ public final class FormUtils
         }
 
         return refListCategories;
-    }
-
-    /**
-     * Return the HTML code of the form
-     * 
-     * @param form
-     *            the form which HTML code must be return
-     * @param strUrlAction
-     *            the URL who must be call after the form submit
-     * @param locale
-     *            the locale
-     * @param bDisplayFront
-     *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office.
-     * @return the HTML code of the form
-     */
-    public static String getHtmlForm( Form form, String strUrlAction, Locale locale, boolean bDisplayFront )
-    {
-        return getHtmlForm( form, strUrlAction, locale, bDisplayFront, null );
     }
 
     /**
@@ -837,60 +802,44 @@ public final class FormUtils
         model.put( MARK_ENTRY_ITERATION_NUMBER, nIterationNumber );
         model.put( MARK_LOCALE, locale );
 
-        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+        // Retrieve the user from the request
+        LuteceUser user = retrieveLuteceUserFromRequest( request );
+        model.put( MARK_USER, user );
 
-        if ( ( user == null ) && SecurityService.isAuthenticationEnable( ) && SecurityService.getInstance( ).isExternalAuthentication( ) && ( request != null ) )
+        Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession( ) );
+        List<Response> listResponses = new ArrayList<>( );
+
+        if ( listSubmittedResponses != null && !EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
         {
-            try
+            listResponses = listSubmittedResponses.get( entry.getIdEntry( ) );
+        }
+        else
+        {
+            String strEntryParameter = request.getParameter( FormConstants.PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+
+            if ( StringUtils.isNotBlank( strEntryParameter ) )
             {
-                user = SecurityService.getInstance( ).getRemoteUser( request );
+                EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponses, locale );
             }
-            catch( UserNotSignedException e )
+
+            // Check if the current entry has a parent and if the parent is of entry type group or not
+            if ( ( entry != null && entry.getParent( ) != null ) || entry.getFieldDepend( ) != null )
             {
-                // Nothing to do : lutece user is not mandatory
+                // Manage the response for an entry belong to an iterable group
+                EntryTypeGroupUtils.manageIterableGroupResponse( request, entry, listResponses, nIterationNumber );
+
+                // Populate the IterationGroup map in the session
+                if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
+                {
+                    EntryTypeGroupUtils.populateIterationGroup( request, entry, nIterationNumber, listResponses );
+                }
             }
         }
 
-        model.put( MARK_USER, user );
-
-        if ( request != null )
+        // The list of response to the model
+        if ( listResponses != null && !listResponses.isEmpty( ) )
         {
-            Map<Integer, List<Response>> listSubmittedResponses = getResponses( request.getSession( ) );
-            List<Response> listResponses = new ArrayList<>( );
-
-            if ( listSubmittedResponses != null && !EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
-            {
-                listResponses = listSubmittedResponses.get( entry.getIdEntry( ) );
-            }
-            else
-            {
-                String strEntryParameter = request.getParameter( FormConstants.PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
-
-                if ( StringUtils.isNotBlank( strEntryParameter ) )
-                {
-                    EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponses, locale );
-                }
-
-                // Check if the current entry has a parent and if the parent is of entry type group or not
-                if ( ( entry != null && entry.getParent( ) != null ) || entry.getFieldDepend( ) != null )
-                {
-                    // Manage the response for an entry belong to an iterable group
-                    EntryTypeGroupUtils.manageIterableGroupResponse( request, entry, listResponses, nIterationNumber );
-
-                    // Populate the IterationGroup map in the session
-                    if ( EntryTypeGroupUtils.entryBelongIterableGroup( entry ) )
-                    {
-                        EntryTypeGroupUtils.populateIterationGroup( request, entry, nIterationNumber, listResponses );
-                    }
-                }
-            }
-
-            // The list of response to the model
-            if ( listResponses != null && !listResponses.isEmpty( ) )
-            {
-                model.put( MARK_LIST_RESPONSES, listResponses );
-            }
-
+            model.put( MARK_LIST_RESPONSES, listResponses );
         }
 
         IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
@@ -917,6 +866,32 @@ public final class FormUtils
 
         template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ), locale, model );
         stringBuffer.append( template.getHtml( ) );
+    }
+    
+    /**
+     * Retrieve the LuteceUser associated to the request
+     * 
+     * @param request
+     *          The request to retrieve the LuteceUser from
+     * @return the LuteceUser of the request
+     */
+    private static LuteceUser retrieveLuteceUserFromRequest( HttpServletRequest request )
+    {
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+
+        if ( user == null && SecurityService.isAuthenticationEnable( ) && SecurityService.getInstance( ).isExternalAuthentication( ) )
+        {
+            try
+            {
+                user = SecurityService.getInstance( ).getRemoteUser( request );
+            }
+            catch( UserNotSignedException e )
+            {
+                // Nothing to do : lutece user is not mandatory
+            }
+        }
+        
+        return user;
     }
 
     /**
@@ -1931,7 +1906,7 @@ public final class FormUtils
         for ( Field field : listField )
         {
             // filter by workgroup
-            if ( ( !SecurityService.isAuthenticationEnable( ) ) || ( field.getRoleKey( ) == null ) || field.getRoleKey( ).equals( Form.ROLE_NONE )
+            if ( !SecurityService.isAuthenticationEnable( ) || field.getRoleKey( ) == null || field.getRoleKey( ).equals( Form.ROLE_NONE )
                     || SecurityService.getInstance( ).isUserInRole( request, field.getRoleKey( ) ) )
             {
                 listFieldAuthorized.add( field );

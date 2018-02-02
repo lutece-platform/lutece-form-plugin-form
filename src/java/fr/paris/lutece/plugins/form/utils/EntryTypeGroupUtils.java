@@ -987,12 +987,7 @@ public class EntryTypeGroupUtils
     @SuppressWarnings( "unchecked" )
     public static Map<Integer, IterationGroup> retrieveIterationMap( HttpServletRequest request )
     {
-        if ( request != null )
-        {
-            return (Map<Integer, IterationGroup>) request.getSession( ).getAttribute( FormConstants.SESSION_ITERATION_MAP );
-        }
-
-        return null;
+        return (Map<Integer, IterationGroup>) request.getSession( ).getAttribute( FormConstants.SESSION_ITERATION_MAP );
     }
 
     /**
@@ -1011,7 +1006,7 @@ public class EntryTypeGroupUtils
         Map<Integer, IterationGroup> mapIdEntryIterationGroup = retrieveIterationMap( request );
         if ( mapIdEntryIterationGroup != null && !mapIdEntryIterationGroup.isEmpty( ) )
         {
-            iterationGroup = retrieveIterationMap( request ).get( nIdEntry );
+            iterationGroup = mapIdEntryIterationGroup.get( nIdEntry );
         }
 
         return iterationGroup;
@@ -1198,10 +1193,10 @@ public class EntryTypeGroupUtils
         java.util.Map.Entry<Integer, Integer> entryIdEntryIterationNumber = new AbstractMap.SimpleEntry<>( NumberUtils.INTEGER_MINUS_ONE,
                 FormConstants.DEFAULT_ITERATION_NUMBER );
 
-        if ( request != null && request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ) != null )
+        String strActionRemoveIterationParameter = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION );
+        if ( strActionRemoveIterationParameter != null )
         {
-            String [ ] listParameterRemoveIteration = request.getParameter( FormConstants.PARAMETER_ACTION_REMOVE_ITERATION ).split(
-                    FormUtils.CONSTANT_UNDERSCORE );
+            String [ ] listParameterRemoveIteration = strActionRemoveIterationParameter.split( FormUtils.CONSTANT_UNDERSCORE );
             if ( listParameterRemoveIteration != null && listParameterRemoveIteration.length > NumberUtils.INTEGER_ONE )
             {
                 int nIdEntry = NumberUtils.toInt( listParameterRemoveIteration [NumberUtils.INTEGER_ZERO], NumberUtils.INTEGER_MINUS_ONE );

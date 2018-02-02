@@ -116,7 +116,7 @@ public class FormPortlet extends Portlet
                 strUrlAction = AppHTTPSService.getHTTPSUrl( request ) + strUrlAction;
             }
 
-            XmlUtil.addElementHtml( strXml, TAG_FORM_PORTLET_CONTENT, FormUtils.getHtmlForm( form, strUrlAction, locale, true ) );
+            XmlUtil.addElementHtml( strXml, TAG_FORM_PORTLET_CONTENT, FormUtils.getHtmlForm( form, strUrlAction, locale, true, request ) );
         }
         else
         {
