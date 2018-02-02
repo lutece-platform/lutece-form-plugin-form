@@ -867,12 +867,12 @@ public final class FormUtils
         template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ), locale, model );
         stringBuffer.append( template.getHtml( ) );
     }
-    
+
     /**
      * Retrieve the LuteceUser associated to the request
      * 
      * @param request
-     *          The request to retrieve the LuteceUser from
+     *            The request to retrieve the LuteceUser from
      * @return the LuteceUser of the request
      */
     private static LuteceUser retrieveLuteceUserFromRequest( HttpServletRequest request )
@@ -890,7 +890,7 @@ public final class FormUtils
                 // Nothing to do : lutece user is not mandatory
             }
         }
-        
+
         return user;
     }
 
