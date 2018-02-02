@@ -6,7 +6,7 @@
 <@messages infos = infos_iterable_group />
 <fieldset class="multi-group">
 	
-	<#if (nb_iterations != "") && (nb_iterations?number > 1) && !entry_iteration_limit_reached>
+	<#if (nb_iterations != "") && (nb_iterations?number > 0) && !entry_iteration_limit_reached>
 		<button class="btn btn-sm btn-primary btn-flat pull-right add_iteration" type="submit" name="action_addIteration" value="${entry.idEntry}" title="${iteration_adding_label!''}">
 			<i class="fa fa-plus" aria-hidden="true"></i>
 			<span>${iteration_adding_label!''}</span>
