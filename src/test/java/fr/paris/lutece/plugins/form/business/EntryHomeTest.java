@@ -58,22 +58,15 @@ public class EntryHomeTest extends LuteceTestCase
     private final static int ID_ENTRY_TYPE_1 = 1;
     private final Plugin _plugin = PluginService.getPlugin( "form" );
 
-    /**
-     * The the creation of an entry
-     */
-    public void testCreate( )
+    public Entry createEntry( ) 
     {
         FormHomeTest formHomeTest = new FormHomeTest( );
-        formHomeTest.testCreate( );
+        Form form = formHomeTest.createForm( );
 
         Entry entry = new Entry( );
 
         EntryType entryType = new EntryType( );
         entryType.setIdType( ID_ENTRY_TYPE_1 );
-
-        FormDAO formDAO = new FormDAO( );
-        int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
-        Form form = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
         entry.setComment( COMMENT_1 );
         entry.setEntryType( entryType );
@@ -85,6 +78,15 @@ public class EntryHomeTest extends LuteceTestCase
         entry.setTitle( TITLE_1 );
 
         EntryHome.create( entry );
+        
+        return entry;
+    }
+    /**
+     * The the creation of an entry
+     */
+    public void testCreate( )
+    {
+        Entry entry = createEntry( );
 
         Entry storedEntry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
 
@@ -125,7 +127,7 @@ public class EntryHomeTest extends LuteceTestCase
      */
     public void testUpdate( )
     {
-        Entry loadEntry = EntryHome.findByPrimaryKey( ID_ENTRY_1 );
+        Entry loadEntry = createEntry( );
 
         Entry entry = new Entry( );
 

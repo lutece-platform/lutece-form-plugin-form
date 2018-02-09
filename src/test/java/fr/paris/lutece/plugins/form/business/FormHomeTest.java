@@ -57,10 +57,7 @@ public class FormHomeTest extends LuteceTestCase
     private final static boolean LIMIT_NUMBER_RESPONSE_2 = false;
     private final Plugin _plugin = PluginService.getPlugin( "form" );
 
-    /**
-     * Test of create method, of class fr.paris.lutece.plugins.form.business.FormHome.
-     */
-    public void testCreate( )
+    public Form createForm( ) 
     {
         Form form = new Form( );
         form.setTitle( TITLE_1 );
@@ -85,6 +82,17 @@ public class FormHomeTest extends LuteceTestCase
         recap.setIdRecap( RecapHome.create( recap, _plugin ) );
         form.setRecap( recap );
         FormHome.create( form, _plugin );
+        
+        return form;
+        
+    }
+    
+    /**
+     * Test of create method, of class fr.paris.lutece.plugins.form.business.FormHome.
+     */
+    public void testCreate( )
+    {
+        Form form = createForm( );
 
         Form storedForm = FormHome.findByPrimaryKey( form.getIdForm( ), _plugin );
 
@@ -113,7 +121,7 @@ public class FormHomeTest extends LuteceTestCase
      */
     public void testCopy( )
     {
-        Form loadForm = FormHome.findByPrimaryKey( ID_1, _plugin );
+        Form loadForm = createForm( );
 
         FormHome.copy( loadForm, _plugin );
 
@@ -145,12 +153,9 @@ public class FormHomeTest extends LuteceTestCase
      */
     public void testUpdate( )
     {
-        FormDAO formDAO = new FormDAO( );
-        int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
-        Form loadForm = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
-
-        Form form = new Form( );
-        form.setIdForm( loadForm.getIdForm( ) );
+        
+        Form form  = createForm( );
+        
         form.setTitle( TITLE_2 );
         form.setDescription( DESCRIPTION_2 );
         form.setWelcomeMessage( WELCOME_MESSAGE_2 );
@@ -170,7 +175,7 @@ public class FormHomeTest extends LuteceTestCase
         form.setLimitNumberResponse( LIMIT_NUMBER_RESPONSE_2 );
 
         Recap recap = new Recap( );
-        recap.setIdRecap( loadForm.getRecap( ).getIdRecap( ) );
+        recap.setIdRecap( form.getRecap( ).getIdRecap( ) );
         form.setRecap( recap );
 
         FormHome.update( form, _plugin );
@@ -217,13 +222,12 @@ public class FormHomeTest extends LuteceTestCase
      */
     public void testRemove( )
     {
-        FormDAO formDAO = new FormDAO( );
-        int LastPrimaryKey = formDAO.newPrimaryKey( _plugin ) - 1;
-        Form loadForm = FormHome.findByPrimaryKey( LastPrimaryKey, _plugin );
 
-        FormHome.remove( loadForm.getIdForm( ), _plugin );
+        Form form = createForm( );
 
-        Form formStored = FormHome.findByPrimaryKey( loadForm.getIdForm( ), _plugin );
+        FormHome.remove( form.getIdForm( ), _plugin );
+
+        Form formStored = FormHome.findByPrimaryKey( form.getIdForm( ), _plugin );
         assertNull( formStored );
     }
 }

@@ -57,10 +57,7 @@ public class ResponseHomeTest extends LuteceTestCase
     private final static String VALUE_RESPONSE_1 = "response value 1";
     private final static String VALUE_RESPONSE_2 = "response value 2";
 
-    /**
-     * Test the creation of a response
-     */
-    public void testCreate( )
+    public Response createResponse( ) 
     {
         Response response = new Response( );
 
@@ -88,6 +85,16 @@ public class ResponseHomeTest extends LuteceTestCase
         response.setResponseValue( VALUE_RESPONSE_1 );
 
         ResponseHome.create( response );
+        
+        return response;
+    }
+    
+    /**
+     * Test the creation of a response
+     */
+    public void testCreate( )
+    {
+        Response response = createResponse( );
 
         Response responseStored = ResponseHome.findByPrimaryKey( response.getIdResponse( ) );
 
@@ -104,7 +111,7 @@ public class ResponseHomeTest extends LuteceTestCase
      */
     public void testUpdate( )
     {
-        Response responseLoad = ResponseHome.findByPrimaryKey( ID_RESPONSE_1 );
+        Response responseLoad = createResponse( );
 
         Response response = new Response( );
 
@@ -152,7 +159,7 @@ public class ResponseHomeTest extends LuteceTestCase
      */
     public void testRemove( )
     {
-        Response responseLoad = ResponseHome.findByPrimaryKey( ID_RESPONSE_1 );
+        Response responseLoad = createResponse( );
 
         ResponseHome.remove( responseLoad.getIdResponse( ) );
 
