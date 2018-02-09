@@ -1,5 +1,5 @@
-
-#Descriptif du plugin
+![](http://dev.lutece.paris.fr/jenkins/buildStatus/icon?job=form-plugin-form-deploy)
+# Descriptif du plugin
 
 Create a form in front-office pages from a back-office interface.
 
