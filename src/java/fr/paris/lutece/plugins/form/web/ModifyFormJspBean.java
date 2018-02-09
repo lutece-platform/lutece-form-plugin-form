@@ -183,7 +183,6 @@ public abstract class ModifyFormJspBean extends FormJspBean
     private static final String PARAMETER_CLEANING_BY_REMOVAL = "cleaningByRemoval";
     private static final String PARAMETER_NB_DAYS_BEFORE_CLEANING = "nb_days_before_cleaning";
     private static final String PARAMETER_WORKGROUP = "workgroup";
-    private static final String PARAMETER_MAX_NUMBER_RESPONSE = "max_number_response";
 
     // other constants
     private static final String EMPTY_STRING = "";
@@ -1053,7 +1052,6 @@ public abstract class ModifyFormJspBean extends FormJspBean
         String strActiveMyLuteceAuthentification = request.getParameter( PARAMETER_ACTIVE_MYLUTECE_AUTHENTIFICATION );
         String strSupportsHTTPS = request.getParameter( PARAMETER_SUPPORT_HTTPS );
         String strActiveCaptcha = request.getParameter( PARAMETER_ACTIVE_CAPTCHA );
-        String strMaxNumberResponse = request.getParameter( PARAMETER_MAX_NUMBER_RESPONSE );
 
         form.setWorkgroup( strWorkgroup );
 
@@ -1113,17 +1111,6 @@ public abstract class ModifyFormJspBean extends FormJspBean
             form.setInfoComplementary5( strInformationComplementary5 );
         }
 
-        try
-        {
-            int nMaxNumberResponse = Integer.parseInt( strMaxNumberResponse );
-            form.setMaxNumberResponse( nMaxNumberResponse >= 0 ? nMaxNumberResponse : 0 );
-        }
-        catch( NumberFormatException ne )
-        {
-            AppLogService.error( ne.getMessage( ), ne );
-
-            return getHomeUrl( request );
-        }
         return null; // No error
     }
 

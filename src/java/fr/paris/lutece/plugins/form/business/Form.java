@@ -104,7 +104,6 @@ public class Form implements AdminWorkgroupResource, RBACResource
     private boolean _bAutomaticCleaning;
     private boolean _bCleaningByRemoval;
     private int _nNbDaysBeforeCleaning;
-    private int _nMaxNumberResponse;
 
     /**
      * Initialize the Form
@@ -896,27 +895,5 @@ public class Form implements AdminWorkgroupResource, RBACResource
     public void setNbDaysBeforeCleaning( int nNbDaysBeforeCleaning )
     {
         this._nNbDaysBeforeCleaning = nNbDaysBeforeCleaning;
-    }
-
-    /**
-     * Set the maximum number of responses before deactivation of the form
-     * 
-     * @param nMaxNumberResponse
-     *            The maximum number of responses
-     */
-    public void setMaxNumberResponse( int nMaxNumberResponse )
-    {
-        this._nMaxNumberResponse = nMaxNumberResponse;
-
-    }
-
-    /**
-     * Get the the maximum number of responses before deactivation of the form
-     * 
-     * @return The maximum number of responses
-     */
-    public int getMaxNumberResponse( )
-    {
-        return this._nMaxNumberResponse;
     }
 }

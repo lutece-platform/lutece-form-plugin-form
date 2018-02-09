@@ -35,9 +35,6 @@
 							<@formGroup labelFor='limit_number_response' labelKey='#i18n{form.createForm.labelLimitNumberResponse}' helpKey='#i18n{form.createForm.labelLimitNumberResponseComment}'>
 								<@checkBox name='limit_number_response' id='limit_number_response' value='1' checked=form?exists && form.limitNumberResponse />
 							</@formGroup>
-							<@formGroup labelFor='max_number_response' labelKey='#i18n{form.createForm.labelMaxNumberResponse}' helpKey='#i18n{form.createForm.labelMaxNumberResponseComment}'>
-								<@input name='max_number_response' id='max_number_response' type='number' value=form.maxNumberResponse!'0' />
-							</@formGroup>
 							<@formGroup labelFor='active_store_adresse' labelKey='#i18n{form.createForm.labelStoreAdresse}' helpKey='#i18n{form.createForm.labelStoreAdresseComment}'>
 								<@checkBox labelFor='active_store_adresse' name='active_store_adresse' id='active_store_adresse' value='1' checked=form?exists && form.activeStoreAdresse />
 							</@formGroup>

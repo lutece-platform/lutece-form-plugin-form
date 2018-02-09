@@ -1,1 +1,0 @@
-ALTER TABLE form_form ADD COLUMN max_number_response INT default 0;
