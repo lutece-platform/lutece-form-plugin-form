@@ -599,7 +599,7 @@ public class EntryTypeGroupUtils
         // Retrieve the entryTypeService of the current entry
         IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
 
-        if ( strCurrentRequestParamValues != null && strCurrentRequestParamValues.length > 0 )
+        if ( strCurrentRequestParamValues != null && strCurrentRequestParamValues.length > 0 && !( strCurrentRequestParamValues.length == 1 && strCurrentRequestParamValues[0].equals( StringUtils.EMPTY ) ) )
         {
             // Create a GroupHttpServletRequestWrapper for the entry type which need it
             GroupHttpServletRequestWrapper groupHttpServletRequestWrapper = new GroupHttpServletRequestWrapper( request, nCurrentIteration );
