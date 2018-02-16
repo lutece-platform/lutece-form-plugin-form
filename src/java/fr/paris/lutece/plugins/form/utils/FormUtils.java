@@ -686,7 +686,7 @@ public final class FormUtils
         {
             model.put( MARK_UPLOAD_FRONT_OFFICE_PICTURE_SRC, getFrontOfficePictureSource( nIdPictureFile ) );
         }
-        
+
         // Check if there are responses in the session. If so, then there are errors
         model.put( MARK_FORM_ERRORS, FormUtils.getFormErrors( session ) );
 
