@@ -132,7 +132,6 @@ public class FormApp extends MVCApplication
     private static final String MARK_ENTRY_TYPE_SESSION = "entry_type_session";
     private static final String MARK_ENTRY_TYPE_NUMBERING = "entry_type_numbering";
     private static final String MARK_IS_DRAFT_SAVED = "is_draft_saved";
-    private static final String MARK_FORM_ERRORS = "form_errors";
     private static final String MARK_ORDER = "order";
     private static final String MARK_ASC = "asc";
     private static final String MARK_LIST_RECAP_RESPONSE = "list_recap_response";
@@ -839,9 +838,6 @@ public class FormApp extends MVCApplication
             page.setPathLabel( form.getTitle( ) );
         }
 
-        // Retrieve the session from the request
-        HttpSession session = request.getSession( );
-
         if ( !form.isActive( ) )
         {
             model.put( MARK_MESSAGE_FORM_INACTIVE, form.getUnavailabilityMessage( ) );
@@ -852,7 +848,7 @@ public class FormApp extends MVCApplication
 
             if ( AppHTTPSService.isHTTPSSupportEnabled( ) )
             {
-                session.setAttribute( AppPathService.SESSION_BASE_URL, AppPathService.getBaseUrl( request ) );
+                request.getSession( ).setAttribute( AppPathService.SESSION_BASE_URL, AppPathService.getBaseUrl( request ) );
                 strUrlAction = AppHTTPSService.getHTTPSUrl( request ) + strUrlAction;
             }
 
@@ -870,9 +866,6 @@ public class FormApp extends MVCApplication
         }
 
         model.put( MARK_IS_DRAFT_SAVED, bIsDraftSaved );
-
-        // Check if there are responses in the session. If so, then there are errors
-        model.put( MARK_FORM_ERRORS, FormUtils.getFormErrors( session ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM, request.getLocale( ), model );
         page.setContent( template.getHtml( ) );

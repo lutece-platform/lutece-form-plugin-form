@@ -151,6 +151,7 @@ public final class FormUtils
     private static final String MARK_WEBAPP_URL = "webapp_url";
     private static final String MARK_ENTRY_ITERATION_NUMBER = "entry_iteration_number";
     private static final String MARK_ENTRY_ITERATION_LIMIT_REACHED = "entry_iteration_limit_reached";
+    private static final String MARK_FORM_ERRORS = "form_errors";
 
     // Name of the JCaptcha plugin
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
@@ -633,6 +634,7 @@ public final class FormUtils
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
         listEntryFirstLevel = EntryHome.getEntryList( filter );
+        HttpSession session = request.getSession( );
 
         ArrayList<Category> listCats = new ArrayList<Category>( );
         Category category = new Category( );
@@ -664,7 +666,7 @@ public final class FormUtils
         model.put( MARK_STR_ENTRY, strBuffer.toString( ) );
         model.put( MARK_LOCALE, locale );
 
-        Object objectSessionValidateRequirement = request.getSession( ).getAttribute( SESSION_VALIDATE_REQUIREMENT );
+        Object objectSessionValidateRequirement = session.getAttribute( SESSION_VALIDATE_REQUIREMENT );
         if ( objectSessionValidateRequirement != null )
         {
             boolean bValidateRequirement = (Boolean) objectSessionValidateRequirement;
@@ -684,6 +686,9 @@ public final class FormUtils
         {
             model.put( MARK_UPLOAD_FRONT_OFFICE_PICTURE_SRC, getFrontOfficePictureSource( nIdPictureFile ) );
         }
+        
+        // Check if there are responses in the session. If so, then there are errors
+        model.put( MARK_FORM_ERRORS, FormUtils.getFormErrors( session ) );
 
         template = AppTemplateService.getTemplate( TEMPLATE_HTML_CODE_FORM, locale, model );
 
