@@ -13,11 +13,11 @@
 			<@boxBody>
 				<@tform action='' method='' name='' id=''>
 					<@formGroup labelFor='active' labelKey='#i18n{form.manageForm.labelActive}'>
-						<@select name='active' items=active_list default_value='${active_selected}' size='sm' />
+						<@select name='active' items=active_list default_value='${active_selected}' />
 					</@formGroup>
 					<@formGroup labelKey='#i18n{form.manageForm.labelWorkGroup}'>
 						<@inputGroup>
-							<@select name='workgroup' items=user_workgroup_list default_value='${user_workgroup_selected}' size='sm' />
+							<@select name='workgroup' items=user_workgroup_list default_value='${user_workgroup_selected}' />
 							<@inputGroupItem>
 								<@button type='submit' buttonIcon='filter' title='#i18n{form.manageForm.buttonSearch}' showTitle=false />
 							</@inputGroupItem>
@@ -32,15 +32,15 @@
 				<div class="clearfix"></div>
 				<@table>
 					<tr>
-						<th>#i18n{form.manageForm.rowTitle}
+						<th class="col-xs-6 col-sm-5 col-md-7">#i18n{form.manageForm.rowTitle}
 							<@sort jsp_url="jsp/admin/plugins/form/ManageForm.jsp" attribute="title" />
 						</th>
-						<th>#i18n{form.manageForm.rowPeriodDisponibility}</th>
-						<th>#i18n{form.manageForm.rowActions}</th>
+						<th class="col-xs-1 col-sm-1">#i18n{form.manageForm.rowPeriodDisponibility}</th>
+						<th class="col-xs-5 col-sm-6 col-md-4">#i18n{form.manageForm.rowActions}</th>
 					</tr>
 					<#list form_list as form>
 						<tr>
-							<td>
+							<td class="col-xs-6 col-sm-5 col-md-7">
 								<#if form.active>
 									<#if form.autoPublished>
 										<@icon style='close' title='#i18n{form.manageForm.stateEnabledAutoPublication}' />
@@ -60,7 +60,7 @@
 								</#if>
 								&nbsp;${form.title}&nbsp;<a href="jsp/site/Portal.jsp?page=form&id_form=${form.idForm}" title="Voir ${form.title}" target="_blank"><i class="fa fa-globe"></i></a>
 							</td>
-							<td>
+							<td class="col-xs-1 col-sm-1">
 								<#setting locale=locale.language>
 								<#if form.dateBeginDisponibility?? && form.dateEndDisponibility?? && form.dateBeginDisponibility==form.dateEndDisponibility>
 									#i18n{form.manageForm.rowPeriodDisponibilityThe} ${form.dateBeginDisponibility}
@@ -74,7 +74,7 @@
 									&nbsp;
 								</#if>
 							</td>
-							<td>
+							<td class="col-xs-5 col-sm-6 col-md-4">
 								<#if form.actions?exists>
 									<#list form.actions as action>
 										<#assign autoPublicationMode=( form.dateBeginDisponibility?? || form.dateEndDisponibility??) />
@@ -88,7 +88,7 @@
 											<#else>
 												<#assign color='btn-primary' />
 											</#if>
-											<@aButton href='${action.url}?id_form=${form.idForm}&plugin_name=form' title='${action.description}' showTitle=false buttonIcon=action.iconUrl color=color />
+											<@aButton href='${action.url}?id_form=${form.idForm}&plugin_name=form' title='${action.description}' showTitle=false buttonIcon=action.iconUrl color=color size='sm' />
 										</#if>
 									</#list>
 								</#if>
