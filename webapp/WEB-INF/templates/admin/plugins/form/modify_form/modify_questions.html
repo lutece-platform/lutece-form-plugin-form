@@ -101,13 +101,14 @@
 										<#if entry.numberConditionalQuestion!=0>${entry.numberConditionalQuestion}</#if>
 									</td>
 									<!--  Change the order of the attribute -->
+									<#if entry.entryType.group><#assign buttonColor='btn-warning' /><#else><#assign buttonColor='btn-primary' /></#if>
 									<#if entry.parent?exists>
 										<td>
 											<@formGroup rows=2>
 												<@inputGroup>
 													<@comboOrders name="order_id_${entry.idEntry!}" default_value=entry.position idParent=entry.parent.idEntry />
 													<@inputGroupItem>
-														<@button type='submit' name='move_${entry.idEntry!}' title='#i18n{form.modifyForm.move}' value='#i18n{form.modifyForm.move}' buttonIcon='check' size='sm' showTitle=false />
+														<@button type='submit' name='move_${entry.idEntry!}' title='#i18n{form.modifyForm.move}' value='#i18n{form.modifyForm.move}' buttonIcon='check' color=buttonColor size='sm' showTitle=false />
 													</@inputGroupItem>
 												</@inputGroup>
 											</@formGroup>
@@ -118,7 +119,7 @@
 												<@inputGroup>
 													<@comboOrders name="order_id_${entry.idEntry!}"	default_value=entry.position idParent=0 />
 													<@inputGroupItem>
-														<@button type='submit' name='move_${entry.idEntry!}' title='#i18n{form.modifyForm.move}' value='#i18n{form.modifyForm.move}' buttonIcon='check' size='sm' showTitle=false />
+														<@button type='submit' name='move_${entry.idEntry!}' title='#i18n{form.modifyForm.move}' value='#i18n{form.modifyForm.move}' buttonIcon='check' color=buttonColor size='sm' showTitle=false />
 													</@inputGroupItem>
 												</@inputGroup>
 											</@formGroup>
