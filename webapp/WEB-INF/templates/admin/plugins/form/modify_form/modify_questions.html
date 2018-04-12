@@ -44,13 +44,13 @@
 										<th>
 											<input type="checkbox" name="selectAll" id="selectAll" value="selectAll" title="#i18n{form.modifyForm.selectAll}">
 										</th>
-										<th>#i18n{form.modifyForm.manageEnter.rowTitle}</th>
+										<th class="col-xs-5">#i18n{form.modifyForm.manageEnter.rowTitle}</th>
 										<th>#i18n{form.modifyForm.manageEnter.rowType}</th>
 										<th>
 											<@icon style='question-circle' title='#i18n{form.modifyForm.manageEnter.rowConditionalQuestion}' />
 										</th>
-										<th>#i18n{form.modifyForm.manageEnter.rowOrder}</th>
-										<th>#i18n{form.modifyForm.manageEnter.rowActions}</th>
+										<th class="col-xs-2">#i18n{form.modifyForm.manageEnter.rowOrder}</th>
+										<th class="col-xs-3">#i18n{form.modifyForm.manageEnter.rowActions}</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -107,7 +107,7 @@
 												<@inputGroup>
 													<@comboOrders name="order_id_${entry.idEntry!}" default_value=entry.position idParent=entry.parent.idEntry />
 													<@inputGroupItem>
-														<@button type='submit' name='move_${entry.idEntry!}' title='#i18n{form.modifyForm.move}' value='#i18n{form.modifyForm.move}' buttonIcon='check' showTitle=false />
+														<@button type='submit' name='move_${entry.idEntry!}' title='#i18n{form.modifyForm.move}' value='#i18n{form.modifyForm.move}' buttonIcon='check' size='sm' showTitle=false />
 													</@inputGroupItem>
 												</@inputGroup>
 											</@formGroup>
