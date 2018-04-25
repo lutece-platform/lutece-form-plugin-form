@@ -36,9 +36,9 @@
 							<@input type='text' name='css_class' value='${entry.CSSClass!}' maxlength=255 />
 						</@formGroup>
 						<@formGroup rows=2>
-							<@button type='submit' name='save' title='#i18n{form.modifyEntry.buttonSave}' buttonIcon='save' size='' showTitleXs=false showTitleMd=false />
-							<@button type='submit' name='apply' title='#i18n{form.modifyEntry.buttonApply}' value='apply' buttonIcon='check' size='' showTitleXs=false showTitleMd=false />
-							<@aButton href='jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form' title='#i18n{form.createEntry.buttonCancel}' buttonIcon='close' size='' showTitleXs=false  showTitleMd=false color='btn-secondary'/>
+							<@button type='submit' name='save' title='#i18n{form.modifyEntry.buttonSave}' buttonIcon='save' showTitleXs=false showTitleMd=false />
+							<@button type='submit' name='apply' title='#i18n{form.modifyEntry.buttonApply}' value='apply' buttonIcon='check' showTitleXs=false showTitleMd=false />
+							<@aButton href='jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form' title='#i18n{form.createEntry.buttonCancel}' buttonIcon='close' showTitleXs=false  showTitleMd=false color='btn-secondary'/>
 						</@formGroup>
 					</@tform>
 				</@boxBody>
@@ -48,7 +48,7 @@
 			<@box color='primary'>
 				<@boxHeader title='#i18n{form.createEntry.manageField.title}' boxTools=true>
 					<@tform action='jsp/admin/plugins/form/CreateField.jsp?option_no_display_title=true'>
-						<@button type='submit' buttonIcon='plus' title='#i18n{form.createEntry.manageField.buttonInsert}' size='' />
+						<@button type='submit' buttonIcon='plus' title='#i18n{form.createEntry.manageField.buttonInsert}' />
 					</@tform>
 				</@boxHeader>
 				<@boxBody>

@@ -3,10 +3,10 @@
 		<@box color='primary' collapsed=true>
 			<@boxHeader title='#i18n{form.manageForm.title}' boxTools=true>
 				<#if permission_manage_advanced_parameters>
-					<@aButton href='jsp/admin/plugins/form/ManageAdvancedParameters.jsp' buttonIcon='cog' title='#i18n{form.manageForm.button_manage_advanced_parameters}' showTitleXs=false size='' />
+					<@aButton href='jsp/admin/plugins/form/ManageAdvancedParameters.jsp' buttonIcon='cog' title='#i18n{form.manageForm.button_manage_advanced_parameters}' showTitleXs=false size='sm' />
 				</#if>
 				<#if permission_create_form>
-					<@aButton href='jsp/admin/plugins/form/CreateForm.jsp' buttonIcon='plus' title='#i18n{form.manageForm.buttonCreate}' showTitleXs=false size='' />
+					<@aButton href='jsp/admin/plugins/form/CreateForm.jsp' buttonIcon='plus' title='#i18n{form.manageForm.buttonCreate}' showTitleXs=false size='sm' />
 				</#if>
 				<@button style='btn-box-tool' params='data-widget="collapse"' buttonIcon='plus' />
 			</@boxHeader>

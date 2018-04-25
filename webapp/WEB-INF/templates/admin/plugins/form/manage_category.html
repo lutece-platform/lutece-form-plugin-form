@@ -28,7 +28,7 @@
 	<@columns sm=8 md=9 lg=9 xl=9>
     <@box color='primary'>
       <@boxHeader title='#i18n{form.manageCategory.title}' boxTools=true>
-				<@aButton href='jsp/admin/plugins/form/CreateCategory.jsp' buttonIcon='plus' title='#i18n{form.manageCategory.buttonCreate}' size='' showTitleXs=false showTitleSm=false />
+				<@aButton href='jsp/admin/plugins/form/CreateCategory.jsp' buttonIcon='plus' title='#i18n{form.manageCategory.buttonCreate}' size='sm' showTitleXs=false showTitleSm=false />
 			</@boxHeader>
       <@boxBody>
         <@table>
@@ -46,8 +46,8 @@
                 <strong>${category.title}</strong>
               </td>
               <td>
-								<@aButton href='jsp/admin/plugins/form/ModifyCategory.jsp?id_category=${category.idCategory}' title='#i18n{form.manageCategory.altModify}' showTitle=false buttonIcon='pencil' />
-								<@aButton href='jsp/admin/plugins/form/ConfirmRemoveCategory.jsp?id_category=${category.idCategory}' title='#i18n{form.manageCategory.altDelete}' showTitle=false buttonIcon='trash' color='btn-danger' />
+								<@aButton href='jsp/admin/plugins/form/ModifyCategory.jsp?id_category=${category.idCategory}' title='#i18n{form.manageCategory.altModify}' size='sm' showTitle=false buttonIcon='pencil' />
+								<@aButton href='jsp/admin/plugins/form/ConfirmRemoveCategory.jsp?id_category=${category.idCategory}' title='#i18n{form.manageCategory.altDelete}' size='sm' showTitle=false buttonIcon='trash' color='btn-danger' />
               </td>
             </tr>
           </#list>

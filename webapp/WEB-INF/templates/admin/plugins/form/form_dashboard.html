@@ -46,7 +46,7 @@
 					</td>
 	        <td>
 	          <#if authorized_form_modification_list?seq_contains(form.idForm)>
-							<@aButton href='jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form'  title='${form.title}' showTitle=false buttonIcon='pencil' />
+							<@aButton href='jsp/admin/plugins/form/ModifyForm.jsp?id_form=${form.idForm}&plugin_name=form'  title='${form.title}' size='sm' showTitle=false buttonIcon='pencil' />
 	          </#if>
 	          <#if form.actions?exists>
 							<#list form.actions as action>
@@ -62,7 +62,7 @@
 												btn-primary
 											</#if>
 										</#assign>
-											<@aButton class=btnClass href='${action.url}?id_form=${form.idForm}&plugin_name=form'  title='${action.description}' showTitle=false buttonIcon=action.iconUrl />
+											<@aButton class=btnClass href='${action.url}?id_form=${form.idForm}&plugin_name=form'  title='${action.description}' size='sm' showTitle=false buttonIcon=action.iconUrl />
 									</#if>
 								</#if>
 							</#list>

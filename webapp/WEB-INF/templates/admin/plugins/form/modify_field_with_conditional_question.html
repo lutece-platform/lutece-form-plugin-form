@@ -25,9 +25,9 @@
 						<@checkBox labelFor='no_display_title' name='no_display_title' value='1' checked=notitle_checked />
 					</@formGroup>
 					<@formGroup>
-						<@button type='submit' name='save' buttonIcon='check' title='#i18n{form.createForm.buttonSave}' showTitleXs=false size='' />
-						<@button type='submit' name='apply'  buttonIcon='check-circle' title='#i18n{form.modifyForm.buttonApply}' showTitleXs=false size='' />
-						<@button type='button' name='cancel' params='onclick="javascript:window.history.back();"' buttonIcon='close' title='#i18n{form.createForm.buttonCancel}' showTitleXs=false size='' color='btn-secondary' />
+						<@button type='submit' name='save' buttonIcon='check' title='#i18n{form.createForm.buttonSave}' showTitleXs=false />
+						<@button type='submit' name='apply'  buttonIcon='check-circle' title='#i18n{form.modifyForm.buttonApply}' showTitleXs=false />
+						<@button type='button' name='cancel' params='onclick="javascript:window.history.back();"' buttonIcon='close' title='#i18n{form.createForm.buttonCancel}' showTitleXs=false color='btn-secondary' />
 					</@formGroup>
 					</fieldset>
 				</@tform>
@@ -72,14 +72,14 @@
 							<td>${entry.entryType.title}</td>
 							<td><#if entry.numberConditionalQuestion!=0>${entry.numberConditionalQuestion}</#if></td>
 							<td>
-								<@aButton href='jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}' title='null' showTitle=false buttonIcon='edit' />
+								<@aButton href='jsp/admin/plugins/form/ModifyEntry.jsp?id_entry=${entry.idEntry}' title='null' showTitle=false buttonIcon='edit' size='sm' />
 				        <#if cpt!=1>
-									<@aButton href='jsp/admin/plugins/form/DoMoveUpEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}' title='#i18n{form.modifyForm.manageEnter.titleMoveUp}' showTitle=false buttonIcon='chevron-up' />
+									<@aButton href='jsp/admin/plugins/form/DoMoveUpEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}' title='#i18n{form.modifyForm.manageEnter.titleMoveUp}' showTitle=false buttonIcon='chevron-up' size='sm' />
 								</#if>	
 				        <#if entry_has_next>
-									<@aButton href='jsp/admin/plugins/form/DoMoveDownEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}' title='#i18n{form.modifyForm.manageEnter.titleMoveDown}' showTitle=false buttonIcon='chevron-down' />
+									<@aButton href='jsp/admin/plugins/form/DoMoveDownEntryConditional.jsp?id_entry=${entry.idEntry}&idField=${field.idField}' title='#i18n{form.modifyForm.manageEnter.titleMoveDown}' showTitle=false buttonIcon='chevron-down' size='sm' />
 								</#if>
-								<@aButton href='jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}' title='#i18n{form.modifyForm.manageEnter.titleDelete}' showTitle=false buttonIcon='trash' color='btn-danger' />
+								<@aButton href='jsp/admin/plugins/form/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}&idField=${field.idField}' title='#i18n{form.modifyForm.manageEnter.titleDelete}' showTitle=false buttonIcon='trash' color='btn-danger' size='sm' />
 							</td>
 				    </tr>
 					</#list>
