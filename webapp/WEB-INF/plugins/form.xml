@@ -24,6 +24,8 @@
     <css-stylesheets>
         <css-stylesheets-scope>portal</css-stylesheets-scope>
         <css-stylesheet>form/form.css</css-stylesheet>
+        <css-stylesheet>../../js/editors/markitup/skins/simple/style.css</css-stylesheet>
+        <css-stylesheet>../../js/editors/markitup/sets/bbcode/style.css</css-stylesheet>
     </css-stylesheets>
     
     <admin-css-stylesheets>
@@ -35,8 +37,9 @@
     <javascript-files>
         <javascript-files-scope>portal</javascript-files-scope>
         <javascript-file>form/form.js</javascript-file>
+        <javascript-file>../editors/markitup/jquery.markitup.js</javascript-file>
+        <javascript-file>../editors/markitup/sets/bbcode/set.js</javascript-file>
     </javascript-files>
-    
 
     <!--Administration interface parameters -->
     <admin-features>

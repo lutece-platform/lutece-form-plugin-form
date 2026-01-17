@@ -337,7 +337,7 @@ public final class FormService
 
         if ( ( entry.getIdResource( ) > 0 ) && EntryTypeServiceManager.getEntryTypeService( entry ) instanceof EntryTypeNumbering )
         {
-            nMaxNumber = ResponseHome.findMaxNumber( entry.getIdEntry( ), entry.getIdResource( ), entry.getResourceType( ) );
+            nMaxNumber = ResponseHome.findMaxNumber( entry.getIdEntry( ) );
         }
 
         return nMaxNumber;

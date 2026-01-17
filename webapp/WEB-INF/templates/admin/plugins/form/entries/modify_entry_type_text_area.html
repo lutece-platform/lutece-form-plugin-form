@@ -53,7 +53,7 @@
 						</@formGroup>
 						<@formGroup labelFor='css_class' labelKey='#i18n{form.createEntry.labelUseRichText}' helpKey='#i18n{form.createEntry.labelUseRichTextComment}'>
 							<!#-- 	fieldInLine means use rich text -->
-							<#if entry.fieldInLine><#assign checked = true /></#if>
+ 							<#if entry.fieldInLine == true><#assign checked = true /><#else> <#assign checked = false /></#if>
 							<@checkBox name='useRichText' value='true' checked=checked />
 						</@formGroup>
 						<@formGroup>
