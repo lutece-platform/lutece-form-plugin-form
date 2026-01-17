@@ -1,0 +1,41 @@
+<!-- markitup -->
+<!-- Load up the actual editor core -->
+<!-- markItUp! -->
+<script type="text/javascript" src="js/editors/markitup/jquery.markitup.js"></script>
+<!-- markItUp! toolbar settings -->
+<script type="text/javascript" src="js/editors/markitup/sets/bbcode/set.js"></script>
+<!-- markItUp! Init -->
+
+<#macro initEditor skin="simple">
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            if ($('head link[href*="bbcode"]').length == 0) {
+
+                <!-- markItUp! add css head skin -->
+                $("head").append("<link>");
+                var css = $("head").children(":last");
+                css.attr({
+                    rel: "stylesheet",
+                    type: "text/css",
+                    href: "js/editors/markitup/skins/${skin}/style.css"
+                });
+                <!--  markItUp! add css head  toolbar skin -->
+                $("head").append("<link>");
+                var css = $("head").children(":last");
+                css.attr({
+                    rel: "stylesheet",
+                    type: "text/css",
+                    href: "js/editors/markitup/sets/bbcode/style.css"
+                });
+
+                // Add markItUp! to your textarea in one line
+                // $('textarea').markItUp( { Settings }, { OptionalExtraSettings } );
+                $(".richtext").markItUp(mySettings);
+            }
+        });
+
+    </script>
+</#macro>
